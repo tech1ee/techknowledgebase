@@ -1,0 +1,47 @@
+# === Obsidian ===
+.obsidian/
+.trash/
+
+# === System ===
+.DS_Store
+*.swp
+*~
+Thumbs.db
+
+# === Claude Code ===
+.claude/
+
+# === Internal automation ===
+_automation/
+
+# === Internal work files ===
+000-inbox/
+
+# === Generated/cached files ===
+docs/sync/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# === Binary outputs ===
+300-content/**/output/
+
+# === Python virtual environments ===
+300-content/**/venv/
+300-content/**/.venv/
+
+# === IDE ===
+.idea/
+.vscode/
+*.iml
+
+# === Secrets ===
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# === Misc ===
+*.canvas

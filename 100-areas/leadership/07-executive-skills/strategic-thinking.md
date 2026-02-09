@@ -1,0 +1,170 @@
+---
+title: "Стратегическое мышление"
+created: 2026-01-18
+updated: 2026-01-18
+type: deep-dive
+status: complete
+difficulty: advanced
+target-role: [director, vpe, cto]
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[technical-vision]]"
+teaches:
+  - strategic vs tactical
+  - frameworks
+  - decision making
+unlocks:
+  - "[[stakeholder-management]]"
+tags: [leadership, strategy, executive, thinking]
+sources: [good-strategy-bad-strategy, playing-to-win]
+---
+
+# Стратегическое мышление
+
+> **TL;DR:** Strategy ≠ goals. Strategy = coherent set of choices about WHERE to play and HOW to win. Tactical: решаем текущие проблемы. Strategic: создаём будущее. 80% времени VP+ — strategy и politics, не execution. Learn to zoom out.
+
+---
+
+## Strategy vs Tactics
+
+```
+TACTICS:                        STRATEGY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• How to win the battle         • Which battles to fight
+• Short-term (weeks-months)     • Long-term (years)
+• React to problems             • Create opportunities
+• Optimize current              • Transform future
+• Anyone can do                 • Leaders must do
+
+EXAMPLE:
+Tactical: "Fix this bug"
+Strategic: "Invest in quality so bugs are rare"
+
+Tactical: "Hire faster"
+Strategic: "Build employer brand so hiring is easy"
+```
+
+## Good Strategy (Rumelt)
+
+```
+BAD STRATEGY:
+• Fluffy goals without substance
+• "Be the best" without how
+• Wish list of objectives
+• Avoids hard choices
+
+GOOD STRATEGY HAS 3 PARTS:
+
+1. DIAGNOSIS
+   "What's actually going on?"
+   Clear understanding of challenge.
+
+2. GUIDING POLICY
+   "What's our approach?"
+   Overall direction that guides decisions.
+
+3. COHERENT ACTIONS
+   "What specifically will we do?"
+   Set of actions that implement policy.
+
+EXAMPLE:
+Diagnosis: "Our platform is slow, losing users"
+Policy: "Prioritize performance over features"
+Actions:
+• Dedicated performance team
+• No new features until latency halved
+• Performance budgets for all pages
+```
+
+## Strategic Frameworks
+
+```
+PLAYING TO WIN (Lafley):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5 strategic choices:
+1. What is our winning aspiration?
+2. Where will we play?
+3. How will we win?
+4. What capabilities must we have?
+5. What management systems?
+
+PORTER'S GENERIC STRATEGIES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Cost leadership: Cheapest
+• Differentiation: Unique value
+• Focus: Niche market
+
+WARDLEY MAPPING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Map value chain by evolution stage.
+Genesis → Custom → Product → Commodity
+Where to invest? Where to outsource?
+```
+
+## Developing Strategic Skill
+
+```
+PRACTICES:
+
+1. ZOOM OUT REGULARLY
+   Ask: "What would 10x outcome look like?"
+   Not: "How to solve this problem?"
+
+2. SECOND-ORDER THINKING
+   "If we do X, then what happens?"
+   "And then what?"
+   "And then?"
+
+3. TIME HORIZONS
+   What's true today vs 1 year vs 5 years?
+   Make decisions for where you're going.
+
+4. TRADE-OFF AWARENESS
+   Every yes = many nos.
+   Explicit trade-offs.
+
+5. LEARN FROM OTHER DOMAINS
+   Strategy books (military, business)
+   Case studies
+   Cross-industry patterns
+```
+
+## Common Strategy Mistakes
+
+```
+❌ GOALS WITHOUT STRATEGY
+"We want 10x revenue" — that's goal, not strategy.
+
+❌ AVOIDING HARD CHOICES
+"We'll do everything" — resources are finite.
+
+❌ CONFUSING VISION AND STRATEGY
+Vision: where we want to be
+Strategy: how we'll get there
+
+❌ COPYING COMPETITORS
+Their context ≠ your context.
+
+❌ STRATEGY SET AND FORGOTTEN
+Environment changes. Revisit quarterly.
+```
+
+---
+
+## Связанные темы
+
+- [[technical-vision]] — tech strategy
+- [[stakeholder-management]] — influencing strategy
+- [[executive-communication]] — communicating strategy
+
+## Источники
+
+| Источник | Тип |
+|----------|-----|
+| [Good Strategy Bad Strategy](https://www.amazon.com/Good-Strategy-Bad-Difference-Matters/dp/0307886239) | Book |
+| [Playing to Win](https://www.amazon.com/Playing-Win-Strategy-Really-Works/dp/142218739X) | Book |
+| [Wardley Maps](https://learnwardleymapping.com/) | Framework |
+
+---
+
+*Последнее обновление: 2026-01-18*

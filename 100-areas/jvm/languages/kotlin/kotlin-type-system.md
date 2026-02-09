@@ -1,0 +1,1114 @@
+---
+title: "Kotlin Type System: Generics, Variance, Reified Types"
+created: 2025-11-25
+modified: 2025-12-27
+tags: [kotlin, generics, variance, type-system, contracts, reified]
+related: [[kotlin-collections]], [[kotlin-advanced-features]], [[kotlin-functional]], [[kotlin-best-practices]]
+---
+
+# Kotlin Type System: Generics и Variance
+
+> **TL;DR:** Kotlin решает type erasure через `reified` типы в inline функциях. Variance определяет подстановку: `out T` (covariance) — читаем, `List<Dog>` → `List<Animal>`. `in T` (contravariance) — пишем, `Comparator<Animal>` → `Comparator<Dog>`. Contracts (`@OptIn(ExperimentalContracts::class)`) информируют компилятор о гарантиях для smart casts.
+
+---
+
+## Пререквизиты
+
+| Тема | Зачем нужно | Где изучить |
+|------|-------------|-------------|
+| **Kotlin basics** | Синтаксис, null-safety | [[kotlin-basics]] |
+| **OOP concepts** | Наследование, полиморфизм | [[kotlin-oop]] |
+| **Java Generics** | Понимание type erasure | [Oracle Tutorial](https://docs.oracle.com/javase/tutorial/java/generics/) |
+| **Collections** | List, Set, Map variance | [[kotlin-collections]] |
+| **Functional types** | Lambda, function types | [[kotlin-functional]] |
+
+---
+
+## Зачем это нужно
+
+### Проблема: Type Safety vs Гибкость
+
+| Проблема | Пример |
+|----------|--------|
+| **Type Erasure** | `List<String>` и `List<Int>` неразличимы в runtime |
+| **Безопасная подстановка** | Можно ли передать `List<Dog>` вместо `List<Animal>`? |
+| **Проверка типа в runtime** | `value is T` не работает с generics |
+| **Smart Casts не работают** | После `if (x is String)` компилятор "забывает" тип |
+
+### Что даёт понимание Type System
+
+```
+Без понимания:                     С пониманием:
+┌──────────────────┐               ┌──────────────────┐
+│ as? везде        │               │ Smart Casts      │
+│ ClassCastException│              │ Type-safe APIs   │
+│ List<*> хаос     │               │ Variance in/out  │
+│ Generics = магия │               │ Reified types    │
+└──────────────────┘               └──────────────────┘
+```
+
+### Ключевые концепции Kotlin Type System
+
+1. **Null Safety** — два типа: `String` и `String?`
+2. **Smart Casts** — автоматическое приведение после проверки типа
+3. **Variance** — `in T` (contravariance), `out T` (covariance)
+4. **Reified Types** — сохранение типа в runtime через inline
+5. **Contracts** — подсказки компилятору для smart casts
+
+### Актуальность 2024-2025
+
+| Фича | Статус | Что нового |
+|------|--------|------------|
+| **K2 Compiler** | ✅ Kotlin 2.0+ | Улучшенный type inference, быстрее smart casts |
+| **Contracts** | ⚠️ Experimental | @OptIn(ExperimentalContracts::class) всё ещё нужен |
+| **Context Parameters** | ⚠️ Preview | KEEP-259: замена context receivers |
+| **Value classes** | ✅ Stable | `@JvmInline value class` для type-safe wrappers |
+| **Definite assignment** | ✅ K2 | Лучший анализ инициализации val |
+
+**Тренды 2025:**
+- K2 compiler — значительно улучшенный type inference
+- Smart casts работают в большем количестве случаев
+- Value classes для zero-overhead type safety
+
+---
+
+## TL;DR
+
+Java стирает generic типы в runtime (type erasure) — `List<String>` и `List<Int>` становятся одинаковыми `List`. Kotlin решает это через `reified` типы в inline функциях: `inline fun <reified T> parse(): T` сохраняет тип T в runtime, позволяя проверки `is T` и получение `T::class.java`.
+
+Variance определяет, когда `List<Dog>` можно использовать вместо `List<Animal>`. Ковариантность (`out T`) — коллекция-производитель, можно только читать: `List<Dog>` подходит для `List<out Animal>`. Контравариантность (`in T`) — коллекция-потребитель, можно только добавлять: `Comparator<Animal>` подходит для `Comparator<in Dog>`. В Kotlin это объявляется на уровне интерфейса (declaration-site variance), а не на месте использования как в Java wildcards.
+
+---
+
+## Терминология для новичков
+
+| Термин | Что это | Аналогия из жизни |
+|--------|---------|-------------------|
+| **Generics** | Параметризация типов `<T>` | Коробка с этикеткой — может хранить что угодно, но этикетка говорит что |
+| **Variance** | Правила подстановки типов | Кто кому подходит — донор крови группы O подходит всем |
+| **Covariance (out)** | Можно подставить подтип | Поставщик фруктов — если поставляет яблоки, подходит как поставщик фруктов |
+| **Contravariance (in)** | Можно подставить супертип | Мусорный бак — бак для всего мусора принимает и пластик |
+| **Invariance** | Только точный тип | Ключ от квартиры — только этот ключ, никакие похожие |
+| **Type erasure** | Стирание типов в runtime | Коробка без этикетки — в runtime не знаем что внутри |
+| **reified** | Сохранение типа в runtime | Коробка с встроенной этикеткой — inline вставляет тип |
+| **Star projection** | `*` — неизвестный тип | Коробка "Осторожно, неизвестно" — читаем, но не пишем |
+| **Contract** | Подсказка компилятору о гарантиях | Контракт "если вернул true, значит не null" |
+| **Smart cast** | Автоматическое приведение после проверки | Если проверил паспорт — дальше помнишь имя |
+| **Upper bound** | Ограничение сверху `T : Number` | Клуб "Только для числовых типов" |
+
+---
+
+## Generics
+
+### Основы generic типов
+
+```kotlin
+// Generic класс
+class Box<T>(val value: T) {
+    fun get(): T = value
+}
+
+val intBox = Box(42)          // Box<Int>
+val strBox = Box("Hello")     // Box<String>
+
+println(intBox.get())         // 42
+println(strBox.get())         // "Hello"
+
+// Generic функция
+fun <T> singletonList(item: T): List<T> {
+    return listOf(item)
+}
+
+val list1 = singletonList(42)      // List<Int>
+val list2 = singletonList("text")  // List<String>
+
+// Множественные type parameters
+class Pair<A, B>(val first: A, val second: B)
+
+val pair = Pair(1, "one")  // Pair<Int, String>
+
+// Generic с ограничениями (type bounds)
+fun <T : Comparable<T>> max(a: T, b: T): T {
+    return if (a > b) a else b
+}
+
+val maxInt = max(10, 20)        // OK: Int : Comparable<Int>
+val maxStr = max("a", "z")      // OK: String : Comparable<String>
+// val maxList = max(listOf(), listOf())  // ❌ Ошибка: List не Comparable
+
+// Множественные bounds через where
+fun <T> process(item: T) where T : CharSequence, T : Comparable<T> {
+    println(item.length)        // CharSequence
+    println(item.compareTo(""))  // Comparable
+}
+
+process("hello")  // String реализует оба интерфейса
+```
+
+**Почему generics?**
+- Type safety: ошибки на этапе компиляции
+- Переиспользование: один код для разных типов
+- Избегаем приведений типов: нет `as`, нет ClassCastException
+
+### Generic type erasure
+
+```kotlin
+// В runtime generic типы стираются
+fun <T> checkType(value: Any): Boolean {
+    // return value is T  // ❌ Ошибка: Cannot check for erased type
+    return false
+}
+
+// Type erasure означает:
+val list1 = listOf<Int>(1, 2, 3)
+val list2 = listOf<String>("a", "b", "c")
+
+// В runtime оба - просто List
+println(list1::class)  // class java.util.Arrays$ArrayList
+println(list2::class)  // class java.util.Arrays$ArrayList
+
+// Невозможно создать массив generic типа
+// val array = Array<T>(10) { ... }  // ❌ Ошибка
+
+// Обход через reified (см. ниже) или Array<Any?>
+inline fun <reified T> createArray(size: Int): Array<T?> {
+    return arrayOfNulls<T>(size)
+}
+```
+
+**Почему type erasure?**
+- Java совместимость: JVM не поддерживает generics нативно
+- Performance: нет overhead на runtime type checks
+- Решение: reified types для inline функций
+
+### Generic constraints в деталях
+
+```kotlin
+// Upper bound - T должен быть подтипом Number
+class NumberBox<T : Number>(val value: T) {
+    fun doubleValue(): Double = value.toDouble()
+}
+
+val intBox = NumberBox(42)      // OK: Int : Number
+val doubleBox = NumberBox(3.14) // OK: Double : Number
+// val strBox = NumberBox("42")    // ❌ Ошибка: String не Number
+
+// Nullable upper bound
+class NullableBox<T : Any?>(val value: T) {
+    // T может быть nullable
+}
+
+val box1 = NullableBox(42)    // T = Int
+val box2 = NullableBox(null)  // T = Nothing?
+
+// Non-null upper bound (по умолчанию - Any?)
+class NonNullBox<T : Any>(val value: T) {
+    // T не может быть nullable
+}
+
+val box3 = NonNullBox(42)     // OK
+// val box4 = NonNullBox(null)   // ❌ Ошибка
+
+// Множественные constraints
+interface Printable {
+    fun print()
+}
+
+fun <T> process(item: T)
+        where T : Comparable<T>,
+              T : Printable,
+              T : CharSequence {
+    item.print()
+    item.compareTo("")
+    println(item.length)
+}
+
+// Рекурсивные type bounds
+interface Node<T : Node<T>> {
+    val children: List<T>
+}
+
+class TreeNode : Node<TreeNode> {
+    override val children: List<TreeNode> = emptyList()
+}
+```
+
+## Variance
+
+### Declaration-site variance
+
+```kotlin
+// Invariant (по умолчанию) - нет variance
+class InvariantBox<T>(var value: T)
+
+val intBox: InvariantBox<Int> = InvariantBox(42)
+// val anyBox: InvariantBox<Any> = intBox  // ❌ Ошибка!
+// val numBox: InvariantBox<Number> = intBox  // ❌ Ошибка!
+
+// Covariant (out) - только производит T, не потребляет
+interface Producer<out T> {
+    fun produce(): T
+    // fun consume(value: T)  // ❌ Ошибка: T в in-позиции
+}
+
+class StringProducer : Producer<String> {
+    override fun produce(): String = "Hello"
+}
+
+val strProducer: Producer<String> = StringProducer()
+val anyProducer: Producer<Any> = strProducer  // ✅ OK: Producer<String> <: Producer<Any>
+
+// Contravariant (in) - только потребляет T, не производит
+interface Consumer<in T> {
+    fun consume(value: T)
+    // fun produce(): T  // ❌ Ошибка: T в out-позиции
+}
+
+class AnyConsumer : Consumer<Any> {
+    override fun consume(value: Any) {
+        println(value)
+    }
+}
+
+val anyConsumer: Consumer<Any> = AnyConsumer()
+val strConsumer: Consumer<String> = anyConsumer  // ✅ OK: Consumer<Any> <: Consumer<String>
+```
+
+**Почему variance нужен?**
+- **Covariance (out)**: читать из generic контейнера безопасно
+  - `List<String>` можно использовать как `List<Any>`
+  - Можем только производить T, не можем добавлять
+- **Contravariance (in)**: писать в generic контейнер безопасно
+  - `Consumer<Any>` может потреблять любые String
+  - Можем только потреблять T, не можем читать
+
+### Практические примеры variance
+
+```kotlin
+// List<out T> - covariant, read-only
+interface List<out T> {
+    fun get(index: Int): T
+    val size: Int
+    // Нельзя добавлять: fun add(element: T)
+}
+
+val strings: List<String> = listOf("a", "b")
+val anys: List<Any> = strings  // ✅ OK: только читаем
+
+// MutableList<T> - invariant, можно читать и писать
+interface MutableList<T> {
+    fun get(index: Int): T
+    fun add(element: T)
+}
+
+val mutableStrings: MutableList<String> = mutableListOf("a")
+// val mutableAnys: MutableList<Any> = mutableStrings  // ❌ Ошибка!
+// Если бы было OK:
+// mutableAnys.add(42)  // Добавили Int в MutableList<String>!
+
+// Comparator<in T> - contravariant
+interface Comparator<in T> {
+    fun compare(a: T, b: T): Int
+}
+
+val anyComparator: Comparator<Any> = Comparator { a, b ->
+    a.hashCode() - b.hashCode()
+}
+
+val stringComparator: Comparator<String> = anyComparator  // ✅ OK
+// anyComparator может сравнивать Any → может сравнивать String
+
+// Function types variance
+// (in) -> out
+val stringToInt: (String) -> Int = { it.length }
+val anyToInt: (Any) -> Int = stringToInt  // ✅ OK: String более специфичен
+val stringToAny: (String) -> Any = stringToInt  // ✅ OK: Int более специфичен
+
+// Правило PECS (Producer Extends, Consumer Super)
+// Producer<out T> - производит T (extends в Java)
+// Consumer<in T> - потребляет T (super в Java)
+```
+
+### Use-site variance (Type projections)
+
+```kotlin
+// Use-site variance - указываем variance при использовании
+class Box<T>(var value: T)
+
+fun copy(from: Box<out Any>, to: Box<in Any>) {
+    to.value = from.value  // Читаем из 'out', пишем в 'in'
+}
+
+val intBox = Box(42)
+val anyBox = Box<Any>("initial")
+
+copy(intBox, anyBox)  // ✅ OK
+println(anyBox.value)  // 42
+
+// 'out' projection - можем только читать
+fun readFrom(box: Box<out Number>) {
+    val value: Number = box.value  // ✅ Читаем
+    // box.value = 42  // ❌ Ошибка: нельзя писать
+}
+
+readFrom(Box<Int>(42))     // ✅ OK
+readFrom(Box<Double>(3.14)) // ✅ OK
+
+// 'in' projection - можем только писать
+fun writeTo(box: Box<in Int>) {
+    box.value = 42  // ✅ Пишем
+    // val value: Int = box.value  // ❌ Ошибка: нельзя читать (может быть Any)
+}
+
+writeTo(Box<Int>(0))    // ✅ OK
+writeTo(Box<Number>(0)) // ✅ OK
+writeTo(Box<Any>(0))    // ✅ OK
+
+// Star projection - unknown type
+fun printBox(box: Box<*>) {
+    println(box.value)  // Читаем как Any?
+    // box.value = "anything"  // ❌ Ошибка: неизвестный тип
+}
+
+printBox(Box(42))
+printBox(Box("hello"))
+```
+
+**Когда использовать какой projection:**
+- `out T`: функция только читает из T
+- `in T`: функция только пишет в T
+- `*`: неизвестный тип, ограниченный доступ
+
+### Когда НЕ использовать variance
+
+```kotlin
+// ❌ Не используйте variance для mutable данных
+class MutableHolder<out T>(var value: T)  // Ошибка компиляции!
+// Почему: если бы сработало, можно было бы записать неправильный тип
+
+// ❌ Не используйте covariance, если нужно передавать T в методы
+interface Repository<out T> {
+    fun save(item: T)  // Ошибка: T в in-позиции
+}
+// Почему: covariance позволяет Repository<Dog> → Repository<Animal>
+// Тогда save(animal) получит Animal, но Repository<Dog> ожидает Dog!
+
+// ❌ Не используйте variance просто "на всякий случай"
+class SimpleBox<T>(val value: T)  // OK: invariant
+// Если не нужна подстановка типов, invariant проще и безопаснее
+
+// ✅ Правильный выбор variance:
+
+// 1. Только читаете? → out (covariant)
+interface Reader<out T> {
+    fun read(): T
+}
+
+// 2. Только пишете? → in (contravariant)
+interface Writer<in T> {
+    fun write(value: T)
+}
+
+// 3. И то, и другое? → invariant (default)
+interface Storage<T> {
+    fun read(): T
+    fun write(value: T)
+}
+```
+
+**Практические советы по variance:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  DECISION TREE ДЛЯ VARIANCE                     │
+└─────────────────────────────────────────────────────────────────┘
+
+Используется ли T как возвращаемое значение (out-позиция)?
+├── ДА → Используется ли T как параметр метода (in-позиция)?
+│        ├── ДА → Invariant (по умолчанию)
+│        │        Пример: MutableList<T>
+│        │
+│        └── НЕТ → Covariant (out T)
+│                  Пример: List<out T>, Iterable<out T>
+│
+└── НЕТ → Используется ли T как параметр метода (in-позиция)?
+          ├── ДА → Contravariant (in T)
+          │        Пример: Comparator<in T>, Consumer<in T>
+          │
+          └── НЕТ → Зачем вам generic? 🤔
+```
+
+### Star projections в деталях
+
+```kotlin
+// Star projection эквиваленты
+// Foo<*> эквивалентно:
+// - Foo<out Any?> для Producer
+// - Foo<in Nothing> для Consumer
+
+interface Producer<out T> {
+    fun produce(): T
+}
+
+fun useProducer(producer: Producer<*>) {
+    val value: Any? = producer.produce()  // Producer<*> = Producer<out Any?>
+}
+
+interface Consumer<in T> {
+    fun consume(value: T)
+}
+
+fun useConsumer(consumer: Consumer<*>) {
+    // consumer.consume("value")  // ❌ Ошибка: Consumer<*> = Consumer<in Nothing>
+    // Нельзя передать ничего (Nothing не имеет значений)
+}
+
+// Практический пример
+class Container<T>(val items: List<T>) {
+    fun getItem(index: Int): T = items[index]
+}
+
+fun printContainer(container: Container<*>) {
+    // Не знаем точный тип, но можем читать как Any?
+    for (i in 0 until container.items.size) {
+        println(container.getItem(i))  // Any?
+    }
+}
+
+printContainer(Container(listOf(1, 2, 3)))
+printContainer(Container(listOf("a", "b", "c")))
+```
+
+## Reified Types
+
+### Основы reified
+
+```kotlin
+// Обычные generic - type erasure
+fun <T> isInstanceOf(value: Any): Boolean {
+    // return value is T  // ❌ Ошибка: Cannot check for erased type
+    return false
+}
+
+// inline + reified - тип сохраняется
+inline fun <reified T> isInstanceOfReified(value: Any): Boolean {
+    return value is T  // ✅ OK: T известен благодаря inline
+}
+
+println(isInstanceOfReified<String>("hello"))  // true
+println(isInstanceOfReified<Int>("hello"))     // false
+
+// Доступ к T::class
+inline fun <reified T> getClassName(): String {
+    return T::class.simpleName ?: "Unknown"
+}
+
+println(getClassName<String>())  // "String"
+println(getClassName<List<Int>>())  // "List"
+```
+
+**Почему только для inline?**
+- inline вставляет код функции в место вызова
+- В месте вызова тип T известен
+- Компилятор подставляет конкретный тип вместо T
+
+### Практические примеры reified
+
+```kotlin
+// Фильтрация по типу
+inline fun <reified T> List<*>.filterIsInstance(): List<T> {
+    val result = mutableListOf<T>()
+    for (element in this) {
+        if (element is T) {
+            result.add(element)
+        }
+    }
+    return result
+}
+
+val mixed: List<Any> = listOf(1, "two", 3.0, "four", 5)
+val strings = mixed.filterIsInstance<String>()  // ["two", "four"]
+val numbers = mixed.filterIsInstance<Number>()  // [1, 3.0, 5]
+
+// JSON parsing
+inline fun <reified T> String.fromJson(): T {
+    return Gson().fromJson(this, T::class.java)
+}
+
+val user: User = jsonString.fromJson()  // Тип выводится!
+val users: List<User> = jsonArrayString.fromJson()
+
+// Intent extras (Android)
+inline fun <reified T> Intent.getExtra(key: String): T? {
+    return when (T::class) {
+        String::class -> getStringExtra(key) as? T
+        Int::class -> getIntExtra(key, 0) as? T
+        Boolean::class -> getBooleanExtra(key, false) as? T
+        else -> getSerializableExtra(key) as? T
+    }
+}
+
+val name: String? = intent.getExtra("name")
+val age: Int? = intent.getExtra("age")
+
+// Создание массива generic типа
+inline fun <reified T> genericArray(size: Int, init: (Int) -> T): Array<T> {
+    return Array(size) { init(it) }
+}
+
+val intArray = genericArray(5) { it * 2 }     // Array<Int>
+val strArray = genericArray(3) { "Item $it" } // Array<String>
+
+// Dependency injection
+class ServiceLocator {
+    private val services = mutableMapOf<Class<*>, Any>()
+
+    fun <T : Any> register(instance: T, clazz: Class<T>) {
+        services[clazz] = instance
+    }
+
+    inline fun <reified T : Any> get(): T {
+        @Suppress("UNCHECKED_CAST")
+        return services[T::class.java] as? T
+            ?: throw IllegalStateException("Service not found: ${T::class.simpleName}")
+    }
+}
+
+val locator = ServiceLocator()
+locator.register(MyServiceImpl(), MyService::class.java)
+
+val service = locator.get<MyService>()  // Без явного указания класса!
+```
+
+### Ограничения reified
+
+```kotlin
+// ✅ Можно:
+inline fun <reified T> example1() {
+    val clazz = T::class            // Получить KClass
+    val instance = T::class.java    // Получить Java Class
+    val check = value is T          // Type check
+    val array = arrayOf<T>()        // Создать массив
+}
+
+// ❌ Нельзя:
+inline fun <reified T> example2() {
+    // val instance = T()  // ❌ Нельзя создать экземпляр
+    // T.staticMethod()    // ❌ Нельзя вызвать static методы
+}
+
+// Обход для создания экземпляра
+inline fun <reified T : Any> createInstance(): T {
+    return T::class.java.getDeclaredConstructor().newInstance()
+}
+
+// Работает только если у T есть конструктор без параметров
+val instance = createInstance<MyClass>()
+```
+
+## Type Projections и Wildcards
+
+### Сравнение с Java wildcards
+
+```kotlin
+// Java: List<? extends Number>
+// Kotlin: List<out Number>
+fun sumOfList(numbers: List<out Number>): Double {
+    return numbers.sumOf { it.toDouble() }
+}
+
+sumOfList(listOf(1, 2, 3))           // List<Int>
+sumOfList(listOf(1.5, 2.5, 3.5))     // List<Double>
+
+// Java: List<? super Integer>
+// Kotlin: List<in Int>
+fun addNumbers(list: MutableList<in Int>) {
+    list.add(42)
+}
+
+val intList = mutableListOf<Int>()
+val numberList = mutableListOf<Number>()
+val anyList = mutableListOf<Any>()
+
+addNumbers(intList)     // OK
+addNumbers(numberList)  // OK
+addNumbers(anyList)     // OK
+
+// Java: List<?>
+// Kotlin: List<*>
+fun printList(list: List<*>) {
+    for (item in list) {
+        println(item)  // item: Any?
+    }
+}
+
+printList(listOf(1, 2, 3))
+printList(listOf("a", "b", "c"))
+```
+
+### Проецирование функциональных типов
+
+```kotlin
+// Function types тоже имеют variance
+// (in) -> out
+
+// Covariant return type
+val intProducer: () -> Int = { 42 }
+val numberProducer: () -> Number = intProducer  // ✅ OK: Int <: Number
+
+// Contravariant parameter type
+val numberConsumer: (Number) -> Unit = { println(it) }
+val intConsumer: (Int) -> Unit = numberConsumer  // ✅ OK: Number :> Int
+
+// Комбинация
+val stringToInt: (String) -> Int = { it.length }
+val anyToNumber: (Any) -> Number = stringToInt  // ✅ OK
+// String <: Any (contravariant parameter)
+// Int <: Number (covariant return)
+```
+
+## Contracts
+
+### Основы contracts
+
+```kotlin
+import kotlin.contracts.*
+
+// Contract информирует компилятор о гарантиях функции
+fun String?.isNotNullOrEmpty(): Boolean {
+    contract {
+        returns(true) implies (this@isNotNullOrEmpty != null)
+    }
+    return this != null && this.isNotEmpty()
+}
+
+fun example(str: String?) {
+    if (str.isNotNullOrEmpty()) {
+        // Компилятор знает что str != null благодаря contract
+        println(str.length)  // ✅ OK, нет ошибки "str might be null"
+    }
+}
+
+// Contract для require
+inline fun requirePositive(value: Int) {
+    contract {
+        returns() implies (value > 0)
+    }
+    require(value > 0) { "Value must be positive" }
+}
+
+fun calculate(x: Int) {
+    requirePositive(x)
+    // Компилятор знает что x > 0
+}
+```
+
+**Почему contracts нужны?**
+- Smart casts: компилятор понимает когда можно smart cast
+- Null safety: компилятор знает когда значение не null
+- Лучший анализ кода: меньше false positives
+
+### Типы contracts
+
+```kotlin
+// returns() implies - условие выполнено если функция вернулась
+fun String?.isNullOrEmpty(): Boolean {
+    contract {
+        returns(false) implies (this@isNullOrEmpty != null)
+    }
+    return this == null || this.isEmpty()
+}
+
+// returns() - функция всегда возвращается (не кидает исключение)
+inline fun <R> run(block: () -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return block()
+}
+
+// callsInPlace - гарантирует что lambda вызовется
+inline fun <T> T.also(block: (T) -> Unit): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    block(this)
+    return this
+}
+
+// InvocationKind варианты:
+// - EXACTLY_ONCE: ровно 1 раз
+// - AT_MOST_ONCE: 0 или 1 раз
+// - AT_LEAST_ONCE: 1 или более раз
+// - UNKNOWN: неизвестно
+
+// Практический пример
+inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    if (condition) {
+        block()
+    }
+    return this
+}
+
+val result = StringBuilder()
+    .applyIf(true) {
+        append("Hello")  // Вызовется
+    }
+    .applyIf(false) {
+        append("World")  // Не вызовется
+    }
+```
+
+### Ограничения contracts
+
+```kotlin
+// ✅ Contracts работают только для:
+// - Top-level функций
+// - Member functions
+// - Extension functions
+
+// ❌ НЕ работают для:
+// - Local functions
+// - Functions в анонимных объектах
+// - Functional types
+
+// Contracts должны быть первым выражением в функции
+fun example(value: String?) {
+    contract {
+        returns() implies (value != null)
+    }
+    // Весь остальной код...
+}
+
+// ❌ Ошибка: contract должен быть первым
+fun wrong(value: String?) {
+    println("Some code")
+    contract { }  // ❌ Ошибка компиляции
+}
+```
+
+### Практические примеры contracts в реальном коде
+
+```kotlin
+// Пример 1: Валидация входных данных
+@OptIn(ExperimentalContracts::class)
+inline fun validateUser(user: User?): User {
+    contract {
+        returns() implies (user != null)
+    }
+    requireNotNull(user) { "User cannot be null" }
+    require(user.name.isNotBlank()) { "User name cannot be blank" }
+    require(user.age >= 0) { "User age must be non-negative" }
+    return user
+}
+
+fun processUser(user: User?) {
+    val validUser = validateUser(user)
+    // После validateUser компилятор знает: validUser != null
+    println(validUser.name)  // ✅ OK, smart cast работает
+}
+
+// Пример 2: Проверка состояния
+@OptIn(ExperimentalContracts::class)
+fun MutableList<*>.isNotEmpty(): Boolean {
+    contract {
+        returns(true) implies (this@isNotEmpty.size > 0)
+    }
+    return this.size > 0
+}
+
+// Пример 3: Synchronized block с гарантией вызова
+@OptIn(ExperimentalContracts::class)
+inline fun <T> synchronized(lock: Any, block: () -> T): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    // Теперь переменные внутри block могут быть val,
+    // потому что компилятор знает: block вызовется ровно 1 раз
+    synchronized(lock) {
+        return block()
+    }
+}
+
+fun example() {
+    val value: String  // val, не инициализирован
+    synchronized(this) {
+        value = "initialized"  // ✅ OK: block вызовется ровно 1 раз
+    }
+    println(value)  // ✅ OK: компилятор знает, value инициализирован
+}
+
+// Пример 4: Either-style обработка ошибок
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Failure(val error: Throwable) : Result<Nothing>()
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <T> Result<T>.isSuccess(): Boolean {
+    contract {
+        returns(true) implies (this@isSuccess is Result.Success)
+    }
+    return this is Result.Success
+}
+
+fun handleResult(result: Result<String>) {
+    if (result.isSuccess()) {
+        // Компилятор знает: result is Result.Success
+        println(result.value)  // ✅ Smart cast работает
+    }
+}
+```
+
+**Когда использовать contracts:**
+- Кастомные проверки, похожие на `require`/`check`/`requireNotNull`
+- Wrapper функции вокруг стандартных scope functions
+- DSL-билдеры, где lambda вызывается определённое число раз
+- Валидация, после которой тип должен измениться (smart cast)
+
+**Когда НЕ использовать contracts:**
+- Для простых функций, где компилятор сам выведет типы
+- Когда contract делает код сложнее для понимания
+- В public API библиотек (contracts — experimental feature)
+
+## Распространённые ошибки
+
+### 1. Invariance когда нужна variance
+
+```kotlin
+// ❌ Invariant generic когда нужно читать
+class Producer<T>(private val values: List<T>) {
+    fun produce(): T = values.random()
+}
+
+// val anyProducer: Producer<Any> = Producer<String>(listOf("a"))  // ❌ Ошибка!
+
+// ✅ Используйте covariance
+class Producer<out T>(private val values: List<T>) {
+    fun produce(): T = values.random()
+}
+
+val anyProducer: Producer<Any> = Producer<String>(listOf("a"))  // ✅ OK
+```
+
+### 2. Type erasure без reified
+
+```kotlin
+// ❌ Попытка type check без reified
+fun <T> checkType(value: Any): Boolean {
+    // return value is T  // ❌ Ошибка компиляции
+    return false
+}
+
+// ✅ Используйте reified для inline функций
+inline fun <reified T> checkType(value: Any): Boolean {
+    return value is T  // ✅ OK
+}
+```
+
+### 3. Неправильная variance
+
+```kotlin
+// ❌ Covariance для mutable структур
+class MutableBox<out T>(var value: T)  // ❌ Ошибка: var в covariant позиции
+
+// ✅ Invariance для mutable
+class MutableBox<T>(var value: T)  // ✅ OK
+
+// ✅ Или covariance для immutable
+class ImmutableBox<out T>(val value: T)  // ✅ OK
+```
+
+### 4. Star projection без понимания
+
+```kotlin
+// ❌ Попытка записи в star projection
+fun addToList(list: MutableList<*>) {
+    // list.add("element")  // ❌ Ошибка: неизвестный тип
+}
+
+// ✅ Используйте конкретный projection
+fun addToList(list: MutableList<in String>) {
+    list.add("element")  // ✅ OK
+}
+```
+
+### 5. Reified без inline
+
+```kotlin
+// ❌ reified без inline
+fun <reified T> wrong() {  // ❌ Ошибка: reified только для inline
+    // ...
+}
+
+// ✅ reified с inline
+inline fun <reified T> correct() {  // ✅ OK
+    // ...
+}
+```
+
+---
+
+## Кто использует и реальные примеры
+
+### Компании использующие Type System Features
+
+| Компания | Фича | Применение |
+|----------|------|------------|
+| **JetBrains** | Contracts | IntelliJ IDEA smart casts, Kotlin stdlib |
+| **Google** | Variance | Jetpack Collections, immutable `List<out T>` |
+| **Square** | Reified | Moshi JSON parsing, Retrofit type-safe API |
+| **Netflix** | Generics + Variance | Type-safe DTOs, API boundaries |
+| **Uber** | Smart Casts | Sealed class hierarchies для UI State |
+| **Pinterest** | Contracts | Custom validation functions |
+
+### Production паттерны
+
+**Sealed Class + Smart Cast (Uber, Google):**
+```kotlin
+sealed class UiState<out T> {
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
+    object Loading : UiState<Nothing>()
+}
+
+// Smart cast после when
+fun handle(state: UiState<User>) {
+    when (state) {
+        is UiState.Success -> showUser(state.data) // T smart-casted to User
+        is UiState.Error -> showError(state.message)
+        UiState.Loading -> showLoading()
+    }
+}
+```
+
+**Reified + JSON (Square Moshi):**
+```kotlin
+inline fun <reified T> Moshi.fromJson(json: String): T? {
+    return adapter(T::class.java).fromJson(json)
+}
+
+val user: User? = moshi.fromJson(jsonString) // Type inferred
+```
+
+### Реальные кейсы
+
+**Case 1: Kotlin Stdlib — Variance Design**
+```
+Пример: List<out T> vs MutableList<T>
+Причина: List только читается → covariant безопасен
+MutableList читается и пишется → invariant необходим
+Результат: List<String> присваивается в List<Any>
+```
+
+**Case 2: Square Retrofit — Reified Types**
+```
+Проблема: Type erasure не позволяет узнать T в runtime
+Решение: inline + reified для Call<T> парсинга
+Результат: Type-safe API без ручного указания Class<T>
+```
+
+---
+
+## Чеклист
+
+- [ ] Используете generics для type-safe переиспользования
+- [ ] Понимаете разницу между covariance (out) и contravariance (in)
+- [ ] Применяете PECS (Producer Extends, Consumer Super)
+- [ ] Используете reified для type checks в inline функциях
+- [ ] Понимаете type erasure и его ограничения
+- [ ] Знаете когда использовать star projections
+- [ ] Применяете type constraints для ограничения generic типов
+- [ ] Используете contracts для улучшения smart casts
+- [ ] Понимаете разницу между declaration-site и use-site variance
+- [ ] Избегаете covariance для mutable структур
+
+## Проверь себя
+
+1. **Почему `List<String>` можно присвоить в `List<Any>`, а `MutableList<String>` нельзя?**
+   <details><summary>Ответ</summary>
+   `List<out T>` — covariant (read-only), только производит T. Безопасно: читаем String как Any. `MutableList<T>` — invariant, можно читать и писать. Если бы было OK: `mutableList.add(42)` добавило бы Int в список String.
+   </details>
+
+2. **Когда использовать `in T` vs `out T`?**
+   <details><summary>Ответ</summary>
+   `out T` (covariance) — когда только ПРОИЗВОДИТЕ T (возвращаете, читаете). Producer Extends. `in T` (contravariance) — когда только ПОТРЕБЛЯЕТЕ T (принимаете как параметр). Consumer Super. Мнемоника: PECS.
+   </details>
+
+3. **Почему reified работает только с inline функциями?**
+   <details><summary>Ответ</summary>
+   Type erasure стирает generic типы в runtime. Но inline функции вставляются напрямую в место вызова, где конкретный тип T известен компилятору. Компилятор подставляет реальный тип вместо T.
+   </details>
+
+4. **Что означает `Box<*>` и что с ним можно делать?**
+   <details><summary>Ответ</summary>
+   Star projection — неизвестный тип. Эквивалент `Box<out Any?>` для чтения (можно читать как Any?) и `Box<in Nothing>` для записи (нельзя ничего записать). Используется когда тип неизвестен, но нужен безопасный доступ.
+   </details>
+
+5. **Зачем нужны Contracts и когда их использовать?**
+   <details><summary>Ответ</summary>
+   Contracts информируют компилятор о гарантиях функции. Это позволяет smart casts работать после кастомных проверок. Используйте для валидаторов типа `requireNotNull`, wrapper-функций вокруг scope functions, и DSL-builders с гарантированным вызовом lambda.
+   </details>
+
+---
+
+## Мифы и заблуждения
+
+| Миф | Реальность |
+|-----|-----------|
+| "String? и Optional<String> одинаковы" | Nullable types — compile-time only, zero overhead. Optional — wrapper object с allocation. Nullable idiomatic в Kotlin |
+| "Smart casts работают везде" | Smart casts не работают для var (может измениться), custom getters (могут возвращать разное), properties из других модулей |
+| "Type erasure — только проблема" | Type erasure обеспечивает backward compatibility с Java. reified inline — workaround для типов в runtime |
+| "out T значит 'только output'" | out T (covariance) значит: T появляется только в output позициях методов. Можно читать T, нельзя принимать T как параметр |
+| "Star projection = Any?" | * projection — unknown type. Box<*> эквивалентен Box<out Any?> для чтения, Box<in Nothing> для записи. Строже чем Any |
+| "Variance влияет на runtime" | Variance — compile-time only. В bytecode нет out/in. JVM видит обычные generics с erasure |
+| "reified можно использовать везде" | reified требует inline функцию. Inline вставляет код в call site, где конкретный тип известен компилятору |
+| "Nothing — бесполезный тип" | Nothing — bottom type. Для функций, которые никогда не возвращают (throw, infinite loop). Subtype всех типов |
+| "Contracts меняют поведение кода" | Contracts информируют компилятор о гарантиях. Они не enforcement — просто подсказка для smart casts |
+| "Unit = void" | Unit — singleton object, реальный тип с одним значением. void — отсутствие типа. Unit можно использовать в generics |
+
+---
+
+## CS-фундамент
+
+| CS-концепция | Применение в Kotlin Type System |
+|--------------|--------------------------------|
+| **Type Soundness** | Nullable types гарантируют отсутствие NPE в compile-time (для чистого Kotlin кода). Type safety through types |
+| **Variance** | Covariance (out), Contravariance (in), Invariance. Правила подтипирования для generic types |
+| **PECS Principle** | Producer Extends (out), Consumer Super (in). Мнемоника для выбора variance |
+| **Type Erasure** | Generic types стираются в runtime для JVM compatibility. Reified — compile-time workaround |
+| **Bottom Type** | Nothing — subtype всех типов. Используется для функций, которые не возвращают нормально |
+| **Union/Intersection Types** | Нет в Kotlin напрямую, но sealed classes + when = discriminated union. Multiple bounds = intersection |
+| **Smart Casts (Flow Typing)** | После type check компилятор знает более точный тип. Информация о типе "течёт" по control flow |
+| **Declaration-site vs Use-site Variance** | Declaration-site (class Producer<out T>) vs Use-site (fun copy(from: Array<out Any>)). Kotlin предпочитает declaration-site |
+| **Type Inference** | Компилятор выводит типы без явного указания. Hindley-Milner based algorithm |
+| **Contracts (Dependent Types lite)** | Contracts связывают входы с выходами/effects. Простая форма dependent types для smart casts |
+
+---
+
+## Связанные темы
+- [[kotlin-collections]] — Variance в коллекциях (List<out T>)
+- [[kotlin-advanced-features]] — Reified в extension functions
+- [[kotlin-functional]] — Variance в function types
+- [[kotlin-best-practices]] — Best practices для generics
+
+---
+
+## Источники
+
+| # | Источник | Тип | Ключевой вклад |
+|---|----------|-----|----------------|
+| 1 | [Null Safety](https://kotlinlang.org/docs/null-safety.html) | Official Docs | Null safety система |
+| 2 | [Generics: in, out, where](https://kotlinlang.org/docs/generics.html) | Official Docs | Variance и bounds |
+| 3 | [Type System Specification](https://kotlinlang.org/spec/type-system.html) | Official Spec | Формальная спецификация |
+| 4 | [Type Checks and Casts](https://kotlinlang.org/docs/typecasts.html) | Official Docs | Smart casts, as, is |
+| 5 | [Kotlin Generics Explained](https://www.droidcon.com/2025/04/29/kotlin-generics-explained-once-upon-a-type/) | Conference | Практические примеры |
+| 6 | [Advanced Generics and Variance](https://carrion.dev/en/posts/advanced-kotlin-generics/) | Blog | Глубокий разбор variance |
+| 7 | [Smart Casts and Type Inference](https://jamshidbekboynazarov.medium.com/smart-casts-and-type-inference-in-kotlin-explained-6e325c07d620) | Blog | Smart casts примеры |
+
+---
+
+*Проверено: 2026-01-09 | Источники: Kotlin Docs, Kotlin Spec, DroidCon, carrion.dev — Педагогический контент проверен*
