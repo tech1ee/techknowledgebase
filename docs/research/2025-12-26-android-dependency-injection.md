@@ -1,3 +1,14 @@
+---
+title: "Research Report: Android Dependency Injection"
+created: 2025-12-26
+modified: 2025-12-26
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/architecture
+---
+
 # Research Report: Android Dependency Injection 2024-2025
 
 **Date:** 2025-12-26

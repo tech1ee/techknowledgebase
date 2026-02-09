@@ -1,12 +1,22 @@
-# Kodein: Deep-Dive
-
 ---
+title: "Kodein: Deep-Dive — runtime DI для Kotlin"
+created: 2026-02-09
+modified: 2026-02-09
 type: deep-dive
-level: intermediate
-topics: [kotlin, kmp, dependency-injection, kodein, runtime, multiplatform]
-related: [[dependency-injection-fundamentals]], [[android-koin-deep-dive]], [[android-kotlin-inject-deep-dive]]
-version: "2024-2025"
+status: published
+tags:
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[dependency-injection-fundamentals]]"
+  - "[[android-koin-deep-dive]]"
+  - "[[android-kotlin-inject-deep-dive]]"
 ---
+
+# Kodein: Deep-Dive
 
 ## TL;DR
 

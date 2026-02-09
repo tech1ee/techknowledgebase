@@ -1,3 +1,18 @@
+---
+title: "Improvement Log"
+created: 2025-11-24
+modified: 2025-12-19
+type: reference
+status: verified
+confidence: high
+tags:
+  - system/guidelines
+  - system/metadata
+related:
+  - "[[content-levels]]"
+  - "[[cognitive-science-rules]]"
+---
+
 # Improvement Log
 
 > Читать перед созданием ЛЮБОГО контента.

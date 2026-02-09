@@ -3,13 +3,15 @@ title: "Databases: карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
+status: published
 area: databases
 confidence: high
 tags:
-  - moc
-  - databases
+  - topic/databases
   - sql
   - nosql
+  - type/moc
+  - level/beginner
 related:
   - "[[database-design-optimization]]"
   - "[[databases-sql-fundamentals]]"

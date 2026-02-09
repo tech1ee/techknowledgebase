@@ -1,3 +1,14 @@
+---
+title: "Research Report: Cloud Databases"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+  - topic/cloud
+---
+
 # Research Report: Cloud Databases
 
 **Date:** 2025-12-30

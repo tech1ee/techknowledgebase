@@ -6,24 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - intent
-  - intentfilter
-  - pendingintent
-  - deep-links
-  - app-links
-  - ipc
-  - binder
-  - intent-resolution
-  - chooser
-  - sharesheet
-  - activity-result
-  - uri-scheme
-  - package-visibility
-  - intent-flags
-  - digital-asset-links
-  - espresso-intents
-  - robolectric
+  - topic/android
+  - topic/intents
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-app-components]]"
   - "[[android-activity-lifecycle]]"

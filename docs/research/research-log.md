@@ -1,3 +1,14 @@
+---
+title: "Research Log"
+created: 2025-12-25
+modified: 2025-12-30
+type: index
+status: verified
+tags:
+  - type/index
+  - navigation
+---
+
 # Research Log
 
 | Date | Topic | Sources | Key Findings | Report |

@@ -3,10 +3,12 @@ title: "Programming Overview"
 created: 2025-12-19
 modified: 2025-12-19
 type: moc
+status: published
 tags:
-  - moc
-  - programming
+  - topic/programming
   - principles
+  - type/moc
+  - level/beginner
 ---
 
 # Programming: Карта раздела

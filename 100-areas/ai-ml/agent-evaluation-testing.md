@@ -1,11 +1,27 @@
 ---
 title: "AI Agent Evaluation & Testing Framework"
-tags: [ai, agents, testing, evaluation, benchmarks, quality, metrics, evals]
+tags:
+  - topic/ai-ml
+  - agents
+  - testing
+  - evaluation
+  - benchmarks
+  - quality
+  - metrics
+  - evals
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: intermediate-advanced
 created: 2026-01-11
 updated: 2026-01-11
-sources: [langchain.com, anthropic.com, openai.com, braintrustdata.com, arize.ai]
+sources:
+  - langchain.com
+  - anthropic.com
+  - openai.com
+  - braintrustdata.com
+  - arize.ai
+status: published
 ---
 
 # AI Agent Evaluation & Testing: Полное руководство

@@ -1,23 +1,24 @@
 ---
 title: "Performance Management: Оценка и развитие"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, hr]
-prerequisites:
-  - "[[em-fundamentals]]"
-  - "[[one-on-one-meetings]]"
 teaches:
   - continuous feedback
   - performance reviews
   - managing underperformance
-unlocks:
-  - "[[difficult-conversations]]"
-  - "[[hiring-engineers]]"
-tags: [leadership, performance, feedback, reviews, coaching]
 sources: [radical-candor, managers-path, netflix-culture, google-rework]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
+  - "[[hiring-engineers]]"
 ---
 
 # Performance Management: Оценка и развитие
@@ -727,4 +728,4 @@ AFTER REVIEW CHECKLIST:
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

@@ -7,11 +7,11 @@ area: android
 confidence: high
 cs-foundations: [dependency-injection, service-locator, kotlin-dsl, multiplatform]
 tags:
-  - android
-  - koin
-  - dependency-injection
-  - kotlin-multiplatform
-  - compose
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-dependency-injection]]"

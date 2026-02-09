@@ -1,11 +1,9 @@
-# Top K Elements Pattern
-
 ---
-title: "Top K Elements Pattern"
+title: "Паттерн Top K элементов"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -18,19 +16,20 @@ prerequisites:
   - "[[heaps-priority-queues]]"
   - "[[sorting-algorithms]]"
   - "[[hash-tables]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[heaps-priority-queues]]"
   - "[[two-heaps-pattern]]"
   - "[[k-way-merge-pattern]]"
   - "[[hash-tables]]"
-tags:
-  - pattern
-  - top-k
-  - heap
-  - quickselect
-  - frequency
-  - interview
 ---
+
+# Top K Elements Pattern
 
 ## TL;DR
 

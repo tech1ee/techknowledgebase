@@ -6,11 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - broadcast
-  - broadcastreceiver
-  - broadcastqueue
-  - intentfilter
+  - topic/android
+  - topic/broadcast
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

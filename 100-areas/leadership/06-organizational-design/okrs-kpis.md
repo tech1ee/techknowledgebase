@@ -1,21 +1,23 @@
 ---
 title: "OKRs и KPIs для инженерии"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, vpe]
-prerequisites:
-  - "[[engineering-metrics]]"
 teaches:
   - OKR framework
   - KPIs vs OKRs
   - engineering-specific OKRs
-unlocks:
-  - "[[strategic-thinking]]"
-tags: [leadership, okrs, kpis, goals, strategy]
 sources: [measure-what-matters, radical-focus, google-okrs]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[engineering-metrics]]"
+  - "[[strategic-thinking]]"
 ---
 
 # OKRs и KPIs для инженерии

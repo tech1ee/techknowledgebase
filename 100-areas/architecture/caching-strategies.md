@@ -3,13 +3,16 @@ title: "Caching: быстро, но сложно"
 created: 2025-11-24
 modified: 2026-01-02
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/architecture
   - architecture/caching
   - architecture/performance
   - tools/redis
+  - type/concept
+  - level/intermediate
 related:
   - "[[microservices-vs-monolith]]"
   - "[[api-design]]"

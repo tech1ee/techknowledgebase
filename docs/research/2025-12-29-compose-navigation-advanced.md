@@ -1,3 +1,14 @@
+---
+title: "Research Report: Compose Navigation Advanced"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/navigation
+---
+
 # Research Report: Compose Navigation Advanced (2024-2025)
 
 **Date:** 2025-12-29

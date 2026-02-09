@@ -1,9 +1,9 @@
 ---
-title: "Graphs (Графы)"
+title: "Графы (Graphs)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -29,12 +29,14 @@ unlocks:
   - "[[union-find-pattern]]"
   - "[[shortest-paths]]"
 tags:
-  - cs-fundamentals
-  - data-structures
-  - graphs
-  - bfs
-  - dfs
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
   - interview
+related:
+  - "[[graph-algorithms]]"
+  - "[[union-find-pattern]]"
+  - "[[shortest-paths]]"
 ---
 
 # Графы (Graphs)

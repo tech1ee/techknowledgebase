@@ -1,22 +1,24 @@
 ---
 title: "Культура инженерной команды"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, cto, founder]
-prerequisites:
-  - "[[building-engineering-team]]"
 teaches:
   - что такое культура
   - как строить культуру
   - примеры компаний
-unlocks:
+sources: [netflix-culture, valve-handbook, gitlab-handbook]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[building-engineering-team]]"
   - "[[team-dynamics]]"
   - "[[company-handbooks]]"
-tags: [leadership, culture, team-building, values]
-sources: [netflix-culture, valve-handbook, gitlab-handbook]
 ---
 
 # Культура инженерной команды
@@ -651,4 +653,4 @@ Even if they're your "10x engineer."
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

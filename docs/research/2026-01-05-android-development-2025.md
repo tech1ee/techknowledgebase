@@ -1,3 +1,13 @@
+---
+title: "Research Report: Android Development 2025"
+created: 2026-01-05
+modified: 2026-01-05
+type: reference
+status: draft
+tags:
+  - topic/android
+---
+
 # Research Report: Android Development 2025
 
 **Date:** 2026-01-05

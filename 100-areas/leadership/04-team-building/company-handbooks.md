@@ -1,20 +1,22 @@
 ---
 title: "Справочники компаний"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: reference
-status: complete
+status: published
 difficulty: beginner
 target-role: [em, director, cto, founder]
-prerequisites:
-  - "[[team-culture]]"
 teaches:
   - примеры культурных документов
   - как структурировать handbook
-unlocks:
-  - "[[scaling-engineering-org]]"
-tags: [leadership, culture, documentation, handbooks]
 sources: [valve-handbook, gitlab-handbook, basecamp-handbook]
+tags:
+  - topic/leadership
+  - type/reference
+  - level/beginner
+related:
+  - "[[team-culture]]"
+  - "[[scaling-engineering-org]]"
 ---
 
 # Справочники компаний

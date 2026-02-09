@@ -3,14 +3,16 @@ title: "Kubernetes Advanced: RBAC, Network Policies, Operators"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - devops
+  - topic/devops
   - kubernetes
   - rbac
-  - security
+  - topic/security
   - operators
+  - type/concept
+  - level/advanced
 related:
   - "[[kubernetes-basics]]"
   - "[[devops-overview]]"

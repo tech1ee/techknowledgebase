@@ -3,13 +3,16 @@ title: "Планирование процессов: как ОС распред�
 created: 2025-12-02
 modified: 2025-12-02
 type: deep-dive
+status: published
 area: operating-systems
 confidence: high
 tags:
-  - os
+  - topic/os
   - scheduling
   - cpu
   - concurrency
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[os-overview]]"
   - "[[os-processes-threads]]"

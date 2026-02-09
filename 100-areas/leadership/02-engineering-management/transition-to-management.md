@@ -1,24 +1,26 @@
 ---
 title: "Переход от IC к менеджеру"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior-ic, tech-lead, new-em]
-prerequisites:
-  - "[[ic-vs-management]]"
-  - "[[em-fundamentals]]"
 teaches:
   - понимание перехода
   - типичные ошибки
   - план первых 90 дней
-unlocks:
+sources: [managers-path, charity-majors, first-round-review]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ic-vs-management]]"
+  - "[[em-fundamentals]]"
   - "[[one-on-one-meetings]]"
   - "[[delegation]]"
   - "[[performance-management]]"
-tags: [leadership, transition, career-change, engineering-management]
-sources: [managers-path, charity-majors, first-round-review]
 ---
 
 # Переход от IC к менеджеру
@@ -592,4 +594,4 @@ DAYS 60-90: Deliver
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

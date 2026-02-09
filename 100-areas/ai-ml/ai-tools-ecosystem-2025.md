@@ -1,9 +1,16 @@
 ---
 title: "AI Tools Ecosystem 2025: Полный справочник"
-tags: [ai, tools, ecosystem, llm, infrastructure, 2025]
+tags:
+  - topic/ai-ml
+  - tools
+  - ecosystem
+  - infrastructure
+  - 2025
+  - type/concept
+  - level/intermediate
 category: ai-engineering
 date: 2025-12-24
-status: complete
+status: published
 level: intermediate
 related:
   - "[[agent-frameworks-comparison]]"

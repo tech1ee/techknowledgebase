@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [access-control, sandboxing, process-isolation, encryption]
 tags:
-  - android
-  - permissions
-  - security
-  - encryption
-  - biometric
+  - topic/android
+  - topic/security
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

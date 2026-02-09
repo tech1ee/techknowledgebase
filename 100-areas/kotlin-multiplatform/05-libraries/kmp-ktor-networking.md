@@ -2,9 +2,17 @@
 title: "Ktor Client в Kotlin Multiplatform: сетевой слой на всех платформах"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, ktor, networking, http, multiplatform, api]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - ktor
+  - topic/networking
+  - "http"
+  - api
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kmp-di-patterns]]"
 cs-foundations:
@@ -12,6 +20,7 @@ cs-foundations:
   - "[[async-io-models]]"
   - "[[connection-pooling]]"
   - "[[retry-strategies]]"
+status: published
 ---
 
 # Ktor Client в Kotlin Multiplatform

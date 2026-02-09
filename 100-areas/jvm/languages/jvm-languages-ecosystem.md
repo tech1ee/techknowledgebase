@@ -3,13 +3,15 @@ title: "JVM Languages: Kotlin, Scala, Clojure, Groovy"
 created: 2025-11-25
 modified: 2026-01-02
 tags:
-  - jvm
-  - kotlin
+  - topic/jvm
   - scala
   - clojure
   - groovy
   - programming-languages
+  - type/comparison
+  - level/intermediate
 type: comparison
+status: published
 area: programming
 confidence: high
 related:
@@ -17,16 +19,16 @@ related:
   - "[[kotlin-basics]]"
   - "[[java-modern-features]]"
 sources:
-  - https://www.baeldung.com/jvm-languages
-  - https://blog.jetbrains.com/kotlin/2011/08/why-jetbrains-needs-kotlin/
-  - https://www.artima.com/articles/the-origins-of-scala
-  - https://en.wikipedia.org/wiki/Clojure
-  - https://dl.acm.org/doi/abs/10.1145/3386326
-  - https://kotlinlang.org/case-studies/
-  - https://datarootlabs.com/blog/big-companies-use-scala
-  - https://blog.frankel.ch/rise-fall-jvm-languages/
-  - https://www.atlassian.com/blog/developer/why-clojure
-  - https://digma.ai/kotlin-modern-java-the-17-differences-experienced-developers-should-know/
+  - "https://www.baeldung.com/jvm-languages"
+  - "https://blog.jetbrains.com/kotlin/2011/08/why-jetbrains-needs-kotlin/"
+  - "https://www.artima.com/articles/the-origins-of-scala"
+  - "https://en.wikipedia.org/wiki/Clojure"
+  - "https://dl.acm.org/doi/abs/10.1145/3386326"
+  - "https://kotlinlang.org/case-studies/"
+  - "https://datarootlabs.com/blog/big-companies-use-scala"
+  - "https://blog.frankel.ch/rise-fall-jvm-languages/"
+  - "https://www.atlassian.com/blog/developer/why-clojure"
+  - "https://digma.ai/kotlin-modern-java-the-17-differences-experienced-developers-should-know/"
 ---
 
 # JVM Languages: Kotlin, Scala, Clojure, Groovy

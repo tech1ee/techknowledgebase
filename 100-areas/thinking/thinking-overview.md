@@ -3,14 +3,15 @@ title: "Thinking & Learning: Карта раздела"
 created: 2025-12-19
 modified: 2025-12-19
 type: moc
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
-  - moc
-  - thinking
+  - topic/thinking
   - learning
   - productivity
+  - type/moc
+  - level/beginner
 related:
   - "[[programming-overview]]"
   - "[[architecture-moc]]"

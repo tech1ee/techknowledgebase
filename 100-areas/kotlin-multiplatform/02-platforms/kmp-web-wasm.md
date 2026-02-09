@@ -2,9 +2,19 @@
 title: "KMP Web/Wasm: Kotlin для Web через WebAssembly"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, wasm, webassembly, web, compose, browser, javascript]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - wasm
+  - webassembly
+  - web
+  - compose
+  - browser
+  - javascript
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-android-integration]]"
   - "[[compose-mp-web]]"
 cs-foundations:
@@ -12,6 +22,7 @@ cs-foundations:
   - "[[native-compilation-llvm]]"
   - "[[bytecode-virtual-machines]]"
   - "[[memory-model-fundamentals]]"
+status: published
 ---
 
 # KMP Web/Wasm

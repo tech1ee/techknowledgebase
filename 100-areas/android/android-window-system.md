@@ -6,13 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - window
-  - decorview
-  - phonewindow
-  - windowmanager
-  - surface
-  - insets
+  - topic/android
+  - topic/internals
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-overview]]"
   - "[[android-view-rendering-pipeline]]"

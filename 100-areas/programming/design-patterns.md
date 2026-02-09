@@ -3,13 +3,16 @@ title: "Design Patterns: решения, которые уже работают"
 created: 2025-11-24
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/programming
   - programming/patterns
   - architecture/design
   - best-practices
+  - type/concept
+  - level/intermediate
 related:
   - "[[clean-code-solid]]"
   - "[[microservices-vs-monolith]]"

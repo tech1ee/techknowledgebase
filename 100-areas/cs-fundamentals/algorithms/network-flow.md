@@ -1,3 +1,19 @@
+---
+title: "Сетевые потоки (Network Flow)"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/expert
+related:
+  - "[[graph-algorithms]]"
+  - "[[graph-advanced]]"
+  - "[[shortest-paths]]"
+---
+
 # Network Flow
 
 ## TL;DR

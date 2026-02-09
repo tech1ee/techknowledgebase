@@ -1,3 +1,13 @@
+---
+title: "NoSQL Databases: Complete Guide"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/intermediate
+---
+
 # NoSQL Databases: Complete Guide
 
 > Полное руководство по NoSQL базам данных — Document, Key-Value, Wide-Column, Graph, Time-Series

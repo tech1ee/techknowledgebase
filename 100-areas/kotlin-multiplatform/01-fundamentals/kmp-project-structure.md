@@ -2,7 +2,14 @@
 title: "KMP Project Structure: Анатомия мультиплатформенного проекта"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, multiplatform, project-structure, gradle, source-sets]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - project-structure
+  - gradle
+  - source-sets
+  - type/concept
+  - level/beginner
 related:
   - "[[kmp-getting-started]]"
   - "[[kmp-source-sets]]"
@@ -12,6 +19,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[dependency-resolution]]"
   - "[[module-systems]]"
+status: published
 ---
 
 # KMP Project Structure: как устроен мультиплатформенный проект

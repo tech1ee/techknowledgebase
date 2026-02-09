@@ -2,7 +2,14 @@
 title: "Cross-Platform: Navigation — NavigationStack vs Navigation Component"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, navigation, ios, android]
+status: published
+tags:
+  - topic/cross-platform
+  - navigation
+  - ios
+  - android
+  - type/comparison
+  - level/intermediate
 ---
 
 # Кросс-платформенная навигация: NavigationStack vs Navigation Component

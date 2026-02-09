@@ -1,3 +1,21 @@
+---
+title: "Алгоритмы кратчайших путей"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - interview
+related:
+  - "[[graph-algorithms]]"
+  - "[[graphs]]"
+  - "[[greedy-algorithms]]"
+  - "[[dynamic-programming]]"
+---
+
 # Shortest Path Algorithms
 
 ## TL;DR

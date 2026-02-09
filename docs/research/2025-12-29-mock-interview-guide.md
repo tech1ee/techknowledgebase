@@ -1,3 +1,14 @@
+---
+title: "Research Report: Mock Interview Guide"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/career
+  - topic/interviews
+---
+
 # Research Report: Mock Interview Guide (2024-2025)
 
 **Date:** 2025-12-29

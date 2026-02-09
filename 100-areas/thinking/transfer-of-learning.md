@@ -3,13 +3,16 @@ title: "Transfer of Learning: как применять знания"
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/transfer
   - learning/application
   - productivity/learning
+  - type/concept
+  - level/intermediate
 related:
   - "[[learning-complex-things]]"
   - "[[desirable-difficulties]]"

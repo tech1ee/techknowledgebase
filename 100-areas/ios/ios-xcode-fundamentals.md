@@ -8,7 +8,7 @@ tags:
   - type/deep-dive
   - topic/ios
   - topic/xcode
-  - level/foundation
+  - level/beginner
 ---
 
 # iOS Xcode Fundamentals: проекты, targets, schemes

@@ -6,13 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - fragment
-  - lifecycle
-  - fragmentmanager
-  - viewlifecycleowner
-  - backstack
-  - navigation
+  - topic/android
+  - topic/lifecycle
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-activity-lifecycle]]"
   - "[[android-navigation]]"

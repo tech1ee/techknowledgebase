@@ -1,11 +1,9 @@
-# Searching Algorithms
-
 ---
-title: "Searching Algorithms"
+title: "Алгоритмы поиска"
 created: 2025-12-30
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,18 +17,18 @@ prerequisites:
   - "[[arrays-strings]]"
   - "[[sorting-algorithms]]"
   - "[[big-o-complexity]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[binary-search-pattern]]"
   - "[[two-pointers-pattern]]"
   - "[[trees-binary]]"
-tags:
-  - algorithm
-  - binary-search
-  - searching
-  - lower-bound
-  - upper-bound
-  - interview
 ---
+
+# Searching Algorithms
 
 ## TL;DR
 

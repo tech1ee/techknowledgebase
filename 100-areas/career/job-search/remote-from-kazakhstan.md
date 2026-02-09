@@ -7,11 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/remote-work
-  - topic/job-search
-  - topic/kazakhstan
   - type/guide
-  - level/senior
+  - level/advanced
 related:
   - "[[remote-first-companies]]"
   - "[[job-search-strategy]]"

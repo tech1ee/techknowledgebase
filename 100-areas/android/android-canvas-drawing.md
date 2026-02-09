@@ -8,12 +8,10 @@ confidence: high
 cs-foundations: [2d-graphics, coordinate-transformation, rasterization, paint-model]
 research: "[[2025-12-25-android-canvas-drawing]]"
 tags:
-  - android
-  - canvas
-  - paint
-  - drawing
-  - graphics
-  - performance
+  - topic/android
+  - topic/graphics
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-view-measurement]]"

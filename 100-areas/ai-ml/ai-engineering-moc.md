@@ -3,14 +3,14 @@ title: "AI Engineering MOC: карта AI инженера"
 created: 2026-01-09
 modified: 2026-01-09
 type: moc
-status: verified
+status: published
 confidence: high
 tags:
-  - moc
-  - ai
-  - llm
+  - topic/ai-ml
   - rag
   - agents
+  - type/moc
+  - level/intermediate
 related:
   - "[[ai-ml-overview-v2]]"
   - "[[llm-fundamentals]]"

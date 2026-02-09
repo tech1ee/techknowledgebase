@@ -3,13 +3,16 @@ title: "Clean Code и SOLID: код, который не стыдно показ
 created: 2025-11-24
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/programming
   - programming/clean-code
   - programming/solid
   - best-practices
+  - type/concept
+  - level/intermediate
 related:
   - "[[design-patterns]]"
   - "[[technical-debt]]"

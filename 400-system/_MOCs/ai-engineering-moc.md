@@ -4,8 +4,9 @@ created: 2025-11-24
 modified: 2025-12-28
 type: moc
 tags:
-  - moc
-  - ai-ml
+  - topic/ai-ml
+  - type/moc
+  - navigation
 ---
 
 # AI Engineering MOC

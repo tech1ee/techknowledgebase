@@ -3,13 +3,16 @@ title: "Databases: от SELECT * до миллисекундных запрос�
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/databases
   - databases/sql
   - databases/optimization
   - databases/design
+  - type/concept
+  - level/advanced
 related:
   - "[[caching-strategies]]"
   - "[[microservices-vs-monolith]]"

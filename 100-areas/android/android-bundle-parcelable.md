@@ -6,14 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - bundle
-  - parcelable
-  - parcel
-  - serialization
-  - binder
-  - ipc
-  - savedinstancestate
+  - topic/android
+  - topic/serialization
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-activity-lifecycle]]"
   - "[[android-state-management]]"

@@ -3,12 +3,15 @@ title: "Облачные сети: VPC, Load Balancing, CDN"
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/networking
   - networking/cloud
   - devops/infrastructure
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-platforms-essentials]]"
   - "[[infrastructure-as-code]]"

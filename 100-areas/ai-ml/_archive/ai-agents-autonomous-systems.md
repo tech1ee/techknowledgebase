@@ -3,14 +3,15 @@ title: "AI Agents: автономные системы с tool use"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - agents
   - tool-use
   - autonomous-systems
-  - llm
+  - type/concept
+  - level/intermediate
 related:
   - "[[ai-ml-overview]]"
   - "[[rag-and-prompt-engineering]]"

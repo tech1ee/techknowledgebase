@@ -3,14 +3,16 @@ title: "GCP Core Services: Compute Engine, Cloud SQL, BigQuery"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - cloud
+  - topic/cloud
   - gcp
   - bigquery
   - compute-engine
   - cloud-functions
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-overview]]"
   - "[[cloud-serverless-patterns]]"

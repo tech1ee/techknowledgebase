@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [dependency-injection, annotation-processing, code-generation, compile-time-validation]
 tags:
-  - android
-  - hilt
-  - dagger
-  - dependency-injection
-  - compose
-  - ksp
+  - topic/android
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-dependency-injection]]"

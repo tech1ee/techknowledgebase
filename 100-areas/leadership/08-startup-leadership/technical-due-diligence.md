@@ -1,22 +1,24 @@
 ---
 title: "Техническое Due Diligence"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [cto, vpe, investor, acquirer]
-prerequisites:
-  - "[[engineering-practices]]"
-  - "[[architecture-decisions]]"
 teaches:
   - technical assessment
   - risk evaluation
   - due diligence process
-unlocks:
-  - "[[startup-cto]]"
-tags: [leadership, due-diligence, assessment, investment, acquisition]
 sources: [m-and-a, vc-due-diligence, technical-assessment]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[engineering-practices]]"
+  - "[[architecture-decisions]]"
+  - "[[startup-cto]]"
 ---
 
 # Техническое Due Diligence

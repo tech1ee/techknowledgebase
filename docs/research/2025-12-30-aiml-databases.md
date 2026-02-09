@@ -1,3 +1,14 @@
+---
+title: "Research Report: AI/ML Databases - Vector Databases & Embeddings"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+  - topic/ai-ml
+---
+
 # Research Report: AI/ML Databases — Vector Databases & Embeddings
 
 **Date:** 2025-12-30

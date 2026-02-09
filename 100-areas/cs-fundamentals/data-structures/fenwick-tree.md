@@ -1,3 +1,18 @@
+---
+title: "Дерево Фенвика (Binary Indexed Tree)"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[segment-tree]]"
+  - "[[sparse-table]]"
+---
+
 # Fenwick Tree (Binary Indexed Tree)
 
 ## TL;DR

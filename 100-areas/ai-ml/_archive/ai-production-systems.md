@@ -3,14 +3,16 @@ title: "AI Production Systems: serving, scaling, cost optimization"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - production
   - mlops
   - serving
   - optimization
+  - type/concept
+  - level/intermediate
 related:
   - "[[ai-ml-overview]]"
   - "[[ai-evaluation-metrics]]"

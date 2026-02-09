@@ -2,7 +2,14 @@
 title: "Cross-Platform: Imperative UI — UIKit vs Android Views"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, uikit, android-views, ui]
+status: published
+tags:
+  - topic/cross-platform
+  - uikit
+  - android-views
+  - ui
+  - type/comparison
+  - level/intermediate
 ---
 
 # Imperative UI: UIKit vs Android Views

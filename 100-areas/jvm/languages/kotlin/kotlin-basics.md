@@ -3,12 +3,15 @@ title: "Kotlin: Основы языка"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - kotlin
+  - topic/jvm
   - basics
   - null-safety
+  - type/concept
+  - level/beginner
 aliases:
   - Kotlin Basics
   - Основы Kotlin
+status: published
 ---
 
 # Kotlin: Основы языка

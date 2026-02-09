@@ -2,15 +2,14 @@
 title: "CS Fundamentals: Алгоритмы и Структуры Данных"
 created: 2025-12-29
 modified: 2025-12-29
-type: moc
+type: overview
 status: published
 confidence: high
 tags:
   - topic/cs-fundamentals
-  - topic/algorithms
-  - topic/data-structures
-  - topic/interview
-  - level/all
+  - type/overview
+  - level/beginner
+  - interview
 related:
   - "[[coding-challenges]]"
   - "[[technical-interview]]"

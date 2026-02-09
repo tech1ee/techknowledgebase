@@ -1,9 +1,20 @@
 ---
-date: 2026-01-11
+title: "SwiftUI vs UIKit: выбор UI-фреймворка для iOS"
+created: 2026-01-11
+modified: 2026-01-11
 type: comparison
+status: published
 area: ios
-tags: [swiftui, uikit, ios-development, architecture, ui-frameworks]
-related: [[ios-architecture-patterns]], [[ios-performance-optimization]], [[ios-migration-strategies]]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/ui
+  - type/comparison
+  - level/intermediate
+related:
+  - "[[ios-architecture-patterns]]"
+  - "[[ios-performance-optimization]]"
+  - "[[ios-migration-strategies]]"
 ---
 
 # SwiftUI vs UIKit: Выбор UI-фреймворка для iOS

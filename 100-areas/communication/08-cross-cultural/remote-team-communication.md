@@ -1,3 +1,18 @@
+---
+title: "Remote Team Communication: Timezone, Async-First и Trust"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/communication
+  - type/guide
+  - level/intermediate
+related:
+  - "[[async-communication]]"
+  - "[[cultural-dimensions]]"
+---
+
 # Remote Team Communication: Timezone, Async-First и Trust
 
 ## TL;DR

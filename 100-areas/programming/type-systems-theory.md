@@ -3,13 +3,15 @@ title: "Type Systems: теория и практика систем типов"
 created: 2026-01-09
 modified: 2026-01-09
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
   - programming/types
   - cs-fundamentals/type-theory
-  - kotlin
+  - topic/jvm
   - typescript
+  - type/concept
+  - level/intermediate
 related:
   - "[[generics-parametric-polymorphism]]"
   - "[[variance-covariance]]"

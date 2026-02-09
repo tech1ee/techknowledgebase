@@ -1,8 +1,19 @@
 ---
-title: iOS Repository Pattern
-date: 2026-01-11
-tags: [ios, swift, architecture, data-layer, repository, clean-architecture]
-related: [[android-repository-pattern]]
+title: "Repository Pattern в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/architecture
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-repository-pattern]]"
+  - "[[ios-architecture-patterns]]"
+  - "[[ios-data-persistence]]"
 ---
 
 # iOS Repository Pattern

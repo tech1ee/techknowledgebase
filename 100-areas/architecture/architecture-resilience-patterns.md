@@ -3,14 +3,16 @@ title: "Resilience Patterns: Circuit Breaker, Retry, Bulkhead"
 created: 2025-12-22
 modified: 2026-01-02
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - architecture
+  - topic/architecture
   - resilience
   - fault-tolerance
   - circuit-breaker
   - patterns
+  - type/concept
+  - level/intermediate
 related:
   - "[[architecture-overview]]"
   - "[[architecture-distributed-systems]]"

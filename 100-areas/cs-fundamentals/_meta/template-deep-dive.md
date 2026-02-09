@@ -1,3 +1,18 @@
+---
+title: "Шаблон обучающего материала (Deep-Dive)"
+created: 2026-02-09
+modified: 2026-02-09
+type: reference
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/reference
+  - level/beginner
+related:
+  - "[[cs-fundamentals-overview]]"
+  - "[[learning-path]]"
+---
+
 # Шаблон обучающего материала (Deep-Dive)
 
 > **Этот шаблон обязателен для КАЖДОГО материала в cs-fundamentals.**

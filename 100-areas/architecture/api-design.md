@@ -3,14 +3,17 @@ title: "API Design: REST, GraphQL и когда что использовать"
 created: 2025-11-24
 modified: 2026-01-02
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/architecture
   - architecture/api
   - backend/rest
   - backend/graphql
   - backend/grpc
+  - type/concept
+  - level/intermediate
 related:
   - "[[microservices-vs-monolith]]"
   - "[[technical-debt]]"

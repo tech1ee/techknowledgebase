@@ -1,11 +1,26 @@
 ---
 title: "AI Agent Cost Optimization"
-tags: [ai, agents, cost, optimization, tokens, caching, routing, production]
+tags:
+  - topic/ai-ml
+  - agents
+  - cost
+  - optimization
+  - tokens
+  - caching
+  - routing
+  - production
+  - type/concept
+  - level/advanced
 category: ai-ml
 level: intermediate-advanced
 created: 2026-01-11
 updated: 2026-01-11
-sources: [openai.com, anthropic.com, langchain.com, together.ai]
+sources:
+  - openai.com
+  - anthropic.com
+  - langchain.com
+  - together.ai
+status: published
 ---
 
 # AI Agent Cost Optimization: Полное руководство

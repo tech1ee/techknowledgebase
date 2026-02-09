@@ -2,7 +2,16 @@
 title: "KMP Performance Optimization: Build, Size, Runtime"
 created: 2026-01-04
 modified: 2026-01-04
-tags: [kotlin, kmp, performance, optimization, k2, native, build-time]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - performance
+  - optimization
+  - k2
+  - native
+  - build-time
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-gradle-deep-dive]]"
   - "[[kmp-memory-management]]"
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[native-compilation-llvm]]"
   - "[[cpu-architecture-basics]]"
   - "[[memory-model-fundamentals]]"
+status: published
 ---
 
 # KMP Performance Optimization

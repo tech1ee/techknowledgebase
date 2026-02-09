@@ -3,13 +3,16 @@ title: "Flow State: когда работа становится игрой"
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/flow
   - productivity/performance
   - deep-work
+  - type/concept
+  - level/intermediate
 related:
   - "[[deep-work]]"
   - "[[attention-crisis]]"

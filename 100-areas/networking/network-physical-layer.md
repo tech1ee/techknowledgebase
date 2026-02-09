@@ -2,8 +2,20 @@
 title: "Физический и канальный уровень: Ethernet, WiFi, MAC"
 created: 2025-01-15
 modified: 2025-12-27
-tags: [networking, ethernet, wifi, mac, physical-layer, layer2]
-related: [[networking-overview]], [[network-ip-routing]], [[network-cloud-modern]]
+tags:
+  - topic/networking
+  - ethernet
+  - wifi
+  - mac
+  - physical-layer
+  - layer2
+  - type/concept
+  - level/intermediate
+related:
+  - [networking-overview]]
+  - "[[network-ip-routing]]"
+  - "[[network-cloud-modern]"
+status: published
 ---
 
 # Физический и канальный уровень: Ethernet, WiFi, MAC

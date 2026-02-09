@@ -2,9 +2,18 @@
 title: "KMP Navigation: Decompose, Voyager, Compose Navigation"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, navigation, decompose, voyager, compose-navigation, routing]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - navigation
+  - decompose
+  - voyager
+  - compose-navigation
+  - routing
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[compose-mp-overview]]"
 cs-foundations:
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[stack-data-structure]]"
   - "[[state-machines-theory]]"
   - "[[component-lifecycle]]"
+status: published
 ---
 
 # KMP Navigation

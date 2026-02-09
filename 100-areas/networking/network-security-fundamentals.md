@@ -2,8 +2,19 @@
 title: "Network Security Fundamentals"
 created: 2025-01-15
 modified: 2025-01-15
-tags: [networking, security, firewall, encryption, tls]
-related: [[network-dns-tls]], [[network-cloud-modern]], [[authentication-authorization]]
+tags:
+  - topic/networking
+  - topic/security
+  - firewall
+  - encryption
+  - tls
+  - type/concept
+  - level/beginner
+related:
+  - [network-dns-tls]]
+  - "[[network-cloud-modern]]"
+  - "[[authentication-authorization]"
+status: published
 ---
 
 # Network Security Fundamentals

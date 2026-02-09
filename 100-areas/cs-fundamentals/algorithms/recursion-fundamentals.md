@@ -1,10 +1,10 @@
 ---
 title: "Рекурсия: полное руководство для понимания с нуля"
 created: 2025-12-29
-updated: 2026-01-06
-type: textbook
-status: complete
-difficulty: beginner-to-intermediate
+modified: 2026-01-06
+type: guide
+status: published
+difficulty: beginner
 confidence: high
 cs-foundations:
   - call-stack-mechanism
@@ -16,17 +16,16 @@ cs-foundations:
   - mathematical-induction
 prerequisites:
   - "[[stacks-queues]]"
+tags:
+  - topic/cs-fundamentals
+  - type/guide
+  - level/beginner
+  - interview
 related:
   - "[[dynamic-programming]]"
   - "[[backtracking]]"
   - "[[sorting-algorithms]]"
   - "[[trees-binary]]"
-tags:
-  - algorithm
-  - recursion
-  - call-stack
-  - teaching
-  - fundamentals
 ---
 
 # Рекурсия: полное руководство для понимания с нуля

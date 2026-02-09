@@ -1,3 +1,14 @@
+---
+title: "Research Report: Bit Manipulation Pattern"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: Bit Manipulation Pattern (2024-2025)
 
 **Date:** 2025-12-29

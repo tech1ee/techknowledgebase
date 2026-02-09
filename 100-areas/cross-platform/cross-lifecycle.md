@@ -9,6 +9,7 @@ tags:
   - topic/lifecycle
   - topic/ios
   - topic/android
+  - level/intermediate
 ---
 
 # Жизненный цикл: UIViewController vs Activity/Fragment

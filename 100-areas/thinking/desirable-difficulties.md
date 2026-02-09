@@ -3,13 +3,16 @@ title: "Desirable Difficulties: почему сложнее — значит л�
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/learning
   - learning/effectiveness
   - productivity/learning
+  - type/concept
+  - level/intermediate
 related:
   - "[[learning-complex-things]]"
   - "[[how-brain-learns]]"

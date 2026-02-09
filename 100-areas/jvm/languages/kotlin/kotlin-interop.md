@@ -2,7 +2,13 @@
 title: "Kotlin-Java Interoperability: Интеграция с Java"
 created: 2025-11-25
 modified: 2025-11-25
-tags: [kotlin, java, interop, jvm, annotations]
+tags:
+  - topic/jvm
+  - interop
+  - annotations
+  - type/concept
+  - level/intermediate
+status: published
 ---
 
 # Kotlin-Java Interop: бесшовная интеграция

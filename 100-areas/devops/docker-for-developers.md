@@ -3,13 +3,16 @@ title: "Docker для разработчиков: от хаоса к поряд�
 created: 2025-11-24
 modified: 2025-11-24
 type: tutorial
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/devops
   - devops/docker
   - devops/containers
   - tools/docker
+  - type/tutorial
+  - level/intermediate
 related:
   - "[[microservices-vs-monolith]]"
   - "[[technical-debt]]"

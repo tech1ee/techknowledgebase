@@ -3,13 +3,16 @@ title: "Системное мышление: видеть лес за дерев
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/systems
   - thinking/engineering
   - skills/problem-solving
+  - type/concept
+  - level/intermediate
 related:
   - "[[mental-models]]"
   - "[[learning-complex-things]]"

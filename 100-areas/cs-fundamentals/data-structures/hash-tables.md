@@ -1,9 +1,9 @@
 ---
-title: "Hash Tables"
+title: "Хеш-таблицы (Hash Tables)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 cs-foundations:
   - hashing-algorithms
@@ -12,18 +12,26 @@ cs-foundations:
   - amortized-complexity
   - modular-arithmetic
 prerequisites:
-  - [[arrays-strings]]
-  - [[big-o-complexity]]
+  - "[[arrays-strings]]"
+  - "[[big-o-complexity]]"
 teaches:
   - hash-function
   - collision-resolution
   - O(1)-lookup
   - key-value-storage
 unlocks:
-  - [[lru-cache]]
-  - [[two-pointers-pattern]]
-  - [[frequency-counting]]
-tags: [cs-fundamentals, data-structures, hash-table, hashmap, hashing]
+  - "[[lru-cache]]"
+  - "[[two-pointers-pattern]]"
+  - "[[frequency-counting]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
+related:
+  - "[[lru-cache]]"
+  - "[[two-pointers-pattern]]"
+  - "[[frequency-counting]]"
 ---
 
 # Hash Tables

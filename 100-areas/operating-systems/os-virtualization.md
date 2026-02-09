@@ -3,14 +3,17 @@ title: "Виртуализация и контейнеры: изоляция о�
 created: 2025-12-02
 modified: 2025-12-02
 type: deep-dive
+status: published
 area: operating-systems
 confidence: high
 tags:
-  - os
+  - topic/os
   - virtualization
   - containers
   - docker
   - kvm
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[os-overview]]"
   - "[[os-processes-threads]]"

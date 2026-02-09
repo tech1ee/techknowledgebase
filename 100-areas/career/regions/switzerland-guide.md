@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/relocation
-  - region/switzerland
   - type/guide
+  - level/intermediate
 related:
   - "[[netherlands-guide]]"
   - "[[salary-benchmarks]]"

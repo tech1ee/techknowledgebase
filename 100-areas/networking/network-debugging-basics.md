@@ -2,14 +2,17 @@
 title: "Network Debugging Basics"
 created: 2025-12-26
 modified: 2025-12-26
-type: practical
+type: tutorial
+status: published
 level: junior
 tags:
-  - networking
+  - topic/networking
   - debugging
   - troubleshooting
   - devtools
   - cli
+  - type/tutorial
+  - level/beginner
 ---
 
 # Network Debugging Basics

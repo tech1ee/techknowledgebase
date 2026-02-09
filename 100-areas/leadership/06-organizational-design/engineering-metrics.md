@@ -1,21 +1,23 @@
 ---
 title: "Метрики инженерии"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, vpe]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - DORA metrics
   - productivity metrics
   - что НЕ мерить
-unlocks:
-  - "[[okrs-kpis]]"
-tags: [leadership, metrics, dora, productivity, engineering]
 sources: [accelerate, dora, space-framework]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[okrs-kpis]]"
 ---
 
 # Метрики инженерии

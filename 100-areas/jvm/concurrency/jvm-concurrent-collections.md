@@ -3,11 +3,14 @@ title: "JVM Concurrent Collections: потокобезопасные колле�
 created: 2025-11-25
 modified: 2025-12-02
 tags:
-  - jvm
+  - topic/jvm
   - concurrency
   - collections
   - concurrent
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

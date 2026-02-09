@@ -2,9 +2,18 @@
 title: "KMP Architecture Patterns: Clean Architecture, MVI, MVVM"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, architecture, clean-architecture, mvi, mvvm, patterns]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - topic/architecture
+  - clean-architecture
+  - mvi
+  - mvvm
+  - patterns
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-di-patterns]]"
   - "[[kmp-state-management]]"
 cs-foundations:
@@ -13,6 +22,7 @@ cs-foundations:
   - "[[dependency-inversion-principle]]"
   - "[[state-machines-theory]]"
   - "[[unidirectional-data-flow]]"
+status: published
 ---
 
 # KMP Architecture Patterns

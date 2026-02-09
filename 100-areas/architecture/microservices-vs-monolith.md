@@ -3,13 +3,16 @@ title: "Микросервисы vs Монолит: когда что выбир
 created: 2025-11-24
 modified: 2025-12-28
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/architecture
   - architecture/patterns
   - architecture/microservices
   - architecture/monolith
+  - type/concept
+  - level/intermediate
 related:
   - "[[technical-debt]]"
   - "[[network-cloud-modern]]"

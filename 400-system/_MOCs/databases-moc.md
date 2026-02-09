@@ -4,8 +4,9 @@ created: 2025-11-24
 modified: 2025-12-18
 type: moc
 tags:
-  - moc
-  - databases
+  - topic/databases
+  - type/moc
+  - navigation
 ---
 
 # Databases MOC
@@ -23,10 +24,58 @@ tags:
 
 ---
 
-## Статьи
+## Рекомендуемый путь изучения
+
+```
+1. [[databases-overview]]               — Обзор раздела
+         ↓
+2. [[databases-fundamentals-complete]]  — Основы: модели данных, ACID, CAP
+         ↓
+3. [[databases-sql-fundamentals]]       — SQL: DDL, DML, JOIN, подзапросы
+         ↓
+4. [[databases-transactions-acid]]      — Транзакции, изоляция, MVCC
+         ↓
+5. [[database-design-optimization]]     — Индексы, N+1, нормализация
+         ↓
+6. [[database-internals-complete]]      — Внутренности: B-Tree, WAL, buffer pool
+         ↓
+7. [[databases-nosql-comparison]]       — NoSQL: Document, Key-Value, Graph, Column
+         ↓
+8. [[databases-replication-sharding]]   — Репликация, шардинг, партиционирование
+         ↓
+9. [[databases-backup-recovery]]        — Бэкапы, DR, point-in-time recovery
+         ↓
+10. [[databases-monitoring-security]]   — Мониторинг, slow queries, безопасность
+```
+
+---
+
+## Статьи по категориям
+
+### Fundamentals
+- [[databases-overview]] — карта раздела, обзор
+- [[databases-fundamentals-complete]] — модели данных, ACID, CAP теорема, BASE
+- [[databases-sql-fundamentals]] — SQL: SELECT, JOIN, агрегации, оконные функции
+- [[databases-transactions-acid]] — транзакции, уровни изоляции, MVCC, deadlocks
 
 ### Design & Optimization
-- [[database-design-optimization]] — Индексы, N+1, нормализация, SQL vs NoSQL, миграции
+- [[database-design-optimization]] — индексы, N+1, нормализация/денормализация, EXPLAIN
+- [[database-internals-complete]] — внутренности СУБД: B-Tree, WAL, buffer pool, query optimizer
+
+### SQL vs NoSQL
+- [[databases-nosql-comparison]] — Document, Key-Value, Graph, Column: когда что выбрать
+- [[sql-databases-complete]] — PostgreSQL, MySQL, SQLite: особенности и выбор
+- [[nosql-databases-complete]] — MongoDB, Redis, Cassandra, Neo4j: глубокое сравнение
+
+### Specialized
+- [[cloud-databases-complete]] — managed БД: RDS, Cloud SQL, DynamoDB, Cosmos DB
+- [[mobile-databases-complete]] — SQLite, Room, Core Data, Realm, SQLDelight
+- [[aiml-databases-complete]] — vector databases, pgvector, Pinecone, Chroma для AI/ML
+
+### Operations
+- [[databases-replication-sharding]] — репликация, шардинг, партиционирование
+- [[databases-backup-recovery]] — бэкапы, disaster recovery, point-in-time recovery
+- [[databases-monitoring-security]] — мониторинг, pg_stat_statements, безопасность
 
 ---
 
@@ -145,11 +194,12 @@ tags:
 
 ---
 
-## Планируется
+## Связанные области
 
-- Database Sharding & Partitioning — горизонтальное масштабирование
-- Replication strategies — read replicas, multi-master
-- Database Migrations at scale — zero-downtime migrations
+- [[architecture-moc]] — microservices database patterns, event sourcing
+- [[cloud-moc]] — managed database services (RDS, Cloud SQL)
+- [[security-moc]] — защита данных, шифрование, доступ
+- [[ai-engineering-moc]] — vector databases для RAG и embeddings
 
 ---
 
@@ -167,8 +217,8 @@ tags:
 
 | Метрика | Значение |
 |---------|----------|
-| Всего заметок | 1 |
-| Последнее обновление | 2025-12-18 |
+| Всего заметок | 15 |
+| Последнее обновление | 2026-02-09 |
 
 ---
 

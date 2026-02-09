@@ -1,21 +1,23 @@
 ---
 title: "Где искать кандидатов"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, hr, recruiter]
-prerequisites:
-  - "[[hiring-engineers]]"
 teaches:
   - каналы sourcing
   - referral programs
   - passive candidates
-unlocks:
-  - "[[interview-process-design]]"
-tags: [leadership, hiring, sourcing, recruiting, talent]
 sources: [linkedin-research, greenhouse, lever]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[hiring-engineers]]"
+  - "[[interview-process-design]]"
 ---
 
 # Где искать кандидатов
@@ -678,4 +680,4 @@ LONG-TERM
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

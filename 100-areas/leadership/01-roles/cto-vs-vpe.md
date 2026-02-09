@@ -1,23 +1,24 @@
 ---
 title: "CTO vs VP Engineering: ключевые различия"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior, tech-lead, em, director, vpe, cto]
-prerequisites:
-  - Понимание ролей в tech-компании
 teaches:
   - Различия CTO и VP Engineering
   - Когда нужна какая роль
   - Как выбрать свой путь
-unlocks:
-  - [[first-90-days]]
-  - [[startup-cto]]
-  - [[scaling-engineering-org]]
-tags: [leadership, cto, vp-engineering, roles, career]
 sources: [avc.com, bothsidesofthetable, firstround, staffeng]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[first-90-days]]"
+  - "[[startup-cto]]"
+  - "[[scaling-engineering-org]]"
 ---
 
 # CTO vs VP Engineering: ключевые различия
@@ -578,4 +579,4 @@ CTO-cofounder при росте до 100 человек всё ещё делае
 
 ---
 
-[[00-leadership-overview|← Leadership MOC]] | [[tech-lead-role|Tech Lead Role →]]
+[[leadership-overview|← Leadership MOC]] | [[tech-lead-role|Tech Lead Role →]]

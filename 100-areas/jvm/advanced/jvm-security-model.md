@@ -3,22 +3,25 @@ title: "JVM Security Model - Модель безопасности Java"
 created: 2025-11-25
 modified: 2026-01-02
 tags:
-  - jvm
-  - security
+  - topic/jvm
+  - topic/security
   - securitymanager
   - permissions
   - sandbox
   - deprecated
   - docker
   - kubernetes
-type: note
+  - type/concept
+  - level/advanced
+type: concept
+status: published
 area: programming
 confidence: high
 sources:
-  - https://openjdk.org/jeps/411
-  - https://openjdk.org/jeps/486
-  - https://snyk.io/blog/securitymanager-removed-java/
-  - https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SecurityManager.html
+  - "https://openjdk.org/jeps/411"
+  - "https://openjdk.org/jeps/486"
+  - "https://snyk.io/blog/securitymanager-removed-java/"
+  - "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SecurityManager.html"
 related:
   - "[[jvm-class-loader-deep-dive]]"
   - "[[docker-for-developers]]"

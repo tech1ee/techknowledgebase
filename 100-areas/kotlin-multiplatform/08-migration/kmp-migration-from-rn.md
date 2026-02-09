@@ -2,9 +2,25 @@
 title: "Миграция с React Native на KMP"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, migration, react-native, javascript, cross-platform]
-related: [[kmp-migration-from-native]], [[kmp-migration-from-flutter]], [[kmp-getting-started]]
-cs-foundations: [interoperability-patterns, bridge-architecture, incremental-migration, language-translation]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - migration
+  - react-native
+  - javascript
+  - topic/cross-platform
+  - type/concept
+  - level/intermediate
+related:
+  - [kmp-migration-from-native]]
+  - "[[kmp-migration-from-flutter]]"
+  - "[[kmp-getting-started]"
+cs-foundations:
+  - interoperability-patterns
+  - bridge-architecture
+  - incremental-migration
+  - language-translation
+status: published
 ---
 
 # Миграция с React Native на KMP

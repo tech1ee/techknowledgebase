@@ -3,14 +3,16 @@ title: "Cloud Disaster Recovery: Multi-AZ, Multi-Region, RTO/RPO"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - cloud
+  - topic/cloud
   - disaster-recovery
   - high-availability
   - rto
   - rpo
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-overview]]"
   - "[[databases-backup-recovery]]"

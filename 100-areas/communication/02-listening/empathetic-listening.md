@@ -1,21 +1,22 @@
 ---
 title: "Empathetic Listening: слушать чтобы понять, а не ответить"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[active-listening]]
 teaches:
   - emotional-validation
   - perspective-taking
   - empathic-response
   - silent-listening
-unlocks:
-  - [[conflict-resolution]]
-  - [[difficult-conversations]]
-tags: [communication, soft-skills, listening, empathy, emotional-intelligence]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[active-listening]]"
+  - "[[conflict-resolution]]"
 ---
 
 # Empathetic Listening: когда важнее понять человека, чем решить проблему

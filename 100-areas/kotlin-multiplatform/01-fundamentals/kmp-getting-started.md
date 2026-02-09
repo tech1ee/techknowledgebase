@@ -2,7 +2,14 @@
 title: "KMP Getting Started: Первый проект за 30 минут"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, multiplatform, getting-started, setup, beginner]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - getting-started
+  - setup
+  - beginner
+  - type/concept
+  - level/beginner
 related:
   - "[[kmp-project-structure]]"
   - "[[kmp-expect-actual]]"
@@ -11,6 +18,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[build-systems-theory]]"
   - "[[dependency-resolution]]"
+status: published
 ---
 
 # KMP Getting Started: от нуля до работающего проекта

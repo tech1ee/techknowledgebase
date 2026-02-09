@@ -3,13 +3,16 @@ title: "Файловые системы: как данные хранятся н
 created: 2025-12-02
 modified: 2025-12-02
 type: deep-dive
+status: published
 area: operating-systems
 confidence: high
 tags:
-  - os
+  - topic/os
   - filesystem
   - storage
   - io
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[os-overview]]"
   - "[[os-io-devices]]"

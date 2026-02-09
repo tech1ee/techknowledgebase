@@ -2,7 +2,14 @@
 title: "Kotlin Collections API: List, Set, Map и их операции"
 created: 2025-11-25
 modified: 2026-01-03
-tags: [kotlin, collections, sequences, functional-programming]
+tags:
+  - topic/jvm
+  - collections
+  - sequences
+  - functional-programming
+  - type/concept
+  - level/intermediate
+status: published
 ---
 
 # Kotlin Collections: List, Set, Map

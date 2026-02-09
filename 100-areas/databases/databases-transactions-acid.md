@@ -3,14 +3,16 @@ title: "Transactions & ACID: уровни изоляции, блокировки
 created: 2025-12-22
 modified: 2025-12-22
 type: deep-dive
-status: verified
+status: published
 confidence: high
 tags:
-  - databases
+  - topic/databases
   - transactions
   - acid
   - isolation
   - locks
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[databases-overview]]"
   - "[[databases-sql-fundamentals]]"

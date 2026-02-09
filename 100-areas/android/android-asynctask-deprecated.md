@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [thread-pool, producer-consumer, callback-pattern, memory-leak-patterns]
 tags:
-  - android
-  - asynctask
-  - deprecated
-  - threading
-  - history
+  - topic/android
+  - topic/threading
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-async-evolution]]"
   - "[[android-handler-looper]]"

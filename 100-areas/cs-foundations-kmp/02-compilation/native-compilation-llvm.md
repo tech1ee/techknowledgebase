@@ -3,7 +3,11 @@ title: "Native Compilation и LLVM: как Kotlin становится маши�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, llvm, aot, native, kotlin-native, compilation]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[compilation-pipeline]]"
   - "[[bytecode-virtual-machines]]"

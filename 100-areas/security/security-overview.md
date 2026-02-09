@@ -3,13 +3,15 @@ title: "Security: карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
+status: published
 area: security
 confidence: high
 tags:
-  - moc
-  - security
+  - topic/security
   - owasp
   - cryptography
+  - type/moc
+  - level/beginner
 related:
   - "[[authentication-authorization]]"
   - "[[web-security-owasp]]"

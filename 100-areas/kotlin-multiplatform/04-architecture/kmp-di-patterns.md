@@ -2,9 +2,18 @@
 title: "KMP DI Patterns: Koin, kotlin-inject, Manual DI"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, dependency-injection, koin, kotlin-inject, di, patterns]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - dependency-injection
+  - koin
+  - kotlin-inject
+  - di
+  - patterns
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kmp-project-structure]]"
 cs-foundations:
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[dependency-inversion-principle]]"
   - "[[object-lifecycle-management]]"
   - "[[service-locator-vs-di]]"
+status: published
 ---
 
 # KMP Dependency Injection Patterns

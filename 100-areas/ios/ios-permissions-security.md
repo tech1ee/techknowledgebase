@@ -1,7 +1,17 @@
 ---
-date: 2026-01-11
-tags: [ios, permissions, security, privacy, keychain, att, app-transport-security]
-related: "[[android-permissions-security]]"
+title: "Разрешения и безопасность в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/security
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-permissions-security]]"
+  - "[[ios-overview]]"
 ---
 
 # iOS Permissions & Security

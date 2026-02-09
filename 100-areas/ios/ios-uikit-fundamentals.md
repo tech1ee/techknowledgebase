@@ -1,10 +1,19 @@
 ---
-title: UIKit Fundamentals - Основы построения интерфейсов в iOS
-date: 2026-01-11
+title: "UIKit Fundamentals: основы построения интерфейсов в iOS"
+created: 2026-01-11
+modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [uikit, views, autolayout, ios-basics, ui-architecture]
-status: complete
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/ui
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[ios-swiftui-vs-uikit]]"
+  - "[[ios-viewcontroller-lifecycle]]"
 ---
 
 ## TL;DR

@@ -2,7 +2,15 @@
 title: "Kotlin Functional Programming: Lambdas, Higher-Order Functions, Scope Functions"
 created: 2025-11-25
 modified: 2026-01-03
-tags: [kotlin, functional-programming, lambdas, higher-order-functions, scope-functions]
+tags:
+  - topic/jvm
+  - functional-programming
+  - lambdas
+  - higher-order-functions
+  - scope-functions
+  - type/concept
+  - level/intermediate
+status: published
 ---
 
 # Kotlin ФП: лямбды, scope functions, inline

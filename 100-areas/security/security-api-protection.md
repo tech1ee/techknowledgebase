@@ -3,13 +3,15 @@ title: "API Protection: rate limiting, input validation, API keys"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - security
+  - topic/security
   - api
   - rate-limiting
   - validation
+  - type/concept
+  - level/intermediate
 related:
   - "[[security-overview]]"
   - "[[authentication-authorization]]"

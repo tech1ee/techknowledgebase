@@ -3,12 +3,15 @@ title: "Что такое AI Engineering"
 created: 2025-11-24
 modified: 2025-12-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/ai-ml
   - ai-ml/basics
   - career/ai-engineer
+  - type/concept
+  - level/intermediate
 related:
   - "[[rag-and-prompt-engineering]]"
   - "[[ai-engineer-tech-stack]]"

@@ -1,3 +1,13 @@
+---
+title: "Database Internals: From Storage to Transactions"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/advanced
+---
+
 # Database Internals: From Storage to Transactions
 
 > Глубокое погружение в механизмы работы баз данных

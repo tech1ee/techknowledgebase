@@ -1,11 +1,9 @@
-# Backtracking
-
 ---
-title: "Backtracking"
+title: "Перебор с возвратом (Backtracking)"
 created: 2025-12-30
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,18 +17,18 @@ prerequisites:
   - "[[recursion-fundamentals]]"
   - "[[trees-binary]]"
   - "[[dfs-bfs-patterns]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[dynamic-programming]]"
   - "[[greedy-algorithms]]"
   - "[[graphs]]"
-tags:
-  - algorithm
-  - backtracking
-  - recursion
-  - constraint-satisfaction
-  - combinatorics
-  - interview
 ---
+
+# Backtracking
 
 ## TL;DR
 

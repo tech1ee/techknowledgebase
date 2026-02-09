@@ -1,3 +1,14 @@
+---
+title: "Research Report: Mobile Databases"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+  - topic/android
+---
+
 # Research Report: Mobile Databases
 
 **Date:** 2025-12-30

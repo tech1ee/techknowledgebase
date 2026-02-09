@@ -3,11 +3,14 @@ title: "JVM Profiling: как найти bottleneck"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
+  - topic/jvm
   - profiling
   - async-profiler
   - performance
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

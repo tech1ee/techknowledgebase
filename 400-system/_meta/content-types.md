@@ -1,3 +1,18 @@
+---
+title: "Типы контента: что, когда, как"
+created: 2025-11-24
+modified: 2025-11-24
+type: reference
+status: verified
+confidence: high
+tags:
+  - system/guidelines
+  - system/metadata
+related:
+  - "[[content-levels]]"
+  - "[[cognitive-science-rules]]"
+---
+
 # Типы контента: что, когда, как
 
 > Разные цели = разная структура. Нельзя писать tutorial как reference.

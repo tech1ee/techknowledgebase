@@ -1,12 +1,21 @@
-# Android Dependency Injection: Overview & Navigation
-
 ---
+title: "Dependency Injection в Android: обзор и навигация"
+created: 2026-02-09
+modified: 2026-02-09
 type: overview
-level: intermediate
-topics: [android, kotlin, dependency-injection, navigation-hub]
-related: [[dependency-injection-fundamentals]], [[android-architecture-patterns]]
-version: "2025"
+status: published
+tags:
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/overview
+  - level/intermediate
+related:
+  - "[[dependency-injection-fundamentals]]"
+  - "[[android-architecture-patterns]]"
 ---
+
+# Android Dependency Injection: Overview & Navigation
 
 ## TL;DR
 

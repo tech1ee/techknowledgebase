@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Library Publishing"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Library Publishing
 
 **Date:** 2026-01-03

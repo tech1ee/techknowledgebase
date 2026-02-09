@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Memory Management"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Memory Management
 
 **Date:** 2026-01-04

@@ -1,13 +1,40 @@
 ---
-title: Локальные LLM и Self-Hosting - Полное Руководство
-tags: [ai, llm, local, ollama, llama-cpp, self-hosting, open-source, deepseek, qwen, llama, mobile, on-device, edge, mediapipe, executorch, mlx]
+title: "Локальные LLM и Self-Hosting - Полное Руководство"
+tags:
+  - topic/ai-ml
+  - local
+  - ollama
+  - llama-cpp
+  - self-hosting
+  - open-source
+  - deepseek
+  - qwen
+  - llama
+  - mobile
+  - on-device
+  - edge
+  - mediapipe
+  - executorch
+  - mlx
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-29
-sources: [ollama.com, lmstudio.ai, github.com/ggerganov/llama.cpp, huggingface.co, mistral.ai, deepseek.com, ai.google.dev/edge, pytorch.org/executorch, developer.apple.com/mlx]
+sources:
+  - ollama.com
+  - lmstudio.ai
+  - github.com/ggerganov/llama.cpp
+  - huggingface.co
+  - mistral.ai
+  - deepseek.com
+  - ai.google.dev/edge
+  - pytorch.org/executorch
+  - developer.apple.com/mlx
 related:
   - "[[mobile-ai-ml-guide]]"
+status: published
 ---
 
 # Локальные LLM: Ollama, LM Studio, llama.cpp

@@ -3,16 +3,17 @@ title: "Prompt Engineering Masterclass: От основ до production"
 created: 2025-12-24
 modified: 2025-12-24
 type: guide
-status: verified
+status: published
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - prompt-engineering
-  - llm
   - claude
   - gpt
   - techniques
   - best-practices
+  - type/guide
+  - level/intermediate
 related:
   - "[[llm-fundamentals]]"
   - "[[models-landscape-2025]]"

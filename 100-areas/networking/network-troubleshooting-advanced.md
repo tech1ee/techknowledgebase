@@ -2,13 +2,16 @@
 title: "Advanced Network Troubleshooting"
 created: 2025-12-26
 modified: 2025-12-26
-type: practical
+type: tutorial
+status: published
 level: senior
 tags:
-  - networking
+  - topic/networking
   - troubleshooting
   - debugging
   - production
+  - type/tutorial
+  - level/advanced
 ---
 
 # Advanced Network Troubleshooting

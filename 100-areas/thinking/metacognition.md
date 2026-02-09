@@ -3,13 +3,16 @@ title: "Метакогниция: думать о том, как ты думае
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/metacognition
   - learning/strategies
   - skills/self-awareness
+  - type/concept
+  - level/intermediate
 related:
   - "[[learning-complex-things]]"
   - "[[cognitive-biases]]"

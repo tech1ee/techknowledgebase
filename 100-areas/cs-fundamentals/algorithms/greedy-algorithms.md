@@ -1,11 +1,9 @@
-# Greedy Algorithms
-
 ---
-title: "Greedy Algorithms"
+title: "Жадные алгоритмы (Greedy)"
 created: 2025-12-30
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,18 +17,18 @@ prerequisites:
   - "[[sorting-algorithms]]"
   - "[[big-o-complexity]]"
   - "[[arrays-strings]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[dynamic-programming]]"
   - "[[graphs]]"
   - "[[heaps-priority-queues]]"
-tags:
-  - algorithm
-  - greedy
-  - optimization
-  - interval-scheduling
-  - knapsack
-  - interview
 ---
+
+# Greedy Algorithms
 
 ## TL;DR
 

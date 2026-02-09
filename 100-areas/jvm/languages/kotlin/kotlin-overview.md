@@ -3,10 +3,11 @@ title: "Kotlin Overview"
 created: 2025-12-19
 modified: 2025-12-19
 type: moc
+status: published
 tags:
-  - moc
-  - kotlin
-  - jvm
+  - topic/jvm
+  - type/moc
+  - level/beginner
 ---
 
 # Kotlin: Карта раздела

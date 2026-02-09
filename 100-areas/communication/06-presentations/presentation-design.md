@@ -1,3 +1,18 @@
+---
+title: "Presentation Design: Структура и визуальный дизайн презентаций"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/communication
+  - type/guide
+  - level/intermediate
+related:
+  - "[[technical-presentations]]"
+  - "[[storytelling-tech]]"
+---
+
 # Presentation Design: Структура и визуальный дизайн презентаций
 
 ## TL;DR

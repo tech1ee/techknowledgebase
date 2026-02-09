@@ -1,16 +1,16 @@
 ---
-title: "Android State Management"
+title: "Управление состоянием в Android"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 cs-foundations: [state-machine, reactive-streams, single-source-of-truth, event-sourcing]
 tags:
-  - android
-  - state
-  - stateflow
-  - sharedflow
-  - channel
-  - compose
-  - architecture
+  - topic/android
+  - topic/state-management
+  - topic/kotlin
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-viewmodel-internals]]"
   - "[[android-architecture-patterns]]"

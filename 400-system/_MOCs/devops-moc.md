@@ -4,8 +4,9 @@ created: 2025-11-24
 modified: 2025-11-24
 type: moc
 tags:
-  - moc
-  - devops
+  - topic/devops
+  - type/moc
+  - navigation
 ---
 
 # DevOps MOC

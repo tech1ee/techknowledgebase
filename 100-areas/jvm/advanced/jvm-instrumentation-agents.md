@@ -1,9 +1,24 @@
 ---
 title: "JVM Instrumentation & Agents - Модификация байткода в runtime"
-tags: [java, jvm, agents, instrumentation, bytecode, apm, javaagent, monitoring, profiling]
-sources: [java-instrumentation-api, jvmti-spec, asm-guide, agent-best-practices]
-confidence: 4
+tags:
+  - topic/jvm
+  - agents
+  - instrumentation
+  - bytecode
+  - apm
+  - javaagent
+  - monitoring
+  - profiling
+  - type/concept
+  - level/advanced
+sources:
+  - java-instrumentation-api
+  - jvmti-spec
+  - asm-guide
+  - agent-best-practices
+confidence: high
 date: 2025-11-25
+status: published
 ---
 
 # JVM Instrumentation & Agents

@@ -1,10 +1,20 @@
 ---
-title: "Android APK и AAB: Форматы пакетов и App Distribution"
+title: "Android APK и AAB: форматы пакетов и дистрибуция"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 cs-foundations: [package-formats, code-signing, compression, resource-bundling]
-tags: [android, apk, aab, app-bundle, signing, distribution, build]
-related: [[android-proguard-r8]], [[android-compilation-pipeline]], [[android-resources-system]], [[android-gradle-fundamentals]]
+tags:
+  - topic/android
+  - topic/build-system
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-proguard-r8]]"
+  - "[[android-compilation-pipeline]]"
+  - "[[android-resources-system]]"
+  - "[[android-gradle-fundamentals]]"
 ---
 
 # Android APK и AAB: Форматы пакетов и App Distribution

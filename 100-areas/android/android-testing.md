@@ -6,12 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - testing
-  - unit-tests
-  - ui-tests
-  - espresso
-  - mockk
+  - topic/android
+  - topic/testing
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-architecture-patterns]]"

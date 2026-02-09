@@ -2,14 +2,17 @@
 title: "Network Performance Optimization"
 created: 2025-12-26
 modified: 2025-12-26
-type: practical
+type: tutorial
+status: published
 level: senior
 tags:
-  - networking
+  - topic/networking
   - performance
   - optimization
   - tcp-tuning
   - benchmarking
+  - type/tutorial
+  - level/advanced
 ---
 
 # Network Performance Optimization

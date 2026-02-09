@@ -2,9 +2,19 @@
 title: "KMP State Management: StateFlow, MVI, Redux patterns"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, state, stateflow, sharedflow, mvi, redux, compose]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - state
+  - stateflow
+  - sharedflow
+  - mvi
+  - redux
+  - compose
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kotlin-flow]]"
 cs-foundations:
@@ -12,6 +22,7 @@ cs-foundations:
   - "[[observer-pattern]]"
   - "[[immutability-principles]]"
   - "[[concurrency-primitives]]"
+status: published
 ---
 
 # KMP State Management

@@ -2,7 +2,14 @@
 title: "Cross-Platform: Distribution — App Store vs Play Store"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, distribution, app-store, play-store]
+status: published
+tags:
+  - topic/cross-platform
+  - distribution
+  - app-store
+  - play-store
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform Distribution: App Store vs Play Store

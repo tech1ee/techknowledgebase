@@ -1,3 +1,13 @@
+---
+title: "AI/ML Databases: Vector Databases & Embeddings"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/intermediate
+---
+
 # AI/ML Databases: Vector Databases & Embeddings
 
 > Полный гайд по vector databases для RAG, semantic search и AI-приложений

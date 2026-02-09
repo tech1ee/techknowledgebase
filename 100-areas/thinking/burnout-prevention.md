@@ -3,13 +3,16 @@ title: "Burnout: как не сгореть на работе"
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/burnout
   - productivity/health
   - wellbeing
+  - type/concept
+  - level/intermediate
 related:
   - "[[deep-work]]"
   - "[[motivation-science]]"

@@ -1,3 +1,13 @@
+---
+title: "Базы данных: Полный фундаментальный гайд"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/beginner
+---
+
 # Базы данных: Полный фундаментальный гайд
 
 > **Уровень:** Начинающий → Средний

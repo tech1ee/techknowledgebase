@@ -1,3 +1,18 @@
+---
+title: "Персистентные структуры данных"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/expert
+related:
+  - "[[segment-tree]]"
+  - "[[trees-binary]]"
+---
+
 # Persistent Data Structures
 
 ## TL;DR

@@ -1,12 +1,10 @@
 ---
 title: "Feedback Frameworks: SBI vs COIN vs DESC vs STAR vs CEDAR"
 created: 2026-01-18
-updated: 2026-01-18
-type: deep-dive
-status: complete
+modified: 2026-01-18
+type: comparison
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[giving-feedback]]
 teaches:
   - sbi-model
   - coin-model
@@ -14,10 +12,13 @@ teaches:
   - star-feedback
   - cedar-model
   - framework-selection
-unlocks:
-  - [[performance-conversations]]
-  - [[difficult-conversations]]
-tags: [communication, soft-skills, feedback, frameworks, comparison]
+tags:
+  - topic/communication
+  - type/comparison
+  - level/intermediate
+related:
+  - "[[giving-feedback]]"
+  - "[[performance-conversations]]"
 ---
 
 # Feedback Frameworks: какую модель выбрать и когда

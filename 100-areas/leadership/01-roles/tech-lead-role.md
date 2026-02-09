@@ -1,23 +1,23 @@
 ---
 title: "Tech Lead: роль, обязанности, навыки"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior, tech-lead]
-prerequisites:
-  - Опыт Senior Engineer
 teaches:
   - Обязанности Tech Lead
   - Различия с EM и Staff
   - Как стать Tech Lead
-unlocks:
-  - [[ic-vs-management]]
-  - [[staff-roles]]
-  - [[em-fundamentals]]
-tags: [leadership, tech-lead, technical-leadership, career]
 sources: [staffeng, leaddev, pragmaticengineer, patkua]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ic-vs-management]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Tech Lead: роль, обязанности, навыки
@@ -620,4 +620,4 @@ SOFT SKILLS:
 
 ---
 
-[[00-leadership-overview|← Leadership MOC]] | [[ic-vs-management|IC vs Management →]]
+[[leadership-overview|← Leadership MOC]] | [[ic-vs-management|IC vs Management →]]

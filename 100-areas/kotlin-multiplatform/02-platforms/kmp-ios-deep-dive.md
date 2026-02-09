@@ -2,9 +2,21 @@
 title: "KMP iOS Deep Dive: Полный гайд по iOS интеграции"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, ios, swift, swiftui, xcode, cocoapods, spm, skie, memory]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - ios
+  - swift
+  - swiftui
+  - xcode
+  - cocoapods
+  - spm
+  - skie
+  - memory
+  - type/deep-dive
+  - level/advanced
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-android-integration]]"
   - "[[kmp-expect-actual]]"
   - "[[compose-mp-ios]]"
@@ -15,6 +27,7 @@ cs-foundations:
   - "[[memory-model-fundamentals]]"
   - "[[garbage-collection-explained]]"
   - "[[reference-counting-arc]]"
+status: published
 ---
 
 # KMP iOS Deep Dive

@@ -3,7 +3,11 @@ title: "Интерпретация и JIT: от байткода к скорос
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, compilation, jit, interpreter, hotspot, v8, optimization]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[compilation-pipeline]]"
   - "[[bytecode-virtual-machines]]"

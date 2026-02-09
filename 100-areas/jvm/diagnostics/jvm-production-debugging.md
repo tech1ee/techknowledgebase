@@ -3,12 +3,14 @@ title: "JVM Production Debugging: диагностика без downtime"
 created: 2025-11-25
 modified: 2025-12-02
 type: deep-dive
+status: published
 tags:
-  - jvm
+  - topic/jvm
   - production
   - debugging
   - troubleshooting
-type: deep-dive
+  - type/deep-dive
+  - level/intermediate
 area: programming
 confidence: high
 related:

@@ -1,11 +1,9 @@
-# Topological Sort Pattern
-
 ---
-title: "Topological Sort Pattern"
+title: "Паттерн топологической сортировки (Topological Sort)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -18,16 +16,18 @@ prerequisites:
   - "[[graphs]]"
   - "[[dfs-bfs-patterns]]"
   - "[[stacks-queues]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[dfs-bfs-patterns]]"
   - "[[dp-patterns]]"
-tags:
-  - pattern
-  - topological-sort
-  - dag
-  - dependency
-  - interview
 ---
+
+# Topological Sort Pattern
 
 ## TL;DR
 

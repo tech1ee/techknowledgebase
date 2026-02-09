@@ -8,11 +8,10 @@ confidence: high
 cs-foundations: [oop-inheritance, composition-pattern, coordinate-system, event-handling]
 research: "[[2025-12-25-android-custom-views]]"
 tags:
-  - android
-  - custom-view
-  - ui
-  - canvas
-  - accessibility
+  - topic/android
+  - topic/ui
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-ui-views]]"
   - "[[android-compose]]"

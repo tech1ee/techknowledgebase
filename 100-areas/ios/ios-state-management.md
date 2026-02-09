@@ -1,10 +1,19 @@
 ---
-title: iOS State Management
-date: 2026-01-11
-tags: [ios, swift, swiftui, state-management, architecture]
-category: ios
-status: active
-related: [[android-state-management]]
+title: "Управление состоянием в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/state-management
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-state-management]]"
+  - "[[ios-swiftui]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 ## TL;DR

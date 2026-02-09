@@ -1,3 +1,14 @@
+---
+title: "Research Report: Problem-Solving Framework for Coding Interviews"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/career
+---
+
 # Research Report: Problem-Solving Framework for Coding Interviews
 
 **Date:** 2025-12-29

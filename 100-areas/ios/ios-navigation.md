@@ -1,8 +1,20 @@
 ---
-date: 2026-01-11
+title: "Навигация в iOS: UIKit и SwiftUI"
+created: 2026-01-11
+modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [navigation, uikit, swiftui, architecture, routing]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/navigation
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-swiftui]]"
+  - "[[ios-uikit-fundamentals]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # iOS Navigation: Полное руководство по UIKit и SwiftUI

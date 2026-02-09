@@ -3,13 +3,16 @@ title: "Kubernetes: оркестрация контейнеров"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/devops
   - devops/kubernetes
   - infrastructure/orchestration
   - containers/k8s
+  - type/concept
+  - level/beginner
 related:
   - "[[docker-for-developers]]"
   - "[[microservices-vs-monolith]]"

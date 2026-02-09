@@ -1,3 +1,13 @@
+---
+title: "Research Report: kotlinx Libraries in KMP"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: kotlinx Libraries in KMP
 
 **Date:** 2026-01-03

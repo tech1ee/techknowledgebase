@@ -1,3 +1,18 @@
+---
+title: "Советы по реализации для соревнований"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/guide
+  - level/intermediate
+related:
+  - "[[competitive-programming-overview]]"
+  - "[[contest-strategy]]"
+---
+
 # Implementation Tips
 
 ## TL;DR

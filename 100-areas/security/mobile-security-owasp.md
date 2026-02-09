@@ -1,6 +1,17 @@
+---
+title: "OWASP Mobile Top 10 2024: Угрозы мобильных приложений"
+type: concept
+status: published
+tags:
+  - topic/security
+  - type/concept
+  - level/intermediate
+---
+
 # OWASP Mobile Top 10 2024: Угрозы мобильных приложений
 
 ---
+
 cs-foundations: [Mobile Security, Authentication, Cryptography, Supply Chain Security, Data Protection]
 ---
 

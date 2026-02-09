@@ -4,14 +4,13 @@ created: 2026-01-09
 modified: 2026-01-09
 type: concept
 area: android
-status: verified
+status: published
 confidence: high
 tags:
-  - android
-  - android/graphics
-  - opengl
-  - vulkan
-  - rendering
+  - topic/android
+  - topic/graphics
+  - type/concept
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-view-rendering-pipeline]]"

@@ -1,23 +1,23 @@
 ---
 title: "IC Track vs Management Track: как выбрать"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior, staff, tech-lead, em]
-prerequisites:
-  - Опыт Senior Engineer
 teaches:
   - Различия IC и Management tracks
   - Self-assessment для выбора
   - Engineer/Manager Pendulum
-unlocks:
-  - [[transition-to-management]]
-  - [[staff-roles]]
-  - [[em-fundamentals]]
-tags: [leadership, career, ic-track, management, staff-engineer]
 sources: [charity.wtf, staffeng.com, pragmaticengineer, leaddev]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[transition-to-management]]"
+  - "[[em-fundamentals]]"
 ---
 
 # IC Track vs Management Track: как выбрать
@@ -583,4 +583,4 @@ Strategic thinking: ~1 hour (10%)
 
 ---
 
-[[00-leadership-overview|← Leadership MOC]] | [[transition-to-management|Transition to Management →]]
+[[leadership-overview|← Leadership MOC]] | [[transition-to-management|Transition to Management →]]

@@ -3,13 +3,16 @@ title: "Прокрастинация: это не лень, а эмоции"
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/procrastination
   - productivity/self-regulation
   - psychology
+  - type/concept
+  - level/intermediate
 related:
   - "[[motivation-science]]"
   - "[[attention-crisis]]"

@@ -1,3 +1,14 @@
+---
+title: "Research Report: CS Fundamentals & Algorithms Learning Roadmap"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: CS Fundamentals & Algorithms Learning Roadmap
 
 **Date:** 2025-12-29

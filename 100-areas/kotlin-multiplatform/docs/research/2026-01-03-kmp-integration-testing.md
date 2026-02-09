@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Integration Testing"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Integration Testing
 
 **Date:** 2026-01-03

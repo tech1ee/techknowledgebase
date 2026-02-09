@@ -3,12 +3,15 @@ title: "JVM Synchronization: synchronized, volatile, atomic"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
+  - topic/jvm
   - concurrency
   - synchronized
   - volatile
   - atomic
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

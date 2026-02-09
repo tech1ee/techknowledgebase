@@ -2,8 +2,12 @@
 title: "Concurrency vs Parallelism: принципиальная разница"
 created: 2026-01-04
 modified: 2026-01-04
-type: deep-dive
-tags: [cs-foundations, concurrency, parallelism, kotlin, dispatchers]
+type: concept
+status: published
+tags:
+  - topic/cs-foundations
+  - type/concept
+  - level/intermediate
 related:
   - "[[processes-threads-fundamentals]]"
   - "[[async-models-overview]]"

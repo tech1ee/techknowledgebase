@@ -1,3 +1,20 @@
+---
+title: "Обзор соревновательного программирования"
+created: 2026-02-09
+modified: 2026-02-09
+type: overview
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/overview
+  - level/intermediate
+related:
+  - "[[cs-fundamentals-overview]]"
+  - "[[contest-strategy]]"
+  - "[[implementation-tips]]"
+  - "[[problem-classification]]"
+---
+
 # Competitive Programming Overview
 
 ## TL;DR

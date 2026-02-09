@@ -3,14 +3,16 @@ title: "Cloud: карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
+status: published
 area: cloud
 confidence: high
 tags:
-  - moc
-  - cloud
+  - topic/cloud
   - aws
   - gcp
   - azure
+  - type/moc
+  - level/beginner
 related:
   - "[[cloud-platforms-essentials]]"
   - "[[cloud-aws-core-services]]"

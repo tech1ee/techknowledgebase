@@ -3,18 +3,21 @@ title: "Reflection API: Интроспекция и динамическое п�
 created: 2025-11-25
 modified: 2025-11-25
 tags:
-  - jvm
+  - topic/jvm
   - reflection
   - introspection
   - dynamic-proxy
-type: note
+  - type/concept
+  - level/advanced
+type: concept
+status: published
 area: programming
-confidence: 4
+confidence: high
 sources:
   - "Java Language Specification: Chapter 12 - Execution (Reflection)"
   - "Effective Java" by Joshua Bloch (3rd Edition, 2018)
   - "Java Reflection in Action" by Ira R. Forman (2004)
-  - "Oracle Java Reflection Documentation"
+  - Oracle Java Reflection Documentation
 ---
 
 # Reflection API: Интроспекция и динамическое поведение в Java

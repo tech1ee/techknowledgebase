@@ -5,8 +5,18 @@ updated: 2025-12-24
 author: AI Assistant
 level: advanced
 type: guide
-topics: [RAG, retrieval, agentic-rag, self-rag, graphrag, evaluation]
-status: complete
+topics:
+  - RAG
+  - retrieval
+  - agentic-rag
+  - self-rag
+  - graphrag
+  - evaluation
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/advanced
 ---
 
 # RAG: Продвинутые техники

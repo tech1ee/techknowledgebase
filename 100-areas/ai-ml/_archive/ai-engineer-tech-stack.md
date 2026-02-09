@@ -3,12 +3,15 @@ title: "Техстек AI Engineer 2025"
 created: 2025-11-24
 modified: 2025-11-24
 type: reference
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/ai-ml
   - ai-ml/tools
   - ai-ml/tech-stack
+  - type/reference
+  - level/intermediate
 related:
   - "[[ai-engineering-intro]]"
   - "[[rag-and-prompt-engineering]]"

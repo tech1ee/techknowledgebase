@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [concurrency-models, thread-pools, cooperative-scheduling, structured-concurrency]
 tags:
-  - android
-  - async
-  - threading
-  - concurrency
-  - coroutines
-  - flow
+  - topic/android
+  - topic/threading
+  - type/overview
+  - level/intermediate
 related:
   - "[[android-handler-looper]]"
   - "[[android-asynctask-deprecated]]"

@@ -2,16 +2,27 @@
 title: "Compose Multiplatform iOS: Production-ready UI для iOS"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, compose, ios, swiftui, uikit, metal, skia]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - compose
+  - ios
+  - swiftui
+  - uikit
+  - metal
+  - skia
+  - type/concept
+  - level/intermediate
 related:
   - "[[compose-mp-overview]]"
   - "[[kmp-ios-deep-dive]]"
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
 cs-foundations:
   - "[[graphics-apis-fundamentals]]"
   - "[[native-code-interop]]"
   - "[[rendering-pipelines]]"
   - "[[accessibility-fundamentals]]"
+status: published
 ---
 
 # Compose Multiplatform iOS

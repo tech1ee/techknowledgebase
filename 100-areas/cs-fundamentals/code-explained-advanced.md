@@ -1,3 +1,19 @@
+---
+title: "Продвинутый код с объяснением каждой детали"
+created: 2026-02-09
+modified: 2026-02-09
+type: tutorial
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/tutorial
+  - level/advanced
+related:
+  - "[[code-explained-from-zero]]"
+  - "[[string-algorithms]]"
+  - "[[dynamic-programming]]"
+---
+
 # Продвинутый код с объяснением каждой детали
 
 Этот документ продолжает разбор с нуля, фокусируясь на продвинутых темах: строки, продвинутое DP, и оптимизации.

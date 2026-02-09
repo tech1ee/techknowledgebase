@@ -3,7 +3,11 @@ title: "Bytecode и виртуальные машины: как код испо�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, bytecode, jvm, wasm, dalvik, art, virtual-machine]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[compilation-pipeline]]"
   - "[[native-compilation-llvm]]"

@@ -1,3 +1,14 @@
+---
+title: "Research Report: Navigation Component Deep Patterns"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/navigation
+---
+
 # Research Report: Navigation Component Deep Patterns
 
 **Date:** 2025-12-29

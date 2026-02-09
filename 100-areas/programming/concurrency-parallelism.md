@@ -3,14 +3,16 @@ title: "Concurrency & Parallelism: Threads, Async, Race Conditions"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - programming
+  - topic/programming
   - concurrency
   - parallelism
   - threads
   - async
+  - type/concept
+  - level/intermediate
 related:
   - "[[programming-overview]]"
   - "[[jvm-concurrency-overview]]"

@@ -1,11 +1,28 @@
 ---
-title: LLM API Integration - Практическое руководство 2025
-tags: [ai, llm, api, openai, anthropic, google, litellm, streaming, production, sdk]
+title: "LLM API Integration - Практическое руководство 2025"
+tags:
+  - topic/ai-ml
+  - api
+  - openai
+  - anthropic
+  - google
+  - litellm
+  - streaming
+  - production
+  - sdk
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: intermediate
 created: 2025-12-28
 updated: 2025-12-28
-sources: [platform.openai.com, docs.anthropic.com, ai.google.dev, docs.litellm.ai, github.com/BerriAI/litellm]
+sources:
+  - platform.openai.com
+  - docs.anthropic.com
+  - ai.google.dev
+  - docs.litellm.ai
+  - github.com/BerriAI/litellm
+status: published
 ---
 
 # LLM API Integration: Практическое руководство 2025

@@ -1,10 +1,15 @@
 ---
 title: "Android CI/CD: от локального билда до Play Store"
-tags: [android, devops, ci-cd, github-actions, fastlane, gradle, testing, automation]
-category: android
-level: senior
 created: 2025-12-28
 modified: 2026-01-05
+type: guide
+status: published
+tags:
+  - topic/android
+  - topic/devops
+  - topic/ci-cd
+  - type/guide
+  - level/advanced
 cs-foundations: [continuous-integration, pipeline-automation, artifact-management, deployment-strategies]
 sources: [developer.android.com, fastlane.tools, firebase.google.com, docs.gradle.org, circleci.com, runway.team]
 ---

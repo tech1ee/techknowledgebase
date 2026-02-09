@@ -1,11 +1,26 @@
 ---
 title: "Tutorial: Production-Ready RAG Chatbot с нуля"
-tags: [ai, rag, tutorial, langchain, chromadb, qdrant, openai, project, production]
+tags:
+  - topic/ai-ml
+  - rag
+  - tutorial
+  - langchain
+  - chromadb
+  - qdrant
+  - openai
+  - project
+  - production
+  - type/tutorial
+  - level/intermediate
 category: ai-ml
 level: practical
 created: 2025-01-15
 updated: 2025-12-27
-related: [[rag-advanced-techniques]], [[embeddings-complete-guide]], [[vector-databases-guide]]
+related:
+  - [rag-advanced-techniques]]
+  - "[[embeddings-complete-guide]]"
+  - "[[vector-databases-guide]"
+status: published
 ---
 
 # Tutorial: Production-Ready RAG Chatbot с нуля

@@ -1,9 +1,19 @@
 ---
-title: iOS Concurrency Mistakes
-date: 2026-01-11
-tags: [ios, swift, concurrency, gcd, async-await, threading, performance]
-category: ios
-related: [[android-coroutines-mistakes]]
+title: "Типичные ошибки конкурентности в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/concurrency
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[android-coroutines-mistakes]]"
+  - "[[ios-gcd-deep-dive]]"
+  - "[[ios-async-await]]"
 ---
 
 # iOS Concurrency Mistakes

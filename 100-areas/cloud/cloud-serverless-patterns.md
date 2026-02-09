@@ -3,14 +3,16 @@ title: "Serverless Patterns: Lambda, Event-Driven, Step Functions"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - cloud
+  - topic/cloud
   - serverless
   - lambda
   - event-driven
   - step-functions
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-overview]]"
   - "[[cloud-aws-core-services]]"

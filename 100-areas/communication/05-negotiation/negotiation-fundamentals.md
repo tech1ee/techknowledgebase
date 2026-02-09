@@ -1,22 +1,23 @@
 ---
 title: "Negotiation Fundamentals для IT-специалистов"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[active-listening]]
 teaches:
   - BATNA
   - ZOPA
   - Anchoring
   - Harvard principled negotiation
   - Iron Triangle
-unlocks:
-  - [[salary-negotiation]]
-  - [[stakeholder-negotiation]]
-tags: [communication, negotiation, career, stakeholders]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[active-listening]]"
+  - "[[stakeholder-negotiation]]"
 ---
 
 # Negotiation Fundamentals для IT-специалистов

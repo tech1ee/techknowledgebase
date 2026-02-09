@@ -2,9 +2,25 @@
 title: "Миграция с Flutter на KMP"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, migration, flutter, dart, cross-platform]
-related: [[kmp-migration-from-native]], [[kmp-migration-from-rn]], [[kmp-getting-started]]
-cs-foundations: [rewrite-vs-refactor, architecture-migration, language-translation, platform-abstraction]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - migration
+  - flutter
+  - dart
+  - topic/cross-platform
+  - type/concept
+  - level/intermediate
+related:
+  - [kmp-migration-from-native]]
+  - "[[kmp-migration-from-rn]]"
+  - "[[kmp-getting-started]"
+cs-foundations:
+  - rewrite-vs-refactor
+  - architecture-migration
+  - language-translation
+  - platform-abstraction
+status: published
 ---
 
 # Миграция с Flutter на KMP

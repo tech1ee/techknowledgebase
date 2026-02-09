@@ -1,21 +1,23 @@
 ---
 title: "Founding Engineer"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior-engineer, staff-engineer]
-prerequisites:
-  - "[[ic-track-vs-management]]"
 teaches:
   - founding engineer role
   - equity negotiation
   - startup evaluation
-unlocks:
-  - "[[startup-cto]]"
-tags: [leadership, startup, founding-engineer, equity, early-stage]
 sources: [levels-fyi, holloway-guide, first-round]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ic-vs-management]]"
+  - "[[startup-cto]]"
 ---
 
 # Founding Engineer

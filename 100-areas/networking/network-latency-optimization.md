@@ -2,8 +2,18 @@
 title: "Network Latency Optimization"
 created: 2025-01-15
 modified: 2025-01-15
-tags: [networking, performance, latency, optimization]
-related: [[network-performance-optimization]], [[network-transport-layer]], [[network-http-evolution]]
+tags:
+  - topic/networking
+  - performance
+  - latency
+  - optimization
+  - type/concept
+  - level/advanced
+related:
+  - [network-performance-optimization]]
+  - "[[network-transport-layer]]"
+  - "[[network-http-evolution]"
+status: published
 ---
 
 # Network Latency Optimization

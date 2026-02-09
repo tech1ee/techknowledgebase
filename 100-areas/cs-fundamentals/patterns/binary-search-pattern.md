@@ -1,11 +1,9 @@
-# Binary Search: Полное руководство для понимания
-
 ---
-title: "Binary Search Pattern"
+title: "Паттерн бинарного поиска (Binary Search)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,17 +17,18 @@ prerequisites:
   - "[[arrays-strings]]"
   - "[[searching-algorithms]]"
   - "[[sorting-algorithms]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[two-pointers-pattern]]"
   - "[[divide-and-conquer]]"
-tags:
-  - pattern
-  - binary-search
-  - boundary-finding
-  - search-on-answer
-  - rotated-array
-  - interview
 ---
+
+# Binary Search: Полное руководство для понимания
 
 ## Для кого этот материал?
 

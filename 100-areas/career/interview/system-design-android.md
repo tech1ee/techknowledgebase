@@ -7,9 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/architecture
-  - level/senior
+  - type/deep-dive
+  - level/advanced
+  - interview
 related:
   - "[[interview-process]]"
   - "[[architecture-questions]]"

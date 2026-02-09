@@ -3,12 +3,15 @@ title: "GC Tuning: выбор и настройка сборщика мусор�
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
+  - topic/jvm
   - gc
   - performance
   - g1
   - zgc
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

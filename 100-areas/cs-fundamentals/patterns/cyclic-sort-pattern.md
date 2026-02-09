@@ -1,11 +1,9 @@
-# Cyclic Sort Pattern
-
 ---
-title: "Cyclic Sort Pattern"
+title: "Паттерн циклической сортировки (Cyclic Sort)"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -18,19 +16,19 @@ prerequisites:
   - "[[arrays-strings]]"
   - "[[sorting-algorithms]]"
   - "[[big-o-complexity]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[sorting-algorithms]]"
   - "[[arrays-strings]]"
   - "[[hash-tables]]"
-tags:
-  - pattern
-  - cyclic-sort
-  - array
-  - in-place
-  - missing-number
-  - duplicate
-  - interview
 ---
+
+# Cyclic Sort Pattern
 
 ## TL;DR
 

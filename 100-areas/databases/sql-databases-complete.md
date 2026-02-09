@@ -1,3 +1,13 @@
+---
+title: "SQL Базы данных: PostgreSQL, MySQL, SQLite — Полный гайд"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/intermediate
+---
+
 # SQL Базы данных: PostgreSQL, MySQL, SQLite — Полный гайд
 
 > **Уровень:** Средний → Продвинутый

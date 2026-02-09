@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [declarative-configuration, component-registration, metadata, xml-schema]
 tags:
-  - android
-  - manifest
-  - configuration
-  - components
-  - permissions
+  - topic/android
+  - topic/configuration
+  - type/deep-dive
+  - level/beginner
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

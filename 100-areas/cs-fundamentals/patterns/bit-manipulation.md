@@ -1,11 +1,9 @@
-# Bit Manipulation Pattern
-
 ---
-title: "Bit Manipulation Pattern"
+title: "Паттерн битовых манипуляций (Bit Manipulation)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -17,15 +15,17 @@ cs-foundations:
 prerequisites:
   - "[[big-o-complexity]]"
   - "[[arrays-strings]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[dp-patterns]]"
-tags:
-  - pattern
-  - bit-manipulation
-  - xor
-  - bitmask
-  - interview
 ---
+
+# Bit Manipulation Pattern
 
 ## TL;DR
 

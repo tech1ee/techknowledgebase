@@ -3,13 +3,15 @@ title: "Cryptography Fundamentals: шифрование, хеширование,
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - security
+  - topic/security
   - cryptography
   - encryption
   - hashing
+  - type/concept
+  - level/beginner
 related:
   - "[[security-overview]]"
   - "[[security-https-tls]]"

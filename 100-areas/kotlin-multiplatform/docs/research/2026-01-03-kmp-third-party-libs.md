@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Third-Party Libraries"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Third-Party Libraries
 
 **Date:** 2026-01-03

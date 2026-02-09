@@ -1,12 +1,22 @@
-# Dagger & Dagger 2: Deep-Dive
-
 ---
+title: "Dagger и Dagger 2: Deep-Dive — compile-time DI"
+created: 2026-02-09
+modified: 2026-02-09
 type: deep-dive
-level: advanced
-topics: [android, kotlin, java, dependency-injection, dagger, dagger2, annotation-processing, ksp]
-related: [[dependency-injection-fundamentals]], [[android-hilt-deep-dive]], [[android-koin-deep-dive]]
-version: "2024-2025"
+status: published
+tags:
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[dependency-injection-fundamentals]]"
+  - "[[android-hilt-deep-dive]]"
+  - "[[android-koin-deep-dive]]"
 ---
+
+# Dagger & Dagger 2: Deep-Dive
 
 ## TL;DR
 

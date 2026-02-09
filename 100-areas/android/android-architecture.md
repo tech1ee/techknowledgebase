@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [os-architecture, process-model, ipc-mechanisms, virtual-machine, memory-management, garbage-collection]
 tags:
-  - android
-  - architecture
-  - art
-  - zygote
-  - binder
+  - topic/android
+  - topic/architecture
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-process-memory]]"

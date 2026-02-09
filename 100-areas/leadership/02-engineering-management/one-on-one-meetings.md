@@ -1,22 +1,24 @@
 ---
 title: "1-on-1 Meetings: Главный инструмент менеджера"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [tech-lead, em, director]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - структура 1-on-1
   - вопросы для разных ситуаций
   - частые ошибки
-unlocks:
+sources: [manager-tools, rands-in-repose, lara-hogan, ben-horowitz]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
   - "[[performance-management]]"
   - "[[delegation]]"
-tags: [leadership, engineering-management, 1-on-1, coaching, feedback]
-sources: [manager-tools, rands-in-repose, lara-hogan, ben-horowitz]
 ---
 
 # 1-on-1 Meetings: Главный инструмент менеджера
@@ -728,4 +730,4 @@ that it's the employee's meeting, not yours."
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

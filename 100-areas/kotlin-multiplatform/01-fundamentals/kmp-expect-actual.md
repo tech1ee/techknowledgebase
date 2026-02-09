@@ -2,7 +2,13 @@
 title: "expect/actual: Платформо-зависимый код в KMP"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, multiplatform, expect-actual, platform-specific]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - expect-actual
+  - platform-specific
+  - type/concept
+  - level/beginner
 related:
   - "[[kmp-project-structure]]"
   - "[[kmp-source-sets]]"
@@ -12,6 +18,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[polymorphism-fundamentals]]"
   - "[[oop-abstraction-patterns]]"
+status: published
 ---
 
 # expect/actual: мост между платформами

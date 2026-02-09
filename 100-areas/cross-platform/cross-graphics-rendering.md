@@ -2,7 +2,14 @@
 title: "Cross-Platform: Graphics — Core Animation vs RenderThread"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, graphics, rendering, animation]
+status: published
+tags:
+  - topic/cross-platform
+  - graphics
+  - rendering
+  - animation
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform: Graphics — Core Animation vs RenderThread

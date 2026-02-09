@@ -5,8 +5,22 @@ updated: 2025-12-24
 author: AI Assistant
 level: intermediate-advanced
 type: guide
-topics: [vector-database, embeddings, similarity-search, RAG, HNSW, IVF, PQ, DiskANN, hybrid-search, production]
-status: complete
+topics:
+  - vector-database
+  - embeddings
+  - similarity-search
+  - RAG
+  - HNSW
+  - IVF
+  - PQ
+  - DiskANN
+  - hybrid-search
+  - production
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
 ---
 
 # Vector Databases: Полное руководство

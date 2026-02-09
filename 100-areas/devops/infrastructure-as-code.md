@@ -3,13 +3,16 @@ title: "Infrastructure as Code: Terraform и декларативный подх
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/devops
   - devops/iac
   - devops/terraform
   - automation/infrastructure
+  - type/concept
+  - level/intermediate
 related:
   - "[[ci-cd-pipelines]]"
   - "[[kubernetes-basics]]"

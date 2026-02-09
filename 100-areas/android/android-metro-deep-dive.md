@@ -1,12 +1,22 @@
-# Metro: Deep-Dive
-
 ---
+title: "Metro: Deep-Dive — DI фреймворк нового поколения"
+created: 2026-02-09
+modified: 2026-02-09
 type: deep-dive
-level: advanced
-topics: [kotlin, kmp, dependency-injection, metro, compiler-plugin, multiplatform]
-related: [[dependency-injection-fundamentals]], [[android-dagger-deep-dive]], [[android-kotlin-inject-deep-dive]]
-version: "2025"
+status: published
+tags:
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[dependency-injection-fundamentals]]"
+  - "[[android-dagger-deep-dive]]"
+  - "[[android-kotlin-inject-deep-dive]]"
 ---
+
+# Metro: Deep-Dive
 
 ## TL;DR
 

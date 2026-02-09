@@ -1,3 +1,13 @@
+---
+title: "OWASP MASVS & MASTG: Mobile Application Security Verification"
+type: concept
+status: published
+tags:
+  - topic/security
+  - type/concept
+  - level/intermediate
+---
+
 # OWASP MASVS & MASTG: Mobile Application Security Verification
 
 ## Metadata

@@ -1,12 +1,32 @@
 ---
-title: AI Cost Optimization - Полное Руководство
-tags: [ai, cost, optimization, pricing, tokens, caching, batch, rag, routing]
+title: "AI Cost Optimization - Полное Руководство"
+tags:
+  - topic/ai-ml
+  - cost
+  - optimization
+  - pricing
+  - tokens
+  - caching
+  - batch
+  - rag
+  - routing
+  - type/concept
+  - level/advanced
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-27
-related: [[llm-fundamentals]], [[ai-observability-monitoring]], [[rag-systems]]
-sources: [openai.com, anthropic.com, cloud.google.com, deepseek.com, microsoft.com]
+related:
+  - [llm-fundamentals]]
+  - "[[ai-observability-monitoring]]"
+  - "[[rag-systems]"
+sources:
+  - openai.com
+  - anthropic.com
+  - cloud.google.com
+  - deepseek.com
+  - microsoft.com
+status: published
 ---
 
 # AI Cost Optimization: Сокращение затрат на 60-95%

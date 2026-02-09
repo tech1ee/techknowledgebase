@@ -3,13 +3,16 @@ title: "Когнитивные искажения: ловушки разума"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/biases
   - thinking/decision-making
   - psychology/cognitive
+  - type/concept
+  - level/intermediate
 related:
   - "[[mental-models]]"
   - "[[systems-thinking]]"

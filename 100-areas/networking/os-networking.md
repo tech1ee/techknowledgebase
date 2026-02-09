@@ -3,13 +3,16 @@ title: "Сетевой стек ОС: Linux networking, сокеты, netfilter"
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/networking
   - networking/os
   - linux/kernel
   - networking/sockets
+  - type/concept
+  - level/intermediate
 related:
   - "[[networking-overview]]"
   - "[[network-transport-layer]]"

@@ -1,9 +1,19 @@
 ---
-title: "Grand Central Dispatch - Глубокое Погружение"
-date: 2026-01-11
-tags: [ios, swift, concurrency, gcd, multithreading, performance]
-category: ios-development
-status: evergreen
+title: "Grand Central Dispatch: глубокое погружение"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/concurrency
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[ios-async-evolution]]"
+  - "[[ios-async-await]]"
+  - "[[ios-threading-fundamentals]]"
 ---
 
 # Grand Central Dispatch - Глубокое Погружение

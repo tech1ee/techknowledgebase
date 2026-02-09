@@ -1,11 +1,9 @@
-# DFS & BFS Patterns
-
 ---
-title: "DFS & BFS Patterns"
+title: "Паттерны DFS и BFS"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -17,22 +15,22 @@ cs-foundations:
   - level-order-processing
 prerequisites:
   - "[[graphs]]"
-  - "[[trees]]"
+  - "[[trees-binary]]"
   - "[[stacks-queues]]"
   - "[[recursion-fundamentals]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[topological-sort-pattern]]"
   - "[[union-find-pattern]]"
   - "[[backtracking]]"
-tags:
-  - pattern
-  - dfs
-  - bfs
-  - graph
-  - tree
-  - traversal
-  - interview
 ---
+
+# DFS & BFS Patterns
 
 ## TL;DR
 

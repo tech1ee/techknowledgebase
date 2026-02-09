@@ -3,14 +3,15 @@ title: "AI Evaluation: метрики качества LLM систем"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - evaluation
   - metrics
-  - llm
   - ragas
+  - type/concept
+  - level/intermediate
 related:
   - "[[ai-ml-overview]]"
   - "[[ai-production-systems]]"

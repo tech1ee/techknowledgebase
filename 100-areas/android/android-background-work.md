@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [process-scheduling, power-management, job-scheduling, constraint-satisfaction]
 tags:
-  - android
-  - workmanager
-  - background
-  - foreground-service
-  - doze
-  - app-standby
+  - topic/android
+  - topic/background-processing
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

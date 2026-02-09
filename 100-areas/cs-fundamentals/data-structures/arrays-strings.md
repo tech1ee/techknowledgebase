@@ -1,5 +1,5 @@
 ---
-title: "Arrays & Strings: фундамент всех алгоритмов"
+title: "Массивы и строки: фундамент всех алгоритмов"
 created: 2025-12-29
 modified: 2026-01-06
 type: deep-dive
@@ -13,16 +13,14 @@ cs-foundations:
   - immutability
 tags:
   - topic/cs-fundamentals
-  - topic/data-structures
-  - topic/arrays
-  - topic/strings
-  - deep-dive/arrays-strings
-  - level/foundation
+  - type/deep-dive
+  - level/beginner
+  - interview
 related:
   - "[[big-o-complexity]]"
   - "[[problem-solving-framework]]"
-  - "[[patterns/two-pointers-pattern]]"
-  - "[[patterns/sliding-window-pattern]]"
+  - "[[two-pointers-pattern]]"
+  - "[[sliding-window-pattern]]"
 ---
 
 # Arrays & Strings: фундамент всех алгоритмов

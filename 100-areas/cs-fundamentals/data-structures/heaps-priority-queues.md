@@ -1,9 +1,9 @@
 ---
-title: "Heaps & Priority Queues"
+title: "Кучи и очереди с приоритетом (Heaps & Priority Queues)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -28,11 +28,14 @@ unlocks:
   - "[[graph-algorithms]]"
   - "[[greedy-algorithms]]"
 tags:
-  - cs-fundamentals
-  - data-structures
-  - heap
-  - priority-queue
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
   - interview
+related:
+  - "[[sorting-algorithms]]"
+  - "[[graph-algorithms]]"
+  - "[[greedy-algorithms]]"
 ---
 
 # Кучи и очереди с приоритетом (Heaps & Priority Queues)

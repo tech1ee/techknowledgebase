@@ -3,14 +3,16 @@ title: "Error Handling & Resilience: Обработка ошибок и усто
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - programming
+  - topic/programming
   - error-handling
   - resilience
   - reliability
   - exceptions
+  - type/concept
+  - level/intermediate
 related:
   - "[[architecture-resilience-patterns]]"
   - "[[testing-strategies]]"

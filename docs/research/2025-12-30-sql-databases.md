@@ -1,3 +1,14 @@
+---
+title: "Research Report: SQL Databases - PostgreSQL, MySQL, SQLite"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+  - topic/sql
+---
+
 # Research Report: SQL Databases - PostgreSQL, MySQL, SQLite
 
 **Date:** 2025-12-30

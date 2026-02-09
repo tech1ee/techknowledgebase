@@ -2,7 +2,14 @@
 title: "Cross-Platform: Legacy Concurrency — GCD vs Handler/Looper"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, gcd, handler, threading]
+status: published
+tags:
+  - topic/cross-platform
+  - gcd
+  - handler
+  - threading
+  - type/comparison
+  - level/intermediate
 ---
 
 # Legacy Concurrency: GCD vs Handler/Looper

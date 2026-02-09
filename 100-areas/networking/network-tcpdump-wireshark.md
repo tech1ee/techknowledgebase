@@ -2,14 +2,17 @@
 title: "Network Packet Analysis: tcpdump & Wireshark"
 created: 2025-12-26
 modified: 2025-12-26
-type: practical
+type: tutorial
+status: published
 level: middle
 tags:
-  - networking
+  - topic/networking
   - packet-analysis
   - tcpdump
   - wireshark
   - debugging
+  - type/tutorial
+  - level/intermediate
 ---
 
 # Network Packet Analysis: tcpdump & Wireshark

@@ -1,6 +1,17 @@
+---
+title: "Threat Modeling: Моделирование угроз"
+type: concept
+status: published
+tags:
+  - topic/security
+  - type/concept
+  - level/intermediate
+---
+
 # Threat Modeling: Моделирование угроз
 
 ---
+
 cs-foundations: [STRIDE, DREAD, PASTA, Attack Trees, Data Flow Diagrams, Trust Boundaries]
 ---
 

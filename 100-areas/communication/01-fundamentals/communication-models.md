@@ -1,21 +1,23 @@
 ---
 title: "Модели коммуникации"
 created: 2026-01-18
-updated: 2026-01-18
-type: deep-dive
-status: complete
+modified: 2026-01-18
+type: concept
+status: published
 difficulty: beginner
-prerequisites: []
 teaches:
   - Shannon-Weaver model
   - Transactional model
   - SMCR model
   - Types of noise
-unlocks:
-  - [[communication-barriers]]
-  - [[active-listening]]
-  - [[giving-feedback]]
-tags: [communication, theory, models, fundamentals]
+tags:
+  - topic/communication
+  - type/concept
+  - level/beginner
+related:
+  - "[[communication-barriers]]"
+  - "[[active-listening]]"
+  - "[[giving-feedback]]"
 ---
 
 # Модели коммуникации

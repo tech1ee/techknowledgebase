@@ -3,13 +3,16 @@ title: "Testing: пирамида, которая спасает от 3am баг
 created: 2025-11-24
 modified: 2025-12-27
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/programming
   - programming/testing
   - programming/tdd
   - best-practices
+  - type/concept
+  - level/intermediate
 related:
   - "[[clean-code-solid]]"
   - "[[ci-cd-pipelines]]"

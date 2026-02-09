@@ -1,3 +1,14 @@
+---
+title: "Research Report: Big O Notation & Complexity Analysis"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: Big O Notation & Complexity Analysis
 
 **Date:** 2025-12-29

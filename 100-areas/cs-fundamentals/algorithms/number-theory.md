@@ -1,3 +1,18 @@
+---
+title: "Теория чисел для алгоритмов"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[combinatorics]]"
+  - "[[dynamic-programming]]"
+---
+
 # Number Theory for Algorithms
 
 ## TL;DR

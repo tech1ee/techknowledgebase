@@ -1,22 +1,23 @@
 ---
 title: "Communication Styles: DISC и как адаптироваться"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[communication-models]]
-  - [[communication-barriers]]
 teaches:
   - disc-model
   - style-identification
   - style-adaptation
   - social-styles
-unlocks:
-  - [[stakeholder-negotiation]]
-  - [[cross-cultural-communication]]
-tags: [communication, soft-skills, disc, personality, adaptation]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[communication-models]]"
+  - "[[communication-barriers]]"
+  - "[[stakeholder-negotiation]]"
 ---
 
 # Communication Styles: понимай других, адаптируй себя

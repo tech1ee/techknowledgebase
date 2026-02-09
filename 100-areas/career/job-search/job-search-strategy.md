@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/job-search
   - type/guide
-  - level/senior
+  - level/intermediate
 related:
   - "[[hidden-job-market]]"
   - "[[networking-tactics]]"

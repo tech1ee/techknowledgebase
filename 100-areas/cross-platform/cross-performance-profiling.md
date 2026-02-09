@@ -2,7 +2,14 @@
 title: "Cross-Platform: Profiling — Instruments vs Android Studio Profiler"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, profiling, instruments, performance]
+status: published
+tags:
+  - topic/cross-platform
+  - profiling
+  - instruments
+  - performance
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform: Profiling Tools Comparison

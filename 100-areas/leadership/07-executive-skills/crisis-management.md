@@ -1,22 +1,24 @@
 ---
 title: "Кризисный менеджмент"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[stakeholder-management]]"
-  - "[[executive-communication]]"
 teaches:
   - incident response
   - communication during crisis
   - post-mortem leadership
-unlocks:
-  - "[[startup-cto]]"
-tags: [leadership, crisis, incidents, communication, resilience]
 sources: [incident-management, crisis-leadership, blameless-postmortems]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[stakeholder-management]]"
+  - "[[executive-communication]]"
+  - "[[startup-cto]]"
 ---
 
 # Кризисный менеджмент

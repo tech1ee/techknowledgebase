@@ -1,3 +1,13 @@
+---
+title: "Ландшафт LLM моделей 2025"
+type: concept
+status: published
+tags:
+  - topic/ai-ml
+  - type/concept
+  - level/intermediate
+---
+
 # Ландшафт LLM моделей 2025
 
 > Последнее обновление: Декабрь 2024

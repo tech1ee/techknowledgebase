@@ -1,21 +1,23 @@
 ---
 title: "Архитектурные решения (ADR)"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [tech-lead, em, staff-engineer]
-prerequisites:
-  - "[[tech-lead-role]]"
 teaches:
   - ADR формат
   - принятие решений
   - документирование
-unlocks:
-  - "[[technical-vision]]"
-tags: [leadership, architecture, adr, decisions, documentation]
 sources: [adr-github, thoughtworks, michael-nygard]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[tech-lead-role]]"
+  - "[[technical-vision]]"
 ---
 
 # Архитектурные решения (ADR)

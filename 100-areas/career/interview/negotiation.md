@@ -7,9 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/negotiation
   - type/guide
-  - level/senior
+  - level/advanced
+  - interview
 related:
   - "[[interview-process]]"
   - "[[salary-benchmarks]]"

@@ -4,10 +4,9 @@ created: 2025-12-26
 modified: 2025-12-26
 type: moc
 tags:
-  - moc
-  - networking
-  - protocols
-  - infrastructure
+  - topic/networking
+  - type/moc
+  - navigation
 ---
 
 # Networking MOC

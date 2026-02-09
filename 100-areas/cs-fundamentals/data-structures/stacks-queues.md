@@ -1,5 +1,5 @@
 ---
-title: "Stacks & Queues: LIFO и FIFO от нуля"
+title: "Стеки и очереди: LIFO и FIFO от нуля"
 created: 2025-12-29
 modified: 2026-01-06
 type: deep-dive
@@ -13,12 +13,9 @@ cs-foundations:
   - circular-buffer
   - amortized-analysis
 tags:
-  - cs-fundamentals
-  - data-structures
-  - stack
-  - queue
-  - deque
-  - monotonic-stack
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/beginner
   - interview
 prerequisites:
   - "[[arrays-strings]]"

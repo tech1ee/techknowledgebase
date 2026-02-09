@@ -1,3 +1,14 @@
+---
+title: "Research Report: Android Performance Profiling"
+created: 2025-12-26
+modified: 2025-12-26
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/performance
+---
+
 # Research Report: Android Performance Profiling
 
 **Date:** 2025-12-26

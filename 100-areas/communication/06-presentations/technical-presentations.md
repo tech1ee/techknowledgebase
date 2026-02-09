@@ -1,21 +1,23 @@
 ---
 title: "Technical Presentations для IT-специалистов"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[communication-models]]
 teaches:
   - Minto Pyramid
   - Tech talk structure
   - Demo techniques
   - Q&A handling
-unlocks:
-  - [[presentation-design]]
-  - [[storytelling-tech]]
-tags: [communication, presentations, visibility, career]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[communication-models]]"
+  - "[[presentation-design]]"
+  - "[[storytelling-tech]]"
 ---
 
 # Technical Presentations для IT-специалистов

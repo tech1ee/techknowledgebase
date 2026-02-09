@@ -1,10 +1,22 @@
 ---
 title: "Практикум: AI Agent с инструментами"
-tags: [ai, agents, langgraph, tutorial, tools, python, guardrails, openai-agents-sdk, crewai, multi-agent]
+tags:
+  - topic/ai-ml
+  - agents
+  - langgraph
+  - tutorial
+  - tools
+  - python
+  - guardrails
+  - openai-agents-sdk
+  - crewai
+  - multi-agent
+  - type/tutorial
+  - level/intermediate
 category: ai-engineering
 date: 2025-01-15
 updated: 2025-12-28
-status: complete
+status: published
 level: intermediate
 related:
   - "[[ai-agents-advanced]]"

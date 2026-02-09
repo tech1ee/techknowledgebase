@@ -3,13 +3,16 @@ title: "Git Workflows: от хаоса к порядку"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/devops
   - devops/git
   - workflow/branching
   - collaboration/version-control
+  - type/concept
+  - level/intermediate
 related:
   - "[[ci-cd-pipelines]]"
   - "[[technical-debt]]"

@@ -3,14 +3,16 @@ title: "Database Monitoring & Security: pg_stat, RLS, encryption"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - databases
+  - topic/databases
   - monitoring
-  - security
+  - topic/security
   - postgresql
   - performance
+  - type/concept
+  - level/intermediate
 related:
   - "[[databases-overview]]"
   - "[[database-design-optimization]]"

@@ -1,10 +1,20 @@
 ---
-title: "Android Modularization"
+title: "Модуляризация Android-приложений"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 cs-foundations: [module-systems, dependency-graph, build-optimization, encapsulation]
-tags: [android, modularization, gradle, architecture, multi-module]
-related: [[android-gradle-fundamentals]], [[android-architecture-patterns]], [[android-dependencies]], [[android-viewmodel-internals]]
+tags:
+  - topic/android
+  - topic/architecture
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[android-gradle-fundamentals]]"
+  - "[[android-architecture-patterns]]"
+  - "[[android-dependencies]]"
+  - "[[android-viewmodel-internals]]"
 ---
 
 # Android Modularization — Under the Hood

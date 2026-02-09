@@ -3,14 +3,14 @@ title: "AI/ML Engineering: Карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
-status: verified
+status: published
 confidence: high
 tags:
-  - moc
-  - ai
+  - topic/ai-ml
   - ml
-  - llm
   - ai-engineering
+  - type/moc
+  - level/beginner
 related:
   - "[[architecture-overview]]"
   - "[[cloud-overview]]"

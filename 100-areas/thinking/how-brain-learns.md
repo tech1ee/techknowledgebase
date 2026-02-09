@@ -3,13 +3,16 @@ title: "Как мозг учится: нейронаука обучения"
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/neuroscience
   - learning/brain
   - productivity/learning
+  - type/concept
+  - level/intermediate
 related:
   - "[[learning-complex-things]]"
   - "[[cognitive-load-theory]]"

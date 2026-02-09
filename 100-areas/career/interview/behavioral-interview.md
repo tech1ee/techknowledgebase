@@ -7,9 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
   - type/guide
-  - level/senior
+  - level/intermediate
+  - interview
 related:
   - "[[interview-process]]"
   - "[[behavioral-questions]]"

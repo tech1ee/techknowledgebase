@@ -3,14 +3,16 @@ title: "Refactoring Techniques: Улучшение кода без измене�
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - programming
+  - topic/programming
   - refactoring
   - clean-code
   - legacy
   - technical-debt
+  - type/concept
+  - level/intermediate
 related:
   - "[[clean-code-solid]]"
   - "[[design-patterns]]"

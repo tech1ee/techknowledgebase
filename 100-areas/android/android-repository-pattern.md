@@ -7,13 +7,11 @@ area: android
 confidence: high
 cs-foundations: [repository-pattern, caching-strategy, data-consistency, offline-first]
 tags:
-  - android
-  - repository
-  - architecture
-  - caching
-  - offline-first
-  - room
-links:
+  - topic/android
+  - topic/architecture
+  - type/deep-dive
+  - level/intermediate
+related:
   - "[[android-architecture-patterns]]"
   - "[[android-data-persistence]]"
   - "[[android-networking]]"

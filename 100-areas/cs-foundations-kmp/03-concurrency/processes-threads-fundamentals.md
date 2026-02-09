@@ -3,7 +3,11 @@ title: "Процессы и потоки: фундамент конкурент�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, concurrency, processes, threads, context-switch, coroutines]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[concurrency-vs-parallelism]]"
   - "[[synchronization-primitives]]"

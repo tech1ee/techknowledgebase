@@ -2,7 +2,14 @@
 title: "Cross-Platform: Build Systems — Xcode vs Gradle"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, build, xcode, gradle]
+status: published
+tags:
+  - topic/cross-platform
+  - build
+  - xcode
+  - gradle
+  - type/comparison
+  - level/intermediate
 ---
 
 # Build Systems: Xcode vs Gradle

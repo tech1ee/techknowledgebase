@@ -1,22 +1,24 @@
 ---
 title: "Receiving Feedback: как принимать обратную связь без defensiveness"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[giving-feedback]]
-  - [[active-listening]]
 teaches:
   - growth-mindset-feedback
   - defensiveness-management
   - feedback-processing
   - seek-feedback
-unlocks:
-  - [[performance-conversations]]
-  - [[conflict-resolution]]
-tags: [communication, soft-skills, feedback, growth-mindset, 1-on-1]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[giving-feedback]]"
+  - "[[active-listening]]"
+  - "[[performance-conversations]]"
+  - "[[conflict-resolution]]"
 ---
 
 # Receiving Feedback: искусство слышать правду и расти

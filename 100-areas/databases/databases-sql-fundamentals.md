@@ -3,13 +3,15 @@ title: "SQL Fundamentals: от SELECT до оконных функций"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - databases
+  - topic/databases
   - sql
   - postgresql
   - queries
+  - type/concept
+  - level/beginner
 related:
   - "[[databases-overview]]"
   - "[[database-design-optimization]]"

@@ -1,3 +1,14 @@
+---
+title: "Research Report: Binary Trees & BST"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/data-structures
+---
+
 # Research Report: Binary Trees & BST
 
 **Date:** 2025-12-29

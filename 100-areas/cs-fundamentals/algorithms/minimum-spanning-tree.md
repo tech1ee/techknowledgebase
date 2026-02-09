@@ -1,3 +1,20 @@
+---
+title: "Минимальное остовное дерево (MST)"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - interview
+related:
+  - "[[graph-algorithms]]"
+  - "[[union-find-pattern]]"
+  - "[[greedy-algorithms]]"
+---
+
 # Minimum Spanning Tree (MST)
 
 ## TL;DR

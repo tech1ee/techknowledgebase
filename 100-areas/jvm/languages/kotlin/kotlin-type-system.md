@@ -2,8 +2,21 @@
 title: "Kotlin Type System: Generics, Variance, Reified Types"
 created: 2025-11-25
 modified: 2025-12-27
-tags: [kotlin, generics, variance, type-system, contracts, reified]
-related: [[kotlin-collections]], [[kotlin-advanced-features]], [[kotlin-functional]], [[kotlin-best-practices]]
+tags:
+  - topic/jvm
+  - generics
+  - variance
+  - type-system
+  - contracts
+  - reified
+  - type/concept
+  - level/intermediate
+related:
+  - [kotlin-collections]]
+  - "[[kotlin-advanced-features]]"
+  - "[[kotlin-functional]]"
+  - "[[kotlin-best-practices]"
+status: published
 ---
 
 # Kotlin Type System: Generics и Variance

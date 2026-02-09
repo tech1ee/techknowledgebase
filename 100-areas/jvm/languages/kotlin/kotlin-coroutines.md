@@ -2,8 +2,21 @@
 title: "Kotlin Coroutines: Асинхронное программирование"
 created: 2025-11-25
 modified: 2026-01-03
-tags: [kotlin, coroutines, async, concurrency, structured-concurrency, flow]
-related: [[kotlin-flow]], [[kotlin-functional]], [[jvm-concurrency-overview]], [[kotlin-testing]]
+tags:
+  - topic/jvm
+  - coroutines
+  - async
+  - concurrency
+  - structured-concurrency
+  - flow
+  - type/concept
+  - level/intermediate
+related:
+  - [kotlin-flow]]
+  - "[[kotlin-functional]]"
+  - "[[jvm-concurrency-overview]]"
+  - "[[kotlin-testing]"
+status: published
 ---
 
 # Kotlin Coroutines: асинхронность без callback hell

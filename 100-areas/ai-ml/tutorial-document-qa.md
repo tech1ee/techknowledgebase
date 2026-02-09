@@ -1,9 +1,20 @@
 ---
 title: "Практикум: Document Q&A System"
-tags: [ai, rag, documents, pdf, qa, tutorial, python, pydantic, extraction]
+tags:
+  - topic/ai-ml
+  - rag
+  - documents
+  - pdf
+  - qa
+  - tutorial
+  - python
+  - pydantic
+  - extraction
+  - type/tutorial
+  - level/intermediate
 category: ai-engineering
 date: 2025-12-24
-status: complete
+status: published
 level: intermediate
 related:
   - "[[tutorial-rag-chatbot]]"

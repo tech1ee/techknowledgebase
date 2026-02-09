@@ -1,15 +1,15 @@
 ---
-title: "Algorithmic Patterns: карта паттернов решения задач"
+title: "Алгоритмические паттерны: карта паттернов решения задач"
 created: 2026-01-09
 modified: 2026-02-08
-type: moc
-status: verified
+type: overview
+status: published
 confidence: high
 tags:
-  - moc
-  - algorithms
-  - patterns
-  - competitive
+  - topic/cs-fundamentals
+  - type/overview
+  - level/intermediate
+  - pattern
   - interview
 related:
   - "[[cs-fundamentals-overview]]"

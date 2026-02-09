@@ -3,13 +3,16 @@ title: "Переключение контекста: скрытый убийца
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/focus
   - productivity/attention
   - skills/multitasking
+  - type/concept
+  - level/intermediate
 related:
   - "[[attention-crisis]]"
   - "[[deep-work]]"

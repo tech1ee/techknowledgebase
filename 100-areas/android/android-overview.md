@@ -6,9 +6,10 @@ type: overview
 area: android
 confidence: high
 tags:
-  - android
-  - mobile
-  - kotlin
+  - topic/android
+  - topic/kotlin
+  - type/overview
+  - level/beginner
 cs-foundations: [mobile-platform-architecture, application-sandbox, component-lifecycle]
 related:
   - "[[mobile-ai-ml-guide]]"
@@ -532,7 +533,7 @@ ANDROID РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
    ├── [[kotlin-coroutines]] ← Асинхронность
    └── [[kotlin-flow]]       ← Реактивные потоки
 
-[[00-kmp-overview]]        ← Кросс-платформенная разработка
+[[kmp-overview]]        ← Кросс-платформенная разработка
    │
    └── [[kmp-android-integration]] ← Интеграция KMP в Android
 
@@ -551,7 +552,7 @@ ANDROID РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
 |--------|---------------------|----------|
 | [[jvm-overview]] | ART = Android Runtime на базе JVM | Понимание памяти, GC |
 | [[kotlin-overview]] | Kotlin = основной язык | Coroutines, Flow |
-| [[00-kmp-overview]] | KMP для shared code | 60-80% общего кода |
+| [[kmp-overview]] | KMP для shared code | 60-80% общего кода |
 | [[cs-fundamentals-overview]] | DSA для интервью | Подготовка к собеседованиям |
 | [[networking-overview]] | HTTP, REST, GraphQL | API интеграция |
 

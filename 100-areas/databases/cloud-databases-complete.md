@@ -1,3 +1,13 @@
+---
+title: "Cloud Databases: Complete Guide"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/intermediate
+---
+
 # Cloud Databases: Complete Guide
 
 > Managed database services от AWS, GCP, Azure — от basics до production best practices

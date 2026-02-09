@@ -3,7 +3,11 @@ title: "Reference Counting и ARC: как Swift управляет память�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, memory, arc, swift, kotlin-native, ios]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[memory-model-fundamentals]]"
   - "[[garbage-collection-explained]]"

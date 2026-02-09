@@ -1,21 +1,23 @@
 ---
 title: "Коммуникация с руководством"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[stakeholder-management]]"
 teaches:
   - executive summaries
   - board communication
   - presenting to C-level
-unlocks:
-  - "[[crisis-management]]"
-tags: [leadership, communication, executive, presentations]
 sources: [pyramid-principle, hbr-communication]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[stakeholder-management]]"
+  - "[[crisis-management]]"
 ---
 
 # Коммуникация с руководством

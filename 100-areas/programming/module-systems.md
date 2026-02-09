@@ -3,13 +3,15 @@ title: "Module Systems: модульность от CommonJS до ESM"
 created: 2026-01-09
 modified: 2026-01-09
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
   - programming/modules
   - javascript
-  - kotlin
+  - topic/jvm
   - build-systems
+  - type/concept
+  - level/intermediate
 related:
   - "[[build-systems-theory]]"
   - "[[dependency-resolution]]"

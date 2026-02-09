@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [database-design, acid-properties, serialization, file-systems]
 tags:
-  - android
-  - room
-  - datastore
-  - database
-  - persistence
+  - topic/android
+  - topic/data
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-threading]]"

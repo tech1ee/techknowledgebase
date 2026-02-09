@@ -1,11 +1,9 @@
-# Sliding Window Pattern
-
 ---
-title: "Sliding Window Pattern"
+title: "Паттерн скользящего окна (Sliding Window)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,18 +17,19 @@ prerequisites:
   - "[[arrays-strings]]"
   - "[[hash-tables]]"
   - "[[two-pointers-pattern]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[two-pointers-pattern]]"
   - "[[prefix-sum-pattern]]"
   - "[[monotonic-stack-pattern]]"
-tags:
-  - pattern
-  - sliding-window
-  - fixed-size
-  - variable-size
-  - monotonic-deque
-  - interview
 ---
+
+# Sliding Window Pattern
 
 ## TL;DR
 

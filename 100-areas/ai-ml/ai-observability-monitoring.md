@@ -1,11 +1,31 @@
 ---
-title: AI Observability & Monitoring - Полное Руководство 2025
-tags: [ai, observability, monitoring, langfuse, langsmith, opentelemetry, tracing, llmops, guardrails]
+title: "AI Observability & Monitoring - Полное Руководство 2025"
+tags:
+  - topic/ai-ml
+  - observability
+  - monitoring
+  - langfuse
+  - langsmith
+  - opentelemetry
+  - tracing
+  - llmops
+  - guardrails
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-24
-sources: [langfuse.com, langchain.com, arize.com, opentelemetry.io, helicone.ai, wandb.ai, braintrust.dev, owasp.org]
+sources:
+  - langfuse.com
+  - langchain.com
+  - arize.com
+  - opentelemetry.io
+  - helicone.ai
+  - wandb.ai
+  - braintrust.dev
+  - owasp.org
+status: published
 ---
 
 # AI Observability: Tracing, Evaluation, Monitoring

@@ -1,3 +1,14 @@
+---
+title: "Research Report: Recursion Fundamentals"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: Recursion Fundamentals
 
 **Date:** 2025-12-29

@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [reactive-streams, observer-pattern, backpressure, functional-programming]
 tags:
-  - android
-  - rxjava
-  - rxandroid
-  - reactive
-  - threading
+  - topic/android
+  - topic/reactive
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-async-evolution]]"
   - "[[android-threading]]"

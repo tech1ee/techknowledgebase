@@ -2,12 +2,25 @@
 title: "KMP Production Checklist: От разработки до релиза"
 created: 2026-01-04
 modified: 2026-01-05
-tags: [kotlin, kmp, production, checklist, release, deployment]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - production
+  - checklist
+  - release
+  - deployment
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-ci-cd]]"
   - "[[kmp-debugging]]"
   - "[[kmp-testing-strategies]]"
-cs-foundations: [release-engineering, observability, quality-gates, production-readiness]
+cs-foundations:
+  - release-engineering
+  - observability
+  - quality-gates
+  - production-readiness
+status: published
 ---
 
 # KMP Production Checklist

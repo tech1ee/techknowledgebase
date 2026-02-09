@@ -2,7 +2,14 @@
 title: "Стратегия тестирования в KMP: от unit до UI тестов"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, testing, unit-tests, integration, multiplatform]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - testing
+  - unit-tests
+  - integration
+  - type/concept
+  - level/intermediate
 cs-foundations:
   - "[[testing-pyramid-theory]]"
   - "[[test-driven-development]]"
@@ -10,9 +17,10 @@ cs-foundations:
   - "[[code-coverage-theory]]"
   - "[[continuous-integration]]"
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-unit-testing]]"
   - "[[kmp-integration-testing]]"
+status: published
 ---
 
 # Стратегия тестирования в Kotlin Multiplatform

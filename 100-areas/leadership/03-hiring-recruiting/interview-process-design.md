@@ -1,21 +1,26 @@
 ---
 title: "Дизайн процесса интервью"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, hr, tech-lead]
-prerequisites:
-  - "[[hiring-engineers]]"
 teaches:
   - структура процесса
   - типы интервью
   - оценка кандидатов
-unlocks:
-  - "[[leadership-interviews]]"
-tags: [leadership, hiring, interviews, process-design]
 sources: [google-rework, stripe-interviews, structured-hiring]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+  - interview
+related:
+  - "[[hiring-engineers]]"
+  - "[[leadership-interviews]]"
+  - "[[making-offers]]"
+  - "[[sourcing-candidates]]"
 ---
 
 # Дизайн процесса интервью
@@ -696,4 +701,4 @@ If can't decide — problem is criteria, not data.
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

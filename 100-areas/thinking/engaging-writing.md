@@ -3,13 +3,16 @@ title: "Писать так, чтобы читали: контент в эпох
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/communication
   - skills/writing
   - productivity/content
+  - type/concept
+  - level/intermediate
 related:
   - "[[metacognition]]"
   - "[[cognitive-biases]]"

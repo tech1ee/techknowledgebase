@@ -3,22 +3,24 @@ title: "JVM ServiceLoader & SPI - Service Provider Interface"
 created: 2025-11-25
 modified: 2026-01-02
 tags:
-  - java
-  - jvm
+  - topic/jvm
   - serviceloader
   - spi
   - plugin
   - modularity
   - extensibility
   - jdbc
-type: note
+  - type/concept
+  - level/advanced
+type: concept
+status: published
 area: programming
 confidence: high
 sources:
-  - https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html
-  - https://www.baeldung.com/java-jdbc-loading-drivers
-  - https://reflectoring.io/service-provider-interface/
-  - https://northcoder.com/post/class-loaders-service-providers-and/
+  - "https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html"
+  - "https://www.baeldung.com/java-jdbc-loading-drivers"
+  - "https://reflectoring.io/service-provider-interface/"
+  - "https://northcoder.com/post/class-loaders-service-providers-and/"
 related:
   - "[[jvm-class-loader-deep-dive]]"
   - "[[jvm-module-system]]"

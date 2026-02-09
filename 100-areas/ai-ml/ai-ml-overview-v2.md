@@ -1,9 +1,16 @@
 ---
 title: "AI/ML Engineering: Карта знаний 2025"
-tags: [ai, ml, moc, overview, curriculum, learning-path]
+tags:
+  - topic/ai-ml
+  - ml
+  - overview
+  - curriculum
+  - learning-path
+  - type/moc
+  - level/beginner
 category: ai-engineering
 date: 2025-01-15
-status: active
+status: published
 type: moc
 ---
 

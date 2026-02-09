@@ -7,13 +7,10 @@ area: android
 confidence: high
 cs-foundations: [graph-traversal, stack-data-structure, state-machine, deep-linking]
 tags:
-  - android
-  - navigation
-  - jetpack
-  - deep-links
-  - compose-navigation
-  - fragments
-  - activity
+  - topic/android
+  - topic/navigation
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-navigation-evolution]]"
   - "[[android-overview]]"

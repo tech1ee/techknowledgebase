@@ -2,16 +2,28 @@
 title: "Compose Multiplatform Desktop: Production-ready приложения для macOS, Windows, Linux"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, compose, desktop, jvm, windows, macos, linux, skia, packaging]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - compose
+  - desktop
+  - windows
+  - macos
+  - linux
+  - skia
+  - packaging
+  - type/concept
+  - level/intermediate
 related:
   - "[[compose-mp-overview]]"
   - "[[kmp-desktop-jvm]]"
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
 cs-foundations:
   - "[[jvm-internals]]"
   - "[[graphics-apis-fundamentals]]"
   - "[[native-packaging-distribution]]"
   - "[[gui-frameworks-history]]"
+status: published
 ---
 
 # Compose Multiplatform Desktop

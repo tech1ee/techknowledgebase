@@ -1,16 +1,15 @@
 ---
-title: "Android Dependencies: Управление зависимостями в Gradle"
+title: "Управление зависимостями в Android Gradle"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 cs-foundations: [dependency-resolution, version-conflict, transitive-dependencies, build-graph]
 tags:
-  - android
-  - gradle
-  - dependencies
-  - maven
-  - version-catalog
-  - bom
-  - build
+  - topic/android
+  - topic/build-system
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-gradle-fundamentals]]"
   - "[[android-project-structure]]"

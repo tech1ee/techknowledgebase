@@ -2,7 +2,14 @@
 title: "Cross-Platform: Background Work — BackgroundTasks vs WorkManager"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, background, backgroundtasks, workmanager]
+status: published
+tags:
+  - topic/cross-platform
+  - background
+  - backgroundtasks
+  - workmanager
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform: Background Work — BackgroundTasks vs WorkManager

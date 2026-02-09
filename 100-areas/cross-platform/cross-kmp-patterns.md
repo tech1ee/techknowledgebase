@@ -2,7 +2,14 @@
 title: "Cross-Platform: KMP Patterns — expect/actual, SKIE, bridging"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, kmp, expect-actual, skie]
+status: published
+tags:
+  - topic/cross-platform
+  - topic/kmp
+  - expect-actual
+  - skie
+  - type/comparison
+  - level/intermediate
 ---
 
 # KMP Patterns: expect/actual, SKIE и Bridging

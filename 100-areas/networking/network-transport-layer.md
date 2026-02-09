@@ -3,11 +3,14 @@ title: "Транспортный уровень: TCP, UDP, QUIC"
 date_created: 2025-01-15
 date_modified: 2025-01-15
 tags:
+  - topic/networking
   - networking/transport
   - networking/protocols
   - networking/tcp
   - networking/udp
   - networking/quic
+  - type/concept
+  - level/intermediate
 related:
   - "[[networking-overview]]"
   - "[[network-ip-routing]]"
@@ -15,6 +18,7 @@ related:
   - "[[os-processes-threads]]"
   - "[[os-synchronization]]"
   - "[[kotlin-coroutines]]"
+status: published
 ---
 
 # Транспортный уровень: TCP, UDP, QUIC

@@ -6,11 +6,10 @@ type: deep-dive
 area: ios
 confidence: high
 tags:
-  - ios
-  - architecture
-  - darwin
-  - xnu
-  - kernel
+  - topic/ios
+  - topic/architecture
+  - type/deep-dive
+  - level/advanced
 cs-foundations:
   - "[[os-overview]]"
   - "[[os-processes-threads]]"

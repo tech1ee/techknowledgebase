@@ -1,3 +1,13 @@
+---
+title: "Сравнение Agent Frameworks: Полное руководство 2025"
+type: concept
+status: published
+tags:
+  - topic/ai-ml
+  - type/concept
+  - level/intermediate
+---
+
 # Сравнение Agent Frameworks: Полное руководство 2025
 
 > Глубокий анализ фреймворков для построения AI-агентов: архитектура, философия, практическое применение

@@ -1,3 +1,20 @@
+---
+title: "Строковые алгоритмы"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
+related:
+  - "[[arrays-strings]]"
+  - "[[string-algorithms-advanced]]"
+  - "[[hash-tables]]"
+---
+
 # String Algorithms
 
 ## TL;DR

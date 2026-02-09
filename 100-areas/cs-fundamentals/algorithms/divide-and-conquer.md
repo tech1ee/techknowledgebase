@@ -1,3 +1,20 @@
+---
+title: "Разделяй и властвуй (Divide and Conquer)"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
+related:
+  - "[[sorting-algorithms]]"
+  - "[[recursion-fundamentals]]"
+  - "[[binary-search-pattern]]"
+---
+
 # Divide and Conquer
 
 ## TL;DR

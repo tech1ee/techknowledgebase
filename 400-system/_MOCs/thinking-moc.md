@@ -4,10 +4,10 @@ created: 2025-11-24
 modified: 2025-11-24
 type: moc
 tags:
-  - moc
-  - thinking
-  - learning
-  - productivity
+  - topic/thinking
+  - topic/learning
+  - type/moc
+  - navigation
 ---
 
 # Thinking MOC
@@ -170,7 +170,7 @@ tags:
 - [[architecture-moc]] — Архитектурные решения требуют системного мышления и знания bias'ов
 - [[ai-engineering-moc]] — AI-инструменты требуют метакогниции (иначе создают иллюзию обучения)
 - [[devops-moc]] — Инфраструктура как система
-- [[_career-moc]] — Подготовка к интервью требует metacognition и deliberate practice
+- [[career-moc]] — Подготовка к интервью требует metacognition и deliberate practice
 
 ---
 

@@ -1,3 +1,19 @@
+---
+title: "Путь обучения CS Fundamentals"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/guide
+  - level/beginner
+related:
+  - "[[cs-fundamentals-overview]]"
+  - "[[big-o-complexity]]"
+  - "[[problem-solving-framework]]"
+---
+
 # Путь обучения CS Fundamentals
 
 > Карта прогресса от новичка до эксперта.

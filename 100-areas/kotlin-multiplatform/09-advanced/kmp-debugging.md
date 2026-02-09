@@ -2,7 +2,17 @@
 title: "KMP Debugging: LLDB, Xcode, Crash Reporting"
 created: 2026-01-04
 modified: 2026-01-04
-tags: [kotlin, kmp, debugging, lldb, xcode, crashlytics, ios, android]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - debugging
+  - lldb
+  - xcode
+  - crashlytics
+  - ios
+  - android
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-memory-management]]"
   - "[[kmp-ios-deep-dive]]"
@@ -11,6 +21,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[native-compilation-llvm]]"
   - "[[memory-model-fundamentals]]"
+status: published
 ---
 
 # KMP Debugging

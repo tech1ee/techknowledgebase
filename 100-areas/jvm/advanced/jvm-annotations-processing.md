@@ -3,8 +3,7 @@ title: "JVM Annotations & Processing - Метапрограммирование 
 created: 2025-11-25
 modified: 2026-01-02
 tags:
-  - java
-  - jvm
+  - topic/jvm
   - annotations
   - apt
   - metaprogramming
@@ -12,17 +11,20 @@ tags:
   - code-generation
   - compiler
   - mapstruct
-type: note
+  - type/concept
+  - level/advanced
+type: concept
+status: published
 area: programming
 confidence: high
 sources:
-  - https://jcp.org/en/jsr/detail?id=175
-  - https://en.wikipedia.org/wiki/Java_annotation
-  - https://blog.tidelift.com/project-lombok-core-maintainer-reinier-zwitserloot-shares-his-open-source-journey
-  - https://objectcomputing.com/resources/publications/sett/january-2010-reducing-boilerplate-code-with-project-lombok
-  - https://projectlombok.org/
-  - https://mapstruct.org/
-  - https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html
+  - "https://jcp.org/en/jsr/detail?id=175"
+  - "https://en.wikipedia.org/wiki/Java_annotation"
+  - "https://blog.tidelift.com/project-lombok-core-maintainer-reinier-zwitserloot-shares-his-open-source-journey"
+  - "https://objectcomputing.com/resources/publications/sett/january-2010-reducing-boilerplate-code-with-project-lombok"
+  - "https://projectlombok.org/"
+  - "https://mapstruct.org/"
+  - "https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html"
 related:
   - "[[jvm-reflection-api]]"
   - "[[jvm-bytecode-manipulation]]"

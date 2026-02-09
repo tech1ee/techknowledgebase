@@ -2,7 +2,14 @@
 title: "Cross-Platform: Declarative UI — SwiftUI vs Compose"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, swiftui, compose, ui]
+status: published
+tags:
+  - topic/cross-platform
+  - swiftui
+  - compose
+  - ui
+  - type/comparison
+  - level/intermediate
 ---
 
 # Declarative UI: SwiftUI vs Jetpack Compose

@@ -1,8 +1,19 @@
 ---
-title: Combine Framework - Реактивное программирование в iOS
-date: 2026-01-11
-tags: [ios, swift, combine, reactive, async, publishers, operators]
-related: [[kotlin-flow]], [[swift-concurrency]], [[async-await]]
+title: "Combine Framework: реактивное программирование в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/reactive
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[kotlin-flow]]"
+  - "[[swift-concurrency]]"
+  - "[[async-await]]"
 ---
 
 # Combine Framework - Реактивное программирование в iOS

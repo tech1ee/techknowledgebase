@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/branding
   - type/guide
-  - level/senior
+  - level/advanced
 related:
   - "[[standing-out]]"
   - "[[portfolio-strategy]]"

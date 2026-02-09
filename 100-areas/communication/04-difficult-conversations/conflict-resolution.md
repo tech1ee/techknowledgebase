@@ -1,22 +1,24 @@
 ---
 title: "Conflict Resolution для IT-специалистов"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
-prerequisites:
-  - [[active-listening]]
-  - [[negotiation-fundamentals]]
 teaches:
   - Thomas-Kilmann 5 modes
   - Interest-based resolution
   - Disagree and commit
   - Escalation patterns
-unlocks:
-  - [[performance-conversations]]
-  - [[delivering-bad-news]]
-tags: [communication, conflict, leadership, difficult-conversations]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[active-listening]]"
+  - "[[negotiation-fundamentals]]"
+  - "[[performance-conversations]]"
+  - "[[delivering-bad-news]]"
 ---
 
 # Conflict Resolution для IT-специалистов

@@ -6,9 +6,8 @@ type: index
 status: verified
 confidence: high
 tags:
-  - index
+  - type/index
   - navigation
-  - moc
 ---
 
 # Tech Knowledge Base
@@ -24,14 +23,14 @@ tags:
 | Готовлюсь к интервью? | [[cs-fundamentals-overview]] → [[coding-challenges]] |
 | Изучаю Android? | [[android-overview]] → [[android-architecture-patterns]] |
 | Изучаю iOS? | [[ios-overview]] → [[ios-architecture-patterns]] |
-| Изучаю Kotlin Multiplatform? | [[00-kmp-overview]] → [[cs-foundations-overview]] |
+| Изучаю Kotlin Multiplatform? | [[kmp-overview]] → [[cs-foundations-overview]] |
 | Сравниваю iOS и Android? | [[cross-platform-overview]] → [[cross-memory-management]] |
 | Хочу понять JVM? | [[jvm-overview]] → [[kotlin-overview]] |
 | Проектирую архитектуру? | [[architecture-overview]] → [[cloud-overview]] |
 | Настраиваю CI/CD? | [[devops-overview]] → [[ci-cd-pipelines]] |
 | Безопасность приложения? | [[security-overview]] → [[authentication-authorization]] |
 | Работаю с AI/ML? | [[ai-ml-overview-v2]] → [[ai-engineering-moc]] |
-| Ищу работу? | [[_career-moc]] → [[job-search-strategy]] |
+| Ищу работу? | [[career-moc]] → [[job-search-strategy]] |
 
 ---
 
@@ -73,8 +72,8 @@ tags:
 | **Android** | Lifecycle, Architecture, Compose, Build | 45 | [[android-overview]] |
 | **iOS** | SwiftUI, UIKit, async/await, Xcode, ARC | 45 | [[ios-overview]] |
 | **Cross-Platform** | iOS vs Android: память, lifecycle, UI, KMP | 24 | [[cross-platform-overview]] |
-| **Kotlin Multiplatform** | iOS, Web, Desktop, Compose MP | 37 | [[00-kmp-overview]] |
-| **CS Foundations KMP** | Низкоуровневые основы для KMP | 61 | [[00-cs-foundations-overview]] |
+| **Kotlin Multiplatform** | iOS, Web, Desktop, Compose MP | 37 | [[kmp-overview]] |
+| **CS Foundations KMP** | Низкоуровневые основы для KMP | 61 | [[cs-foundations-overview]] |
 | **Cloud** | AWS, GCP, Serverless, Networking | 7 | [[cloud-overview]] |
 
 ### Practices — Практики разработки
@@ -93,7 +92,7 @@ tags:
 |--------|----------|--------|------|
 | **AI/ML** | LLM, RAG, Agents, Embeddings, Tools | 33 | [[ai-ml-overview-v2]] |
 | **Thinking** | Cognitive Load, Deep Work, Learning | 22 | [[cognitive-load-theory]] |
-| **Career** | Interview, Job Search, Resume, Regions | 30 | [[_career-moc]] |
+| **Career** | Interview, Job Search, Resume, Regions | 30 | [[career-moc]] |
 
 ---
 

@@ -1,3 +1,13 @@
+---
+title: "Research Report: Database Internals"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+---
+
 # Research Report: Database Internals
 
 **Date:** 2025-12-30

@@ -1,22 +1,24 @@
 ---
 title: "Saying No: отказывать без разрушения отношений"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[communication-styles]]
-  - [[active-listening]]
 teaches:
   - assertive-decline
   - boundary-setting
   - priority-communication
   - professional-no
-unlocks:
-  - [[negotiation-fundamentals]]
-  - [[stakeholder-negotiation]]
-tags: [communication, soft-skills, boundaries, assertiveness, workload]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[communication-styles]]"
+  - "[[active-listening]]"
+  - "[[negotiation-fundamentals]]"
+  - "[[stakeholder-negotiation]]"
 ---
 
 # Saying No: искусство профессионального отказа

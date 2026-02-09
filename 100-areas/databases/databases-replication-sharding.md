@@ -3,14 +3,16 @@ title: "Replication & Sharding: масштабирование баз данны
 created: 2025-12-22
 modified: 2025-12-22
 type: deep-dive
-status: verified
+status: published
 confidence: high
 tags:
-  - databases
+  - topic/databases
   - replication
   - sharding
   - scaling
   - distributed
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[databases-overview]]"
   - "[[databases-transactions-acid]]"

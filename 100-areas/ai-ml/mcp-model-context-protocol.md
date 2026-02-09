@@ -5,8 +5,21 @@ updated: 2025-12-28
 author: AI Assistant
 level: advanced
 type: guide
-topics: [MCP, tools, integrations, Anthropic, agents, fastmcp, typescript-sdk, postgresql, inspector]
-status: complete
+topics:
+  - MCP
+  - tools
+  - integrations
+  - Anthropic
+  - agents
+  - fastmcp
+  - typescript-sdk
+  - postgresql
+  - inspector
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
 ---
 
 # Model Context Protocol (MCP): Полное руководство

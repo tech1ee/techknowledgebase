@@ -3,13 +3,15 @@ title: "Secrets Management: Vault, rotation, environment variables"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - security
+  - topic/security
   - secrets
   - vault
   - credentials
+  - type/concept
+  - level/intermediate
 related:
   - "[[security-overview]]"
   - "[[cloud-aws-core-services]]"

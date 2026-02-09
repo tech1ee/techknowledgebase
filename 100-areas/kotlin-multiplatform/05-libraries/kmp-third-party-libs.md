@@ -2,9 +2,18 @@
 title: "Экосистема библиотек KMP: Apollo, Coil, Realm и другие"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, libraries, apollo, coil, realm, multiplatform, ecosystem]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - libraries
+  - apollo
+  - coil
+  - realm
+  - ecosystem
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kmp-sqldelight-database]]"
 cs-foundations:
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[dependency-management]]"
   - "[[caching-strategies]]"
   - "[[graphql-vs-rest]]"
+status: published
 ---
 
 # Экосистема библиотек Kotlin Multiplatform

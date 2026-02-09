@@ -1,5 +1,5 @@
 ---
-title: "Android Performance Profiling"
+title: "Профилирование производительности Android"
 created: 2025-12-25
 modified: 2026-01-05
 type: deep-dive
@@ -7,10 +7,10 @@ area: android
 confidence: high
 cs-foundations: [profiling, sampling, tracing, memory-analysis]
 tags:
-  - android
-  - performance
-  - profiling
-  - optimization
+  - topic/android
+  - topic/performance
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-view-rendering-pipeline]]"
   - "[[android-compose-internals]]"

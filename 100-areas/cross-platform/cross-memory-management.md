@@ -11,6 +11,7 @@ tags:
   - topic/gc
   - topic/swift
   - topic/kotlin
+  - level/intermediate
 ---
 
 # Управление памятью: ARC vs GC

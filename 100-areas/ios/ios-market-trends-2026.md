@@ -8,7 +8,7 @@ tags:
   - type/overview
   - topic/ios
   - topic/career
-  - level/overview
+  - level/beginner
 ---
 
 # iOS Market Trends 2026: рынок, востребованные навыки, KMP
@@ -1053,7 +1053,7 @@ Apple использует ~3B параметров для on-device language mo
 - [[kmp-ios-deep-dive]] — Глубокое погружение в KMP для iOS
 
 ### Career
-- [[_career-moc]] — Career development MOC
+- [[career-moc]] — Career development MOC
 - [[ios-architecture-patterns]] — Архитектурные паттерны для интервью
 - [[ios-async-await]] — async/await для подготовки к интервью
 

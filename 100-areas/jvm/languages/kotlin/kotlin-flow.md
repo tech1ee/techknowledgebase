@@ -2,11 +2,20 @@
 title: "Kotlin Flow: Реактивные потоки данных"
 created: 2025-11-25
 modified: 2026-01-03
-tags: [kotlin, flow, reactive, stateflow, sharedflow, coroutines]
+tags:
+  - topic/jvm
+  - flow
+  - reactive
+  - stateflow
+  - sharedflow
+  - coroutines
+  - type/concept
+  - level/intermediate
 related:
   - "[[kotlin-coroutines]]"
   - "[[android-state-management]]"
   - "[[kotlin-channels]]"
+status: published
 ---
 
 # Kotlin Flow: реактивные потоки данных

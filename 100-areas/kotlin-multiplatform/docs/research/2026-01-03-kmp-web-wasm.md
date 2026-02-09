@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Web/Wasm"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Web/Wasm
 
 **Date:** 2026-01-03

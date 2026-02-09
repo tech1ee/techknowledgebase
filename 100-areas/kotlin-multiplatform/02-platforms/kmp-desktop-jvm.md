@@ -2,9 +2,19 @@
 title: "KMP Desktop/JVM: Compose для десктопных приложений"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, desktop, jvm, compose, windows, macos, linux, packaging]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - desktop
+  - compose
+  - windows
+  - macos
+  - linux
+  - packaging
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-android-integration]]"
   - "[[compose-mp-desktop]]"
 cs-foundations:
@@ -12,6 +22,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[garbage-collection-explained]]"
   - "[[memory-model-fundamentals]]"
+status: published
 ---
 
 # KMP Desktop/JVM

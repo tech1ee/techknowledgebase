@@ -2,7 +2,14 @@
 title: "Cross-Platform: Architecture — MVVM, Clean Architecture"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, architecture, mvvm, clean-architecture]
+status: published
+tags:
+  - topic/cross-platform
+  - topic/architecture
+  - mvvm
+  - clean-architecture
+  - type/comparison
+  - level/intermediate
 ---
 
 # Архитектурные паттерны: iOS vs Android

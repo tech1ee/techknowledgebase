@@ -2,9 +2,25 @@
 title: "KMP Gradle Deep Dive"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, gradle, build, optimization, convention-plugins]
-related: [[kmp-project-structure]], [[kmp-ci-cd]], [[kmp-publishing]]
-cs-foundations: [build-systems, caching, directed-acyclic-graph, incremental-computation]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - gradle
+  - build
+  - optimization
+  - convention-plugins
+  - type/deep-dive
+  - level/advanced
+related:
+  - [kmp-project-structure]]
+  - "[[kmp-ci-cd]]"
+  - "[[kmp-publishing]"
+cs-foundations:
+  - build-systems
+  - caching
+  - directed-acyclic-graph
+  - incremental-computation
+status: published
 ---
 
 # KMP Gradle Deep Dive

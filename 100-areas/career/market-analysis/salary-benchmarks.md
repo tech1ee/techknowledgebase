@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/android
   - type/reference
-  - level/senior
+  - level/intermediate
 related:
   - "[[android-job-market-2025]]"
   - "[[in-demand-skills-2025]]"

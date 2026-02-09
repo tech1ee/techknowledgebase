@@ -2,8 +2,12 @@
 title: "Bridges и Bindings: автоматизация interop"
 created: 2026-01-04
 modified: 2026-01-04
-type: deep-dive
-tags: [cs-foundations, platform-interop, bindings, bridges, cinterop, skie]
+type: overview
+status: published
+tags:
+  - topic/cs-foundations
+  - type/overview
+  - level/advanced
 related:
   - "[[ffi-foreign-function-interface]]"
   - "[[abi-calling-conventions]]"

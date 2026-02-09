@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/remote-work
   - type/reference
-  - level/senior
+  - level/intermediate
 related:
   - "[[android-job-market-2025]]"
   - "[[job-search-strategy]]"

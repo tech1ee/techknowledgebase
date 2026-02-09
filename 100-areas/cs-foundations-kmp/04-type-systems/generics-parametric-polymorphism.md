@@ -3,7 +3,11 @@ title: "Generics: параметрический полиморфизм"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, type-systems, generics, polymorphism, kotlin]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[type-systems-fundamentals]]"
   - "[[variance-covariance]]"

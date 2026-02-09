@@ -1,11 +1,16 @@
 ---
 title: "Staff+ Engineering: путь выше Senior"
-tags: [career, staff-engineer, principal-engineer, ic-track, leadership, faang]
-category: career
-level: senior
 created: 2025-12-28
-updated: 2025-12-28
+modified: 2025-12-28
+type: deep-dive
+status: published
 sources: [staffeng.com, leaddev.com, pragmaticengineer.com, levels.fyi]
+tags:
+  - topic/career
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[ic-vs-management]]"
 ---
 
 # Staff+ Engineering: путь выше Senior
@@ -884,7 +889,7 @@ PROCESS:
 
 ## Связанные заметки
 
-- [[_career-moc]] — Карта раздела карьеры
+- [[career-moc]] — Карта раздела карьеры
 - [[technical-interview]] — Техническое интервью
 - [[system-design-android]] — System Design для Mobile
 - [[behavioral-interview]] — Behavioral интервью

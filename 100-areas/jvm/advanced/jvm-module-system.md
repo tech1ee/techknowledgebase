@@ -3,19 +3,21 @@ title: "Java Module System (JPMS): Модульность и инкапсуля�
 created: 2025-11-25
 modified: 2025-11-25
 tags:
-  - jvm
+  - topic/jvm
   - modules
   - jpms
   - jigsaw
-  - java9
-type: note
+  - type/concept
+  - level/advanced
+type: concept
+status: published
 area: programming
-confidence: 4
+confidence: high
 sources:
   - "The Java Module System" by Nicolai Parlog (2019)
   - "Java 9 Modularity" by Sander Mak & Paul Bakker (2017)
   - "JEP 261: Module System"
-  - "Oracle Java Platform Module System Documentation"
+  - Oracle Java Platform Module System Documentation
 ---
 
 # Java Module System (JPMS): Модульность и инкапсуляция

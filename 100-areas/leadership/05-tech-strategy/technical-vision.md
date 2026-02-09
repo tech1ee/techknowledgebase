@@ -1,22 +1,24 @@
 ---
 title: "Техническое видение и стратегия"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [cto, vpe, director, staff-engineer]
-prerequisites:
-  - "[[tech-debt-management]]"
-  - "[[architecture-decisions]]"
 teaches:
   - создание tech vision
   - roadmap planning
   - alignment с бизнесом
-unlocks:
-  - "[[strategic-thinking]]"
-tags: [leadership, strategy, vision, roadmap, architecture]
 sources: [staff-engineer, elegant-puzzle, cto-craft]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[tech-debt-management]]"
+  - "[[architecture-decisions]]"
+  - "[[strategic-thinking]]"
 ---
 
 # Техническое видение и стратегия

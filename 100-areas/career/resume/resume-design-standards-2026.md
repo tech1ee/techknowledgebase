@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/resume
-  - type/guide
-  - level/senior
+  - type/reference
+  - level/intermediate
 related:
   - "[[resume-strategy]]"
   - "[[linkedin-optimization]]"

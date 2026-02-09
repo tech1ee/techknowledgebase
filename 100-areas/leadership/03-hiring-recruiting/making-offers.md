@@ -1,22 +1,25 @@
 ---
 title: "Офферы и переговоры"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, hr, recruiter]
-prerequisites:
-  - "[[hiring-engineers]]"
-  - "[[interview-process-design]]"
 teaches:
   - structuring offers
   - negotiation tactics
   - closing candidates
-unlocks:
-  - "[[onboarding]]"
-tags: [leadership, hiring, offers, negotiation, compensation]
 sources: [pave, levels-fyi, salary-negotiation]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[hiring-engineers]]"
+  - "[[interview-process-design]]"
+  - "[[onboarding]]"
+  - "[[team-culture]]"
 ---
 
 # Офферы и переговоры
@@ -677,4 +680,4 @@ SPEED IS KEY:
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

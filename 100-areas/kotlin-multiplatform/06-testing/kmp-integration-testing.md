@@ -2,14 +2,27 @@
 title: "KMP Integration Testing"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, testing, integration, ktor, sqldelight]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - testing
+  - integration
+  - ktor
+  - sqldelight
+  - type/concept
+  - level/intermediate
 cs-foundations:
   - "[[integration-testing-theory]]"
   - "[[test-doubles-patterns]]"
   - "[[database-testing-strategies]]"
   - "[[http-mocking-patterns]]"
   - "[[test-isolation-principles]]"
-related: [[kmp-testing-strategies]], [[kmp-unit-testing]], [[kmp-ktor-networking]], [[kmp-sqldelight-database]]
+related:
+  - [kmp-testing-strategies]]
+  - "[[kmp-unit-testing]]"
+  - "[[kmp-ktor-networking]]"
+  - "[[kmp-sqldelight-database]"
+status: published
 ---
 
 # KMP Integration Testing

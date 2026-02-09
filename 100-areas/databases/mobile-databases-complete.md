@@ -1,3 +1,13 @@
+---
+title: "Mobile Databases: Complete Guide"
+type: guide
+status: published
+tags:
+  - topic/databases
+  - type/guide
+  - level/intermediate
+---
+
 # Mobile Databases: Complete Guide
 
 > Полное руководство по мобильным базам данных — Android, iOS, Kotlin Multiplatform, Flutter, React Native

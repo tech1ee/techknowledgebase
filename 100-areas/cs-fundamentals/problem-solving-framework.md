@@ -1,16 +1,15 @@
 ---
-title: "Problem-Solving Framework: UMPIRE и метод Полья"
+title: "Фреймворк решения задач: UMPIRE и метод Полья"
 created: 2025-12-29
 modified: 2025-12-29
-type: deep-dive
+type: guide
 status: published
 confidence: high
 tags:
   - topic/cs-fundamentals
-  - topic/algorithms
-  - topic/interview
-  - deep-dive/problem-solving
-  - level/foundation
+  - type/guide
+  - level/beginner
+  - interview
 related:
   - "[[big-o-complexity]]"
   - "[[coding-challenges]]"

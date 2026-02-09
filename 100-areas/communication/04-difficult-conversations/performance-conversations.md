@@ -1,23 +1,24 @@
 ---
 title: "Performance Conversations: reviews, PIPs и promotion talks"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
-prerequisites:
-  - [[giving-feedback]]
-  - [[receiving-feedback]]
-  - [[active-listening]]
 teaches:
   - performance-review-structure
   - pip-management
   - promotion-conversations
   - difficult-feedback-delivery
-unlocks:
-  - [[delivering-bad-news]]
-  - [[career-development]]
-tags: [communication, soft-skills, performance, management, career]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[giving-feedback]]"
+  - "[[receiving-feedback]]"
+  - "[[active-listening]]"
+  - "[[delivering-bad-news]]"
 ---
 
 # Performance Conversations: говорить о performance без разрушения отношений

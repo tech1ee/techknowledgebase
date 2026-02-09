@@ -6,11 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - activity
-  - lifecycle
-  - savedinstancestate
-  - viewmodel
+  - topic/android
+  - topic/lifecycle
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

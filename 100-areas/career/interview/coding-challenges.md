@@ -7,9 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/algorithms
-  - level/senior
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[interview-process]]"
   - "[[technical-interview]]"

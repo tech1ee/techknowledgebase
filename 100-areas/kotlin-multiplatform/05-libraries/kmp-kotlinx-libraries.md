@@ -2,9 +2,18 @@
 title: "kotlinx библиотеки в KMP: сериализация, дата-время, корутины, IO"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, kotlinx, serialization, datetime, coroutines, io, multiplatform]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - kotlinx
+  - serialization
+  - datetime
+  - coroutines
+  - io
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kotlin-coroutines]]"
 cs-foundations:
@@ -13,6 +22,7 @@ cs-foundations:
   - "[[concurrency-models]]"
   - "[[io-streams-theory]]"
   - "[[type-systems-theory]]"
+status: published
 ---
 
 # kotlinx библиотеки в Kotlin Multiplatform

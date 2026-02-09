@@ -3,12 +3,14 @@ title: "Виртуальная машина: что это и зачем"
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - jvm
+  - topic/jvm
   - virtual-machine
   - fundamentals
+  - type/concept
+  - level/beginner
 related:
   - "[[jvm-basics-history]]"
   - "[[os-virtualization-containers]]"

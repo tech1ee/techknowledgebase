@@ -1,5 +1,5 @@
 ---
-title: "Android View Rendering Pipeline"
+title: "Конвейер рендеринга View в Android"
 created: 2025-12-25
 modified: 2026-01-05
 type: deep-dive
@@ -7,10 +7,11 @@ area: android
 confidence: high
 cs-foundations: [rendering-pipeline, gpu-acceleration, vsync, double-buffering]
 tags:
-  - android
-  - rendering
-  - performance
-  - gpu
+  - topic/android
+  - topic/rendering
+  - topic/performance
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-compose-internals]]"
   - "[[android-performance-profiling]]"

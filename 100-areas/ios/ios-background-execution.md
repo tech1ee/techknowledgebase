@@ -1,8 +1,18 @@
 ---
-title: iOS Background Execution
+title: "Фоновое выполнение в iOS"
 created: 2026-01-11
-tags: [ios, swift, background-tasks, app-lifecycle, performance]
-related: "[[android-background-work]]"
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/background-processing
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[android-background-work]]"
+  - "[[ios-app-components]]"
 ---
 
 ## TL;DR

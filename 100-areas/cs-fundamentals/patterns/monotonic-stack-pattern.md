@@ -1,11 +1,9 @@
-# Monotonic Stack Pattern
-
 ---
-title: "Monotonic Stack Pattern"
+title: "Паттерн монотонного стека (Monotonic Stack)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -17,16 +15,18 @@ cs-foundations:
 prerequisites:
   - "[[stacks-queues]]"
   - "[[arrays-strings]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[sliding-window-pattern]]"
   - "[[two-pointers-pattern]]"
-tags:
-  - pattern
-  - monotonic-stack
-  - next-greater
-  - histogram
-  - interview
 ---
+
+# Monotonic Stack Pattern
 
 ## TL;DR
 

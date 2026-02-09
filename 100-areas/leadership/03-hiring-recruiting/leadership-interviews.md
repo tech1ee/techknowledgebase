@@ -1,22 +1,26 @@
 ---
 title: "Интервью на EM/Director/VP/CTO"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [em, director, vpe, cto, hr]
-prerequisites:
-  - "[[hiring-engineers]]"
-  - "[[interview-process-design]]"
 teaches:
   - оценка leadership кандидатов
   - вопросы для разных уровней
   - red flags
-unlocks:
-  - "[[first-90-days]]"
-tags: [leadership, hiring, interviews, executive-hiring, em-hiring]
 sources: [topgrading, executive-search, who-book]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+  - interview
+related:
+  - "[[hiring-engineers]]"
+  - "[[interview-process-design]]"
+  - "[[first-90-days]]"
+  - "[[cto-vs-vpe]]"
 ---
 
 # Интервью на EM/Director/VP/CTO
@@ -695,4 +699,4 @@ ADDITIONAL:
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

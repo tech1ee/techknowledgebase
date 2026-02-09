@@ -1,21 +1,23 @@
 ---
 title: "Управление stakeholders"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - mapping stakeholders
   - influence without authority
   - managing up
-unlocks:
-  - "[[executive-communication]]"
-tags: [leadership, stakeholders, influence, politics, executive]
 sources: [first-round-review, hbr, manager-tools]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[em-fundamentals]]"
+  - "[[executive-communication]]"
 ---
 
 # Управление stakeholders

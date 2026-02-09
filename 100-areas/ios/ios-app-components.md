@@ -1,11 +1,21 @@
 ---
-title: iOS App Components и Lifecycle
+title: "Компоненты iOS-приложения и жизненный цикл"
 created: 2026-01-11
 modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [ios, app-architecture, lifecycle, uikit, swiftui, cs-foundations]
-related: [[android-app-components]], [[ios-view-controllers]], [[swiftui-app-lifecycle]], [[ios-scene-delegate]]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/lifecycle
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-app-components]]"
+  - "[[ios-view-controllers]]"
+  - "[[swiftui-app-lifecycle]]"
+  - "[[ios-scene-delegate]]"
 ---
 
 ## TL;DR

@@ -3,7 +3,11 @@ title: "Variance: ковариантность и контравариантно
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, type-systems, variance, generics, kotlin]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[generics-parametric-polymorphism]]"
   - "[[type-erasure-reification]]"

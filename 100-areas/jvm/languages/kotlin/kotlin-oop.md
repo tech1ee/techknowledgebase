@@ -3,12 +3,15 @@ title: "Kotlin: Объектно-ориентированное программ
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - kotlin
+  - topic/jvm
   - oop
   - classes
+  - type/concept
+  - level/intermediate
 aliases:
   - Kotlin OOP
   - Kotlin Classes
+status: published
 ---
 
 # Kotlin ООП: классы без boilerplate

@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Architecture Patterns"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Architecture Patterns
 
 **Date:** 2026-01-03

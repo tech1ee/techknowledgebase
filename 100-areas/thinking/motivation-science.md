@@ -3,13 +3,16 @@ title: "Наука мотивации: почему награды не рабо
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/motivation
   - learning/psychology
   - productivity/self-determination
+  - type/concept
+  - level/intermediate
 related:
   - "[[procrastination-science]]"
   - "[[flow-state]]"

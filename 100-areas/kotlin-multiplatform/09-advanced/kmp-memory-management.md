@@ -2,7 +2,16 @@
 title: "KMP Memory Management: GC, ARC, и их взаимодействие"
 created: 2026-01-04
 modified: 2026-01-04
-tags: [kotlin, kmp, memory, gc, arc, native, ios]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - memory
+  - gc
+  - arc
+  - native
+  - ios
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-performance-optimization]]"
   - "[[kmp-ios-deep-dive]]"
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[reference-counting-arc]]"
   - "[[memory-model-fundamentals]]"
   - "[[memory-safety-ownership]]"
+status: published
 ---
 
 # KMP Memory Management

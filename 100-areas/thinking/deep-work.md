@@ -3,13 +3,16 @@ title: "Deep Work: фокус в мире отвлечений"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/focus
   - productivity/deep-work
   - skills/concentration
+  - type/concept
+  - level/intermediate
 related:
   - "[[learning-complex-things]]"
   - "[[mental-models]]"

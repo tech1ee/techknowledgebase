@@ -1,11 +1,9 @@
-# Dynamic Programming Patterns
-
 ---
-title: "Dynamic Programming Patterns"
+title: "Паттерны динамического программирования"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 confidence: high
 cs-foundations:
@@ -19,17 +17,18 @@ prerequisites:
   - "[[recursion-fundamentals]]"
   - "[[big-o-complexity]]"
   - "[[arrays-strings]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - pattern
+  - interview
 related:
   - "[[backtracking]]"
   - "[[greedy-algorithms]]"
-tags:
-  - pattern
-  - dynamic-programming
-  - memoization
-  - tabulation
-  - optimization
-  - interview
 ---
+
+# Dynamic Programming Patterns
 
 ## TL;DR
 

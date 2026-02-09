@@ -3,12 +3,15 @@ title: "Real-time протоколы: WebSocket, SSE, WebRTC, gRPC"
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/networking
   - networking/protocols
   - networking/realtime
+  - type/concept
+  - level/intermediate
 related:
   - "[[network-http-evolution]]"
   - "[[network-transport-layer]]"

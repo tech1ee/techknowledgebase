@@ -3,13 +3,16 @@ title: "Беспроводные IoT протоколы: Zigbee, Thread, Matter,
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/networking
   - networking/wireless
   - networking/iot
   - hardware/embedded
+  - type/concept
+  - level/intermediate
 related:
   - "[[network-bluetooth]]"
   - "[[network-physical-layer]]"

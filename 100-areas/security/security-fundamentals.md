@@ -1,6 +1,17 @@
+---
+title: "Security Fundamentals: Основы информационной безопасности"
+type: concept
+status: published
+tags:
+  - topic/security
+  - type/concept
+  - level/beginner
+---
+
 # Security Fundamentals: Основы информационной безопасности
 
 ---
+
 cs-foundations: [CIA Triad, Defense in Depth, Principle of Least Privilege, Risk Management, AAA Framework]
 ---
 

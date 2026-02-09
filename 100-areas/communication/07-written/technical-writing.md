@@ -1,3 +1,18 @@
+---
+title: "Technical Writing: RFC, ADR и документация"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/communication
+  - type/guide
+  - level/intermediate
+related:
+  - "[[async-communication]]"
+  - "[[email-communication]]"
+---
+
 # Technical Writing: RFC, ADR и документация
 
 ## TL;DR

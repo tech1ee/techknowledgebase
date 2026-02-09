@@ -1,11 +1,9 @@
-# Sorting Algorithms
-
 ---
-title: "Sorting Algorithms"
+title: "Алгоритмы сортировки"
 created: 2025-12-30
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -20,18 +18,18 @@ prerequisites:
   - "[[recursion-fundamentals]]"
   - "[[heaps-priority-queues]]"
   - "[[big-o-complexity]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[searching-algorithms]]"
   - "[[divide-and-conquer]]"
   - "[[two-pointers-pattern]]"
-tags:
-  - algorithm
-  - sorting
-  - quicksort
-  - mergesort
-  - heapsort
-  - interview
 ---
+
+# Sorting Algorithms
 
 ## TL;DR
 

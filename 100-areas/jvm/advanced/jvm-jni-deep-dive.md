@@ -1,9 +1,22 @@
 ---
 title: "JVM JNI - Java Native Interface"
-tags: [java, jvm, jni, native, c, cpp, interop, performance]
-sources: [jni-specification, oracle-jni-guide, openjdk-jni]
-confidence: 4
+tags:
+  - topic/jvm
+  - jni
+  - native
+  - c
+  - cpp
+  - interop
+  - performance
+  - type/deep-dive
+  - level/advanced
+sources:
+  - jni-specification
+  - oracle-jni-guide
+  - openjdk-jni
+confidence: high
 date: 2025-11-25
+status: published
 ---
 
 # JVM JNI - Java Native Interface

@@ -1,11 +1,9 @@
-# Meet in the Middle Pattern
-
 ---
-title: "Meet in the Middle Pattern"
+title: "Паттерн Meet in the Middle"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 confidence: high
 cs-foundations:
@@ -18,16 +16,18 @@ prerequisites:
   - "[[binary-search-pattern]]"
   - "[[bit-manipulation]]"
   - "[[hash-tables]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - pattern
+  - interview
 related:
   - "[[backtracking]]"
   - "[[dp-patterns]]"
-tags:
-  - pattern
-  - meet-in-the-middle
-  - subset-sum
-  - bidirectional
-  - interview
 ---
+
+# Meet in the Middle Pattern
 
 ## TL;DR
 

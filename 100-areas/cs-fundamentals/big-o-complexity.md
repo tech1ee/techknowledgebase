@@ -1,5 +1,5 @@
 ---
-title: "Big O Notation: Полное руководство по анализу сложности"
+title: "Big O нотация: полное руководство по анализу сложности"
 created: 2025-12-29
 modified: 2026-01-06
 type: deep-dive
@@ -13,14 +13,13 @@ cs-foundations:
   - computational-complexity
 tags:
   - topic/cs-fundamentals
-  - topic/algorithms
-  - topic/complexity
-  - topic/interview
+  - type/deep-dive
   - level/beginner
+  - interview
 related:
   - "[[cs-fundamentals-overview]]"
-  - "[[algorithms/sorting-algorithms]]"
-  - "[[algorithms/searching-algorithms]]"
+  - "[[sorting-algorithms]]"
+  - "[[searching-algorithms]]"
   - "[[problem-solving-framework]]"
 ---
 

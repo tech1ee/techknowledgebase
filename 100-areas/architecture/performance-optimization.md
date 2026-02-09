@@ -3,13 +3,16 @@ title: "Performance: от 3s до 300ms"
 created: 2025-11-24
 modified: 2026-01-02
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/architecture
   - architecture/performance
   - programming/optimization
   - best-practices
+  - type/concept
+  - level/advanced
 related:
   - "[[caching-strategies]]"
   - "[[database-design-optimization]]"

@@ -1,11 +1,9 @@
-# Intervals Pattern
-
 ---
-title: "Intervals Pattern"
+title: "Паттерн интервалов (Intervals)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -16,17 +14,19 @@ cs-foundations:
   - merge-operation
 prerequisites:
   - "[[sorting-algorithms]]"
-  - "[[heaps]]"
+  - "[[heaps-priority-queues]]"
   - "[[two-pointers-pattern]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[greedy-algorithms]]"
-tags:
-  - pattern
-  - intervals
-  - merge
-  - scheduling
-  - interview
 ---
+
+# Intervals Pattern
 
 ## TL;DR
 

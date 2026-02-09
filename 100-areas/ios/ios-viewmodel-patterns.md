@@ -1,7 +1,19 @@
 ---
-date: 2026-01-11
-tags: [ios, swiftui, mvvm, viewmodel, combine, observable, state-management]
-related: "[[android-viewmodel-internals]]"
+title: "Паттерны ViewModel в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/architecture
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-viewmodel-internals]]"
+  - "[[ios-state-management]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # iOS ViewModel Patterns

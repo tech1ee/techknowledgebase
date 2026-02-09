@@ -1,23 +1,25 @@
 ---
 title: "Строительство инженерной команды"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, cto, founder]
-prerequisites:
-  - "[[hiring-engineers]]"
-  - "[[em-fundamentals]]"
 teaches:
   - team composition
   - growth stages
   - building from scratch
-unlocks:
+sources: [managers-path, elegant-puzzle, first-round-review]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[hiring-engineers]]"
+  - "[[em-fundamentals]]"
   - "[[team-culture]]"
   - "[[scaling-engineering-org]]"
-tags: [leadership, team-building, engineering-team, org-design]
-sources: [managers-path, elegant-puzzle, first-round-review]
 ---
 
 # Строительство инженерной команды
@@ -693,4 +695,4 @@ ADD:
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

@@ -1,3 +1,19 @@
+---
+title: "Код с объяснением каждой детали (с нуля)"
+created: 2026-02-09
+modified: 2026-02-09
+type: tutorial
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/tutorial
+  - level/beginner
+related:
+  - "[[code-explained-advanced]]"
+  - "[[arrays-strings]]"
+  - "[[recursion-fundamentals]]"
+---
+
 # Код с объяснением каждой детали (с нуля)
 
 ## Введение

@@ -3,8 +3,8 @@
 > Открытая база технических знаний для IT-специалистов: от алгоритмов до архитектуры систем, от мобильной разработки до AI/ML. На русском языке, с кодом на английском.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Notes](https://img.shields.io/badge/Notes-980+-blue.svg)](#статистика)
-[![Areas](https://img.shields.io/badge/Areas-13-green.svg)](#области-знаний)
+[![Notes](https://img.shields.io/badge/Notes-640+-blue.svg)](#статистика)
+[![Areas](https://img.shields.io/badge/Areas-20-green.svg)](#области-знаний)
 
 ---
 
@@ -30,13 +30,13 @@
 
 | Цель | Начать здесь |
 |------|--------------|
-| **Обзор всего** | [Home.md](400-system/Home.md) — главная панель |
+| **Обзор всего** | [Home.md](400-system/Home.md) — главная панель навигации |
 | **Алгоритмы** | [patterns-overview](100-areas/cs-fundamentals/patterns/patterns-overview.md) — 30+ паттернов |
 | **Android** | [android-overview](100-areas/android/android-overview.md) — Compose, архитектура, Hilt |
-| **iOS** | [100-areas/ios/](100-areas/ios/) — SwiftUI, UIKit, async/await |
-| **AI/ML** | [ai-ml-overview-v2](100-areas/ai-ml/ai-ml-overview-v2.md) — LLM, RAG, агенты |
+| **iOS** | [ios-overview](100-areas/ios/ios-overview.md) — SwiftUI, UIKit, async/await |
+| **AI/ML** | [ai-ml-overview](100-areas/ai-ml/ai-ml-overview-v2.md) — LLM, RAG, агенты |
 | **Системный дизайн** | [architecture-overview](100-areas/architecture/architecture-overview.md) |
-| **Подготовка к интервью** | [100-areas/career/](100-areas/career/) — стратегии, вопросы, переговоры |
+| **Подготовка к интервью** | [career/](100-areas/career/) — стратегии, вопросы, переговоры |
 
 ---
 
@@ -48,15 +48,16 @@
 |---------|--------|----------|
 | **Android** | 66 | Lifecycle, Compose, Architecture Components, Hilt, Performance |
 | **iOS** | 45 | SwiftUI, UIKit, Concurrency, Core Data, Performance |
-| **Kotlin Multiplatform** | 37 | Shared code, Compose Multiplatform, expect/actual |
+| **Kotlin Multiplatform** | 70 | Shared code, Compose Multiplatform, expect/actual |
 | **Cross-platform** | 24 | iOS vs Android сравнения, паттерны миграции |
-| **JVM** | 25 | GC, Memory Model, Kotlin internals, Coroutines |
+| **JVM** | 37 | GC, Memory Model, Kotlin internals, Coroutines |
 
 ### Computer Science
 
 | Область | Файлов | Описание |
 |---------|--------|----------|
 | **CS Fundamentals** | 63 | Алгоритмы, структуры данных, 30+ паттернов решения |
+| **CS Foundations KMP** | 61 | Memory, compilation, concurrency, type systems |
 | **Databases** | 16 | SQL, NoSQL, индексы, транзакции, оптимизация |
 | **Networking** | 23 | TCP/IP, HTTP/2/3, DNS, TLS, мобильные сети |
 | **Operating Systems** | 8 | Процессы, память, файловые системы |
@@ -69,13 +70,13 @@
 | **DevOps** | 10 | Docker, Kubernetes, CI/CD, мониторинг |
 | **Cloud** | 7 | AWS, GCP, Azure, serverless |
 | **Security** | 13 | OWASP, мобильная безопасность, криптография |
+| **Programming** | 12 | Clean Code, SOLID, Design Patterns, Testing |
 
 ### AI/ML
 
 | Область | Файлов | Описание |
 |---------|--------|----------|
 | **AI/ML Engineering** | 43 | LLM, RAG, агенты, embeddings, оптимизация |
-| **+ NotebookLM Export** | 30 | Дополнительные справочные материалы |
 
 ### Soft Skills & Карьера
 
@@ -119,7 +120,7 @@
 | **Suffix Array / LCP** | Advanced | Все подстроки, LCP queries |
 | **Segment Tree** | Hard | Range queries, range updates |
 
-**[Полная карта паттернов →](100-areas/cs-fundamentals/patterns/patterns-overview.md)**
+**[Полная карта паттернов ->](100-areas/cs-fundamentals/patterns/patterns-overview.md)**
 
 ---
 
@@ -127,44 +128,36 @@
 
 ```
 tech/
-├── 000-inbox/              # Входящие заметки (очередь обработки)
-│
-├── 100-areas/              # Основные области знаний (850+ файлов)
-│   ├── ai-ml/              # AI/ML Engineering
-│   ├── android/            # Android Development
-│   ├── architecture/       # System Design & Patterns
-│   ├── career/             # Карьера и поиск работы
-│   ├── cloud/              # AWS, GCP, Azure
-│   ├── communication/      # Коммуникация
-│   ├── cross-platform/     # iOS vs Android
-│   ├── cs-fundamentals/    # Алгоритмы и паттерны
-│   │   └── patterns/       # 30+ алгоритмических паттернов
-│   ├── databases/          # SQL, NoSQL, оптимизация
-│   ├── devops/             # Docker, K8s, CI/CD
-│   ├── ios/                # iOS Development
-│   ├── jvm/                # JVM, Kotlin, Coroutines
-│   ├── kotlin-multiplatform/
-│   ├── leadership/         # Лидерство и менеджмент
-│   ├── networking/         # Сети и протоколы
-│   ├── operating-systems/  # ОС
-│   ├── programming/        # Clean Code, SOLID
-│   ├── security/           # OWASP, криптография
-│   └── thinking/           # Когнитивистика, обучение
+├── 100-areas/              # Основные области знаний (640 файлов)
+│   ├── ai-ml/              # AI/ML Engineering (43)
+│   ├── android/            # Android Development (66)
+│   ├── architecture/       # System Design & Patterns (12)
+│   ├── career/             # Карьера и поиск работы (37)
+│   ├── cloud/              # AWS, GCP, Azure (7)
+│   ├── communication/      # Коммуникация (26)
+│   ├── cross-platform/     # iOS vs Android (24)
+│   ├── cs-foundations-kmp/  # Низкоуровневые основы (61)
+│   ├── cs-fundamentals/    # Алгоритмы и паттерны (63)
+│   ├── databases/          # SQL, NoSQL, оптимизация (16)
+│   ├── devops/             # Docker, K8s, CI/CD (10)
+│   ├── ios/                # iOS Development (45)
+│   ├── jvm/                # JVM, Kotlin, Coroutines (37)
+│   ├── kotlin-multiplatform/ # KMP, Compose MP (70)
+│   ├── leadership/         # Лидерство и менеджмент (44)
+│   ├── networking/         # Сети и протоколы (23)
+│   ├── operating-systems/  # ОС (8)
+│   ├── programming/        # Clean Code, SOLID (12)
+│   ├── security/           # OWASP, криптография (13)
+│   └── thinking/           # Когнитивистика, обучение (22)
 │
 ├── 200-resources/          # Справочные материалы
 │
-├── 300-content/            # Проекты и публикации
-│   └── it-market-2025/     # Исследование рынка IT
-│
 ├── 400-system/             # Система навигации
 │   ├── Home.md             # Главная панель
-│   ├── _MOCs/              # Карты навигации по областям
-│   ├── _meta/              # Стандарты и шаблоны
-│   └── _templates/         # 8 типов шаблонов заметок
-│
-├── _automation/            # Claude Code интеграция
-│   ├── agents/             # AI-агенты для контента
-│   └── slash-commands/     # Команды автоматизации
+│   ├── _MOCs/              # Карты навигации (21 MOC)
+│   ├── _meta/              # Стандарты контента
+│   ├── _plans/             # Планы развития
+│   └── _templates/         # Шаблоны заметок
 │
 └── docs/                   # Исследовательские документы
     └── research/           # 70+ research notes
@@ -179,7 +172,7 @@ tech/
 База построена на научных принципах обучения:
 
 1. **Принцип полноты** — каждый материал отвечает на ПОЧЕМУ, ЧТО, КАК
-2. **Когнитивная нагрузка** — 4±1 элемент на секцию (Miller's Law)
+2. **Когнитивная нагрузка** — 4±1 элемент на секцию (Cowan, 2000)
 3. **Прогрессивное раскрытие** — от простого к сложному
 4. **Связность** — всё связано ссылками (Zettelkasten)
 
@@ -190,17 +183,6 @@ tech/
 | **Overview** | 300-500 строк | Быстрое введение, навигация |
 | **Deep-dive** | 1500-2500 строк | Глубокое погружение с примерами |
 | **Reference** | Varies | Справочник для быстрого поиска |
-
-### Восемь типов контента
-
-1. **Concept** — определение + контекст
-2. **Deep-Dive** — полное исследование темы
-3. **Reference** — справочник/cheatsheet
-4. **Tutorial** — пошаговое руководство
-5. **Comparison** — сравнительный анализ
-6. **Analysis** — разбор проблемы
-7. **Research Log** — ход исследования
-8. **Tool** — документация инструмента
 
 ---
 
@@ -220,64 +202,16 @@ tech/
 
 ---
 
-## Ключевые материалы
-
-### Алгоритмы (must-read)
-
-| Материал | Что внутри |
-|----------|------------|
-| [patterns-overview](100-areas/cs-fundamentals/patterns/patterns-overview.md) | Карта всех паттернов + как выбрать |
-| [two-pointers-pattern](100-areas/cs-fundamentals/patterns/two-pointers-pattern.md) | Two Pointers во всех вариациях |
-| [sliding-window-pattern](100-areas/cs-fundamentals/patterns/sliding-window-pattern.md) | Sliding Window + монотонная очередь |
-| [binary-search-pattern](100-areas/cs-fundamentals/patterns/binary-search-pattern.md) | Binary Search: границы, ротация |
-| [dp-patterns](100-areas/cs-fundamentals/patterns/dp-patterns.md) | DP: knapsack, LCS, grid, intervals |
-| [string-algorithms-advanced](100-areas/cs-fundamentals/patterns/string-algorithms-advanced.md) | KMP, Z-function, Suffix Array, Manacher |
-| [dfs-bfs-patterns](100-areas/cs-fundamentals/patterns/dfs-bfs-patterns.md) | DFS/BFS, топологическая сортировка |
-
-### Мобильная разработка
-
-| Материал | Что внутри |
-|----------|------------|
-| [android-overview](100-areas/android/android-overview.md) | Карта Android-разработки |
-| [android-compose-architecture](100-areas/android/) | Compose + архитектура |
-| [android-dependency-injection](100-areas/android/android-dependency-injection.md) | Hilt, Koin, Manual DI |
-| [ios/](100-areas/ios/) | SwiftUI, UIKit, Concurrency |
-
-### Системный дизайн
-
-| Материал | Что внутри |
-|----------|------------|
-| [architecture-overview](100-areas/architecture/architecture-overview.md) | Карта архитектуры |
-| [databases](100-areas/databases/) | SQL vs NoSQL, индексы, шардирование |
-| [networking](100-areas/networking/) | HTTP/2/3, TCP, DNS, TLS |
-
----
-
 ## Статистика
 
 | Метрика | Значение |
 |---------|----------|
-| **Markdown файлов** | 983 |
-| **Областей знаний** | 13 основных + 10 дополнительных |
+| **Markdown файлов** | 640+ |
+| **Областей знаний** | 20 |
 | **Алгоритмических паттернов** | 30+ |
-| **Шаблонов контента** | 8 |
-| **MOC (карт навигации)** | 10 |
-| **Размер** | 384 MB |
+| **MOC (карт навигации)** | 21 |
 | **Язык контента** | Русский |
 | **Язык кода** | English |
-
----
-
-## Обновления
-
-Репозиторий активно развивается. Основные направления:
-
-- [ ] Серия материалов по Dependency Injection (Spring, .NET, Hilt, Koin)
-- [ ] Расширение покрытия System Design
-- [ ] Материалы по Kotlin Multiplatform
-- [ ] Интерактивные примеры кода
-
-**Последнее обновление:** 2026-02-08
 
 ---
 
@@ -290,18 +224,6 @@ tech/
 
 ---
 
-## Автор
-
-Создано для систематизации знаний и подготовки к техническим интервью.
-
----
-
 ## Лицензия
 
 MIT License — см. [LICENSE](LICENSE)
-
----
-
-<p align="center">
-  <b>Звезда на GitHub поддержит развитие проекта!</b>
-</p>

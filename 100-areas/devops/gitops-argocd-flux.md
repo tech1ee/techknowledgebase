@@ -3,14 +3,16 @@ title: "GitOps: ArgoCD, Flux, Declarative Deployments"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - devops
+  - topic/devops
   - gitops
   - argocd
   - flux
   - kubernetes
+  - type/concept
+  - level/intermediate
 related:
   - "[[devops-overview]]"
   - "[[kubernetes-basics]]"

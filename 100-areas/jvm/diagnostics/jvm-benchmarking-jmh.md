@@ -3,11 +3,14 @@ title: "JMH: правильные бенчмарки в Java"
 created: 2025-11-25
 modified: 2025-12-02
 tags:
-  - jvm
+  - topic/jvm
   - jmh
   - benchmarking
   - performance
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

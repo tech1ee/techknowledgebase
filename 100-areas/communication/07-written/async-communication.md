@@ -1,3 +1,19 @@
+---
+title: "Async Communication: Slack, Email и Remote Best Practices"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/communication
+  - type/guide
+  - level/intermediate
+related:
+  - "[[email-communication]]"
+  - "[[remote-team-communication]]"
+  - "[[technical-writing]]"
+---
+
 # Async Communication: Slack, Email и Remote Best Practices
 
 ## TL;DR

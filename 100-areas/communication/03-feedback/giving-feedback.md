@@ -1,22 +1,24 @@
 ---
 title: "Giving Feedback: как давать обратную связь, которая работает"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[active-listening]]
 teaches:
   - SBI-model
   - radical-candor
   - code-review-feedback
   - constructive-criticism
-unlocks:
-  - [[receiving-feedback]]
-  - [[feedback-frameworks]]
-  - [[performance-conversations]]
-tags: [communication, soft-skills, feedback, code-review, 1-on-1]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[active-listening]]"
+  - "[[receiving-feedback]]"
+  - "[[feedback-frameworks]]"
+  - "[[performance-conversations]]"
 ---
 
 # Giving Feedback: обратная связь, которая меняет поведение

@@ -1,3 +1,14 @@
+---
+title: "Research Report: Jetpack Compose Internals"
+created: 2025-12-26
+modified: 2025-12-26
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/compose
+---
+
 # Research Report: Jetpack Compose Internals
 
 **Date:** 2025-12-26

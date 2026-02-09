@@ -6,11 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - handler
-  - looper
-  - messagequeue
-  - threading
+  - topic/android
+  - topic/threading
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-async-evolution]]"
   - "[[android-threading]]"

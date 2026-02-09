@@ -3,15 +3,23 @@ title: "Dependency Injection: фундаментальные концепции"
 created: 2026-01-29
 modified: 2026-01-29
 type: deep-dive
+status: published
 area: architecture
 confidence: high
-cs-foundations: [dependency-inversion-principle, inversion-of-control, strategy-pattern, factory-pattern, composition-root]
+cs-foundations:
+  - dependency-inversion-principle
+  - inversion-of-control
+  - strategy-pattern
+  - factory-pattern
+  - composition-root
 tags:
   - dependency-injection
   - solid
   - design-patterns
-  - architecture
+  - topic/architecture
   - ioc
+  - type/deep-dive
+  - level/beginner
 related:
   - "[[clean-code-solid]]"
   - "[[design-patterns]]"

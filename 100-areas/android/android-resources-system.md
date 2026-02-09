@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [resource-abstraction, locale-matching, qualifier-system, code-generation]
 tags:
-  - android
-  - resources
-  - localization
-  - qualifiers
-  - aapt
+  - topic/android
+  - topic/resources
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-project-structure]]"

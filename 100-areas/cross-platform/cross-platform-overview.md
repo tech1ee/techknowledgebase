@@ -10,6 +10,7 @@ tags:
   - topic/ios
   - topic/android
   - topic/kmp
+  - level/beginner
 ---
 
 # Cross-Platform: iOS vs Android сравнение
@@ -762,7 +763,7 @@ tags:
 │  • Gradle KMP plugin                                                         │
 │                                                                              │
 │  Материалы:                                                                  │
-│  ├── [[00-kmp-overview]] — общий обзор                                      │
+│  ├── [[kmp-overview]] — общий обзор                                      │
 │  ├── 18-project-structure.md — структура проекта                            │
 │  └── 17-build-systems.md — Gradle для KMP                                   │
 │                                                                              │
@@ -821,7 +822,7 @@ tags:
 │           │                      │                      │                   │
 │           ▼                      ▼                      ▼                   │
 │  ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐           │
-│  │ [[ios-overview]]│   │[[android-overview]]│  │[[00-kmp-overview]]│         │
+│  │ [[ios-overview]]│   │[[android-overview]]│  │[[kmp-overview]]│         │
 │  │                 │   │                 │   │                 │           │
 │  │ • Swift         │   │ • Kotlin        │   │ • Shared code   │           │
 │  │ • SwiftUI       │   │ • Compose       │   │ • expect/actual │           │
@@ -876,7 +877,7 @@ tags:
 │                                                                              │
 │  Нужно сделать networking:                                                   │
 │  1. 13-networking.md → сравнение подходов                                   │
-│  2. [[00-kmp-overview]] → Ktor setup                                        │
+│  2. [[kmp-overview]] → Ktor setup                                        │
 │  3. [[networking]] → общие паттерны                                         │
 │                                                                              │
 │  СЦЕНАРИЙ 3: Debugging проблемы                                             │

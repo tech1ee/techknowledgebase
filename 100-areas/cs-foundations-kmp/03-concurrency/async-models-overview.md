@@ -2,8 +2,12 @@
 title: "Async модели: от callbacks до coroutines"
 created: 2026-01-04
 modified: 2026-01-04
-type: deep-dive
-tags: [cs-foundations, concurrency, async, callbacks, promises, coroutines, event-loop]
+type: overview
+status: published
+tags:
+  - topic/cs-foundations
+  - type/overview
+  - level/intermediate
 related:
   - "[[processes-threads-fundamentals]]"
   - "[[synchronization-primitives]]"

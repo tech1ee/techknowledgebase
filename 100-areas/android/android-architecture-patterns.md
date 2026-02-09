@@ -6,13 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - architecture
-  - mvvm
-  - mvi
-  - clean-architecture
-  - udf
-  - compose
+  - topic/android
+  - topic/architecture
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-activity-lifecycle]]"

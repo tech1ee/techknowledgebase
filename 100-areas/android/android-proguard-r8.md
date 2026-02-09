@@ -7,14 +7,12 @@ area: android
 confidence: high
 cs-foundations: [dead-code-elimination, tree-shaking, name-mangling, bytecode-optimization]
 tags:
-  - android
-  - proguard
-  - r8
-  - shrinking
-  - obfuscation
-  - optimization
-  - build
-links:
+  - topic/android
+  - topic/build-system
+  - topic/security
+  - type/deep-dive
+  - level/advanced
+related:
   - "[[android-compilation-pipeline]]"
   - "[[android-apk-aab]]"
   - "[[android-gradle-fundamentals]]"

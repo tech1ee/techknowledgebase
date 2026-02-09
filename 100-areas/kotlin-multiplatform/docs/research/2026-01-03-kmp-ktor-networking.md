@@ -1,3 +1,13 @@
+---
+title: "Research Report: Ktor Client in KMP"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: Ktor Client in KMP
 
 **Date:** 2026-01-03

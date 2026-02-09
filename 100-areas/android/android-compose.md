@@ -6,12 +6,11 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - compose
-  - ui
-  - declarative
-  - state
-  - recomposition
+  - topic/android
+  - topic/compose
+  - topic/ui
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-threading]]"

@@ -9,6 +9,7 @@ tags:
   - topic/concurrency
   - topic/async-await
   - topic/coroutines
+  - level/intermediate
 ---
 
 # Современная конкурентность: Swift async/await vs Kotlin Coroutines

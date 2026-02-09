@@ -1,22 +1,23 @@
 ---
 title: "Первые 90 дней в роли лидера"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [tech-lead, em, director, vpe, cto]
-prerequisites:
-  - Понимание своей новой роли
 teaches:
   - Структура первых 90 дней
   - Ключевые милестоуны
   - Типичные ошибки новичков
-unlocks:
-  - [[em-fundamentals]]
-  - [[building-engineering-team]]
-tags: [leadership, onboarding, first-90-days, transition]
 sources: [larahogan, lethain, firstround, watkins]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[building-engineering-team]]"
 ---
 
 # Первые 90 дней в роли лидера
@@ -668,4 +669,4 @@ FRIDAY:
 
 ---
 
-[[00-leadership-overview|← Leadership MOC]] | [[em-fundamentals|EM Fundamentals →]]
+[[leadership-overview|← Leadership MOC]] | [[em-fundamentals|EM Fundamentals →]]

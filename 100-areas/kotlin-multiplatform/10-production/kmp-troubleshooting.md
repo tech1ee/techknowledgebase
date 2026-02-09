@@ -2,13 +2,27 @@
 title: "KMP Troubleshooting: Решение типичных проблем"
 created: 2026-01-04
 modified: 2026-01-05
-tags: [kotlin, kmp, troubleshooting, gradle, xcode, ios, debugging]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - troubleshooting
+  - gradle
+  - xcode
+  - ios
+  - debugging
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-production-checklist]]"
   - "[[kmp-debugging]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-gradle-deep-dive]]"
-cs-foundations: [root-cause-analysis, debugging-methodology, error-taxonomy, toolchain-complexity]
+cs-foundations:
+  - root-cause-analysis
+  - debugging-methodology
+  - error-taxonomy
+  - toolchain-complexity
+status: published
 ---
 
 # KMP Troubleshooting

@@ -3,7 +3,11 @@ title: "Synchronization Primitives: mutex, semaphore и другие"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, concurrency, synchronization, mutex, semaphore, kotlin]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[processes-threads-fundamentals]]"
   - "[[concurrency-vs-parallelism]]"

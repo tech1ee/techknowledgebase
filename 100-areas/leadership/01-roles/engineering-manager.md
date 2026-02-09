@@ -1,24 +1,26 @@
 ---
 title: "Engineering Manager: роль и обязанности"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [senior, tech-lead, em]
-prerequisites:
-  - [[ic-vs-management]]
-  - [[tech-lead-role]]
 teaches:
   - Обязанности Engineering Manager
   - Различия с Tech Lead
   - Ключевые навыки EM
-unlocks:
-  - [[em-fundamentals]]
-  - [[one-on-one-meetings]]
-  - [[hiring-engineers]]
-tags: [leadership, engineering-management, em, people-management]
 sources: [managersPath, randsinrepose, leaddev, firstround]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ic-vs-management]]"
+  - "[[tech-lead-role]]"
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
+  - "[[hiring-engineers]]"
 ---
 
 # Engineering Manager: роль и обязанности
@@ -670,4 +672,4 @@ SCRIPT:
 
 ---
 
-[[00-leadership-overview|← Leadership MOC]] | [[em-fundamentals|EM Fundamentals →]]
+[[leadership-overview|← Leadership MOC]] | [[em-fundamentals|EM Fundamentals →]]

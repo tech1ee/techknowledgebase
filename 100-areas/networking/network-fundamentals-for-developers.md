@@ -2,12 +2,15 @@
 title: "Сетевые основы для разработчиков"
 date_created: 2025-12-26
 date_modified: 2025-12-26
-type: explainer
+type: concept
 status: published
 tags:
+  - topic/networking
   - networking/fundamentals
   - networking/beginner
   - skills/developer
+  - type/concept
+  - level/beginner
 related:
   - "[[networking-overview]]"
   - "[[network-dns-tls]]"

@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP DI Patterns"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP DI Patterns
 
 **Date:** 2026-01-03

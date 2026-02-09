@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/relocation
-  - region/austria
-  - level/senior
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[netherlands-guide]]"
   - "[[switzerland-guide]]"

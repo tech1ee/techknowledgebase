@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Migration from React Native"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Migration from React Native
 
 **Date:** 2026-01-03

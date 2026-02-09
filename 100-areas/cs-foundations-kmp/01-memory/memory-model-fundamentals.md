@@ -3,7 +3,11 @@ title: "Модель памяти: Stack и Heap"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, memory, stack, heap, fundamentals]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[garbage-collection-explained]]"
   - "[[reference-counting-arc]]"

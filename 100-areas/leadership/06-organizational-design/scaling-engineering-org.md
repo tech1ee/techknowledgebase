@@ -1,21 +1,23 @@
 ---
 title: "Масштабирование инженерной организации"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[building-engineering-team]]"
 teaches:
   - stages of growth
   - reorgs
   - coordination patterns
-unlocks:
-  - "[[team-structures]]"
-tags: [leadership, scaling, org-design, growth]
 sources: [elegant-puzzle, team-topologies, conways-law]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[building-engineering-team]]"
+  - "[[team-structures]]"
 ---
 
 # Масштабирование инженерной организации

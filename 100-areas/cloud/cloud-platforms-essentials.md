@@ -3,14 +3,17 @@ title: "Cloud Platforms: от bare metal до serverless"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/cloud
   - cloud/aws
   - cloud/gcp
   - cloud/azure
   - devops/cloud
+  - type/concept
+  - level/intermediate
 related:
   - "[[infrastructure-as-code]]"
   - "[[kubernetes-basics]]"

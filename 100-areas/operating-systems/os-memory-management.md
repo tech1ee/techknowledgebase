@@ -3,13 +3,16 @@ title: "Управление памятью: виртуальная память
 created: 2025-12-02
 modified: 2025-12-02
 type: deep-dive
+status: published
 area: operating-systems
 confidence: high
 tags:
-  - os
+  - topic/os
   - memory
   - virtual-memory
   - paging
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[os-overview]]"
   - "[[os-processes-threads]]"

@@ -7,11 +7,11 @@ area: android
 confidence: high
 cs-foundations: [thread-pool, task-scheduling, work-stealing, resource-pooling]
 tags:
-  - android
-  - executors
-  - threadpool
-  - java-concurrency
-  - threading
+  - topic/android
+  - topic/threading
+  - topic/jvm
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-async-evolution]]"
   - "[[android-threading]]"

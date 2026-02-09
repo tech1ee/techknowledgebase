@@ -1,10 +1,16 @@
 ---
-title: "UIViewController Lifecycle: Полный разбор жизненного цикла"
+title: "UIViewController Lifecycle: полный разбор жизненного цикла"
 created: 2026-01-11
 modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [ios, uikit, viewcontroller, lifecycle, view-management, memory, performance]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/lifecycle
+  - type/deep-dive
+  - level/intermediate
 cs-foundations: [state-machines, event-driven-programming, object-lifecycle]
 related:
   - "[[ios-view-hierarchy]]"

@@ -4,8 +4,9 @@ created: 2025-11-24
 modified: 2025-12-18
 type: moc
 tags:
-  - moc
-  - security
+  - topic/security
+  - type/moc
+  - navigation
 ---
 
 # Security MOC

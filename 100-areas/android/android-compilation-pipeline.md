@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [compiler-design, intermediate-representation, bytecode, linking]
 tags:
-  - android
-  - compilation
-  - d8
-  - r8
-  - dex
-  - aapt
+  - topic/android
+  - topic/build-system
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-gradle-fundamentals]]"

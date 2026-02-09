@@ -1,3 +1,13 @@
+---
+title: "Mobile App Protection: Защита приложений от атак"
+type: concept
+status: published
+tags:
+  - topic/security
+  - type/concept
+  - level/intermediate
+---
+
 # Mobile App Protection: Защита приложений от атак
 
 ## Metadata

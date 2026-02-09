@@ -1,9 +1,9 @@
 ---
-title: "Linked Lists"
+title: "Связные списки (Linked Lists)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
 confidence: high
 cs-foundations:
@@ -28,11 +28,14 @@ unlocks:
   - "[[trees-binary]]"
   - "[[graphs]]"
 tags:
-  - cs-fundamentals
-  - data-structures
-  - linked-list
-  - pointers
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/beginner
   - interview
+related:
+  - "[[stacks-queues]]"
+  - "[[trees-binary]]"
+  - "[[graphs]]"
 ---
 
 # Linked Lists

@@ -1,3 +1,18 @@
+---
+title: "Вычислительная геометрия"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/expert
+related:
+  - "[[divide-and-conquer]]"
+  - "[[sorting-algorithms]]"
+---
+
 # Computational Geometry
 
 ## 1. Обзор и Мотивация

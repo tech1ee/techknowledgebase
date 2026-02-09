@@ -3,16 +3,17 @@ title: "Безопасность LLM приложений: от Prompt Injection
 created: 2026-01-11
 modified: 2026-01-11
 type: guide
-status: verified
+status: published
 level: intermediate-advanced
 confidence: high
 tags:
-  - ai
-  - security
-  - llm
+  - topic/ai-ml
+  - topic/security
   - guardrails
   - prompt-injection
   - owasp
+  - type/guide
+  - level/intermediate
 prerequisites:
   - "[[llm-fundamentals]]"
   - "[[ai-api-integration]]"

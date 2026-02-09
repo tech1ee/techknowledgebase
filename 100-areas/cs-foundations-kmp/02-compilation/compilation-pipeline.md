@@ -3,7 +3,11 @@ title: "Compilation Pipeline: путь кода от текста до испо�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, compilation, compiler, lexer, parser, ast, ir, optimization]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[bytecode-virtual-machines]]"
   - "[[native-compilation-llvm]]"

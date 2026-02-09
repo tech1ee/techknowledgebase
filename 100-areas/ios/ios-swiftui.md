@@ -1,8 +1,19 @@
 ---
-date: 2026-01-11
+title: "SwiftUI: декларативный UI для iOS"
+created: 2026-01-11
+modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [swiftui, ios, declarative-ui, state-management, mobile-development]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/swiftui
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-swiftui-vs-uikit]]"
+  - "[[ios-state-management]]"
 ---
 
 # SwiftUI: Декларативный UI для iOS

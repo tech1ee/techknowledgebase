@@ -1,3 +1,18 @@
+---
+title: "Оптимизации динамического программирования"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/expert
+related:
+  - "[[dynamic-programming]]"
+  - "[[dp-patterns]]"
+---
+
 # DP Optimization Techniques
 
 ## TL;DR

@@ -3,9 +3,12 @@ title: "Сетевые технологии: карта раздела"
 date_created: 2025-01-15
 date_modified: 2025-01-15
 tags:
+  - topic/networking
   - networking/fundamentals
   - networking/protocols
   - skills/backend
+  - type/moc
+  - level/beginner
 related:
   - "[[network-physical-layer]]"
   - "[[network-ip-routing]]"
@@ -21,6 +24,7 @@ related:
   - "[[os-io-devices]]"
   - "[[api-design]]"
   - "[[microservices-vs-monolith]]"
+status: published
 ---
 
 # Сетевые технологии: от битов до микросервисов

@@ -1,7 +1,20 @@
 ---
-date: 2026-01-11
-tags: [ios, notifications, push, apns, ununsernotificationcenter, live-activities]
-related: [ios-background-tasks, ios-app-lifecycle, ios-networking]
+title: "Уведомления в iOS: Push, Local, Live Activities"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/notifications
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-background-execution]]"
+  - "[[ios-app-components]]"
+  - "[[ios-networking]]"
+  - "[[android-notifications]]"
 ---
 
 # iOS Notifications

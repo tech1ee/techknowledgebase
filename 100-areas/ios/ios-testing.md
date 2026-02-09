@@ -1,9 +1,18 @@
 ---
-title: iOS Testing
-date: 2026-01-11
-tags: [ios, swift, testing, xctest, ui-testing, unit-testing, tdd]
-category: ios
-related: [[android-testing]]
+title: "Тестирование iOS-приложений"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/testing
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-testing]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # iOS Testing

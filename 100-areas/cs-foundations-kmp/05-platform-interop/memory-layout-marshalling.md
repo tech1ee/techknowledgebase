@@ -3,7 +3,11 @@ title: "Memory Layout и Marshalling: как данные хранятся и п
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, platform-interop, memory-layout, marshalling, alignment]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[memory-model-fundamentals]]"
   - "[[abi-calling-conventions]]"

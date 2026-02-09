@@ -2,11 +2,19 @@
 title: "Kotlin Advanced Features: Extension Functions, Delegates, DSL"
 created: 2025-11-25
 modified: 2025-12-27
-tags: [kotlin, extensions, delegates, dsl, operator-overloading]
+tags:
+  - topic/jvm
+  - extensions
+  - delegates
+  - dsl
+  - operator-overloading
+  - type/concept
+  - level/advanced
 related:
   - "[[kotlin-overview]]"
   - "[[kotlin-best-practices]]"
   - "[[kotlin-type-system]]"
+status: published
 ---
 
 # Kotlin Advanced: расширения, делегаты, DSL

@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Project Structure 2025/2026"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Project Structure 2025/2026
 
 **Date:** 2026-01-03

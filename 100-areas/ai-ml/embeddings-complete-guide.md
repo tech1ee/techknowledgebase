@@ -1,3 +1,13 @@
+---
+title: "Embeddings: Полное руководство"
+type: guide
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
+---
+
 # Embeddings: Полное руководство
 
 > От Word2Vec до современных моделей: как машины научились понимать смысл слов

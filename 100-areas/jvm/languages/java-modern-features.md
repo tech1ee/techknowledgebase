@@ -3,7 +3,7 @@ title: "Java Modern Features: От Java 8 до Java 21"
 created: 2025-11-25
 modified: 2026-01-02
 tags:
-  - java
+  - topic/jvm
   - lambdas
   - streams
   - records
@@ -11,18 +11,21 @@ tags:
   - pattern-matching
   - project-loom
   - sealed-classes
-type: note
+  - type/concept
+  - level/intermediate
+type: concept
+status: published
 area: programming
 confidence: high
 sources:
-  - https://www.oracle.com/technical-resources/articles/java/architect-lambdas-part1.html
-  - https://www.infoq.com/articles/Brian_Goetz_Project_Lambda_from_the_Inside_Interview/
-  - https://www.infoq.com/podcasts/java-project-loom/
-  - https://cr.openjdk.org/~rpressler/loom/loom/sol1_part1.html
-  - https://openjdk.org/projects/amber/design-notes/records-and-sealed-classes
-  - https://www.infoworld.com/article/2334607/project-loom-understand-the-new-java-concurrency-model.html
-  - "Effective Java 3rd Edition by Joshua Bloch (2018)"
-  - "Modern Java in Action by Raoul-Gabriel Urma (2018)"
+  - "https://www.oracle.com/technical-resources/articles/java/architect-lambdas-part1.html"
+  - "https://www.infoq.com/articles/Brian_Goetz_Project_Lambda_from_the_Inside_Interview/"
+  - "https://www.infoq.com/podcasts/java-project-loom/"
+  - "https://cr.openjdk.org/~rpressler/loom/loom/sol1_part1.html"
+  - "https://openjdk.org/projects/amber/design-notes/records-and-sealed-classes"
+  - "https://www.infoworld.com/article/2334607/project-loom-understand-the-new-java-concurrency-model.html"
+  - Effective Java 3rd Edition by Joshua Bloch (2018)
+  - Modern Java in Action by Raoul-Gabriel Urma (2018)
 related:
   - "[[jvm-basics-history]]"
   - "[[jvm-concurrency-overview]]"

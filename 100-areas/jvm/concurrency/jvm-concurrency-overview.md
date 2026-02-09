@@ -3,11 +3,13 @@ title: "JVM Concurrency: карта многопоточности"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
+  - topic/jvm
   - concurrency
   - threads
-  - moc
+  - type/moc
+  - level/beginner
 type: moc
+status: published
 area: programming
 confidence: high
 related:

@@ -1,3 +1,18 @@
+---
+title: "Вариативность структуры: альтернативы шаблонам"
+created: 2025-11-24
+modified: 2025-12-19
+type: reference
+status: verified
+confidence: high
+tags:
+  - system/guidelines
+  - system/metadata
+related:
+  - "[[content-types]]"
+  - "[[cognitive-science-rules]]"
+---
+
 # Вариативность структуры: альтернативы шаблонам
 
 > Проблема: TL;DR, "крючок", фиксированная структура — сами становятся клише.

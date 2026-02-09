@@ -1,8 +1,18 @@
 ---
-title: iOS Networking - URLSession и современные подходы
+title: "iOS Networking: URLSession и современные подходы"
 created: 2026-01-11
-tags: [ios, networking, urlsession, async-await, codable, swift]
-related: [[android-networking]]
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/networking
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-networking]]"
+  - "[[ios-async-await]]"
 ---
 
 ## TL;DR

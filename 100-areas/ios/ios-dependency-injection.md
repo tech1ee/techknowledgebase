@@ -1,7 +1,18 @@
 ---
+title: "Dependency Injection в iOS"
 created: 2026-01-11
-tags: [ios, swift, dependency-injection, architecture, testing, swiftui]
-related: "[[android-dependency-injection]]"
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-dependency-injection]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # iOS Dependency Injection

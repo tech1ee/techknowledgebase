@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Migration from Flutter"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Migration from Flutter
 
 **Date:** 2026-01-03

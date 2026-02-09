@@ -6,13 +6,11 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - memory-leaks
-  - leakcanary
-  - weakreference
-  - garbage-collection
-  - lifecycle
-  - performance
+  - topic/android
+  - topic/memory
+  - topic/performance
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-handler-looper]]"
   - "[[android-activity-lifecycle]]"

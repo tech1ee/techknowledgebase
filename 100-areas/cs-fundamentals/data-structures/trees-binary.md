@@ -1,9 +1,9 @@
 ---
-title: "Binary Trees & Binary Search Trees (BST)"
+title: "Бинарные деревья и деревья поиска (BST)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -28,11 +28,14 @@ unlocks:
   - "[[graph-algorithms]]"
   - "[[dfs-bfs-patterns]]"
 tags:
-  - cs-fundamentals
-  - data-structures
-  - binary-tree
-  - bst
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
   - interview
+related:
+  - "[[trees-advanced]]"
+  - "[[graph-algorithms]]"
+  - "[[dfs-bfs-patterns]]"
 ---
 
 # Binary Trees & Binary Search Trees (BST)

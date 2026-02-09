@@ -1,5 +1,5 @@
 ---
-title: "Jetpack Compose Internals"
+title: "Внутреннее устройство Jetpack Compose"
 created: 2025-12-25
 modified: 2026-01-05
 type: deep-dive
@@ -7,10 +7,10 @@ area: android
 confidence: high
 cs-foundations: [gap-buffer, tree-diffing, memoization, snapshot-isolation, functional-programming, immutability]
 tags:
-  - android
-  - compose
-  - internals
-  - performance
+  - topic/android
+  - topic/compose
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-compose]]"
   - "[[android-view-rendering-pipeline]]"

@@ -2,8 +2,19 @@
 title: "Docker Networking Deep Dive"
 created: 2025-01-15
 modified: 2025-01-15
-tags: [networking, docker, containers, linux, devops]
-related: [[network-kubernetes-deep-dive]], [[network-ip-routing]], [[network-transport-layer]]
+tags:
+  - topic/networking
+  - docker
+  - containers
+  - linux
+  - topic/devops
+  - type/deep-dive
+  - level/advanced
+related:
+  - [network-kubernetes-deep-dive]]
+  - "[[network-ip-routing]]"
+  - "[[network-transport-layer]"
+status: published
 ---
 
 # Docker Networking Deep Dive

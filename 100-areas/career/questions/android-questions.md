@@ -7,9 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/android
-  - level/senior
+  - type/reference
+  - level/intermediate
+  - interview
 related:
   - "[[technical-interview]]"
   - "[[kotlin-questions]]"

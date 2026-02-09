@@ -1,3 +1,14 @@
+---
+title: "Research Report: Android View Measurement"
+created: 2025-12-25
+modified: 2025-12-25
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/ui
+---
+
 # Research Report: Android View Measurement
 
 **Date:** 2025-12-25

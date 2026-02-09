@@ -3,13 +3,16 @@ title: "Network Tools Reference"
 created: 2025-12-26
 modified: 2025-12-26
 type: reference
+status: published
 level: middle
 tags:
-  - networking
+  - topic/networking
   - tools
   - cli
   - debugging
   - reference
+  - type/reference
+  - level/intermediate
 ---
 
 # Network Tools Reference

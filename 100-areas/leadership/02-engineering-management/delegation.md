@@ -1,23 +1,25 @@
 ---
 title: "Делегирование: Отпустить контроль"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [tech-lead, em, director]
-prerequisites:
-  - "[[em-fundamentals]]"
-  - "[[one-on-one-meetings]]"
 teaches:
   - когда делегировать
   - как делегировать эффективно
   - ошибки делегирования
-unlocks:
+sources: [turn-the-ship-around, managers-path, high-output-management]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
   - "[[scaling-engineering-org]]"
   - "[[building-engineering-team]]"
-tags: [leadership, delegation, empowerment, team-development]
-sources: [turn-the-ship-around, managers-path, high-output-management]
 ---
 
 # Делегирование: Отпустить контроль
@@ -709,4 +711,4 @@ not rules and control."
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

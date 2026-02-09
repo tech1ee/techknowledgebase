@@ -2,8 +2,20 @@
 title: "Network Observability"
 created: 2025-01-15
 modified: 2025-01-15
-tags: [networking, observability, monitoring, prometheus, grafana, tracing]
-related: [[network-debugging-basics]], [[network-performance-optimization]], [[network-kubernetes-deep-dive]]
+tags:
+  - topic/networking
+  - observability
+  - monitoring
+  - prometheus
+  - grafana
+  - tracing
+  - type/concept
+  - level/intermediate
+related:
+  - [network-debugging-basics]]
+  - "[[network-performance-optimization]]"
+  - "[[network-kubernetes-deep-dive]"
+status: published
 ---
 
 # Network Observability

@@ -2,9 +2,25 @@
 title: "KMP Library Publishing"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, publishing, maven-central, spm, cocoapods]
-related: [[kmp-gradle-deep-dive]], [[kmp-ci-cd]], [[kmp-third-party-libs]]
-cs-foundations: [package-management, digital-signatures, semantic-versioning, artifact-distribution]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - publishing
+  - maven-central
+  - spm
+  - cocoapods
+  - type/concept
+  - level/intermediate
+related:
+  - [kmp-gradle-deep-dive]]
+  - "[[kmp-ci-cd]]"
+  - "[[kmp-third-party-libs]"
+cs-foundations:
+  - package-management
+  - digital-signatures
+  - semantic-versioning
+  - artifact-distribution
+status: published
 ---
 
 # KMP Library Publishing

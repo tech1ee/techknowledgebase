@@ -1,21 +1,23 @@
 ---
 title: "Структуры команд"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, vpe]
-prerequisites:
-  - "[[scaling-engineering-org]]"
 teaches:
   - spotify model
   - team topologies
   - trade-offs
-unlocks:
-  - "[[engineering-metrics]]"
-tags: [leadership, org-design, teams, spotify-model, team-topologies]
 sources: [team-topologies, spotify-model, scaling-up]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[scaling-engineering-org]]"
+  - "[[engineering-metrics]]"
 ---
 
 # Структуры команд

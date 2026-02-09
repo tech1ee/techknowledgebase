@@ -2,7 +2,16 @@
 title: "Unit Testing в KMP: kotlin.test, Kotest, Turbine"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, testing, unit-tests, kotest, turbine, coroutines]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - testing
+  - unit-tests
+  - kotest
+  - turbine
+  - coroutines
+  - type/concept
+  - level/intermediate
 cs-foundations:
   - "[[unit-testing-theory]]"
   - "[[assertion-patterns]]"
@@ -10,9 +19,10 @@ cs-foundations:
   - "[[virtual-time-testing]]"
   - "[[reactive-testing-patterns]]"
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-testing-strategies]]"
   - "[[kmp-integration-testing]]"
+status: published
 ---
 
 # Unit Testing в Kotlin Multiplatform

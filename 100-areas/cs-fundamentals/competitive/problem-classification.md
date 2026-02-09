@@ -1,3 +1,19 @@
+---
+title: "Классификация задач по ограничениям"
+created: 2026-02-09
+modified: 2026-02-09
+type: reference
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/reference
+  - level/intermediate
+related:
+  - "[[competitive-programming-overview]]"
+  - "[[contest-strategy]]"
+  - "[[patterns-overview]]"
+---
+
 # Problem Classification
 
 ## TL;DR

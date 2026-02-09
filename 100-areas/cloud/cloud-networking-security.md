@@ -3,14 +3,16 @@ title: "Cloud Networking & Security: VPC, Security Groups, IAM"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - cloud
-  - networking
-  - security
+  - topic/cloud
+  - topic/networking
+  - topic/security
   - vpc
   - iam
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-overview]]"
   - "[[cloud-aws-core-services]]"

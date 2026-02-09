@@ -1,8 +1,20 @@
 ---
-title: iOS Async Evolution
-date: 2026-01-11
-tags: [ios, swift, concurrency, async-await, gcd, threading]
-related: [[android-async-evolution]], [[kotlin-coroutines]]
+title: "Эволюция асинхронности в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: overview
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/concurrency
+  - type/overview
+  - level/intermediate
+related:
+  - "[[android-async-evolution]]"
+  - "[[kotlin-coroutines]]"
+  - "[[ios-async-await]]"
+  - "[[ios-gcd-deep-dive]]"
 ---
 
 # Эволюция асинхронности в iOS

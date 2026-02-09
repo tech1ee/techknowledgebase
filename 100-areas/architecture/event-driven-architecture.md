@@ -3,13 +3,16 @@ title: "Event-Driven Architecture: реактивные системы"
 created: 2025-11-24
 modified: 2026-01-03
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/architecture
   - architecture/eda
   - architecture/messaging
   - tools/kafka
+  - type/concept
+  - level/intermediate
 related:
   - "[[microservices-vs-monolith]]"
   - "[[design-patterns]]"

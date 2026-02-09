@@ -1,11 +1,9 @@
-# String Algorithms Advanced
-
 ---
-title: "String Algorithms Advanced"
+title: "Продвинутые строковые алгоритмы"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 confidence: high
 cs-foundations:
@@ -17,20 +15,18 @@ cs-foundations:
 prerequisites:
   - "[[arrays-strings]]"
   - "[[hash-tables]]"
-  - "[[trees-basic]]"
+  - "[[trees-binary]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - interview
 related:
   - "[[two-pointers-pattern]]"
   - "[[sliding-window-pattern]]"
-tags:
-  - strings
-  - kmp
-  - z-function
-  - rabin-karp
-  - aho-corasick
-  - suffix-array
-  - manacher
-  - interview
 ---
+
+# String Algorithms Advanced
 
 ## TL;DR
 

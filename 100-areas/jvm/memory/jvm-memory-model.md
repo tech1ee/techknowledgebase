@@ -3,12 +3,15 @@ title: "JVM Memory Model: где живут объекты"
 created: 2025-11-25
 modified: 2025-12-28
 tags:
-  - jvm
+  - topic/jvm
   - memory
   - heap
   - stack
   - concurrency
+  - type/deep-dive
+  - level/intermediate
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

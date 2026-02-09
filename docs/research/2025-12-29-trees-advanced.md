@@ -1,3 +1,14 @@
+---
+title: "Research Report: Advanced Trees (AVL, Red-Black)"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/data-structures
+---
+
 # Research Report: Advanced Trees (AVL, Red-Black) (2024-2025)
 
 **Date:** 2025-12-29

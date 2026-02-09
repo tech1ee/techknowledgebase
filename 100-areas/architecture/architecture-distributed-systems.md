@@ -3,14 +3,16 @@ title: "Distributed Systems: CAP, consistency, Saga pattern"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - architecture
+  - topic/architecture
   - distributed-systems
   - cap
   - consistency
   - saga
+  - type/concept
+  - level/intermediate
 related:
   - "[[architecture-overview]]"
   - "[[architecture-resilience-patterns]]"

@@ -1,14 +1,29 @@
 ---
-title: LLM Inference Optimization - Полное Руководство
-tags: [ai, llm, inference, optimization, vllm, tensorrt, quantization, performance]
+title: "LLM Inference Optimization - Полное Руководство"
+tags:
+  - topic/ai-ml
+  - inference
+  - optimization
+  - vllm
+  - tensorrt
+  - quantization
+  - performance
+  - type/concept
+  - level/advanced
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-29
-sources: [nvidia.com, vllm.ai, github.com/sgl-project, arxiv.org, lmsys.org]
+sources:
+  - nvidia.com
+  - vllm.ai
+  - github.com/sgl-project
+  - arxiv.org
+  - lmsys.org
 related:
   - "[[mobile-ai-ml-guide]]"
   - "[[local-llms-self-hosting]]"
+status: published
 ---
 
 # LLM Inference Optimization: От Теории к Production

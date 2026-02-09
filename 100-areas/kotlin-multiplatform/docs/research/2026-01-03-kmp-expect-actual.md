@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Expect/Actual Mechanism"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Expect/Actual Mechanism
 
 **Date:** 2026-01-03

@@ -2,15 +2,14 @@
 title: "Эволюция архитектуры Android-приложений"
 created: 2025-01-15
 modified: 2026-01-05
+type: overview
+status: published
 cs-foundations: [architectural-patterns, separation-of-concerns, state-management, design-evolution]
 tags:
-  - android
-  - architecture
-  - evolution
-  - mvp
-  - mvvm
-  - mvi
-  - history
+  - topic/android
+  - topic/architecture
+  - type/overview
+  - level/intermediate
 related:
   - "[[android-architecture-patterns]]"
   - "[[android-viewmodel-internals]]"

@@ -3,12 +3,15 @@ title: "Операционные системы: карта раздела"
 created: 2025-12-02
 modified: 2025-12-02
 type: overview
+status: published
 area: operating-systems
 confidence: high
 tags:
-  - os
+  - topic/os
   - fundamentals
   - systems-programming
+  - type/moc
+  - level/beginner
 related:
   - "[[os-processes-threads]]"
   - "[[os-memory-management]]"

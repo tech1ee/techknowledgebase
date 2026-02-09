@@ -2,7 +2,15 @@
 title: "Cross-Platform: Decision Guide — Native vs KMP vs Flutter"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, decision, kmp, flutter, native]
+status: published
+tags:
+  - topic/cross-platform
+  - decision
+  - topic/kmp
+  - flutter
+  - native
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform: Decision Guide
@@ -171,7 +179,7 @@ ELSE IF (MVP/стартап AND маленькая команда AND скоро
 3. **iOS сборка** — медленнее, сложнее отладка
 4. **Экосистема** — меньше библиотек чем у Flutter
 
-### Подробнее: [[00-kmp-overview]]
+### Подробнее: [[kmp-overview]]
 
 ---
 
@@ -682,7 +690,7 @@ D) React Native модули
 
 ## 12. Связанные материалы
 
-- [[00-kmp-overview]] — Детальный обзор Kotlin Multiplatform
+- [[kmp-overview]] — Детальный обзор Kotlin Multiplatform
 - Официальная документация KMP: kotlinlang.org/docs/multiplatform.html
 - Flutter vs Native сравнение: flutter.dev
 - React Native: reactnative.dev

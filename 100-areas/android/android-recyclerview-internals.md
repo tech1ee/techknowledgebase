@@ -6,11 +6,11 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - recyclerview
-  - viewholder
-  - diffutil
-  - performance
+  - topic/android
+  - topic/ui
+  - topic/performance
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-overview]]"
   - "[[android-view-rendering-pipeline]]"

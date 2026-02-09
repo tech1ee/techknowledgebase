@@ -1,22 +1,24 @@
 ---
 title: "Управление техническим долгом"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, tech-lead, cto]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - что такое tech debt
   - приоритизация
   - коммуникация с бизнесом
-unlocks:
+sources: [martin-fowler, elegant-puzzle, tech-debt-research]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
   - "[[architecture-decisions]]"
   - "[[engineering-practices]]"
-tags: [leadership, tech-debt, architecture, strategy]
-sources: [martin-fowler, elegant-puzzle, tech-debt-research]
 ---
 
 # Управление техническим долгом

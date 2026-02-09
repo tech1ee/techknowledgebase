@@ -1,3 +1,14 @@
+---
+title: "Research Report: Dynamic Programming Patterns"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: Dynamic Programming Patterns (2024-2025)
 
 **Date:** 2025-12-29

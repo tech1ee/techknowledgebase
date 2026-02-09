@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [modular-architecture, dependency-graph, namespace-isolation, convention-over-configuration]
 tags:
-  - android
-  - project-structure
-  - modules
-  - gradle
-  - multi-module
+  - topic/android
+  - topic/project-structure
+  - type/deep-dive
+  - level/beginner
 related:
   - "[[android-overview]]"
   - "[[android-gradle-fundamentals]]"

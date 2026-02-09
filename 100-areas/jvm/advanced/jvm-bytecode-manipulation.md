@@ -1,9 +1,22 @@
 ---
 title: "JVM Bytecode Manipulation - ASM, Javassist, ByteBuddy"
-tags: [java, jvm, bytecode, asm, javassist, bytebuddy, code-generation]
-sources: [asm-guide, javassist-tutorial, bytebuddy-docs, jvm-spec]
-confidence: 4
+tags:
+  - topic/jvm
+  - bytecode
+  - asm
+  - javassist
+  - bytebuddy
+  - code-generation
+  - type/concept
+  - level/advanced
+sources:
+  - asm-guide
+  - javassist-tutorial
+  - bytebuddy-docs
+  - jvm-spec
+confidence: high
 date: 2025-12-02
+status: published
 ---
 
 # JVM Bytecode Manipulation

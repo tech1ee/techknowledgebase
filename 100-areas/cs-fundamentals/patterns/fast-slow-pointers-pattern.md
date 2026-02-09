@@ -1,11 +1,9 @@
-# Fast & Slow Pointers Pattern
-
 ---
-title: "Fast & Slow Pointers Pattern (Floyd's Algorithm)"
+title: "Паттерн быстрого и медленного указателей (Floyd)"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,19 +17,19 @@ prerequisites:
   - "[[linked-lists]]"
   - "[[big-o-complexity]]"
   - "[[two-pointers-pattern]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[two-pointers-pattern]]"
   - "[[linked-lists]]"
   - "[[hash-tables]]"
-tags:
-  - pattern
-  - fast-slow
-  - floyd
-  - cycle-detection
-  - linked-list
-  - interview
-  - tortoise-hare
 ---
+
+# Fast & Slow Pointers Pattern
 
 ## TL;DR
 

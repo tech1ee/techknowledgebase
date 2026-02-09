@@ -3,16 +3,20 @@ title: "DNS и TLS: имена и безопасность"
 date_created: 2025-01-15
 date_modified: 2025-01-15
 tags:
+  - topic/networking
   - networking/dns
   - networking/security
   - networking/tls
   - networking/certificates
+  - type/concept
+  - level/intermediate
 related:
   - "[[networking-overview]]"
   - "[[network-transport-layer]]"
   - "[[network-http-evolution]]"
   - "[[web-security-owasp]]"
   - "[[authentication-authorization]]"
+status: published
 ---
 
 # DNS и TLS: как интернет находит адреса и защищает данные

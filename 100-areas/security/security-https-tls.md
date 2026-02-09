@@ -3,13 +3,15 @@ title: "HTTPS & TLS: handshake, сертификаты, certificate pinning"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - security
+  - topic/security
   - tls
-  - https
+  - "https"
   - certificates
+  - type/concept
+  - level/intermediate
 related:
   - "[[security-overview]]"
   - "[[security-cryptography-fundamentals]]"

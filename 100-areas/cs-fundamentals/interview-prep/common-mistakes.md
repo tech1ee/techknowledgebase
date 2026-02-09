@@ -1,3 +1,20 @@
+---
+title: "Типичные ошибки на coding интервью"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/guide
+  - level/intermediate
+  - interview
+related:
+  - "[[mock-interview-guide]]"
+  - "[[leetcode-roadmap]]"
+  - "[[problem-solving-framework]]"
+---
+
 # Common Coding Interview Mistakes
 
 ## TL;DR

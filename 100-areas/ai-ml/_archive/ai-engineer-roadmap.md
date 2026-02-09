@@ -3,12 +3,15 @@ title: "Roadmap AI Engineer для новичка"
 created: 2025-11-24
 modified: 2025-11-24
 type: tutorial
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/ai-ml
   - ai-ml/career
   - ai-ml/learning
+  - type/tutorial
+  - level/intermediate
 related:
   - "[[ai-engineering-intro]]"
   - "[[rag-and-prompt-engineering]]"

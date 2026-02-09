@@ -1,8 +1,18 @@
 ---
+title: "Эволюция архитектуры iOS-приложений"
 created: 2026-01-11
-tags: [ios, architecture, swift, swiftui, patterns, evolution]
-related: "[[android-architecture-evolution]]"
-status: active
+modified: 2026-01-11
+type: overview
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/architecture
+  - type/overview
+  - level/intermediate
+related:
+  - "[[android-architecture-evolution]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # Эволюция архитектуры iOS приложений

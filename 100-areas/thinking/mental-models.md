@@ -3,13 +3,16 @@ title: "Ментальные модели: инструментарий мышл
 created: 2025-11-24
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/models
   - thinking/engineering
   - skills/problem-solving
+  - type/concept
+  - level/intermediate
 related:
   - "[[systems-thinking]]"
   - "[[learning-complex-things]]"

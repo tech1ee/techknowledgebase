@@ -1,21 +1,23 @@
 ---
 title: "Active Listening: Базовый навык коммуникации"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
-prerequisites: []
 teaches:
   - active-listening
   - paraphrasing
   - clarifying-questions
   - SOLER-technique
-unlocks:
-  - [[empathetic-listening]]
-  - [[giving-feedback]]
-  - [[conflict-resolution]]
-tags: [communication, soft-skills, listening, 1-on-1]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[empathetic-listening]]"
+  - "[[giving-feedback]]"
+  - "[[conflict-resolution]]"
 ---
 
 # Active Listening: как слышать то, что на самом деле говорят

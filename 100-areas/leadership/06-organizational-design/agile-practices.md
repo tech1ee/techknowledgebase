@@ -1,21 +1,23 @@
 ---
 title: "Agile практики"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
 target-role: [em, tech-lead, scrum-master]
-prerequisites:
-  - "[[development-process]]"
 teaches:
   - scrum vs kanban
   - что работает
   - критический взгляд
-unlocks:
-  - "[[engineering-practices]]"
-tags: [leadership, agile, scrum, kanban, methodology]
 sources: [agile-manifesto, scrum-guide, kanban-method]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[development-process]]"
+  - "[[engineering-practices]]"
 ---
 
 # Agile практики

@@ -4,9 +4,10 @@ created: 2025-11-25
 modified: 2025-11-25
 type: moc
 tags:
-  - moc
-  - kotlin
-  - jvm
+  - topic/kotlin
+  - topic/jvm
+  - type/moc
+  - navigation
 ---
 
 # Kotlin MOC
@@ -36,7 +37,7 @@ tags:
          ↓
 8. [[kotlin-type-system]]         — Generics, variance, contracts
          ↓
-9. [[kotlin-multiplatform]]       — KMP, expect/actual, платформы
+9. [[kmp-overview|kotlin-multiplatform]]       — KMP, expect/actual, платформы
          ↓
 10. [[kotlin-interop]]            — Java interop, платформенная интеграция
          ↓
@@ -67,7 +68,7 @@ tags:
 - [[kotlin-type-system]] — Generics, in/out variance, reified, contracts
 
 ### Multiplatform (Advanced)
-- [[kotlin-multiplatform]] — KMP architecture, expect/actual, targets (JVM/JS/Native/Wasm)
+- [[kmp-overview|kotlin-multiplatform]] — KMP architecture, expect/actual, targets (JVM/JS/Native/Wasm)
 - [[kotlin-interop]] — Java interop, platform-specific APIs
 
 ### Качество кода (All levels)
@@ -91,14 +92,14 @@ tags:
 | Inline Functions | Zero-overhead abstractions | [[kotlin-advanced-features]] |
 | Reified Types | Доступ к generic типам в runtime | [[kotlin-type-system]] |
 | DSL | Type-safe builders | [[kotlin-advanced-features]] |
-| KMP | Один код для всех платформ | [[kotlin-multiplatform]] |
+| KMP | Один код для всех платформ | [[kmp-overview|kotlin-multiplatform]] |
 
 ---
 
 ## Связанные области
 
 - [[jvm-languages-ecosystem]] — Kotlin в экосистеме JVM
-- [[jvm-concurrency]] — Модель памяти JVM для корутин
+- [[jvm-concurrency-overview|jvm-concurrency]] — Модель памяти JVM для корутин
 - [[java-modern-features]] — Сравнение с Java 8-21
 - [[design-patterns]] — Паттерны в Kotlin
 - [[testing-strategies]] — Стратегии тестирования

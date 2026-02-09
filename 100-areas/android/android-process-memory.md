@@ -6,11 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - memory
-  - process
-  - lmk
-  - gc
+  - topic/android
+  - topic/memory
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-architecture]]"

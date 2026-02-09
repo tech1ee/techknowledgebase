@@ -8,12 +8,10 @@ confidence: high
 cs-foundations: [constraint-solving, tree-traversal, layout-algorithm, memoization]
 research: "[[2025-12-25-android-view-measurement]]"
 tags:
-  - android
-  - view
-  - measurement
-  - viewgroup
-  - layout
-  - performance
+  - topic/android
+  - topic/ui
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-ui-views]]"

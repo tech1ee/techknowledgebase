@@ -1,3 +1,13 @@
+---
+title: "Research Report: Compose Multiplatform Desktop"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: Compose Multiplatform Desktop
 
 **Date:** 2026-01-03

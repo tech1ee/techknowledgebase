@@ -7,9 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/relocation
-  - region/netherlands
   - type/guide
+  - level/intermediate
 related:
   - "[[android-job-market-2025]]"
   - "[[uae-tech-market]]"

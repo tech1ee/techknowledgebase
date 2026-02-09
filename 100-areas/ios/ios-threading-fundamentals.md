@@ -1,10 +1,20 @@
 ---
-title: iOS Threading Fundamentals
-date: 2026-01-11
-tags: [ios, threading, gcd, concurrency, swift, performance]
-category: iOS Development
-related: [[concurrency-parallelism]], [[android-threading]], [[swift-concurrency]]
-status: complete
+title: "Основы многопоточности в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/threading
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[concurrency-parallelism]]"
+  - "[[android-threading]]"
+  - "[[swift-concurrency]]"
+  - "[[ios-gcd-deep-dive]]"
 ---
 
 # Основы многопоточности в iOS

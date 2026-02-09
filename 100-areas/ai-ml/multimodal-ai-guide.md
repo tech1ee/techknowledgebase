@@ -1,3 +1,13 @@
+---
+title: "Multimodal AI: Полное руководство по мультимодальным системам (2025)"
+type: guide
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
+---
+
 # Multimodal AI: Полное руководство по мультимодальным системам (2025)
 
 > Последнее обновление: Декабрь 2025

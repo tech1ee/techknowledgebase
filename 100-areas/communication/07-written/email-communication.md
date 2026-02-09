@@ -1,20 +1,22 @@
 ---
 title: "Email Communication для IT-специалистов"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
-prerequisites: []
 teaches:
   - BLUF technique
   - 5Cs framework
   - Email templates для IT
   - Async communication
-unlocks:
-  - [[technical-writing]]
-  - [[async-communication]]
-tags: [communication, email, written, remote]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[technical-writing]]"
+  - "[[async-communication]]"
 ---
 
 # Email Communication для IT-специалистов

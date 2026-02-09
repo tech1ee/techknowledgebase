@@ -1,9 +1,19 @@
 ---
-title: "iOS Async/Await и Современная Конкурентность в Swift"
-date: 2026-01-11
-tags: [ios, swift, concurrency, async-await, actors, structured-concurrency]
-category: ios
-status: active
+title: "iOS Async/Await и современная конкурентность в Swift"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/concurrency
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[ios-threading-fundamentals]]"
+  - "[[ios-async-evolution]]"
+  - "[[ios-gcd-deep-dive]]"
 ---
 
 # iOS Async/Await и Современная Конкурентность в Swift

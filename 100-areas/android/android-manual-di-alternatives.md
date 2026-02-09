@@ -1,12 +1,22 @@
-# Manual DI & Alternative Frameworks
-
 ---
+title: "Manual DI и альтернативные фреймворки"
+created: 2026-02-09
+modified: 2026-02-09
 type: deep-dive
-level: intermediate
-topics: [android, kotlin, dependency-injection, manual-di, anvil, toothpick]
-related: [[dependency-injection-fundamentals]], [[android-dagger-deep-dive]], [[android-metro-deep-dive]]
-version: "2024-2025"
+status: published
+tags:
+  - topic/android
+  - topic/kotlin
+  - topic/dependency-injection
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[dependency-injection-fundamentals]]"
+  - "[[android-dagger-deep-dive]]"
+  - "[[android-metro-deep-dive]]"
 ---
+
+# Manual DI & Alternative Frameworks
 
 ## TL;DR
 

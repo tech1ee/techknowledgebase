@@ -1,8 +1,19 @@
 ---
-date: 2026-01-11
+title: "Доступность iOS-приложений"
+created: 2026-01-11
+modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [accessibility, voiceover, swiftui, uikit, inclusive-design, a11y]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/accessibility
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-swiftui]]"
+  - "[[ios-uikit-fundamentals]]"
 ---
 
 # iOS Accessibility: Разработка доступных приложений

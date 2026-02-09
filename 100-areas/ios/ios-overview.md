@@ -6,15 +6,14 @@ type: overview
 area: ios
 confidence: high
 tags:
-  - ios
-  - mobile
-  - swift
-  - swiftui
-  - uikit
+  - topic/ios
+  - topic/swift
+  - type/overview
+  - level/beginner
 cs-foundations: [reference-counting-arc, ffi-foreign-function-interface, mobile-platform-architecture]
 related:
   - "[[android-overview]]"
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[compose-mp-ios]]"
   - "[[ios-architecture]]"
@@ -368,7 +367,7 @@ iOS РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
    ├── [[os-processes-threads]] ← Processes & threads
    └── [[os-memory-management]] ← Memory management
 
-[[00-kmp-overview]]         ← Kotlin Multiplatform для iOS
+[[kmp-overview]]         ← Kotlin Multiplatform для iOS
    │
    ├── [[kmp-ios-deep-dive]]    ← iOS интеграция KMP
    └── [[compose-mp-ios]]       ← Compose Multiplatform на iOS
@@ -389,7 +388,7 @@ iOS РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
 |--------|------------------|----------|
 | [[reference-counting-arc]] | ARC = iOS memory management | Понимание retain cycles |
 | [[os-overview]] | Darwin = iOS foundation | Process/memory концепции |
-| [[00-kmp-overview]] | KMP targets iOS | Shared code с Android |
+| [[kmp-overview]] | KMP targets iOS | Shared code с Android |
 | [[android-overview]] | Сравнение платформ | Понимание отличий |
 | [[networking-overview]] | URLSession patterns | HTTP, REST |
 

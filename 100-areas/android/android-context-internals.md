@@ -6,14 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - context
-  - contextimpl
-  - contextwrapper
-  - contextthemewrapper
-  - decorator-pattern
-  - system-services
-  - memory-leaks
+  - topic/android
+  - topic/internals
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-activity-lifecycle]]"
   - "[[android-app-components]]"

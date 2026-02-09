@@ -2,7 +2,14 @@
 title: "Cross-Platform: Permissions — Privacy Manifest vs Runtime Permissions"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, permissions, privacy, security]
+status: published
+tags:
+  - topic/cross-platform
+  - permissions
+  - privacy
+  - topic/security
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform: Permissions — Privacy Manifest vs Runtime Permissions

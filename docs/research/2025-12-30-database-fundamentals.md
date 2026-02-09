@@ -1,3 +1,13 @@
+---
+title: "Research Report: Database Fundamentals for Beginners"
+created: 2025-12-30
+modified: 2025-12-30
+type: concept
+status: draft
+tags:
+  - topic/databases
+---
+
 # Research Report: Database Fundamentals for Beginners
 
 **Date:** 2025-12-30

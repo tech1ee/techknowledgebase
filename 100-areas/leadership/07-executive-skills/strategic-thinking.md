@@ -1,22 +1,24 @@
 ---
 title: "Стратегическое мышление"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[em-fundamentals]]"
-  - "[[technical-vision]]"
 teaches:
   - strategic vs tactical
   - frameworks
   - decision making
-unlocks:
-  - "[[stakeholder-management]]"
-tags: [leadership, strategy, executive, thinking]
 sources: [good-strategy-bad-strategy, playing-to-win]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[em-fundamentals]]"
+  - "[[technical-vision]]"
+  - "[[stakeholder-management]]"
 ---
 
 # Стратегическое мышление

@@ -3,10 +3,13 @@ title: "JVM Performance: карта оптимизации"
 created: 2025-11-25
 modified: 2025-12-02
 tags:
-  - jvm
+  - topic/jvm
   - performance
   - overview
+  - type/concept
+  - level/beginner
 type: concept
+status: published
 area: programming
 confidence: high
 related:

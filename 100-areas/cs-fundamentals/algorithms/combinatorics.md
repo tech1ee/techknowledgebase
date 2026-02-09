@@ -1,3 +1,19 @@
+---
+title: "Комбинаторика для соревновательного программирования"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[number-theory]]"
+  - "[[dynamic-programming]]"
+  - "[[backtracking]]"
+---
+
 # Combinatorics for Competitive Programming
 
 ## TL;DR

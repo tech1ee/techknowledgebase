@@ -2,7 +2,14 @@
 title: "Cross-Platform: Networking — URLSession vs Retrofit"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, networking, urlsession, retrofit]
+status: published
+tags:
+  - topic/cross-platform
+  - topic/networking
+  - urlsession
+  - retrofit
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform Networking: URLSession vs Retrofit

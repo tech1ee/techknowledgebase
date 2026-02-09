@@ -1,3 +1,20 @@
+---
+title: "LeetCode Roadmap: планы и стратегия подготовки"
+created: 2026-02-09
+modified: 2026-02-09
+type: guide
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/guide
+  - level/intermediate
+  - interview
+related:
+  - "[[mock-interview-guide]]"
+  - "[[common-mistakes]]"
+  - "[[patterns-overview]]"
+---
+
 # LeetCode Roadmap: Study Plans & Strategy
 
 ## TL;DR

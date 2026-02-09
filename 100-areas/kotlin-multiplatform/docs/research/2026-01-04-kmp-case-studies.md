@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Case Studies"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Case Studies
 
 **Date:** 2026-01-04

@@ -1,11 +1,9 @@
-# Two Pointers Pattern
-
 ---
-title: "Two Pointers Pattern"
+title: "Паттерн двух указателей (Two Pointers)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,17 +17,18 @@ prerequisites:
   - "[[arrays-strings]]"
   - "[[linked-lists]]"
   - "[[sorting-algorithms]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[sliding-window-pattern]]"
   - "[[binary-search-pattern]]"
-tags:
-  - pattern
-  - two-pointers
-  - fast-slow
-  - array
-  - linked-list
-  - interview
 ---
+
+# Two Pointers Pattern
 
 ## TL;DR
 

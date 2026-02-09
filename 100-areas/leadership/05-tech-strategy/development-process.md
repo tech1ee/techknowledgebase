@@ -1,21 +1,23 @@
 ---
 title: "Процессы разработки"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, tech-lead]
-prerequisites:
-  - "[[engineering-practices]]"
 teaches:
   - git workflows
   - sprint planning
   - release management
-unlocks:
-  - "[[agile-practices]]"
-tags: [leadership, process, git, agile, development]
 sources: [trunk-based-dev, git-flow, continuous-delivery]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[engineering-practices]]"
+  - "[[agile-practices]]"
 ---
 
 # Процессы разработки

@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Performance Optimization"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/advanced
+---
+
 # Research Report: KMP Performance Optimization
 
 **Date:** 2026-01-04

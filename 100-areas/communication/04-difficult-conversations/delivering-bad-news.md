@@ -1,21 +1,23 @@
 ---
 title: "Delivering Bad News: layoffs, cancellations и другие сложные сообщения"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
-prerequisites:
-  - [[empathetic-listening]]
-  - [[giving-feedback]]
 teaches:
   - bad-news-delivery
   - layoff-communication
   - project-cancellation
   - crisis-communication
-unlocks:
-  - [[conflict-resolution]]
-tags: [communication, soft-skills, difficult-conversations, leadership, crisis]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[empathetic-listening]]"
+  - "[[giving-feedback]]"
+  - "[[conflict-resolution]]"
 ---
 
 # Delivering Bad News: как сообщать о сложном профессионально

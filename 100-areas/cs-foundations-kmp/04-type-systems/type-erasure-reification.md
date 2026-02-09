@@ -3,7 +3,11 @@ title: "Type Erasure и Reification: что происходит с типами
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, type-systems, type-erasure, reified, kotlin, jvm]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[generics-parametric-polymorphism]]"
   - "[[variance-covariance]]"

@@ -3,7 +3,11 @@ title: "Garbage Collection: как компьютер убирает за тоб
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, memory, garbage-collection, jvm, kotlin-native]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[memory-model-fundamentals]]"
   - "[[reference-counting-arc]]"

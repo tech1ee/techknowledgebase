@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Interop Deep Dive"
+type: deep-dive
+status: published
+tags:
+  - topic/kmp
+  - type/deep-dive
+  - level/advanced
+---
+
 # Research Report: KMP Interop Deep Dive
 
 **Date:** 2026-01-04

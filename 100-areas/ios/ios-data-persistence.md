@@ -1,8 +1,19 @@
 ---
-title: "iOS Data Persistence"
+title: "Хранение данных в iOS"
 created: 2026-01-11
-tags: [ios, swift, data-persistence, storage, security, keychain, userdefaults]
-status: active
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/data
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-core-data]]"
+  - "[[ios-swiftdata]]"
+  - "[[android-data-persistence]]"
 ---
 
 # iOS Data Persistence

@@ -1,21 +1,23 @@
 ---
 title: "Онбординг инженеров"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
 target-role: [em, tech-lead, hr]
-prerequisites:
-  - "[[building-engineering-team]]"
 teaches:
   - 30-60-90 day plan
   - onboarding checklist
   - buddy system
-unlocks:
-  - "[[team-culture]]"
-tags: [leadership, onboarding, hiring, team-building]
 sources: [first-round-review, managers-path, gitlab-onboarding]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[building-engineering-team]]"
+  - "[[team-culture]]"
 ---
 
 # Онбординг инженеров

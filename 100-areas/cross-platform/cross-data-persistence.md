@@ -2,7 +2,14 @@
 title: "Cross-Platform: Data Persistence — Core Data vs Room"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, persistence, core-data, room]
+status: published
+tags:
+  - topic/cross-platform
+  - persistence
+  - core-data
+  - room
+  - type/comparison
+  - level/intermediate
 ---
 
 # Data Persistence: iOS vs Android

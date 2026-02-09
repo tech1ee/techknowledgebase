@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [build-systems, dependency-resolution, incremental-compilation, task-graph]
 tags:
-  - android
-  - build-system
-  - gradle
-  - ant
-  - history
+  - topic/android
+  - topic/build-system
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-gradle-fundamentals]]"

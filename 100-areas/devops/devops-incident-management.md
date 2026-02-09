@@ -3,14 +3,16 @@ title: "Incident Management: On-call, Runbooks, Post-mortems"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - devops
+  - topic/devops
   - sre
   - incidents
   - on-call
   - post-mortem
+  - type/concept
+  - level/intermediate
 related:
   - "[[devops-overview]]"
   - "[[observability]]"

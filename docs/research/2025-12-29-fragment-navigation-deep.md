@@ -1,3 +1,14 @@
+---
+title: "Research Report: Fragment Navigation Deep Dive"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/android
+  - topic/navigation
+---
+
 # Research Report: Fragment Navigation Deep Dive (Legacy)
 
 **Date:** 2025-12-29

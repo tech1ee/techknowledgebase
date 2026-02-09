@@ -1,3 +1,13 @@
+---
+title: "LLM Fundamentals: От нейронных сетей к современным языковым моделям"
+type: concept
+status: published
+tags:
+  - topic/ai-ml
+  - type/concept
+  - level/beginner
+---
+
 # LLM Fundamentals: От нейронных сетей к современным языковым моделям
 
 ---
@@ -40,6 +50,7 @@
 | **RoPE** | Rotary Position Embedding | **Часы с несколькими стрелками** — позиция токена кодируется углами вращения |
 
 ---
+
 created: 2025-12-24
 modified: 2025-12-24
 type: foundational

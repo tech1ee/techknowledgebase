@@ -1,13 +1,15 @@
 ---
-title: "App Startup & Performance — от Zygote до первого кадра"
+title: "Производительность запуска приложения: от Zygote до первого кадра"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
 area: android
 tags:
-  - android
-  - performance
-  - startup
-  - baseline-profiles
-  - macrobenchmark
-  - optimization
+  - topic/android
+  - topic/performance
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-compilation-pipeline]]"

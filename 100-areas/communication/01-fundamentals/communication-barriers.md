@@ -1,22 +1,23 @@
 ---
 title: "Communication Barriers: что мешает понять друг друга"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
-prerequisites:
-  - [[communication-models]]
 teaches:
   - barrier-types
   - noise-identification
   - filtering-recognition
   - selective-perception
   - barrier-mitigation
-unlocks:
-  - [[active-listening]]
-  - [[cross-cultural-communication]]
-tags: [communication, soft-skills, barriers, noise, fundamentals]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[communication-models]]"
+  - "[[active-listening]]"
 ---
 
 # Communication Barriers: почему сообщение не доходит

@@ -1,3 +1,13 @@
+---
+title: "Research Report: KMP Troubleshooting"
+type: concept
+status: published
+tags:
+  - topic/kmp
+  - type/concept
+  - level/intermediate
+---
+
 # Research Report: KMP Troubleshooting
 
 **Date:** 2026-01-04

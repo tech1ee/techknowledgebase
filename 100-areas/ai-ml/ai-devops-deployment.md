@@ -1,12 +1,34 @@
 ---
-title: AI DevOps & Deployment - Полное Руководство 2025
-tags: [ai, devops, mlops, llmops, kubernetes, docker, deployment, ci-cd, gpu]
+title: "AI DevOps & Deployment - Полное Руководство 2025"
+tags:
+  - topic/ai-ml
+  - topic/devops
+  - mlops
+  - llmops
+  - kubernetes
+  - docker
+  - deployment
+  - ci-cd
+  - gpu
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-27
-related: [[ai-cost-optimization]], [[ai-observability-monitoring]], [[tutorial-rag-chatbot]]
-sources: [kubernetes.io, nvidia.com, cloud.google.com, mlflow.org, redhat.com, vllm.ai, huggingface.co]
+related:
+  - [ai-cost-optimization]]
+  - "[[ai-observability-monitoring]]"
+  - "[[tutorial-rag-chatbot]"
+sources:
+  - kubernetes.io
+  - nvidia.com
+  - cloud.google.com
+  - mlflow.org
+  - redhat.com
+  - vllm.ai
+  - huggingface.co
+status: published
 ---
 
 # AI DevOps: Docker, Kubernetes, CI/CD для LLM в 2025

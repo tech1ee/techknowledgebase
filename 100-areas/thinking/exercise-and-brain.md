@@ -3,13 +3,16 @@ title: "Физическая активность и мозг: двигайся,
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/exercise
   - learning/brain
   - productivity/health
+  - type/concept
+  - level/intermediate
 related:
   - "[[how-brain-learns]]"
   - "[[sleep-and-learning]]"

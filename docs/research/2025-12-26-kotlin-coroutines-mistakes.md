@@ -1,3 +1,14 @@
+---
+title: "Research Report: Kotlin Coroutines Common Mistakes"
+created: 2025-12-26
+modified: 2025-12-26
+type: reference
+status: draft
+tags:
+  - topic/kotlin
+  - topic/android
+---
+
 # Research Report: Kotlin Coroutines Common Mistakes
 
 **Date:** 2025-12-26

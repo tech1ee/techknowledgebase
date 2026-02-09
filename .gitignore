@@ -23,13 +23,6 @@ docs/sync/
 *.pyc
 *.pyo
 
-# === Binary outputs ===
-300-content/**/output/
-
-# === Python virtual environments ===
-300-content/**/venv/
-300-content/**/.venv/
-
 # === IDE ===
 .idea/
 .vscode/

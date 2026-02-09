@@ -1,22 +1,24 @@
 ---
 title: "Масштабирование с нуля"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [cto, vpe, founding-engineer]
-prerequisites:
-  - "[[startup-cto]]"
-  - "[[scaling-engineering-org]]"
 teaches:
   - growth stages challenges
   - technical scaling
   - organizational scaling
-unlocks:
-  - "[[technical-vision]]"
-tags: [leadership, startup, scaling, growth, architecture]
 sources: [high-growth-handbook, scaling-teams, blitzscaling]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[startup-cto]]"
+  - "[[scaling-engineering-org]]"
+  - "[[technical-vision]]"
 ---
 
 # Масштабирование с нуля

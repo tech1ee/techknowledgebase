@@ -2,9 +2,19 @@
 title: "KMP Android Integration: Полный гайд по интеграции с Android"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, android, jetpack, room, datastore, viewmodel, integration]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - android
+  - jetpack
+  - room
+  - datastore
+  - viewmodel
+  - integration
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-project-structure]]"
   - "[[android-architecture-patterns]]"
   - "[[kotlin-coroutines]]"
@@ -13,6 +23,7 @@ cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[memory-model-fundamentals]]"
   - "[[garbage-collection-explained]]"
+status: published
 ---
 
 # KMP Android Integration

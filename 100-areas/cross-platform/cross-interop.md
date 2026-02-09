@@ -2,7 +2,15 @@
 title: "Cross-Platform: Interop — Swift-ObjC vs Kotlin-Java"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, interop, swift, kotlin, objc, java]
+status: published
+tags:
+  - topic/cross-platform
+  - interop
+  - swift
+  - topic/jvm
+  - objc
+  - type/comparison
+  - level/intermediate
 ---
 
 # Языковая интероперабельность: Swift-ObjC vs Kotlin-Java

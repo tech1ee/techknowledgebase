@@ -1,21 +1,22 @@
 ---
 title: "Negotiation Frameworks: Harvard Method и другие подходы"
 created: 2026-01-18
-updated: 2026-01-18
-type: deep-dive
-status: complete
+modified: 2026-01-18
+type: comparison
+status: published
 difficulty: intermediate
-prerequisites:
-  - [[negotiation-fundamentals]]
 teaches:
   - harvard-method
   - principled-negotiation
   - win-win-strategies
   - integrative-bargaining
-unlocks:
-  - [[stakeholder-negotiation]]
-  - [[salary-negotiation]]
-tags: [communication, soft-skills, negotiation, frameworks, harvard]
+tags:
+  - topic/communication
+  - type/comparison
+  - level/intermediate
+related:
+  - "[[negotiation-fundamentals]]"
+  - "[[stakeholder-negotiation]]"
 ---
 
 # Negotiation Frameworks: от Harvard Method до современных подходов

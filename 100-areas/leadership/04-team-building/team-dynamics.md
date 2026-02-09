@@ -1,22 +1,24 @@
 ---
 title: "Динамика команды"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, tech-lead]
-prerequisites:
-  - "[[building-engineering-team]]"
-  - "[[team-culture]]"
 teaches:
   - tuckman stages
   - psychological safety
   - conflict resolution
-unlocks:
-  - "[[motivation]]"
-tags: [leadership, team-dynamics, psychology, team-health]
 sources: [google-aristotle, five-dysfunctions, tuckman]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[building-engineering-team]]"
+  - "[[team-culture]]"
+  - "[[motivation]]"
 ---
 
 # Динамика команды

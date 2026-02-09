@@ -3,13 +3,16 @@ title: "Сон и обучение: почему всё забывается б�
 created: 2025-12-19
 modified: 2025-12-19
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/thinking
   - thinking/sleep
   - learning/memory
   - productivity/health
+  - type/concept
+  - level/intermediate
 related:
   - "[[how-brain-learns]]"
   - "[[burnout-prevention]]"

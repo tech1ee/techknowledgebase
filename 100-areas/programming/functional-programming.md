@@ -3,14 +3,16 @@ title: "Functional Programming: Pure Functions, Immutability, Composition"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - programming
+  - topic/programming
   - functional
   - fp
   - immutability
   - composition
+  - type/concept
+  - level/intermediate
 related:
   - "[[programming-overview]]"
   - "[[clean-code-solid]]"

@@ -6,14 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - contentprovider
-  - contentresolver
-  - binder
-  - fileprovider
-  - uri
-  - cursor
-  - cursorwindow
+  - topic/android
+  - topic/data
+  - type/deep-dive
+  - level/expert
 related:
   - "[[android-overview]]"
   - "[[android-app-components]]"

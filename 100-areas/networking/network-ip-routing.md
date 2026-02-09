@@ -2,8 +2,22 @@
 title: "IP-адресация и маршрутизация"
 created: 2025-01-15
 modified: 2025-12-27
-tags: [networking, ip, routing, ipv4, ipv6, icmp, arp, nat]
-related: [[networking-overview]], [[network-transport-layer]], [[network-cloud-modern]]
+tags:
+  - topic/networking
+  - ip
+  - routing
+  - ipv4
+  - ipv6
+  - icmp
+  - arp
+  - nat
+  - type/concept
+  - level/intermediate
+related:
+  - [networking-overview]]
+  - "[[network-transport-layer]]"
+  - "[[network-cloud-modern]"
+status: published
 ---
 
 # IP-адресация и маршрутизация

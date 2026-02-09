@@ -3,13 +3,16 @@ title: "CI/CD: автоматизация, которая меняет всё"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/devops
   - devops/ci-cd
   - automation/pipelines
   - tools/github-actions
+  - type/concept
+  - level/intermediate
 related:
   - "[[docker-for-developers]]"
   - "[[technical-debt]]"

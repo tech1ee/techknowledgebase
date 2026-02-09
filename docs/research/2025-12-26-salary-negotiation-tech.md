@@ -1,3 +1,13 @@
+---
+title: "Research Report: Tech Salary Negotiation 2025"
+created: 2025-12-26
+modified: 2025-12-26
+type: reference
+status: draft
+tags:
+  - topic/career
+---
+
 # Research Report: Tech Salary Negotiation 2025
 
 **Date:** 2025-12-26

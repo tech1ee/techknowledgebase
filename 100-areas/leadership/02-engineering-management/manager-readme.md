@@ -1,22 +1,24 @@
 ---
 title: "Manager README: Как работать со мной"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: beginner
 target-role: [em, director, tech-lead]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - создание Manager README
   - самопознание как лидер
   - прозрачность expectations
-unlocks:
+sources: [manager-readme-examples, rands-in-repose, first-round-review]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/beginner
+related:
+  - "[[em-fundamentals]]"
   - "[[team-culture]]"
   - "[[onboarding]]"
-tags: [leadership, communication, transparency, onboarding, self-awareness]
-sources: [manager-readme-examples, rands-in-repose, first-round-review]
 ---
 
 # Manager README: Как работать со мной
@@ -599,4 +601,4 @@ Edit ruthlessly:
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

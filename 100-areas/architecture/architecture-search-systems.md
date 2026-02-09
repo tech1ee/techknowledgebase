@@ -3,14 +3,16 @@ title: "Search Systems: Elasticsearch, Full-Text Search, Relevance"
 created: 2025-12-22
 modified: 2026-01-02
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - architecture
+  - topic/architecture
   - search
   - elasticsearch
   - full-text
   - relevance
+  - type/concept
+  - level/intermediate
 related:
   - "[[architecture-overview]]"
   - "[[databases-overview]]"

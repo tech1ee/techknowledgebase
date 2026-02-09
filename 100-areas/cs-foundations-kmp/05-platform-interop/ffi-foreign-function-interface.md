@@ -3,7 +3,11 @@ title: "FFI: как языки общаются друг с другом"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, platform-interop, ffi, jni, cinterop, native]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[abi-calling-conventions]]"
   - "[[memory-model-fundamentals]]"

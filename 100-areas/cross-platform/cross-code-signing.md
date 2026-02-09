@@ -2,7 +2,14 @@
 title: "Cross-Platform: Code Signing — Provisioning Profiles vs Keystore"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, signing, security, distribution]
+status: published
+tags:
+  - topic/cross-platform
+  - signing
+  - topic/security
+  - distribution
+  - type/comparison
+  - level/intermediate
 ---
 
 # Code Signing: iOS vs Android

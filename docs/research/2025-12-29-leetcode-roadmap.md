@@ -1,3 +1,14 @@
+---
+title: "Research Report: LeetCode Roadmap & Study Plans"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/career
+  - topic/cs-fundamentals
+---
+
 # Research Report: LeetCode Roadmap & Study Plans (2024-2025)
 
 **Date:** 2025-12-29

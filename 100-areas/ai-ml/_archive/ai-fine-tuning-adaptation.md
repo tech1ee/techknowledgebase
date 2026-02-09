@@ -3,14 +3,15 @@ title: "Fine-tuning и адаптация моделей: LoRA, QLoRA, когд�
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - fine-tuning
   - lora
-  - llm
   - ml
+  - type/concept
+  - level/intermediate
 related:
   - "[[ai-ml-overview]]"
   - "[[rag-and-prompt-engineering]]"

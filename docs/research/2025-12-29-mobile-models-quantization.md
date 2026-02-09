@@ -1,3 +1,14 @@
+---
+title: "Research Report: Mobile Models & Quantization"
+created: 2025-12-29
+modified: 2025-12-29
+type: reference
+status: draft
+tags:
+  - topic/ai-ml
+  - topic/android
+---
+
 # Research Report: Mobile Models & Quantization (2024-2025)
 
 **Date:** 2025-12-29

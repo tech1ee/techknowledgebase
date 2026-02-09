@@ -7,10 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/ai
-  - topic/prompts
   - type/reference
+  - level/advanced
+  - interview
 related:
   - "[[ai-interview-preparation]]"
   - "[[ai-era-job-search]]"

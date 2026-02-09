@@ -2,16 +2,28 @@
 title: "Compose Multiplatform Web: Beta для современных браузеров"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, compose, web, wasm, wasmgc, canvas, browser, javascript]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - compose
+  - web
+  - wasm
+  - wasmgc
+  - canvas
+  - browser
+  - javascript
+  - type/concept
+  - level/intermediate
 related:
   - "[[compose-mp-overview]]"
   - "[[kmp-web-wasm]]"
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
 cs-foundations:
   - "[[webassembly-internals]]"
   - "[[browser-rendering-engine]]"
   - "[[canvas-api-graphics]]"
   - "[[web-accessibility-fundamentals]]"
+status: published
 ---
 
 # Compose Multiplatform Web

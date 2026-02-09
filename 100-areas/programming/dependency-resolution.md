@@ -3,13 +3,16 @@ title: "Dependency Resolution: как разрешаются зависимос�
 created: 2026-01-09
 modified: 2026-01-09
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
+  - topic/programming
   - programming/dependencies
   - gradle
   - npm
   - maven
+  - type/concept
+  - level/intermediate
 related:
   - "[[module-systems]]"
   - "[[build-systems-theory]]"

@@ -1,8 +1,19 @@
 ---
-title: SwiftData - Современная Персистентность в iOS
+title: "SwiftData: современная персистентность в iOS"
 created: 2026-01-11
-tags: [ios, swiftdata, persistence, ios17, ios18, swift6, data-modeling]
-related: [[ios-core-data]], [[ios-swiftui]], [[ios-cloudkit]]
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/data
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ios-core-data]]"
+  - "[[ios-swiftui]]"
+  - "[[ios-cloudkit]]"
 ---
 
 ## TL;DR

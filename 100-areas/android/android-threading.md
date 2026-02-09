@@ -6,11 +6,11 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - threading
-  - coroutines
-  - main-thread
-  - dispatcher
+  - topic/android
+  - topic/threading
+  - topic/kotlin
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-activity-lifecycle]]"

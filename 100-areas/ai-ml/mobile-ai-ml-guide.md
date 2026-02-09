@@ -2,7 +2,17 @@
 title: "Mobile AI/ML: Complete Guide to On-Device Inference (2024-2025)"
 date: 2025-12-29
 type: guide
-tags: [mobile, ai, ml, on-device, llm, npu, quantization, production]
+status: published
+tags:
+  - mobile
+  - topic/ai-ml
+  - ml
+  - on-device
+  - npu
+  - quantization
+  - production
+  - type/guide
+  - level/intermediate
 related:
   - "[[ai-ml-overview-v2]]"
   - "[[local-llms-self-hosting]]"

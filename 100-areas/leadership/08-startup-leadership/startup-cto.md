@@ -1,22 +1,24 @@
 ---
 title: "CTO в стартапе"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [cto, founder, technical-cofounder]
-prerequisites:
-  - "[[cto-vs-vpe]]"
-  - "[[technical-vision]]"
 teaches:
   - startup CTO role evolution
   - technical cofounder responsibilities
   - build vs buy decisions
-unlocks:
-  - "[[scaling-from-zero]]"
-tags: [leadership, startup, cto, founder, technical-cofounder]
 sources: [startup-cto-handbook, first-round-review, a16z]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[cto-vs-vpe]]"
+  - "[[technical-vision]]"
+  - "[[scaling-from-zero]]"
 ---
 
 # CTO в стартапе

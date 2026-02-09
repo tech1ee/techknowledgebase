@@ -2,9 +2,25 @@
 title: "Миграция на KMP с Native (Android + iOS)"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, migration, android, ios, native]
-related: [[kmp-getting-started]], [[kmp-project-structure]], [[kmp-ios-deep-dive]]
-cs-foundations: [strangler-fig-pattern, incremental-adoption, modular-architecture, risk-management]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - migration
+  - android
+  - ios
+  - native
+  - type/concept
+  - level/intermediate
+related:
+  - [kmp-getting-started]]
+  - "[[kmp-project-structure]]"
+  - "[[kmp-ios-deep-dive]"
+cs-foundations:
+  - strangler-fig-pattern
+  - incremental-adoption
+  - modular-architecture
+  - risk-management
+status: published
 ---
 
 # Миграция на KMP с Native (Android + iOS)

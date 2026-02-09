@@ -1,14 +1,15 @@
 ---
-title: "Android Touch Handling"
+title: "Обработка касаний в Android"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 cs-foundations: [event-dispatching, hit-testing, gesture-recognition, event-bubbling]
 tags:
-  - android
-  - touch
-  - gestures
-  - motionevent
-  - compose
+  - topic/android
+  - topic/ui
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-compose]]"

@@ -3,12 +3,15 @@ title: "Сотовые сети: от GSM до 5G"
 created: 2025-12-18
 modified: 2025-12-18
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/networking
   - networking/wireless
   - networking/cellular
+  - type/concept
+  - level/intermediate
 related:
   - "[[network-wireless-iot]]"
   - "[[network-physical-layer]]"

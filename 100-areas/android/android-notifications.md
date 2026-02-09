@@ -6,11 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - notifications
-  - notificationchannel
-  - pendingintent
-  - foreground-service
+  - topic/android
+  - topic/notifications
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-service-internals]]"

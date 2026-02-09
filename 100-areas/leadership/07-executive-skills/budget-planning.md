@@ -1,21 +1,23 @@
 ---
 title: "Планирование бюджета"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
 target-role: [director, vpe, cto]
-prerequisites:
-  - "[[strategic-thinking]]"
 teaches:
   - headcount planning
   - opex vs capex
   - budget justification
-unlocks:
-  - "[[executive-communication]]"
-tags: [leadership, budget, finance, planning, headcount]
 sources: [cfo-partnership, engineering-budgets]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[strategic-thinking]]"
+  - "[[executive-communication]]"
 ---
 
 # Планирование бюджета

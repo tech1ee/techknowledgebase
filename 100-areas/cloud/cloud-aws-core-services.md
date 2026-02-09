@@ -3,15 +3,17 @@ title: "AWS Core Services: EC2, RDS, Lambda, S3, IAM"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - cloud
+  - topic/cloud
   - aws
   - ec2
   - lambda
   - s3
   - rds
+  - type/concept
+  - level/intermediate
 related:
   - "[[cloud-overview]]"
   - "[[cloud-serverless-patterns]]"

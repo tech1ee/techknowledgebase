@@ -1,3 +1,14 @@
+---
+title: "Research Report: DFS & BFS Patterns"
+created: 2025-12-29
+modified: 2025-12-29
+type: concept
+status: draft
+tags:
+  - topic/cs-fundamentals
+  - topic/algorithms
+---
+
 # Research Report: DFS & BFS Patterns (2024-2025)
 
 **Date:** 2025-12-29

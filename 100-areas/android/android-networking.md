@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [http-protocol, tcp-ip, connection-pooling, serialization]
 tags:
-  - android
-  - networking
-  - retrofit
-  - okhttp
-  - ktor
+  - topic/android
+  - topic/networking
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-overview]]"
   - "[[android-threading]]"

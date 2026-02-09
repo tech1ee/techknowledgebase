@@ -1,11 +1,9 @@
-# K-way Merge Pattern
-
 ---
-title: "K-way Merge Pattern"
+title: "Паттерн K-way Merge"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -19,20 +17,20 @@ prerequisites:
   - "[[heaps-priority-queues]]"
   - "[[sorting-algorithms]]"
   - "[[linked-lists]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[heaps-priority-queues]]"
   - "[[top-k-elements-pattern]]"
   - "[[two-heaps-pattern]]"
   - "[[sorting-algorithms]]"
-tags:
-  - pattern
-  - k-way-merge
-  - heap
-  - priority-queue
-  - sorting
-  - interview
-  - external-sort
 ---
+
+# K-way Merge Pattern
 
 ## TL;DR
 

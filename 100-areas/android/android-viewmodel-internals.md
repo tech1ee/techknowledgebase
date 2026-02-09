@@ -1,13 +1,14 @@
 ---
-title: "Android ViewModel Internals"
+title: "Внутреннее устройство Android ViewModel"
 created: 2025-01-15
 modified: 2026-01-05
+type: deep-dive
+status: published
 tags:
-  - android
-  - viewmodel
-  - lifecycle
-  - savedstate
-  - architecture
+  - topic/android
+  - topic/architecture
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-architecture-evolution]]"
   - "[[android-architecture-patterns]]"

@@ -2,9 +2,20 @@
 title: "Compose Multiplatform: Shared UI для всех платформ"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, compose, multiplatform, ui, skia, android, ios, desktop, web]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - compose
+  - ui
+  - skia
+  - android
+  - ios
+  - desktop
+  - web
+  - type/moc
+  - level/beginner
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[compose-mp-ios]]"
   - "[[compose-mp-desktop]]"
   - "[[compose-mp-web]]"
@@ -13,6 +24,7 @@ cs-foundations:
   - "[[declarative-ui-paradigm]]"
   - "[[graphics-apis-fundamentals]]"
   - "[[composition-recomposition]]"
+status: published
 ---
 
 # Compose Multiplatform Overview

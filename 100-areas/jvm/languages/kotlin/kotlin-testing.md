@@ -2,8 +2,21 @@
 title: "Kotlin Testing: JUnit, MockK, Kotest, Coroutines Testing"
 created: 2025-11-25
 modified: 2025-12-27
-tags: [kotlin, testing, junit, mockk, kotest, coroutines, property-based-testing]
-related: [[kotlin-coroutines]], [[kotlin-flow]], [[kotlin-best-practices]]
+tags:
+  - topic/jvm
+  - testing
+  - junit
+  - mockk
+  - kotest
+  - coroutines
+  - property-based-testing
+  - type/concept
+  - level/intermediate
+related:
+  - [kotlin-coroutines]]
+  - "[[kotlin-flow]]"
+  - "[[kotlin-best-practices]"
+status: published
 ---
 
 # Kotlin Testing: JUnit, MockK, Kotest

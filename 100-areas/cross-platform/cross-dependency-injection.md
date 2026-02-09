@@ -2,7 +2,15 @@
 title: "Cross-Platform: Dependency Injection — Swinject vs Hilt"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, di, swinject, hilt, koin]
+status: published
+tags:
+  - topic/cross-platform
+  - di
+  - swinject
+  - hilt
+  - koin
+  - type/comparison
+  - level/intermediate
 ---
 
 # Dependency Injection: iOS vs Android

@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [component-model, ipc-mechanisms, intent-pattern, process-lifecycle]
 tags:
-  - android
-  - activity
-  - service
-  - broadcast-receiver
-  - content-provider
-  - intent
+  - topic/android
+  - topic/app-components
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-architecture]]"

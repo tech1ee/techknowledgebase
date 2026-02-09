@@ -3,13 +3,15 @@ title: "Incident Response: detection, containment, recovery"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - security
+  - topic/security
   - incident-response
   - forensics
   - detection
+  - type/concept
+  - level/intermediate
 related:
   - "[[security-overview]]"
   - "[[devops-incident-management]]"

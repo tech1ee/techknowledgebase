@@ -3,7 +3,11 @@ title: "CPU Architecture: что должен знать программист"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, appendix, cpu, registers, cache, architecture]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[memory-model-fundamentals]]"
   - "[[processes-threads-fundamentals]]"

@@ -1,11 +1,34 @@
 ---
-title: AI Агенты - Продвинутое Руководство
-tags: [ai, agents, langgraph, crewai, autogen, openai-sdk, claude-agent-sdk, mcp, computer-use, multi-agent, react, rewoo, tree-of-thoughts]
+title: "AI Агенты - Продвинутое Руководство"
+tags:
+  - topic/ai-ml
+  - agents
+  - langgraph
+  - crewai
+  - autogen
+  - openai-sdk
+  - claude-agent-sdk
+  - mcp
+  - computer-use
+  - multi-agent
+  - react
+  - rewoo
+  - tree-of-thoughts
+  - type/concept
+  - level/advanced
 category: ai-ml
 level: advanced
 created: 2025-01-15
 updated: 2025-12-24
-sources: [openai.com, anthropic.com, langchain.com, crewai.com, microsoft.com, deeplearning.ai, arxiv.org]
+sources:
+  - openai.com
+  - anthropic.com
+  - langchain.com
+  - crewai.com
+  - microsoft.com
+  - deeplearning.ai
+  - arxiv.org
+status: published
 ---
 
 # AI Агенты: От Философии к Production

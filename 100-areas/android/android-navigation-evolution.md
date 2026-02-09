@@ -7,12 +7,10 @@ area: android
 confidence: high
 cs-foundations: [stack-based-navigation, routing-patterns, state-restoration, back-stack-management]
 tags:
-  - android
-  - navigation
-  - compose
-  - fragments
-  - activity
-  - jetpack
+  - topic/android
+  - topic/navigation
+  - type/overview
+  - level/intermediate
 related:
   - "[[android-navigation]]"
   - "[[android-activity-lifecycle]]"

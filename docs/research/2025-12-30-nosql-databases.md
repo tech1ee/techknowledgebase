@@ -1,3 +1,14 @@
+---
+title: "Research Report: NoSQL Databases"
+created: 2025-12-30
+modified: 2025-12-30
+type: reference
+status: draft
+tags:
+  - topic/databases
+  - topic/nosql
+---
+
 # Research Report: NoSQL Databases
 
 **Date:** 2025-12-30

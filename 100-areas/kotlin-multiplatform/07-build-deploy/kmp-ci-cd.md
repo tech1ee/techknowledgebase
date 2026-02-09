@@ -2,9 +2,25 @@
 title: "KMP CI/CD"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, ci-cd, github-actions, bitrise, fastlane]
-related: [[kmp-gradle-deep-dive]], [[kmp-publishing]], [[kmp-testing-strategies]]
-cs-foundations: [continuous-integration, pipeline-architecture, cost-optimization, caching-strategies]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - ci-cd
+  - github-actions
+  - bitrise
+  - fastlane
+  - type/concept
+  - level/intermediate
+related:
+  - [kmp-gradle-deep-dive]]
+  - "[[kmp-publishing]]"
+  - "[[kmp-testing-strategies]"
+cs-foundations:
+  - continuous-integration
+  - pipeline-architecture
+  - cost-optimization
+  - caching-strategies
+status: published
 ---
 
 # KMP CI/CD

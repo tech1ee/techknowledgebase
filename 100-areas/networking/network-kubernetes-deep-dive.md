@@ -2,8 +2,20 @@
 title: "Kubernetes Networking Deep Dive"
 created: 2025-01-15
 modified: 2025-01-15
-tags: [networking, kubernetes, k8s, cni, service-mesh, devops]
-related: [[network-docker-deep-dive]], [[network-cloud-modern]], [[network-observability]]
+tags:
+  - topic/networking
+  - kubernetes
+  - k8s
+  - cni
+  - service-mesh
+  - topic/devops
+  - type/deep-dive
+  - level/advanced
+related:
+  - [network-docker-deep-dive]]
+  - "[[network-cloud-modern]]"
+  - "[[network-observability]"
+status: published
 ---
 
 # Kubernetes Networking Deep Dive

@@ -1,9 +1,20 @@
 ---
-title: Touch Interaction in iOS
-date: 2026-01-11
+title: "Обработка касаний в iOS"
+created: 2026-01-11
+modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [ios, uikit, swiftui, gestures, touch, interaction, responder-chain]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/ui
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[ios-uikit-fundamentals]]"
+  - "[[ios-custom-views]]"
+  - "[[android-touch-handling]]"
 ---
 
 ## TL;DR

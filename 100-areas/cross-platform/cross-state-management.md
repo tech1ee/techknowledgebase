@@ -2,7 +2,14 @@
 title: "Cross-Platform: State Management — @State vs StateFlow"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, state, swiftui, compose]
+status: published
+tags:
+  - topic/cross-platform
+  - state
+  - swiftui
+  - compose
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform State Management: SwiftUI vs Jetpack Compose

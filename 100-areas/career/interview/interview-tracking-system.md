@@ -7,10 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/tracking
-  - type/template
-  - level/all
+  - type/reference
+  - level/intermediate
+  - interview
 related:
   - "[[interview-process]]"
   - "[[job-search-strategy]]"

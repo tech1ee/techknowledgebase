@@ -1,21 +1,23 @@
 ---
 title: "Инженерные практики"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, tech-lead, director]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - code review
   - testing strategy
   - CI/CD practices
-unlocks:
-  - "[[development-process]]"
-tags: [leadership, engineering, practices, quality, ci-cd]
 sources: [google-engineering, accelerate, dora]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[development-process]]"
 ---
 
 # Инженерные практики

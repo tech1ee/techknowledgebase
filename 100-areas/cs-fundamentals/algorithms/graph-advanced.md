@@ -1,3 +1,20 @@
+---
+title: "Продвинутые алгоритмы на графах"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/advanced
+  - interview
+related:
+  - "[[graph-algorithms]]"
+  - "[[shortest-paths]]"
+  - "[[graphs]]"
+---
+
 # Advanced Graph Algorithms
 
 ## TL;DR

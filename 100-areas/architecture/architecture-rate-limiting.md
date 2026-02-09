@@ -3,16 +3,18 @@ title: "Rate Limiting: защита API от перегрузки"
 created: 2025-12-22
 modified: 2026-01-02
 type: deep-dive
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
-  - architecture
+  - topic/architecture
   - rate-limiting
   - api
   - throttling
   - distributed
   - redis
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[architecture-overview]]"
   - "[[architecture-resilience-patterns]]"

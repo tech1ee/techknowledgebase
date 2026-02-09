@@ -3,16 +3,18 @@ title: "Подготовка данных для AI: Chunking, Синтетич�
 created: 2026-01-11
 modified: 2026-01-11
 type: guide
-status: verified
+status: published
 level: intermediate
 confidence: high
 tags:
-  - ai
+  - topic/ai-ml
   - data
   - chunking
   - rag
   - fine-tuning
   - synthetic-data
+  - type/guide
+  - level/intermediate
 prerequisites:
   - "[[llm-fundamentals]]"
   - "[[embeddings-complete-guide]]"

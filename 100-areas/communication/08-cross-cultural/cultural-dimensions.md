@@ -1,3 +1,17 @@
+---
+title: "Cultural Dimensions: Hofstede и Lewis Model"
+created: 2026-02-09
+modified: 2026-02-09
+type: concept
+status: published
+tags:
+  - topic/communication
+  - type/concept
+  - level/intermediate
+related:
+  - "[[remote-team-communication]]"
+---
+
 # Cultural Dimensions: Hofstede и Lewis Model
 
 ## TL;DR

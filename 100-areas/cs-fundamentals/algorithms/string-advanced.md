@@ -1,3 +1,19 @@
+---
+title: "Продвинутые строковые алгоритмы (Suffix Array, Aho-Corasick)"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/expert
+related:
+  - "[[string-algorithms]]"
+  - "[[string-algorithms-advanced]]"
+  - "[[tries]]"
+---
+
 # Advanced String Algorithms
 
 ## TL;DR

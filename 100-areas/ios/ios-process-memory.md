@@ -1,12 +1,22 @@
 ---
-title: iOS Process Memory Management & ARC
+title: "Управление памятью и процессами в iOS (ARC)"
 created: 2026-01-11
 modified: 2026-01-11
 type: deep-dive
+status: published
 area: ios
-tags: [ios, memory, arc, swift, retain-cycles, reference-counting, jetsam]
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/memory
+  - type/deep-dive
+  - level/advanced
 cs-foundations: [[reference-counting-arc]]
-related: [[android-process-memory]], [[swift-value-types]], [[instruments-profiling]], [[ios-performance]]
+related:
+  - "[[android-process-memory]]"
+  - "[[swift-value-types]]"
+  - "[[instruments-profiling]]"
+  - "[[ios-performance]]"
 ---
 
 ## TL;DR

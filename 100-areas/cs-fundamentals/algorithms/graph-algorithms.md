@@ -1,5 +1,5 @@
 ---
-title: "Graph Algorithms: BFS, DFS, Dijkstra и beyond"
+title: "Алгоритмы на графах: BFS, DFS, Dijkstra"
 created: 2025-12-29
 modified: 2025-12-29
 type: deep-dive
@@ -7,15 +7,14 @@ status: published
 confidence: high
 tags:
   - topic/cs-fundamentals
-  - topic/algorithms
-  - topic/graphs
-  - deep-dive/graph-algorithms
-  - level/foundation
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[big-o-complexity]]"
-  - "[[data-structures/graphs]]"
-  - "[[patterns/dfs-bfs-patterns]]"
-  - "[[patterns/topological-sort-pattern]]"
+  - "[[graphs]]"
+  - "[[dfs-bfs-patterns]]"
+  - "[[topological-sort-pattern]]"
 ---
 
 # Graph Algorithms: BFS, DFS, Dijkstra и beyond

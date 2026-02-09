@@ -1,22 +1,23 @@
 ---
 title: "Stakeholder Negotiation: работа с руководством, PM и клиентами"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: advanced
-prerequisites:
-  - [[negotiation-fundamentals]]
-  - [[negotiation-frameworks]]
-  - [[communication-styles]]
 teaches:
   - executive-communication
   - pm-negotiation
   - client-management
   - managing-up
-unlocks:
-  - [[career-growth]]
-tags: [communication, soft-skills, negotiation, stakeholders, leadership]
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[negotiation-fundamentals]]"
+  - "[[negotiation-frameworks]]"
+  - "[[communication-styles]]"
 ---
 
 # Stakeholder Negotiation: влияние без authority

@@ -2,7 +2,16 @@
 title: "KMP Interop Deep Dive: ObjC, Swift Export, cinterop"
 created: 2026-01-04
 modified: 2026-01-04
-tags: [kotlin, kmp, interop, objc, swift, cinterop, skie]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - interop
+  - objc
+  - swift
+  - cinterop
+  - skie
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-memory-management]]"
@@ -12,6 +21,7 @@ cs-foundations:
   - "[[ffi-foreign-function-interface]]"
   - "[[bridges-bindings-overview]]"
   - "[[memory-layout-marshalling]]"
+status: published
 ---
 
 # KMP Interop Deep Dive

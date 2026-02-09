@@ -1,21 +1,23 @@
 ---
 title: "Мотивация команды"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [em, director, tech-lead]
-prerequisites:
-  - "[[em-fundamentals]]"
 teaches:
   - intrinsic vs extrinsic motivation
   - autonomy, mastery, purpose
   - recognition and rewards
-unlocks:
-  - "[[performance-management]]"
-tags: [leadership, motivation, engagement, psychology]
 sources: [drive-pink, manager-tools, gallup]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[em-fundamentals]]"
+  - "[[performance-management]]"
 ---
 
 # Мотивация команды

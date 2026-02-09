@@ -7,10 +7,8 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/ai
-  - topic/job-search
   - type/guide
-  - level/senior
+  - level/advanced
 related:
   - "[[job-search-strategy]]"
   - "[[resume-strategy]]"

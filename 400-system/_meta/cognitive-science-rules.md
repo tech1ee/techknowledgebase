@@ -1,3 +1,18 @@
+---
+title: "Когнитивная наука: правила создания контента"
+created: 2025-11-24
+modified: 2025-12-19
+type: reference
+status: verified
+confidence: high
+tags:
+  - system/guidelines
+  - system/metadata
+related:
+  - "[[content-levels]]"
+  - "[[improvements]]"
+---
+
 # Когнитивная наука: правила создания контента
 
 > Каждое правило здесь основано на исследованиях. Без ссылки на источник — не правило.

@@ -7,10 +7,9 @@ status: published
 confidence: high
 tags:
   - topic/career
-  - topic/interview
-  - topic/fundamentals
   - type/guide
-  - level/all
+  - level/intermediate
+  - interview
 related:
   - "[[interview-process]]"
   - "[[coding-challenges]]"

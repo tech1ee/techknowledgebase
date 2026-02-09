@@ -1,11 +1,25 @@
 ---
 title: "Agentic RAG: AI Agents + Retrieval"
-tags: [ai, agents, rag, retrieval, agentic-rag, self-rag, corrective-rag]
+tags:
+  - topic/ai-ml
+  - agents
+  - rag
+  - retrieval
+  - agentic-rag
+  - self-rag
+  - corrective-rag
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: advanced
 created: 2026-01-11
 updated: 2026-01-11
-sources: [langchain.com, llamaindex.ai, arxiv.org, anthropic.com]
+sources:
+  - langchain.com
+  - llamaindex.ai
+  - arxiv.org
+  - anthropic.com
+status: published
 ---
 
 # Agentic RAG: Когда агенты встречают retrieval

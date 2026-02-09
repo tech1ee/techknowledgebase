@@ -1,24 +1,26 @@
 ---
 title: "Engineering Management: Фундаментальные принципы"
 created: 2026-01-18
-updated: 2026-01-18
+modified: 2026-01-18
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 target-role: [tech-lead, em, director]
-prerequisites:
-  - "[[ic-vs-management]]"
-  - "[[tech-lead-role]]"
 teaches:
   - понимание роли EM
   - ключевые ответственности
   - метрики успеха
-unlocks:
+sources: [manager-tools, rands-in-repose, camille-fournier, google-rework]
+tags:
+  - topic/leadership
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[ic-vs-management]]"
+  - "[[tech-lead-role]]"
   - "[[transition-to-management]]"
   - "[[one-on-one-meetings]]"
   - "[[performance-management]]"
-tags: [leadership, engineering-management, fundamentals, em]
-sources: [manager-tools, rands-in-repose, camille-fournier, google-rework]
 ---
 
 # Engineering Management: Фундаментальные принципы
@@ -594,4 +596,4 @@ EM так занят командой, что не развивает собст
 ---
 
 *Последнее обновление: 2026-01-18*
-*Связано с: [[00-leadership-overview]]*
+*Связано с: [[leadership-overview]]*

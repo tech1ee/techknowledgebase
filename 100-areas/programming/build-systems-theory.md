@@ -3,13 +3,15 @@ title: "Build Systems: от Make до Gradle"
 created: 2026-01-09
 modified: 2026-01-09
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
   - programming/build
-  - devops
+  - topic/devops
   - gradle
   - make
+  - type/concept
+  - level/intermediate
 related:
   - "[[module-systems]]"
   - "[[dependency-resolution]]"

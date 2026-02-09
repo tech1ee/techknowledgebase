@@ -6,14 +6,10 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - service
-  - foreground-service
-  - bound-service
-  - binder
-  - aidl
-  - workmanager
-  - ipc
+  - topic/android
+  - topic/services
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-app-components]]"
   - "[[android-background-work]]"

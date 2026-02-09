@@ -3,14 +3,16 @@ title: "Backup & Recovery: PITR, WAL, RTO/RPO"
 created: 2025-12-22
 modified: 2025-12-22
 type: concept
-status: verified
+status: published
 confidence: high
 tags:
-  - databases
+  - topic/databases
   - backup
   - recovery
   - disaster-recovery
   - postgresql
+  - type/concept
+  - level/intermediate
 related:
   - "[[databases-overview]]"
   - "[[databases-replication-sharding]]"

@@ -3,11 +3,11 @@ title: "JVM Overview"
 created: 2025-12-19
 modified: 2025-12-19
 type: moc
+status: published
 tags:
-  - moc
-  - jvm
-  - java
-  - kotlin
+  - topic/jvm
+  - type/moc
+  - level/beginner
 ---
 
 # JVM: Карта раздела

@@ -1,13 +1,16 @@
 ---
-title: "Android Animations — от ValueAnimator до Compose Transition"
+title: "Анимации Android: от ValueAnimator до Compose Transition"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
 area: android
 tags:
-  - android
-  - animations
-  - property-animation
-  - compose-animation
-  - motionlayout
-  - choreographer
+  - topic/android
+  - topic/ui
+  - topic/animations
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-view-rendering-pipeline]]"

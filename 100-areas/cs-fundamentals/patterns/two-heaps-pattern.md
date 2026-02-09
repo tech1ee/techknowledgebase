@@ -1,11 +1,9 @@
-# Two Heaps Pattern
-
 ---
-title: "Two Heaps Pattern"
+title: "Паттерн двух куч (Two Heaps)"
 created: 2026-02-08
-updated: 2026-02-08
+modified: 2026-02-08
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -17,19 +15,20 @@ cs-foundations:
 prerequisites:
   - "[[heaps-priority-queues]]"
   - "[[big-o-complexity]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - pattern
+  - interview
 related:
   - "[[heaps-priority-queues]]"
   - "[[k-way-merge-pattern]]"
   - "[[top-k-elements-pattern]]"
   - "[[sliding-window-pattern]]"
-tags:
-  - pattern
-  - two-heaps
-  - heap
-  - median
-  - stream
-  - interview
 ---
+
+# Two Heaps Pattern
 
 ## TL;DR
 

@@ -1,11 +1,25 @@
 ---
 title: "AI Agent Production Deployment"
-tags: [ai, agents, deployment, production, kubernetes, scaling, reliability]
+tags:
+  - topic/ai-ml
+  - agents
+  - deployment
+  - production
+  - kubernetes
+  - scaling
+  - reliability
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: advanced
 created: 2026-01-11
 updated: 2026-01-11
-sources: [langchain.com, anthropic.com, openai.com, kubernetes.io]
+sources:
+  - langchain.com
+  - anthropic.com
+  - openai.com
+  - kubernetes.io
+status: published
 ---
 
 # AI Agent Production Deployment: Полное руководство

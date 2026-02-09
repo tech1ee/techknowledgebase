@@ -2,9 +2,16 @@
 title: "SQLDelight в Kotlin Multiplatform: типобезопасная база данных"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, sqldelight, database, sqlite, multiplatform]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - sqldelight
+  - topic/databases
+  - sqlite
+  - type/concept
+  - level/intermediate
 related:
-  - "[[00-kmp-overview]]"
+  - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kmp-architecture-patterns]]"
 cs-foundations:
@@ -13,6 +20,7 @@ cs-foundations:
   - "[[sql-query-optimization]]"
   - "[[schema-migration-patterns]]"
   - "[[type-systems-theory]]"
+status: published
 ---
 
 # SQLDelight в Kotlin Multiplatform

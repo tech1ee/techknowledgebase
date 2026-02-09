@@ -3,13 +3,14 @@ title: "Software Architecture: Карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
-status: verified
+status: published
 confidence: high
 tags:
-  - moc
-  - architecture
+  - topic/architecture
   - system-design
   - distributed-systems
+  - type/moc
+  - level/beginner
 related:
   - "[[programming-overview]]"
   - "[[cloud-overview]]"

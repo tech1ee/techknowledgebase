@@ -3,11 +3,12 @@ title: "JVM: обзор и точка входа"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
-  - java
+  - topic/jvm
   - overview
-  - moc
+  - type/moc
+  - level/beginner
 type: moc
+status: published
 area: programming
 confidence: high
 related:

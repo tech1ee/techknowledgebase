@@ -5,8 +5,20 @@ updated: 2025-12-24
 author: AI Assistant
 level: intermediate
 type: guide
-topics: [structured-outputs, function-calling, tool-use, JSON, Pydantic, Instructor, Outlines, constrained-decoding]
-status: complete
+topics:
+  - structured-outputs
+  - function-calling
+  - tool-use
+  - JSON
+  - Pydantic
+  - Instructor
+  - Outlines
+  - constrained-decoding
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
 ---
 
 # Structured Outputs и Tool Use: От хаоса к порядку

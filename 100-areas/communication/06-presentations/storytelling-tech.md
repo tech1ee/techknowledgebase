@@ -1,3 +1,18 @@
+---
+title: "Technical Storytelling: Нарратив в IT-коммуникации"
+created: 2026-02-09
+modified: 2026-02-09
+type: deep-dive
+status: published
+tags:
+  - topic/communication
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[technical-presentations]]"
+  - "[[presentation-design]]"
+---
+
 # Technical Storytelling: Нарратив в IT-коммуникации
 
 ## TL;DR

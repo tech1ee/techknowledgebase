@@ -1,7 +1,18 @@
 ---
-date: 2026-01-11
-tags: [ios, swift, architecture, spm, modularization]
-related: "[[android-modularization]]"
+title: "Модуляризация iOS-приложений"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/architecture
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[android-modularization]]"
+  - "[[ios-architecture-patterns]]"
 ---
 
 # iOS Модularизация

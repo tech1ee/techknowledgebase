@@ -5,8 +5,22 @@ updated: 2025-12-24
 author: AI Assistant
 level: advanced
 type: guide
-topics: [reasoning, o1, o3, deepseek-r1, chain-of-thought, extended-thinking, test-time-compute, GRPO, QwQ, Gemini]
-status: complete
+topics:
+  - reasoning
+  - o1
+  - o3
+  - deepseek-r1
+  - chain-of-thought
+  - extended-thinking
+  - test-time-compute
+  - GRPO
+  - QwQ
+  - Gemini
+status: published
+tags:
+  - topic/ai-ml
+  - type/guide
+  - level/intermediate
 ---
 
 # Reasoning Models: Революция в мышлении ИИ

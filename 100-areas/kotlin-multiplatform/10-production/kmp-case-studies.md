@@ -2,12 +2,26 @@
 title: "KMP Case Studies: Реальные примеры в production"
 created: 2026-01-04
 modified: 2026-01-05
-tags: [kotlin, kmp, case-studies, production, netflix, mcdonalds, cashapp]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - case-studies
+  - production
+  - netflix
+  - mcdonalds
+  - cashapp
+  - type/concept
+  - level/advanced
 related:
   - "[[kmp-production-checklist]]"
   - "[[kmp-architecture-patterns]]"
-  - "[[00-kmp-overview]]"
-cs-foundations: [empirical-validation, technology-adoption, success-metrics, survivorship-bias]
+  - "[[kmp-overview]]"
+cs-foundations:
+  - empirical-validation
+  - technology-adoption
+  - success-metrics
+  - survivorship-bias
+status: published
 ---
 
 # KMP Case Studies
@@ -20,7 +34,7 @@ cs-foundations: [empirical-validation, technology-adoption, success-metrics, sur
 
 | Тема | Зачем нужно | Где изучить |
 |------|-------------|-------------|
-| KMP Overview | Что такое KMP | [[00-kmp-overview]] |
+| KMP Overview | Что такое KMP | [[kmp-overview]] |
 | Architecture | Паттерны архитектуры | [[kmp-architecture-patterns]] |
 | Production | Готовность к релизу | [[kmp-production-checklist]] |
 | **CS: Survivorship Bias** | Критический анализ кейсов | [[cs-survivorship-bias]] |

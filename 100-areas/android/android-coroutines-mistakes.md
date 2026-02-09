@@ -6,12 +6,11 @@ type: deep-dive
 area: android
 confidence: high
 tags:
-  - android
-  - coroutines
-  - kotlin
-  - mistakes
-  - anti-patterns
-  - structured-concurrency
+  - topic/android
+  - topic/kotlin
+  - topic/coroutines
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[android-async-evolution]]"
   - "[[android-threading]]"

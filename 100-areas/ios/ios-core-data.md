@@ -1,9 +1,17 @@
 ---
-title: "Core Data: Персистентность данных в iOS"
-date: 2026-01-11
-tags: [ios, core-data, persistence, swiftui, cloudkit, database]
-category: ios-development
-status: active
+title: "Core Data: персистентность данных в iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/data
+  - type/deep-dive
+  - level/advanced
+related:
+  - "[[ios-data-persistence]]"
+  - "[[ios-swiftdata]]"
 ---
 
 # Core Data: Персистентность данных в iOS

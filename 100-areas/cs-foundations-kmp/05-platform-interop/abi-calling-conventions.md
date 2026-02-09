@@ -3,7 +3,11 @@ title: "ABI и Calling Conventions: как бинарный код общает�
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, platform-interop, abi, calling-conventions, low-level]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/expert
 related:
   - "[[memory-model-fundamentals]]"
   - "[[native-compilation-llvm]]"

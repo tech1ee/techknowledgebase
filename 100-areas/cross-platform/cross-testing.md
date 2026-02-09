@@ -2,7 +2,14 @@
 title: "Cross-Platform: Testing — XCTest vs JUnit"
 created: 2026-01-11
 type: comparison
-tags: [cross-platform, testing, xctest, junit]
+status: published
+tags:
+  - topic/cross-platform
+  - testing
+  - xctest
+  - junit
+  - type/comparison
+  - level/intermediate
 ---
 
 # Cross-Platform Testing: XCTest vs JUnit

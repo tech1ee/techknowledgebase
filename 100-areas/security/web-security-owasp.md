@@ -3,13 +3,16 @@ title: "Web Security: OWASP Top 10 и защита приложений"
 created: 2025-11-24
 modified: 2025-11-24
 type: concept
-status: verified
+status: published
 confidence: high
 sources_verified: true
 tags:
+  - topic/security
   - security/web
   - security/owasp
   - backend/security
+  - type/concept
+  - level/intermediate
 related:
   - "[[api-design]]"
   - "[[ci-cd-pipelines]]"

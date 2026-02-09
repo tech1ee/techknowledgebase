@@ -3,14 +3,15 @@ title: "DevOps: Карта раздела"
 created: 2025-12-22
 modified: 2025-12-22
 type: moc
-status: verified
+status: published
 confidence: high
 tags:
-  - moc
-  - devops
+  - topic/devops
   - ci-cd
   - infrastructure
   - operations
+  - type/moc
+  - level/beginner
 related:
   - "[[cloud-overview]]"
   - "[[architecture-overview]]"

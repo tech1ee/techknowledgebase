@@ -3,7 +3,11 @@ title: "Memory Safety: от багов к гарантиям"
 created: 2026-01-04
 modified: 2026-01-04
 type: deep-dive
-tags: [cs-foundations, memory, ownership, borrowing, safety, rust, kotlin-native]
+status: published
+tags:
+  - topic/cs-foundations
+  - type/deep-dive
+  - level/advanced
 related:
   - "[[memory-model-fundamentals]]"
   - "[[garbage-collection-explained]]"

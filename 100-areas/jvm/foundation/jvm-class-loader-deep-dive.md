@@ -3,10 +3,13 @@ title: "Class Loader: как JVM загружает классы"
 created: 2025-11-25
 modified: 2026-01-03
 tags:
-  - jvm
+  - topic/jvm
   - class-loader
   - bytecode
+  - type/deep-dive
+  - level/beginner
 type: deep-dive
+status: published
 area: programming
 confidence: high
 related:

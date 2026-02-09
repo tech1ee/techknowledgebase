@@ -2,11 +2,19 @@
 title: "Kotlin Best Practices: Идиоматичный код и оптимизация"
 created: 2025-11-25
 modified: 2025-12-27
-tags: [kotlin, best-practices, coding-conventions, performance, idioms]
+tags:
+  - topic/jvm
+  - best-practices
+  - coding-conventions
+  - performance
+  - idioms
+  - type/concept
+  - level/intermediate
 related:
   - "[[kotlin-overview]]"
   - "[[kotlin-advanced-features]]"
   - "[[kotlin-type-system]]"
+status: published
 ---
 
 # Kotlin Best Practices: идиоматичный код

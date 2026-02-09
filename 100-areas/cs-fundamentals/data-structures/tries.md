@@ -1,11 +1,9 @@
-# Trie (Префиксное дерево)
-
 ---
-title: "Trie (Префиксное дерево)"
+title: "Префиксное дерево (Trie)"
 created: 2025-12-29
-updated: 2026-01-06
+modified: 2026-01-06
 type: deep-dive
-status: complete
+status: published
 difficulty: intermediate
 confidence: high
 cs-foundations:
@@ -20,19 +18,19 @@ prerequisites:
   - "[[hash-tables]]"
   - "[[arrays-strings]]"
   - "[[recursion-fundamentals]]"
+tags:
+  - topic/cs-fundamentals
+  - type/deep-dive
+  - level/intermediate
+  - interview
 related:
   - "[[graphs]]"
   - "[[dfs-bfs-patterns]]"
   - "[[backtracking]]"
   - "[[dynamic-programming]]"
-tags:
-  - data-structure
-  - trie
-  - prefix-tree
-  - autocomplete
-  - string-search
-  - interview
 ---
+
+# Trie (Префиксное дерево)
 
 ## TL;DR
 

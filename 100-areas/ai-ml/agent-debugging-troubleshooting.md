@@ -1,11 +1,26 @@
 ---
 title: "AI Agent Debugging & Troubleshooting"
-tags: [ai, agents, debugging, troubleshooting, observability, langgraph, tracing, production]
+tags:
+  - topic/ai-ml
+  - agents
+  - debugging
+  - troubleshooting
+  - observability
+  - langgraph
+  - tracing
+  - production
+  - type/concept
+  - level/intermediate
 category: ai-ml
 level: intermediate-advanced
 created: 2026-01-11
 updated: 2026-01-11
-sources: [langchain.com, arize.ai, anthropic.com, openai.com]
+sources:
+  - langchain.com
+  - arize.ai
+  - anthropic.com
+  - openai.com
+status: published
 ---
 
 # AI Agent Debugging & Troubleshooting: Полное руководство

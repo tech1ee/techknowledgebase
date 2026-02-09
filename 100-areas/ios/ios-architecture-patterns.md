@@ -1,7 +1,18 @@
 ---
-date: 2026-01-11
-tags: [ios, architecture, swift, swiftui, patterns, mvvm, mvc, viper, tca]
-related: [[android-architecture-patterns]]
+title: "Архитектурные паттерны iOS"
+created: 2026-01-11
+modified: 2026-01-11
+type: deep-dive
+status: published
+tags:
+  - topic/ios
+  - topic/swift
+  - topic/architecture
+  - type/deep-dive
+  - level/intermediate
+related:
+  - "[[android-architecture-patterns]]"
+  - "[[ios-overview]]"
 ---
 
 # iOS Architecture Patterns

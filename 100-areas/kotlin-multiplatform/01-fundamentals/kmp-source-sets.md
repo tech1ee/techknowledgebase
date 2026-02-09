@@ -2,7 +2,14 @@
 title: "KMP Source Sets: Организация кода по платформам"
 created: 2026-01-03
 modified: 2026-01-05
-tags: [kotlin, kmp, multiplatform, source-sets, dependencies, gradle]
+tags:
+  - topic/jvm
+  - topic/kmp
+  - source-sets
+  - dependencies
+  - gradle
+  - type/concept
+  - level/beginner
 related:
   - "[[kmp-project-structure]]"
   - "[[kmp-expect-actual]]"
@@ -12,6 +19,7 @@ cs-foundations:
   - "[[dependency-resolution]]"
   - "[[compilation-pipeline]]"
   - "[[type-systems-theory]]"
+status: published
 ---
 
 # KMP Source Sets: организация кода для разных платформ

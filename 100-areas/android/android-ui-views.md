@@ -7,11 +7,10 @@ area: android
 confidence: high
 cs-foundations: [view-hierarchy, object-pooling, adapter-pattern, layout-inflation]
 tags:
-  - android
-  - views
-  - xml-layouts
-  - viewbinding
-  - recyclerview
+  - topic/android
+  - topic/ui
+  - type/deep-dive
+  - level/intermediate
 related:
   - "[[android-overview]]"
   - "[[android-activity-lifecycle]]"
