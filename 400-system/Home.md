@@ -14,7 +14,7 @@ tags:
 # Knowledge Vault
 
 > Персональная база знаний по IT, архитектуре и мышлению.
-> **640 материалов** в 20 областях знаний.
+> **650+ материалов** в 20 областях знаний.
 
 ---
 
@@ -128,7 +128,7 @@ tags:
 ### Platforms — Платформы разработки
 
 #### Android Development
-> 66 материалов: от основ до продвинутых паттернов
+> 70 материалов: от основ до продвинутых паттернов
 
 **Рекомендуемый путь:** [[android-overview]]
 
@@ -213,7 +213,7 @@ tags:
 ### Practices — Практики разработки
 
 #### Архитектура систем
-> 12 материалов: проектирование систем, паттерны, технический долг
+> 16 материалов: проектирование систем, паттерны, API Design, технический долг
 
 - [[microservices-vs-monolith]] — Когда что выбирать
 - [[technical-debt]] — $2 триллиона проблем
@@ -279,11 +279,11 @@ tags:
 ---
 
 #### Security
-> 13 материалов: безопасность приложений, OWASP, DevSecOps
+> 19 материалов: безопасность приложений, OWASP, AuthN/AuthZ, DevSecOps
 
 - [[security-overview]] — Обзор безопасности
 - [[web-security-owasp]] — OWASP Top 10
-- [[authentication-authorization]] — JWT, OAuth 2.0
+- [[authentication-authorization]] — Навигационный хаб AuthN/AuthZ (7 файлов)
 - [[security-cryptography-fundamentals]] — Криптография
 - [[security-https-tls]] — HTTPS, TLS
 - [[security-api-protection]] — API Security
@@ -322,7 +322,7 @@ tags:
 ### Soft Skills — Навыки лидера
 
 #### Карьера и поиск работы
-> 37 материалов: от анализа рынка до negotiation
+> 36 материалов: от анализа рынка до negotiation
 
 **Рекомендуемый путь:** [[career-moc]]
 
@@ -383,11 +383,11 @@ tags:
 ## Структура базы
 
 ```
-100-areas/     → Основные области знаний (640 файлов)
+100-areas/     → Основные области знаний (653 файла)
   ├── ai-ml/              → 43 файла: AI Engineering
-  ├── android/            → 66 файлов: Android Development
-  ├── architecture/       → 12 файлов: Архитектура систем
-  ├── career/             → 37 файлов: Карьера, поиск работы
+  ├── android/            → 70 файлов: Android Development
+  ├── architecture/       → 16 файлов: Архитектура систем
+  ├── career/             → 36 файлов: Карьера, поиск работы
   ├── cloud/              → 7 файлов: AWS, GCP, Azure
   ├── communication/      → 26 файлов: Коммуникация
   ├── cross-platform/     → 24 файла: iOS vs Android
@@ -402,7 +402,7 @@ tags:
   ├── networking/         → 23 файла: Сети
   ├── operating-systems/  → 8 файлов: ОС
   ├── programming/        → 12 файлов: Код, паттерны
-  ├── security/           → 13 файлов: OWASP, Auth
+  ├── security/           → 19 файлов: OWASP, AuthN/AuthZ
   └── thinking/           → 22 файла: Мышление
 200-resources/ → Справочники
 400-system/    → Навигация, индексы, мета
@@ -420,26 +420,26 @@ tags:
 | Область | Файлов |
 |---------|--------|
 | Kotlin Multiplatform | 70 |
-| Android | 66 |
+| Android | 70 |
 | CS Fundamentals | 63 |
 | CS Foundations KMP | 61 |
 | iOS | 45 |
 | Leadership | 44 |
 | AI/ML | 43 |
 | JVM | 37 |
-| Career | 37 |
+| Career | 36 |
 | Communication | 26 |
 | Cross-Platform | 24 |
 | Networking | 23 |
 | Thinking | 22 |
 | Databases | 16 |
-| Security | 13 |
+| Security | 19 |
 | Programming | 12 |
-| Architecture | 12 |
+| Architecture | 16 |
 | DevOps | 10 |
 | Operating Systems | 8 |
 | Cloud | 7 |
-| **Всего** | **640** |
+| **Всего** | **653** |
 
 ---
 
@@ -467,4 +467,4 @@ tags:
 
 ---
 
-*Последнее обновление: 2026-02-09*
+*Последнее обновление: 2026-02-11*

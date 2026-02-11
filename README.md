@@ -1,9 +1,9 @@
 # Tech Knowledge Vault
 
-> Открытая база технических знаний для IT-специалистов: от алгоритмов до архитектуры систем, от мобильной разработки до AI/ML. На русском языке, с кодом на английском.
+> Открытая база технических знаний для IT-специалистов: от алгоритмов до архитектуры систем, от мобильной разработки до AI/ML. 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Notes](https://img.shields.io/badge/Notes-640+-blue.svg)](#статистика)
+[![Notes](https://img.shields.io/badge/Notes-650+-blue.svg)](#статистика)
 [![Areas](https://img.shields.io/badge/Areas-20-green.svg)](#области-знаний)
 
 ---
@@ -46,7 +46,7 @@
 
 | Область | Файлов | Описание |
 |---------|--------|----------|
-| **Android** | 66 | Lifecycle, Compose, Architecture Components, Hilt, Performance |
+| **Android** | 70 | Lifecycle, Compose, Architecture Components, Hilt, Performance |
 | **iOS** | 45 | SwiftUI, UIKit, Concurrency, Core Data, Performance |
 | **Kotlin Multiplatform** | 70 | Shared code, Compose Multiplatform, expect/actual |
 | **Cross-platform** | 24 | iOS vs Android сравнения, паттерны миграции |
@@ -66,10 +66,10 @@
 
 | Область | Файлов | Описание |
 |---------|--------|----------|
-| **Architecture** | 12 | System Design, микросервисы, DDD, Clean Architecture |
+| **Architecture** | 16 | System Design, микросервисы, API Design, Clean Architecture |
 | **DevOps** | 10 | Docker, Kubernetes, CI/CD, мониторинг |
 | **Cloud** | 7 | AWS, GCP, Azure, serverless |
-| **Security** | 13 | OWASP, мобильная безопасность, криптография |
+| **Security** | 19 | OWASP, AuthN/AuthZ, мобильная безопасность, криптография |
 | **Programming** | 12 | Clean Code, SOLID, Design Patterns, Testing |
 
 ### AI/ML
@@ -83,7 +83,7 @@
 | Область | Файлов | Описание |
 |---------|--------|----------|
 | **Leadership** | 44 | Менеджмент, 1-1, командная динамика, найм |
-| **Career** | 37 | Поиск работы, интервью, переговоры по ЗП |
+| **Career** | 36 | Поиск работы, интервью, переговоры по ЗП |
 | **Communication** | 26 | Презентации, письменная коммуникация, конфликты |
 | **Thinking** | 22 | Когнитивные модели, обучение, продуктивность |
 
@@ -128,11 +128,11 @@
 
 ```
 tech/
-├── 100-areas/              # Основные области знаний (640 файлов)
+├── 100-areas/              # Основные области знаний (653 файла)
 │   ├── ai-ml/              # AI/ML Engineering (43)
-│   ├── android/            # Android Development (66)
-│   ├── architecture/       # System Design & Patterns (12)
-│   ├── career/             # Карьера и поиск работы (37)
+│   ├── android/            # Android Development (70)
+│   ├── architecture/       # System Design & Patterns (16)
+│   ├── career/             # Карьера и поиск работы (36)
 │   ├── cloud/              # AWS, GCP, Azure (7)
 │   ├── communication/      # Коммуникация (26)
 │   ├── cross-platform/     # iOS vs Android (24)
@@ -147,7 +147,7 @@ tech/
 │   ├── networking/         # Сети и протоколы (23)
 │   ├── operating-systems/  # ОС (8)
 │   ├── programming/        # Clean Code, SOLID (12)
-│   ├── security/           # OWASP, криптография (13)
+│   ├── security/           # OWASP, AuthN/AuthZ, криптография (19)
 │   └── thinking/           # Когнитивистика, обучение (22)
 │
 ├── 200-resources/          # Справочные материалы
@@ -206,7 +206,7 @@ tech/
 
 | Метрика | Значение |
 |---------|----------|
-| **Markdown файлов** | 640+ |
+| **Markdown файлов** | 650+ |
 | **Областей знаний** | 20 |
 | **Алгоритмических паттернов** | 30+ |
 | **MOC (карт навигации)** | 21 |

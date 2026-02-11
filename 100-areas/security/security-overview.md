@@ -148,6 +148,21 @@ related:
 | [[security-secrets-management]] | Vault, rotation, environment variables | → cloud |
 | [[security-api-protection]] | Rate limiting, input validation, API keys | → auth |
 
+### Основы
+
+| Статья | Описание | Связи |
+|--------|----------|-------|
+| [[security-fundamentals]] | CIA Triad, Defense in Depth, Threat Modeling basics | → все разделы |
+| [[threat-modeling]] | STRIDE, Attack Trees, Threat Modeling процесс | → design |
+
+### Мобильная безопасность
+
+| Статья | Описание | Связи |
+|--------|----------|-------|
+| [[mobile-security-owasp]] | OWASP Mobile Top 10, мобильные уязвимости | → android, ios |
+| [[mobile-security-masvs]] | MASVS стандарт верификации | → owasp |
+| [[mobile-app-protection]] | Обфускация, tamper detection, SSL pinning | → android, ios |
+
 ### Операции
 
 | Статья | Описание | Связи |
@@ -271,8 +286,8 @@ related:
 
 | Метрика | Значение |
 |---------|----------|
-| Всего статей | 14 |
-| Категорий | 5 |
+| Всего статей | 19 |
+| Категорий | 7 |
 | Последнее обновление | 2026-02-11 |
 
 ---
