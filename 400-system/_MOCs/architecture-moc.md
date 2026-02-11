@@ -22,6 +22,10 @@ tags:
 
 ### API и интеграции
 - [[api-design]] — REST, GraphQL, gRPC. Когда что использовать, безопасность, версионирование
+- [[api-rest-deep-dive]] — REST: от диссертации Филдинга до production. Constraints, HATEOAS, идемпотентность, ETags
+- [[api-graphql-deep-dive]] — GraphQL: schema-first API design. Federation, subscriptions, клиентское кэширование
+- [[api-grpc-deep-dive]] — gRPC: high-performance RPC. Protocol Buffers, 4 паттерна коммуникации, load balancing
+- [[api-modern-patterns]] — tRPC, Webhooks, API Gateway, BFF. Современные паттерны и decision tree
 
 ### Качество и долг
 - [[technical-debt]] — $2 триллиона проблем. Southwest Airlines, Friendster, как измерять и бороться
@@ -49,6 +53,12 @@ tags:
 | Strangler Fig | Постепенная миграция | [[technical-debt]] |
 | 15-20% правило | Бюджет на долг | [[technical-debt]] |
 | REST vs GraphQL | Простота vs гибкость | [[api-design]] |
+| Richardson Maturity Model | 4 уровня зрелости REST API | [[api-rest-deep-dive]] |
+| HATEOAS | Hypermedia as engine of state | [[api-rest-deep-dive]] |
+| Apollo Federation | Распределённый GraphQL | [[api-graphql-deep-dive]] |
+| Protocol Buffers | Binary serialization для gRPC | [[api-grpc-deep-dive]] |
+| BFF Pattern | Backend per frontend type | [[api-modern-patterns]] |
+| tRPC | End-to-end type safety без codegen | [[api-modern-patterns]] |
 | OAuth 2.0 | Стандарт авторизации API | [[api-design]] |
 | OpenAPI 3.2 | Стандарт документации | [[api-design]] |
 | Cache-Aside | Ручное управление кэшем | [[caching-strategies]] |
@@ -67,9 +77,9 @@ tags:
 
 | Метрика | Значение |
 |---------|----------|
-| Всего заметок | 6 |
-| Последнее обновление | 2025-11-24 |
+| Всего заметок | 10 |
+| Последнее обновление | 2026-02-10 |
 
 ---
 
-*Последнее обновление: 2025-11-24*
+*Последнее обновление: 2026-02-10*

@@ -294,6 +294,8 @@ SENIOR DEVELOPER
 → [[architecture-moc]] — Архитектурные паттерны
 → [[microservices-vs-monolith]] — Сеть критична для микросервисов
 → [[api-design]] — API поверх HTTP
+→ [[api-rest-deep-dive]] — REST constraints, Content Negotiation, ETags — всё поверх HTTP
+→ [[api-grpc-deep-dive]] — gRPC поверх HTTP/2: multiplexing, HPACK, фреймы
 → [[event-driven-architecture]] — Message brokers поверх TCP
 
 ### Cloud

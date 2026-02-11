@@ -23,6 +23,10 @@ prerequisites:
   - "[[network-realtime-protocols]]"
   - "[[caching-strategies]]"
   - "[[architecture-rate-limiting]]"
+  - "[[api-rest-deep-dive]]"
+  - "[[api-graphql-deep-dive]]"
+  - "[[api-grpc-deep-dive]]"
+  - "[[api-modern-patterns]]"
 ---
 
 # API Design: REST, GraphQL, gRPC
@@ -1169,6 +1173,19 @@ components:
               message: Too many requests
               retryAfter: 900
 ```
+
+---
+
+## Глубже по каждой технологии
+
+Этот материал — обзор и сравнение. Для глубокого погружения в каждую технологию:
+
+| Технология | Deep-dive материал | Ключевые темы |
+|------------|-------------------|---------------|
+| **REST** | [[api-rest-deep-dive]] | Fielding constraints, Richardson Maturity Model, HATEOAS, идемпотентность, ETags, Content Negotiation |
+| **GraphQL** | [[api-graphql-deep-dive]] | SDL, execution model, Apollo Federation, subscriptions, клиентское кэширование, persisted queries |
+| **gRPC** | [[api-grpc-deep-dive]] | Protocol Buffers encoding, 4 паттерна коммуникации, HTTP/2 mapping, deadline propagation, load balancing |
+| **Современные паттерны** | [[api-modern-patterns]] | tRPC, Webhooks, API Gateway, BFF, SOAP (исторический контекст), JSON:API |
 
 ---
 
