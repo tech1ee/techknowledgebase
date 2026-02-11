@@ -16,6 +16,7 @@ related:
   - "[[security-overview]]"
   - "[[authentication-authorization]]"
   - "[[api-design]]"
+  - "[[auth-api-service-patterns]]"
 prerequisites:
   - "[[authentication-authorization]]"
   - "[[security-fundamentals]]"

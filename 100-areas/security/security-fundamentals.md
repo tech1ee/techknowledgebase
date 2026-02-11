@@ -10,6 +10,7 @@ related:
   - "[[security-cryptography-fundamentals]]"
   - "[[threat-modeling]]"
   - "[[network-security-fundamentals]]"
+  - "[[auth-authorization-models]]"
 ---
 
 # Security Fundamentals: Основы информационной безопасности

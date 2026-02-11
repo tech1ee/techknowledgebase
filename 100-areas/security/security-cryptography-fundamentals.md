@@ -16,6 +16,8 @@ related:
   - "[[security-overview]]"
   - "[[security-https-tls]]"
   - "[[authentication-authorization]]"
+  - "[[auth-sessions-jwt-tokens]]"
+  - "[[auth-passwordless-mfa]]"
 ---
 
 # Cryptography Fundamentals: шифрование, хеширование, подписи

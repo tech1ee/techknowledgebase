@@ -18,6 +18,8 @@ related:
   - "[[microservices-vs-monolith]]"
   - "[[technical-debt]]"
   - "[[network-http-evolution]]"
+  - "[[auth-oauth2-oidc]]"
+  - "[[auth-api-service-patterns]]"
 prerequisites:
   - "[[microservices-vs-monolith]]"
   - "[[network-realtime-protocols]]"

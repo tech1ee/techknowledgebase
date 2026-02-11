@@ -66,7 +66,7 @@ related:
 
 | Вопрос | Куда идти |
 |--------|-----------|
-| Как реализовать login/auth? | [[authentication-authorization]] |
+| Как реализовать login/auth? | [[authentication-authorization]] (навигационный хаб, 7 файлов) |
 | Какие уязвимости самые опасные? | [[web-security-owasp]] |
 | Как работает шифрование? | [[security-cryptography-fundamentals]] |
 | Как настроить HTTPS? | [[security-https-tls]] |
@@ -120,7 +120,13 @@ related:
 
 | Статья | Описание | Связи |
 |--------|----------|-------|
-| [[authentication-authorization]] | AuthN vs AuthZ, JWT, OAuth 2.0, RBAC | → api |
+| [[authentication-authorization]] | Навигационный хаб: обзор, decision tree, сравнение подходов | → 6 deep-dives |
+| [[auth-sessions-jwt-tokens]] | Sessions, JWT, opaque tokens, refresh patterns, token storage | → crypto, tls |
+| [[auth-oauth2-oidc]] | OAuth 2.0/2.1, OIDC, PKCE, DPoP, GNAP, social login | → api, sso |
+| [[auth-authorization-models]] | RBAC, ABAC, ReBAC (Zanzibar), policy engines | → owasp |
+| [[auth-passwordless-mfa]] | Passkeys/WebAuthn, MFA, TOTP, Argon2, NIST 800-63-4 | → crypto |
+| [[auth-enterprise-sso]] | SAML, Kerberos, LDAP, federation, IdP comparison | → oauth |
+| [[auth-api-service-patterns]] | API keys, mTLS, HMAC, AWS Sig v4, Zero Trust | → tls, api |
 
 ### Веб-безопасность
 
@@ -265,9 +271,9 @@ related:
 
 | Метрика | Значение |
 |---------|----------|
-| Всего статей | 8 |
-| Категорий | 4 |
-| Последнее обновление | 2025-12-22 |
+| Всего статей | 14 |
+| Категорий | 5 |
+| Последнее обновление | 2026-02-11 |
 
 ---
 

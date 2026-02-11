@@ -20,7 +20,7 @@ tags:
 - **Новичок в безопасности?** → Раздел "С чего начать" ниже
 - **Ищешь OWASP Top 10?** → Раздел "OWASP Top 10:2025 — приоритеты"
 - **Внедряешь DevSecOps?** → Раздел "DevSecOps Roadmap"
-- **Настраиваешь авторизацию?** → [[authentication-authorization]]
+- **Настраиваешь авторизацию?** → [[authentication-authorization]] (навигационный хаб)
 
 ---
 
@@ -30,7 +30,13 @@ tags:
 - [[web-security-owasp]] — OWASP Top 10:2025, защита от инъекций, access control, supply chain
 
 ### Authentication & Authorization
-- [[authentication-authorization]] — JWT, OAuth 2.0, Sessions, RBAC/ABAC. Кто ты и что тебе можно
+- [[authentication-authorization]] — навигационный хаб: обзор и выбор подхода к аутентификации
+- [[auth-sessions-jwt-tokens]] — Sessions, JWT, opaque tokens: механизмы и безопасность токенов
+- [[auth-oauth2-oidc]] — OAuth 2.0/2.1, OpenID Connect, PKCE, социальный логин
+- [[auth-authorization-models]] — RBAC, ABAC, ReBAC: модели контроля доступа и policy engines
+- [[auth-passwordless-mfa]] — Passkeys/WebAuthn, MFA, пароли: современная аутентификация
+- [[auth-enterprise-sso]] — SAML, Kerberos, SSO: корпоративная аутентификация и федерация
+- [[auth-api-service-patterns]] — API keys, mTLS, Zero Trust: аутентификация сервисов и API
 
 ---
 
@@ -156,10 +162,13 @@ tags:
 | **Supply Chain Security** | 🆕 #3 — защита зависимостей | 🔴 Critical | [[web-security-owasp]] |
 | **Injection** | SQL, XSS, Command injection | 🟠 High | [[web-security-owasp]] |
 | **SAST/DAST** | Статический + динамический анализ | 🟠 High | [[web-security-owasp]] |
-| **JWT** | Stateless токены для API | 🟡 Medium | [[authentication-authorization]] |
-| **OAuth 2.0** | Делегирование доступа третьим сторонам | 🟡 Medium | [[authentication-authorization]] |
-| **RBAC/ABAC** | Role/Attribute based access control | 🟠 High | [[authentication-authorization]] |
-| **bcrypt/Argon2** | Безопасное хеширование паролей | 🔴 Critical | [[authentication-authorization]] |
+| **JWT** | Stateless токены для API | 🟡 Medium | [[auth-sessions-jwt-tokens]] |
+| **OAuth 2.0 / OIDC** | Делегирование доступа, identity layer | 🟡 Medium | [[auth-oauth2-oidc]] |
+| **RBAC/ABAC/ReBAC** | Role/Attribute/Relationship access control | 🟠 High | [[auth-authorization-models]] |
+| **Passkeys/WebAuthn** | Phishing-resistant passwordless auth | 🟠 High | [[auth-passwordless-mfa]] |
+| **Argon2id/bcrypt** | Безопасное хеширование паролей | 🔴 Critical | [[auth-passwordless-mfa]] |
+| **SAML/SSO** | Enterprise single sign-on | 🟡 Medium | [[auth-enterprise-sso]] |
+| **mTLS/Zero Trust** | Service-to-service, verify always | 🟠 High | [[auth-api-service-patterns]] |
 
 ---
 
@@ -170,14 +179,6 @@ tags:
 - [[cloud-platforms-essentials]] — IAM, security groups, encryption at rest
 - [[android-permissions-security]] — Мобильная безопасность (Android)
 - [[network-dns-tls]] — TLS, сертификаты, HTTPS
-
----
-
-## Планируется
-
-- Криптография для разработчиков — когда использовать какой алгоритм
-- Security в Kubernetes — RBAC, Network Policies, Pod Security
-- Secure Development Lifecycle (SDL) — процесс от Microsoft
 
 ---
 
@@ -195,8 +196,8 @@ tags:
 
 | Метрика | Значение |
 |---------|----------|
-| Всего заметок | 2 |
-| Последнее обновление | 2025-12-18 |
+| Всего заметок | 14 |
+| Последнее обновление | 2026-02-11 |
 
 ---
 

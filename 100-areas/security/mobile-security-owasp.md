@@ -10,6 +10,7 @@ related:
   - "[[mobile-security-masvs]]"
   - "[[mobile-app-protection]]"
   - "[[android-permissions-security]]"
+  - "[[auth-passwordless-mfa]]"
 prerequisites:
   - "[[security-fundamentals]]"
   - "[[web-security-owasp]]"
