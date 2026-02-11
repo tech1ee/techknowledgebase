@@ -18,6 +18,9 @@ related:
   - "[[communication-models]]"
   - "[[communication-barriers]]"
   - "[[stakeholder-negotiation]]"
+prerequisites:
+  - "[[communication-models]]"
+  - "[[communication-barriers]]"
 ---
 
 # Communication Styles: понимай других, адаптируй себя

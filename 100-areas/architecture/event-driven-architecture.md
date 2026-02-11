@@ -18,6 +18,9 @@ related:
   - "[[design-patterns]]"
   - "[[observability]]"
   - "[[architecture-resilience-patterns]]"
+prerequisites:
+  - "[[microservices-vs-monolith]]"
+  - "[[api-design]]"
 ---
 
 # Event-Driven Architecture: реактивные системы

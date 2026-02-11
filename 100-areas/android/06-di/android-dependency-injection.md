@@ -252,3 +252,15 @@ related:
 
 ### Другое
 - [[android-manual-di-alternatives]] — Manual DI, Anvil, Toothpick
+
+---
+
+## Связь с другими темами
+
+### [[dependency-injection-fundamentals]]
+
+Фундаментальные концепции DI (Dependency Inversion Principle, Inversion of Control, Service Locator vs DI Container) — теоретическая основа для всех фреймворков, описанных в этом обзоре. Без понимания DIP невозможно осознанно выбирать между compile-time и runtime DI, между Hilt и Koin. Знание типов injection (constructor, field, method) и их trade-offs объясняет, почему Hilt использует @Inject constructor, а Koin — DSL factory.
+
+### [[android-architecture-patterns]]
+
+DI — ключевой enabler для архитектурных паттернов в Android (MVVM, MVI, Clean Architecture). Без DI контейнера ViewModel'и получают жёсткие зависимости от Repository, Repository — от DataSource, и тестирование становится невозможным. Hilt интегрируется с Android Jetpack (ViewModel Injection, WorkManager), а архитектурные паттерны определяют структуру DI-графа: какие scope нужны, как разделить модули, где проводить границы между слоями.

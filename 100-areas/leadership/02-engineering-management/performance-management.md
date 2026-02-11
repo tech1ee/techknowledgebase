@@ -19,6 +19,9 @@ related:
   - "[[em-fundamentals]]"
   - "[[one-on-one-meetings]]"
   - "[[hiring-engineers]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
 ---
 
 # Performance Management: Оценка и развитие
@@ -724,6 +727,22 @@ AFTER REVIEW CHECKLIST:
 - "Thanks for the Feedback" by Stone & Heen — receiving feedback
 - "Crucial Conversations" — difficult performance talks
 - "Nine Lies About Work" by Buckingham — critique of ratings
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — Performance management — одна из ключевых обязанностей EM, описанных в em-fundamentals. Без понимания фундаментальных принципов servant leadership и multiplier effect менеджер рискует превратить performance management в бюрократический процесс вместо инструмента развития. Фундамент EM задаёт правильный mindset: цель — развить людей, а не просто оценить.
+
+**[[one-on-one-meetings]]** — 1-on-1 — это площадка, где performance management происходит на ежедневной основе. Continuous feedback, coaching conversations, career discussions — всё это части performance management, реализуемые через регулярные 1-on-1. Если менеджер проводит хорошие 1-on-1, формальный performance review становится лишь документированием уже обсуждённого.
+
+**[[hiring-engineers]]** — Performance management и hiring глубоко связаны: criteria, по которым оцениваются кандидаты, должны совпадать с criteria performance review. Кроме того, плохой hiring — частая причина performance issues, а understanding performance patterns помогает улучшить hiring process. Менеджер, который хорошо управляет performance, лучше понимает, кого нанимать.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Содержит детальные главы о performance conversations, включая как давать negative feedback, как проводить performance review и как управлять underperformance. Практические scripts и frameworks делают книгу незаменимой для менеджеров на любом уровне.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Показывает, что избегание accountability (четвёртая дисфункция) — одна из самых распространённых проблем в командах. Performance management без honest feedback невозможен, и модель Lencioni объясняет, почему менеджеры избегают difficult conversations и как это преодолеть.
+- **Peter Drucker, "The Effective Executive" (2006)** — Концепция Drucker о focus on strengths вместо fixation on weaknesses революционизирует подход к performance management. Его идея о том, что задача менеджера — сделать strengths productive, а не исправлять все weaknesses, помогает переосмыслить весь performance process.
 
 ---
 

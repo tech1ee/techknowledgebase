@@ -16,6 +16,8 @@ related:
   - "[[security-overview]]"
   - "[[security-cryptography-fundamentals]]"
   - "[[cloud-networking-security]]"
+prerequisites:
+  - "[[security-cryptography-fundamentals]]"
 ---
 
 # HTTPS & TLS: handshake, сертификаты, certificate pinning

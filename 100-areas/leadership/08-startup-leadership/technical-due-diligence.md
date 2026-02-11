@@ -19,6 +19,10 @@ related:
   - "[[engineering-practices]]"
   - "[[architecture-decisions]]"
   - "[[startup-cto]]"
+prerequisites:
+  - "[[engineering-practices]]"
+  - "[[architecture-decisions]]"
+  - "[[startup-cto]]"
 ---
 
 # Техническое Due Diligence
@@ -477,20 +481,21 @@ MODERATE (factor into valuation):
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[startup-cto]] — preparing for DD
-- [[engineering-practices]] — what good looks like
-- [[architecture-decisions]] — ADRs and documentation
-- [[engineering-metrics]] — what to measure
+**[[engineering-practices]]** — Техническое due diligence фактически оценивает качество инженерных практик компании: CI/CD, code review, testing, documentation, incident management. Компании с сильными инженерными практиками проходят DD значительно легче, поскольку их процессы прозрачны и измеримы. Инвестирование в инженерные практики задолго до DD — лучшая стратегия подготовки.
 
-## Источники
+**[[architecture-decisions]]** — Документированные Architecture Decision Records (ADR) являются одним из ключевых артефактов, которые assessors ищут при техническом DD. ADR показывают не только текущую архитектуру, но и контекст принятия решений, рассмотренные альтернативы и trade-offs. Отсутствие документации архитектурных решений — серьёзный red flag при due diligence, указывающий на хаотичное техническое управление.
+
+**[[startup-cto]]** — CTO стартапа несёт основную ответственность за подготовку к техническому DD и за прохождение самой процедуры. Инвесторы оценивают не только код и архитектуру, но и CTO как лидера: его способность честно оценить tech debt, сформулировать технический roadmap и ответить на глубокие технические вопросы. Подготовка к DD — это не одноразовое событие, а результат постоянной работы CTO над качеством инженерной организации.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [M&A Technical Due Diligence](https://www.amazon.com/Technical-Due-Diligence-Software-Companies/dp/1484262557) | Book |
-| [VC DD Guides](https://www.openvc.app/blog/technical-due-diligence) | Guide |
-| SOC 2 Compliance | Framework |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
 
 ---
 

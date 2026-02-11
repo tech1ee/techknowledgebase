@@ -18,6 +18,8 @@ related:
   - "[[microservices-vs-monolith]]"
   - "[[technical-debt]]"
   - "[[network-http-evolution]]"
+prerequisites:
+  - "[[microservices-vs-monolith]]"
   - "[[network-realtime-protocols]]"
   - "[[caching-strategies]]"
   - "[[architecture-rate-limiting]]"

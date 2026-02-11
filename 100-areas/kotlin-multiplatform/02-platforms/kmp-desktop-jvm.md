@@ -6,7 +6,7 @@ tags:
   - topic/jvm
   - topic/kmp
   - desktop
-  - compose
+  - topic/android
   - windows
   - macos
   - linux
@@ -17,6 +17,9 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-android-integration]]"
   - "[[compose-mp-desktop]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
 cs-foundations:
   - "[[bytecode-virtual-machines]]"
   - "[[compilation-pipeline]]"
@@ -1072,6 +1075,22 @@ Compose Desktop лучше для Android/Desktop, Electron — для Web/Deskt
 | Инструмент | Описание |
 |------------|----------|
 | [Conveyor](https://www.hydraulic.dev/) | Alternative packaging tool |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор Kotlin Multiplatform описывает место Desktop/JVM target в общей экосистеме KMP. Desktop является одной из наиболее зрелых платформ KMP благодаря прямому запуску на JVM. Понимание общей архитектуры KMP (expect/actual, source sets) необходимо для правильной организации desktop-специфичного кода в jvmMain source set.
+
+**[[kmp-android-integration]]** — Android и Desktop JVM разделяют значительную часть кодовой базы, так как обе платформы работают на JVM. Паттерны интеграции с Jetpack-библиотеками на Android часто имеют прямые аналоги в desktop-разработке. Опыт Android KMP-интеграции ускоряет освоение desktop target, особенно в области ViewModel, навигации и работы с данными.
+
+**[[compose-mp-desktop]]** — Compose Multiplatform для Desktop предоставляет декларативный UI-фреймворк поверх JVM target. Данный материал фокусируется на платформенной интеграции (JVM, jpackage, системные API), тогда как compose-mp-desktop описывает UI-слой: Window API, Swing interop, нативные меню и трей. Вместе они дают полную картину desktop-разработки на KMP.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундамент для понимания работы Kotlin на JVM, включая interop с Java, корутины и систему типов. Особенно полезны главы про JVM-специфичные особенности, которые напрямую применяются в desktop-разработке.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Лучшие практики написания Kotlin-кода, которые особенно актуальны для desktop-приложений: управление ресурсами, обработка ошибок и оптимизация производительности на JVM.
+3. **Skeen A. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое введение в Kotlin с акцентом на JVM-платформу. Помогает понять взаимодействие Kotlin с Java-экосистемой, что критически важно для desktop-разработки с использованием Swing interop и системных API.
 
 ---
 

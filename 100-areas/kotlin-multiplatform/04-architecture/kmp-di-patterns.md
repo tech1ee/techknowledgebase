@@ -16,6 +16,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kmp-project-structure]]"
+prerequisites:
+  - "[[kmp-project-structure]]"
+  - "[[kmp-expect-actual]]"
+  - "[[kmp-architecture-patterns]]"
 cs-foundations:
   - "[[inversion-of-control]]"
   - "[[dependency-inversion-principle]]"
@@ -1008,6 +1012,22 @@ Manual DI + interfaces + expect/actual — полноценное решение
 | Object Lifecycle | Scopes и memory management | [[object-lifecycle-management]] |
 | Service Locator Pattern | Koin под капотом | [[service-locator-vs-di]] |
 | Reflection vs Code Generation | Runtime vs compile-time | [[metaprogramming-basics]] |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор KMP описывает общую архитектуру проекта, в которой DI играет ключевую роль для связывания shared и платформенных модулей. Dependency Injection обеспечивает подстановку платформенных реализаций (expect/actual, интерфейсы) в shared бизнес-логику. Понимание структуры KMP проекта необходимо для правильной настройки DI-графа между source sets.
+
+**[[kmp-architecture-patterns]]** — Архитектурные паттерны (Clean Architecture, MVVM, MVI) определяют, какие зависимости необходимо инжектировать и как организовать слои приложения. DI реализует принцип Dependency Inversion из SOLID, позволяя domain-слою не зависеть от data-слоя. Выбор DI-фреймворка (Koin vs kotlin-inject) влияет на тестируемость и модульность архитектуры.
+
+**[[kmp-project-structure]]** — Структура проекта KMP определяет, где размещается DI-конфигурация: общие модули в commonMain, платформенные привязки в androidMain/iosMain. Правильная организация Gradle-модулей и source sets критически влияет на то, как DI-граф собирается для каждой платформы. Понимание project structure помогает избежать циклических зависимостей между модулями.
+
+## Источники и дальнейшее чтение
+
+1. **Martin R. (2017).** *Clean Architecture.* — Принцип Dependency Inversion (буква "D" в SOLID) является теоретической основой всех DI-паттернов. Книга объясняет, почему зависимости должны указывать в сторону абстракций и как это реализовать через инверсию контроля.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации зависимостей в Kotlin: использование интерфейсов для абстракций, companion object factories, и паттерны, дружественные к DI-фреймворкам в мультиплатформенном контексте.
+3. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Понимание Kotlin-механизмов (делегирование, reified generics, extension functions) необходимо для работы с DI-фреймворками: Koin использует DSL builders, kotlin-inject — KSP annotation processing, Manual DI — delegation и lazy initialization.
 
 ---
 

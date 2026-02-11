@@ -12,10 +12,14 @@ tags:
   - property-based-testing
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-coroutines]]"
 related:
-  - [kotlin-coroutines]]
+  - "[[kotlin-coroutines]]"
   - "[[kotlin-flow]]"
-  - "[[kotlin-best-practices]"
+  - "[[kotlin-best-practices]]"
+  - "[[kotlin-functional]]"
 status: published
 ---
 
@@ -127,103 +131,65 @@ class CalculatorTest {
 
 ### Lifecycle хуки
 
+JUnit 5 предлагает lifecycle-хуки: `@BeforeAll/@AfterAll` выполняются один раз для всего класса, `@BeforeEach/@AfterEach` -- перед каждым тестом. В Kotlin `@BeforeAll/@AfterAll` требуют `@JvmStatic` в companion object:
+
 ```kotlin
 class ServiceTest {
     companion object {
-        @JvmStatic
-        @BeforeAll
-        fun setupClass() {
-            // Выполняется один раз перед всеми тестами
-            println("Setting up test suite")
-        }
+        @JvmStatic @BeforeAll
+        fun setupClass() { println("Setting up test suite") }
 
-        @JvmStatic
-        @AfterAll
-        fun teardownClass() {
-            // Выполняется один раз после всех тестов
-            println("Tearing down test suite")
-        }
+        @JvmStatic @AfterAll
+        fun teardownClass() { println("Tearing down test suite") }
     }
 
     @BeforeEach
-    fun setup() {
-        // Выполняется перед каждым тестом
-        println("Setting up test")
-    }
+    fun setup() { println("Setting up test") }
 
     @AfterEach
-    fun teardown() {
-        // Выполняется после каждого теста
-        println("Tearing down test")
-    }
+    fun teardown() { println("Tearing down test") }
 
-    @Test
-    fun test1() {
-        println("Running test 1")
-    }
-
-    @Test
-    fun test2() {
-        println("Running test 2")
-    }
+    @Test fun test1() { println("Running test 1") }
+    @Test fun test2() { println("Running test 2") }
 }
-
-// Output:
-// Setting up test suite
-// Setting up test
-// Running test 1
-// Tearing down test
-// Setting up test
-// Running test 2
-// Tearing down test
-// Tearing down test suite
 ```
+
+Порядок выполнения: setupClass, setup, test1, teardown, setup, test2, teardown, teardownClass. Каждый тест получает чистое окружение благодаря `@BeforeEach`.
 
 ### Parametrized тесты
 
+Параметризованные тесты позволяют запустить один тест с разными наборами данных. `@ValueSource` для простых типов, `@CsvSource` для табличных данных:
+
 ```kotlin
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.*
+@ParameterizedTest
+@ValueSource(strings = ["", "  ", "\t", "\n"])
+fun `isBlank should return true for blank strings`(input: String) {
+    assertTrue(input.isBlank())
+}
 
-class StringUtilsTest {
+@ParameterizedTest
+@CsvSource("1, 1, 2", "2, 3, 5", "10, 20, 30")
+fun `addition should work`(a: Int, b: Int, expected: Int) {
+    assertEquals(expected, a + b)
+}
+```
 
-    @ParameterizedTest
-    @ValueSource(strings = ["", "  ", "\t", "\n"])
-    fun `isBlank should return true for blank strings`(input: String) {
-        assertTrue(input.isBlank())
-    }
+Для сложных объектов используйте `@MethodSource` с фабричным методом или `@EnumSource` для перебора всех значений enum:
 
-    @ParameterizedTest
-    @CsvSource(
-        "1, 1, 2",
-        "2, 3, 5",
-        "10, 20, 30"
-    )
-    fun `addition should work`(a: Int, b: Int, expected: Int) {
-        assertEquals(expected, a + b)
-    }
+```kotlin
+@ParameterizedTest
+@MethodSource("userProvider")
+fun `should validate user`(user: User) { assertTrue(user.isValid()) }
 
-    @ParameterizedTest
-    @MethodSource("userProvider")
-    fun `should validate user`(user: User) {
-        assertTrue(user.isValid())
-    }
+companion object {
+    @JvmStatic
+    fun userProvider() = listOf(User("Alice", 25), User("Bob", 30))
+}
 
-    companion object {
-        @JvmStatic
-        fun userProvider() = listOf(
-            User("Alice", 25),
-            User("Bob", 30),
-            User("Charlie", 35)
-        )
-    }
-
-    @ParameterizedTest
-    @EnumSource(Status::class)
-    fun `should process all statuses`(status: Status) {
-        val result = processStatus(status)
-        assertNotNull(result)
-    }
+@ParameterizedTest
+@EnumSource(Status::class)
+fun `should process all statuses`(status: Status) {
+    assertNotNull(processStatus(status))
 }
 ```
 
@@ -543,87 +509,46 @@ fun `should mock object extension`() {
 
 ### Spec стили
 
+Kotest предлагает несколько стилей спецификаций. `FunSpec` -- привычный JUnit-подобный стиль, `StringSpec` -- минималистичный:
+
 ```kotlin
-import io.kotest.core.spec.style.*
-import io.kotest.matchers.*
-import io.kotest.matchers.string.*
-
-// FunSpec - JUnit-like
 class CalculatorFunSpec : FunSpec({
-    test("addition should work") {
-        val result = 2 + 2
-        result shouldBe 4
-    }
-
+    test("addition should work") { (2 + 2) shouldBe 4 }
     test("division by zero should fail") {
-        shouldThrow<ArithmeticException> {
-            10 / 0
-        }
+        shouldThrow<ArithmeticException> { 10 / 0 }
     }
 })
 
-// StringSpec - минималистичный
 class CalculatorStringSpec : StringSpec({
-    "addition should work" {
-        2 + 2 shouldBe 4
-    }
-
-    "subtraction should work" {
-        5 - 3 shouldBe 2
-    }
+    "addition should work" { 2 + 2 shouldBe 4 }
+    "subtraction should work" { 5 - 3 shouldBe 2 }
 })
+```
 
-// BehaviorSpec - BDD стиль
+`BehaviorSpec` реализует BDD-стиль Given/When/Then, что делает тесты читаемыми как спецификация поведения:
+
+```kotlin
 class UserServiceBehaviorSpec : BehaviorSpec({
     Given("authenticated user") {
         val user = User("123", "Alice")
-
         When("fetching profile") {
             val profile = userService.getProfile(user)
-
             Then("should return user profile") {
                 profile.name shouldBe "Alice"
             }
         }
-
-        When("updating email") {
-            userService.updateEmail(user, "new@example.com")
-
-            Then("should update user email") {
-                user.email shouldBe "new@example.com"
-            }
-        }
-    }
-
-    Given("unauthenticated user") {
-        When("accessing protected resource") {
-            Then("should throw UnauthorizedException") {
-                shouldThrow<UnauthorizedException> {
-                    userService.getProtectedData()
-                }
-            }
-        }
     }
 })
+```
 
-// DescribeSpec - RSpec-like
+`DescribeSpec` -- RSpec-подобный стиль с `describe/context/it`, знакомый Ruby/JS-разработчикам:
+
+```kotlin
 class CalculatorDescribeSpec : DescribeSpec({
     describe("Calculator") {
         context("addition") {
             it("should add two numbers") {
                 Calculator().add(2, 3) shouldBe 5
-            }
-        }
-
-        context("division") {
-            it("should divide two numbers") {
-                Calculator().divide(10, 2) shouldBe 5
-            }
-
-            it("should throw on division by zero") {
-                shouldThrow<ArithmeticException> {
-                    Calculator().divide(10, 0)
-                }
             }
         }
     }
@@ -632,93 +557,40 @@ class CalculatorDescribeSpec : DescribeSpec({
 
 ### Kotest матчеры
 
+Kotest matchers используют infix-синтаксис `shouldBe`, который читается как английское предложение. Основные категории:
+
 ```kotlin
-import io.kotest.matchers.*
-import io.kotest.matchers.collections.*
-import io.kotest.matchers.string.*
-import io.kotest.matchers.types.*
+// Equality и числа
+42 shouldBe 42
+10 shouldBeGreaterThan 5
+3.14159 shouldBe (3.14 plusOrMinus 0.01)
+```
 
-class MatchersExamples : StringSpec({
-    "equality matchers" {
-        val value = 42
-        value shouldBe 42
-        value shouldNotBe 0
+Строковые и коллекционные матчеры покрывают типичные проверки без вспомогательных утилит:
 
-        val str = "hello"
-        str shouldBe "hello"
-        str shouldBeEqualTo "hello"
-    }
+```kotlin
+// Строки
+"Hello World" shouldStartWith "Hello"
+"Hello World" shouldContain "lo Wo"
+"Hello World" shouldHaveLength 11
 
-    "numeric matchers" {
-        val number = 10
-        number shouldBeGreaterThan 5
-        number shouldBeLessThan 20
-        number shouldBeInRange 5..15
+// Коллекции
+listOf(1, 2, 3) shouldContain 3
+listOf(1, 2, 3) shouldHaveSize 3
+listOf(1, 2, 3).shouldBeSorted()
+emptyList<Int>().shouldBeEmpty()
+```
 
-        val double = 3.14159
-        double.shouldBePositive()
-        double shouldBe (3.14 plusOrMinus 0.01)
-    }
+Для типов и исключений Kotest предлагает type-safe проверки с reified generics:
 
-    "string matchers" {
-        val str = "Hello World"
-        str shouldStartWith "Hello"
-        str shouldEndWith "World"
-        str shouldContain "lo Wo"
-        str shouldHaveLength 11
-        str shouldMatch "Hello.*"
+```kotlin
+val value: Any = "Hello"
+value.shouldBeInstanceOf<String>()
 
-        "".shouldBeEmpty()
-        "   ".shouldBeBlank()
-    }
-
-    "collection matchers" {
-        val list = listOf(1, 2, 3, 4, 5)
-
-        list shouldContain 3
-        list shouldContainAll listOf(1, 3, 5)
-        list shouldHaveSize 5
-        list.shouldBeUnique()
-        list.shouldBeSorted()
-
-        list shouldContainExactly listOf(1, 2, 3, 4, 5)
-        list shouldContainInOrder listOf(1, 3, 5)
-
-        emptyList<Int>().shouldBeEmpty()
-    }
-
-    "type matchers" {
-        val value: Any = "Hello"
-
-        value.shouldBeInstanceOf<String>()
-        value.shouldBeTypeOf<String>()
-
-        val nullable: String? = null
-        nullable.shouldBeNull()
-
-        val notNull: String? = "value"
-        notNull.shouldNotBeNull()
-    }
-
-    "exception matchers" {
-        shouldThrow<IllegalArgumentException> {
-            require(false) { "Error" }
-        }
-
-        val exception = shouldThrow<IllegalStateException> {
-            throw IllegalStateException("Test error")
-        }
-        exception.message shouldBe "Test error"
-
-        shouldThrowAny {
-            throw RuntimeException()
-        }
-
-        shouldNotThrowAny {
-            // Code that shouldn't throw
-        }
-    }
-})
+val exception = shouldThrow<IllegalStateException> {
+    throw IllegalStateException("Test error")
+}
+exception.message shouldBe "Test error"
 ```
 
 ### Data-driven testing
@@ -1342,11 +1214,21 @@ fun test() = runTest {
 - [ ] Применяете property-based testing для алгоритмов
 - [ ] Разделяете unit и integration тесты через tags
 
-## Связанные темы
-- [[kotlin-coroutines]] — Тестирование асинхронного кода
-- [[kotlin-flow]] — Тестирование Flow
-- [[kotlin-best-practices]] — Best practices для тестов
-- [[kotlin-functional]] — Тестирование функционального кода
+## Связь с другими темами
+
+[[kotlin-coroutines]] — Корутины являются основным механизмом асинхронности в Kotlin, и их тестирование требует специальных инструментов: runTest, virtual time, TestDispatchers. Без понимания structured concurrency и dispatcher-модели невозможно корректно тестировать suspend-функции и избежать flaky-тестов. Рекомендуется изучить корутины до раздела о тестировании async-кода.
+
+[[kotlin-flow]] — Flow представляет собой реактивные потоки данных, тестирование которых требует библиотеки Turbine и понимания hot/cold потоков. Знание разницы между StateFlow и SharedFlow влияет на выбор стратегии тестирования (awaitItem vs value). Этот материал необходим для полного понимания тестирования реактивного кода в Android-приложениях.
+
+[[kotlin-best-practices]] — Best practices Kotlin напрямую влияют на тестируемость кода: dependency injection через constructor, использование интерфейсов вместо конкретных классов, чистые функции. Понимание этих практик помогает писать код, который легко покрывается тестами без сложных моков. Рекомендуется изучать параллельно с тестированием.
+
+[[kotlin-functional]] — Функциональный стиль Kotlin (чистые функции, immutable data, higher-order functions) упрощает тестирование: чистые функции не требуют моков, а higher-order functions позволяют подставлять тестовые реализации. Property-based testing из Kotest особенно эффективен для тестирования функциональных трансформаций данных.
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2021). *Effective Kotlin*. — Раздел о тестировании best practices, включая рекомендации по выбору test doubles (fakes vs mocks), структуре тестов и property-based testing.
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. — Глава о тестировании корутин с runTest, virtual time, TestDispatchers. Единственная книга с глубоким разбором тестирования suspend-функций и Flow.
+- Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Базовые паттерны тестирования Kotlin-кода с JUnit, включая использование backtick-имён тестов и Kotlin-специфичных assertion-функций.
 
 ---
 

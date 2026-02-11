@@ -18,6 +18,8 @@ tags:
 related:
   - "[[engineering-practices]]"
   - "[[agile-practices]]"
+prerequisites:
+  - "[[engineering-practices]]"
 ---
 
 # Процессы разработки
@@ -177,6 +179,20 @@ RELEASE DONE WHEN:
 | [Trunk Based Development](https://trunkbaseddevelopment.com/) | Guide |
 | [Continuous Delivery](https://continuousdelivery.com/) | Book/Site |
 | [Feature Flags](https://martinfowler.com/articles/feature-toggles.html) | Article |
+
+---
+
+## Связь с другими темами
+
+**[[engineering-practices]]** — Development process и engineering practices — два взаимодополняющих аспекта delivery. Process определяет workflow (git workflows, sprint cadence, release management), а practices определяют quality standards (code review, testing strategy, CI/CD). Без хороших practices процесс превращается в ceremony без substance, а без process practices не масштабируются.
+
+**[[agile-practices]]** — Agile — это philosophy, а development process — конкретная реализация. Trunk-based development, sprint planning, retrospectives — все это implementations agile принципов. Важно помнить, что process должен serve team, а не наоборот: если процесс замедляет вместо ускорения, его нужно адаптировать, что является core agile principle.
+
+## Источники и дальнейшее чтение
+
+- **Kim et al., "The Phoenix Project" (2016)** — Через narrative form показывает, как broken development process (long release cycles, no CI/CD, manual deployments) приводит к organizational crisis. Three Ways (flow, feedback, continuous learning) — fundamental principles для дизайна development process.
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает, как менеджер на каждом уровне участвует в определении и улучшении development process: от EM, facilitating retrospectives, до VP Engineering, устанавливающего org-wide standards.
+- **Will Larson, "An Elegant Puzzle" (2019)** — Содержит practical frameworks для оптимизации development process, включая sizing sprints, managing technical debt и balancing feature work с infrastructure improvements. Системный подход к process design.
 
 ---
 

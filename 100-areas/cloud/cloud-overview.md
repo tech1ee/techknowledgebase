@@ -8,9 +8,9 @@ area: cloud
 confidence: high
 tags:
   - topic/cloud
-  - aws
-  - gcp
-  - azure
+  - topic/aws
+  - topic/gcp
+  - topic/azure
   - type/moc
   - level/beginner
 related:

@@ -14,6 +14,9 @@ related:
   - "[[ai-era-job-search]]"
   - "[[interview-process]]"
   - "[[se-interview-foundation]]"
+prerequisites:
+  - "[[interview-process]]"
+  - "[[se-interview-foundation]]"
 ---
 
 # AI-Powered Interview Preparation 2026
@@ -713,6 +716,22 @@ I have an Amazon [L5] interview. Create prep plan for:
 → [[interview-tracking-system]] — Progress tracking
 
 ---
+
+## Связь с другими темами
+
+- [[ai-era-job-search]] — Обзор AI-инструментов для всего процесса поиска работы, от резюме до трекинга заявок. Данный материал углубляется именно в подготовку к интервью с помощью AI, предоставляя 50+ готовых промптов и стратегии для каждого этапа. Вместе они формируют полную AI-стратегию: от первого отклика до получения оффера.
+
+- [[interview-process]] — Описание структуры и этапов интервью в FAANG-компаниях. AI-подготовка из текущего материала накладывается на каждый этап процесса: промпты для recruiter screen, coding, system design и behavioral раундов. Знание процесса позволяет выбрать правильные AI-инструменты для каждой фазы.
+
+- [[se-interview-foundation]] — Универсальный фундамент знаний для интервью: DSA, System Design, Behavioral, AI-enabled формат. Текущий материал дополняет его конкретными промптами и тактиками использования AI на каждом этапе подготовки. Foundation даёт ЧТО учить, а AI Preparation — КАК учить эффективнее.
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Фундаментальное руководство по DSA-подготовке к интервью. AI-промпты из текущего материала помогают глубже разобрать паттерны и решения из этой книги, но саму базу нужно изучать здесь.
+
+- Xu A. (2020). *System Design Interview*. — Основа для подготовки к system design раундам. AI-ассистенты помогают практиковать и получать обратную связь, но структурное понимание компонентов, trade-offs и framework даёт именно эта книга.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для тех, кто готовится к Staff+ интервью. AI-промпты для behavioral и leadership вопросов работают лучше, когда есть глубокое понимание того, что компании ищут на Staff уровне.
 
 ## Источники
 

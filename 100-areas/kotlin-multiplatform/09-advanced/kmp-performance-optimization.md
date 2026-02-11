@@ -6,7 +6,6 @@ tags:
   - topic/jvm
   - topic/kmp
   - performance
-  - optimization
   - k2
   - native
   - build-time
@@ -16,6 +15,10 @@ related:
   - "[[kmp-gradle-deep-dive]]"
   - "[[kmp-memory-management]]"
   - "[[kmp-debugging]]"
+prerequisites:
+  - "[[kmp-gradle-deep-dive]]"
+  - "[[kmp-memory-management]]"
+  - "[[kmp-ios-deep-dive]]"
 cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[native-compilation-llvm]]"
@@ -837,6 +840,24 @@ embedBitcode = BitcodeEmbeddingMode.DISABLE
 | [[compilation-pipeline]] | Понять что оптимизируем |
 | [[native-compilation-llvm]] | Почему LLVM медленный |
 | [[cpu-architecture-basics]] | Понять cache и inline
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-gradle-deep-dive]]** — Оптимизация build time начинается с глубокого понимания Gradle: DAG задач, кэширование, configuration cache и параллельное выполнение. Без правильной Gradle-конфигурации никакие другие оптимизации не помогут — большая часть «медленных» KMP-сборок связана именно с неоптимальными настройками Gradle, а не с Kotlin/Native. Этот материал объясняет, как устроена сборка изнутри и какие tasks можно безопасно пропускать.
+
+- **[[kmp-memory-management]]** — Runtime-производительность напрямую зависит от управления памятью: GC-паузы вызывают UI-фризы, чрезмерные аллокации увеличивают давление на GC, а memory spikes при interop-вызовах деградируют user experience. Value classes, sequences и object reuse — это техники, которые одновременно решают и memory, и performance проблемы. Профилирование через Instruments показывает оба аспекта.
+
+- **[[kmp-debugging]]** — Профилирование перед оптимизацией — золотое правило, и инструменты отладки (Android Studio Profiler, Xcode Instruments, Gradle Build Scans) являются основным средством поиска bottlenecks. Без измерений оптимизация превращается в угадывание. Материал по debugging объясняет, как настроить GC-логирование, signposts для Instruments и build scans для Gradle — всё то, что необходимо для data-driven оптимизации.
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2021). *Effective Kotlin.* — Книга содержит детальный разбор производительности Kotlin-конструкций: когда sequences выгоднее list, как inline влияет на code size, когда value classes дают реальный выигрыш, а когда приводят к boxing. Прямые практические рекомендации, применимые к оптимизации KMP-кода.
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Асинхронный код — частый источник performance-проблем: неправильный выбор Dispatcher, blocking calls на main thread, утечки корутинных scope. Книга объясняет, как structured concurrency помогает контролировать ресурсы и избегать типичных ошибок.
+
+- Martin R. (2017). *Clean Architecture.* — Архитектурные решения (разделение на слои, dependency rule) определяют, какой код оказывается на hot path и как легко его оптимизировать. Правильная архитектура позволяет изолировать performance-critical участки и применять platform-specific оптимизации через expect/actual без рефакторинга всего проекта.
 
 ---
 

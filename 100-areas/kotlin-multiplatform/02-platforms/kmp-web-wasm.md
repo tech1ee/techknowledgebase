@@ -8,7 +8,7 @@ tags:
   - wasm
   - webassembly
   - web
-  - compose
+  - topic/android
   - browser
   - javascript
   - type/concept
@@ -17,6 +17,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-android-integration]]"
   - "[[compose-mp-web]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
+  - "[[kmp-source-sets]]"
 cs-foundations:
   - "[[compilation-pipeline]]"
   - "[[native-compilation-llvm]]"
@@ -889,6 +893,21 @@ Kotlin/JS остаётся stable и лучше для sharing business logic wi
 |--------|----------|
 | [kotlin-wasm-compose-template](https://github.com/Kotlin/kotlin-wasm-compose-template) | Официальный шаблон |
 | [KMP Web Wizard](https://kmp.jetbrains.com/?web=true&webui=compose) | Генератор проектов |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор KMP описывает место Web/Wasm target в общей мультиплатформенной стратегии. Web является новейшей платформой KMP (Beta с Compose 1.9.0) и использует WasmGC для компиляции Kotlin в WebAssembly. Понимание общей архитектуры KMP помогает оценить зрелость web target и спланировать его внедрение в существующий мультиплатформенный проект.
+
+**[[kmp-android-integration]]** — Сравнение Web и Android интеграции показывает различия в подходах: Android напрямую использует JVM и Jetpack, тогда как Web требует компиляции через Kotlin/Wasm и работает в sandbox браузера. Опыт Android KMP помогает понять, какой shared-код переносим на Web без изменений, а какой требует web-специфичных expect/actual реализаций.
+
+**[[compose-mp-web]]** — Compose Multiplatform для Web использует Canvas API для рендеринга UI через Skia. Данный материал фокусируется на платформенном уровне (Kotlin/Wasm, WasmGC, JS interop), тогда как compose-mp-web описывает UI-слой и его ограничения (SEO, accessibility, bundle size). Вместе они формируют полное понимание web-разработки на KMP.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Базовое понимание системы типов Kotlin и корутин необходимо для работы с Kotlin/Wasm. Особенно полезны главы про компиляцию и multiplatform-модули, которые помогают понять, как Kotlin транслируется в различные targets, включая WebAssembly.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Лучшие практики Kotlin-кода помогают писать shared-модули, совместимые с Web target. Советы по управлению памятью и оптимизации особенно актуальны из-за ограничений WasmGC и размера бандла.
 
 ---
 

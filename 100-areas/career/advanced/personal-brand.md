@@ -13,6 +13,10 @@ related:
   - "[[standing-out]]"
   - "[[portfolio-strategy]]"
   - "[[linkedin-optimization]]"
+prerequisites:
+  - "[[linkedin-optimization]]"
+  - "[[portfolio-strategy]]"
+  - "[[standing-out]]"
 ---
 
 # Personal Brand: как стать узнаваемым в своей нише
@@ -368,6 +372,22 @@ Patience is the key differentiator.
 → [[ai-era-job-search]] — новые инструменты
 
 ---
+
+## Связь с другими темами
+
+- [[standing-out]] — Личный бренд — это долгосрочная инвестиция, а standing out — тактическое применение бренда в конкретном поиске работы. Когда hiring manager гуглит твоё имя и находит блог-посты, GitHub-проекты и конференционные доклады, ты автоматически выделяешься среди 250+ кандидатов. Brand строится месяцами, но окупается при каждом поиске работы.
+
+- [[portfolio-strategy]] — Portfolio — это конкретное воплощение личного бренда в коде. GitHub-профиль, pinned repos и документация — это proof of work, который подкрепляет твою LinkedIn-видимость реальными артефактами. Без portfolio бренд остаётся словами; без бренда portfolio никто не увидит.
+
+- [[linkedin-optimization]] — LinkedIn — основная платформа visibility для разработчиков. Оптимизация профиля, контент-стратегия 70/20/10 и регулярные комментарии из текущего материала реализуются на LinkedIn. Это самый быстрый канал для построения personal brand с минимальными вложениями: 15 минут в день достаточно.
+
+## Источники и дальнейшее чтение
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking помогает определить свою нишу для personal brand: не пытаться быть "Android Developer", а найти специфический угол — "Compose migration expert" или "KMP architecture specialist".
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff+ уровне personal brand становится частью работы: RFCs, tech talks, open source. Книга описывает, как visibility и influence работают в контексте карьерного роста выше Senior.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание того, как компании оценивают инженеров на разных уровнях, помогает позиционировать свой бренд правильно: какие сигналы посылать hiring managers и как демонстрировать leadership через контент.
 
 ## Источники
 

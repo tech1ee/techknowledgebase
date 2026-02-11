@@ -9,8 +9,8 @@ tags:
   - permissions
   - sandbox
   - deprecated
-  - docker
-  - kubernetes
+  - topic/docker
+  - topic/kubernetes
   - type/concept
   - level/advanced
 type: concept
@@ -22,6 +22,10 @@ sources:
   - "https://openjdk.org/jeps/486"
   - "https://snyk.io/blog/securitymanager-removed-java/"
   - "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SecurityManager.html"
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-module-system]]"
 related:
   - "[[jvm-class-loader-deep-dive]]"
   - "[[docker-for-developers]]"
@@ -224,6 +228,8 @@ public class MaliciousApplet {
    - Domain имеет набор permissions
 
 ### Stack Inspection — проверка всего стека вызовов
+
+> **Аналогия из жизни: цепочка поручительств в банке.** Представьте, что вы хотите получить доступ к банковской ячейке. Банк проверяет не только ваш паспорт, но и всю цепочку людей, которые привели вас сюда: кто вас рекомендовал, кто рекомендовал рекомендателя и так далее. Если хоть один человек в цепочке не имеет нужного уровня доверия — доступ запрещён. Именно так работал Stack Inspection: SecurityManager проверял каждый вызывающий метод в стеке, и если хоть один caller не имел нужного permission — вся операция блокировалась. А `doPrivileged()` — это как если бы доверенный сотрудник банка сказал: «Дальше проверять не нужно, я беру ответственность на себя».
 
 SecurityManager проверял **весь стек вызовов**, не только непосредственного caller:
 
@@ -666,12 +672,23 @@ spec:
 
 ---
 
-## Источники
+## Связь с другими темами
 
-1. [JEP 411: Deprecate the Security Manager for Removal](https://openjdk.org/jeps/411) — Официальное обоснование deprecation
-2. [JEP 486: Permanently Disable the Security Manager](https://openjdk.org/jeps/486) — Окончательное отключение в Java 24
-3. [Snyk: SecurityManager Removed from Java](https://snyk.io/blog/securitymanager-removed-java/) — Практическое руководство по миграции
-4. [Oracle: SecurityManager Javadoc (Java 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SecurityManager.html) — Официальная документация
+**[[jvm-class-loader-deep-dive]]** — ClassLoader и SecurityManager исторически были тесно связаны: каждый класс принадлежал Protection Domain, определяемому его ClassLoader'ом и code source. ClassLoader определял «откуда загружен код» (local disk, network, JAR), а SecurityManager на основе этого назначал permissions. Хотя SecurityManager deprecated, понимание этой связи важно для legacy-кода и для осознания того, почему ClassLoader в Java — это не просто механизм загрузки классов, а элемент security-архитектуры.
+
+**[[docker-for-developers]]** — Docker-контейнеры стали основной заменой SecurityManager для изоляции Java-приложений. Контейнеры обеспечивают изоляцию на уровне OS (Linux namespaces, cgroups, seccomp), что надёжнее in-process песочницы SecurityManager. При миграции от SecurityManager к контейнерам файловые permissions заменяются на read-only filesystem, сетевые permissions — на network policies, а ограничения ресурсов — на cgroups лимиты. Рекомендуется изучить Docker security features (USER, --read-only, --cap-drop) как прямую замену policy файлов.
+
+**[[kubernetes-basics]]** — Kubernetes Pod Security Standards и Network Policies обеспечивают security на уровне оркестрации, заменяя централизованные policy-файлы SecurityManager. Pod Security admission controller контролирует, какие capabilities доступны контейнеру (аналог RuntimePermission), Network Policies ограничивают сетевой доступ (аналог SocketPermission), а RBAC управляет доступом к API ресурсам. Для production Java-приложений комбинация Kubernetes security + container hardening обеспечивает более надёжную защиту, чем SecurityManager когда-либо предоставлял.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Oaks S. (2001). *Java Security*, 2nd Edition. — Историческое руководство по Java Security Model: SecurityManager, AccessController, policy files. Ценно для понимания legacy-систем и контекста, в котором создавалась модель безопасности Java.
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 85 «Prefer alternatives to Java serialization» и другие items по безопасности показывают современный подход к security в Java без SecurityManager.
+- McLaughlin D. (2018). *Java Security: Writing and Deploying Secure Applications*. — Обзор эволюции Java security от applets до контейнеров, включая практические рекомендации по миграции от SecurityManager к современным альтернативам.
+- OpenJDK (2021). *JEP 411: Deprecate the Security Manager for Removal*. — Официальное обоснование deprecation с анализом причин (низкое использование, overhead, сложность) и рекомендациями по альтернативам.
+- OpenJDK (2024). *JEP 486: Permanently Disable the Security Manager*. — Финальное решение об отключении SecurityManager в Java 24, описание migration path и влияния на существующий код.
 
 ---
 

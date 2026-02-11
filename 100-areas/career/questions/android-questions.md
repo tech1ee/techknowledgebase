@@ -14,6 +14,8 @@ related:
   - "[[technical-interview]]"
   - "[[kotlin-questions]]"
   - "[[architecture-questions]]"
+prerequisites:
+  - "[[interview-process]]"
 ---
 
 # Android Interview Questions: что спрашивают в 2025
@@ -602,6 +604,24 @@ fun getData(): Flow<Resource<Data>> = flow {
 ❌ "Не знаю разницу между launch и async"
    → Базовые Coroutines обязательны
 ```
+
+---
+
+## Связь с другими темами
+
+- **[[technical-interview]]** — Android-вопросы — это часть более широкого технического интервью, которое также включает алгоритмы и System Design. Понимание формата и ожиданий технического раунда помогает правильно дозировать глубину ответов. На Senior-уровне важно не просто знать ответ, а объяснить trade-offs и практический опыт.
+
+- **[[kotlin-questions]]** — Kotlin и Android неразделимы: coroutines, Flow, sealed classes используются в каждом Android-проекте. Kotlin-вопросы дополняют Android-вопросы, и на интервью их часто смешивают в одном раунде. Глубокое знание Kotlin internals (inline, reified, delegation) отличает Senior от Mid.
+
+- **[[architecture-questions]]** — Архитектурные вопросы (MVVM vs MVI, Clean Architecture, модуляризация) — следующий уровень после базовых Android-вопросов. На Senior-интервью архитектура занимает до 30% технического раунда. Понимание архитектурных паттернов показывает способность проектировать системы, а не просто писать код.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Фундаментальный справочник по подготовке к техническим интервью. Хотя фокус на алгоритмах, методология подготовки и формат ответов применимы к Android-вопросам. Незаменима для понимания, как думает интервьюер.
+
+- **Xu A. (2020). System Design Interview.** — System Design вопросы всё чаще появляются на Android-интервью: «Design offline-first app», «Design image loading library». Эта книга даёт структурированный подход к таким задачам, адаптируемый под mobile-специфику.
 
 ---
 

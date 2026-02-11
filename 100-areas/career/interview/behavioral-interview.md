@@ -14,6 +14,8 @@ related:
   - "[[interview-process]]"
   - "[[behavioral-questions]]"
   - "[[negotiation]]"
+prerequisites:
+  - "[[interview-process]]"
 ---
 
 # Behavioral Interview: 50% интервью, 100% влияния на решение
@@ -543,6 +545,22 @@ TECHNICAL SETUP (remote):
 → [[negotiation]] — что делать после behavioral
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Behavioral — один из 4-6 раундов в полном interview loop. Этот материал описывает behavioral в контексте общего процесса, показывая, на каком этапе он проходит (обычно Round 4 в onsite) и какой вес имеет в финальном решении. Behavioral может компенсировать средний technical performance или убить шансы при отличном coding.
+
+- [[behavioral-questions]] — Содержит 50+ конкретных вопросов с примерами ответов, организованных по dimensions (Leadership, Conflict, Failure и др.). Текущий материал объясняет framework и стратегию, а behavioral-questions — это практический reference для отработки каждого типа вопросов.
+
+- [[negotiation]] — Negotiation начинается сразу после успешного behavioral раунда. Soft skills, продемонстрированные на behavioral (communication, confidence, self-awareness), напрямую влияют на силу позиции в переговорах. Компания, впечатлённая behavioral, более гибка в negotiation.
+
+## Источники и дальнейшее чтение
+
+- Fournier C. (2017). *The Manager's Path*. — Объясняет ожидания на каждом уровне карьеры, что помогает калибровать scope STAR-историй. Junior показывает impact на задачу, Senior — на команду, Staff — на организацию. Книга даёт context для правильного позиционирования.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ behavioral вопросов: influence without authority, cross-team initiatives, finding problems vs solving assigned tasks. Книга помогает сформулировать истории, демонстрирующие Staff-level scope.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Глава о behavioral интервью содержит framework для подготовки историй и типичные ошибки. Хотя основной фокус книги — coding, behavioral секция даёт практичный подход к структурированию STAR-ответов.
 
 ## Источники
 

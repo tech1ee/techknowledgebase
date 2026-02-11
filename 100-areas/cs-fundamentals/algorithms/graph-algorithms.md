@@ -15,6 +15,10 @@ related:
   - "[[graphs]]"
   - "[[dfs-bfs-patterns]]"
   - "[[topological-sort-pattern]]"
+prerequisites:
+  - "[[graphs]]"
+  - "[[stacks-queues]]"
+  - "[[recursion-fundamentals]]"
 ---
 
 # Graph Algorithms: BFS, DFS, Dijkstra и beyond
@@ -1469,8 +1473,26 @@ fun isBipartite(graph: Map<Int, List<Int>>, n: Int): Boolean {
 
 ---
 
+## Связь с другими темами
+
+**[[big-o-complexity]]** — анализ сложности графовых алгоритмов отличается от массивовых: здесь фигурируют два параметра V (вершины) и E (рёбра). BFS и DFS имеют сложность O(V + E), Dijkstra с binary heap -- O((V + E) log V), а Floyd-Warshall -- O(V^3). Понимание Big O необходимо для выбора между алгоритмами и представлениями графа (матрица смежности O(V^2) по памяти vs список смежности O(V + E)). Рекомендуется изучить Big O до графовых алгоритмов.
+
+**[[graphs]]** — структура данных "граф" является фундаментом для всех графовых алгоритмов. Знание представлений графа (adjacency list, adjacency matrix, edge list), типов графов (directed, undirected, weighted, DAG) и терминологии (degree, path, cycle, connected component) необходимо для корректного применения алгоритмов. Без понимания структуры графа невозможно правильно построить входные данные для BFS, DFS или Dijkstra. Изучить graphs нужно строго ДО алгоритмов.
+
+**[[dfs-bfs-patterns]]** — паттерны применения DFS и BFS к конкретным типам задач: multi-source BFS (Rotting Oranges), BFS по уровням (Binary Tree Level Order), DFS с состояниями (cycle detection), DFS для компонент связности (Number of Islands). Знание паттернов позволяет быстро распознавать тип задачи на интервью и применять нужную модификацию обхода. Паттерны стоит изучать после освоения базовых BFS/DFS.
+
+**[[topological-sort-pattern]]** — топологическая сортировка применима только к DAG (directed acyclic graph) и решает задачи упорядочивания зависимостей: порядок сборки проектов, расписание курсов (Course Schedule), порядок компиляции. Два подхода (Kahn's BFS с indegree и DFS с post-order) оба основаны на базовых обходах графа. Понимание BFS и DFS -- обязательный prerequisite для топологической сортировки.
+
+---
+
 ## Источники
 
+### Книги
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms (CLRS)."** — каноническое изложение BFS, DFS, топологической сортировки, Dijkstra, Bellman-Ford и Floyd-Warshall с формальными доказательствами корректности и анализом сложности
+- **Sedgewick & Wayne (2011). "Algorithms, 4th Edition."** — графовые алгоритмы с отличными визуализациями; сопровождающий сайт algs4.cs.princeton.edu содержит интерактивные демонстрации BFS, DFS, Dijkstra и MST алгоритмов
+- **Even (2011). "Graph Algorithms, 2nd Edition."** — специализированная книга, целиком посвящённая алгоритмам на графах; покрывает планарность, потоки в сетях, matchings и NP-полные задачи на графах
+
+### Онлайн-ресурсы
 - [Tech Interview Handbook - Graph](https://www.techinterviewhandbook.org/algorithms/graph/) — cheatsheet
 - [GeeksforGeeks - BFS](https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/) — tutorial
 - [Wikipedia - Dijkstra](https://en.wikipedia.org/wiki/Dijkstra's_algorithm) — proof

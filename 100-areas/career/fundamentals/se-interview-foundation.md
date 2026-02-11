@@ -15,6 +15,8 @@ related:
   - "[[coding-challenges]]"
   - "[[system-design-android]]"
   - "[[behavioral-interview]]"
+prerequisites:
+  - "[[interview-process]]"
 ---
 
 # Software Engineer Interview Foundation 2026
@@ -644,6 +646,24 @@ AI-ENABLED MISTAKES:
 → [[ai-era-job-search]] — AI tools overview
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Описывает конкретный процесс прохождения интервью: от recruiter screen до оффера, с timeline и тактиками для каждого этапа. Текущий материал даёт фундамент знаний (DSA, System Design, Behavioral), а interview-process объясняет, как и когда эти знания применяются в реальном процессе. Вместе они формируют полную картину: что учить и как это показать.
+
+- [[coding-challenges]] — Глубокое погружение в 12 паттернов, которые покрывают 87% DSA-задач на интервью. Текущий материал описывает паттерны обзорно в рамках Pillar 1, а coding-challenges разбирает каждый с примерами кода на Kotlin, типичными задачами и планом подготовки на 3 месяца.
+
+- [[system-design-android]] — Детальный гайд по Mobile System Design с framework RESHADED, примерами проектирования (Instagram Feed, Chat App) и mobile-specific considerations (offline, battery, sync). Текущий материал покрывает System Design обзорно, а этот — даёт глубину для Senior/Staff раундов.
+
+- [[behavioral-interview]] — Полное руководство по STAR method, Amazon Leadership Principles, Google Googleyness и Meta Core Values. Текущий материал описывает behavioral как один из четырёх pillars, а этот — даёт 8 dimensions оценки, company-specific подготовку и 6-8 готовых историй.
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Фундаментальная книга для DSA-подготовки: 189 задач с разбором, паттерны решения, tips для каждого типа интервью. Покрывает Pillar 1 текущего материала с практическими примерами и подробными объяснениями.
+
+- Xu A. (2020). *System Design Interview*. — Структурированный подход к system design с 13 реальными задачами. Хотя книга фокусируется на backend, framework и подход к clarification, estimations и trade-offs применимы к mobile system design из Pillar 2.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ уровня, где System Design и Behavioral важнее DSA. Книга объясняет, что компании ищут на L6+ и как демонстрировать leadership, cross-team impact и architectural thinking на интервью.
 
 ## Источники
 

@@ -17,11 +17,26 @@ related:
   - "[[programming-overview]]"
   - "[[clean-code-solid]]"
   - "[[design-patterns]]"
+prerequisites:
+  - "[[clean-code-solid]]"
+  - "[[type-systems-theory]]"
 ---
 
 # Functional Programming: Pure Functions, Immutability, Composition
 
 > FP — это не "только функции". Это способ думать о программах как о композиции трансформаций данных.
+
+---
+
+## Исторический контекст
+
+Функциональное программирование уходит корнями в лямбда-исчисление Алонзо Чёрча (1936) — формальную систему для описания вычислений через функции. Первым практическим языком стал **Lisp** (John McCarthy, 1958), созданный для задач искусственного интеллекта в MIT. Lisp ввёл концепции first-class functions, рекурсии как основного механизма управления, и garbage collection.
+
+В 1973 году Robin Milner создал язык **ML** (Meta Language) в Эдинбургском университете, который привнёс статическую типизацию с type inference — компилятор сам выводит типы без явных аннотаций. ML породил целое семейство языков: Standard ML, OCaml, F#.
+
+В 1990 году комитет исследователей опубликовал спецификацию **Haskell** — чисто функционального языка с ленивыми вычислениями (lazy evaluation). Haskell стал "лабораторией" для исследования монад, type classes и других абстракций, которые позже проникли в mainstream-языки.
+
+Влияние FP на современные языки огромно: лямбда-выражения появились в Java 8 (2014), C++ 11 (2011), Python (с рождения, но PEP усилили), Kotlin (2016). Концепции map/filter/reduce, pattern matching, immutable data classes стали стандартными инструментами даже в объектно-ориентированных языках. Rust (2015) построил всю систему ownership на идеях из ML и Haskell.
 
 ---
 
@@ -629,22 +644,28 @@ return "Unknown"
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[programming-overview]] — основы программирования
-- [[clean-code-solid]] — принципы чистого кода
-- [[kotlin-overview]] — FP в Kotlin
-- [[design-patterns]] — OOP patterns (сравнение)
+**[[programming-overview]]** — Functional programming является одной из ключевых парадигм программирования наряду с императивной и объектно-ориентированной. Понимание FP расширяет "инструментарий мышления" разработчика: даже если основной язык — OOP, функциональные приёмы (pure functions, immutability, composition) делают код чище и предсказуемее. Overview даёт контекст, где FP располагается среди других парадигм.
+
+**[[clean-code-solid]]** — Принципы чистого кода и FP взаимно усиливают друг друга. Single Responsibility (SRP) естественно вытекает из pure functions — каждая функция делает ровно одно. Open/Closed Principle реализуется через composition: расширяем поведение, комбинируя функции, а не модифицируя существующие. Dependency Inversion в FP выражается через higher-order functions — вместо наследования передаём стратегию как аргумент.
+
+**[[design-patterns]]** — Многие GoF-паттерны в FP становятся тривиальными или исчезают вовсе. Strategy Pattern — это просто higher-order function. Observer Pattern заменяется reactive streams. Decorator — это function composition. Сравнение OOP-паттернов с FP-подходами показывает, что паттерны часто компенсируют ограничения языка, а не решают фундаментальные проблемы.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-- "Functional Programming in Scala" — Red Book
-- "Professor Frisby's Guide to FP" — Free online
-- [Kotlin FP Guide](https://kotlinlang.org/docs/lambdas.html)
-- [Python functools](https://docs.python.org/3/library/functools.html)
-- "Grokking Simplicity" by Eric Normand
+Abelson H., Sussman G.J. (1996). *"Structure and Interpretation of Computer Programs."* — Фундаментальный учебник MIT по программированию через призму Lisp. Учит думать о вычислениях как о композиции абстракций; формирует "функциональное мышление" с нуля.
+
+Hughes J. (1989). *"Why Functional Programming Matters."* — Классический paper, объясняющий почему FP важен для модульности. Вводит ключевые аргументы: higher-order functions и lazy evaluation как инструменты композиции, которые невозможны в императивных языках.
+
+Chiusano P., Bjarnason R. (2014). *"Functional Programming in Scala."* — "Red Book", практическое введение в FP через Scala. Пошагово строит абстракции от pure functions до монад; отлично подходит для разработчиков с OOP-фоном.
+
+Normand E. (2021). *"Grokking Simplicity."* — Практическое руководство по применению FP-принципов в повседневной разработке. Фокус на разделение actions, calculations и data — делает FP доступным без академического жаргона.
+
+- [Kotlin FP Guide](https://kotlinlang.org/docs/lambdas.html) — официальная документация по лямбдам и higher-order functions в Kotlin
+- [Python functools](https://docs.python.org/3/library/functools.html) — модуль стандартной библиотеки Python для функциональных инструментов
 
 ---
 

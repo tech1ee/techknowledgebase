@@ -17,6 +17,9 @@ related:
   - "[[databases-overview]]"
   - "[[databases-replication-sharding]]"
   - "[[cloud-disaster-recovery]]"
+prerequisites:
+  - "[[databases-transactions-acid]]"
+  - "[[databases-replication-sharding]]"
 ---
 
 # Backup & Recovery: PITR, WAL, RTO/RPO

@@ -1678,8 +1678,26 @@ Prefix Sum:    O(n) build, O(1) query
 
 ---
 
+## Связь с другими темами
+
+**[[big-o-complexity]]** — анализ сложности операций с массивами и строками является отправной точкой для изучения Big O. Доступ по индексу O(1), линейный поиск O(n), бинарный поиск O(log n), сортировка O(n log n) -- все эти базовые сложности проще всего понять именно на примере массивов. Понимание амортизированного анализа (amortized O(1) для dynamic array append) тоже начинается здесь. Big O рекомендуется изучить параллельно с массивами или чуть раньше.
+
+**[[problem-solving-framework]]** — фреймворк решения алгоритмических задач особенно важен для array/string задач, которые составляют до 90% интервью-задач. Последовательность "понять задачу -> brute force -> оптимизировать -> edge cases" помогает не застревать на сложных задачах. Массивы и строки -- идеальный контекст для отработки этого фреймворка, поскольку задачи варьируются от Easy до Hard. Изучить фреймворк стоит до массового решения задач.
+
+**[[two-pointers-pattern]]** — техника двух указателей является одним из ключевых паттернов для задач на массивы и строки. Сходящиеся указатели (palindrome check, two sum в sorted array, container with most water), параллельные указатели (remove duplicates, merge sorted arrays), slow/fast pointer (linked list cycle) -- все они оперируют индексами массива. Глубокое понимание массивов (contiguous memory, O(1) доступ) необходимо для эффективного применения паттерна.
+
+**[[sliding-window-pattern]]** — скользящее окно является расширением техники двух указателей и применяется к задачам на подмассивы и подстроки: maximum sum subarray, longest substring without repeating characters, minimum window substring. Ключевая идея -- инкрементальное обновление окна (добавить справа, убрать слева) вместо пересчёта с нуля. Понимание массивов, строк и их сложностей -- обязательный prerequisite для sliding window.
+
+---
+
 ## Источники
 
+### Книги
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms (CLRS)."** — формальное изложение массивов, строк и алгоритмов сортировки; строковые алгоритмы (KMP, Rabin-Karp) с доказательствами корректности; фундамент для понимания сложности операций
+- **Sedgewick & Wayne (2011). "Algorithms, 4th Edition."** — строковые алгоритмы с визуализациями: сортировки строк (radix sort), tries, substring search, регулярные выражения; отличные иллюстрации для интуитивного понимания
+- **Aziz, Lee & Prakash (2015). "Elements of Programming Interviews."** — обширная коллекция array и string задач для подготовки к интервью с разбором решений; задачи ранжированы по сложности; паттерны two pointers, sliding window, prefix sum представлены через практические примеры
+
+### Онлайн-ресурсы
 - [Tech Interview Handbook - Array](https://www.techinterviewhandbook.org/algorithms/array/) — cheatsheet
 - [Tech Interview Handbook - String](https://www.techinterviewhandbook.org/algorithms/string/) — cheatsheet
 - [GeeksforGeeks - Two Pointers](https://www.geeksforgeeks.org/dsa/two-pointers-technique/) — tutorial

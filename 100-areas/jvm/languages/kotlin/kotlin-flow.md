@@ -11,6 +11,9 @@ tags:
   - coroutines
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-coroutines]]"
+  - "[[kotlin-functional]]"
 related:
   - "[[kotlin-coroutines]]"
   - "[[android-state-management]]"
@@ -125,10 +128,9 @@ Flow делятся на холодные и горячие:
 
 ### Что такое Flow?
 
-```kotlin
-import kotlinx.coroutines.flow.*
+Flow создаётся через builder `flow {}`, внутри которого `emit()` отправляет значения подписчику. Каждый `delay()` приостанавливает корутину, не блокируя поток:
 
-// Flow - последовательность значений, испускаемых асинхронно
+```kotlin
 fun simpleFlow(): Flow<Int> = flow {
     for (i in 1..3) {
         delay(1000)  // Эмулируем async работу
@@ -136,24 +138,22 @@ fun simpleFlow(): Flow<Int> = flow {
     }
 }
 
-// Сбор значений (холодный поток - запускается при collect)
 suspend fun collectFlow() {
     simpleFlow().collect { value ->
         println(value)  // 1, 2, 3 с задержкой по 1 сек
     }
 }
+```
 
-// Flow - это suspend последовательность
+Ключевое свойство холодного Flow -- каждый вызов `collect` запускает поток заново. Два подписчика получат две независимые копии данных:
+
+```kotlin
 fun numbers(): Flow<Int> = flow {
-    emit(1)
-    emit(2)
-    emit(3)
+    emit(1); emit(2); emit(3)
 }
 
-// Каждый collect запускает flow заново (холодный)
 suspend fun main() {
     val flow = numbers()
-
     flow.collect { println("First: $it") }   // 1, 2, 3
     flow.collect { println("Second: $it") }  // 1, 2, 3 снова
 }
@@ -167,42 +167,31 @@ suspend fun main() {
 
 ### Flow builders
 
+Kotlin предлагает несколько способов создания Flow. Простейшие -- `flowOf` для фиксированных значений и `asFlow` для конвертации коллекций:
+
 ```kotlin
-// flow { } - самый общий builder
-val flow1 = flow {
-    emit(1)
-    emit(2)
-    emit(3)
-}
-
-// flowOf - из фиксированных значений
+val flow1 = flow { emit(1); emit(2); emit(3) }
 val flow2 = flowOf(1, 2, 3, 4, 5)
-
-// asFlow - конвертация коллекций
 val flow3 = listOf(1, 2, 3).asFlow()
 val flow4 = (1..5).asFlow()
+val empty = emptyFlow<Int>()
+```
 
-// channelFlow - для callback-based API
+Для интеграции с callback-based API (Firebase, Bluetooth, сенсоры) используется `channelFlow`. Он позволяет отправлять значения из callback-ов, которые вызываются из других потоков:
+
+```kotlin
 fun callbackFlow(): Flow<String> = channelFlow {
     val callback = object : Callback {
         override fun onData(data: String) {
             trySend(data)  // Отправка из callback
         }
-
         override fun onComplete() {
-            close()  // Закрытие flow
+            close()
         }
     }
-
     registerCallback(callback)
-
-    awaitClose {
-        unregisterCallback(callback)  // Cleanup
-    }
+    awaitClose { unregisterCallback(callback) }
 }
-
-// emptyFlow - пустой flow
-val empty = emptyFlow<Int>()
 ```
 
 ### Отмена Flow
@@ -243,89 +232,64 @@ flow {
 
 ### Промежуточные операторы (intermediate)
 
+Промежуточные операторы трансформируют поток, не запуская его. `map` и `filter` работают как в коллекциях, но асинхронно -- каждый элемент может приостанавливаться:
+
 ```kotlin
-// map - трансформация значений
-val doubled = flowOf(1, 2, 3)
-    .map { it * 2 }
+flowOf(1, 2, 3).map { it * 2 }
     .collect { println(it) }  // 2, 4, 6
 
-// filter - фильтрация
-val evens = (1..10).asFlow()
-    .filter { it % 2 == 0 }
+(1..10).asFlow().filter { it % 2 == 0 }
     .collect { println(it) }  // 2, 4, 6, 8, 10
+```
 
-// transform - гибкая трансформация
-val transformed = (1..3).asFlow()
-    .transform { value ->
-        emit("Start $value")  // Можем emit несколько значений
-        delay(100)
-        emit("End $value")
-    }
+`transform` -- наиболее гибкий оператор: он позволяет emit несколько значений на каждый входной элемент. `take` и `drop` ограничивают количество элементов, а `distinctUntilChanged` убирает повторяющиеся подряд:
 
-// take - первые N значений
-val first3 = (1..10).asFlow()
-    .take(3)
+```kotlin
+(1..3).asFlow().transform { value ->
+    emit("Start $value")  // Можем emit несколько значений
+    delay(100)
+    emit("End $value")
+}
+
+(1..10).asFlow().take(3)
     .collect { println(it) }  // 1, 2, 3
 
-// drop - пропуск первых N значений
-val skipped = (1..5).asFlow()
-    .drop(2)
-    .collect { println(it) }  // 3, 4, 5
-
-// distinctUntilChanged - убирает повторяющиеся подряд
-flowOf(1, 1, 2, 2, 3, 1)
-    .distinctUntilChanged()
+flowOf(1, 1, 2, 2, 3, 1).distinctUntilChanged()
     .collect { println(it) }  // 1, 2, 3, 1
 ```
 
 ### Операторы контекста
 
+`flowOn` переключает dispatcher для всех операций выше себя (upstream). Это правильный способ разделить контексты: производство на IO, потребление на Main:
+
 ```kotlin
-// flowOn - изменение контекста upstream операций
 fun fetchData(): Flow<String> = flow {
-    // Тяжёлая работа
-    repeat(3) {
-        delay(1000)
-        emit("Data $it")
-    }
+    repeat(3) { delay(1000); emit("Data $it") }
 }.flowOn(Dispatchers.IO)  // upstream выполнится на IO
 
 suspend fun main() = coroutineScope {
     fetchData()
-        .map { it.uppercase() }  // На IO
-        .collect {
-            // На текущем контексте (можно на Main)
-            println(it)
-        }
+        .map { it.uppercase() }
+        .collect { println(it) }  // На текущем контексте
 }
+```
 
-// buffer - буферизация для производительности
-flow {
-    repeat(3) {
-        delay(100)  // Производство занимает 100ms
-        emit(it)
-    }
-}
-    .buffer()  // Буфер между производством и потреблением
-    .collect {
-        delay(300)  // Обработка занимает 300ms
-        println(it)
-    }
-// Без buffer: 400ms * 3 = 1200ms
-// С buffer: ~900ms (параллельная работа)
+`buffer` позволяет производителю и потребителю работать параллельно. Без буфера каждый emit ждёт обработки предыдущего. С буфером -- производитель продолжает работать, пока потребитель обрабатывает:
 
-// conflate - пропускает промежуточные значения если потребитель медленный
-flow {
-    repeat(10) {
-        delay(100)
-        emit(it)
-    }
-}
+```kotlin
+flow { repeat(3) { delay(100); emit(it) } }
+    .buffer()
+    .collect { delay(300); println(it) }
+// Без buffer: 1200ms. С buffer: ~900ms
+```
+
+`conflate` идёт дальше: если потребитель не успевает, промежуточные значения пропускаются. Потребитель всегда получает последнее актуальное значение:
+
+```kotlin
+flow { repeat(10) { delay(100); emit(it) } }
     .conflate()
-    .collect {
-        delay(500)  // Медленный потребитель
-        println(it)  // 0, 4, 8 (пропустили промежуточные)
-    }
+    .collect { delay(500); println(it) }
+// 0, 4, 8 (промежуточные пропущены)
 ```
 
 **Почему flowOn нужен?**
@@ -335,83 +299,46 @@ flow {
 
 ### Комбинирование потоков
 
+`zip` комбинирует элементы двух потоков попарно. Когда один поток заканчивается -- результат тоже:
+
 ```kotlin
-// zip - комбинирует попарно
 val numbers = (1..3).asFlow()
 val strings = flowOf("one", "two", "three")
 
-numbers.zip(strings) { num, str ->
-    "$num -> $str"
-}.collect { println(it) }
-// 1 -> one
-// 2 -> two
-// 3 -> three
-
-// combine - комбинирует последние значения
-val nums = flow {
-    emit(1)
-    delay(500)
-    emit(2)
-}
-
-val strs = flow {
-    emit("a")
-    delay(250)
-    emit("b")
-    delay(250)
-    emit("c")
-}
-
-nums.combine(strs) { num, str ->
-    "$num$str"
-}.collect { println(it) }
-// 1a (сразу)
-// 1b (через 250ms)
-// 2b (через 500ms)
-// 2c (через 750ms)
-
-// flatMapConcat - последовательный flatMap
-(1..3).asFlow()
-    .flatMapConcat { value ->
-        flow {
-            emit("$value: First")
-            delay(500)
-            emit("$value: Second")
-        }
-    }
+numbers.zip(strings) { num, str -> "$num -> $str" }
     .collect { println(it) }
-// 1: First, 1: Second, 2: First, 2: Second, ...
+// 1 -> one, 2 -> two, 3 -> three
+```
 
-// flatMapMerge - параллельный flatMap
-(1..3).asFlow()
-    .flatMapMerge { value ->
-        flow {
-            emit("$value: First")
-            delay(500)
-            emit("$value: Second")
-        }
-    }
+`combine` работает иначе: при каждом новом значении из любого потока он комбинирует его с последним значением из другого. Это идеально для UI, где нужно реагировать на изменение любого источника:
+
+```kotlin
+val nums = flow { emit(1); delay(500); emit(2) }
+val strs = flow { emit("a"); delay(250); emit("b"); delay(250); emit("c") }
+
+nums.combine(strs) { num, str -> "$num$str" }
     .collect { println(it) }
-// Все параллельно: 1: First, 2: First, 3: First, ...
+// 1a, 1b, 2b, 2c
+```
 
-// flatMapLatest - отменяет предыдущий при новом значении
-flow {
-    emit(1)
-    delay(150)
-    emit(2)
-    delay(150)
-    emit(3)
-}
+Три варианта flatMap отличаются стратегией обработки внутренних потоков. `flatMapConcat` обрабатывает последовательно, `flatMapMerge` -- параллельно, `flatMapLatest` отменяет предыдущий при появлении нового значения:
+
+```kotlin
+// flatMapConcat -- строго последовательно
+(1..3).asFlow().flatMapConcat { value ->
+    flow { emit("$value: First"); delay(500); emit("$value: Second") }
+}.collect { println(it) }
+// 1: First, 1: Second, 2: First, 2: Second, 3: First, 3: Second
+```
+
+`flatMapLatest` особенно полезен для поиска: при каждом новом символе предыдущий запрос отменяется и запускается новый:
+
+```kotlin
+flow { emit(1); delay(150); emit(2); delay(150); emit(3) }
     .flatMapLatest { value ->
-        flow {
-            emit("$value: First")
-            delay(500)  // Долгая операция
-            emit("$value: Second")  // Может не выполниться
-        }
-    }
-    .collect { println(it) }
-// 1: First, 2: First, 3: First, 3: Second
-// (1 и 2 отменяются до Second)
+        flow { emit("$value: First"); delay(500); emit("$value: Second") }
+    }.collect { println(it) }
+// 1: First, 2: First, 3: First, 3: Second (1 и 2 отменяются)
 ```
 
 **Когда использовать какой flatMap:**
@@ -423,47 +350,32 @@ flow {
 
 ### Основы StateFlow
 
-```kotlin
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+StateFlow -- горячий поток, который всегда хранит текущее значение. Паттерн с `MutableStateFlow` внутри и read-only `StateFlow` снаружи -- стандарт для ViewModel:
 
-// StateFlow - горячий поток с текущим состоянием
+```kotlin
 class CounterViewModel {
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter
 
-    fun increment() {
-        _counter.value++
-    }
-
-    fun decrement() {
-        _counter.value--
-    }
+    fun increment() { _counter.value++ }
+    fun decrement() { _counter.value-- }
 }
+```
 
-// Использование
+Подписчик получает текущее значение сразу при подписке. Новый подписчик не пропустит состояние -- он увидит последнее значение:
+
+```kotlin
 val viewModel = CounterViewModel()
-
-// Чтение текущего значения
 println(viewModel.counter.value)  // 0
 
-// Подписка на изменения
 launch {
     viewModel.counter.collect { value ->
         println("Counter: $value")
     }
 }
 
-// Изменение
 viewModel.increment()  // Counter: 1
 viewModel.increment()  // Counter: 2
-
-// Горячий поток - значение сохраняется
-launch {
-    viewModel.counter.collect { value ->
-        println("New subscriber: $value")  // Получит текущее значение (2)
-    }
-}
 ```
 
 **Почему StateFlow?**
@@ -474,52 +386,40 @@ launch {
 
 ### StateFlow vs LiveData
 
+Ключевое преимущество StateFlow перед LiveData -- thread-safety: `_data.value = value` можно вызывать с любого потока без `postValue()`:
+
 ```kotlin
-// LiveData (Android)
+// LiveData: update только с Main потока
 class LiveDataViewModel : ViewModel() {
     private val _data = MutableLiveData<String>()
     val data: LiveData<String> = _data
-
-    fun update(value: String) {
-        _data.value = value  // Только с Main потока
-        // или
-        _data.postValue(value)  // С любого потока
-    }
+    fun update(value: String) { _data.value = value }
 }
 
-// StateFlow
+// StateFlow: thread-safe из любого потока
 class StateFlowViewModel : ViewModel() {
     private val _data = MutableStateFlow("")
     val data: StateFlow<String> = _data
-
-    fun update(value: String) {
-        _data.value = value  // С любого потока, thread-safe
-    }
+    fun update(value: String) { _data.value = value }
 }
+```
 
-// Сбор в UI (Android)
-// LiveData
-viewModel.data.observe(viewLifecycleOwner) { value ->
-    updateUI(value)
-}
+В UI подписка на StateFlow требует lifecycle-aware подхода. Без него Flow продолжит collect даже в background, тратя ресурсы:
 
-// StateFlow
-lifecycleScope.launch {
-    viewModel.data.collect { value ->
-        updateUI(value)
-    }
-}
+```kotlin
+// LiveData -- lifecycle-aware из коробки
+viewModel.data.observe(viewLifecycleOwner) { updateUI(it) }
 
-// Или с lifecycle-aware сбором
+// StateFlow -- используйте flowWithLifecycle
 lifecycleScope.launch {
     viewModel.data.flowWithLifecycle(lifecycle)
-        .collect { value ->
-            updateUI(value)
-        }
+        .collect { updateUI(it) }
 }
 ```
 
 ### Обновление StateFlow
+
+Для сложного UI-состояния используют data class с `copy()`. Метод `update {}` обеспечивает атомарность -- важно при обновлении из нескольких корутин:
 
 ```kotlin
 data class UiState(
@@ -532,50 +432,24 @@ class ViewModel {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
-    // Простое обновление
-    fun setLoading(loading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = loading)
-    }
-
-    // update - атомарное обновление
+    // update -- атомарное обновление (рекомендован)
     fun addItem(item: String) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                data = currentState.data + item
-            )
-        }
+        _uiState.update { it.copy(data = it.data + item) }
     }
+}
+```
 
-    // updateAndGet - обновить и получить новое значение
-    fun incrementAndGet(): UiState {
-        return _uiState.updateAndGet { currentState ->
-            currentState.copy(
-                data = currentState.data + "new"
-            )
-        }
-    }
+Типичный паттерн загрузки данных: показать loading, загрузить, обработать ошибку. Все обновления через `update {}` для thread-safety:
 
-    // Комплексное обновление
-    fun loadData() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-
-            try {
-                val data = fetchData()
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        data = data
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = e.message
-                    )
-                }
-            }
+```kotlin
+fun loadData() {
+    viewModelScope.launch {
+        _uiState.update { it.copy(isLoading = true, error = null) }
+        try {
+            val data = fetchData()
+            _uiState.update { it.copy(isLoading = false, data = data) }
+        } catch (e: Exception) {
+            _uiState.update { it.copy(isLoading = false, error = e.message) }
         }
     }
 }
@@ -1407,25 +1281,22 @@ val events = _events.receiveAsFlow()
 
 ---
 
-## Рекомендуемые источники
+## Связь с другими темами
 
-### Официальная документация
-- [Kotlin Flow](https://kotlinlang.org/docs/flow.html) — официальная документация
-- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) — Android best practices
-- [Testing Kotlin Flow](https://developer.android.com/kotlin/flow/test) — тестирование
+**[[kotlin-coroutines]]** — Flow полностью построен на coroutines: `flow {}` builder создаёт cold stream, который выполняется только при `collect` в coroutine scope. Cancellation, dispatchers, structured concurrency — всё это механизмы coroutines, которые Flow наследует. Без прочного понимания coroutines невозможно отлаживать Flow (deadlocks, cancellation, backpressure). Обязательно изучите coroutines перед Flow.
 
-### Статьи
-- [A safer way to collect flows](https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda) — repeatOnLifecycle (Google)
-- [SharedFlow vs StateFlow](https://medium.com/@mortitech/sharedflow-vs-stateflow-a-comprehensive-guide-to-kotlin-flows-503576b4de31) — детальное сравнение
-- [ViewModel events](https://kt.academy/article/viewmodel-stateflow-sharedflow-channel) — events handling
+**[[android-state-management]]** — StateFlow и SharedFlow заменили LiveData как основной механизм UI state management в Android. StateFlow хранит текущее состояние экрана, SharedFlow транслирует одноразовые события (навигация, snackbar). Понимание Flow operators (map, combine, stateIn) необходимо для построения reactive UI architecture. Flow — технический механизм, state management — архитектурный паттерн его использования.
 
-### Книги
-- **"Kotlin Coroutines: Deep Dive"** — Marcin Moskała. Главы о Flow
-- **"Reactive Programming with Kotlin"** — переход от RxJava к Flow
+**[[kotlin-channels]]** — Channel и Flow решают разные задачи: Channel для communication между coroutines (fan-out, fan-in), Flow для reactive streams данных. SharedFlow внутри использует Channel для буферизации. Понимание различий помогает выбрать правильный инструмент: Channel для point-to-point, Flow для broadcast. Изучите оба для полной картины async-примитивов в Kotlin.
 
-### Инструменты
-- [Turbine](https://github.com/cashapp/turbine) — тестирование Flow от Square
-- [Molecule](https://github.com/cashapp/molecule) — Compose + Flow интеграция
+---
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. — Главы о Flow: cold vs hot streams, операторы, backpressure, StateFlow/SharedFlow internals. Единственная книга с глубоким разбором Flow architecture.
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. — Введение в Flow и reactive streams в контексте Kotlin-экосистемы. Хорошая стартовая точка.
+- Elizarov R. (2019). *Cold flows, hot channels* (KotlinConf talk). — Доклад автора библиотеки о design decisions: почему Flow холодный, как он соотносится с Channel и Reactive Streams. Объясняет философию API.
+- Yigit Boyar (2021). *A safer way to collect flows from Android UIs* (Android Dev Blog). — Практическое руководство Google по lifecycle-aware collection: repeatOnLifecycle, collectAsStateWithLifecycle. Обязательно для Android-разработчиков.
 
 ---
 

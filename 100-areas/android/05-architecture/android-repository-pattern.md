@@ -16,6 +16,10 @@ related:
   - "[[android-data-persistence]]"
   - "[[android-networking]]"
   - "[[android-state-management]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-architecture-patterns]]"
+  - "[[android-data-persistence]]"
 ---
 
 > Полное руководство по реализации Repository pattern в Android с офлайн-поддержкой, кэшированием и синхронизацией.
@@ -1135,12 +1139,15 @@ class FakeUserDao : UserDao {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- **[[android-architecture-patterns]]** — Repository в MVVM/Clean Architecture
-- **[[android-data-persistence]]** — Room как Local Data Source
-- **[[android-networking]]** — Retrofit как Remote Data Source
-- **[[android-background-work]]** — WorkManager для sync
+**[[android-architecture-patterns]]** — Repository pattern является ключевым элементом Data Layer в MVVM и Clean Architecture. В MVVM ViewModel получает данные исключительно через Repository, не зная об источниках данных. В Clean Architecture Repository реализует интерфейс из Domain Layer, обеспечивая инверсию зависимостей. Понимание архитектурных паттернов определяет, как Repository интегрируется в общую архитектуру приложения. Изучите Architecture Patterns первым для понимания роли Repository.
+
+**[[android-data-persistence]]** — Room является основным Local Data Source в Repository pattern, обеспечивая Single Source of Truth. Room DAO предоставляет Flow/LiveData для реактивного наблюдения за изменениями данных, что делает UI автоматически обновляемым при записи новых данных из сети. Понимание Room entities, DAO, миграций и transactions критично для реализации offline-first архитектуры. DataStore используется для настроек и простых данных в Repository.
+
+**[[android-networking]]** — Retrofit/OkHttp выступает как Remote Data Source в Repository pattern. Repository координирует сетевые запросы через Retrofit с локальным кэшированием через Room, реализуя стратегии Cache-First, Network-First и Stale-While-Revalidate. Понимание interceptors, error handling и retry policies в OkHttp влияет на надёжность Repository layer. Изучите networking для реализации remote data source.
+
+**[[android-state-management]]** — Repository предоставляет данные через Flow/StateFlow, которые ViewModel трансформирует в UI State. Правильная интеграция Repository с state management (StateFlow для single values, Flow для streams) определяет, как данные протекают от сети/базы до UI. Понимание cold vs hot streams критично для выбора правильного API в Repository interface.
 
 ---
 
@@ -1150,6 +1157,14 @@ class FakeUserDao : UserDao {
 2. [Repository Pattern in Android](https://developer.android.com/topic/architecture/data-layer)
 3. [Offline-First](https://developer.android.com/topic/architecture/data-layer/offline-first)
 4. [Room with Flow](https://developer.android.com/training/data-storage/room/async-queries#kotlin)
+
+---
+
+## Источники и дальнейшее чтение
+
+- Meier (2022). *Professional Android*. — практическая реализация Repository pattern с Room, Retrofit и offline-first стратегиями, включая sync, conflict resolution и тестирование data layer.
+- Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальный разбор Flow и Channel, которые являются основой реактивного API Repository: Flow для наблюдения за данными из Room, suspend functions для сетевых запросов.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое построение Repository layer с Room и Retrofit, включая кэширование, error handling и интеграцию с ViewModel.
 
 ---
 

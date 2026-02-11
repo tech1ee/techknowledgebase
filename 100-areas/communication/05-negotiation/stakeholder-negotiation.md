@@ -18,6 +18,10 @@ related:
   - "[[negotiation-fundamentals]]"
   - "[[negotiation-frameworks]]"
   - "[[communication-styles]]"
+prerequisites:
+  - "[[negotiation-fundamentals]]"
+  - "[[negotiation-frameworks]]"
+  - "[[communication-styles]]"
 ---
 
 # Stakeholder Negotiation: влияние без authority

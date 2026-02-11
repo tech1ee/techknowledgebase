@@ -12,6 +12,11 @@ related:
   - "[[string-algorithms]]"
   - "[[string-algorithms-advanced]]"
   - "[[tries]]"
+prerequisites:
+  - "[[string-algorithms]]"
+  - "[[string-algorithms-advanced]]"
+  - "[[tries]]"
+  - "[[arrays-strings]]"
 ---
 
 # Advanced String Algorithms

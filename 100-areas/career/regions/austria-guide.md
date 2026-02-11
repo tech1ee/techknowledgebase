@@ -13,6 +13,8 @@ related:
   - "[[netherlands-guide]]"
   - "[[switzerland-guide]]"
   - "[[android-job-market-2025]]"
+prerequisites:
+  - "[[android-job-market-2025]]"
 ---
 
 # Австрия: Red-White-Red Card для разработчиков
@@ -400,6 +402,24 @@ Savings: €1,700/month
 - [Nucamp: Tech Jobs in Austria 2025](https://www.nucamp.co/blog/coding-bootcamp-austria-aut-getting-a-job-in-tech-in-austria-in-2025-the-complete-guide)
 - [Glassdoor: Vienna Software Engineer Salaries](https://www.glassdoor.com/Salaries/vienna-austria-software-engineer-salary-SRCH_IL.0,14_IM1118_KO15,32.htm)
 - [VisaHQ: 2026 Salary Thresholds](https://www.visahq.com/news/2025-10-30/at/austria-raises-2026-minimum-salary-thresholds-for-red-white-red-and-eu-blue-cards/)
+
+---
+
+## Связь с другими темами
+
+- **[[netherlands-guide]]** — Нидерланды — главная альтернатива Австрии для Android-разработчиков в ЕС. Быстрая Kennismigrant виза (2-4 недели vs 8-12 недель RWR Card) и 30% ruling делают NL привлекательнее по net income. Сравнение этих двух стран помогает принять обоснованное решение с учётом зарплат, налогов, и качества жизни.
+
+- **[[switzerland-guide]]** — Швейцария платит на 50-80% больше net, но виза сложнее (квоты, labour market test). Для Senior-разработчиков, готовых к сложному визовому процессу, Швейцария — финансово оптимальный выбор в регионе. Австрия проще для входа в европейский рынок с перспективой перехода в CH позже.
+
+- **[[android-job-market-2025]]** — Общая картина Android-рынка определяет, сколько позиций доступно в Австрии и какие навыки востребованы. Dynatrace, Bitpanda и Runtastic ищут специфичные навыки (Compose, KMP), и знание рыночных трендов помогает таргетировать подготовку.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Bolles R.N. (2023). What Color Is Your Parachute?** — Практический гайд по поиску работы за рубежом, включая оценку культурного соответствия и адаптацию стратегии под конкретную страну. Полезен для планирования переезда в Австрию и понимания, как позиционировать себя на европейском рынке.
+
+- **Fournier C. (2017). The Manager's Path.** — Для Senior-разработчиков, планирующих карьерный рост в Австрии. Понимание engineering culture и management expectations в европейских компаниях отличается от US-стандартов, и эта книга даёт framework для навигации.
 
 ---
 

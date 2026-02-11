@@ -19,6 +19,10 @@ related:
   - "[[android-compose]]"
   - "[[android-bundle-parcelable]]"
   - "[[android-intent-internals]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
+  - "[[android-app-components]]"
 ---
 
 # Android Navigation: Полный гайд по всем подходам
@@ -2044,6 +2048,14 @@ SettingsActivity (отдельная для настроек)
 - [Tech Interview Handbook - Navigation](https://www.techinterviewhandbook.org/) — Patterns
 - [CodePath Android Cliffnotes](https://guides.codepath.com/android) — Task stacks, transitions
 - [Understand Activity launchMode](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en) — Launch modes visual guide
+
+---
+
+## Источники и дальнейшее чтение
+
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — подробное пошаговое руководство по Navigation Component, Fragment transactions, back stack management и Safe Args с практическими примерами.
+- Meier (2022). *Professional Android*. — глубокое покрытие Activity lifecycle, Intent system, deep links и task management, что даёт системное понимание навигационной модели Android.
+- Leiva (2017). *Kotlin for Android Developers*. — практические паттерны Kotlin для организации навигационной логики, включая sealed classes для type-safe routes и extension functions для NavController.
 
 ---
 

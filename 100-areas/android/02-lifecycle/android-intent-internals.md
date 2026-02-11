@@ -24,6 +24,11 @@ related:
   - "[[android-manifest-merging]]"
   - "[[android-testing]]"
 cs-foundations: [message-passing, pattern-matching, uri-scheme, capability-token, ipc, pub-sub, loose-coupling, indexing, delegation, serialization]
+prerequisites:
+  - "[[android-app-components]]"
+  - "[[android-activity-lifecycle]]"
+  - "[[android-navigation]]"
+  - "[[android-permissions-security]]"
 ---
 
 # Intent: resolution, PendingIntent и Deep Links под капотом
@@ -2505,26 +2510,27 @@ Intent resolution проходит три теста для каждого Inten
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-### Обязательные связи
-- **[[android-activity-lifecycle]]** — Intent запускает Activity, определяет как она создаётся (new task, single top и т.д.)
-- **[[android-app-components]]** — Intent связывает все 4 компонента: Activity, Service, BroadcastReceiver, ContentProvider
-- **[[android-bundle-parcelable]]** — Intent extras это Bundle, понимание сериализации критично
+**[[android-app-components]]** — Intent является фундаментальным механизмом связи между всеми четырьмя типами компонентов Android: Activity, Service, BroadcastReceiver и ContentProvider. Понимание жизненного цикла компонентов и их взаимодействия через Intent — необходимая основа для работы с Intent resolution и implicit/explicit Intent. Рекомендуется начать с обзора компонентов, затем переходить к внутренней механике Intent.
 
-### Углубление
-- **[[android-navigation]]** — Navigation Component использует Intent под капотом для deep links
-- **[[android-permissions-security]]** — Intent-based permissions, URI permissions через Intent flags
-- **[[android-broadcast-internals]]** — Broadcast Intent internals, ordered broadcasts, permissions
+**[[android-activity-lifecycle]]** — Intent непосредственно запускает Activity и определяет поведение через launch mode flags (FLAG_ACTIVITY_NEW_TASK, FLAG_ACTIVITY_SINGLE_TOP и т.д.), влияя на создание, переиспользование и расположение Activity в Task/Back Stack. Без понимания жизненного цикла Activity невозможно корректно использовать Intent flags и предсказывать поведение навигации. Изучайте lifecycle параллельно с Intent flags.
 
-### Смежные темы
-- **[[android-manifest]]** — IntentFilter, exported атрибут, intent-filter declaration
-- **[[android-context-internals]]** — Context.startActivity(), Context.sendBroadcast() — методы для работы с Intent
-- **[[android-service-internals]]** — Service запускается через Intent, binding через Intent
+**[[android-bundle-parcelable]]** — Intent extras представляют собой Bundle, и вся передача данных между компонентами через Intent основана на механизме Parcelable/Serializable сериализации. Понимание ограничений Bundle (TransactionTooLargeException при превышении 1 МБ) и правильной реализации Parcelable критично для надёжной передачи данных. Сериализация — обязательное знание перед работой с Intent extras.
+
+**[[android-navigation]]** — Navigation Component использует Intent под капотом для реализации deep links и навигации между feature-модулями. Deep Links и App Links, описанные в этой статье, напрямую интегрируются с Navigation graph через `<deepLink>` элемент. После изучения Intent resolution переходите к Navigation для понимания высокоуровневых абстракций.
+
+**[[android-permissions-security]]** — Intent-based permissions и URI permissions (FLAG_GRANT_READ_URI_PERMISSION) являются ключевым механизмом безопасности при межкомпонентном взаимодействии. PendingIntent security (FLAG_IMMUTABLE requirement с Android 12) и защита от Intent Redirection vulnerability напрямую связаны с моделью безопасности Android. Изучайте параллельно для целостного понимания security модели.
+
+**[[android-context-internals]]** — Все методы отправки Intent (startActivity, sendBroadcast, startService, bindService) являются методами Context, и их поведение зависит от типа Context (Application vs Activity). Понимание иерархии Context объясняет ограничения вроде необходимости FLAG_ACTIVITY_NEW_TASK при вызове startActivity из non-Activity Context. Рекомендуется изучить Context internals для глубокого понимания dispatch механизма Intent.
+
+**[[android-handler-looper]]** — Доставка Intent и результатов через ActivityResultCallback происходит через Handler/Looper механизм главного потока. Понимание message queue помогает объяснить асинхронную природу Intent resolution и delivery, а также порядок доставки broadcast Intent. Изучайте Handler/Looper для понимания низкоуровневой механики доставки сообщений.
+
+**[[android-process-memory]]** — Intent resolution проходит через system_server процесс (ActivityManagerService), и понимание межпроцессного взаимодействия через Binder объясняет ограничения на размер Intent extras и механизм PendingIntent как Binder-токена. Знание процессной модели Android помогает понять, почему PendingIntent переживает смерть создавшего его процесса.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 | Источник | Тип | Описание |
 |----------|-----|----------|
@@ -2538,6 +2544,12 @@ Intent resolution проходит три теста для каждого Inten
 | [Oversecured: Intent Redirection](https://blog.oversecured.com/Android-Access-to-app-protected-components/) | Article | Детальный разбор Intent Redirection |
 | [Deep Links vs App Links — ProAndroidDev](https://proandroiddev.com/deep-links-crash-course-for-android-developers-e1a12d5d5f) | Article | Практическое сравнение Deep Links и App Links |
 | [PendingIntent Security — Google Security Blog](https://security.googleblog.com/2021/10/protecting-android-users-from-malicious.html) | Article | Объяснение FLAG_IMMUTABLE requirement |
+
+### Книги
+
+- **Meier R.** *Professional Android* (2022) — подробное описание Intent resolution, IntentFilter matching, Deep Links и App Links с практическими примерами
+- **Phillips B., Stewart C., Marsicano K.** *Android Programming: The Big Nerd Ranch Guide* (2022) — пошаговое введение в Intent, explicit/implicit Intent, Activity Result API
+- **Vasavada C.** *Android Internals* (2019) — AOSP-уровневый разбор Intent dispatch через ActivityManagerService и Binder
 
 ---
 

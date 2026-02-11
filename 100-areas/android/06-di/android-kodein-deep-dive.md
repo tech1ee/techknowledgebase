@@ -14,6 +14,9 @@ related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-koin-deep-dive]]"
   - "[[android-kotlin-inject-deep-dive]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-architecture-patterns]]"
 ---
 
 # Kodein: Deep-Dive
@@ -726,7 +729,19 @@ val di = DI {
 
 ---
 
-## Источники
+## Связь с другими темами
+
+**[[dependency-injection-fundamentals]]** — Kodein реализует паттерны Dependency Injection на чистом Kotlin, и без понимания базовых концепций (Inversion of Control, Composition Root, Service Locator vs DI) невозможно оценить архитектурные решения фреймворка. Теоретическая база объясняет, почему Kodein выбрал runtime binding вместо compile-time, и какие trade-off это создаёт. Обязательно начинайте с фундаментальных концепций DI.
+
+**[[android-koin-deep-dive]]** — Koin является главным конкурентом Kodein в категории runtime DI для Kotlin, и понимание различий между ними критично для выбора фреймворка. Ключевое отличие Kodein — поддержка множественных изолированных контейнеров, что делает его предпочтительным для SDK-разработки, тогда как Koin работает с единым глобальным контейнером. Изучайте оба фреймворка параллельно для объективного сравнения.
+
+**[[android-kotlin-inject-deep-dive]]** — kotlin-inject представляет альтернативный подход к DI в Kotlin Multiplatform с compile-time проверками, в отличие от runtime-подхода Kodein. Сравнение compile-time и runtime DI помогает понять, когда ошибки конфигурации обнаруживаются (при компиляции vs при запуске) и как это влияет на надёжность. Рекомендуется после Kodein для понимания compile-time альтернатив в KMP.
+
+**[[android-dagger-deep-dive]]** — Dagger является стандартом compile-time DI для Android/JVM и служит концептуальной основой для понимания разницы между annotation processing подходом (Dagger/Hilt) и DSL-based подходом (Kodein). Понимание ограничений Dagger (только JVM, сложная конфигурация) объясняет, почему Kodein был создан как Kotlin-native альтернатива. Изучайте Dagger для полной картины DI экосистемы Android.
+
+---
+
+## Источники и дальнейшее чтение
 
 ### Официальные
 - [Kodein Documentation](https://kosi-libs.org/kodein/)
@@ -738,11 +753,8 @@ val di = DI {
 - [Kotlin DI Frameworks Comparison](https://www.baeldung.com/kotlin/dependency-injection-libraries)
 - [Kodein + ViewModels](https://medium.com/@RedthLight/kodein-viewmodels-4023b7bf4920)
 
----
+### Книги
 
-## Связанные материалы
-
-- [[dependency-injection-fundamentals]] — Теория DI
-- [[android-koin-deep-dive]] — Koin (альтернатива)
-- [[android-kotlin-inject-deep-dive]] — kotlin-inject (compile-time)
-- [[android-dagger-deep-dive]] — Dagger (compile-time)
+- **Moskala M.** *Effective Kotlin* (2021) — лучшие практики Kotlin, включая паттерны DI и управление зависимостями в Kotlin-идиоматичном стиле
+- **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования API и управления зависимостями, применимые к любому DI фреймворку
+- **Meier R.** *Professional Android* (2022) — архитектурные паттерны Android-приложений, включая интеграцию DI фреймворков

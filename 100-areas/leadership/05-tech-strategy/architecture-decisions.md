@@ -18,6 +18,9 @@ tags:
 related:
   - "[[tech-lead-role]]"
   - "[[technical-vision]]"
+prerequisites:
+  - "[[tech-lead-role]]"
+  - "[[engineering-practices]]"
 ---
 
 # Архитектурные решения (ADR)
@@ -185,6 +188,20 @@ Version controlled with code
 | [ADR GitHub](https://adr.github.io/) | Resource |
 | [Michael Nygard ADR](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) | Article |
 | [ThoughtWorks Tech Radar](https://www.thoughtworks.com/radar) | Reference |
+
+---
+
+## Связь с другими темами
+
+**[[tech-lead-role]]** — Tech Lead — основной author и driver ADR в команде. Архитектурные решения — одна из ключевых обязанностей Tech Lead, и ADR формализует этот процесс. Без ADR решения принимаются устно и теряются, когда люди уходят. Tech Lead, создающий culture of documentation через ADR, оставляет lasting impact, который переживёт его пребывание в команде.
+
+**[[technical-vision]]** — ADR и tech vision работают на разных уровнях абстракции: vision описывает направление (куда идём), а ADR фиксирует конкретные решения (как идём). Каждый ADR должен быть aligned с tech vision, и вместе они формируют coherent technical narrative. Без vision ADR становятся изолированными решениями, без ADR vision остаётся абстрактным документом без execution.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает, как принимаются архитектурные решения на разных уровнях организации: от Tech Lead, принимающего решения для команды, до CTO, определяющего strategic technical direction. Процесс decision-making — ключевая competency на каждом уровне.
+- **Kim et al., "The Phoenix Project" (2016)** — Демонстрирует, как отсутствие documented decisions и poor communication между командами приводит к organizational chaos. ADR — это один из инструментов, предотвращающих ситуации, описанные в книге, когда "никто не знает, почему мы это делаем".
+- **Will Larson, "Staff Engineer" (2022)** — Описывает writing architecture documents как одну из core activities Staff Engineer. Larson показывает, как writing (включая ADR и design docs) является инструментом influence и alignment на organizational level.
 
 ---
 

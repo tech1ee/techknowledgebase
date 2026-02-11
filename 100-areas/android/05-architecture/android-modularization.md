@@ -15,6 +15,10 @@ related:
   - "[[android-architecture-patterns]]"
   - "[[android-dependencies]]"
   - "[[android-viewmodel-internals]]"
+prerequisites:
+  - "[[android-gradle-fundamentals]]"
+  - "[[android-architecture-patterns]]"
+  - "[[android-dependencies]]"
 ---
 
 # Android Modularization — Under the Hood
@@ -1240,13 +1244,15 @@ dependencies {
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [android-gradle-fundamentals.md](android-gradle-fundamentals.md) — Gradle basics
-- [android-architecture-patterns.md](android-architecture-patterns.md) — MVVM/MVI
-- [android-repository-pattern.md](android-repository-pattern.md) — Repository в модулях
-- [android-project-structure.md](android-project-structure.md) — Структура проекта
-- [android-dependencies.md](android-dependencies.md) — Version Catalogs, BOM
+**[[android-gradle-fundamentals]]** — Gradle является движком модуляризации: каждый модуль — это отдельный Gradle project с собственным build.gradle. Понимание Gradle configurations (implementation vs api), task graph и Convention Plugins критично для правильной настройки multi-module проекта. Без знания Gradle невозможно настроить Version Catalogs, build variants и incremental compilation для модулей. Изучите Gradle перед началом модуляризации.
+
+**[[android-architecture-patterns]]** — модуляризация и архитектурные паттерны (MVVM, MVI, Clean Architecture) взаимосвязаны: модули отражают архитектурные слои (data, domain, presentation). Feature-модули инкапсулируют полный вертикальный срез от UI до data layer. Правильная архитектура упрощает модуляризацию, а модуляризация делает архитектурные границы физическими (не только логическими). Рекомендуется определить архитектуру до начала разбиения на модули.
+
+**[[android-repository-pattern]]** — Repository pattern определяет, как feature-модули взаимодействуют с данными через data-модули. В multi-module архитектуре Repository interface живёт в domain/api модуле, а реализация — в data модуле. Это обеспечивает инверсию зависимостей: feature-модули зависят только от абстракций, не от конкретных реализаций Room или Retrofit. Изучите Repository после понимания базовой модульной структуры.
+
+**[[android-dependencies]]** — Version Catalogs и BOM решают критическую проблему multi-module проектов: согласованность версий зависимостей. Без централизованного управления зависимостями каждый модуль может использовать разные версии одной библиотеки, что ведёт к конфликтам и увеличению размера APK. Version Catalogs (libs.versions.toml) стали индустриальным стандартом для модульных проектов. Настройте Version Catalog при создании первого модуля.
 
 ---
 
@@ -1272,6 +1278,14 @@ dependencies {
 | 5 | [Now in Android](https://github.com/android/nowinandroid) | GitHub | Референсная реализация от Google |
 | 6 | [Modularization at Scale](https://medium.com/@hiren6997/modularization-at-scale-how-to-split-a-million-line-android-app-without-losing-your-mind-569c98e86512) | Blog | Опыт крупных проектов |
 | 7 | [The Pitfalls of Preliminary Over-Modularization](https://www.techyourchance.com/preliminary-over-modularization-of-android-projects/) | Blog | Анти-паттерны, когда НЕ нужно |
+
+---
+
+## Источники и дальнейшее чтение
+
+- Meier (2022). *Professional Android*. — охватывает модульную архитектуру Android-приложений, Gradle конфигурации для multi-module проектов и практические рекомендации по организации feature-модулей.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое руководство по структурированию Android-проектов, включая разделение на модули и управление зависимостями между ними.
+- Moskala (2021). *Effective Kotlin*. — принципы модульного дизайна в Kotlin, включая visibility modifiers (internal), API design для модулей и best practices организации кода.
 
 ---
 

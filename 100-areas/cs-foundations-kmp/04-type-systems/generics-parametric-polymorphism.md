@@ -12,6 +12,8 @@ related:
   - "[[type-systems-fundamentals]]"
   - "[[variance-covariance]]"
   - "[[type-erasure-reification]]"
+prerequisites:
+  - "[[type-systems-fundamentals]]"
 ---
 
 # Generics: параметрический полиморфизм
@@ -398,12 +400,26 @@ val first: Any? = list.first()
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[type-systems-fundamentals]]
+Generics — это расширение системы типов, называемое параметрическим полиморфизмом. Без понимания базовых концепций (subtyping, type inference, static vs dynamic typing) невозможно осознать, зачем нужны type parameters и как компилятор выводит конкретные типы. Знание Hindley-Milner алгоритма из теории типов объясняет, как Kotlin автоматически определяет T в `identity("hello")`.
+
+### [[variance-covariance]]
+Variance — это прямое следствие взаимодействия generics с subtyping. Когда `Dog` IS-A `Animal`, вопрос "является ли `List<Dog>` подтипом `List<Animal>`" — это вопрос variance. Понимание generics необходимо для изучения variance, а variance в свою очередь объясняет ограничения на позиции типов (`out` — только возврат, `in` — только параметр) и принцип PECS.
+
+### [[type-erasure-reification]]
+Type erasure — главное ограничение generics на JVM. Понимание того, как компилятор стирает информацию о типах для backward compatibility с Java 1.4, объясняет, почему `is T` невозможен и зачем Kotlin ввёл `reified`. Эта связь критична для KMP: на JVM работает erasure, на Native — типы сохраняются, что влияет на дизайн common-кода.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — фундаментальная работа по теории типов, включая System F и параметрический полиморфизм, которые лежат в основе generics
+- Cardelli L., Wegner P. (1985). *On Understanding Types, Data Abstraction, and Polymorphism*. — классическая paper, систематизирующая виды полиморфизма (parametric, ad-hoc, subtype) и их взаимодействие
+- Bloch J. (2018). *Effective Java*, 3rd ed. — главы 26-33 посвящены практике работы с generics, включая PECS, bounded wildcards и type tokens
 - [Kotlin Docs: Generics](https://kotlinlang.org/docs/generics.html) — official reference
-- [Wikipedia: System F](https://en.wikipedia.org/wiki/System_F) — теоретические основы
 - [TypeAlias: Kotlin Generics](https://typealias.com/start/kotlin-generics/) — visual guide
-- [Baeldung: Kotlin Generics](https://www.baeldung.com/kotlin/generics) — practical examples
 
 ---
 

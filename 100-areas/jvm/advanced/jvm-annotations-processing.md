@@ -25,6 +25,10 @@ sources:
   - "https://projectlombok.org/"
   - "https://mapstruct.org/"
   - "https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html"
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-reflection-api]]"
 related:
   - "[[jvm-reflection-api]]"
   - "[[jvm-bytecode-manipulation]]"
@@ -361,6 +365,10 @@ service.getUser(123L);  // Автоматически мониторится
 ---
 
 ## Compile-Time Annotation Processing (APT)
+
+### Аналогия: APT как сортировочный конвейер на почте
+
+> **Представьте:** Почтовое отделение (компилятор) получает письма (исходный код). На некоторых письмах наклеены стикеры (аннотации): "доставить экспресс", "требует подпись", "отправить копию в архив". Сортировочный конвейер (APT) проходит по всем письмам, читает стикеры и выполняет действия: генерирует квитанции (новые файлы), отправляет копии (сгенерированный код). Конвейер работает в несколько проходов (rounds): после первого прохода появились новые письма (сгенерированные файлы) — конвейер проходит ещё раз, пока новых писем не останется.
 
 ### Архитектура процессора
 
@@ -1288,6 +1296,24 @@ public class OrderAuditLog {
 5. [Project Lombok](https://projectlombok.org/) — Официальная документация
 6. [MapStruct](https://mapstruct.org/) — Официальная документация
 7. [Oracle: Processor API](https://docs.oracle.com/javase/8/docs/api/javax/annotation/processing/Processor.html) — Официальный API
+
+---
+
+## Связь с другими темами
+
+**[[jvm-reflection-api]]** — Reflection API и аннотации тесно связаны: runtime-аннотации (@Retention(RUNTIME)) читаются именно через Reflection, а compile-time аннотации обрабатываются APT без участия Reflection. Понимание Reflection необходимо для реализации annotation-driven фреймворков (Spring, Hibernate), где аннотации управляют поведением в runtime. Рекомендуется сначала изучить Reflection, затем переходить к annotation processing, так как APT работает с аналогичными концепциями (Element API вместо java.lang.reflect), но на этапе компиляции.
+
+**[[jvm-bytecode-manipulation]]** — Annotation Processing (APT) и bytecode manipulation — два альтернативных подхода к метапрограммированию на JVM. APT генерирует новые .java файлы на compile-time, тогда как ASM/ByteBuddy модифицируют байткод в runtime или при сборке. Lombok — уникальный случай, сочетающий оба подхода: использует APT-интерфейс, но фактически модифицирует AST через internal API javac. При выборе между подходами учитывайте: если типы известны на compile-time — APT быстрее и безопаснее; если нужна runtime-гибкость — bytecode manipulation.
+
+**[[jvm-service-loader-spi]]** — ServiceLoader и annotation processing используют похожий механизм регистрации: META-INF/services файлы. Annotation processors регистрируются через META-INF/services/javax.annotation.processing.Processor (или через Google AutoService, который сам является annotation processor). Понимание SPI помогает разобраться в том, как javac обнаруживает и загружает processors, а также как устроена модульная система plugins в Java экосистеме. Изучайте SPI параллельно с APT для целостного понимания plugin-архитектуры.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Главы 39-41 посвящены аннотациям: когда создавать собственные, как правильно использовать @Override, и почему marker interfaces иногда лучше marker annotations.
+- Evans B., Flanagan D. (2018). *Java in a Nutshell*, 7th Edition. — Подробный справочник по синтаксису аннотаций, retention policies и annotation processing API с практическими примерами.
+- Lindholm T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition. — Глава 4 описывает формат class-файлов и как аннотации хранятся в атрибутах RuntimeVisibleAnnotations и RuntimeInvisibleAnnotations.
 
 ---
 

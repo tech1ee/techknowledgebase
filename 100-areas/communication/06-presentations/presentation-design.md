@@ -11,6 +11,8 @@ tags:
 related:
   - "[[technical-presentations]]"
   - "[[storytelling-tech]]"
+prerequisites:
+  - "[[communication-models]]"
 ---
 
 # Presentation Design: Структура и визуальный дизайн презентаций

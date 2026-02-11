@@ -890,4 +890,22 @@ macosMain.get().dependsOn(appleMain)
 
 ---
 
+## Связь с другими темами
+
+- **[[kmp-project-structure]]** — Source sets — это внутреннее устройство модулей, описанных в project structure. Если project structure объясняет «какие модули есть в проекте», то source sets объясняют «как организован код внутри каждого модуля». Targets определяются на уровне project structure, а source sets конфигурируют dependencies, compiler options и файловую структуру для каждого target. Эти два материала образуют единое целое.
+
+- **[[kmp-expect-actual]]** — Правила видимости source sets напрямую определяют, как работает expect/actual. expect можно объявить в commonMain (видимом всем), а actual — в platform source sets (видящих common). dependsOn-механизм гарантирует, что actual в iosMain покрывает все iOS targets без дублирования. Понимание source set hierarchy объясняет, почему intermediate source sets упрощают работу с expect/actual.
+
+- **[[kmp-getting-started]]** — При создании первого проекта через KMP Wizard автоматически генерируются source sets (commonMain, androidMain, iosMain) с примерами кода. Возвращение к этим автоматически созданным файлам после изучения source sets позволяет увидеть, как default hierarchy template работает на практике и как dependsOn связывает iosMain с commonMain без явной конфигурации.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Понимание модульной системы Kotlin (packages, visibility, dependencies) необходимо для работы с source sets. Книга объясняет, как internal модификатор ограничивает видимость на уровне модуля — ключевая концепция при разделении кода между commonMain и platform source sets.
+
+- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по управлению зависимостями (implementation vs api scope), минимизации публичного API и организации кода в модули напрямую применимы к конфигурации source sets. Совет «зависимости должны быть implementation, а не api, если они не часть публичного API» критичен для multi-module KMP проектов.
+
+- Martin R. (2017). *Clean Architecture.* — Принципы модульности (Common Closure Principle, Common Reuse Principle) объясняют, как правильно группировать код в source sets. Понимание cohesion и coupling помогает решить, что поместить в commonMain, а что — в platform source sets или intermediate source sets.
+
+---
+
 *Проверено: 2026-01-09 | Kotlin 2.1.21, Gradle 8.5+*

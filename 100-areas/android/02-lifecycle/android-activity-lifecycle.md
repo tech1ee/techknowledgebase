@@ -17,6 +17,9 @@ related:
   - "[[android-architecture-patterns]]"
   - "[[android-context-internals]]"
 cs-foundations: [process-lifecycle, state-machine, resource-management, callback-pattern]
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-app-components]]"
 ---
 
 # Жизненный цикл Activity: состояния и переходы
@@ -751,25 +754,23 @@ fun `ViewModel data survives configuration change`() {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[android-overview]] — контекст Android-приложений, процессы и компоненты
-- [[os-processes-threads]] — почему Android убивает процессы, LMK (Low Memory Killer)
+**[[android-overview]]** — обзорная заметка по Android-платформе, описывающая процессную модель и компоненты приложения. Понимание того, как Android управляет процессами и зачем нужны компоненты, формирует базу для изучения жизненного цикла Activity. Рекомендуется изучить overview перед погружением в lifecycle.
 
-**Связанные концепции:**
-- [[android-app-components]] — Activity как один из 4 компонентов приложения
-- [[android-process-memory]] — как Android управляет памятью и решает что убить
+**[[android-app-components]]** — Activity является одним из четырёх фундаментальных компонентов Android-приложения наряду с Service, BroadcastReceiver и ContentProvider. Изучение компонентной модели показывает, почему Activity имеет именно такой жизненный цикл — система может запускать и останавливать компоненты независимо. Рекомендуется изучить компоненты до или параллельно с lifecycle.
 
-**Решения проблем lifecycle:**
-- [[android-architecture]] — ViewModel переживает configuration changes
-- [[android-compose]] — Compose имеет свой lifecycle (Composition), интегрированный с Activity
-- [[android-navigation]] — Navigation component управляет lifecycle destinations
-- [[android-bundle-parcelable]] — Bundle и savedInstanceState: как данные сохраняются через Binder IPC при пересоздании Activity
+**[[android-process-memory]]** — описывает, как Android управляет памятью через Low Memory Killer и приоритеты процессов. Непосредственно связано с lifecycle: когда система убивает процесс приложения, Activity проходит через onStop/onDestroy, и понимание приоритетов объясняет, почему важно сохранять состояние вовремя. Изучайте после lifecycle для более глубокого понимания.
 
-**Практика:**
-- [[android-data-persistence]] — как правильно сохранять данные между lifecycle transitions
-- [[android-background-work]] — когда приложение в background, но работа продолжается
+**[[android-architecture-patterns]]** — ViewModel, ключевой компонент архитектурных паттернов (MVVM/MVI), был создан именно для решения проблемы потери данных при configuration changes в lifecycle. Понимание lifecycle необходимо для правильного использования ViewModel, SavedStateHandle и lifecycle-aware компонентов. Рекомендуется как следующий шаг после lifecycle.
+
+**[[android-context-internals]]** — Context привязан к жизненному циклу Activity, и неправильное использование Context (например, передача Activity Context в singleton) является основной причиной memory leaks. Понимание lifecycle помогает избежать утечек и выбирать правильный тип Context для каждой ситуации.
+
+**[[android-compose]]** — Compose имеет собственный lifecycle (Composition), интегрированный с Activity lifecycle. Composable-функции привязаны к lifecycle хоста через setContent, и понимание Activity lifecycle необходимо для правильной работы с побочными эффектами (LaunchedEffect, DisposableEffect). Изучайте Compose после освоения Activity lifecycle.
+
+**[[android-bundle-parcelable]]** — Bundle используется в savedInstanceState для сохранения данных при пересоздании Activity. Понимание ограничений Bundle (1MB лимит Binder IPC, только Parcelable-типы) объясняет, почему для больших данных используется ViewModel, а не savedInstanceState.
+
+**[[android-background-work]]** — когда Activity уходит в background (onStop), длительная работа должна выполняться через WorkManager или Foreground Service, а не через coroutine в Activity scope. Lifecycle определяет, когда корутины Activity отменяются, и понимание этого критично для надёжной фоновой работы.
 
 ---
 
@@ -793,8 +794,14 @@ fun `ViewModel data survives configuration change`() {
 | Callback Pattern | Система вызывает методы Activity, инверсия контроля (IoC) |
 | Serialization | savedInstanceState → Bundle → Parcel (IPC), ограничение ~1MB |
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник, подробно разбирающий Activity lifecycle с упражнениями и примерами сохранения состояния
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке с глубоким описанием жизненного цикла компонентов
+- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их взаимодействие с lifecycle (viewModelScope, lifecycleScope)
+
+**Веб-ресурсы:**
 - [The Activity Lifecycle - Android Developers](https://developer.android.com/guide/components/activities/activity-lifecycle) — официальная документация
 - [Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle) — lifecycle-aware компоненты
 - [Activity Lifecycle Codelab](https://developer.android.com/codelabs/basic-android-kotlin-compose-activity-lifecycle) — практический codelab

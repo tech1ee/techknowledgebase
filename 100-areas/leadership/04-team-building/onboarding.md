@@ -191,6 +191,16 @@ Structured plan + buddy + small early wins
 | [First Round: Onboarding](https://review.firstround.com/) | Articles |
 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book |
 
+## Связь с другими темами
+
+### [[building-engineering-team]]
+
+Онбординг — заключительный этап процесса найма и первый этап интеграции нового члена команды. Даже идеальный hiring pipeline обесценивается, если новый инженер уходит через 3 месяца из-за плохого onboarding. Structured onboarding (+62% productivity) напрямую влияет на retention rate и time-to-productivity, которые являются ключевыми метриками успешного team building.
+
+### [[team-culture]]
+
+Первые 30 дней — окно, в котором новый инженер впитывает культуру команды. Buddy system, 1:1 с менеджером, первый code review — всё это формирует восприятие культуры. Если заявленные ценности (collaboration, psychological safety) расходятся с реальным опытом onboarding ("sink or swim"), новый сотрудник усвоит реальную культуру, а не декларируемую. Onboarding — лакмусовая бумажка для team culture.
+
 ---
 
 *Последнее обновление: 2026-01-18*

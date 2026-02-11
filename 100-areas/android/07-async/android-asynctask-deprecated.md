@@ -16,6 +16,9 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-executors]]"
   - "[[android-threading]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-threading]]"
 ---
 
 # AsyncTask: история, проблемы и уроки
@@ -3001,6 +3004,20 @@ AsyncTask строился поверх более низкоуровневых 
 Сложности тестирования AsyncTask:
 
 - **[[android-testing]]** — стратегии тестирования асинхронного кода, Espresso IdlingResources и мокирование
+
+---
+
+## Источники и дальнейшее чтение
+
+**Книги:**
+- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM: thread pools, executor framework, memory model — фундамент, на котором построен AsyncTask
+- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины как современная замена AsyncTask: structured concurrency, cancellation, lifecycle integration
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая эволюцию асинхронных API
+
+**Веб-ресурсы:**
+- [AsyncTask API Reference](https://developer.android.com/reference/android/os/AsyncTask) — официальная документация (deprecated)
+- [Background Tasks Overview](https://developer.android.com/develop/background-work) — современные альтернативы AsyncTask
+- [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines) — рекомендованная замена AsyncTask
 
 ---
 

@@ -18,6 +18,8 @@ related:
   - "[[api-design]]"
   - "[[observability]]"
   - "[[network-http-evolution]]"
+prerequisites:
+  - "[[api-design]]"
   - "[[jvm-memory-model]]"
 ---
 

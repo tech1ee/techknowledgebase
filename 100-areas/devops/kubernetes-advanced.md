@@ -7,7 +7,7 @@ status: published
 confidence: high
 tags:
   - topic/devops
-  - kubernetes
+  - topic/kubernetes
   - rbac
   - topic/security
   - operators
@@ -17,6 +17,10 @@ related:
   - "[[kubernetes-basics]]"
   - "[[devops-overview]]"
   - "[[security-overview]]"
+prerequisites:
+  - "[[kubernetes-basics]]"
+  - "[[docker-for-developers]]"
+  - "[[infrastructure-as-code]]"
 ---
 
 # Kubernetes Advanced: RBAC, Network Policies, Operators

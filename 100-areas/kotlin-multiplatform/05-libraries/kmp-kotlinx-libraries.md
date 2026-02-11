@@ -16,6 +16,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kotlin-coroutines]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-source-sets]]"
+  - "[[kotlin-coroutines]]"
 cs-foundations:
   - "[[serialization-theory]]"
   - "[[time-representation-computing]]"
@@ -877,6 +881,24 @@ val meetingTime: Instant  // Однозначный момент в UTC
 | [[concurrency-models]] | Structured concurrency, Flow | Kotlin Coroutines Guide |
 | [[io-streams-theory]] | Buffer, Source, Sink | Okio documentation |
 | [[type-systems-theory]] | @Serializable compile-time checking | TAPL book |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — kotlinx библиотеки являются официальной основой экосистемы KMP от JetBrains. Понимание общей архитектуры KMP позволяет правильно выбирать и комбинировать kotlinx-serialization, kotlinx-datetime и kotlinx-coroutines в рамках multiplatform-проекта. Без этого контекста сложно понять, зачем нужны отдельные артефакты для каждой платформы и как source sets влияют на доступность API.
+
+- **[[kmp-ktor-networking]]** — Ktor Client тесно интегрирован с kotlinx-serialization через ContentNegotiation plugin и с kotlinx-io начиная с версии 3.0. Понимание сериализации, буферов и корутин напрямую влияет на эффективность работы с сетевым слоем. Ktor 3.x использует kotlinx-io внутри, что даёт 90%+ улучшение throughput благодаря segment pooling и zero-copy.
+
+- **[[kotlin-coroutines]]** — kotlinx-coroutines является фундаментом асинхронного программирования в KMP: Flow, StateFlow, Dispatchers и structured concurrency используются повсеместно. Глубокое понимание корутин необходимо для правильного использования suspend-функций в Ktor, реактивных запросов в SQLDelight и управления состоянием через StateFlow. Без этих знаний невозможно писать эффективный multiplatform-код.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундаментальное введение в Kotlin, включая работу с generics и annotations, которые лежат в основе @Serializable и compile-time code generation в kotlinx-serialization.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Исчерпывающее руководство по корутинам, Flow, StateFlow и structured concurrency — всё, что составляет ядро kotlinx-coroutines и используется в каждом KMP-проекте для асинхронной работы.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по идиоматическому использованию Kotlin, включая best practices для работы с коллекциями, nullable типами и DSL-подобными API, что напрямую применимо к конфигурации Json {} и DateTimePeriod.
 
 ---
 

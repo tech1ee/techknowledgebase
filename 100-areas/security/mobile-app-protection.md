@@ -6,6 +6,13 @@ tags:
   - topic/security
   - type/concept
   - level/intermediate
+related:
+  - "[[mobile-security-owasp]]"
+  - "[[android-permissions-security]]"
+  - "[[ios-permissions-security]]"
+prerequisites:
+  - "[[mobile-security-owasp]]"
+  - "[[security-fundamentals]]"
 ---
 
 # Mobile App Protection: Защита приложений от атак
@@ -2374,6 +2381,29 @@ Enterprise Solutions:
   ├── □ Server notification on threats
   └── □ Data protection on detection
 ```
+
+---
+
+## Связь с другими темами
+
+[[mobile-security-owasp]] — OWASP Mobile Top 10 определяет каталог угроз, от которых защищают техники из этого материала. Категории M1 (Improper Credential Usage), M7 (Insufficient Binary Protections) и M8 (Security Misconfiguration) напрямую связаны с code hardening, RASP и integrity verification. Рекомендуется сначала изучить Mobile Top 10 для понимания ландшафта угроз, затем mobile-app-protection для конкретных контрмер.
+
+[[android-permissions-security]] — Android-специфичные механизмы безопасности (permission model, Android Keystore, EncryptedSharedPreferences) являются платформенной основой для реализации техник защиты: root detection проверяет целостность платформы, integrity verification использует PackageManager API, а secrets protection опирается на Android Keystore. Глубокое знание Android security model необходимо для эффективной реализации RASP.
+
+[[ios-permissions-security]] — iOS-специфичные механизмы (Keychain, Secure Enclave, Data Protection API, App Attest) обеспечивают платформенную поддержку для jailbreak detection, attestation и secure storage. Понимание особенностей iOS sandbox, code signing и entitlements критично для реализации многослойной защиты на платформе Apple.
+
+[[mobile-security-masvs]] — категория MASVS-RESILIENCE определяет конкретные требования к anti-tampering и reverse engineering protection, а MASTG предоставляет тест-кейсы для верификации реализации. Mobile App Protection реализует контроли из MASVS-RESILIENCE, MASVS-STORAGE и MASVS-CRYPTO, обеспечивая практическое соответствие стандарту.
+
+[[threat-modeling]] — моделирование угроз определяет, какие техники защиты приоритетны для конкретного приложения. Например, финансовое приложение требует максимального уровня RASP и attestation, тогда как информационное может ограничиться базовой obfuscation. Threat model также помогает оценить risk/cost баланс между бесплатными (R8, RootBeer) и коммерческими (DexGuard, iXGuard) решениями.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по защите мобильных приложений, включая reverse engineering, runtime protection и platform-specific mechanisms для Android и iOS.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — принципы Defense in Depth и инженерии безопасности, применимые к проектированию многослойной защиты мобильных приложений.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — методология определения приоритетов защиты через систематическое моделирование угроз, критична для выбора адекватного уровня mobile app protection.
+- Ferguson N., Schneier B., Kohno T. (2010). *Cryptography Engineering: Design Principles and Practical Applications.* Wiley. — для понимания криптографических основ, на которых строятся integrity verification, secure storage и string encryption.
 
 ---
 

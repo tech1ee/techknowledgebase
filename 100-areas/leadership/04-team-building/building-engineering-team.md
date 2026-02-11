@@ -20,6 +20,9 @@ related:
   - "[[em-fundamentals]]"
   - "[[team-culture]]"
   - "[[scaling-engineering-org]]"
+prerequisites:
+  - "[[hiring-engineers]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Строительство инженерной команды
@@ -691,6 +694,24 @@ ADD:
 | 3 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Team building stages |
 | 4 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book | Scaling teams |
 | 5 | [First Round Review](https://review.firstround.com/) | Articles | First hires |
+
+---
+
+## Связь с другими темами
+
+**[[hiring-engineers]]** — Hiring — первый шаг в строительстве команды. Каждый новый hire не просто заполняет позицию, а изменяет динамику всей команды. Первые 3-5 hires определяют culture на годы вперёд, поэтому hiring philosophy и criteria должны учитывать не только индивидуальные skills, но и team composition, diversity of perspectives и cultural contribution.
+
+**[[em-fundamentals]]** — Building engineering team — это расширение фундаментальных обязанностей EM в масштабе. Если em-fundamentals описывает, как работать с существующей командой, то building team покрывает создание команды с нуля или её трансформацию. Servant leadership, psychological safety и multiplier effect — все эти принципы EM становятся особенно важными на этапе формирования команды.
+
+**[[team-culture]]** — Культура — это emergent property команды, и она формируется осознанно или неосознанно с первого дня. Building team и building culture — параллельные процессы: нельзя построить хорошую команду без хорошей культуры, и нельзя создать культуру без правильных людей. First hires задают cultural DNA, которое потом чрезвычайно сложно изменить.
+
+**[[scaling-engineering-org]]** — Scaling — естественное продолжение building team. Когда одна команда вырастает до 8-10 человек, возникает необходимость split и масштабирования. Принципы, заложенные при строительстве первой команды (autonomy, clear ownership, documentation culture), определяют, насколько легко будет масштабировать организацию.
+
+## Источники и дальнейшее чтение
+
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Фундаментальная модель для понимания, что делает команду эффективной. Пять уровней (trust, conflict, commitment, accountability, results) — это blueprint для строительства здоровой команды с самого начала.
+- **Ed Catmull, "Creativity Inc." (2014)** — Опыт Pixar в строительстве creative teams. Catmull показывает, что правильные люди в правильной среде создают результаты, которые невозможно предсказать. "Getting the team right is the necessary precondition for getting the ideas right."
+- **Camille Fournier, "The Manager's Path" (2017)** — Практическое руководство по строительству и развитию инженерных команд на каждом этапе роста, от первой команды до engineering org из сотен человек.
 
 ---
 

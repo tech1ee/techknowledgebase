@@ -12,6 +12,10 @@ tags:
   - coroutines
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
+  - "[[kotlin-coroutines]]"
 cs-foundations:
   - "[[unit-testing-theory]]"
   - "[[assertion-patterns]]"
@@ -998,6 +1002,24 @@ fun test() {
 | Reactive Testing | Turbine, Flow testing | Reactive Manifesto |
 | Assertion Patterns | shouldBe, assertSoftly | xUnit Patterns |
 | Test Isolation | Fakes, no shared state | Gerard Meszaros "xUnit Test Patterns" |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — unit тесты в KMP пишутся в commonTest и автоматически запускаются на всех целевых платформах. Это означает, что один написанный тест проверяет поведение кода на JVM, Android, iOS и других targets. Понимание структуры source sets необходимо для правильной организации тестов и использования expect/actual для platform-specific test utilities.
+
+- **[[kmp-testing-strategies]]** — unit тесты составляют основу тестовой пирамиды в KMP (70% от всех тестов). Стратегия тестирования определяет, что именно покрывать unit тестами (UseCases, ViewModels, Repositories), какие инструменты использовать (kotlin.test + Kotest + Turbine) и как организовать fakes вместо mocks для совместимости с Kotlin/Native, где нет reflection.
+
+- **[[kmp-integration-testing]]** — unit тесты и integration тесты дополняют друг друга: unit тесты проверяют изолированную логику с fakes, а integration тесты — взаимодействие компонентов с MockEngine и in-memory SQLDelight. Понимание границ между ними позволяет избежать дублирования и сфокусировать каждый тип теста на своей зоне ответственности — логика vs контракты.
+
+## Источники и дальнейшее чтение
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Содержит подробную главу о тестировании корутин: runTest, TestDispatcher, virtual time, а также паттерны тестирования Flow и StateFlow. Без этих знаний невозможно правильно тестировать асинхронный код в KMP.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы тестируемости через инверсию зависимостей и разделение слоёв. Объясняет, почему UseCases и Repositories должны зависеть от интерфейсов, а не реализаций, что позволяет легко подставлять fakes в unit тестах.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию тестируемого Kotlin-кода: использование sealed classes для состояний (UiState), data classes для сравнения в assertions, и extension functions для custom matchers.
 
 ---
 

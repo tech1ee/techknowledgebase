@@ -17,11 +17,26 @@ related:
   - "[[programming-overview]]"
   - "[[jvm-concurrency-overview]]"
   - "[[architecture-resilience-patterns]]"
+prerequisites:
+  - "[[os-processes-threads]]"
+  - "[[clean-code-solid]]"
 ---
 
 # Concurrency & Parallelism: Threads, Async, Race Conditions
 
 > Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once. — Rob Pike
+
+---
+
+## Исторический контекст
+
+Проблема concurrent programming возникла с появлением многозадачных операционных систем в 1960-х. **Edsger Dijkstra** (1965) формализовал проблему взаимного исключения и предложил **семафоры** (semaphores) как примитив синхронизации в статье "Solution of a Problem in Concurrent Programming Control". Он же сформулировал проблему "обедающих философов" (1971), ставшую каноническим примером deadlock.
+
+**C.A.R. Hoare** (1974) предложил **мониторы** (monitors) — более структурированный подход к синхронизации, объединяющий данные и операции над ними с автоматической блокировкой. Мониторы легли в основу synchronized-блоков Java и lock-механизмов в большинстве современных языков. Позже Hoare (1978) описал **Communicating Sequential Processes (CSP)** — формальный язык для описания concurrency через обмен сообщениями, а не через разделяемую память.
+
+**Leslie Lamport** (1978) ввёл концепцию **happens-before** и логических часов, которые стали основой для рассуждения о порядке событий в распределённых системах. Его работы по Paxos (1998) и Byzantine fault tolerance заложили фундамент для distributed consensus.
+
+В 2000-х произошёл "concurrency revolution": закон Мура перестал давать прирост тактовой частоты, и индустрия перешла к многоядерным процессорам. Rob Pike (2012) в докладе "Concurrency is not Parallelism" чётко разделил эти концепции, а язык Go (2009) воплотил идеи CSP в goroutines и channels. Kotlin coroutines (2018), Java virtual threads (Project Loom, 2023), Swift structured concurrency (2021) — все они наследники этих фундаментальных идей.
 
 ---
 
@@ -628,21 +643,28 @@ with semaphore:
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[programming-overview]] — основы программирования
-- [[jvm-concurrency-overview]] — JVM concurrency specifics
-- [[architecture-resilience-patterns]] — retry, circuit breaker
-- [[kotlin-coroutines]] — Kotlin coroutines
+**[[programming-overview]]** — Concurrency и parallelism — фундаментальные концепции, которые пронизывают все уровни программирования. Overview описывает парадигмы и подходы, а concurrency добавляет ещё одно измерение: программа может быть одновременно объектно-ориентированной, функциональной и concurrent. Понимание этих концепций критично для любого разработчика, работающего с сетью, I/O или пользовательским интерфейсом.
+
+**[[jvm-concurrency-overview]]** — JVM предоставляет конкретную реализацию concurrency-примитивов: Java Memory Model (JSR-133), synchronized/volatile, java.util.concurrent, а также современные абстракции — Kotlin coroutines и Java virtual threads (Project Loom). Понимание теоретических основ (семафоры, мониторы, happens-before) делает работу с JVM-специфичными инструментами осмысленной, а не механической.
+
+**[[architecture-resilience-patterns]]** — Паттерны resilience (retry, circuit breaker, bulkhead, timeout) напрямую связаны с concurrency: все они решают проблемы, возникающие при параллельных запросах к внешним сервисам. Circuit breaker использует atomic state transitions, bulkhead реализуется через semaphores, а timeout — через async cancellation. Без понимания concurrency эти паттерны невозможно корректно реализовать.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-- "Java Concurrency in Practice" by Brian Goetz
-- "The Go Programming Language" — Chapter 8
-- [Python asyncio docs](https://docs.python.org/3/library/asyncio.html)
-- [Rust async book](https://rust-lang.github.io/async-book/)
+Goetz B. et al. (2006). *"Java Concurrency in Practice."* — Золотой стандарт для JVM-разработчиков. Объясняет Java Memory Model, happens-before, thread safety и построение корректных concurrent-структур. Актуален далеко за пределами Java — концепции применимы к любому языку с shared memory.
+
+Herlihy M., Shavit N. (2012). *"The Art of Multiprocessor Programming."* — Глубокое погружение в lock-free и wait-free алгоритмы, линеаризуемость, concurrent data structures. Незаменимо для понимания того, как работают atomic operations и CAS на уровне hardware.
+
+Ben-Ari M. (2006). *"Principles of Concurrent and Distributed Programming."* — Академический, но доступный учебник. Покрывает все фундаментальные модели: semaphores, monitors, message passing, distributed algorithms. Отличная теоретическая база перед переходом к практике.
+
+Hoare C.A.R. (1978). *"Communicating Sequential Processes."* — Оригинальная работа, описавшая CSP-модель concurrency через обмен сообщениями. Лежит в основе goroutines (Go) и каналов (Kotlin, Rust). Доступна бесплатно на сайте автора.
+
+- [Python asyncio docs](https://docs.python.org/3/library/asyncio.html) — документация по асинхронному программированию в Python
+- [Rust async book](https://rust-lang.github.io/async-book/) — async/await в Rust с ownership-моделью
 
 ---
 

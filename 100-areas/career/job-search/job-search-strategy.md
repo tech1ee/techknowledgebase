@@ -13,6 +13,8 @@ related:
   - "[[hidden-job-market]]"
   - "[[networking-tactics]]"
   - "[[remote-first-companies]]"
+prerequisites:
+  - "[[android-job-market-2025]]"
 ---
 
 # Job Search Strategy 2025: системный подход в жёсткой конкуренции
@@ -348,6 +350,22 @@ and learn how it's going for your team."
 → [[resume-strategy]] — как оптимизировать резюме
 
 ---
+
+## Связь с другими темами
+
+- [[hidden-job-market]] — 70-80% вакансий не публикуются, и targeted outreach стратегия из текущего материала напрямую связана с доступом к hidden market. Step 3 (Build Relationships) и Step 4 (Apply Strategically через referrals) — это практическое применение знаний о hidden market. Без понимания скрытого рынка стратегия сводится к cold apply с 2% конверсией.
+
+- [[networking-tactics]] — Networking — основа targeted outreach стратегии. Value-forward communication, informational interviews и proactive outreach из текущего материала требуют конкретных networking навыков: как начать разговор, как поддерживать relationship, как попросить referral. Networking-tactics даёт эти тактики с templates и scripts.
+
+- [[remote-first-companies]] — Список целевых компаний для remote работы, который используется в Step 2 (Build Target List). Для кандидатов, ищущих remote позиции, этот список заменяет ручной поиск на RemoteOK и We Work Remotely. Target list — основа стратегии, и remote-first companies даёт готовый пул для начала.
+
+## Источники и дальнейшее чтение
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking framework идеально ложится на 5-Step Framework из текущего материала: Define (Step 1) → Ideate (Step 2) → Prototype (Step 3-4) → Test (Step 5). Книга помогает структурировать поиск работы как design challenge, а не как лотерею.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Стратегия поиска работы бесполезна без technical preparation. Книга покрывает coding rounds, которые следуют за успешным networking и referral. Глава о job search process дополняет текущий материал perspective кандидата FAANG.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание того, как hiring managers думают о кандидатах, помогает в value-forward communication: какие pain points у engineering teams, почему нанимают, какие сигналы ищут. Книга даёт perspective "с другой стороны стола".
 
 ## Источники
 

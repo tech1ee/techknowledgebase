@@ -6,6 +6,14 @@ tags:
   - topic/databases
   - type/guide
   - level/advanced
+related:
+  - "[[databases-transactions-acid]]"
+  - "[[os-file-systems]]"
+  - "[[databases-fundamentals-complete]]"
+prerequisites:
+  - "[[databases-transactions-acid]]"
+  - "[[databases-fundamentals-complete]]"
+  - "[[sql-databases-complete]]"
 ---
 
 # Database Internals: From Storage to Transactions
@@ -1166,6 +1174,22 @@ QUERIES:
 - [PostgreSQL Internals](https://www.postgresql.org/docs/current/internals.html)
 - [MySQL InnoDB Architecture](https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html)
 - [SQLite File Format](https://sqlite.org/fileformat.html)
+
+## Связь с другими темами
+
+[[databases-transactions-acid]] — Транзакции и ACID-свойства рассматриваются на прикладном уровне, тогда как данный документ показывает их внутреннюю реализацию: WAL обеспечивает Durability и Atomicity, MVCC реализует Isolation, а ARIES-алгоритм гарантирует Recovery. Рекомендуется сначала освоить ACID на уровне использования, затем углубиться в механизмы через этот материал.
+
+[[os-file-systems]] — Файловые системы ОС лежат в основе storage engine: страницы (pages) являются единицей I/O, fsync обеспечивает durability, а mmap используется для memory-mapped файлов. Понимание работы файловой системы помогает осознать, почему sequential I/O (LSM-Tree) быстрее random I/O (B-Tree) и как buffer pool оптимизирует доступ к данным.
+
+[[databases-fundamentals-complete]] — Фундаментальные концепции баз данных (индексы, нормализация, типы запросов) описывают «что» делает СУБД, тогда как internals объясняют «как» это реализовано под капотом. Знание фундамента помогает задавать правильные вопросы: почему этот запрос медленный? почему нужен vacuum? почему isolation level влияет на производительность?
+
+[[sql-databases-complete]] — Практическое использование PostgreSQL, MySQL и SQLite подкрепляется пониманием их internal-механизмов: почему EXPLAIN ANALYZE показывает определённый план, как работает connection pooling, почему partitioning ускоряет запросы. Этот материал даёт теоретическую базу для осознанной оптимизации SQL-запросов.
+
+## Источники и дальнейшее чтение
+
+- Petrov A. (2019). *Database Internals*. — Основной источник по теме: storage engines (B-Tree, LSM-Tree), buffer management, WAL, distributed transactions. Must-read для глубокого понимания работы СУБД.
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage и retrieval, репликации, партиционировании. Связывает internal-механизмы с архитектурными решениями для data-intensive систем.
+- Garcia-Molina H., Ullman J.D., Widom J. (2008). *Database Systems: The Complete Book*. — Академический учебник с формальным описанием query processing, concurrency control (2PL, MVCC), recovery (ARIES). Необходим для глубокого понимания алгоритмов.
 
 ---
 

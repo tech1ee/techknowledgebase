@@ -17,6 +17,8 @@ tags:
 related:
   - "[[active-listening]]"
   - "[[conflict-resolution]]"
+prerequisites:
+  - "[[active-listening]]"
 ---
 
 # Empathetic Listening: когда важнее понять человека, чем решить проблему

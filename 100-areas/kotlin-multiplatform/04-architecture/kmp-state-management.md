@@ -10,12 +10,16 @@ tags:
   - sharedflow
   - mvi
   - redux
-  - compose
+  - topic/android
   - type/concept
   - level/intermediate
 related:
   - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
+  - "[[kotlin-flow]]"
+prerequisites:
+  - "[[kmp-architecture-patterns]]"
+  - "[[kotlin-coroutines]]"
   - "[[kotlin-flow]]"
 cs-foundations:
   - "[[reactive-programming-paradigm]]"
@@ -969,6 +973,22 @@ withContext(Dispatchers.Main.immediate) {
 | Concurrency | Thread-safe operations | [[concurrency-primitives]] |
 | Hot vs Cold Streams | StateFlow vs Flow | [[reactive-programming-paradigm]] |
 | Structural Sharing | Efficient copy() | [[persistent-data-structures]] |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор KMP описывает общую архитектуру проекта, в которой state management является центральным механизмом для связывания shared бизнес-логики с платформенным UI. Управление состоянием определяет, как данные передаются из commonMain в Android Compose, iOS SwiftUI/UIKit и Desktop. Понимание KMP-архитектуры необходимо для выбора правильной стратегии state management.
+
+**[[kmp-architecture-patterns]]** — Архитектурные паттерны (MVVM, MVI, Redux) определяют стратегию state management: MVVM использует StateFlow в ViewModel, MVI реализует однонаправленный поток Intent → Reducer → State, Redux применяет единый Store с middleware. Выбор архитектурного паттерна неразрывно связан с подходом к управлению состоянием.
+
+**[[kotlin-flow]]** — Kotlin Flow и StateFlow являются основными примитивами для state management в KMP. StateFlow обеспечивает хранение и распространение текущего состояния, SharedFlow — одноразовые события (navigation, snackbar), а обычный Flow — потоки данных из репозиториев. Глубокое понимание Flow API критически важно для реализации любого подхода к state management в KMP.
+
+## Источники и дальнейшее чтение
+
+1. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Наиболее важная книга для state management в KMP. Детально описывает StateFlow, SharedFlow, Flow operators и structured concurrency — все механизмы, которые лежат в основе реактивного управления состоянием в мультиплатформенных приложениях.
+2. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв определяют, где хранится состояние (domain vs presentation) и как оно трансформируется при передаче между слоями. Помогает избежать god-object ViewModel с чрезмерным количеством state.
+3. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по immutability (data class copy()), sealed classes для state/event моделирования и proper equality определяют качество state management реализации.
 
 ---
 

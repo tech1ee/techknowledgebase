@@ -12,6 +12,10 @@ aliases:
   - Kotlin Basics
   - Основы Kotlin
 status: published
+related:
+  - "[[kotlin-oop]]"
+  - "[[kotlin-functional]]"
+  - "[[kmp-getting-started]]"
 ---
 
 # Kotlin: Основы языка
@@ -46,6 +50,10 @@ status: published
 ---
 
 Kotlin — язык для JVM от JetBrains, официальный язык Android-разработки с 2019 года. Null-safety на уровне системы типов: `String` никогда не null, `String?` — может быть, и компилятор заставляет обрабатывать оба случая. NullPointerException ловится при компиляции, не в runtime.
+
+Представьте аптечный склад, где каждое лекарство имеет ячейку. В Java любая ячейка может быть пустой — и вы узнаете об этом, только когда протянете руку и ничего не найдёте. В Kotlin ячейки двух видов: обычные (гарантированно с лекарством) и помеченные знаком «?» (может быть пустой). Прежде чем взять что-то из помеченной ячейки, вы обязаны проверить — иначе система просто не позволит вам протянуть руку. Это и есть null-safety на уровне типов.
+
+Другая полезная аналогия — ресторанное меню. В Java `switch` — это фиксированное меню: только определённые категории блюд (примитивы, enum, строки). В Kotlin `when` — это меню без ограничений: можно выбирать по типу блюда (`is`), по диапазону цен (`in 10..50`), по нескольким критериям одновременно — и если меню фиксировано (sealed class), официант (компилятор) проверит, что вы рассмотрели все варианты.
 
 Data class заменяет ~50 строк Java boilerplate (getters, setters, equals, hashCode, toString). `val` вместо `final String`, `when` вместо ограниченного switch с exhaustiveness checking. Extension functions позволяют добавлять методы к существующим классам без наследования. Полная интероперабельность с Java: можно вызывать Kotlin из Java и наоборот.
 
@@ -229,45 +237,40 @@ val result = numbers
 
 ### Типы данных
 
+Kotlin поддерживает стандартные числовые типы, но все они являются классами, а не примитивами в Java-смысле. Компилятор автоматически использует примитивные типы JVM (`int`, `long`) для производительности там, где это возможно.
+
 ```kotlin
 // Числовые типы
 val byte: Byte = 127
 val short: Short = 32767
 val int: Int = 2_147_483_647      // Подчеркивания для читабельности
 val long: Long = 9_000_000_000L   // L суффикс для Long
-
 val float: Float = 3.14F          // F суффикс для Float
 val double: Double = 3.14159
+```
 
-// Символы и строки
+Строки поддерживают интерполяцию и многострочный формат через тройные кавычки. `Unit` — аналог `void` в Java, но является полноценным типом с единственным значением (можно использовать в generics).
+
+```kotlin
+// Символы, строки и логический тип
 val char: Char = 'A'
 val string: String = "Hello"
 val multiline = """
-    This is
-    multiline string
-    with preserved formatting
+    This is multiline string
 """.trimIndent()
-
-// Логический тип
 val isActive: Boolean = true
 
-// Unit — аналог void в Java
-fun logMessage(msg: String): Unit {
-    println(msg)
-}
-// Unit можно опустить
-fun logMessage2(msg: String) {
-    println(msg)
-}
+// Unit — можно опустить в сигнатуре
+fun logMessage(msg: String) { println(msg) }
 ```
-
-**Важно:** Kotlin не имеет примитивов в Java-смысле. `Int` — это класс, но компилируется в `int` где возможно для производительности.
 
 ---
 
 ## 2. Null Safety
 
 ### Nullable vs Non-nullable типы
+
+В Kotlin типы делятся на nullable и non-nullable. По умолчанию переменная не может содержать null — для этого нужно явно добавить `?` к типу.
 
 ```kotlin
 // Non-nullable по умолчанию
@@ -277,24 +280,18 @@ name = null  // ❌ Ошибка компиляции
 // Nullable тип — добавляем ?
 var nullableName: String? = "John"
 nullableName = null  // ✅ OK
+```
 
-// Компилятор заставляет обрабатывать null
+Компилятор предлагает несколько способов безопасной работы с nullable-типами. Каждый подходит для разных ситуаций: safe call для цепочек, Elvis для значений по умолчанию, явная проверка для блоков логики.
+
+```kotlin
 fun printLength(text: String?) {
-    // println(text.length)  // ❌ Ошибка: text может быть null
-
-    // Вариант 1: Безопасный вызов
-    println(text?.length)  // Вернет null если text == null
-
-    // Вариант 2: Elvis operator
-    val length = text?.length ?: 0  // Если null, вернет 0
-
-    // Вариант 3: Явная проверка
+    println(text?.length)            // Safe call: null если text == null
+    val length = text?.length ?: 0   // Elvis: 0 если null
     if (text != null) {
-        println(text.length)  // Smart cast: text теперь String
+        println(text.length)         // Smart cast: text теперь String
     }
-
-    // Вариант 4: Принудительный вызов (используйте редко!)
-    println(text!!.length)  // NPE если text == null
+    println(text!!.length)           // Принудительный вызов (NPE если null!)
 }
 ```
 
@@ -945,31 +942,21 @@ Adoption:
 
 ---
 
-## Рекомендуемые источники
+## Связь с другими темами
 
-### Официальная документация
-- [Kotlin Basics](https://kotlinlang.org/docs/basic-syntax.html) — официальный tutorial
-- [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) — style guide
-- [Kotlin Koans](https://play.kotlinlang.org/koans/) — интерактивный курс в браузере
+**[[kotlin-oop]]** — основы языка (val/var, null-safety, data classes) создают фундамент для объектно-ориентированного программирования в Kotlin. Data classes, sealed classes и object declarations — расширения базового синтаксиса для моделирования предметной области. Без освоения basics невозможно понять, почему Kotlin OOP отличается от Java OOP. Изучите основы синтаксиса, затем переходите к ООП-паттернам.
 
-### Книги
-- **"Kotlin in Action"** (2nd ed, 2024) — Dmitry Jemerov, Svetlana Isakova. Каноническая книга от создателей языка
-- **"Effective Kotlin"** (2024) — Marcin Moskała. Best practices и идиоматичный код
-- **"Head First Kotlin"** — визуальный формат для начинающих
+**[[kotlin-functional]]** — Kotlin с самого начала проектировался как мультипарадигменный язык: лямбды, higher-order functions и expression-based конструкции (if, when как expressions) встроены в базовый синтаксис. Функциональное программирование расширяет basics: scope functions (let, apply, run) строятся на лямбдах, collection operators (map, filter) — на higher-order functions. Рекомендуется изучать functional после basics как естественное продолжение.
 
-### Курсы
-- [JetBrains Academy](https://www.jetbrains.com/academy/) — project-based learning от создателей Kotlin
-- [Android Kotlin Fundamentals](https://developer.android.com/courses/kotlin-fundamentals/course) — Google официальный курс
-- [Kotlin for Java Developers](https://www.coursera.org/learn/kotlin-for-java-developers) — Coursera, JetBrains
+**[[kmp-getting-started]]** — Kotlin Multiplatform позволяет использовать один язык для Android, iOS, Desktop и Web. Все базовые конструкции Kotlin (null-safety, data classes, coroutines) работают одинаково на всех платформах. Понимание basics необходимо перед изучением KMP, потому что мультиплатформенный код — это обычный Kotlin с expect/actual декларациями для платформенных различий.
 
-### Видео
-- [Roman Elizarov talks](https://www.youtube.com/@RomanElizarov) — автор Kotlin Coroutines
-- [Kotlin by JetBrains](https://www.youtube.com/@Kotlin) — официальный канал
+---
 
-### Инструменты
-- [ktlint](https://github.com/pinterest/ktlint) — linter и formatter
-- [detekt](https://github.com/detekt/detekt) — static code analysis
-- [Kotlin Playground](https://play.kotlinlang.org/) — онлайн IDE для экспериментов
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — каноническая книга от создателей языка. Подробное объяснение каждой конструкции Kotlin с точки зрения перехода с Java: val/var, null-safety, type inference, control flow.
+- Moskala M. (2024). *Effective Kotlin.* — best practices и идиоматичный код. Объясняет, почему предпочитать val, когда использовать smart casts и как избегать типичных ошибок новичков.
+- Vermeulen D. (2019). *Head First Kotlin.* — визуальный формат для начинающих. Хорошо подходит как первое знакомство с языком благодаря иллюстрациям и пошаговым примерам.
 
 ---
 

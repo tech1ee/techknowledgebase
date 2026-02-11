@@ -7,10 +7,14 @@ tags:
   - topic/kmp
   - gradle
   - build
-  - optimization
+  - performance
   - convention-plugins
   - type/deep-dive
   - level/advanced
+prerequisites:
+  - "[[kmp-project-structure]]"
+  - "[[kmp-source-sets]]"
+  - "[[kmp-expect-actual]]"
 related:
   - [kmp-project-structure]]
   - "[[kmp-ci-cd]]"
@@ -730,4 +734,22 @@ kotlin.build.report.file.output_dir=build/reports/kotlin-build
 | [Multi-module KMP](https://proandroiddev.com/effortless-multimodule-configuration-for-kotlin-multiplatform-projects-with-gradle-convention-8e6593dff1d9) | Blog | Convention plugins для KMP |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-project-structure]]** — Gradle конфигурация определяет структуру KMP-проекта: targets (androidTarget, iosArm64, jvm), source sets (commonMain, platformMain), зависимости между модулями. Понимание project structure необходимо для правильной настройки build.gradle.kts, а convention plugins формализуют эту структуру для multi-module проектов, устраняя дублирование конфигурации.
+
+- **[[kmp-ci-cd]]** — производительность Gradle напрямую влияет на время и стоимость CI/CD: parallel builds, configuration cache и кэширование ~/.konan могут сократить CI время с 30+ минут до 5-10 минут. Gradle tasks (allTests, koverHtmlReport, assembleXCFramework) вызываются из GitHub Actions workflow, поэтому оптимизация Gradle = оптимизация CI/CD costs.
+
+- **[[kmp-publishing]]** — Gradle является единственным инструментом для публикации KMP-библиотек: vanniktech plugin, signing configuration, POM generation — всё конфигурируется через build.gradle.kts и gradle.properties. Convention plugins для publishing обеспечивают единообразную конфигурацию координат и metadata для всех модулей multi-module библиотеки.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin и его интеграции с инструментами сборки, включая Gradle Kotlin DSL. Книга закладывает фундамент для понимания build.gradle.kts синтаксиса, plugins DSL и конфигурации source sets, что является ежедневной задачей при работе с KMP.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации Kotlin-проектов, включая модульность, управление зависимостями и API design. Эти принципы напрямую применяются к convention plugins: правильная абстракция, переиспользование и минимизация coupling между модулями.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы компонентного дизайна (Acyclic Dependencies, Stable Dependencies, Stable Abstractions) определяют правильную организацию multi-module KMP-проекта в Gradle: зависимости между модулями образуют DAG, стабильные модули (core, domain) зависят только от абстракций.
+
+---
+
 *Проверено: 2026-01-09 | Gradle 8.12, Kotlin 2.1.21, AGP 8.8.0*

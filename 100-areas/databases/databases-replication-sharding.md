@@ -18,6 +18,9 @@ related:
   - "[[databases-transactions-acid]]"
   - "[[databases-nosql-comparison]]"
   - "[[architecture-distributed-systems]]"
+prerequisites:
+  - "[[databases-transactions-acid]]"
+  - "[[databases-nosql-comparison]]"
 ---
 
 # Replication & Sharding: масштабирование баз данных

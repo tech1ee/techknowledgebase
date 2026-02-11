@@ -17,6 +17,8 @@ related:
   - "[[databases-overview]]"
   - "[[databases-sql-fundamentals]]"
   - "[[architecture-distributed-systems]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
 ---
 
 # Transactions & ACID: уровни изоляции, блокировки, deadlocks

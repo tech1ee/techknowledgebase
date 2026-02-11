@@ -19,6 +19,9 @@ related:
   - "[[building-engineering-team]]"
   - "[[team-dynamics]]"
   - "[[company-handbooks]]"
+prerequisites:
+  - "[[building-engineering-team]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Культура инженерной команды
@@ -649,6 +652,22 @@ Even if they're your "10x engineer."
 | 3 | [Basecamp Handbook](https://github.com/basecamp/handbook) | Document | Calm company |
 | 4 | [Valve Handbook](https://www.valvesoftware.com/en/publications) | Document | Flat structure |
 | 5 | [HBR: Culture Research](https://hbr.org/topic/subject/organizational-culture) | Research | Data on culture |
+
+---
+
+## Связь с другими темами
+
+**[[building-engineering-team]]** — Culture и team building — два неразделимых процесса. Культура формируется через actions и decisions при строительстве команды: кого нанимаем, как проводим onboarding, какие behaviors поощряем. Building-engineering-team описывает структурные аспекты (composition, sizing, roles), а team-culture — behavioral и values аспекты. Вместе они определяют, какой командой вы станете.
+
+**[[team-dynamics]]** — Team dynamics — это то, как culture проявляется в ежедневных взаимодействиях. Культура определяет norms (как мы здесь делаем вещи), а dynamics показывает, как эти norms работают в реальности: как проходят meetings, как решаются конфликты, как принимаются решения. Healthy culture создаёт healthy dynamics, но динамика также влияет на культуру через feedback loops.
+
+**[[company-handbooks]]** — Company handbooks — это documented culture, формализация неписаных правил и ценностей. Netflix Culture Deck, Valve Handbook, GitLab Handbook — примеры того, как explicit documentation культуры помогает масштабировать её и onboard новых людей. Handbook не создаёт культуру, но фиксирует её, делая transparent и accountable.
+
+## Источники и дальнейшее чтение
+
+- **Ed Catmull, "Creativity Inc." (2014)** — Глубокий взгляд на строительство creative culture в Pixar. Catmull показывает, что culture of candor (честность без политкорректности), trust и willingness to fail — не абстрактные ценности, а конкретные practices, которые нужно сознательно поддерживать. "Braintrust" meetings — пример culture practice.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Модель Lencioni показывает, что здоровая culture строится послойно: trust → productive conflict → commitment → accountability → results. Попытка создать "culture of accountability" без фундамента trust обречена на провал.
+- **Simon Sinek, "Start with Why" (2009)** — Culture начинается с "Why": зачем существует команда, какова её mission. Companies и teams с clear "Why" привлекают людей, которые верят в то же, что создаёт organic cultural alignment без необходимости enforce правила.
 
 ---
 

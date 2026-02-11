@@ -17,6 +17,8 @@ related:
   - "[[design-patterns]]"
   - "[[technical-debt]]"
   - "[[microservices-vs-monolith]]"
+prerequisites:
+  - "[[type-systems-theory]]"
 ---
 
 # Clean Code и SOLID: код, который не стыдно показать
@@ -892,6 +894,22 @@ function add(a: number, b: number): number {
 - [DigitalOcean SOLID Guide](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design)
 - [Baeldung SOLID Principles](https://www.baeldung.com/solid-principles)
 - [Refactoring Guru](https://refactoring.guru/refactoring/techniques)
+
+---
+
+## Связь с другими темами
+
+### [[design-patterns]]
+
+Design Patterns и SOLID тесно переплетены: паттерны проектирования по сути являются конкретными реализациями SOLID-принципов. Например, Factory Method реализует Dependency Inversion, Strategy воплощает Open/Closed Principle, а Observer обеспечивает слабую связанность (loose coupling). Понимание SOLID даёт теоретическую базу, а паттерны — практические рецепты для применения этих принципов. Без фундамента SOLID паттерны превращаются в Cargo Cult Programming.
+
+### [[technical-debt]]
+
+Технический долг — прямое следствие нарушений Clean Code и SOLID. Каждый случай "потом поправлю", каждый God Class, каждый magic number — это микрокредит с процентами. Понимание Clean Code помогает осознанно управлять техническим долгом: где-то допустить его намеренно (MVP, прототип), а где-то — погасить до того, как проценты станут неподъёмными. Knight Capital потерял $440M именно из-за накопленного долга в виде мёртвого кода и отсутствия code review.
+
+### [[microservices-vs-monolith]]
+
+SOLID масштабируется с уровня классов на уровень сервисов. Single Responsibility превращается в "один сервис — одна бизнес-доменная область". Open/Closed становится backward-compatible API versioning. Dependency Inversion — это контракты между сервисами через API-интерфейсы. Однако в микросервисной архитектуре цена over-engineering ещё выше: лишняя абстракция — это не просто лишний класс, а лишний сервис с деплоем, мониторингом и сетевой задержкой.
 
 ---
 

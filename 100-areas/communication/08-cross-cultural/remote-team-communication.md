@@ -11,6 +11,9 @@ tags:
 related:
   - "[[async-communication]]"
   - "[[cultural-dimensions]]"
+prerequisites:
+  - "[[async-communication]]"
+  - "[[cultural-dimensions]]"
 ---
 
 # Remote Team Communication: Timezone, Async-First и Trust

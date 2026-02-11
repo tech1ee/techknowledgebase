@@ -18,6 +18,9 @@ related:
   - "[[communication-models]]"
   - "[[presentation-design]]"
   - "[[storytelling-tech]]"
+prerequisites:
+  - "[[communication-models]]"
+  - "[[presentation-design]]"
 ---
 
 # Technical Presentations для IT-специалистов

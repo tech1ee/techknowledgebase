@@ -1622,6 +1622,34 @@ Structured Concurrency критична для Android, потому что:
 - ✅ Облегчает тестирование
 </details>
 
+## Связь с другими темами
+
+### [[android-handler-looper]]
+Handler-Looper-MessageQueue — это фундамент Android threading модели, появившийся в 2008 году и остающийся основой Main Thread по сей день. Понимание этого механизма объясняет, почему `Dispatchers.Main` в Kotlin Coroutines работает через `Handler(Looper.getMainLooper()).post()`. Без знания Handler-Looper невозможно отлаживать проблемы с ANR и понять, как именно coroutines переключают контекст на UI thread.
+
+### [[android-asynctask-deprecated]]
+AsyncTask — это урок неудачного API-дизайна, deprecation которого в API 30 формализовал проблемы, известные сообществу годами. Детальный разбор причин (memory leaks, serial execution, отсутствие cancellation) показывает, какие именно проблемы решают Kotlin Coroutines. Каждый design decision в structured concurrency (lifecycle scopes, automatic cancellation, exception propagation) является прямым ответом на конкретную проблему AsyncTask.
+
+### [[android-executors]]
+Executors — это Java-совместимый промежуточный слой между AsyncTask и Coroutines, активно используемый в Architecture Components 2017-2019. Понимание ThreadPoolExecutor, ScheduledExecutorService и Future критично для работы с Java-библиотеками и для `suspendCancellableCoroutine` — моста между callback-based и suspend-based миром. В legacy-проектах Executors по-прежнему встречаются повсеместно.
+
+### [[android-rxjava]]
+RxJava привнесла в Android reactive programming и показала, что declarative composition (map, flatMap, filter) превосходит imperative callbacks. Понимание RxJava необходимо для работы с крупными legacy-кодовыми базами, а также для осознания того, почему Kotlin Flow устроен именно так: cold streams, backpressure через suspension, операторы-расширения. Migration path RxJava -> Flow — одна из самых востребованных задач.
+
+### [[android-coroutines-mistakes]]
+Каталог антипаттернов дополняет эволюционный обзор конкретными ошибками, которые разработчики совершают при переходе от старых подходов к coroutines. Знание эволюции объясняет *почему* эти ошибки так распространены: привычка к `GlobalScope` — наследие неструктурированных threads, блокирующие вызовы в suspend-функциях — наследие synchronous мышления, неправильный scope — наследие AsyncTask без lifecycle awareness.
+
+### [[android-threading]]
+Threading — это основа, на которой построены все async-подходы. Coroutines не заменяют threads — они работают поверх thread pool. Понимание Main Thread, worker threads, StrictMode и профилирования performance необходимо для диагностики проблем производительности даже в полностью coroutine-based приложениях.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Bock J. (2018). *Android Programming with Kotlin*. — практическое руководство по Android-разработке с Kotlin, включая переход от Java-подходов к корутинам
+- Meier R. (2022). *Professional Android*, 4th ed. — комплексный справочник по Android-разработке, покрывающий эволюцию от Handler/AsyncTask до Coroutines/Flow
+- Leiva A. (2020). *Kotlin for Android Developers*. — практическое введение в Kotlin для Android, включая корутины как замену AsyncTask и RxJava
+
 ## Связи с детальными файлами
 
 Этот overview файл связан со следующими детальными материалами:

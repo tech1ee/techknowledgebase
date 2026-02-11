@@ -19,6 +19,10 @@ related:
   - "[[android-async-evolution]]"
   - "[[android-executors]]"
   - "[[android-service-internals]]"
+prerequisites:
+  - "[[android-app-components]]"
+  - "[[android-threading]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Фоновая работа: история ограничений, WorkManager, Foreground Services
@@ -1079,8 +1083,14 @@ WorkManager с constraints будет ждать выхода из Doze. Для 
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Services, WorkManager и background execution limits
+- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их применение для фоновой работы: CoroutineWorker, viewModelScope, structured concurrency
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с разделами по background work и Services
+
+**Веб-ресурсы:**
 - [Android Developers: Optimize for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby)
 - [Android Developers: App Standby Buckets](https://developer.android.com/topic/performance/appstandby)
 - [Android Developers: Background Execution Limits](https://developer.android.com/about/versions/oreo/background)
@@ -1089,24 +1099,19 @@ WorkManager с constraints будет ждать выхода из Doze. Для 
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[android-overview]] — lifecycle приложений, почему Android убивает процессы
-- [[android-activity-lifecycle]] — когда Activity в background, нужен другой механизм для работы
-- [[android-process-memory]] — приоритеты процессов и LMK
+**[[android-activity-lifecycle]]** — когда Activity уходит в background (onStop/onDestroy), все привязанные к ней coroutines в lifecycleScope отменяются. Понимание lifecycle объясняет, почему для длительных задач нужен WorkManager или Foreground Service вместо coroutines в Activity scope. Изучайте lifecycle перед background work.
 
-**Технологии:**
-- [[kotlin-coroutines]] — coroutines для short-lived async работы, viewModelScope
-- [[android-app-components]] — Service как компонент для background работы
+**[[android-process-memory]]** — Android использует Low Memory Killer для освобождения памяти, убивая фоновые процессы по приоритету. Foreground Service повышает приоритет процесса, защищая его от LMK. Понимание приоритетов процессов критично для выбора правильного механизма фоновой работы и гарантий выполнения.
 
-**Архитектура:**
-- [[android-architecture]] — Repository паттерн для background sync
-- [[android-data-persistence]] — Room + WorkManager для offline-first apps
+**[[android-app-components]]** — Service является одним из четырёх компонентов Android и основным механизмом для длительной фоновой работы. Foreground Service требует notification и declaration в манифесте. BroadcastReceiver может инициировать фоновую работу через goAsync() с последующей делегацией в WorkManager.
 
-**Связанные концепции:**
-- [[android-threading]] — Main Thread restrictions, Dispatchers
-- [[android-networking]] — сетевые запросы часто выполняются в background
+**[[kotlin-coroutines]]** — coroutines являются основным инструментом для short-lived асинхронных операций (сетевые запросы, DB queries). viewModelScope и lifecycleScope обеспечивают автоматическую отмену при уничтожении компонента. Однако для задач, переживающих процесс, необходим WorkManager с CoroutineWorker.
+
+**[[android-data-persistence]]** — Room + WorkManager — стандартный паттерн для offline-first приложений: данные сохраняются локально в Room, а WorkManager синхронизирует их с сервером при наличии connectivity. Понимание persistence необходимо для проектирования надёжной фоновой синхронизации.
+
+**[[android-networking]]** — сетевые запросы часто выполняются в background, и правильный выбор механизма зависит от требований: coroutines для immediate requests, WorkManager для deferred sync, Foreground Service для long-running uploads/downloads. Constraints в WorkManager (NetworkType.CONNECTED) обеспечивают выполнение только при наличии сети.
 
 ---
 

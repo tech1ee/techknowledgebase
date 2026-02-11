@@ -18,6 +18,9 @@ related:
   - "[[android-view-measurement]]"
   - "[[android-canvas-drawing]]"
   - "[[android-touch-handling]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Custom Views: основы создания
@@ -777,19 +780,21 @@ class LabeledSwitch @JvmOverloads constructor(
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-| Материал | Зачем изучать |
-|----------|---------------|
-| [[android-view-measurement]] | Глубже про onMeasure, MeasureSpec, кастомные ViewGroup |
-| [[android-canvas-drawing]] | Canvas API: paths, gradients, shaders, hardware acceleration |
-| [[android-touch-handling]] | onTouchEvent, GestureDetector, multi-touch |
-| [[android-compose]] | Современная альтернатива — Compose Canvas |
-| [[android-ui-views]] | View hierarchy, layout inflation, основы |
+**[[android-ui-views]]** — Custom View является расширением базового класса View, поэтому глубокое понимание View hierarchy, layout inflation и стандартного набора виджетов — необходимая предпосылка. Зная, как работают стандартные View, вы сможете оценить, когда действительно нужен Custom View, а когда достаточно комбинации существующих компонентов. Рекомендуется изучить ui-views перед Custom View.
+
+**[[android-view-measurement]]** — Метод onMeasure() является ключевым для Custom View, и MeasureSpec определяет, как родительский контейнер ограничивает размер дочернего View. Для создания кастомных ViewGroup необходимо глубокое понимание measure/layout pass. Изучайте view-measurement как продолжение данного материала.
+
+**[[android-canvas-drawing]]** — Canvas API предоставляет низкоуровневые операции рисования (paths, gradients, shaders), которые используются в onDraw() Custom View. Hardware acceleration влияет на производительность Canvas операций. Это естественное продолжение изучения Custom View для реализации визуально сложных компонентов.
+
+**[[android-touch-handling]]** — Обработка касаний через onTouchEvent(), GestureDetector и multi-touch — вторая ключевая часть интерактивных Custom View. Понимание touch dispatch chain (от Activity → ViewGroup → View) критично для создания компонентов с нестандартным взаимодействием. Изучайте после базовых Custom View.
+
+**[[android-compose]]** — Jetpack Compose предлагает современную альтернативу Custom View через Compose Canvas и custom layouts. Для новых проектов на Compose знание Custom View остаётся полезным для интеграции legacy-компонентов через AndroidView. Понимание обоих подходов даёт полное представление о UI-разработке в Android.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 | Источник | Тип | Вклад |
 |----------|-----|-------|
@@ -799,6 +804,12 @@ class LabeledSwitch @JvmOverloads constructor(
 | [Optimize custom view - Android Developers](https://developer.android.com/develop/ui/views/layout/custom-views/optimizing-view) | Official | Performance optimization |
 | [Make custom views accessible - Android Developers](https://developer.android.com/guide/topics/ui/accessibility/custom-views) | Official | Accessibility requirements |
 | [Android leak pattern: subscriptions in views - Square](https://developer.squareup.com/blog/android-leak-pattern-subscriptions-in-views/) | Expert Blog | Memory leak patterns |
+
+### Книги
+
+- **Meier R. (2022)** *Professional Android* — глава о создании Custom View покрывает конструкторы, AttributeSet, onDraw() и стилизацию. Практические примеры production-level компонентов.
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — пошаговое создание Custom View с обработкой касаний и кастомными атрибутами. Отличный вводный материал.
+- **Leiva A. (2017)** *Kotlin for Android Developers* — примеры создания Custom View на Kotlin с использованием extension functions и делегатов для чистого кода.
 
 ---
 

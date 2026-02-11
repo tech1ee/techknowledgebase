@@ -18,6 +18,9 @@ tags:
 related:
   - "[[em-fundamentals]]"
   - "[[performance-management]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
 ---
 
 # Мотивация команды
@@ -198,6 +201,20 @@ flow на работе? Над чем работал?"
 | [Drive](https://www.amazon.com/Drive-Surprising-Truth-About-Motivates/dp/1594484805) | Book (Daniel Pink) |
 | [Gallup Q12](https://www.gallup.com/workplace/356063/gallup-q12-employee-engagement-survey.aspx) | Research |
 | [Manager Tools](https://www.manager-tools.com/) | Podcast |
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — Мотивация — одна из ключевых зон ответственности EM, описанных в em-fundamentals. Менеджер создаёт условия для intrinsic motivation через autonomy (доверие и делегирование), mastery (stretch assignments и feedback) и purpose (connection с миссией). Без понимания мотивации EM не может эффективно выполнять свою главную задачу: сделать команду эффективной и людей — счастливыми.
+
+**[[performance-management]]** — Мотивация и performance тесно связаны, но не тождественны. Высоко мотивированный инженер может underperform из-за unclear expectations, а демотивированный top performer может уйти, несмотря на хорошие результаты. Performance management система должна учитывать мотивационные факторы каждого человека, используя recognition, growth opportunities и meaningful work как инструменты наряду с formal reviews.
+
+## Источники и дальнейшее чтение
+
+- **Simon Sinek, "Start with Why" (2009)** — Концепция "purpose" как ключевого мотиватора: люди не покупают ЧТО вы делаете, они покупают ЗАЧЕМ. В контексте команды это означает, что connection с mission и purpose организации — более мощный мотиватор, чем любой финансовый бонус.
+- **L. David Marquet, "Turn the Ship Around!" (2012)** — Модель intent-based leadership показывает, как передача authority (autonomy) трансформирует мотивацию. Crew USS Santa Fe из наименее мотивированного стал самым мотивированным во fleet через простое изменение: "Don't move information to authority, move authority to information."
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Показывает, что trust — фундамент мотивации в команде. Без psychological safety люди не могут быть по-настоящему мотивированы, потому что энергия уходит на самозащиту вместо creative work.
 
 ---
 

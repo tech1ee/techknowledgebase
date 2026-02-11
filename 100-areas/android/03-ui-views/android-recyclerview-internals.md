@@ -19,6 +19,11 @@ related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-performance-profiling]]"
 cs-foundations: [object-pool, cache-hierarchy, producer-consumer, diff-algorithm, amortized-complexity]
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-custom-view-fundamentals]]"
+  - "[[android-view-rendering-pipeline]]"
+  - "[[android-performance-profiling]]"
 ---
 
 # RecyclerView Internals: кэширование, переработка и производительность
@@ -1989,20 +1994,17 @@ adapter.submitList(list)
 
 ---
 
-## Связи
+## Связь с другими темами
 
-### Фундамент
-- **[[android-view-rendering-pipeline]]** — RecyclerView участвует в measure/layout/draw; понимание нужно для оптимизации
-- **[[android-ui-views]]** — ViewGroup основа; LayoutParams, measure specs
+**[[android-view-rendering-pipeline]]** — RecyclerView как ViewGroup участвует в полном rendering pipeline: measure → layout → draw → VSYNC. Понимание этого pipeline критично для оптимизации списков: тяжёлый onBindViewHolder блокирует measure/layout phase и вызывает jank. GapWorker prefetch использует idle time между VSYNC сигналами для предзагрузки ViewHolder. Знание Choreographer и frame timing помогает интерпретировать результаты profiling. Изучите rendering pipeline перед оптимизацией RecyclerView.
 
-### Альтернативы
-- **[[android-compose]]** — LazyColumn/LazyRow как декларативная альтернатива
+**[[android-ui-views]]** — RecyclerView наследуется от ViewGroup, а ViewHolder кэширует результаты findViewById. Понимание MeasureSpec, LayoutParams и View lifecycle (attach/detach) необходимо для реализации custom LayoutManager и корректной работы с вложенными RecyclerView. Знание View recycling и detach/attach механизмов объясняет, почему переиспользование ViewHolder эффективнее создания новых View. Изучите View system как фундамент.
 
-### Производительность
-- **[[android-performance-profiling]]** — Profiling scroll, systrace, GPU rendering
+**[[android-compose]]** — LazyColumn/LazyRow являются декларативной альтернативой RecyclerView с автоматическим diffing через key. Однако Compose lazy lists не поддерживают shared pool между списками, что делает RecyclerView предпочтительным для nested lists и complex animations. Понимание обоих подходов помогает выбрать правильный инструмент: RecyclerView для performance-critical списков, LazyColumn для простого декларативного UI.
 
-### Паттерны
-- **[[android-custom-view-fundamentals]]** — Custom LayoutManager требует знания Custom View API
+**[[android-performance-profiling]]** — профилирование scroll-производительности RecyclerView требует GPU Rendering, Perfetto/systrace и Memory Profiler. CPU Profiler показывает время в onCreateViewHolder vs onBindViewHolder, помогая определить bottleneck: inflation (создание View) или binding (привязка данных). Memory Profiler выявляет утечки ViewHolder и чрезмерные allocations в onBindViewHolder. Изучите profiling tools для диагностики jank.
+
+**[[android-custom-view-fundamentals]]** — создание custom LayoutManager (Grid, Staggered, Carousel) требует глубокого знания Custom View API: onMeasure, onLayout, coordinate system и touch handling. ViewHolder pattern является частным случаем View caching pattern. Понимание custom views помогает реализовать сложные layout strategies и ItemDecoration.
 
 ---
 
@@ -2022,3 +2024,9 @@ adapter.submitList(list)
 | 10 | [ItemTouchHelper](https://developer.android.com/reference/androidx/recyclerview/widget/ItemTouchHelper) | Docs | Drag & swipe |
 | 11 | [RecyclerView Performance](https://developer.android.com/topic/performance/vitals/render) | Docs | Performance best practices |
 | 12 | [Shared RecycledViewPool](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.RecycledViewPool) | Docs | Nested RV optimization |
+
+## Источники и дальнейшее чтение
+
+- Meier (2022). *Professional Android*. — практическое руководство по RecyclerView, включая Adapter patterns, DiffUtil, ItemAnimator и performance best practices для production-приложений.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое построение списков с RecyclerView, ViewHolder pattern и обработка кликов, идеально для понимания основ перед погружением в internals.
+- Bloch (2018). *Effective Java*. — паттерны Object Pool (Item 6), Flyweight и кэширования, которые лежат в основе четырёхуровневой системы кэширования RecyclerView.

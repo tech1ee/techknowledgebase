@@ -18,6 +18,10 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-intent-internals]]"
 cs-foundations: [client-server, ipc, proxy-pattern, observer-pattern, service-locator, command-pattern, reference-counting]
+prerequisites:
+  - "[[android-app-components]]"
+  - "[[android-activity-lifecycle]]"
+  - "[[android-threading]]"
 ---
 
 # Service: Started, Bound, Foreground — жизненный цикл и IPC под капотом
@@ -2453,25 +2457,25 @@ override fun onServiceDisconnected(name: ComponentName?) {
 
 ---
 
-## Связи
+## Связь с другими темами
 
 ### [[android-app-components]]
-Service — один из 4 основных компонентов Android (Activity, Service, BroadcastReceiver, ContentProvider). Все компоненты управляются ActivityManagerService через Binder IPC. Понимание lifecycle других компонентов помогает понять, как Service взаимодействует с Activity (binding), BroadcastReceiver (запуск через intent) и ContentProvider (доступ к данным).
+Service — один из 4 основных компонентов Android (Activity, Service, BroadcastReceiver, ContentProvider). Все компоненты управляются ActivityManagerService через Binder IPC. Понимание lifecycle других компонентов помогает понять, как Service взаимодействует с Activity (binding), BroadcastReceiver (запуск через intent) и ContentProvider (доступ к данным). Рекомендуется сначала изучить общую картину компонентов, а затем углубляться в Service.
 
 ### [[android-background-work]]
-Service — один из механизмов фоновой работы, но НЕ единственный. Важно знать полную картину: Coroutines (in-process), WorkManager (persistent), AlarmManager (exact timing), JobScheduler (system-optimized). Service нужен только когда задача continuous и user-visible (музыка, навигация).
+Service — один из механизмов фоновой работы, но НЕ единственный. Важно знать полную картину: Coroutines (in-process), WorkManager (persistent), AlarmManager (exact timing), JobScheduler (system-optimized). Service нужен только когда задача continuous и user-visible (музыка, навигация). Без понимания альтернатив разработчики злоупотребляют Service там, где достаточно WorkManager или корутин. Изучите background-work первым для правильного decision tree.
 
 ### [[android-process-memory]]
-LMK (Low Memory Killer) определяет приоритет процесса на основе компонентов внутри него. Foreground Service повышает приоритет до foreground. Понимание oom_adj_score и процессных приоритетов критично для выбора между Service и другими механизмами.
+LMK (Low Memory Killer) определяет приоритет процесса на основе компонентов внутри него. Foreground Service повышает приоритет до foreground. Понимание oom_adj_score и процессных приоритетов критично для выбора между Service и другими механизмами. Знание процессной модели объясняет, почему Foreground Service с уведомлением живёт дольше обычного Started Service. Рекомендуется параллельное изучение.
 
 ### [[android-context-internals]]
-Service наследует от Context. ApplicationContext vs Service Context — разные объекты. Service Context нужен для bindService(), startForeground(). При создании notification channel нужен именно Service Context. Утечка Service Context = утечка всего Service.
+Service наследует от Context. ApplicationContext vs Service Context — разные объекты. Service Context нужен для bindService(), startForeground(). При создании notification channel нужен именно Service Context. Утечка Service Context = утечка всего Service. Понимание иерархии Context помогает избежать классических ошибок при работе с Bound Service и notification API.
 
 ### [[android-handler-looper]]
-Service работает на Main Thread = Looper + Handler. Messenger IPC построен на Handler + Message. IntentService (deprecated) использовал HandlerThread внутри. Понимание Handler-Looper триады критично для работы с Messenger и понимания, почему Service callbacks блокируют Main Thread.
+Service работает на Main Thread = Looper + Handler. Messenger IPC построен на Handler + Message. IntentService (deprecated) использовал HandlerThread внутри. Понимание Handler-Looper триады критично для работы с Messenger и понимания, почему Service callbacks блокируют Main Thread. Без этого знания невозможно понять, как Messenger обеспечивает однопоточный IPC и почему heavy work в onStartCommand() приводит к ANR.
 
 ### [[android-intent-internals]]
-Intent — механизм запуска Service (startService, bindService). Intent содержит action + data + extras. Explicit Intent (указываем класс) vs Implicit Intent (указываем action). На Android 5+ implicit intent для bindService() запрещён. PendingIntent используется для запуска Service из notification actions.
+Intent — механизм запуска Service (startService, bindService). Intent содержит action + data + extras. Explicit Intent (указываем класс) vs Implicit Intent (указываем action). На Android 5+ implicit intent для bindService() запрещён. PendingIntent используется для запуска Service из notification actions. Понимание Intent internals объясняет, как система маршрутизирует запросы к Service через ActivityManagerService.
 
 ---
 
@@ -2493,6 +2497,12 @@ Intent — механизм запуска Service (startService, bindService). 
 | 12 | [Medium: Foreground Service vs WorkManager](https://medium.com/@amar90aqi/foreground-service-vs-workmanager-in-android-choosing-the-right-tool-for-background-tasks-32c1242f9898) | Статья | Сравнение FGS и WorkManager |
 | 13 | [Android Developers: WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) | Документация | WorkManager как замена Service |
 | 14 | [Android Source: ActivityManagerService](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/core/java/com/android/server/am/ActiveServices.java) | Исходный код | Service management в AOSP |
+
+## Источники и дальнейшее чтение
+
+- **Meier R. (2022). Professional Android.** — Глубокое покрытие Service lifecycle, Bound Services и Foreground Services с практическими примерами. Одна из немногих книг, объясняющих AIDL и Binder IPC на прикладном уровне.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое введение в Service с акцентом на правильный выбор между Service, WorkManager и корутинами. Хороший старт для понимания lifecycle.
+- **Vasavada N. (2019). Android Internals.** — Детали реализации ActivityManagerService, Binder транзакций и процессного управления Service на уровне AOSP. Для тех, кто хочет понять, что происходит «под капотом» системных вызовов.
 
 ---
 

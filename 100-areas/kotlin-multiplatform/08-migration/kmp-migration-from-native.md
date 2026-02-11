@@ -6,11 +6,15 @@ tags:
   - topic/jvm
   - topic/kmp
   - migration
-  - android
-  - ios
+  - topic/android
+  - topic/ios
   - native
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
+  - "[[kmp-architecture-patterns]]"
 related:
   - [kmp-getting-started]]
   - "[[kmp-project-structure]]"
@@ -681,6 +685,24 @@ pod 'SharedKit', '~> 1.0.0'
 | [Convert Native to KMP](https://www.thedroidsonroids.com/blog/convert-native-project-to-kotlin-multiplatform-developers-guide) | Blog | Detailed guide |
 | [KMP Shared Module Template](https://android-developers.googleblog.com/2025/05/kotlin-multiplatform-shared-module-templates.html) | Official | Android Studio |
 | [Case Studies](https://kotlinlang.org/docs/multiplatform/case-studies.html) | Official | Real examples |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-getting-started]]** — Прежде чем мигрировать существующий проект, важно понимать основы создания KMP-проекта с нуля. Этот материал покрывает настройку окружения, структуру шаблонного проекта и первый запуск на обеих платформах. Без этого фундамента миграция превратится в хождение вслепую, так как вы не будете знать, какое состояние проекта считать «рабочим». Рекомендуется пройти Getting Started до начала миграции.
+
+- **[[kmp-project-structure]]** — Понимание структуры KMP-проекта критично при миграции, поскольку вам предстоит реорганизовать существующий код из Android/iOS модулей в shared модуль с source sets. Знание того, как устроены commonMain, androidMain и iosMain, позволит правильно распределить код между слоями. Ошибки в структуре на ранних этапах миграции приведут к сложностям с зависимостями и конфликтами сборки. Особенно важно для выбора между монорепо и git submodule подходами.
+
+- **[[kmp-ios-deep-dive]]** — Интеграция shared-модуля в iOS через XCFramework, CocoaPods или SPM — один из самых трудных этапов миграции. Этот материал объясняет, как Kotlin/Native компилируется в iOS framework, как настроить Xcode проект и как вызывать Kotlin-код из Swift. Без понимания iOS-специфики миграция Android-first команды неизбежно столкнётся с проблемами линковки, подписи и несовместимости архитектур.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундамент языка Kotlin, необходимый для понимания идиом, используемых в shared-модуле. Особенно полезны главы о data classes, sealed classes и расширениях, которые составляют основу мигрируемого кода.
+
+- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по написанию качественного Kotlin-кода, критичные при миграции: как правильно проектировать API shared-модуля, избегать типичных ошибок и выбирать между interface и abstract class.
+
+- Martin R. (2017). *Clean Architecture.* — Принципы разделения на слои (Model → Data → Domain → Presentation), которые напрямую определяют порядок миграции. Понимание Dependency Rule поможет выделить слои, пригодные для выноса в shared-модуль.
 
 ---
 *Проверено: 2026-01-09 | KMP Stable, Android Studio Meerkat+*

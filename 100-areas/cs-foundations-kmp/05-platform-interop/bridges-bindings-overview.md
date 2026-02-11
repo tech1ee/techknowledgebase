@@ -526,14 +526,27 @@ skie {
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[ffi-foreign-function-interface]]
+Bridges и bindings — это автоматизация FFI. Без понимания того, как языки вызывают функции друг друга через foreign function interface (конвенции вызова, передача аргументов, возврат значений), невозможно понять, что именно автоматизируют генераторы bindings. FFI определяет "что нужно сделать", а binding generators определяют "как это сделать автоматически".
+
+### [[abi-calling-conventions]]
+ABI (Application Binary Interface) определяет binary-level контракт между скомпилированным кодом: как передаются аргументы, кто очищает стек, как возвращаются значения. Binding generators должны генерировать код, совместимый с ABI целевой платформы. Понимание calling conventions объясняет, почему cinterop генерирует разные обёртки для arm64 и x86_64.
+
+### [[memory-layout-marshalling]]
+Marshalling — ключевая задача любого binding generator. Когда Kotlin `String` нужно передать в C-функцию как `char*`, происходит преобразование memory layout: из объекта на managed heap в null-terminated byte array. Понимание memory layout объясняет, почему некоторые типы передаются "by value" (простые struct), а другие требуют аллокации и копирования (complex objects).
+
+---
+
+## Источники и дальнейшее чтение
+
+- Appel A. (1998). *Modern Compiler Implementation in ML*. — глава по runtime-системам и interop между языками с разными моделями памяти
+- Aho A., Lam M., Sethi R., Ullman J. (2006). *Compilers: Principles, Techniques, and Tools* (Dragon Book). — теоретические основы генерации кода и linking, которые лежат в основе binding generators
+- Beazley D. (2003). *Automated Scientific Software Scripting with SWIG*. — paper от автора SWIG, объясняющая принципы автоматической генерации bindings
 - [SWIG](https://www.swig.org/) — official site
-- [jextract Guide](https://github.com/openjdk/jextract/blob/master/doc/GUIDE.md) — official docs
 - [Kotlin cinterop](https://kotlinlang.org/docs/native-c-interop.html) — official docs
 - [SKIE](https://skie.touchlab.co/) — Touchlab official
-- [Swift Export](https://kotlinlang.org/docs/native-swift-export.html) — Kotlin docs
-- [Kotlin Swift Interopedia](https://github.com/kotlin-hands-on/kotlin-swift-interopedia) — practical examples
 
 ---
 

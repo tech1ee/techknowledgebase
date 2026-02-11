@@ -21,6 +21,10 @@ sources:
   - "https://www.baeldung.com/java-jdbc-loading-drivers"
   - "https://reflectoring.io/service-provider-interface/"
   - "https://northcoder.com/post/class-loaders-service-providers-and/"
+prerequisites:
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-module-system]]"
+  - "[[jvm-reflection-api]]"
 related:
   - "[[jvm-class-loader-deep-dive]]"
   - "[[jvm-module-system]]"
@@ -45,6 +49,10 @@ related:
 ### Аналогия: SPI как розетки и вилки
 
 > **Представьте:** У вас дома розетка (интерфейс сервиса). Вы можете подключить любое устройство с подходящей вилкой: лампу, телевизор, пылесос (реализации). Вам не нужно перестраивать дом, чтобы подключить новое устройство — просто вставьте вилку. ServiceLoader — это механизм, который автоматически находит все устройства с подходящими вилками и подключает их.
+
+### Аналогия: Lazy Loading как ресторанное меню
+
+> **Представьте:** Вы приходите в ресторан и получаете меню (ServiceLoader). Меню перечисляет все доступные блюда (провайдеры), но кухня не начинает готовить, пока вы не сделаете заказ (итерация). Если вы заказали только суп — остальные блюда не готовятся, экономя ресурсы. А если ресторан добавил новое блюдо (новый JAR на classpath), оно просто появляется в меню без перестройки кухни. Это и есть lazy discovery + lazy instantiation, которые делают ServiceLoader эффективным.
 
 ### До Java 6: Ручная загрузка
 
@@ -803,6 +811,24 @@ Overhead ServiceLoader:
 2. [Baeldung: Loading JDBC Drivers](https://www.baeldung.com/java-jdbc-loading-drivers) — История загрузки JDBC драйверов
 3. [Reflectoring: Implementing Plugins with SPI](https://reflectoring.io/service-provider-interface/) — Практическое руководство по SPI
 4. [NorthCoder: Class Loaders and Service Providers](https://northcoder.com/post/class-loaders-service-providers-and/) — Глубокий разбор ServiceLoader и JDBC
+
+---
+
+## Связь с другими темами
+
+**[[jvm-class-loader-deep-dive]]** — ServiceLoader внутренне использует ClassLoader для обнаружения и загрузки провайдеров: сканирует META-INF/services через ClassLoader.getResources(), затем загружает классы провайдеров через Class.forName() с указанным ClassLoader'ом. Проблемы с ServiceLoader часто связаны с ClassLoader hierarchy: провайдер в child ClassLoader не виден parent'у. Понимание ClassLoader delegation model необходимо для диагностики «ServiceLoader не находит провайдер», особенно в web-контейнерах (Tomcat) с изолированными ClassLoader'ами.
+
+**[[jvm-module-system]]** — JPMS глубоко интегрирован с ServiceLoader через директивы uses/provides в module-info.java. Модульная система добавляет compile-time проверку сервисных зависимостей: если модуль объявляет uses SomeService, но ни один модуль на module path не объявляет provides SomeService — это обнаруживается при сборке. Это эволюция от runtime-обнаружения (META-INF/services) к compile-time-обнаружению (module declarations). Рекомендуется изучить SPI с META-INF/services для понимания основ, затем модульный подход для новых проектов.
+
+**[[design-patterns]]** — ServiceLoader реализует комбинацию нескольких паттернов: Service Locator (runtime обнаружение реализаций), Strategy (выбор реализации по критерию), и Inversion of Control (потребитель не знает о конкретных реализациях). Сравнение ServiceLoader с DI-контейнерами (Spring, Guice) показывает trade-offs: ServiceLoader проще и не требует внешних зависимостей, но не поддерживает lifecycle management, scoping и injection. Для plugin-архитектуры ServiceLoader достаточен; для application wiring — DI-фреймворк лучше.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 59 «Know and use the libraries» и Item 1 «Consider static factory methods» описывают паттерны, которые ServiceLoader реализует на уровне платформы, включая service provider framework pattern.
+- Parlog N. (2019). *The Java Module System*. — Главы о services in modules подробно описывают интеграцию ServiceLoader с JPMS: uses/provides директивы, provider methods, и миграцию от META-INF/services.
+- Evans B., Flanagan D. (2018). *Java in a Nutshell*, 7th Edition. — Практическое описание ServiceLoader API с примерами создания SPI, регистрации провайдеров и обработки ошибок загрузки.
 
 ---
 

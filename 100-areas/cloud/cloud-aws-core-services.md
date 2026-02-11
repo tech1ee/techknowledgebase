@@ -7,7 +7,7 @@ status: published
 confidence: high
 tags:
   - topic/cloud
-  - aws
+  - topic/aws
   - ec2
   - lambda
   - s3
@@ -18,6 +18,8 @@ related:
   - "[[cloud-overview]]"
   - "[[cloud-serverless-patterns]]"
   - "[[cloud-networking-security]]"
+prerequisites:
+  - "[[cloud-platforms-essentials]]"
 ---
 
 # AWS Core Services: EC2, RDS, Lambda, S3, IAM

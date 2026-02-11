@@ -19,6 +19,10 @@ related:
   - "[[tech-debt-management]]"
   - "[[architecture-decisions]]"
   - "[[strategic-thinking]]"
+prerequisites:
+  - "[[architecture-decisions]]"
+  - "[[strategic-thinking]]"
+  - "[[tech-debt-management]]"
 ---
 
 # Техническое видение и стратегия
@@ -202,6 +206,22 @@ FORMATS:
 | [Staff Engineer](https://staffeng.com/) | Book |
 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
 | [CTO Craft](https://ctocraft.com/) | Community |
+
+---
+
+## Связь с другими темами
+
+**[[tech-debt-management]]** — Tech debt — это gap между current state и target state, описанным в tech vision. Без vision tech debt management становится reactive fire-fighting, а с clear vision — strategic investment. Vision помогает prioritize какой debt платить первым: тот, который блокирует movement к target state. "20% sprint tax" на tech debt должен быть directed vision priorities, а не случайными fix'ами.
+
+**[[architecture-decisions]]** — ADR — это operational implementation tech vision. Каждое архитектурное решение должно двигать organization ближе к target state. Vision определяет guiding principles для ADR (например, "boring technology", "own your data"), а ADR фиксирует конкретные решения, aligned с этими principles. Без vision ADR принимаются изолированно и могут противоречить друг другу.
+
+**[[strategic-thinking]]** — Tech vision — это application strategic thinking к технологии. Strategic thinking framework (where are we, where do we want to be, how do we get there) напрямую maps на components tech vision (current state, target state, roadmap). Без навыков strategic thinking tech vision вырождается в technology wishlist или architecture diagram без business connection.
+
+## Источники и дальнейшее чтение
+
+- **Will Larson, "Staff Engineer" (2022)** — Описывает tech vision как одну из core responsibilities Staff+ инженеров. Larson предлагает concrete framework для writing tech vision documents: business context → current state → target state → priorities → non-goals. Показывает, как vision document создаёт alignment без authority.
+- **Will Larson, "An Elegant Puzzle" (2019)** — Содержит practical guidance по созданию и communication tech strategy, включая how to translate vision в actionable roadmap, как получить buy-in от stakeholders и как adapt strategy при изменении условий.
+- **Peter Drucker, "The Effective Executive" (2006)** — Drucker's концепция "contribution focus" помогает формулировать tech vision не через технологии ("мы будем использовать AI"), а через contribution ("мы enable бизнес делать X"). Это shifts vision от technology-centric к business-enabling.
 
 ---
 

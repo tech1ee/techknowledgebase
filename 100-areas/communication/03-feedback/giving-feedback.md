@@ -19,6 +19,8 @@ related:
   - "[[receiving-feedback]]"
   - "[[feedback-frameworks]]"
   - "[[performance-conversations]]"
+prerequisites:
+  - "[[active-listening]]"
 ---
 
 # Giving Feedback: обратная связь, которая меняет поведение

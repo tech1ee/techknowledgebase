@@ -8,7 +8,7 @@ tags:
   - troubleshooting
   - gradle
   - xcode
-  - ios
+  - topic/ios
   - debugging
   - type/concept
   - level/advanced
@@ -17,6 +17,10 @@ related:
   - "[[kmp-debugging]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-gradle-deep-dive]]"
+prerequisites:
+  - "[[kmp-debugging]]"
+  - "[[kmp-gradle-deep-dive]]"
+  - "[[kmp-ios-deep-dive]]"
 cs-foundations:
   - root-cause-analysis
   - debugging-methodology
@@ -920,6 +924,26 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/*
 | [Kotlin Slack #multiplatform](https://kotlinlang.slack.com/) | Community | Real-time help |
 | [YouTrack KMP Issues](https://youtrack.jetbrains.com/issues/KT?q=Multiplatform) | Official | Bug tracker |
 | [Touchlab Blog](https://touchlab.co/blog) | Expert | iOS-specific issues |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-production-checklist]]** — Troubleshooting часто возникает при подготовке к production. Проблемы из чеклиста (dSYM не загружен, crash reporting не работает, CI падает) имеют конкретные решения, описанные здесь. Чеклист говорит «настрой crash reporting», а troubleshooting объясняет, почему CrashKiOS крашится с dynamic framework и как это исправить через static framework или временное отключение.
+
+- **[[kmp-debugging]]** — Debugging и troubleshooting — две стороны одной медали. Debugging — это проактивный процесс поиска багов в коде, а troubleshooting — реактивное решение проблем окружения и toolchain. Инструменты пересекаются: LLDB, xcode-kotlin, KDoctor используются и для отладки, и для диагностики. Понимание root cause analysis из debugging помогает систематически решать проблемы, а не применять workarounds.
+
+- **[[kmp-ios-deep-dive]]** — Большинство проблем в KMP troubleshooting связаны с iOS: exit code 138 (Xcode linker), framework not found, architecture mismatch, CocoaPods/SPM issues. Глубокое понимание iOS-интеграции позволяет не просто применять fix из таблицы, а понимать причину: почему новый Xcode 16 linker несовместим, почему нужен `-ld_classic`, почему static и dynamic frameworks ведут себя по-разному.
+
+- **[[kmp-gradle-deep-dive]]** — Gradle-проблемы (AGP 9 sync failure, withJava() deprecation, daemon memory) составляют отдельную категорию troubleshooting. Понимание Gradle internals — task graph, configuration phase, dependency resolution — позволяет диагностировать проблемы сборки на уровне причин, а не симптомов. Version compatibility matrix (Kotlin + Gradle + AGP) — ключевой инструмент превентивного troubleshooting.
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2021). *Effective Kotlin.* — Многие проблемы в troubleshooting (freeze deprecated, generics limitation, default arguments на iOS) связаны с неправильным использованием языковых конструкций Kotlin. Книга помогает писать код, который изначально избегает типичных ловушек expect/actual, nullable generics и exception handling.
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундаментальное понимание компиляции Kotlin (JVM bytecode vs Native machine code), системы типов и interop с Java необходимо для диагностики ошибок компиляции и линковки. Когда вы понимаете, что Kotlin/Native проходит через LLVM, exit code 138 (SIGBUS от линкера) обретает логический смысл.
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Проблемы с freeze() и InvalidMutabilityException (старая memory model) связаны с многопоточностью корутин. Книга объясняет, почему новая memory model убрала freeze, как Dispatchers взаимодействуют с потоками и почему Dispatchers.Main не работает в unit tests без мока.
 
 ---
 

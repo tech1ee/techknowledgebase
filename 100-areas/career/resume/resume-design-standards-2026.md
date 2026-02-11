@@ -12,6 +12,8 @@ tags:
 related:
   - "[[resume-strategy]]"
   - "[[linkedin-optimization]]"
+prerequisites:
+  - "[[resume-strategy]]"
 ---
 
 # Resume Design Standards 2026: Pixel-Perfect Guidelines
@@ -328,6 +330,22 @@ File size: Under 1MB
 | Jobscan | ATS compatibility check |
 | Resume Worded | Content analysis |
 | Grammarly | Grammar/spelling |
+
+---
+
+## Связь с другими темами
+
+- **[[resume-strategy]]** — Design standards — это визуальная реализация resume strategy. Стратегия определяет КАКОЙ контент включить, а design standards — КАК его оформить. ATS-совместимость зависит и от контента (keywords), и от формата (шрифты, отступы, структура). Оба документа нужно использовать вместе.
+
+- **[[linkedin-optimization]]** — LinkedIn и резюме должны визуально дополнять друг друга: consistent formatting, одинаковые headline и summary. Рекрутеры сравнивают оба документа, и несоответствия в дизайне или содержании снижают доверие. LinkedIn может быть более детальным, но core message одинаков.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит примеры правильно оформленных резюме для tech-позиций и типичные ошибки форматирования. Помогает понять, как рекрутеры сканируют резюме за 6 секунд и какие design decisions критичны.
+
+- **Bolles R.N. (2023). What Color Is Your Parachute?** — Практические советы по созданию резюме, которое проходит ATS и одновременно привлекает внимание рекрутера. Глава о «two audiences» (робот и человек) помогает балансировать между ATS-оптимизацией и читабельностью.
 
 ---
 

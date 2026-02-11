@@ -17,6 +17,10 @@ related:
   - "[[caching-strategies]]"
   - "[[microservices-vs-monolith]]"
   - "[[api-design]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
+  - "[[databases-transactions-acid]]"
+  - "[[databases-nosql-comparison]]"
 ---
 
 # Databases: от SELECT * до миллисекундных запросов
@@ -1446,19 +1450,21 @@ EXPLAIN ANALYZE SELECT ...;
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- Кэширование БД: [[caching-strategies]]
-- Distributed transactions: [[event-driven-architecture]]
-- API pagination: [[api-design]]
+[[caching-strategies]] — Кэширование является ключевым дополнением к оптимизации базы данных: правильно настроенный Redis-кэш снимает нагрузку с БД для часто читаемых данных, а cache invalidation стратегии (TTL, write-through, write-behind) определяют консистентность данных. Понимание оптимизации запросов помогает определить, какие данные кэшировать и когда инвалидировать кэш. Рекомендуется изучать параллельно.
 
----
+[[event-driven-architecture]] — Событийная архитектура решает проблему distributed transactions, которая возникает при масштабировании баз данных: вместо 2PC используются Saga-паттерны, event sourcing и CQRS. Знание оптимизации БД помогает понять, когда нужна денормализация для read-модели (CQRS) и как проектировать event store для производительности.
 
-## Источники
+[[api-design]] — Проектирование API напрямую влияет на нагрузку базы данных: правильная пагинация (cursor vs offset) снижает нагрузку в 10-100x, batch endpoints уменьшают количество запросов, а field selection (GraphQL) позволяет избежать SELECT *. Оптимизация БД и API проектирование — две стороны одной задачи производительности.
 
-- [Use The Index, Luke](https://use-the-index-luke.com/) — проверено 2025-11-24
-- [PostgreSQL Performance Optimization](https://www.postgresql.org/docs/current/performance-tips.html) — проверено 2025-11-24
-- [MongoDB Schema Design Best Practices](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design) — проверено 2025-11-24
+[[microservices-vs-monolith]] — Архитектурный выбор между микросервисами и монолитом определяет стратегию работы с базами данных: database per service в микросервисах, shared database в монолите. Оптимизация запросов различается: в монолите — JOIN между таблицами, в микросервисах — API-вызовы и eventual consistency. Знание обоих подходов необходимо для осознанного проектирования.
+
+## Источники и дальнейшее чтение
+
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage engines, индексах и query processing дают фундамент для понимания оптимизации. Разделы о партиционировании и репликации объясняют, как масштабировать БД при росте нагрузки.
+- Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Академическое описание query optimization (cost-based optimizer, join algorithms, index selection), которое помогает интерпретировать EXPLAIN ANALYZE и проектировать эффективные индексы.
+- Petrov A. (2019). *Database Internals*. — Детальный разбор B-Tree, buffer management и concurrency control, который объясняет, почему одни паттерны оптимизации работают, а другие нет, на уровне внутренних механизмов СУБД.
 
 ---
 

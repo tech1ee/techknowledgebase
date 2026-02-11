@@ -15,6 +15,9 @@ related:
   - "[[android-async-evolution]]"
   - "[[android-threading]]"
   - "[[kotlin-flow]]"
+prerequisites:
+  - "[[android-threading]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # RxJava и RxAndroid: полный гайд
@@ -3059,6 +3062,14 @@ combineLatest(isEmailValid, isPasswordValid, doPasswordsMatch, terms)
 **Итог**: RxJava — мощная библиотека для реактивного программирования в Android. Хотя Kotlin Coroutines стали рекомендованным подходом, RxJava остаётся актуальной для сложных event-driven систем и legacy проектов. Критически важно правильно управлять lifecycle через Disposable, выбирать правильные operators и понимать threading model.
 
 Знание RxJava полезно даже при работе с Coroutines — многие концепции переносимы, и понимание реактивного программирования делает вас более сильным разработчиком.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Goetz (2006). *Java Concurrency in Practice*. — фундаментальное понимание threading, visibility, happens-before и executor model, на которых построены RxJava Schedulers. Без знания Java concurrency невозможно понять, почему observeOn/subscribeOn работают именно так и как избежать race conditions.
+- Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальное сравнение RxJava и Kotlin Coroutines/Flow, включая миграционные паттерны (Observable → Flow, Single → suspend). Помогает принять обоснованное решение о миграции legacy RxJava кода.
+- Moskala (2021). *Effective Kotlin*. — best practices работы с функциональным стилем в Kotlin, включая lambda expressions, higher-order functions и collection processing, которые являются основой для понимания RxJava operators.
 
 ---
 

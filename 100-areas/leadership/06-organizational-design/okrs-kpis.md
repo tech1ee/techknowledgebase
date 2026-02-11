@@ -18,6 +18,9 @@ tags:
 related:
   - "[[engineering-metrics]]"
   - "[[strategic-thinking]]"
+prerequisites:
+  - "[[engineering-metrics]]"
+  - "[[em-fundamentals]]"
 ---
 
 # OKRs и KPIs для инженерии
@@ -172,19 +175,19 @@ TEAM HEALTH:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[engineering-metrics]] — what to measure
-- [[strategic-thinking]] — setting direction
-- [[performance-management]] — individual goals
+**[[engineering-metrics]]** — OKR и KPI тесно связаны с инженерными метриками, так как именно метрики (DORA, SPACE) формируют измеримые Key Results. Без понимания того, что и как измерять, невозможно построить качественные OKR. Метрики предоставляют объективные данные для оценки прогресса по OKR и определения health KPI для инженерной организации.
 
-## Источники
+**[[strategic-thinking]]** — OKR являются инструментом трансляции стратегии в конкретные измеримые цели для команд. Стратегическое мышление определяет направление (куда идём), а OKR превращают это направление в квартальные цели с конкретными результатами. Без стратегического контекста OKR превращаются в бессмысленный список задач, оторванный от бизнес-целей компании.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Measure What Matters](https://www.whatmatters.com/) | Book (John Doerr) |
-| [Radical Focus](https://www.amazon.com/Radical-Focus-Achieving-Important-Objectives/dp/0996006028) | Book |
-| [Google OKRs](https://rework.withgoogle.com/guides/set-goals-with-okrs/) | Guide |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
 
 ---
 

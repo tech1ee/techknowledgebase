@@ -13,6 +13,10 @@ related:
   - "[[graph-algorithms]]"
   - "[[shortest-paths]]"
   - "[[graphs]]"
+prerequisites:
+  - "[[graphs]]"
+  - "[[graph-algorithms]]"
+  - "[[dfs-bfs-patterns]]"
 ---
 
 # Advanced Graph Algorithms

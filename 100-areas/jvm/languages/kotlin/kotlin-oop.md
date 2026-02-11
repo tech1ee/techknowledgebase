@@ -11,7 +11,13 @@ tags:
 aliases:
   - Kotlin OOP
   - Kotlin Classes
+prerequisites:
+  - "[[kotlin-basics]]"
 status: published
+related:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-functional]]"
+  - "[[design-patterns]]"
 ---
 
 # Kotlin ООП: классы без boilerplate
@@ -48,6 +54,10 @@ status: published
 В Java стандартный POJO с equals, hashCode, toString, getters/setters занимает 50-100 строк. В Kotlin: `data class User(val name: String, val age: Int)` — одна строка, всё генерируется автоматически.
 
 Data class решает проблему boilerplate: equals сравнивает по полям, copy создаёт изменённую копию (immutability), destructuring (`val (name, age) = user`) упрощает работу с данными. Sealed class — закрытая иерархия, где компилятор проверяет обработку всех вариантов в when-выражении: добавили новый подкласс — код не скомпилируется пока не добавите обработку. Value class — type-safe обёртка примитивов (`UserId`, `Email`) без runtime overhead: компилируется в обычный Long или String, но защищает от перепутывания параметров.
+
+Аналогия из жизни: представьте паспортный стол. **Data class** — это стандартный бланк паспорта. Вы заполняете поля (имя, дата рождения, адрес), и система автоматически генерирует уникальный идентификатор, фотографию для базы и возможность сделать копию документа при смене фамилии. Вам не нужно объяснять, как сравнивать два паспорта — они сравниваются по данным, а не по номеру экземпляра.
+
+**Sealed class** — это касса в аэропорту с фиксированными типами операций: «регистрация», «пересадка», «возврат билета». Каждый тип имеет свой набор данных (у регистрации — номер рейса и место, у возврата — причина и сумма). Когда появляется новый тип операции (например, «апгрейд класса»), все кассиры обязаны пройти инструктаж — аналог ошибки компиляции при неполном `when`.
 
 ---
 
@@ -188,6 +198,8 @@ println(person)      // Person(name=John, age=30, city=NYC)
 println(olderPerson) // Person(name=John, age=31, city=NYC)
 ```
 
+**Что происходит под капотом.** Компилятор Kotlin генерирует `copy()` как функцию с параметрами по умолчанию для каждого свойства primary constructor. Для `Person(val name: String, val age: Int, val city: String)` создаётся эквивалент `fun copy(name: String = this.name, age: Int = this.age, city: String = this.city): Person`. Благодаря default parameters можно указать только изменяемые поля. Создаётся новый объект — оригинал остаётся неизменным, что критически важно для многопоточного кода: если один поток работает с `person`, а другой создал `person.copy(age = 31)`, они не мешают друг другу.
+
 **Почему это важно:**
 - Immutability — безопасность в многопоточности
 - Функциональный стиль программирования
@@ -268,6 +280,20 @@ fun handle(result: Result): String = when (result) {
 - Exhaustiveness checking в `when`
 - Type-safe alternative для enums
 - Идеально для state machines
+
+**Когда sealed class, а когда enum?** Используйте это дерево принятия решений:
+
+```
+Нужен ограниченный набор вариантов?
+├── НЕТ → Обычный class/interface
+└── ДА → У всех вариантов одинаковые поля?
+         ├── ДА → Enum class
+         │        Пример: Color(RED, GREEN, BLUE)
+         └── НЕТ → Sealed class
+                   Пример: Result(Success(data), Error(message, code))
+```
+
+Sealed class выигрывает, когда каждый вариант несёт разную информацию. `Success` содержит данные, `Error` — сообщение и код, `Loading` — ничего. Enum не позволяет такую гибкость: все значения должны иметь одинаковую структуру. Sealed class также поддерживает вложенные иерархии: `Error` может быть `NetworkError`, `ValidationError`, `ServerError` — каждый со своими полями.
 
 ### Sealed classes vs Enums
 
@@ -782,38 +808,34 @@ typealias BInner = B.Inner
 
 ### Паттерны в production
 
-```
-Паттерн 1: Sealed class для UI State
-────────────────────────────────────
+**Паттерн 1: Sealed class для UI State.** Самый распространённый паттерн в Android-разработке — sealed class для представления состояний экрана:
+
+```kotlin
 sealed class UiState<out T> {
     object Loading : UiState<Nothing>()
     data class Success<T>(val data: T) : UiState<T>()
     data class Error(val message: String) : UiState<Nothing>()
 }
+```
 
-// Exhaustive when:
-when (state) {
-    is UiState.Loading -> showSpinner()
-    is UiState.Success -> showData(state.data)
-    is UiState.Error -> showError(state.message)
-    // Компилятор проверит все варианты!
-}
+Exhaustive `when` гарантирует обработку всех состояний. Если добавить новое состояние (например, `Empty`), компилятор укажет на все места, где его не обработали.
 
-Паттерн 2: Value class для type-safety
-──────────────────────────────────────
+**Паттерн 2: Value class для type-safety.** Предотвращает перепутывание параметров одного типа:
+
+```kotlin
 @JvmInline
 value class UserId(val value: Long)
 
 @JvmInline
 value class OrderId(val value: Long)
 
-fun getUser(id: UserId): User  // Нельзя случайно передать OrderId!
-fun getOrder(id: OrderId): Order
+fun getUser(id: UserId): User   // Нельзя передать OrderId!
+fun getOrder(id: OrderId): Order // В runtime: обычный Long
+```
 
-// В runtime: обычный Long, без boxing
+**Паттерн 3: Delegation вместо наследования.** Ключевое слово `by` делегирует реализацию интерфейса другому объекту — можно переопределить только нужные методы:
 
-Паттерн 3: Delegation вместо наследования
-────────────────────────────────────────
+```kotlin
 interface Printer { fun print(message: String) }
 
 class ConsolePrinter : Printer {
@@ -865,21 +887,28 @@ class TimestampPrinter(
 
 ---
 
-## Рекомендуемые источники
+## Куда дальше (дополнительные ресурсы)
 
-### Официальная документация
-- [Classes and Objects](https://kotlinlang.org/docs/classes.html) — официальный гайд
-- [Data Classes](https://kotlinlang.org/docs/data-classes.html) — data class deep dive
-- [Sealed Classes](https://kotlinlang.org/docs/sealed-classes.html) — sealed class patterns
+- [Classes and Objects](https://kotlinlang.org/docs/classes.html) — официальная документация Kotlin по классам
+- [Kotlin Vocabulary](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc_T0fSZc9obnmnWcjvmJdw_) — Google, серия видео по data class, sealed class
 
-### Книги
-- **"Kotlin in Action"** (2nd ed) — глава о классах и объектах
-- **"Effective Kotlin"** — best practices для OOP
-- **"Head First Design Patterns"** — паттерны GoF (многие проще в Kotlin)
+## Связь с другими темами
 
-### Видео
-- [Kotlin Vocabulary](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc_T0fSZc9obnmnWcjvmJdw_) — Google, data class, sealed class
-- [KotlinConf talks on OOP](https://www.youtube.com/results?search_query=kotlinconf+sealed+class) — продвинутые паттерны
+[[kotlin-basics]] — Основы синтаксиса Kotlin (переменные, функции, null-safety, control flow) являются фундаментом для понимания ООП-конструкций. Без знания базового синтаксиса примеры с data class, sealed class и delegation будут непонятны. Этот материал обязателен для изучения перед ООП.
+
+[[kotlin-functional]] — Функциональное программирование в Kotlin (higher-order functions, lambdas, extension functions) дополняет ООП и создаёт уникальный стиль Kotlin: data class + copy() для immutability, sealed class + when для pattern matching, delegation для composition. Изучение обоих подходов позволяет выбирать оптимальный стиль для каждой задачи. Рекомендуется читать параллельно или сразу после ООП.
+
+[[design-patterns]] — Паттерны проектирования GoF получают новое прочтение в Kotlin: Singleton реализуется через object, Factory Method через companion object, Decorator через delegation by, Strategy через higher-order functions. Понимание ООП-конструкций Kotlin необходимо для эффективного применения паттернов без избыточного boilerplate.
+
+[[kotlin-type-system]] — Generics, variance (in/out) и reified типы расширяют возможности ООП: generic sealed class для type-safe состояний (UiState<out T>), value class для zero-overhead обёрток, variance для безопасной подстановки типов в коллекциях. Рекомендуется как следующий шаг после освоения базового ООП.
+
+[[clean-code-solid]] — SOLID-принципы тесно связаны с ООП-конструкциями Kotlin: final by default поддерживает Open/Closed Principle, delegation by реализует композицию вместо наследования, sealed class обеспечивает Liskov Substitution через exhaustive when. Изучение SOLID параллельно с ООП формирует правильные привычки проектирования.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Главы о классах, объектах, data classes и sealed classes. Наиболее полное объяснение ООП-модели Kotlin с точки зрения перехода с Java.
+- Moskala M. (2021). *Effective Kotlin*. — Практические рекомендации по использованию data class, sealed class, value class и delegation в production-коде. Объясняет, когда и почему предпочитать одну конструкцию другой.
+- Subramaniam V. (2019). *Programming Kotlin*. — Глубокое погружение в объектную модель Kotlin: свойства, delegation, singleton-паттерны. Хорошо подходит для разработчиков, приходящих из мира Java.
 
 ---
 

@@ -18,6 +18,8 @@ related:
   - "[[os-processes-threads]]"
   - "[[os-synchronization]]"
   - "[[jvm-executors-futures]]"
+prerequisites:
+  - "[[os-processes-threads]]"
 ---
 
 # Планирование процессов: как ОС распределяет CPU
@@ -1165,17 +1167,18 @@ pidstat -w 1                   # По процессам
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-processes-threads]] — состояния процесса (Ready, Running, Blocked), на которых построен scheduling
-- [[os-overview]] — context switch, который scheduler инициирует
+**[[os-overview]]** — Обзор ОС объясняет механизм context switch, который планировщик инициирует при каждом переключении задачи: сохранение регистров текущего потока, загрузка регистров следующего, переключение стека. Без понимания разделения kernel/user mode невозможно осознать, почему timer interrupt — основа preemptive scheduling: hardware таймер генерирует прерывание, CPU переходит в kernel mode, и планировщик получает возможность решить, какой поток запускать следующим. Концепция системных вызовов также связана с планированием: любой блокирующий syscall (read, wait) переводит поток в состояние Blocked, и планировщик выбирает другой Ready-поток.
 
-**Углубление:**
-- [[os-synchronization]] — priority inversion возникает при взаимодействии scheduling и locks
+**[[os-processes-threads]]** — Процессы и потоки — это именно те сущности, которые планировщик распределяет по CPU. Состояния процесса (New, Ready, Running, Blocked, Terminated) формируют основу работы scheduling: планировщик берёт потоки из Ready-очереди и переводит их в Running, а при блокирующей операции или истечении кванта — обратно в Ready или Blocked. В Linux планировщик CFS работает с task_struct, которая представляет как процессы, так и потоки (через clone()), и использует vruntime для отслеживания «справедливости» распределения CPU. Понимание разницы между user-level и kernel-level threads критично: 1:1 модель означает, что ОС видит и планирует каждый поток, тогда как в M:N модели пользовательский runtime выполняет собственное планирование поверх нескольких OS threads.
+
+**[[os-synchronization]]** — Синхронизация и планирование взаимодействуют через проблему priority inversion: когда высокоприоритетный поток ожидает mutex, захваченный низкоприоритетным потоком, а среднеприоритетный поток занимает CPU — высокоприоритетный блокируется на неопределённое время. Решения (priority inheritance, priority ceiling) требуют координации между планировщиком и механизмом блокировок: планировщик временно повышает приоритет владельца mutex до уровня ожидающего потока. Spinlocks также связаны с scheduling: если поток, держащий spinlock, вытесняется планировщиком, все ожидающие потоки тратят свои кванты на бесполезное вращение. Выбор между mutex (блокирующий, вызывает перепланирование) и spinlock (не блокирующий, потребляет CPU) зависит от ожидаемого времени ожидания относительно стоимости context switch.
+
+**[[jvm-executors-futures]]** — JVM Executor framework реализует планирование задач в userspace поверх OS scheduling: ThreadPoolExecutor управляет пулом OS threads и распределяет Runnable/Callable задачи между ними. Это двухуровневое планирование: ОС планирует потоки пула, а Executor планирует задачи на потоки, причём каждый уровень имеет собственные политики — CFS на уровне ОС и work queue на уровне Executor. ForkJoinPool использует work-stealing алгоритм — когда поток завершает свои задачи, он «крадёт» задачи из очередей других потоков, что минимизирует idle time и балансирует нагрузку. Понимание OS scheduling помогает настраивать пулы: core pool size должен соответствовать количеству CPU cores для CPU-bound задач и быть больше для IO-bound (формула N_threads = N_cores × (1 + W/C), где W/C — отношение wait time к compute time).
+
+**Связанные концепции:**
 - [[os-memory-management]] — TLB flush при context switch между процессами
-
-**Применение:**
 - [[jvm-concurrency-overview]] — Thread.yield(), thread priorities в JVM
 - [[kotlin-coroutines]] — Dispatchers распределяют корутины по потокам, но сам scheduling корутин — в userspace
 
@@ -1186,6 +1189,14 @@ pidstat -w 1                   # По процессам
 ### Официальная документация
 - [CFS Scheduler — Linux Kernel docs](https://docs.kernel.org/scheduler/sched-design-CFS.html) — официальная документация
 - [Red Hat: Tuning Scheduling Policy](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/monitoring_and_managing_system_status_and_performance/tuning-scheduling-policy) — практическое руководство
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 2.4 (Scheduling) покрывает все классические алгоритмы (FCFS, SJF, RR, Priority, MLFQ) с математическим анализом и сравнением; дополнительно глава 10 (Case Study: UNIX/Linux) разбирает CFS.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — глава 5 (CPU Scheduling) и глава 6 (Synchronization Tools) — формальные определения scheduling criteria (turnaround time, waiting time, response time) с решёнными задачами; идеален для подготовки к экзаменам.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — главы 7-10 (Scheduling) — от наивного FIFO до MLFQ с интерактивными симуляторами; бесплатно и с отличными аналогиями.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 8 (Exceptional Control Flow) объясняет, как signals и interrupts связаны с preemptive scheduling; глава 12 (Concurrent Programming) — влияние scheduling на многопоточный код.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — глава 4 (Process Scheduling) — детальное описание O(1) scheduler и CFS с анализом исходного кода ядра Linux; объясняет real-time scheduling классы (SCHED_FIFO, SCHED_RR).
 
 ### Книги и курсы
 - [OSTEP: Scheduling chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched.pdf) — бесплатная книга, главы 7-10

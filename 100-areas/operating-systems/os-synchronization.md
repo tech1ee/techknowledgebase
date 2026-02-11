@@ -18,6 +18,9 @@ related:
   - "[[os-processes-threads]]"
   - "[[os-scheduling]]"
   - "[[jvm-synchronization]]"
+prerequisites:
+  - "[[os-processes-threads]]"
+  - "[[os-scheduling]]"
 ---
 
 # Синхронизация: координация параллельных процессов
@@ -1309,23 +1312,32 @@ try {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-processes-threads]] — потоки разделяют память → нужна синхронизация, без понимания потоков синхронизация бессмысленна
-- [[os-overview]] — syscalls и kernel mode, куда уходит поток при блокировке на mutex
+**[[os-overview]]** — Обзор ОС объясняет разделение kernel/user mode, которое критично для понимания синхронизации: когда поток блокируется на mutex, он совершает системный вызов (futex в Linux), переходит в kernel mode, и ядро помещает его в wait queue — это стоит ~1-2 µs. Атомарные операции (CAS, fetch-and-add), лежащие в основе lock-free алгоритмов, реализуются на уровне процессорных инструкций (CMPXCHG, LOCK prefix на x86) без перехода в kernel. Понимание interrupt handling также важно: критические секции ядра часто защищаются не mutex, а запретом прерываний (cli/sti), поскольку interrupt handler не может ждать на lock.
 
-**Углубление:**
-- [[os-scheduling]] — как планировщик решает кому дать CPU когда поток заблокирован, priority inversion
+**[[os-processes-threads]]** — Потоки и синхронизация неразрывно связаны: именно потому, что потоки одного процесса разделяют адресное пространство, возникают race conditions при одновременном доступе к общим данным. Без понимания модели памяти потоков — stack приватный, heap и глобальные переменные общие — невозможно определить, какие данные требуют защиты. Каждый поток имеет собственный кэш процессора (L1/L2), и cache coherency protocol (MESI) обеспечивает видимость записей между ядрами, но с задержкой — именно это порождает необходимость memory barriers. Процессы, в отличие от потоков, имеют изолированные адресные пространства и синхронизируются через IPC-механизмы (named semaphores, shared memory + mutexes), что принципиально дороже.
+
+**[[os-scheduling]]** — Планирование и синхронизация тесно взаимодействуют через несколько механизмов. Priority inversion — классическая проблема на стыке двух тем: высокоприоритетный поток T1 ждёт mutex, захваченный низкоприоритетным T3, а среднеприоритетный T2 вытесняет T3, косвенно блокируя T1 на неопределённое время. Решения (priority inheritance protocol, priority ceiling protocol) требуют, чтобы планировщик динамически изменял приоритеты на основе владения mutex. Выбор между spinlock и mutex зависит от scheduling: если ожидаемое время ожидания меньше стоимости context switch (~2 µs), spinlock эффективнее; если больше — mutex с перепланированием экономит CPU cycles.
+
+**[[jvm-synchronization]]** — Синхронизация в JVM построена поверх примитивов ОС: synchronized блок использует monitor, который на уровне HotSpot реализован через biased locking → thin lock (CAS) → fat lock (OS mutex/futex) по мере возрастания contention. ReentrantLock из java.util.concurrent использует AbstractQueuedSynchronizer (AQS), который сочетает CAS-спин с park/unpark (futex на Linux). Volatile в Java генерирует memory barriers на уровне процессора (StoreLoad barrier на x86), гарантируя visibility без mutex — это прямая связь с аппаратными механизмами синхронизации. Понимание OS-уровня помогает диагностировать проблемы: lock contention в Java profiler (JFR) показывает время в состоянии BLOCKED, которое соответствует ожиданию на futex в ядре.
+
+**Связанные концепции:**
 - [[os-memory-management]] — memory barriers и cache coherency связаны с синхронизацией на низком уровне
-
-**Применение:**
 - [[jvm-concurrency-overview]] — synchronized, ReentrantLock, volatile в JVM построены на этих примитивах
 - [[kotlin-coroutines]] — Mutex в корутинах, structured concurrency как альтернатива locks
 
 ---
 
 ## Рекомендуемые источники
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 2.3 (Interprocess Communication) и 6.1-6.4 (Deadlocks) — классическое изложение от race conditions через mutual exclusion до алгоритмов обнаружения и предотвращения deadlock; задача обедающих философов разобрана в деталях.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — главы 6 (Synchronization Tools) и 7 (Synchronization Examples) и 8 (Deadlocks) — формальные определения критических секций, Peterson's algorithm, семафоры Дейкстры и решения классических задач (bounded buffer, readers-writers, dining philosophers).
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — главы 26-33 (Concurrency) — от потоков и locks до condition variables и семафоров с практическими упражнениями и симуляторами; бесплатно, с отличными пошаговыми объяснениями.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 12 (Concurrent Programming) рассматривает синхронизацию с точки зрения программиста: thread safety, reentrant functions, races и deadlocks в контексте реального C-кода.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — главы 9 (An Introduction to Kernel Synchronization) и 10 (Kernel Synchronization Methods) — spinlocks, semaphores, completion variables, seq locks, RCU и preemption в контексте ядра Linux.
 
 ### Книги и курсы
 - [OSTEP: Concurrency chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf) — бесплатная книга, главы 26-33

@@ -18,6 +18,9 @@ tags:
 related:
   - "[[em-fundamentals]]"
   - "[[executive-communication]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
 ---
 
 # Управление stakeholders
@@ -162,19 +165,19 @@ ABSENT:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[executive-communication]] — как общаться
-- [[strategic-thinking]] — understanding context
-- [[communication/]] — communication skills
+**[[em-fundamentals]]** — Управление стейкхолдерами является одной из ключевых компетенций engineering manager, описанных в основах роли EM. Managing up — навык, который EM использует ежедневно: построение доверия с руководителем, проактивная коммуникация, передача bad news early. Понимание фундаментальных обязанностей менеджера помогает правильно расставлять приоритеты в работе со стейкхолдерами.
 
-## Источники
+**[[executive-communication]]** — Управление стейкхолдерами и коммуникация с руководством — две стороны одной медали: stakeholder mapping определяет «с кем» общаться, а executive communication — «как» общаться. BLUF формат, Pyramid Principle и умение говорить на бизнес-языке — конкретные инструменты, которые делают управление стейкхолдерами эффективным. Без навыков executive communication даже правильно идентифицированные стейкхолдеры останутся без необходимого влияния.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [HBR: Managing Up](https://hbr.org/topic/subject/managing-up) | Articles |
-| [First Round: Politics](https://review.firstround.com/) | Articles |
-| [Manager Tools](https://www.manager-tools.com/) | Podcast |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
 
 ---
 

@@ -16,6 +16,9 @@ related:
   - "[[os-processes-threads]]"
   - "[[android-memory-leaks]]"
 cs-foundations: [event-loop, message-queue, producer-consumer, thread-confinement]
+prerequisites:
+  - "[[android-threading]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Handler, Looper и MessageQueue: устройство Main Thread
@@ -3048,7 +3051,19 @@ Handler, Looper и MessageQueue — это фундаментальный мех
 
 ---
 
-## Источники
+## Связь с другими темами
+
+**[[android-threading]]** — Handler, Looper и MessageQueue являются низкоуровневой реализацией threading в Android. Понимание threading модели (main thread, background threads, ANR) даёт контекст для изучения Handler/Looper. ThreadLocal<Looper> обеспечивает привязку одного Looper к одному потоку. Рекомендуется изучить threading fundamentals перед Handler/Looper.
+
+**[[android-memory-leaks]]** — Handler является одним из главных источников memory leaks в Android. Анонимные inner class Handler-ы и non-static Runnable неявно держат ссылку на Activity, предотвращая GC. Паттерн WeakReference + static Handler и removeCallbacksAndMessages(null) в onDestroy() — стандартные решения. Рекомендуется изучать параллельно.
+
+**[[os-processes-threads]]** — Каждый Thread в Android — это native OS thread (pthread на Linux). Looper использует epoll для эффективного ожидания сообщений, что напрямую связано с механизмами ядра Linux. Понимание OS-level потоков, context switching и stack memory объясняет стоимость создания HandlerThread и почему thread pools эффективнее.
+
+**[[kotlin-coroutines]]** — Dispatchers.Main в Kotlin Coroutines реализован через Handler(Looper.getMainLooper()). Каждый dispatch на Main Dispatcher — это post Message в MessageQueue main thread. Понимание Handler/Looper объясняет разницу между Dispatchers.Main и Dispatchers.Main.immediate, а также помогает при отладке корутин.
+
+---
+
+## Источники и дальнейшее чтение
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
@@ -3062,6 +3077,12 @@ Handler, Looper и MessageQueue — это фундаментальный мех
 | 8 | [GitHub: kotlinx.coroutines HandlerDispatcher.kt](https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/kotlinx-coroutines-android/src/HandlerDispatcher.kt) | Исходный код | Dispatchers.Main реализация |
 | 9 | [Kotlin Blog: Dispatchers.Main vs Main.immediate](https://blog.shreyaspatil.dev/understanding-dispatchers-main-and-mainimmediate) | Статья | Performance optimization |
 | 10 | [JetBrains: Kotlin Developer Survey 2024](https://www.jetbrains.com/lp/devecosystem-2024/kotlin/) | Исследование | Статистика использования |
+
+### Книги
+
+- **Goetz B. (2006)** *Java Concurrency in Practice* — фундаментальное описание producer-consumer паттерна, thread confinement и message passing, которые лежат в основе Handler/Looper/MessageQueue. Обязательное чтение для глубокого понимания.
+- **Vasavada N. (2019)** *Android Internals* — детальное описание Looper, MessageQueue и native layer (epoll) на уровне AOSP. Объясняет связь между Java и C++ слоями MessageQueue.
+- **Moskala M. (2022)** *Kotlin Coroutines: Deep Dive* — объясняет, как Dispatchers.Main использует Handler под капотом, и почему понимание Handler/Looper критично для отладки корутин.
 
 ---
 

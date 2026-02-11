@@ -13,6 +13,9 @@ related:
   - "[[leetcode-roadmap]]"
   - "[[common-mistakes]]"
   - "[[problem-solving-framework]]"
+prerequisites:
+  - "[[problem-solving-framework]]"
+  - "[[big-o-complexity]]"
 ---
 
 # Mock Interview Guide

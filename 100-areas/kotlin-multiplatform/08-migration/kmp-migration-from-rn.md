@@ -11,6 +11,9 @@ tags:
   - topic/cross-platform
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-architecture-patterns]]"
 related:
   - [kmp-migration-from-native]]
   - "[[kmp-migration-from-flutter]]"
@@ -508,4 +511,22 @@ fun getUser(id: Long): User? =
 | [RN vs KMP 2026 Guide](https://www.luciq.ai/blog/react-native-vs-kotlin-mutliplatform-guide) | Blog | Detailed comparison |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-migration-from-native]]** — миграция с React Native и миграция с нативных приложений различаются фундаментально: RN → KMP заменяет JS-bridge на native compilation, а native → KMP извлекает общую логику из уже нативного кода. Понимание обоих подходов позволяет выбрать правильную стратегию для конкретного проекта и оценить trade-offs между полной перезаписью и инкрементальной миграцией.
+
+- **[[kmp-migration-from-flutter]]** — Flutter и React Native — два основных cross-platform фреймворка, и миграция каждого на KMP имеет свои особенности. Flutter → KMP всегда full rewrite (Dart → Kotlin), тогда как RN → KMP имеет уникальный инкрементальный путь через Kotlin/JS. Маппинг стеков аналогичен (state management → ViewModel, networking → Ktor), но детали реализации различаются из-за разных языков и экосистем.
+
+- **[[kmp-getting-started]]** — независимо от выбранной стратегии миграции (Kotlin/JS, reakt-native-toolkit или полная перезапись), первый практический шаг — создание KMP-проекта. Getting started определяет структуру shared module, настройку targets и базовую конфигурацию Gradle. Для инкрементального пути через Kotlin/JS необходимо добавить js(IR) target в build.gradle.kts.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Ключевое руководство для JavaScript/TypeScript-разработчиков, переходящих на Kotlin. Kotlin синтаксически похож на TypeScript, но имеет существенные отличия: строгая null safety без escape hatches, sealed classes вместо union types, coroutines вместо Promises. Книга покрывает все эти аспекты.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — При миграции с Redux/MobX/Zustand на ViewModel + StateFlow необходимо понимание корутин и Flow. Книга объясняет, как Kotlin Coroutines заменяют JavaScript async/await и Promises, обеспечивая structured concurrency и cancellation, которых нет в JS-экосистеме.
+
+- **Skeen J. et al. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое руководство по Kotlin для разработчиков, приходящих из других языков. Особенно полезно для JS/TS-разработчиков: покрывает типовую систему, функциональные возможности и инструменты Kotlin-экосистемы пошагово, с упражнениями.
+
+---
+
 *Проверено: 2026-01-09 | KMP Stable, React Native 0.76+*

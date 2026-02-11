@@ -20,6 +20,8 @@ related:
   - "[[os-synchronization]]"
   - "[[jvm-concurrency-overview]]"
   - "[[kotlin-coroutines]]"
+prerequisites:
+  - "[[data-structures-fundamentals]]"
 ---
 
 # Процессы и потоки: единицы выполнения
@@ -1185,19 +1187,19 @@ Zombie опаснее — они накапливаются и могут исч
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-overview]] — карта раздела, базовые концепции kernel/user mode, которые объясняют почему syscalls (fork, pthread_create) имеют overhead
+**[[os-overview]]** — Обзор операционных систем закладывает фундамент для понимания процессов и потоков: концепции kernel mode vs user mode объясняют, почему системные вызовы fork() и pthread_create() имеют ощутимый overhead — каждый из них требует перехода в пространство ядра. Понимание архитектуры ОС (монолитное ядро vs микроядро) определяет, как именно процессы и потоки обслуживаются: в монолитном ядре Linux все операции происходят в едином адресном пространстве ядра, а в микроядре Minix — через message passing между серверными процессами. Без этого контекста невозможно понять, почему context switch стоит 2-5 µs и куда уходит это время.
 
-**Углубление:**
-- [[os-scheduling]] — как планировщик решает какому потоку/процессу дать CPU, почему 1000 потоков на 4 ядрах — плохая идея
-- [[os-memory-management]] — структура адресного пространства (stack, heap, text), page tables и почему fork() использует COW
-- [[os-synchronization]] — mutex, semaphore, deadlock — проблемы, возникающие когда потоки разделяют память
+**[[os-scheduling]]** — Планирование CPU неразрывно связано с процессами и потоками, поскольку именно планировщик определяет, какой поток получит процессорное время и на какой срок. CFS в Linux работает с task_struct — той же структурой, которая представляет поток в ядре, — распределяя vruntime пропорционально весам nice-значений. Понимание scheduling объясняет, почему создание 1000 потоков на 4 ядрах приводит к деградации: overhead от context switch и конкуренции за кэш-линии перевешивает выигрыш от параллелизма. Также планирование определяет поведение приоритетов: real-time потоки (SCHED_FIFO) могут вытеснять обычные потоки CFS.
 
-**Применение:**
-- [[jvm-concurrency-overview]] — как JVM реализует Thread поверх pthread, почему 10K Java threads = 80GB виртуальной памяти
-- [[kotlin-coroutines]] — M:N модель в Kotlin: много корутин на нескольких OS threads, suspend вместо блокировки
+**[[os-memory-management]]** — Управление памятью непосредственно определяет структуру адресного пространства процесса: сегменты text, data, heap, stack, а также механику page tables для трансляции виртуальных адресов в физические. Именно memory management объясняет, почему fork() использует Copy-on-Write: вместо дублирования всех страниц ядро помечает их read-only и копирует только при записи, что делает fork() почти мгновенным для read-heavy процессов. Каждый поток получает собственный стек (обычно 8 MB виртуальной памяти), и это напрямую влияет на лимит потоков: 10 000 потоков потребуют 80 GB виртуального адресного пространства. Понимание TLB и page table switching также объясняет, почему переключение между процессами дороже, чем между потоками одного процесса.
+
+**[[os-synchronization]]** — Синхронизация является прямым следствием многопоточности: когда несколько потоков разделяют адресное пространство процесса, возникают race conditions, требующие mutex, semaphore и других примитивов. Без корректной синхронизации даже простая операция counter++ превращается в data race, поскольку состоит из трёх машинных инструкций (load, increment, store), между которыми может произойти переключение потока. Проблема deadlock — когда два потока блокируют друг друга, захватив ресурсы в разном порядке — является одной из классических опасностей многопоточного программирования. Понимание модели памяти (memory ordering, happens-before) критично для написания корректного lock-free кода.
+
+**[[jvm-concurrency-overview]]** — JVM реализует потоки поверх нативных OS threads через 1:1 модель: каждый java.lang.Thread соответствует одному pthread в Linux или NSThread в macOS. Это означает, что все ограничения ОС — стоимость context switch, размер стека, лимиты на количество потоков — напрямую влияют на Java-приложения. Создание 10 000 Java threads приводит к потреблению ~80 GB виртуальной памяти (8 MB стек × 10K) и тысячам context switches в секунду. JVM добавляет собственный overhead: safepoint polling, GC stop-the-world паузы блокируют все потоки, а synchronized/volatile реализуются через CAS-инструкции и memory barriers процессора. Проект Loom (virtual threads) в Java 21+ переходит к модели M:N, аналогичной корутинам.
+
+**[[kotlin-coroutines]]** — Корутины Kotlin реализуют M:N модель потоков: множество легковесных корутин мультиплексируются на небольшой пул OS threads через Dispatchers. В отличие от OS threads, корутина не привязана к конкретному потоку и может приостановиться (suspend) без блокировки нижележащего потока — вместо блокирующего системного вызова она сохраняет continuation и освобождает поток для другой работы. Это решает проблему масштабируемости: если 10 000 OS threads потребляют 80 GB памяти и генерируют тысячи context switches, то 10 000 корутин работают на пуле из 4-8 потоков с минимальным overhead (~200 bytes на корутину). Понимание OS threads необходимо для отладки корутин: structured concurrency, dispatchers и их взаимодействие с ОС определяют реальную производительность.
 
 ---
 
@@ -1206,6 +1208,14 @@ Zombie опаснее — они накапливаются и могут исч
 ### Официальная документация
 - [fork(2) - Linux manual page](https://man7.org/linux/man-pages/man2/fork.2.html) — официальная документация fork
 - [pthreads(7) - Linux manual page](https://man7.org/linux/man-pages/man7/pthreads.7.html) — POSIX threads
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — главы 2 (Processes and Threads) и 11 (Case Study: Linux) дают полную картину от абстракции процесса до реализации в Linux; классическое изложение с примерами MINIX.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — главы 3 (Processes) и 4 (Threads & Concurrency) детально разбирают модели потоков (1:1, M:N, M:1) и IPC-механизмы; хорош для подготовки к экзаменам и интервью.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — главы 4-6 (Processes, API, Limited Direct Execution) и 26-33 (Concurrency) — бесплатная книга с отличными аналогиями и практическими упражнениями.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — главы 8 (Exceptional Control Flow) и 12 (Concurrent Programming) рассматривают процессы и потоки с точки зрения программиста, включая signal handling и thread safety.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — главы 3 (Process Management) и 4 (Process Scheduling) описывают реализацию task_struct, fork(), clone() и CFS на уровне исходного кода ядра Linux.
 
 ### Книги и курсы
 - [OSTEP: Concurrency chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/) — бесплатная книга, главы 26-33 о потоках

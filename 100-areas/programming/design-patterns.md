@@ -17,6 +17,9 @@ related:
   - "[[clean-code-solid]]"
   - "[[microservices-vs-monolith]]"
   - "[[api-design]]"
+prerequisites:
+  - "[[clean-code-solid]]"
+  - "[[type-systems-theory]]"
 ---
 
 # Design Patterns: решения, которые уже работают
@@ -1214,6 +1217,22 @@ YAGNI: You Ain't Gonna Need It
 - [Strategy Pattern: When Useful vs Overkill](https://www.linkedin.com/advice/3/when-strategy-pattern-useful-overkill-skills-object-oriented-design)
 - [Factory Method Pattern](https://www.oodesign.com/factory-method-pattern) — детальный разбор участников
 - [Observer Pattern Pitfalls](https://themorningdev.com/observer-pattern/) — 7 критических ошибок
+
+---
+
+## Связь с другими темами
+
+### [[clean-code-solid]]
+
+SOLID-принципы — теоретический фундамент, на котором стоят Design Patterns. Каждый паттерн GoF воплощает один или несколько принципов SOLID: Strategy реализует Open/Closed (новые алгоритмы без изменения контекста), Observer — Dependency Inversion (Subject зависит от абстракции Observer, не от конкретных подписчиков), ISP воплощается через role interfaces в Adapter и Decorator. Изучение SOLID до паттернов позволяет понимать ПОЧЕМУ паттерн устроен именно так, а не просто запоминать структуру.
+
+### [[microservices-vs-monolith]]
+
+В распределённых системах классические GoF-паттерны трансформируются. Factory становится Service Registry, Observer превращается в Event Bus (Kafka, RabbitMQ), Strategy — в API Gateway с routing rules. Decorator реализуется через middleware/sidecar (Istio, Envoy). Понимание паттернов на уровне классов даёт интуицию для архитектурных паттернов на уровне сервисов, но важно учитывать сетевую задержку и partial failure, которых нет в монолите.
+
+### [[api-design]]
+
+API Design активно использует Design Patterns: Builder для формирования сложных запросов, Strategy для выбора формата ответа (JSON, XML, Protobuf), Facade для упрощения сложного backend в единый API endpoint. Понимание паттернов помогает проектировать API, которые легко расширяются (Open/Closed) и не навязывают клиентам лишнюю функциональность (Interface Segregation). Антипаттерн God Endpoint — это тот же God Class, только на уровне REST API.
 
 ---
 

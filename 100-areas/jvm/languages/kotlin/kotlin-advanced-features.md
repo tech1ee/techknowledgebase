@@ -10,6 +10,11 @@ tags:
   - operator-overloading
   - type/concept
   - level/advanced
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-oop]]"
+  - "[[kotlin-functional]]"
+  - "[[kotlin-type-system]]"
 related:
   - "[[kotlin-overview]]"
   - "[[kotlin-best-practices]]"
@@ -78,7 +83,9 @@ Kotlin позволяет писать код, который читается �
 
 **Extension functions** добавляют методы к любому классу без наследования: `fun String.isPalindrome(): Boolean`. Работает даже для final классов.
 
-**Property delegates** переиспользуют логику свойств: `by lazy {}` вычисляет один раз, `by observable {}` отслеживает изменения, `by Delegates.vetoable {}` позволяет отклонить.
+Аналогия: представьте швейцарский нож. Сам нож (класс String) уже готов и запечатан — вы не можете его разобрать и добавить новое лезвие внутрь. Но вы можете прикрепить к нему чехол с дополнительными инструментами (extension functions) — отвёртку, пилку, штопор. Со стороны кажется, что всё это часть ножа, но технически инструменты прикреплены снаружи. Именно поэтому extensions не имеют доступа к «внутренностям» ножа (private members).
+
+**Property delegates** переиспользуют логику свойств: `by lazy {}` вычисляет один раз, `by observable {}` отслеживает изменения, `by Delegates.vetoable {}` позволяет отклонить. Это как нанять секретаря для конкретной задачи: «Когда кто-то спрашивает мой номер телефона — ответь за меня» (`getValue`), «когда кто-то хочет поменять мой номер — спроси меня сначала» (`vetoable`).
 
 **DSL** строится через function types с receiver (`block: StringBuilder.() -> Unit`) и trailing lambda. Результат: Ktor, Compose, Gradle Kotlin DSL — код как конфигурация.
 
@@ -466,8 +473,9 @@ cube[1, 2, 3] = 42
 
 ### Invoke operator
 
+`invoke` позволяет вызывать экземпляр класса как функцию — полезно для объектов, которые концептуально являются «вызываемыми»:
+
 ```kotlin
-// invoke позволяет вызывать объект как функцию
 class Greeter(private val greeting: String) {
     operator fun invoke(name: String): String {
         return "$greeting, $name!"
@@ -476,44 +484,35 @@ class Greeter(private val greeting: String) {
 
 val greet = Greeter("Hello")
 println(greet("Alice"))  // "Hello, Alice!"
+```
 
-// Множественные invoke для overloading
+Можно определить несколько перегрузок `invoke` для разных сигнатур:
+
+```kotlin
 class Calculator {
     operator fun invoke(a: Int, b: Int): Int = a + b
     operator fun invoke(a: Int, b: Int, c: Int): Int = a + b + c
-    operator fun invoke(operation: String, a: Int, b: Int): Int {
-        return when (operation) {
-            "+" -> a + b
-            "-" -> a - b
-            "*" -> a * b
-            "/" -> a / b
-            else -> throw IllegalArgumentException()
-        }
-    }
 }
 
 val calc = Calculator()
-println(calc(2, 3))           // 5
-println(calc(1, 2, 3))        // 6
-println(calc("+", 5, 3))      // 8
+println(calc(2, 3))        // 5
+println(calc(1, 2, 3))     // 6
+```
 
-// Практическое применение: Dependency Provider
+Практическое применение — ServiceProvider, где `invoke` делает получение сервиса естественным:
+
+```kotlin
 class ServiceProvider {
     private val services = mutableMapOf<Class<*>, Any>()
 
-    fun <T : Any> register(clazz: Class<T>, instance: T) {
-        services[clazz] = instance
-    }
-
     operator fun <T : Any> invoke(clazz: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return services[clazz] as? T ?: throw IllegalStateException()
+        return services[clazz] as? T
+            ?: throw IllegalStateException()
     }
 }
 
-val provider = ServiceProvider()
-provider.register(MyService::class.java, MyServiceImpl())
-val service = provider(MyService::class.java)  // Красиво!
+val service = provider(MyService::class.java)  // Вызов как функция
 ```
 
 ### Contains operator
@@ -540,50 +539,35 @@ class CustomList<T>(private val items: List<T>) {
 
 ### RangeTo и iterator operators
 
-```kotlin
-// .. оператор через rangeTo
-data class Date(val year: Int, val month: Int, val day: Int) : Comparable<Date> {
-    operator fun rangeTo(other: Date): DateRange {
-        return DateRange(this, other)
-    }
+Оператор `..` реализуется через `rangeTo`. Для создания итерируемого диапазона нужны три компонента: сам оператор, класс Range и Iterator.
 
-    override fun compareTo(other: Date): Int {
-        // Сравнение дат
-        return when {
-            year != other.year -> year - other.year
-            month != other.month -> month - other.month
-            else -> day - other.day
-        }
+```kotlin
+data class Date(val year: Int, val month: Int, val day: Int) : Comparable<Date> {
+    operator fun rangeTo(other: Date) = DateRange(this, other)
+
+    override fun compareTo(other: Date): Int = when {
+        year != other.year -> year - other.year
+        month != other.month -> month - other.month
+        else -> day - other.day
     }
 }
+```
 
+DateRange реализует `ClosedRange` и `Iterable` для поддержки `in` и `for`:
+
+```kotlin
 class DateRange(
     override val start: Date,
     override val endInclusive: Date
 ) : ClosedRange<Date>, Iterable<Date> {
-
-    override operator fun iterator(): Iterator<Date> {
-        return DateIterator(start, endInclusive)
-    }
+    override operator fun iterator() = DateIterator(start, endInclusive)
 }
+```
 
-class DateIterator(start: Date, private val end: Date) : Iterator<Date> {
-    private var current = start
+Результат — естественный синтаксис для итерации по диапазону дат:
 
-    override fun hasNext(): Boolean = current <= end
-
-    override fun next(): Date {
-        val result = current
-        current = current.nextDay()  // Метод для следующего дня
-        return result
-    }
-}
-
-// Использование
-val start = Date(2025, 1, 1)
-val end = Date(2025, 1, 10)
-
-for (date in start..end) {
+```kotlin
+for (date in Date(2025, 1, 1)..Date(2025, 1, 10)) {
     println(date)
 }
 ```
@@ -1582,11 +1566,17 @@ routing {
 
 ---
 
-## Связанные темы
-- [[kotlin-functional]] — Function types с receiver для DSL
-- [[kotlin-collections]] — Extensions для коллекций
-- [[kotlin-best-practices]] — Идиоматичное использование advanced features
-- [[kotlin-type-system]] — Generics в extensions и delegates
+## Связь с другими темами
+
+**[[kotlin-overview]]** — обзор экосистемы Kotlin даёт контекст для advanced features: extension functions используются в Kotlin stdlib, Compose, Ktor; delegates — в Android Jetpack; DSL — в Gradle, Exposed, Kotest. Понимание экосистемы помогает увидеть, где и зачем применяются продвинутые конструкции. Рекомендуется как отправная точка перед глубоким погружением.
+
+**[[kotlin-functional]]** — DSL и type-safe builders строятся на function types с receiver (`block: T.() -> Unit`), которые являются частью функционального программирования в Kotlin. Без понимания higher-order functions, trailing lambdas и inline невозможно создавать и читать DSL-код. Функциональное программирование даёт теоретическую базу (closures, receivers), advanced features — практическое применение (Compose DSL, Ktor routing, Gradle scripts). Изучите functional basics перед погружением в DSL-паттерны.
+
+**[[kotlin-collections]]** — стандартная библиотека Kotlin collections почти полностью состоит из extension functions: `map`, `filter`, `groupBy`, `associate` — всё это extensions на `Iterable` и `Sequence`. Изучение advanced features (extensions, operator overloading) объясняет, как устроены знакомые collection operators «под капотом». Рекомендуется параллельное изучение для более глубокого понимания обоих тем.
+
+**[[kotlin-best-practices]]** — advanced features (extensions, delegates, DSL) — мощные инструменты, которые легко использовать неправильно. Best practices устанавливают границы: когда extension function уместна (расширение API), а когда нет (бизнес-логика с побочными эффектами); когда DSL улучшает читаемость, а когда добавляет cognitive load. Изучите advanced features для расширения арсенала, best practices — для дисциплины их применения.
+
+**[[kotlin-type-system]]** — generics, variance (in/out), reified type parameters тесно связаны с extensions и delegates: generic extension function (`fun <T: Comparable<T>> List<T>.sorted()`), reified в inline functions (`inline fun <reified T> Gson.fromJson()`), delegate с type constraints. Type system обеспечивает type-safety advanced features и определяет их границы применимости.
 
 ---
 
@@ -1624,20 +1614,16 @@ routing {
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-| # | Источник | Тип | Описание |
-|---|----------|-----|----------|
-| 1 | [Kotlin Extensions](https://kotlinlang.org/docs/extensions.html) | Docs | Официальная документация по extensions |
-| 2 | [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html) | Docs | Property delegates в деталях |
-| 3 | [Type-safe Builders](https://kotlinlang.org/docs/type-safe-builders.html) | Docs | DSL и type-safe builders |
-| 4 | [Operator Overloading](https://kotlinlang.org/docs/operator-overloading.html) | Docs | Все доступные операторы |
-| 5 | [KEEP-259: Context Parameters](https://github.com/Kotlin/KEEP/blob/master/proposals/context-parameters.md) | KEEP | Эволюция context receivers |
-| 6 | [Kotlin DSL Best Practices](https://proandroiddev.com/kotlin-dsl-everywhere-a12bd09b10a6) | Blog | Паттерны создания DSL |
-| 7 | [Jetpack Compose DSL](https://developer.android.com/jetpack/compose) | Docs | DSL в Compose UI |
-| 8 | [Gradle Kotlin DSL Primer](https://docs.gradle.org/current/userguide/kotlin_dsl.html) | Docs | Kotlin DSL для Gradle |
-| 9 | [kotlinx.html](https://github.com/Kotlin/kotlinx.html) | GitHub | Пример production DSL |
-| 10 | [Roman Elizarov — Kotlin DSL Design](https://www.youtube.com/watch?v=0phKrXp8-8U) | Video | Доклад о дизайне DSL |
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — каноническая книга от создателей языка с подробными главами об extension functions, delegates и DSL с объяснением дизайнерских решений.
+- Moskala M. (2024). *Effective Kotlin.* — best practices по использованию advanced features: когда extension function уместна, как проектировать DSL и избегать типичных ошибок с delegates.
+- Bloch J. (2018). *Effective Java, 3rd Edition.* — паттерны (Builder, Strategy, Observer) напрямую реализуются через Kotlin advanced features. Помогает понять, какие Java-проблемы решают extensions и delegates.
+
+### Дополнительные ресурсы
+
+- [Type-safe Builders](https://kotlinlang.org/docs/type-safe-builders.html) — официальная документация по DSL и type-safe builders
+- [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html) — property delegates в деталях
 
 ---
 

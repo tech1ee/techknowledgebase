@@ -17,6 +17,9 @@ related:
   - "[[android-ui-views]]"
   - "[[android-compilation-pipeline]]"
   - "[[android-apk-aab]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-project-structure]]"
 ---
 
 # Система ресурсов Android: типы, квалификаторы, R класс
@@ -895,19 +898,15 @@ res/
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Структура:**
-- [[android-project-structure]] — организация проекта
-- [[android-manifest]] — конфигурация приложения
+**[[android-compilation-pipeline]]** — AAPT2 (Android Asset Packaging Tool) компилирует ресурсы в бинарный формат на этапе сборки, генерирует R класс с ID ресурсов и выполняет resource merging из модулей и библиотек. Понимание compilation pipeline объясняет, почему R.id генерируется автоматически, как resource merging разрешает конфликты между модулями и почему изменение ресурса требует частичной пересборки. Без этого знания сложно диагностировать ошибки сборки связанные с ресурсами. Изучите compilation pipeline для системного понимания.
 
-**UI:**
-- [[android-ui-views]] — View system и layouts
-- [[android-compose]] — Compose и ресурсы
+**[[android-ui-views]]** — система ресурсов тесно связана с View system: XML layouts определяют структуру UI, drawable ресурсы используются в View backgrounds, а dimension ресурсы задают размеры элементов. Понимание View system объясняет, как LayoutInflater парсит XML layouts в иерархию View, как qualifier system подбирает правильные ресурсы для разных конфигураций экрана, и почему Vector Drawable предпочтительнее растровых изображений. Ресурсы и View system — неразрывная пара.
 
-**Сборка:**
-- [[android-compilation-pipeline]] — как ресурсы компилируются
-- [[android-apk-aab]] — ресурсы в APK
+**[[android-compose]]** — Compose использует ресурсы через функции stringResource(), painterResource(), dimensionResource(). Понимание того, как Compose интегрируется с системой ресурсов, помогает правильно использовать локализацию, тематизацию (MaterialTheme) и адаптивный дизайн. Compose также вводит собственные механизмы тем, дополняющие XML-based ресурсы.
+
+**[[android-apk-aab]]** — ресурсы упаковываются в APK/AAB и составляют значительную часть размера приложения. AAB формат позволяет Play Store доставлять только нужные ресурсы для конкретного устройства (language splits, density splits), оптимизируя размер. Понимание ресурсной системы помогает правильно использовать App Bundle для уменьшения размера загрузки.
 
 ---
 
@@ -918,6 +917,14 @@ res/
 - [Localize your app - Android Developers](https://developer.android.com/guide/topics/resources/localization)
 - [Vector drawables overview - Android Developers](https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources)
 - [Shrink, obfuscate, and optimize your app - Android Developers](https://developer.android.com/build/shrink-code)
+
+---
+
+## Источники и дальнейшее чтение
+
+- Meier (2022). *Professional Android*. — полное покрытие ресурсной системы Android: типы ресурсов, qualifier matching algorithm, resource merging в multi-module проектах и оптимизация размера через App Bundle.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — практические примеры работы с ресурсами: локализация, поддержка тёмной темы, адаптивные layouts и Vector Drawable.
+- Vasavada (2019). *Android Internals*. — внутреннее устройство AAPT2, бинарный формат ресурсов в APK, R класс генерация и runtime resource resolution через AssetManager.
 
 ---
 

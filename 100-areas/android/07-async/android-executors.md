@@ -17,6 +17,9 @@ related:
   - "[[android-threading]]"
   - "[[os-processes-threads]]"
   - "[[os-scheduling]]"
+prerequisites:
+  - "[[android-threading]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Executors и ThreadPoolExecutor в Android
@@ -2903,6 +2906,16 @@ Executors построены поверх OS-level потоков. Каждый 
 
 ### os-scheduling
 OS scheduler напрямую влияет на performance ThreadPoolExecutor. Когда пул имеет больше потоков чем CPU cores, OS scheduler должен постоянно выполнять context switching. Каждый switch стоит CPU cycles и инвалидирует cache. Для CPU-bound задач оптимальное число потоков = CPU cores именно из-за минимизации scheduling overhead. Для IO-bound задач можно больше потоков, так как они большую часть времени блокируются и не конкурируют за CPU. Приоритеты потоков (Thread.setPriority) также влияют на scheduling decisions.
+
+---
+
+## Источники и дальнейшее чтение
+
+### Книги
+
+- **Goetz B. (2006)** *Java Concurrency in Practice* — фундаментальная книга по Executors, ThreadPoolExecutor и java.util.concurrent. Главы 6-8 подробно описывают task execution, thread pools и их правильную конфигурацию. Обязательное чтение для глубокого понимания Executors.
+- **Bloch J. (2018)** *Effective Java* — Item 80 "Prefer executors, tasks, and streams to threads" и Item 81 "Prefer concurrency utilities to wait and notify" напрямую относятся к теме.
+- **Moskala M. (2022)** *Kotlin Coroutines: Deep Dive* — объясняет, как Dispatchers.IO и Dispatchers.Default используют ThreadPoolExecutor под капотом, и почему Coroutines заменили Executors в современном Android.
 
 ---
 

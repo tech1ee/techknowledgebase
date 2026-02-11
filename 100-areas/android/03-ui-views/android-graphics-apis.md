@@ -17,6 +17,9 @@ related:
   - "[[android-canvas-drawing]]"
   - "[[android-performance-profiling]]"
   - "[[android-window-system]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-view-rendering-pipeline]]"
 ---
 
 # Graphics APIs: OpenGL, Vulkan, Metal для мобильных
@@ -623,21 +626,30 @@ GPU ограничен не только compute, но и memory bandwidth
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[android-view-rendering-pipeline]] — как Android рисует UI
-- [[android-canvas-drawing]] — 2D рисование
-- [[android-performance-profiling]] — профилирование графики
+**[[android-view-rendering-pipeline]]** — Rendering pipeline — это основной способ, которым Android рисует UI. Graphics APIs (OpenGL ES, Vulkan) работают на уровне ниже стандартного pipeline: HWUI использует OpenGL ES/Vulkan под капотом для hardware-accelerated rendering. Понимание rendering pipeline объясняет, когда стандартного Canvas достаточно, а когда нужен прямой доступ к GPU. Рекомендуется изучить rendering pipeline перед Graphics APIs.
+
+**[[android-canvas-drawing]]** — Canvas API предоставляет 2D-рисование поверх Skia, который, в свою очередь, использует OpenGL ES или Vulkan для hardware acceleration. Для большинства задач (Custom View, графики, диаграммы) Canvas достаточно. Graphics APIs нужны только для 3D-графики, игр и вычислений на GPU. Изучайте Canvas как более практичную альтернативу.
+
+**[[android-performance-profiling]]** — GPU Profiler, Systrace и GPU overdraw inspection являются ключевыми инструментами для диагностики проблем производительности графики. Понимание Graphics APIs помогает интерпретировать результаты профилирования (shader compilation stalls, draw call overhead, texture upload bottlenecks). Изучайте profiling после базового понимания Graphics APIs.
+
+**[[android-window-system]]** — Window system управляет поверхностями (Surface, SurfaceFlinger), на которых отрисовываются результаты работы Graphics APIs. SurfaceView и TextureView предоставляют Surface для прямого OpenGL/Vulkan рендеринга. Понимание window system объясняет, как GPU output попадает на экран.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [OpenGL ES Android](https://developer.android.com/develop/ui/views/graphics/opengl) | Docs | Android specific |
 | 2 | [Vulkan Tutorial](https://vulkan-tutorial.com/) | Tutorial | Vulkan basics |
 | 3 | [GPU Gems](https://developer.nvidia.com/gpugems/gpugems/contributors) | Book | Advanced techniques |
+
+### Книги
+
+- **Meier R. (2022)** *Professional Android* — введение в SurfaceView, TextureView и использование OpenGL ES для custom rendering в Android приложениях.
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практические примеры работы с Canvas и базовым OpenGL ES для создания интерактивных визуализаций.
 
 ---
 

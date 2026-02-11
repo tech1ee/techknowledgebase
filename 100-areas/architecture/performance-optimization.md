@@ -17,6 +17,10 @@ related:
   - "[[caching-strategies]]"
   - "[[database-design-optimization]]"
   - "[[observability]]"
+prerequisites:
+  - "[[caching-strategies]]"
+  - "[[api-design]]"
+  - "[[microservices-vs-monolith]]"
 ---
 
 # Performance: от 3s до 300ms

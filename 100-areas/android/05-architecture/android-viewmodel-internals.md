@@ -17,6 +17,10 @@ related:
   - "[[android-modularization]]"
   - "[[android-bundle-parcelable]]"
 cs-foundations: [state-machine, separation-of-concerns, object-retention, serialization]
+prerequisites:
+  - "[[android-activity-lifecycle]]"
+  - "[[android-architecture-patterns]]"
+  - "[[android-state-management]]"
 ---
 
 # Android ViewModel Internals: Как ViewModel переживает Configuration Change
@@ -941,12 +945,25 @@ class FakeUserRepository : UserRepository {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- **[[android-architecture-evolution]]** — эволюция от MVP к MVVM
-- **[[android-architecture-patterns]]** — MVVM/MVI паттерны
-- **[[android-state-management]]** — StateFlow vs LiveData
-- **[[android-activity-lifecycle]]** — lifecycle и configuration changes
+### [[android-architecture-evolution]]
+ViewModel появился как часть Architecture Components (2017) в ответ на проблемы с lifecycle и state management в MVP. Эволюция от MVP (Presenter теряется при rotation) к MVVM (ViewModel переживает configuration change) — это история решения конкретных архитектурных проблем Android. Понимание эволюции объясняет, почему ViewModel спроектирован именно так и какие проблемы предшественников он решает.
+
+### [[android-architecture-patterns]]
+ViewModel — ключевой компонент MVVM и MVI паттернов. В MVVM ViewModel экспонирует state через StateFlow/LiveData, а View подписывается на изменения. В MVI ViewModel содержит reducer, обрабатывающий intents и producing state. Понимание архитектурных паттернов определяет, как правильно использовать ViewModel: один ViewModel на экран, shared ViewModel через activityViewModels(), Navigation-scoped ViewModel для wizard flows.
+
+### [[android-state-management]]
+ViewModel — основной контейнер для UI state. StateFlow в ViewModel переживает configuration change (благодаря NonConfigurationInstance), но НЕ переживает process death. SavedStateHandle решает эту проблему, персистируя критичные данные через Bundle. Понимание state management объясняет выбор между in-memory state (StateFlow) и persisted state (SavedStateHandle). Изучите state management для понимания «что хранить», а ViewModel internals — для понимания «как это работает».
+
+### [[android-activity-lifecycle]]
+ViewModel напрямую привязан к lifecycle: создаётся при первом обращении, переживает configuration change через NonConfigurationInstance, уничтожается при finish() Activity. ViewModelStore хранится в ActivityThread через RetainedFragment (до API 28) или NonConfigurationInstances. Без понимания Activity lifecycle невозможно понять, когда ViewModel создаётся, переиспользуется и очищается. Изучите Activity lifecycle перед ViewModel internals.
+
+### [[android-modularization]]
+В multi-module проектах ViewModel scope и sharing становятся сложнее. Shared ViewModel между feature-модулями требует правильного scope (Activity, Navigation Graph). Hilt с @ViewModelScoped и assisted injection упрощает создание ViewModel с зависимостями из разных модулей. Понимание ViewModel internals помогает проектировать module boundaries с учётом shared state.
+
+### [[android-bundle-parcelable]]
+SavedStateHandle внутри использует Bundle для сохранения state при process death. Bundle имеет ограничение ~500KB (TransactionTooLargeException при превышении), поддерживает только Parcelable/Serializable типы. Понимание Bundle internals объясняет ограничения SavedStateHandle и помогает правильно выбирать, какие данные сохранять (ID, query, scroll position), а какие перезагружать (списки, изображения).
 
 ---
 
@@ -957,6 +974,12 @@ class FakeUserRepository : UserRepository {
 3. [ViewModel Source Code](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:lifecycle/lifecycle-viewmodel/)
 4. [Testing ViewModel](https://developer.android.com/training/testing/unit-testing/viewmodel-testing)
 5. [Understanding ViewModel Persistence - droidcon 2025](https://www.droidcon.com/2025/01/13/understanding-viewmodel-persistence-across-configuration-changes-in-android/)
+
+## Источники и дальнейшее чтение
+
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Практическое введение в ViewModel, SavedStateHandle и lifecycle-aware components. Пошаговые проекты помогают понять, как ViewModel переживает configuration change и когда данные теряются.
+- **Moskala M. (2021). Effective Kotlin.** — Принципы проектирования immutable state, data classes для state representation и best practices для ViewModel. Формирует правильное мышление для проектирования state containers без side effects.
+- **Bloch J. (2018). Effective Java.** — Паттерны проектирования, применимые к ViewModel: immutability (Item 17), composition over inheritance (Item 18), minimize mutability. Хотя книга на Java, принципы универсальны для проектирования ViewModel API.
 
 ---
 

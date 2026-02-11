@@ -19,6 +19,10 @@ related:
   - "[[cto-vs-vpe]]"
   - "[[technical-vision]]"
   - "[[scaling-from-zero]]"
+prerequisites:
+  - "[[cto-vs-vpe]]"
+  - "[[technical-vision]]"
+  - "[[scaling-from-zero]]"
 ---
 
 # CTO в стартапе
@@ -341,20 +345,21 @@ COPING:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[cto-vs-vpe]] — role comparison
-- [[technical-vision]] — setting direction
-- [[founding-engineer]] — first hire perspective
-- [[scaling-from-zero]] — growth challenges
+**[[cto-vs-vpe]]** — Понимание различий между ролями CTO и VP Engineering критически важно для CTO стартапа, особенно при масштабировании. На ранней стадии CTO совмещает обе роли, но при росте до 20-50 инженеров приходится решать: остаться техническим лидером (CTO) или перейти к управлению людьми (VPE). Многие стартап-CTO нанимают VP Engineering, чтобы сфокусироваться на технической стратегии и product.
 
-## Источники
+**[[technical-vision]]** — Формирование технического видения — одна из главных обязанностей CTO, которая становится всё более важной по мере роста компании. На стадии Seed-Series A это build vs buy решения и выбор стека, а на Series B+ — это долгосрочная архитектурная стратегия и технологический roadmap. CTO является главным хранителем технического видения и должен уметь транслировать его как команде инженеров, так и board of directors.
+
+**[[scaling-from-zero]]** — CTO стартапа проживает все этапы масштабирования с нуля на собственном опыте, и каждый этап требует радикального изменения подхода к работе. Переход от «я пишу весь код» к «я не пишу код вообще» — один из самых сложных emotional transitions в карьере. Понимание этапов роста (0-10, 10-30, 30-100+) позволяет CTO заранее готовиться к необходимым изменениям в стиле лидерства.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [The Startup CTO's Handbook](https://github.com/ZachGoldberg/Startup-CTO-Handbook) | Book |
-| [First Round Review](https://review.firstround.com/) | Blog |
-| [a16z](https://a16z.com/tag/engineering/) | Blog |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
 
 ---
 

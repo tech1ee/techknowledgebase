@@ -20,6 +20,9 @@ related:
   - "[[interview-process-design]]"
   - "[[onboarding]]"
   - "[[team-culture]]"
+prerequisites:
+  - "[[hiring-engineers]]"
+  - "[[interview-process-design]]"
 ---
 
 # Офферы и переговоры
@@ -676,6 +679,24 @@ SPEED IS KEY:
 | 3 | [Pave](https://www.pave.com/) | Tool | Real-time comp data |
 | 4 | [First Round: Closing](https://review.firstround.com/) | Articles | Closing tactics |
 | 5 | [Glassdoor Research](https://www.glassdoor.com/) | Research | Negotiation statistics |
+
+---
+
+## Связь с другими темами
+
+**[[hiring-engineers]]** — Making offers — финальный этап hiring pipeline, описанного в hiring-engineers. Оффер должен отражать тот же уровень тщательности и персонализации, что и весь процесс найма. Если hiring philosophy строится на "hire for trajectory", то и оффер должен показывать trajectory: не только текущую compensation, но и growth opportunity, career path и learning environment.
+
+**[[interview-process-design]]** — Качество interview process напрямую влияет на offer stage: если candidate experience была позитивной, acceptance rate выше. Информация, собранная на интервью (мотивация, career goals, другие offers), должна использоваться для персонализации оффера. Structured debrief после интервью — это также момент, когда формируется level/compensation recommendation.
+
+**[[onboarding]]** — Оффер — это обещание, а onboarding — его выполнение. Если оффер обещает определённую роль, culture и growth opportunities, onboarding должен это deliver. Разрыв между обещаниями на offer stage и реальностью на onboarding — одна из главных причин early turnover (30% hires уходят в первые 90 дней).
+
+**[[team-culture]]** — Культура команды — один из ключевых selling points при making offers, особенно для senior кандидатов. Money matters, но mission, team quality и growth environment часто являются решающими факторами. Менеджер, который может authentically sell culture (не hype, а реальность), имеет значительное преимущество в closing кандидатов.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает роль менеджера в offer process, включая как определить правильный level, как negotiate fair compensation и как onboard успешно. Практические рекомендации по closing кандидатов без overselling.
+- **Simon Sinek, "Start with Why" (2009)** — Концепция "Golden Circle" (Why → How → What) напрямую применима к making offers: кандидаты принимают офферы не только из-за compensation (what), но и из-за mission (why) и culture (how). Менеджер, который может articulate "why" компании, закрывает больше кандидатов.
+- **Peter Drucker, "The Effective Executive" (2006)** — Drucker подчёркивает, что staffing decisions — самые важные решения executive, и они включают не только выбор правильного кандидата, но и правильное positioning роли и expectations. Его принципы помогают структурировать offer conversation.
 
 ---
 

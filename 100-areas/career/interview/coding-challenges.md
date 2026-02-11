@@ -13,6 +13,8 @@ tags:
 related:
   - "[[interview-process]]"
   - "[[technical-interview]]"
+prerequisites:
+  - "[[interview-process]]"
 ---
 
 # Coding Challenges: 12 паттернов, которые покрывают 87% задач
@@ -574,6 +576,20 @@ NeetCode 150 или Blind 75
 → [[system-design-android]] — design round
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Coding rounds составляют 2 из 4-6 раундов в типичном onsite. Текущий материал даёт паттерны и стратегии для решения задач, а interview-process объясняет, как coding вписывается в общий loop: после recruiter screen, перед или параллельно с system design. Понимание контекста помогает правильно распределить подготовку.
+
+- [[technical-interview]] — Детальный обзор всех технических раундов: DSA coding, live coding, system design, Android domain. Текущий материал фокусируется на DSA-паттернах, а technical-interview описывает, как эти паттерны оцениваются на разных уровнях (Junior → Staff) и в разных компаниях (Google, Meta, DoorDash).
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Главная книга для DSA-подготовки: 189 задач с детальными разборами, классификация по структурам данных и алгоритмам. Дополняет pattern-based подход из текущего материала конкретными задачами и edge cases.
+
+- Xu A. (2020). *System Design Interview*. — Хотя фокус книги — system design, главы о data structures (consistent hashing, bloom filters) и алгоритмах (rate limiting) полезны для advanced coding rounds на Staff уровне, где задачи выходят за рамки классического LeetCode.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Помогает справиться с эмоциональной стороной grinding: как не выгореть при подготовке 150 задач, как структурировать процесс обучения и сохранять мотивацию на протяжении 2-3 месяцев подготовки.
 
 ## Источники
 

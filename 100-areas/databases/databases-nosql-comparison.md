@@ -18,6 +18,8 @@ related:
   - "[[databases-overview]]"
   - "[[database-design-optimization]]"
   - "[[databases-replication-sharding]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
   - "[[caching-strategies]]"
 ---
 

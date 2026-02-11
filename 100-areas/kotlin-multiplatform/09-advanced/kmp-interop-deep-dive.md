@@ -7,7 +7,7 @@ tags:
   - topic/kmp
   - interop
   - objc
-  - swift
+  - topic/swift
   - cinterop
   - skie
   - type/deep-dive
@@ -16,6 +16,10 @@ related:
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-memory-management]]"
   - "[[kmp-expect-actual]]"
+prerequisites:
+  - "[[kmp-expect-actual]]"
+  - "[[kmp-ios-deep-dive]]"
+  - "[[kmp-memory-management]]"
 cs-foundations:
   - "[[abi-calling-conventions]]"
   - "[[ffi-foreign-function-interface]]"
@@ -969,6 +973,24 @@ Swift Export улучшает **одно направление**: как Swift 
 | [[abi-calling-conventions]] | Понять почему нужен bridge |
 | [[ffi-foreign-function-interface]] | Как работают биндинги |
 | [[bridges-bindings-overview]] | Общая картина генераторов |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-ios-deep-dive]]** — Interop — это механизм, через который Kotlin-код становится доступен в iOS-проекте. Понимание того, как XCFramework собирается, как CocoaPods/SPM доставляют framework в Xcode и как Swift импортирует Kotlin-модуль, является необходимым контекстом для осознанной работы с ObjC bridge, Swift Export и cinterop. Без этого знания ограничения interop кажутся случайными, а не следствиями архитектурных решений.
+
+- **[[kmp-memory-management]]** — На границе Kotlin-Swift происходит критическое взаимодействие двух моделей памяти: GC и ARC. Каждый объект, пересекающий границу interop, требует корректного управления lifetime. Mixed retain cycles, autoreleasepool для interop-циклов и overhead коллекций (двойная конверсия List→NSArray→Array) — всё это проблемы на стыке interop и memory management.
+
+- **[[kmp-expect-actual]]** — Механизм expect/actual и interop решают похожую задачу — доступ к платформенному коду — но на разных уровнях. expect/actual работает внутри Kotlin (между source sets), а interop — между Kotlin и Swift/ObjC. Часто они используются вместе: expect/actual для cinterop-биндингов, а ObjC bridge для экспорта результата в Swift. Понимание обоих механизмов позволяет выбрать правильный инструмент для каждой задачи.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Главы о системе типов, generics и аннотациях Kotlin дают необходимый фундамент для понимания маппинга типов между Kotlin и ObjC/Swift. Ограничения generics в interop (T→T?) становятся понятнее, когда знаешь, как Kotlin обрабатывает type erasure и variance.
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Suspend-функции — ключевой элемент interop, поскольку их маппинг в Swift completionHandler/async/await определяет DX iOS-разработчиков. Книга объясняет внутреннее устройство suspend и CancellationException, что критично для понимания работы SKIE и правильного проектирования async API.
+
+- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по проектированию API (видимость, именование, default arguments) напрямую применимы к дизайну Kotlin-кода, экспортируемого в Swift. Помогает создавать API, которое будет удобно использовать по обе стороны границы interop.
 
 ---
 

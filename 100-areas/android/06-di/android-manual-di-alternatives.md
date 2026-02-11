@@ -14,6 +14,9 @@ related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-dagger-deep-dive]]"
   - "[[android-metro-deep-dive]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-architecture-patterns]]"
 ---
 
 # Manual DI & Alternative Frameworks
@@ -572,10 +575,18 @@ class UserRepositoryFactory(
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-- [[dependency-injection-fundamentals]] — Теория DI
-- [[android-dagger-deep-dive]] — Dagger (основа для Anvil)
-- [[android-metro-deep-dive]] — Metro (замена Anvil)
-- [[android-hilt-deep-dive]] — Hilt (рекомендация Google)
-- [[android-kotlin-inject-deep-dive]] — kotlin-inject (KMP compile-time)
+**[[dependency-injection-fundamentals]]** — теоретический фундамент dependency injection как паттерна проектирования. Без понимания принципов Inversion of Control, Composition Root и различий между Service Locator и DI невозможно осознанно выбирать между Manual DI и фреймворками. Manual DI — лучший способ изучить эти принципы на практике, потому что каждый паттерн реализуется вручную. Рекомендуется изучить теорию первой, затем реализовать Manual DI для закрепления.
+
+**[[android-dagger-deep-dive]]** — Dagger является основой, на которой построен Anvil (рассмотренный в этом файле). Понимание Dagger Components, Modules и Scopes необходимо для работы с Anvil-аннотациями вроде @ContributesTo и @MergeComponent. При миграции с Manual DI на фреймворк Dagger часто является следующим шагом для Android-only проектов. Изучите Manual DI для понимания основ, затем Dagger для production.
+
+**[[android-metro-deep-dive]]** — Metro является рекомендуемой заменой Anvil (который переходит в maintenance mode). API Metro почти идентичен Anvil (@ContributesBinding, @ContributesTo), что делает миграцию простой. Metro объединяет преимущества compile-time safety от Dagger и KMP-поддержку от kotlin-inject, устраняя необходимость в Manual DI для средних и крупных проектов. Читайте после освоения Manual DI и базового Dagger.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Leiva (2017). *Kotlin for Android Developers*. — практическое введение в Kotlin-паттерны, включая подходы к организации зависимостей без фреймворков, полезно для понимания Manual DI в Kotlin-стиле.
+- Moskala (2021). *Effective Kotlin*. — best practices Kotlin, включая паттерны создания объектов, lazy initialization и организацию кода, которые напрямую применяются при реализации Manual DI containers.
+- Bloch (2018). *Effective Java*. — классические паттерны Factory, Builder и принципы API-дизайна, на которых основан Manual DI подход с containers и factories.

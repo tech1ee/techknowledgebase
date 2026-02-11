@@ -6,6 +6,12 @@ tags:
   - topic/databases
   - type/guide
   - level/intermediate
+related:
+  - "[[android-data-persistence]]"
+  - "[[ios-core-data]]"
+  - "[[kmp-sqldelight-database]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
 ---
 
 # Mobile Databases: Complete Guide
@@ -1440,6 +1446,22 @@ try db.execute(sql: "PRAGMA optimize")
 - [ ] Encrypt sensitive data (SQLCipher)
 - [ ] Monitor database size (<200MB optimal)
 - [ ] Use Flow/StateFlow for reactive UI updates
+
+## Связь с другими темами
+
+[[android-data-persistence]] — Data persistence на Android описывает полный стек хранения данных: SharedPreferences для простых настроек, Room для реляционных данных, DataStore для типизированных настроек. Текущий документ углубляет тему Room и SQLDelight, сравнивая их с iOS и cross-platform альтернативами. Рекомендуется изучить android-data-persistence для Android-специфичного контекста.
+
+[[ios-core-data]] — Core Data является основным фреймворком Apple для persistence, но работает принципиально иначе, чем Room: это Object Graph Manager, а не ORM. Понимание Core Data помогает оценить преимущества и ограничения кросс-платформенных решений (SQLDelight, Room KMP) и принять решение о shared database layer. Рекомендуется для iOS-разработчиков и KMP-архитекторов.
+
+[[kmp-sqldelight-database]] — SQLDelight для Kotlin Multiplatform предоставляет SQL-first подход к кросс-платформенным базам данных: пишешь SQL, получаешь type-safe Kotlin API для Android, iOS, Desktop. Этот материал углубляет раздел о кросс-платформенных решениях из текущего документа и необходим для проектирования shared data layer в KMP-проектах.
+
+[[databases-fundamentals-complete]] — Фундаментальные концепции баз данных (SQL, индексы, транзакции, нормализация) применимы и к мобильным БД: SQLite использует B-Tree индексы, Room обеспечивает ACID через транзакции, WAL mode улучшает concurrent access. Без этого фундамента сложно оптимизировать производительность мобильной базы данных.
+
+## Источники и дальнейшее чтение
+
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage engines и репликации дают понимание внутренних механизмов SQLite (B-Tree, WAL), которые лежат в основе всех мобильных баз данных.
+- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор различных моделей данных помогает понять, почему SQLite (реляционная модель) доминирует на мобильных платформах, и когда стоит рассмотреть альтернативы (Realm/ObjectBox).
+- Date C.J. (2003). *An Introduction to Database Systems*. — Фундаментальная теория реляционных баз данных, включая нормализацию и SQL, которая применима к проектированию схем мобильных БД (Room entities, SQLDelight tables).
 
 ---
 

@@ -18,6 +18,10 @@ related:
   - "[[android-state-management]]"
   - "[[android-context-internals]]"
 cs-foundations: [state-machine, stack-data-structure, observer-pattern, command-pattern, decorator-pattern]
+prerequisites:
+  - "[[android-activity-lifecycle]]"
+  - "[[android-navigation]]"
+  - "[[android-ui-views]]"
 ---
 
 # Fragment Lifecycle: состояния, View lifecycle и FragmentManager под капотом
@@ -2185,6 +2189,12 @@ class CartFragment : Fragment() {
 | 14 | [Android Developers: Interoperability APIs (Compose in Fragment)](https://developer.android.com/develop/ui/compose/migrate/interoperability-apis) | Документация | ComposeView в Fragment, ViewCompositionStrategy |
 | 15 | [Android Developers: ViewCompositionStrategy](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy) | Документация | Стратегии dispose для ComposeView в Fragment |
 | 16 | [Chet Haase, Romain Guy: ADS 2022 - Fragments: Past, Present, and Future](https://www.youtube.com/watch?v=OE-tDh3d1F4) | Видео | Эволюция Fragment API, планы на будущее |
+
+### Книги
+
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — подробное пошаговое руководство по Fragment lifecycle, FragmentManager и FragmentTransaction. Лучший вводный материал для понимания Fragment.
+- **Meier R. (2022)** *Professional Android* — глубокое описание Fragment lifecycle, back stack management и интеграции с Navigation Component в production-приложениях.
+- **Moskala M. (2021)** *Effective Kotlin* — рекомендации по использованию viewLifecycleOwner, правильному scoping корутин во Fragment и предотвращению memory leaks.
 
 ---
 

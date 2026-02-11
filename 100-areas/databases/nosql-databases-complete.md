@@ -6,6 +6,13 @@ tags:
   - topic/databases
   - type/guide
   - level/intermediate
+related:
+  - "[[sql-databases-complete]]"
+  - "[[databases-nosql-comparison]]"
+  - "[[architecture-distributed-systems]]"
+prerequisites:
+  - "[[databases-nosql-comparison]]"
+  - "[[databases-fundamentals-complete]]"
 ---
 
 # NoSQL Databases: Complete Guide
@@ -1650,6 +1657,22 @@ const user = await db.users.findOne(
 - [Neo4j GraphAcademy](https://graphacademy.neo4j.com/) — Graph database courses
 - [DynamoDB Book](https://www.dynamodbbook.com/) — Alex DeBrie's guide
 - [Designing Data-Intensive Applications](https://dataintensive.net/) — Martin Kleppmann
+
+## Связь с другими темами
+
+[[sql-databases-complete]] — SQL-базы данных (PostgreSQL, MySQL, SQLite) представляют противоположный подход к хранению данных: строгая схема, ACID-транзакции, мощные JOIN. Сравнение SQL и NoSQL помогает осознанно выбирать инструмент под задачу: транзакционные системы — SQL, гибкая схема и горизонтальное масштабирование — NoSQL, часто оба вместе (Polyglot Persistence). Рекомендуется изучать параллельно.
+
+[[databases-nosql-comparison]] — Материал по сравнению NoSQL-решений даёт общий framework для выбора между Document, Key-Value, Wide-Column и Graph моделями. Текущий документ углубляет каждую категорию практическими примерами (MongoDB, Redis, Cassandra, Neo4j) и production-паттернами. Рекомендуется прочитать comparison для общей картины, затем этот материал для деталей.
+
+[[architecture-distributed-systems]] — NoSQL-базы данных часто являются distributed by design: MongoDB Replica Set, Cassandra ring, DynamoDB partitioning. Понимание распределённых систем (consensus, eventual consistency, vector clocks) помогает правильно настраивать и диагностировать NoSQL-кластеры. Рекомендуется для архитекторов и senior-разработчиков.
+
+[[databases-fundamentals-complete]] — Фундаментальные концепции (ACID vs BASE, CAP-теорема, индексы) являются основой для понимания trade-offs NoSQL. Без знания реляционной модели сложно оценить, от чего именно отказывается каждый тип NoSQL и какие преимущества это даёт. Обязательный пререквизит перед этим материалом.
+
+## Источники и дальнейшее чтение
+
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Лучшая книга для понимания trade-offs между SQL и NoSQL: репликация, партиционирование, consistency модели. Обязательна для осознанного выбора NoSQL-решения.
+- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Практический обзор PostgreSQL, MongoDB, Redis, CouchDB, Neo4j, HBase, Riak с hands-on примерами. Идеальна для быстрого знакомства с разными моделями данных.
+- Petrov A. (2019). *Database Internals*. — Глубокий разбор storage engines (LSM-Tree для Cassandra, B-Tree для MongoDB WiredTiger) и distributed protocols (gossip, anti-entropy), которые лежат в основе NoSQL-систем.
 
 ---
 

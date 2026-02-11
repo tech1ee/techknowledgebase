@@ -10,6 +10,9 @@ tags:
   - level/intermediate
 related:
   - "[[remote-team-communication]]"
+prerequisites:
+  - "[[communication-models]]"
+  - "[[communication-barriers]]"
 ---
 
 # Cultural Dimensions: Hofstede и Lewis Model

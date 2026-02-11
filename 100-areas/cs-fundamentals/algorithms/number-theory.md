@@ -11,6 +11,10 @@ tags:
 related:
   - "[[combinatorics]]"
   - "[[dynamic-programming]]"
+prerequisites:
+  - "[[recursion-fundamentals]]"
+  - "[[big-o-complexity]]"
+  - "[[arrays-strings]]"
 ---
 
 # Number Theory for Algorithms

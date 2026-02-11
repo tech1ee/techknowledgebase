@@ -11,6 +11,9 @@ tags:
   - topic/cross-platform
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-architecture-patterns]]"
 related:
   - [kmp-migration-from-native]]
   - "[[kmp-migration-from-rn]]"
@@ -512,4 +515,22 @@ fun UserListScreen(
 | [Full Comparison](https://guarana-technologies.com/blog/flutter-vs-kotlin-multiplatform-2025) | Blog | Detailed analysis |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-migration-from-native]]** — миграция с Flutter и миграция с нативных приложений представляют два полюса: Flutter → KMP требует полную перезапись (Dart → Kotlin + нативный UI), тогда как native → KMP позволяет постепенное извлечение shared логики. Сравнение этих стратегий помогает оценить ROI миграции и выбрать правильный подход в зависимости от существующей кодбазы и компетенций команды.
+
+- **[[kmp-migration-from-rn]]** — обе миграции (Flutter и React Native → KMP) требуют замены cross-platform фреймворка, но RN → KMP имеет уникальный инкрементальный путь через Kotlin/JS и reakt-native-toolkit. Сравнение с миграцией Flutter помогает понять, почему Flutter → KMP — это всегда full rewrite, тогда как RN → KMP может быть постепенным. Маппинг зависимостей (BLoC → ViewModel, Dio → Ktor) аналогичен, но реализация отличается.
+
+- **[[kmp-getting-started]]** — после принятия решения о миграции с Flutter, следующий шаг — создание KMP-проекта с нуля. Getting started определяет начальную структуру (shared module, androidApp, iosApp), выбор targets и первоначальную конфигурацию Gradle. Миграция models и data layer из Flutter опирается на понимание KMP source sets и expect/actual механизма.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основное руководство для Flutter/Dart-разработчиков, переходящих на Kotlin. Покрывает все ключевые отличия: data classes вместо freezed, null safety, extension functions, sealed classes — всё, что нужно для перевода Dart-кода в идиоматический Kotlin.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — При миграции с Flutter state management (BLoC, Riverpod) на KMP ViewModel + StateFlow необходимо глубокое понимание корутин. Книга покрывает Flow, StateFlow, structured concurrency — замену Dart Streams и async/await в контексте KMP.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы чистой архитектуры одинаково применимы и в Flutter, и в KMP. Книга помогает при миграции сохранить архитектурные слои (Domain, Data, Presentation) и правильно перенести бизнес-логику, абстрагировав её от конкретного фреймворка.
+
+---
+
 *Проверено: 2026-01-09 | KMP Stable, Compose MP iOS Stable*

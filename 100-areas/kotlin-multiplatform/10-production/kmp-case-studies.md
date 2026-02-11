@@ -16,6 +16,9 @@ related:
   - "[[kmp-production-checklist]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kmp-overview]]"
+prerequisites:
+  - "[[kmp-architecture-patterns]]"
+  - "[[kmp-production-checklist]]"
 cs-foundations:
   - empirical-validation
   - technology-adoption
@@ -553,6 +556,24 @@ iosApp/
 | [Netflix KotlinConf Talk](https://www.youtube.com/watch?v=example) | Video | Netflix experience |
 | [Philips Case Study](https://blog.jetbrains.com/kotlin/2021/01/philips-case-study-building-connectivity-platform-with-kotlin-multiplatform/) | Official | Healthcare approach |
 | [KMPShip Big Companies](https://www.kmpship.app/blog/big-companies-kotlin-multiplatform-2025) | Blog | Metrics summary |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-production-checklist]]** — Кейсы Netflix, McDonald's и Cash App демонстрируют результат, а production checklist показывает путь к этому результату. Каждая успешная компания из case studies прошла через этапы архитектуры, тестирования, CI/CD и crash reporting, описанные в чеклисте. Изучение кейсов без понимания production requirements — это survivorship bias: вы видите успех, но не видите инженерную работу за ним.
+
+- **[[kmp-architecture-patterns]]** — Архитектурные решения — ключевой фактор успеха в case studies. Netflix использует shared data layer с нативным UI, Cash App — feature-based модуляризацию, McDonald's — полный shared business logic. Понимание архитектурных паттернов KMP позволяет осознанно выбирать подход, а не слепо копировать чужой опыт. Контекст вашей команды определяет, какой паттерн сработает.
+
+- **[[kmp-overview]]** — Общий обзор KMP даёт контекст для интерпретации case studies: что означает «KMP Stable», какие библиотеки production-ready, какова экосистема. Без этого фундамента цифры вроде «80% shared code» или «60% reduction in bugs» теряют смысл, поскольку непонятно, что именно считается shared и какие инструменты делают это возможным.
+
+## Источники и дальнейшее чтение
+
+- Martin R. (2017). *Clean Architecture.* — Архитектурные принципы, применяемые в успешных KMP-проектах: разделение на слои, dependency rule, use cases. Netflix и McDonald's структурируют shared-модуль именно по этим принципам, что позволяет достигать 50-80% переиспользования кода без потери гибкости.
+
+- Moskala M. (2021). *Effective Kotlin.* — Качество shared-кода определяет успех KMP-проекта. Cash App создал SQLDelight и Turbine именно потому, что стандартные инструменты не соответствовали уровню качества, требуемому для финтех-приложения. Книга помогает писать код того уровня, который выдержит production-нагрузку.
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундаментальное понимание Kotlin необходимо для оценки кейсов: почему Kotlin подходит для shared-логики, как data classes и sealed classes упрощают моделирование бизнес-логики, почему Kotlin Coroutines стали стандартом для асинхронного кода в shared-модулях.
 
 ---
 

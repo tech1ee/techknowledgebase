@@ -6,6 +6,13 @@ tags:
   - topic/databases
   - type/guide
   - level/intermediate
+related:
+  - "[[databases-sql-fundamentals]]"
+  - "[[nosql-databases-complete]]"
+  - "[[database-internals-complete]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
+  - "[[databases-transactions-acid]]"
 ---
 
 # SQL Базы данных: PostgreSQL, MySQL, SQLite — Полный гайд
@@ -1812,13 +1819,21 @@ LIMIT 10;
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-- [[databases-fundamentals-complete]] — Основы баз данных
-- [[postgresql-deep-dive]] — Глубокое погружение в PostgreSQL
-- [[mysql-advanced]] — Продвинутый MySQL
-- [[sqlite-mobile]] — SQLite для мобильных приложений
-- [[android-data-persistence]] — Room и Android
+[[databases-fundamentals-complete]] — Фундаментальные концепции баз данных (таблицы, ключи, индексы, ACID, нормализация) являются необходимым пререквизитом для изучения конкретных SQL СУБД. Без понимания нормальных форм, типов JOIN и isolation levels невозможно эффективно использовать PostgreSQL, MySQL или SQLite. Рекомендуется как обязательный предшествующий материал.
+
+[[nosql-databases-complete]] — NoSQL-базы данных представляют альтернативный подход к хранению данных, и понимание SQL помогает осознать, от чего именно отказывается каждый тип NoSQL. Многие проекты используют Polyglot Persistence (PostgreSQL для транзакций + Redis для кэша + MongoDB для документов), поэтому знание обоих миров необходимо. Рекомендуется изучать параллельно с SQL.
+
+[[database-internals-complete]] — Внутренние механизмы баз данных (B-Tree, WAL, MVCC, Buffer Pool) объясняют, почему PostgreSQL и MySQL ведут себя по-разному при одинаковых запросах. Понимание internals позволяет перейти от механического использования EXPLAIN ANALYZE к осознанной оптимизации: выбор storage engine, настройка параметров, понимание lock contention.
+
+[[database-design-optimization]] — Практическая оптимизация запросов и проектирование схем являются прямым применением знаний из этого документа: индексы для ускорения WHERE, EXPLAIN ANALYZE для диагностики, cursor pagination вместо OFFSET. Рекомендуется как следующий шаг после изучения SQL СУБД для перехода к production-уровню.
+
+## Источники и дальнейшее чтение
+
+- Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Полный университетский курс: SQL, query processing, concurrency control, recovery. Фундаментальный учебник для глубокого понимания реляционных СУБД.
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage engines (B-Tree vs LSM-Tree), репликации (single-leader, multi-leader, leaderless) и транзакциях объясняют архитектурные решения PostgreSQL, MySQL и SQLite.
+- Petrov A. (2019). *Database Internals*. — Детальный разбор внутренних механизмов СУБД: от структуры страниц и buffer management до distributed transactions. Идеальное дополнение к практическому использованию SQL.
 
 ---
 

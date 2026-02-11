@@ -19,6 +19,10 @@ related:
   - "[[stakeholder-management]]"
   - "[[executive-communication]]"
   - "[[startup-cto]]"
+prerequisites:
+  - "[[stakeholder-management]]"
+  - "[[executive-communication]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Кризисный менеджмент
@@ -358,20 +362,21 @@ This too shall pass.
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[stakeholder-management]] — managing up during crisis
-- [[executive-communication]] — clear communication
-- [[engineering-practices]] — incident management
-- [[team-dynamics]] — team under stress
+**[[stakeholder-management]]** — Во время кризиса управление stakeholders становится критически важным: нужно правильно эскалировать, информировать руководство и управлять ожиданиями клиентов. Кризис обнажает качество отношений со стейкхолдерами — доверие, построенное заранее, позволяет быстрее принимать решения и получать поддержку. Навыки influence without authority особенно важны при координации кросс-функциональной команды реагирования.
 
-## Источники
+**[[executive-communication]]** — Коммуникация во время кризиса требует предельной ясности: BLUF формат, регулярные апдейты, чёткие escalation templates. Умение быстро структурировать информацию по Pyramid Principle позволяет донести суть проблемы до C-level за секунды, а не за минуты. Пост-кризисная коммуникация (postmortem, lessons learned) также требует навыков executive communication для трансляции уроков на уровень организации.
+
+**[[startup-cto]]** — В стартапе CTO часто является единственным лидером, способным управлять техническим кризисом, и одновременно несёт ответственность за коммуникацию с инвесторами и клиентами. Стартап-контекст добавляет экзистенциальный риск: серьёзный инцидент может поставить под угрозу выживание компании. Опыт кризисного менеджмента — одна из ключевых компетенций, отличающих опытного CTO от начинающего.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Incident Management](https://sre.google/sre-book/managing-incidents/) | Google SRE |
-| [Blameless Postmortems](https://www.etsy.com/codeascraft/blameless-postmortems/) | Etsy |
-| [PagerDuty Incident Response](https://response.pagerduty.com/) | Guide |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
 
 ---
 

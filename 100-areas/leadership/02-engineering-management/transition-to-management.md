@@ -21,6 +21,9 @@ related:
   - "[[one-on-one-meetings]]"
   - "[[delegation]]"
   - "[[performance-management]]"
+prerequisites:
+  - "[[ic-vs-management]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Переход от IC к менеджеру
@@ -590,6 +593,26 @@ DAYS 60-90: Deliver
 - "Resilient Management" by Lara Hogan — первые 90 дней
 - "The Making of a Manager" by Julie Zhuo — FB perspective
 - "Become an Effective Software Engineering Manager" by James Stanier — practical guide
+
+---
+
+## Связь с другими темами
+
+**[[ic-vs-management]]** — Осознанный выбор между IC и management треком — обязательный шаг перед переходом. Ic-vs-management помогает понять, что management — это career change, а не promotion, и даёт self-assessment инструменты для принятия решения. Без этого понимания переход часто происходит по неправильным причинам ("это следующий шаг", "больше денег"), что приводит к frustration и возврату.
+
+**[[em-fundamentals]]** — Em-fundamentals описывает целевое состояние: навыки и практики, которые нужно освоить после перехода. Если transition-to-management фокусируется на процессе самого перехода и его эмоциональных вызовах, то em-fundamentals даёт конкретный framework для работы в роли EM. Вместе они покрывают путь от решения о переходе до уверенной работы в новой роли.
+
+**[[one-on-one-meetings]]** — 1-on-1 — первый инструмент, который новый EM должен освоить. Именно через 1-on-1 строятся отношения с direct reports, собирается контекст о команде и начинается trust building. Качество первых 1-on-1 определяет, как быстро новый менеджер пройдёт через фазы identity shift и начнёт эффективно работать.
+
+**[[delegation]]** — Делегирование — одна из самых сложных задач для нового EM, потому что требует отпустить то, что раньше определяло идентичность: hands-on technical work. Coding addiction — типичная ошибка перехода — преодолевается именно через освоение навыков делегирования. Умение делегировать outcome, а не task, отличает успешного нового менеджера от struggling.
+
+**[[performance-management]]** — Для нового EM performance management часто становится первым серьёзным вызовом: давать feedback, проводить career conversations и, возможно, управлять underperformance. Эти навыки радикально отличаются от IC skills и требуют conscious practice. Transition-to-management показывает, почему эти навыки нужны, а performance-management — как их применять.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает переход из IC в EM как одну из самых critical career transitions, с конкретными шагами, ошибками и стратегиями адаптации. Главы о переходе — must-read для любого нового менеджера.
+- **Will Larson, "Staff Engineer" (2022)** — Показывает альтернативу переходу в management: IC track до Staff, Principal и Distinguished уровней. Помогает убедиться, что решение о переходе принято осознанно, а не из-за отсутствия видимости IC career path.
+- **Simon Sinek, "Start with Why" (2009)** — Концепция "Golden Circle" помогает новому менеджеру переосмыслить свою мотивацию: зачем он перешёл в management? Ясное "why" помогает преодолеть трудные моменты identity shift и coding withdrawal, которые неизбежны в первые месяцы.
 
 ---
 

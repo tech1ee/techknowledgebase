@@ -19,6 +19,9 @@ related:
   - "[[kotlin-functional]]"
   - "[[android-compose-internals]]"
 cs-foundations: [declarative-programming, functional-ui, immutability, tree-diffing]
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Jetpack Compose: декларативный UI
@@ -999,37 +1002,28 @@ Compose умный — перекомпозиция ТОЛЬКО затрону�
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[android-overview]] — контекст Android-платформы, Activity/Fragment как хосты для Compose
-- [[kotlin-basics]] — Kotlin features (lambdas, extensions, delegates) критичны для понимания Compose
+**[[android-overview]]** — Activity и Fragment являются хостами для Compose UI через setContent {}. Понимание Android-платформы и компонентной модели необходимо для правильной интеграции Compose в существующие приложения. Compose не заменяет Activity — он работает внутри неё.
 
-**UI концепции:**
-- [[android-ui-views]] — классическая View system, с которой Compose можно смешивать (ComposeView, AndroidView)
-- [[android-activity-lifecycle]] — Compose composition привязан к lifecycle хоста
+**[[android-activity-lifecycle]]** — Compose composition привязан к lifecycle хоста (Activity/Fragment). LaunchedEffect, DisposableEffect и rememberCoroutineScope автоматически отменяются при уничтожении lifecycle owner. Понимание lifecycle объясняет, почему collectAsStateWithLifecycle() предпочтительнее collectAsState() — он останавливает collection когда UI не виден.
 
-**Архитектура:**
-- [[android-architecture]] — ViewModel + Compose = правильная архитектура
-- [[android-architecture-patterns]] — MVI хорошо сочетается с unidirectional data flow Compose
+**[[android-architecture-patterns]]** — MVI (Model-View-Intent) идеально сочетается с Compose благодаря unidirectional data flow: state flows down через параметры composable, events flow up через callback lambdas. ViewModel предоставляет StateFlow для UI state, а Compose подписывается через collectAsStateWithLifecycle(). Изучайте архитектурные паттерны параллельно с Compose.
 
-**State management:**
-- [[kotlin-flow]] — Flow + collectAsState() для реактивного state
-- [[android-data-persistence]] — DataStore/Room с Compose integration
+**[[kotlin-flow]]** — Flow и StateFlow являются основным механизмом reactive state management в Compose. collectAsState()/collectAsStateWithLifecycle() конвертируют Flow в Compose State, triggering recomposition при новых значениях. Понимание cold/hot flows, operators и backpressure необходимо для эффективного Compose UI.
 
-**Дополнительно:**
-- [[android-threading]] — coroutines и Compose
-- [[kotlin-functional]] — higher-order functions, которые лежат в основе Compose
+**[[android-compose-internals]]** — глубокое погружение в архитектуру Compose (Compiler Plugin, Slot Table, Snapshot System). Объясняет, КАК работает recomposition, почему @Stable и @Immutable влияют на производительность, и как Gap Buffer оптимизирует tree updates. Рекомендуется после освоения Compose basics для оптимизации и debugging.
+
+**[[android-ui-views]]** — классическая View system может сосуществовать с Compose через ComposeView (Compose в View hierarchy) и AndroidView (View в Compose). Понимание обоих подходов необходимо для постепенной миграции существующих приложений на Compose.
 
 ---
 
-## Связанные материалы
+## Источники и дальнейшее чтение
 
-→ [[android-compose-internals]] — глубокое погружение в архитектуру Compose (Compiler Plugin, Slot Table, Snapshot System)
-
----
-
-## Источники
+**Книги:**
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Compose UI и интеграцию с Android ecosystem
+- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin (lambdas, DSL, immutability), являющиеся фундаментом Compose API design
+- Leiva A. (2017). Kotlin for Android Developers. — Kotlin-first Android разработка, базовые языковые конструкции для понимания Compose syntax
 
 **Официальная документация:**
 - [Jetpack Compose Documentation](https://developer.android.com/develop/ui/compose/documentation) — официальная документация

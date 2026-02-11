@@ -16,6 +16,10 @@ related:
   - "[[android-architecture-patterns]]"
   - "[[android-coroutines-mistakes]]"
   - "[[kotlin-flow]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
+  - "[[android-architecture-patterns]]"
 ---
 
 # Android State Management: StateFlow, SharedFlow, Channel и Compose State
@@ -1185,13 +1189,22 @@ class SearchViewModel(
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- **[[android-viewmodel-internals]]** — ViewModel как holder для State
-- **[[android-architecture-patterns]]** — MVVM/MVI паттерны
-- **[[android-coroutines-mistakes]]** — ошибки с Flow и coroutines
-- **[[kotlin-flow]]** — детали Flow API
-- **[[android-bundle-parcelable]]** — Bundle internals, savedInstanceState механизм, SavedStateHandle и путь данных через system_server
+### [[android-viewmodel-internals]]
+ViewModel — основной контейнер для UI state в современном Android. Понимание внутреннего устройства ViewModel (ViewModelStore, NonConfigurationInstance, SavedStateHandle) объясняет, почему StateFlow в ViewModel переживает configuration change, но не process death. Без знания ViewModel internals невозможно правильно выбрать между in-memory state и persisted state. Рекомендуется изучить state management первым, затем углубиться в ViewModel internals.
+
+### [[android-architecture-patterns]]
+MVVM и MVI паттерны определяют, как state управляется на архитектурном уровне. В MVVM ViewModel экспонирует StateFlow, а View подписывается через collectAsStateWithLifecycle(). В MVI state — единый объект, а изменения происходят через reducer. Понимание архитектурных паттернов даёт контекст для выбора между StateFlow, SharedFlow и Channel. Изучите архитектурные паттерны перед углублением в конкретные механизмы state management.
+
+### [[android-coroutines-mistakes]]
+Типичные ошибки при работе с Flow и корутинами напрямую влияют на state management: неправильный scope приводит к утечкам, отсутствие repeatOnLifecycle — к обновлениям невидимого UI, а SharedFlow без replay — к потере событий. Эта заметка документирует конкретные антипаттерны, которые возникают при неправильном использовании инструментов state management. Читайте параллельно с текущей заметкой.
+
+### [[kotlin-flow]]
+Flow — реактивный примитив Kotlin, лежащий в основе StateFlow и SharedFlow. Понимание операторов Flow (map, combine, flatMapLatest), горячих и холодных потоков, а также backpressure необходимо для эффективной трансформации и комбинирования state. Без знания Flow API невозможно написать сложную логику state management с несколькими источниками данных. Изучите основы Flow перед StateFlow/SharedFlow.
+
+### [[android-bundle-parcelable]]
+Bundle и Parcelable — механизм сохранения state при process death через savedInstanceState. SavedStateHandle в ViewModel использует Bundle под капотом для персистентного хранения. Понимание ограничений Bundle (размер ~500KB, только Parcelable/Serializable типы) критично для правильного выбора, какие данные сохранять в SavedStateHandle, а какие перезагружать из сети/БД.
 
 ---
 
@@ -1211,6 +1224,12 @@ class SearchViewModel(
 | 10 | [Compose lifecycle](https://developer.android.com/jetpack/compose/lifecycle) | Docs | Lifecycle-aware state collection |
 | 11 | [collectAsStateWithLifecycle](https://developer.android.com/reference/kotlin/androidx/lifecycle/compose/package-summary) | Docs | API reference |
 | 12 | [Molecule by Cash App](https://github.com/cashapp/molecule) | GitHub | Альтернативный подход 2024 |
+
+## Источники и дальнейшее чтение
+
+- **Moskala M. (2022). Kotlin Coroutines Deep Dive.** — Исчерпывающее руководство по Flow, StateFlow и SharedFlow. Объясняет разницу между горячими и холодными потоками, backpressure и structured concurrency — всё, что лежит в основе state management на корутинах.
+- **Moskala M. (2021). Effective Kotlin.** — Практики работы с immutable state, data classes для state representation и best practices по избеганию side effects. Формирует правильное мышление для проектирования state containers.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое введение в ViewModel, LiveData и SavedStateHandle с понятными примерами. Хороший старт для тех, кто только начинает работать с state management в Android.
 
 ---
 

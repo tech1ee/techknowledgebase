@@ -17,6 +17,8 @@ related:
   - "[[clean-code-solid]]"
   - "[[ci-cd-pipelines]]"
   - "[[design-patterns]]"
+prerequisites:
+  - "[[clean-code-solid]]"
 ---
 
 # Testing: пирамида, которая спасает от 3am багов

@@ -13,11 +13,18 @@ type: concept
 status: published
 area: programming
 confidence: high
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-class-loader-deep-dive]]"
 sources:
   - "The Java Module System" by Nicolai Parlog (2019)
   - "Java 9 Modularity" by Sander Mak & Paul Bakker (2017)
   - "JEP 261: Module System"
   - Oracle Java Platform Module System Documentation
+related:
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[module-systems]]"
+  - "[[android-modularization]]"
 ---
 
 # Java Module System (JPMS): Модульность и инкапсуляция
@@ -51,6 +58,8 @@ sources:
 ---
 
 ## Проблема: Classpath Hell
+
+> **Аналогия из жизни: склад без инвентаризации.** Представьте огромный склад, куда разные поставщики привозят товары и сваливают их в одну кучу без маркировки. Никто не знает, кто привёз какую коробку, нет описи содержимого, и два поставщика могут привезти разные товары в одинаковых коробках. Когда кладовщик ищет нужный предмет, он берёт первый попавшийся — и не факт, что это правильная версия. Classpath в Java работал именно так: все JAR-файлы сваливались в один «склад», без явных зависимостей и без контроля видимости. Module System — это переход к складу с чёткими зонами, описью и системой доступа.
 
 ### До Java 9: Classpath
 
@@ -122,6 +131,8 @@ java -cp lib.jar:app.jar Main
 ## Решение: Module System
 
 ### Концепция модуля
+
+> **Аналогия из жизни: квартиры в многоэтажном доме.** До Java 9 все классы жили в одном большом пространстве — как коммунальная квартира, где каждый видит вещи соседа и может их взять. Module System — это переезд в многоэтажку с отдельными квартирами. Каждая квартира (модуль) имеет стены (boundaries), входную дверь (exports) и список гостей, которым можно входить (requires). Даже если ваш шкаф (public class) стоит прямо у двери, сосед из другой квартиры не может до него добраться без вашего разрешения. А `opens` — это как дать ключ от квартиры курьеру (framework): он может войти и положить посылку (заполнить поля через Reflection), но только в указанную комнату.
 
 **Module — единица инкапсуляции с явными границами.**
 
@@ -1435,6 +1446,24 @@ module com.library.api {
 - [ ] Понимаю проблемы с Reflection
 - [ ] Умею настроить opens для frameworks
 - [ ] Знаю про jdeps для анализа зависимостей
+
+---
+
+## Связь с другими темами
+
+**[[jvm-class-loader-deep-dive]]** — Module System радикально изменил архитектуру ClassLoader'ов в Java 9+: вместо monolithic Bootstrap ClassLoader появился трёхуровневый Pipeline (Bootstrap → Platform → Application), где каждый модуль загружается соответствующим ClassLoader'ом. Понимание ClassLoader hierarchy необходимо для диагностики проблем модульной системы (ClassNotFoundException, IllegalAccessError), особенно при миграции legacy-кода. Рекомендуется сначала изучить ClassLoader (как JVM ищет и загружает классы), затем модульную систему (как модули ограничивают видимость).
+
+**[[module-systems]]** — JPMS — одна из реализаций концепции модульных систем, наряду с OSGi, npm modules, Kotlin Multiplatform modules и Android Gradle modules. Сравнительное изучение показывает фундаментальные trade-offs: JPMS обеспечивает strong encapsulation на runtime-уровне, но не поддерживает versioning (в отличие от OSGi). Понимание общих принципов модульности (явные зависимости, information hiding, минимальный публичный API) помогает принимать архитектурные решения независимо от конкретной технологии.
+
+**[[android-modularization]]** — Android multi-module проекты и JPMS решают похожую задачу (изоляция кода, явные зависимости), но на разных уровнях: Android modules — на уровне build system (Gradle), JPMS — на уровне JVM runtime. Android не использует JPMS напрямую, но концепции пересекаются: exports ~ api dependencies, internal packages ~ implementation dependencies. Опыт модульной архитектуры на Android облегчает понимание JPMS и наоборот; оба подхода борются с одной проблемой — неконтролируемым coupling между компонентами.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Parlog N. (2019). *The Java Module System*. — Наиболее полное руководство по JPMS: от базовых концепций до продвинутых тем (migration, reflection, services), включая реальные примеры миграции проектов.
+- Mak S., Bakker P. (2017). *Java 9 Modularity: Patterns and Practices for Developing Maintainable Applications*. — Практическое руководство с фокусом на паттернах модуляризации и стратегиях миграции legacy-кода на модули.
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Глава 15 «Minimize the Accessibility of Classes and Members» описывает принципы инкапсуляции, которые JPMS реализует на уровне модулей, а не только классов.
 
 ---
 

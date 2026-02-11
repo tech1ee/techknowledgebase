@@ -1,7 +1,7 @@
 ---
 title: "Дерево Фенвика (Binary Indexed Tree)"
 created: 2026-02-09
-modified: 2026-02-09
+modified: 2026-02-10
 type: deep-dive
 status: published
 tags:
@@ -11,6 +11,10 @@ tags:
 related:
   - "[[segment-tree]]"
   - "[[sparse-table]]"
+prerequisites:
+  - "[[arrays-strings]]"
+  - "[[trees-binary]]"
+  - "[[bit-manipulation]]"
 ---
 
 # Fenwick Tree (Binary Indexed Tree)
@@ -134,18 +138,38 @@ Update обновляет все диапазоны, содержащие i.
 
 ---
 
-## Зачем это нужно?
+## Зачем отдельная структура? Почему не Segment Tree?
 
-**Проблема:**
+Segment Tree -- универсальный инструмент: sum, min, max, GCD, lazy propagation, range updates. Зачем тогда Fenwick Tree? По той же причине, по которой существует отвёртка, хотя есть универсальный мультитул: специализированный инструмент проще, легче и быстрее для СВОЕЙ задачи.
 
-| Подход | Prefix Sum | Point Update |
-|--------|------------|--------------|
-| Array | O(n) | O(1) |
-| Prefix Array | O(1) | O(n) |
-| Segment Tree | O(log n) | O(log n) |
-| **Fenwick Tree** | **O(log n)** | **O(log n)** |
+Fenwick Tree решает ОДНУ задачу: prefix sum + point update. Но решает её элегантнее Segment Tree по всем параметрам:
 
-Fenwick Tree = Segment Tree производительность + простота кода.
+| Критерий | Fenwick Tree | Segment Tree |
+|----------|-------------|--------------|
+| Код | 8-10 строк | 50-100 строк |
+| Память | O(n) | O(4n) |
+| Constant factor | Маленький | Больше (рекурсия, 2 ребёнка) |
+| Баги при реализации | Мало (код простой) | Много (границы, pushDown, размер 4n) |
+| Cache performance | Лучше (линейный массив) | Хуже (прыжки по дереву) |
+
+На практике Fenwick Tree в 2-3 раза быстрее Segment Tree для задач типа "prefix sum + point update". В олимпиадном программировании, где каждая миллисекунда на счету, это существенно.
+
+### Историческая справка
+
+Питер Фенвик опубликовал структуру в 1994 году в статье "A New Data Structure for Cumulative Frequency Tables". Оригинальное название -- Binary Indexed Tree (BIT), и оно точнее описывает суть: структура использует бинарное представление индексов для определения, какие элементы агрегирует каждая ячейка. Название "Fenwick Tree" прижилось в олимпиадном сообществе, хотя структура -- не дерево в классическом смысле (она хранится в массиве).
+
+---
+
+### Когда Fenwick Tree НЕ подходит
+
+Fenwick Tree НЕ подходит для:
+
+- **Min/Max queries** -- невозможно эффективно "отменить" минимум при изменении элемента. Для min/max нужен Segment Tree.
+- **Non-commutative operations** -- Fenwick хранит не отдельные элементы, а кумулятивные суммы. Операция должна быть коммутативной и иметь обратный элемент.
+- **Range update + range query** -- возможно с двумя BIT, но код становится сложнее и теряется преимущество простоты.
+- **Сложные lazy-операции** -- для них Segment Tree c lazy propagation незаменим.
+
+> **Правило большого пальца:** Если задача сводится к "prefix sum + point update" (или range update + point query) -- используй Fenwick. Для всего остального -- Segment Tree.
 
 ---
 
@@ -303,7 +327,35 @@ println(bit.rangeSum(2, 5))  // 2 + 4 + 6 + 5 = 17
 
 ---
 
-## Как работает LSB арифметика
+## Как работает LSB арифметика: магия бинарных чисел
+
+### Почему i & (-i) вычисляет LSB
+
+Это, пожалуй, самый красивый трюк в программировании с битами. Почему побитовое AND числа с его отрицанием даёт наименьший установленный бит?
+
+В двоичном дополнении (two's complement), -i = ~i + 1 (инверсия всех бит + 1). Рассмотрим пример:
+
+```
+i  = 12 = 0000 1100₂
+~i =       1111 0011₂
+-i = ~i+1= 1111 0100₂
+
+i & (-i) = 0000 1100
+         & 1111 0100
+         = 0000 0100 = 4 = LSB(12)
+```
+
+Что происходит: при инверсии все биты переворачиваются. При добавлении 1 единица "прокатывается" через все нули в конце и останавливается на первом бите, который был 1 (теперь он стал 0 после инверсии). В результате ТОЛЬКО этот бит совпадает между i и -i.
+
+Аналогия: представьте номер дома. LSB -- это "масштаб ответственности" этого дома. Дом 8 (1000₂) отвечает за 8 домов (весь район). Дом 6 (110₂) отвечает за 2 дома. Дом 7 (111₂) отвечает только за себя. Чем больше нулей в конце двоичного представления, тем "важнее" узел -- тем за больший диапазон он отвечает.
+
+### Два направления: Query идёт "назад", Update идёт "вперёд"
+
+Это один из самых неинтуитивных аспектов Fenwick Tree. При query мы ВЫЧИТАЕМ LSB (двигаемся к началу массива), а при update ПРИБАВЛЯЕМ LSB (двигаемся к концу). Почему?
+
+**Query (prefix sum):** мы собираем непересекающиеся блоки, которые покрывают [1, i]. Каждый блок определяется своим индексом: tree[i] покрывает [i - LSB(i) + 1, i]. Убирая LSB, мы переходим к предыдущему непересекающемуся блоку. Блоки "склеиваются" слева направо и вместе покрывают весь [1, i].
+
+**Update (point add):** мы должны обновить ВСЕ узлы, чей блок содержит индекс i. Прибавляя LSB, мы переходим к следующему "родительскому" узлу с бОльшим блоком. Каждый такой узел -- это следующий узел выше в неявном дереве, который "отвечает" за наш индекс.
 
 ### Prefix Sum Query
 
@@ -684,28 +736,26 @@ private val tree = LongArray(n + 1)
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-### Prerequisites
-- Bit Manipulation (LSB)
-- Prefix Sums
+**[[segment-tree]]** -- Segment Tree решает все задачи Fenwick Tree и многие другие. Если вам нужен только prefix sum + point update, Fenwick проще и быстрее. Если нужен min/max, lazy propagation или сложные операции -- Segment Tree. На собеседовании: начните с Fenwick, если задача позволяет -- покажете знание более элегантного решения.
 
-### Unlocks
-- 2D Fenwick Tree
-- Offline algorithms (answer queries in different order)
-- Wavelet Trees
+**[[sparse-table]]** -- Sparse Table решает совсем другую задачу: статический RMQ за O(1). Fenwick решает динамическую задачу (с обновлениями). Они не взаимозаменяемы, но часто изучаются вместе как "альтернативные подходы к range queries".
+
+**[[bit-manipulation]]** -- Понимание побитовых операций (AND, OR, XOR, сдвиги) -- prerequisite для Fenwick Tree. Конкретно: two's complement и трюк i & (-i) для вычисления LSB. Без этого Fenwick Tree выглядит как магия; с этим -- как элегантное применение бинарной арифметики.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [CP-Algorithms](https://cp-algorithms.com/data_structures/fenwick.html) | Reference | Complete guide |
-| 2 | [HackerEarth](https://www.hackerearth.com/practice/notes/binary-indexed-tree-or-fenwick-tree/) | Tutorial | Visualization |
-| 3 | [Wikipedia](https://en.wikipedia.org/wiki/Fenwick_tree) | Reference | Original paper |
-| 4 | [TopCoder](https://www.topcoder.com/thrive/articles/Binary%20Indexed%20Trees) | Tutorial | Applications |
+- **Fenwick, P. (1994). A New Data Structure for Cumulative Frequency Tables.** -- Оригинальная статья. Фенвик представил структуру для задач подсчёта частот (cumulative frequency tables), но идея оказалась универсальнее -- применима к любым prefix sum задачам.
+
+- **Cormen, T. et al. (2009). Introduction to Algorithms (CLRS).** -- CLRS не описывает Fenwick Tree напрямую, но глава о бинарных операциях и augmented data structures даёт теоретическую базу.
+
+- **Halim, S. (2013). Competitive Programming 3, Chapter 2.4.4.** -- Лучшее практическое описание Fenwick Tree: от базовой реализации до 2D BIT и range update/range query с двумя BIT. Включает таблицу "Fenwick vs Segment Tree".
+
+- **CP-Algorithms (cp-algorithms.com/data_structures/fenwick.html).** -- Полное руководство с описанием всех вариантов: point update/prefix query, range update/point query, range update/range query, 2D BIT.
 
 ---
 
-*Последнее обновление: 2026-01-09 — Добавлены педагогические секции: 2 аналогии (многоуровневая агрегация, LSB как шаг назад), 3 типичные ошибки (0-indexed, range sum, update vs add), 2 ментальные модели (LSB определяет ответственность, query влево/update вправо)*
+*Последнее обновление: 2026-02-10 -- Добавлена глубокая теория: почему Fenwick Tree отдельная структура (сравнение с Segment Tree), историческая справка (Fenwick, 1994), когда НЕ подходит, объяснение LSB-магии (why i & (-i) works, two's complement), два направления движения (query назад, update вперёд)*

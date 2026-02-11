@@ -18,6 +18,10 @@ related:
   - "[[design-patterns]]"
   - "[[testing-strategies]]"
   - "[[technical-debt]]"
+prerequisites:
+  - "[[clean-code-solid]]"
+  - "[[testing-strategies]]"
+  - "[[design-patterns]]"
 ---
 
 # Refactoring Techniques: Улучшение кода без изменения поведения

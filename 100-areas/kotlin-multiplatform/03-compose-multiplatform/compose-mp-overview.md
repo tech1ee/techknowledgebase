@@ -5,11 +5,10 @@ modified: 2026-01-05
 tags:
   - topic/jvm
   - topic/kmp
-  - compose
+  - topic/android
   - ui
   - skia
-  - android
-  - ios
+  - topic/ios
   - desktop
   - web
   - type/moc
@@ -1070,6 +1069,24 @@ implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.1")
 | [[composition-recomposition]] | Как Compose обновляет UI | State management, performance |
 | [[immediate-vs-retained-mode]] | Два подхода к rendering | Понимание Compose internals |
 | [[hardware-acceleration]] | GPU rendering | Почему Skia быстрая |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Kotlin Multiplatform является фундаментом, на котором построен Compose Multiplatform. KMP обеспечивает shared бизнес-логику (networking, data, domain), тогда как Compose MP добавляет shared UI поверх этого фундамента. Понимание архитектуры KMP (source sets, expect/actual, Kotlin/Native) необходимо для правильной организации Compose MP проекта и разграничения UI и бизнес-логики.
+
+**[[compose-mp-ios]]** — iOS является ключевой платформой для Compose Multiplatform, достигшей Stable статуса в версии 1.8.0. Compose MP на iOS использует Skia для рендеринга через Metal API, что обеспечивает нативную производительность. Понимание iOS-специфичных особенностей (UIKit interop, gesture handling, accessibility) необходимо для создания production-ready приложений с shared UI.
+
+**[[compose-mp-desktop]]** — Desktop является наиболее зрелой платформой Compose Multiplatform, используемой JetBrains в собственных продуктах (Toolbox, Fleet). Desktop target работает на JVM через Skia и поддерживает Swing interop, нативные меню и window management. Изучение desktop-платформы помогает понять возможности Compose MP без iOS/web-ограничений.
+
+**[[compose-mp-web]]** — Web (Beta) представляет собой новейшую платформу Compose Multiplatform, использующую Canvas API через Kotlin/Wasm. Web target демонстрирует ограничения Compose MP подхода (SEO, accessibility, bundle size) и помогает оценить, когда shared UI оправдан, а когда лучше использовать платформенные технологии.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Понимание основ Kotlin критически важно для работы с Compose MP: @Composable функции, делегирование свойств (remember, mutableStateOf), extension functions и DSL builders формируют основу декларативного UI.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по Kotlin-коду напрямую применимы при написании Composable-функций: управление state, избегание side effects, правильное использование scope functions и inline-функций для оптимизации recomposition.
+3. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения UI и бизнес-логики определяют архитектуру Compose MP приложений. Boundary между Compose UI layer и shared domain/data layers проектируется по принципам Clean Architecture.
 
 ---
 

@@ -10,6 +10,9 @@ tags:
   - integration
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-unit-testing]]"
 cs-foundations:
   - "[[testing-pyramid-theory]]"
   - "[[test-driven-development]]"
@@ -602,6 +605,24 @@ fun testUser() {
 | Test Doubles | Fakes vs Mocks vs Stubs | xUnit Patterns |
 | Code Coverage | Branch vs Line vs Path | ISTQB Foundation |
 | TDD | Red-Green-Refactor | Kent Beck "TDD by Example" |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — стратегия тестирования в KMP уникальна тем, что тесты из commonTest запускаются на каждой целевой платформе отдельно. Это даёт мультипликативный эффект: 70 shared тестов при 3 targets = 210 проверок. Понимание архитектуры KMP определяет, какие тесты писать в commonTest (70%), а какие — в platform-specific source sets.
+
+- **[[kmp-unit-testing]]** — unit тесты формируют основание тестовой пирамиды и составляют 70% всех тестов. Стратегия определяет инструменты (kotlin.test + Kotest assertions + Turbine), подходы (fakes вместо mocks из-за ограничений Kotlin/Native) и приоритеты (Domain → Data → Presentation). Без продуманной стратегии unit тесты превращаются в хаотичный набор проверок без системного покрытия.
+
+- **[[kmp-integration-testing]]** — integration тесты занимают среднюю часть пирамиды (20%) и проверяют контракты между компонентами: Repository + MockEngine + SQLDelight in-memory. Стратегия определяет границы интеграции — что тестировать вместе, а что изолировать — и обеспечивает баланс между скоростью и полнотой покрытия.
+
+## Источники и дальнейшее чтение
+
+- **Martin R. (2017).** *Clean Architecture.* — Определяет принципы тестируемой архитектуры: Dependency Inversion, Separation of Concerns и Boundary interfaces. Эти принципы напрямую применяются к организации тестовой стратегии в KMP — от выбора слоёв для покрытия до проектирования test doubles.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Глава о тестировании корутин охватывает runTest, TestDispatcher и паттерны тестирования Flow. Поскольку большинство KMP-кода использует корутины, эти знания критичны для всех уровней тестовой пирамиды.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по написанию идиоматического Kotlin-кода, который легко тестировать: prefer composition over inheritance, используйте sealed classes для представления состояний, избегайте side effects в pure functions.
 
 ---
 

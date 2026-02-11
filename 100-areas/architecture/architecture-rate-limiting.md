@@ -18,6 +18,9 @@ tags:
 related:
   - "[[architecture-overview]]"
   - "[[architecture-resilience-patterns]]"
+prerequisites:
+  - "[[api-design]]"
+  - "[[architecture-distributed-systems]]"
   - "[[api-design]]"
   - "[[caching-strategies]]"
 ---

@@ -19,6 +19,8 @@ tags:
 related:
   - "[[giving-feedback]]"
   - "[[performance-conversations]]"
+prerequisites:
+  - "[[giving-feedback]]"
 ---
 
 # Feedback Frameworks: какую модель выбрать и когда

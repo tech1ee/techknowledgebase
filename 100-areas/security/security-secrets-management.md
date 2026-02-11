@@ -16,6 +16,9 @@ related:
   - "[[security-overview]]"
   - "[[cloud-aws-core-services]]"
   - "[[devops-overview]]"
+prerequisites:
+  - "[[security-cryptography-fundamentals]]"
+  - "[[security-fundamentals]]"
 ---
 
 # Secrets Management: Vault, rotation, environment variables
@@ -439,6 +442,28 @@ OK для dev, но для production лучше Secrets Manager или Vault.
 - [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/)
 - [External Secrets Operator](https://external-secrets.io/)
 - [OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html)
+
+---
+
+## Связь с другими темами
+
+[[security-fundamentals]] — управление секретами является практическим применением принципа Confidentiality из CIA Triad. Понимание базовых концепций безопасности (defense in depth, least privilege) определяет архитектуру secrets management: почему нужны отдельные хранилища, зачем ротация, почему environment variables недостаточны. Без фундамента в security-fundamentals сложно оценить, какой уровень защиты секретов адекватен для конкретной системы.
+
+[[cloud-aws-core-services]] — AWS Secrets Manager, AWS KMS и IAM роли являются конкретными инструментами для реализации secrets management в облачной инфраструктуре. Понимание IAM policies, resource-based policies и service-linked roles необходимо для правильной настройки доступа к секретам. Рекомендуется изучить secrets-management для концептуального понимания, а затем aws-core-services для практической реализации.
+
+[[security-incident-response]] — компрометация секретов (leaked API key, exposed database password) — один из самых частых типов инцидентов безопасности. План реагирования должен включать процедуры экстренной ротации секретов, и знание secrets management определяет скорость recovery. Incident response информирует secrets management о необходимости автоматизации ротации и мониторинга доступа.
+
+[[infrastructure-as-code]] — Terraform, Pulumi и другие IaC-инструменты тесно интегрируются с secrets management для безопасного управления credentials инфраструктуры. Правильная интеграция предотвращает хранение секретов в state-файлах и шаблонах. Изучение IaC и secrets management рекомендуется параллельно.
+
+[[docker-for-developers]] — контейнеризация создаёт специфические вызовы для управления секретами: environment variables видны через docker inspect, Kubernetes Secrets кодируются в base64 (не шифруются). Понимание этих ограничений критично для выбора правильного решения (External Secrets Operator, Sealed Secrets, Vault Agent Injector).
+
+---
+
+## Источники и дальнейшее чтение
+
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальное руководство по инженерии безопасности, включая принципы управления ключами и секретами в распределённых системах.
+- Stallings W. (2017). *Cryptography and Network Security: Principles and Practice.* 7th Edition. Pearson. — для понимания криптографических основ, на которых строятся механизмы шифрования секретов (AES, KDF, key wrapping).
+- McGraw G. (2006). *Software Security: Building Security In.* Addison-Wesley. — принципы безопасной разработки, включая правила работы с credentials и секретами на уровне кода и архитектуры.
 
 ---
 

@@ -13,6 +13,11 @@ related:
   - "[[graph-algorithms]]"
   - "[[union-find-pattern]]"
   - "[[greedy-algorithms]]"
+prerequisites:
+  - "[[graphs]]"
+  - "[[graph-algorithms]]"
+  - "[[greedy-algorithms]]"
+  - "[[union-find-pattern]]"
 ---
 
 # Minimum Spanning Tree (MST)

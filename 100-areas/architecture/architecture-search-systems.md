@@ -18,6 +18,9 @@ related:
   - "[[databases-overview]]"
   - "[[caching-strategies]]"
   - "[[ai-ml-overview]]"
+prerequisites:
+  - "[[api-design]]"
+  - "[[caching-strategies]]"
 ---
 
 # Search Systems: Elasticsearch, Full-Text Search, Relevance

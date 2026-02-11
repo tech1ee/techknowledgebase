@@ -11,6 +11,8 @@ tags:
 related:
   - "[[async-communication]]"
   - "[[email-communication]]"
+prerequisites:
+  - "[[communication-models]]"
 ---
 
 # Technical Writing: RFC, ADR и документация

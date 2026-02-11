@@ -21,6 +21,11 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-process-memory]]"
 cs-foundations: [ipc, uri-scheme, crud, observer-pattern, proxy-pattern, facade-pattern, shared-memory, binder-ipc]
+prerequisites:
+  - "[[android-app-components]]"
+  - "[[android-data-persistence]]"
+  - "[[android-permissions-security]]"
+  - "[[android-process-memory]]"
 ---
 
 # ContentProvider Internals: межпроцессный доступ к данным
@@ -1879,31 +1884,27 @@ CursorWindow использует **shared memory** (ashmem на старых в
 
 ---
 
-## Связи
+## Связь с другими темами
 
-### Фундамент
-- **[[android-app-components]]** — CP один из 4 фундаментальных компонентов; lifecycle управляется системой
-- **[[android-data-persistence]]** — Room как backend для CP; DataStore для in-process settings
+**[[android-app-components]]** — ContentProvider является одним из четырёх фундаментальных компонентов Android. Понимание общей модели компонентов (Activity, Service, BroadcastReceiver, ContentProvider) даёт контекст для осознания роли CP как единственного стандартного IPC-интерфейса для структурированных данных. Жизненный цикл CP управляется системой аналогично другим компонентам. Рекомендуется сначала изучить app-components, затем переходить к CP internals.
 
-### IPC и Transport
-- **[[android-handler-looper]]** — Binder thread pool для CP; Handler для ContentObserver callbacks
-- **[[android-process-memory]]** — CP process priority; CursorWindow shared memory allocation
+**[[android-data-persistence]]** — Room и DataStore часто выступают бэкэндом для ContentProvider. Типичный паттерн — Room для внутренней работы с данными, а ContentProvider как фасад для межпроцессного доступа. Понимание Room DAO, миграций и Flow-интеграции необходимо для реализации эффективного CP. Рекомендуется сначала изучить data-persistence, затем CP internals.
 
-### Тесно связаны
-- **[[android-permissions-security]]** — read/writePermission; URI grants; path-permissions
-- **[[android-intent-internals]]** — URI-based addressing аналогично Intent resolution; FileProvider + Intent
-- **[[android-app-startup-performance]]** — CP как инициализационный хук; App Startup library замена
+**[[android-handler-looper]]** — ContentProvider использует Binder thread pool для обработки запросов от клиентов, а ContentObserver callbacks доставляются через Handler. Понимание event loop, MessageQueue и threading модели Android объясняет, почему query/insert/update/delete выполняются в Binder потоках (concurrent), а onCreate() — на main thread. Изучение Handler/Looper помогает понять thread safety requirements для CP.
 
-### Контекст
-- **[[android-context-internals]]** — ContentResolver через context.contentResolver; Context для CP
+**[[android-process-memory]]** — ContentProvider влияет на приоритет процесса: если другой процесс использует ваш CP, система повышает приоритет вашего процесса. CursorWindow использует shared memory (ashmem/memfd) для zero-copy передачи данных между процессами. Понимание процессной модели Android объясняет, почему stable client при crash provider-а убивает и ваш процесс.
 
-### Связанные темы
-- **[[android-broadcast-internals]]** — ContentObserver vs BroadcastReceiver для наблюдения за данными
-- **[[android-memory-leaks]]** — Cursor leak, ContentObserver leak patterns
+**[[android-permissions-security]]** — ContentProvider защищён многоуровневой моделью разрешений: readPermission/writePermission на уровне провайдера, path-permission для гранулярного контроля, и URI grants для временного доступа. Понимание permission модели Android критично для безопасной реализации CP. Рекомендуется изучать параллельно.
+
+**[[android-intent-internals]]** — URI-based addressing в ContentProvider концептуально аналогична Intent resolution. FileProvider работает в связке с Intent для безопасного шаринга файлов между приложениями. Понимание Intent flags (FLAG_GRANT_READ_URI_PERMISSION) необходимо для работы с URI grants.
+
+**[[android-app-startup-performance]]** — Библиотеки используют ContentProvider как хук для ранней инициализации (до Application.onCreate()), что замедляет cold start. App Startup library решает эту проблему через единый InitializationProvider с dependency graph. Понимание этой связи критично для оптимизации времени запуска приложения.
+
+**[[android-context-internals]]** — ContentResolver получается через context.contentResolver, а сам ContentProvider получает Context через getContext() после attachInfo(). Понимание иерархии Context и различий между Application Context и Activity Context помогает правильно использовать CP в разных компонентах.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
@@ -1919,3 +1920,9 @@ CursorWindow использует **shared memory** (ashmem на старых в
 | 10 | [MediaStore](https://developer.android.com/training/data-storage/shared/media) | Docs | MediaStore для медиафайлов |
 | 11 | [Scoped Storage](https://developer.android.com/about/versions/11/privacy/storage) | Docs | Scoped Storage изменения |
 | 12 | [Photo Picker](https://developer.android.com/training/data-storage/shared/photopicker) | Docs | Android 13+ Photo Picker |
+
+### Книги
+
+- **Meier R. (2022)** *Professional Android* — глава о ContentProvider охватывает реализацию CRUD-операций, FileProvider и работу с системными провайдерами (MediaStore, Contacts). Полезно для понимания production-паттернов.
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практический подход к ContentProvider с пошаговыми примерами создания собственного провайдера и интеграции с Room.
+- **Vasavada N. (2019)** *Android Internals* — детальное описание Binder IPC, CursorWindow shared memory и внутреннего устройства ContentProvider на уровне AOSP.

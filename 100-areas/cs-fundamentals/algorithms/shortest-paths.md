@@ -14,6 +14,10 @@ related:
   - "[[graphs]]"
   - "[[greedy-algorithms]]"
   - "[[dynamic-programming]]"
+prerequisites:
+  - "[[graphs]]"
+  - "[[graph-algorithms]]"
+  - "[[heaps-priority-queues]]"
 ---
 
 # Shortest Path Algorithms

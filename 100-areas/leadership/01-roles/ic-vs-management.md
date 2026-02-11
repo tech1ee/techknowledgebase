@@ -18,6 +18,8 @@ tags:
 related:
   - "[[transition-to-management]]"
   - "[[em-fundamentals]]"
+prerequisites:
+  - "[[tech-lead-role]]"
 ---
 
 # IC Track vs Management Track: как выбрать
@@ -580,6 +582,20 @@ Strategic thinking: ~1 hour (10%)
 - **An Elegant Puzzle** (Will Larson) — management perspective
 
 *Исследование проведено: 2026-01-18*
+
+---
+
+## Связь с другими темами
+
+**[[transition-to-management]]** — После принятия решения о переходе на management track, transition-to-management описывает конкретные шаги и вызовы самого перехода. Если ic-vs-management помогает выбрать трек, то transition-to-management — это практический гид по первым месяцам в роли менеджера. Включает типичные ловушки перехода, изменение identity от "я делаю" к "я помогаю делать другим", и стратегии адаптации.
+
+**[[em-fundamentals]]** — Для тех, кто выбрал management track, em-fundamentals — следующая ступень погружения в конкретные навыки и инструменты Engineering Manager. Понимание фундаментальных обязанностей EM (1-on-1, performance management, hiring) помогает принять более информированное решение при выборе между треками, потому что показывает реальную ежедневную работу менеджера.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает полный карьерный путь от IC до CTO, что позволяет увидеть оба трека в перспективе. Особенно ценна глава о различиях между management и IC, а также раздел о том, когда и как можно переключаться между треками.
+- **Will Larson, "Staff Engineer" (2022)** — Детально раскрывает IC track выше уровня Senior, показывая что Staff, Principal и Distinguished Engineer — это полноценные карьерные уровни с огромным scope и compensation, comparable с management track.
+- **Will Larson, "An Elegant Puzzle" (2019)** — Показывает management track изнутри, включая системные аспекты управления инженерными командами. Помогает оценить, подходит ли вам management, через понимание реальных задач и вызовов.
 
 ---
 

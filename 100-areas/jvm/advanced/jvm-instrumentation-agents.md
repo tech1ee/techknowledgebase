@@ -11,6 +11,10 @@ tags:
   - profiling
   - type/concept
   - level/advanced
+prerequisites:
+  - "[[jvm-bytecode-manipulation]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-memory-model]]"
 sources:
   - java-instrumentation-api
   - jvmti-spec
@@ -19,729 +23,357 @@ sources:
 confidence: high
 date: 2025-11-25
 status: published
+related:
+  - "[[jvm-bytecode-manipulation]]"
+  - "[[jvm-profiling]]"
+  - "[[observability]]"
 ---
 
 # JVM Instrumentation & Agents
 
-## TL;DR
+## Зачем это знать
 
-**Java агенты** — это программы, которые модифицируют байткод классов **в runtime** через API `java.lang.instrument`. Позволяют добавлять логику без изменения исходного кода.
+Представьте: production-приложение начинает тормозить. Вам нужно понять, какие SQL-запросы выполняются дольше 500ms, какие HTTP-эндпоинты деградировали, какие методы потребляют больше всего CPU — и всё это без остановки сервиса, без изменения исходного кода, без пересборки и переразвёртывания. Именно эту задачу решают Java agents. Каждый раз, когда вы подключаете Datadog, New Relic или Dynatrace к своему приложению через флаг `-javaagent:` — за кулисами работает Instrumentation API, перехватывающий загрузку классов и вставляющий измерительный код прямо в байткод ваших сервисов.
 
-**Ключевые концепции:**
-- **Premain-агенты** — загружаются при старте JVM (`-javaagent:agent.jar`)
-- **Agentmain-агенты** — подключаются к работающей JVM (dynamic attach)
-- **ClassFileTransformer** — перехватывает загрузку классов и модифицирует байткод
-- **APM-инструменты** (New Relic, DataDog, Dynatrace) построены на этой технологии
+Java agents — это не нишевая технология для энтузиастов: это фундамент observability в Java-экосистеме. JaCoCo измеряет code coverage через agent. YourKit и JProfiler профилируют через agent. AspectJ выполняет load-time weaving через agent. Без понимания того, как работают agents, невозможно осознанно настраивать APM, диагностировать проблемы производительности или создавать собственные инструменты мониторинга.
 
-**Когда использовать:**
-- ✅ Application Performance Monitoring (APM)
-- ✅ Code coverage (JaCoCo, Cobertura)
-- ✅ Профайлеры (YourKit, JProfiler)
-- ✅ Aspect-Oriented Programming (AspectJ)
-- ✅ Hot reload / live debugging
-- ❌ Сложная бизнес-логика (используйте обычный код)
-- ❌ Когда достаточно annotation processors
+> **Ключевая идея:** Java agent — это программа, которая модифицирует байткод классов в runtime через API `java.lang.instrument`, позволяя добавлять мониторинг, трассировку и изменение поведения без доступа к исходному коду.
 
 ---
 
-## Проблема: Модификация поведения без изменения кода
+## Аналогия: тайный покупатель
 
-### Традиционный подход
+Представьте крупную сеть магазинов. Руководство хочет понять, как работают продавцы: сколько времени уходит на обслуживание клиента, как часто сотрудники отвлекаются, на каком этапе покупатели уходят. Можно установить камеры (изменить «исходный код» магазина) — но это дорого, заметно и меняет поведение сотрудников. А можно отправить **тайного покупателя** — человека, который выглядит как обычный клиент, но записывает всё, что видит.
 
-**Без агента — дублирование кода:**
-```java
-public class UserService {
-    public User getUser(Long id) {
-        long start = System.nanoTime();
-        try {
-            return userRepository.findById(id);
-        } finally {
-            MetricsCollector.record("getUser", System.nanoTime() - start);
-        }
-    }
-
-    // 50+ методов с идентичным boilerplate...
-}
-```
-
-**С агентом — чистый код, инструментация автоматическая:**
-```java
-public class UserService {
-    public User getUser(Long id) {
-        return userRepository.findById(id);
-    }
-}
-
-// java -javaagent:monitor-agent.jar -jar app.jar
-// Агент автоматически добавляет timing во все методы
-```
+Java agent — это тайный покупатель для вашего приложения. Он загружается вместе с приложением (или подключается к работающему процессу), наблюдает за каждым «обслуживанием» (вызовом метода), записывает время и результаты, но при этом само приложение не знает о наблюдении и работает как обычно. Хороший тайный покупатель незаметен — хороший agent добавляет минимальный overhead (1-5%).
 
 ---
 
-## Архитектура Java Agents
+## Вторая аналогия: датчики в автомобиле
 
-### Жизненный цикл агента
+Второй способ интуитивно понять instrumentation — через аналогию с автомобилестроением. Современный автомобиль оборудован сотнями датчиков: температура двигателя, давление в шинах, обороты коленвала, расход топлива. Эти датчики не меняют конструкцию двигателя — он работает так же, как без них. Но датчики дают водителю и бортовому компьютеру информацию для принятия решений.
+
+Instrumentation в Java — это установка таких датчиков в код приложения. Вы не меняете бизнес-логику `UserService.getUser()` — но добавляете «датчик», который фиксирует время входа в метод, время выхода, параметры вызова и результат. Как и в автомобиле, датчики добавляют небольшой вес (overhead), но ценность информации многократно превышает затраты.
+
+---
+
+## Терминология
+
+| Термин | Значение | Аналогия из жизни |
+|--------|----------|--------------------|
+| **Java Agent** | JAR-файл с особым manifest, загружаемый JVM для модификации байткода | Тайный покупатель — наблюдает за работой системы изнутри |
+| **premain** | Метод agent'а, вызываемый ДО `main()` приложения | Инспектор, который приходит до открытия магазина |
+| **agentmain** | Метод agent'а, вызываемый при dynamic attach к работающей JVM | Инспектор, который приходит в разгар рабочего дня |
+| **Instrumentation** | Java-интерфейс для регистрации трансформеров и управления классами | Пульт управления датчиками — включать, выключать, настраивать |
+| **ClassFileTransformer** | Интерфейс, перехватывающий загрузку каждого класса и позволяющий модифицировать байткод | Контролёр на конвейере — проверяет каждую деталь и может её доработать |
+| **Retransformation** | Повторная трансформация уже загруженного класса | Замена деталей в работающем двигателе — без остановки |
+| **JVMTI** | JVM Tool Interface — нативный C API для создания инструментов | Диагностический разъём OBD-II в автомобиле — низкоуровневый доступ к показателям |
+| **APM** | Application Performance Monitoring — мониторинг производительности приложения | Бортовой компьютер автомобиля — собирает данные со всех датчиков |
+| **Dynamic Attach** | Подключение agent'а к уже работающей JVM через Attach API | Подключение диагностического оборудования к работающему двигателю |
+
+---
+
+## Историческая справка
+
+История Java agents тесно переплетена с эволюцией средств диагностики JVM.
+
+**Ранние годы (1997-2003).** В первых версиях Java единственным способом отладки и профилирования были **JPDA** (Java Platform Debugger Architecture) и **JVMPI** (JVM Profiler Interface). JVMPI появился в Java 1.1 как нативный C-интерфейс для профайлеров. Проблема JVMPI заключалась в том, что он был нестабильным (не часть спецификации), тяжеловесным (замедлял JVM на 30-50%) и сложным в использовании — требовал написания нативного кода на C. Каждый профайлер реализовывал собственные хаки для получения данных о работающем приложении, и совместимость между версиями JVM не гарантировалась.
+
+**Java 5 — революция (2004).** JSR-163 «Java Platform Profiling Architecture» ввёл два фундаментальных нововведения. Первое — **JVMTI** (JVM Tool Interface), который заменил устаревшие JVMPI и JVMDI (Debugger Interface) единым стабильным нативным API. Второе — пакет **`java.lang.instrument`**, предоставивший Java-level API для bytecode instrumentation. Именно тогда появились `premain`, `ClassFileTransformer` и концепция Java agent'а. Это был переломный момент: вместо хрупких нативных хаков разработчики получили стандартизированный, стабильный и документированный механизм.
+
+**Рост APM-индустрии (2008-2015).** Появление `java.lang.instrument` породило целую индустрию. New Relic (основан 2008), AppDynamics (2008), Dynatrace (переработка Agent в 2014), Datadog APM (2017) — все эти продукты построены на Java agents. Каждый APM-agent содержит набор ClassFileTransformer'ов для популярных фреймворков (JDBC, HTTP, Spring, gRPC) и фоновый reporter, отправляющий метрики в облако.
+
+**Java 9+ и ограничения (2017-сегодня).** Модульная система JPMS (Java 9) начала ограничивать доступ agent'ов к internal-классам. Java 21 ввела предупреждения при dynamic attach без явного разрешения (`-XX:+EnableDynamicAgentLoading`). JEP 451 (Java 21) сделал dynamic loading agents ограниченным по умолчанию — шаг к повышению безопасности JVM. Эволюция показывает тренд: agent'ы остаются мощным инструментом, но JVM постепенно ужесточает контроль над ними.
+
+---
+
+## Архитектура Java Agents: premain vs agentmain
+
+### Жизненный цикл agent'а
+
+Java agent — это обычный JAR-файл со специальным `MANIFEST.MF`. JVM распознаёт agent по атрибутам manifest'а (`Premain-Class`, `Agent-Class`) и вызывает соответствующие точки входа. Существуют два принципиально разных механизма загрузки, и выбор между ними определяет возможности agent'а.
 
 ```
-java -javaagent:agent.jar -jar application.jar
-          │
-          ↓
-   ┌──────────────────┐
-   │ JVM загружает    │
-   │ агент JAR        │
-   └────────┬─────────┘
-            │
-            ↓
-   ┌─────────────────────────────┐
-   │ Вызов метода premain()      │
-   │   public static void        │
-   │   premain(String args,      │
-   │            Instrumentation) │
-   └────────┬────────────────────┘
-            │
-            ↓
-   ┌──────────────────────────────┐
-   │ Регистрация трансформера:    │
-   │ inst.addTransformer(...)     │
-   └────────┬─────────────────────┘
-            │
-            ↓
-   ┌─────────────────────────────────┐
-   │ При загрузке каждого класса:    │
-   │ 1. ClassLoader читает .class    │
-   │ 2. Трансформер перехватывает    │
-   │ 3. Модифицирует байткод         │
-   │ 4. Возвращает новые байты       │
-   │ 5. JVM создаёт класс            │
-   └─────────────────────────────────┘
+Premain-агент:                        Agentmain-агент:
+
+JVM start                             Работающая JVM
+    │                                      │
+    ↓                                      ↓
+Загрузка agent JAR                    Attach API подключается
+    │                                      │
+    ↓                                      ↓
+premain(args, inst)                   agentmain(args, inst)
+    │                                      │
+    ↓                                      ↓
+Регистрация трансформеров             Регистрация + retransform
+    │                                 уже загруженных классов
+    ↓                                      │
+main() приложения                     Продолжение работы JVM
 ```
 
-### Типы агентов
+### Premain: перехват с самого начала
 
-**Premain-агент (startup):**
+Метод `premain` вызывается **до** метода `main()` приложения. Это ключевое преимущество: agent успевает зарегистрировать трансформеры прежде, чем приложение начнёт загружать свои классы. Каждый класс, загружаемый после регистрации трансформера, проходит через `ClassFileTransformer.transform()` — agent получает сырые байты `.class`-файла и может вернуть модифицированные байты.
+
+Premain-агент запускается флагом командной строки: `java -javaagent:agent.jar -jar app.jar`. Можно указать несколько agent'ов: `-javaagent:a.jar -javaagent:b.jar` — они загружаются последовательно, в указанном порядке. Это важно: если agent A и agent B трансформируют один и тот же класс, B получит уже модифицированные A байты.
+
+Сигнатура `premain` принимает два параметра: строку аргументов (задаётся через `=` после пути к JAR: `-javaagent:agent.jar=debug,port=8080`) и объект `Instrumentation` — главный интерфейс для регистрации трансформеров и управления классами.
+
 ```java
+// Premain: agent загружается ДО main() приложения
 public class MonitoringAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
         System.out.println("Agent started: " + agentArgs);
         inst.addTransformer(new PerformanceTransformer());
+        // Все классы, загружаемые после этого,
+        // пройдут через PerformanceTransformer.transform()
     }
 }
 ```
 
-**Agentmain-агент (dynamic attach):**
-```java
-public class MonitoringAgent {
-    public static void agentmain(String agentArgs, Instrumentation inst) {
-        System.out.println("Agent attached to running JVM");
-        // true = можно retransform уже загруженных классов
-        inst.addTransformer(new PerformanceTransformer(), true);
-    }
-}
-```
+Premain-агент видит каждый загружаемый класс — включая классы фреймворков (Spring, Hibernate), библиотек (Apache HttpClient, JDBC-драйверы) и самого приложения. Именно поэтому APM-инструменты используют premain: они должны инструментировать сторонние библиотеки, а не только код приложения.
+
+### Agentmain: подключение к работающему процессу
+
+Метод `agentmain` вызывается при **dynamic attach** — подключении agent'а к уже работающей JVM. Это принципиально другой сценарий: приложение уже запущено, классы уже загружены, и простая регистрация трансформера не поможет — он будет вызываться только для новых классов, которые ещё не загружены.
+
+Поэтому agentmain обычно использует **retransformation**: повторную трансформацию уже загруженных классов. Для этого трансформер регистрируется с флагом `canRetransform = true`, а затем вызывается `inst.retransformClasses(...)` для нужных классов. JVM передаёт текущий байткод класса через трансформер, получает модифицированный и «горячо» заменяет определение класса в памяти.
+
+Dynamic attach использует `com.sun.tools.attach.VirtualMachine` API: по PID процесса создаётся соединение с JVM, через которое загружается agent JAR. Начиная с Java 21 (JEP 451), dynamic attach требует явного флага `-XX:+EnableDynamicAgentLoading` — без него JVM выдаст предупреждение или откажет в загрузке.
+
+Agentmain незаменим для диагностики production-проблем: вы можете подключить диагностический agent к работающему серверу, собрать данные и отключить его — без перезапуска приложения. Это как подключить диагностическое оборудование к работающему двигателю автомобиля.
+
+### Почему именно два механизма
+
+Разделение на premain и agentmain — не прихоть дизайнеров, а следствие двух принципиально разных use-case'ов. Premain — для «постоянных» agent'ов, которые являются частью конфигурации запуска: APM, code coverage, security monitoring. Agentmain — для «временных» диагностических инструментов: ad-hoc профилирование, сбор thread dump'ов, динамическое включение debug-логирования.
 
 ---
 
-## Instrumentation API
+## Instrumentation API: подробный разбор
 
-### Основной интерфейс
+Мы разобрали жизненный цикл agent'а. Теперь рассмотрим главный интерфейс — `java.lang.instrument.Instrumentation`, который agent получает в `premain`/`agentmain`.
+
+### ClassFileTransformer: перехват загрузки классов
+
+`ClassFileTransformer` — это интерфейс с единственным методом `transform()`, вызываемым JVM при загрузке каждого класса. Метод получает имя класса, ClassLoader, ProtectionDomain и массив байтов оригинального `.class`-файла. Трансформер может вернуть модифицированный массив байтов (если хочет изменить класс) или `null` (если класс не нужно трансформировать).
+
+Критически важный момент: трансформер вызывается для **каждого** загружаемого класса — включая системные (`java.lang.*`, `java.util.*`). Без ранней фильтрации agent замедлит загрузку приложения на порядок. Первые строки `transform()` должны быстро отсеивать ненужные классы.
 
 ```java
-package java.lang.instrument;
+// ClassFileTransformer: ранняя фильтрация критична для производительности
+public byte[] transform(ClassLoader loader, String className,
+                        Class<?> redefined, ProtectionDomain domain,
+                        byte[] classfileBuffer) {
+    if (className == null) return null;          // Анонимные классы
+    if (className.startsWith("java/")) return null;   // JDK
+    if (className.startsWith("sun/")) return null;    // JDK internals
+    if (!className.startsWith("com/example/")) return null; // Не наши
 
-public interface Instrumentation {
-    // Добавить трансформер для новых классов
-    void addTransformer(ClassFileTransformer transformer);
-
-    // С возможностью retransform
-    void addTransformer(ClassFileTransformer transformer, boolean canRetransform);
-
-    // Удалить трансформер
-    boolean removeTransformer(ClassFileTransformer transformer);
-
-    // Retransform уже загруженных классов
-    void retransformClasses(Class<?>... classes);
-
-    // Получить все загруженные классы
-    Class[] getAllLoadedClasses();
-
-    // Размер объекта в памяти
-    long getObjectSize(Object obj);
+    return doTransform(classfileBuffer);  // Дорогая трансформация
 }
 ```
 
-### ClassFileTransformer
+Без фильтрации первых четырёх строк agent попытается трансформировать тысячи системных классов — и startup приложения замедлится в 5-10 раз. Хорошая практика: фильтровать по prefix'у пакета и кэшировать решение «трансформировать/пропустить» для каждого класса.
 
-```java
-public interface ClassFileTransformer {
-    /**
-     * @param loader       ClassLoader, загружающий класс
-     * @param className    Имя класса (e.g., "java/lang/String")
-     * @param classfileBuffer Оригинальный байткод
-     * @return Модифицированный байткод, или null если не трансформируем
-     */
-    byte[] transform(
-        ClassLoader loader,
-        String className,
-        Class<?> classBeingRedefined,
-        ProtectionDomain protectionDomain,
-        byte[] classfileBuffer
-    ) throws IllegalClassFormatException;
-}
-```
+### Retransformation vs Redefinition
 
----
+Instrumentation API предоставляет два механизма изменения уже загруженных классов, и различие между ними принципиальное.
 
-## Создание простого агента
+**Retransformation** (`retransformClasses`) — повторно пропускает класс через зарегистрированные трансформеры. Это безопасный механизм: JVM начинает с оригинального байткода и применяет все трансформеры заново. Если трансформер удалён — его модификации исчезают. Retransformation поддерживает «обратимость» — можно вернуть класс к исходному состоянию.
 
-### Шаг 1: Класс агента
+**Redefinition** (`redefineClasses`) — полная замена байткода класса. Это более низкоуровневый и опасный механизм: вы предоставляете полностью новый байткод, и JVM заменяет определение класса. Ограничения жёсткие: нельзя менять схему класса (добавлять/удалять поля, методы, изменять иерархию наследования). Можно менять только тела методов.
 
-```java
-public class SimpleAgent {
-    public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.println("=== Agent Started ===");
-        inst.addTransformer(new SimpleTransformer());
-    }
+На практике retransformation используется чаще, потому что она безопаснее и обратима. APM-agent'ы используют retransformation: при подключении — трансформируют, при отключении — retransform с пустым трансформером возвращает класс к исходному состоянию.
 
-    static class SimpleTransformer implements ClassFileTransformer {
-        @Override
-        public byte[] transform(ClassLoader loader, String className,
-                              Class<?> redefined, ProtectionDomain domain,
-                              byte[] classfileBuffer) {
+### Manifest: объявление возможностей
 
-            // Фильтр: трансформируем только свои классы
-            if (className == null || !className.startsWith("com/example/app")) {
-                return null;  // Не трансформируем
-            }
-
-            System.out.println("Transforming: " + className);
-
-            // Здесь модификация байткода через ASM
-            return modifyBytecode(classfileBuffer);
-        }
-    }
-}
-```
-
-### Шаг 2: MANIFEST.MF
+Agent объявляет свои возможности через `MANIFEST.MF` внутри JAR-файла. Это декларативная конфигурация, которую JVM читает при загрузке agent'а.
 
 ```
 Manifest-Version: 1.0
-Premain-Class: com.example.agent.SimpleAgent
-Agent-Class: com.example.agent.SimpleAgent
+Premain-Class: com.example.agent.MonitoringAgent
+Agent-Class: com.example.agent.MonitoringAgent
 Can-Retransform-Classes: true
 Can-Redefine-Classes: true
 Boot-Class-Path: asm-9.5.jar
 ```
 
-### Шаг 3: Запуск
-
-```bash
-# Собрать агент
-mvn clean package
-
-# Запустить приложение с агентом
-java -javaagent:target/agent.jar -jar application.jar
-
-# С аргументами
-java -javaagent:agent.jar=debug=true,port=8080 -jar app.jar
-```
+`Premain-Class` указывает класс с методом `premain()`. `Agent-Class` — класс с методом `agentmain()`. Один JAR может иметь оба атрибута — и быть одновременно premain и agentmain agent'ом. `Can-Retransform-Classes: true` разрешает agent'у вызывать `retransformClasses()` — без этого атрибута попытка retransform вызовет `UnsupportedOperationException`. `Boot-Class-Path` добавляет JAR-файлы в bootstrap classpath — необходимо, когда agent'у нужны библиотеки (ASM, ByteBuddy) для трансформации классов, загружаемых bootstrap ClassLoader'ом.
 
 ---
 
-## Модификация байткода с ASM
+## JVMTI: нативный интерфейс
 
-### Базовая структура трансформера
+Java agents через `java.lang.instrument` — это высокоуровневая абстракция. Под капотом они построены на **JVMTI** (JVM Tool Interface) — нативном C API, который предоставляет глубокий доступ к внутреннему состоянию JVM.
 
-```java
-public class PerformanceTransformer implements ClassFileTransformer {
+### Что такое JVMTI и зачем он нужен
 
-    @Override
-    public byte[] transform(ClassLoader loader, String className,
-                          Class<?> redefined, ProtectionDomain domain,
-                          byte[] classfileBuffer) {
+JVMTI появился в Java 5 как замена двум устаревшим интерфейсам: JVMPI (Profiler Interface) и JVMDI (Debugger Interface). Вместо двух отдельных, плохо совместимых API разработчики JVM создали единый мощный интерфейс. JVMTI определён в спецификации JVM и реализован во всех совместимых JVM (HotSpot, OpenJ9, GraalVM).
 
-        if (!shouldTransform(className)) {
-            return null;
-        }
+JVMTI работает через систему **capabilities** (возможностей) и **events** (событий). Agent запрашивает нужные capabilities при загрузке (`can_generate_method_entry_events`, `can_access_local_variables`, `can_generate_garbage_collection_events`), а затем подписывается на интересующие events. JVM вызывает callback-функции agent'а при наступлении событий.
 
-        try {
-            ClassReader reader = new ClassReader(classfileBuffer);
-            ClassWriter writer = new ClassWriter(reader,
-                ClassWriter.COMPUTE_FRAMES);
+### Capabilities и Events
 
-            // Visitor добавляет timing в методы
-            ClassVisitor visitor = new PerformanceClassVisitor(writer);
-            reader.accept(visitor, ClassReader.EXPAND_FRAMES);
+Система capabilities спроектирована с учётом производительности: каждая capability имеет свою «цену» в виде overhead. Если agent не запрашивает `can_generate_method_entry_events` — JVM не вставляет код для генерации событий на входе в каждый метод, и overhead равен нулю. Это позволяет JVM оптимизироваться: если ни один agent не запросил breakpoints — JIT-компилятор может агрессивнее инлайнить методы.
 
-            return writer.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null; // Возвращаем null = используем оригинальный класс
-        }
-    }
-}
-```
+Основные категории events: **класс** (class load, class prepare), **поток** (thread start/end), **метод** (method entry/exit), **память** (GC start/finish, object allocation), **отладка** (breakpoint, single step, exception). Каждая категория требует соответствующей capability.
 
-### Результат трансформации
+### Когда JVMTI вместо java.lang.instrument
 
-**Оригинальный метод:**
-```java
-public User getUser(Long id) {
-    return userRepository.findById(id);
-}
-```
+Для большинства задач `java.lang.instrument` достаточно — он проще, безопаснее и не требует нативного кода. JVMTI нужен в трёх случаях. Первый — максимальная производительность: нативный agent избегает overhead Java-кода и GC. Async-profiler — один из самых популярных профайлеров — написан на C++ и использует JVMTI для получения stack trace'ов без остановки потоков (через `AsyncGetCallTrace`, недокументированный, но широко используемый API). Второй — доступ к данным, недоступным из Java: heap dumps, native method bind events, JIT-compilation events. Третий — кросс-языковое профилирование: когда Java-приложение вызывает нативный код через JNI, JVMTI позволяет профилировать обе стороны.
 
-**После трансформации (декомпилированный):**
-```java
-public User getUser(Long id) {
-    long startTime = System.nanoTime();
-    try {
-        return userRepository.findById(id);
-    } finally {
-        long duration = System.nanoTime() - startTime;
-        MetricsCollector.record("UserService", "getUser", duration);
-    }
-}
-```
+Нативный agent загружается через `-agentpath:/path/to/libagent.so` (Linux) или `-agentpath:/path/to/agent.dll` (Windows) и реализует функцию `Agent_OnLoad()` на C/C++. Это принципиально отличается от `-javaagent:`, который загружает Java-код.
 
 ---
 
-## Dynamic Attach API
+## Практические use-case'ы
 
-### Подключение к работающей JVM
+Мы разобрали механизмы. Теперь рассмотрим конкретные области применения agent'ов — от мониторинга до безопасности.
 
-```java
-import com.sun.tools.attach.*;
+### Мониторинг и APM
 
-public class DynamicAttacher {
-    public static void main(String[] args) throws Exception {
-        // Список всех работающих JVM
-        for (VirtualMachineDescriptor desc : VirtualMachine.list()) {
-            System.out.printf("PID: %s, Name: %s%n",
-                desc.id(), desc.displayName());
-        }
+APM (Application Performance Monitoring) — крупнейшая область применения Java agents. Коммерческие APM-продукты (Datadog, New Relic, Dynatrace, Elastic APM) и open-source решения (OpenTelemetry Java Agent) представляют собой premain-agent'ы с модульной архитектурой.
 
-        // Подключение к конкретной JVM
-        String pid = args[0];
-        String agentPath = args[1];
+Типичный APM-agent содержит десятки ClassFileTransformer'ов, каждый из которых специализируется на конкретном фреймворке или библиотеке: JDBC (перехват SQL-запросов), HTTP-клиенты (перехват исходящих запросов), Servlet/Spring MVC (перехват входящих запросов), Redis/Kafka/RabbitMQ (перехват операций с очередями). Трансформеры добавляют код, который записывает время начала и окончания операции, параметры (URL, SQL-запрос, имя очереди) и результат (код ответа, ошибка).
 
-        VirtualMachine vm = VirtualMachine.attach(pid);
-        try {
-            vm.loadAgent(agentPath, "runtime-args");
-            System.out.println("Agent loaded successfully");
-        } finally {
-            vm.detach();
-        }
-    }
-}
+```
+┌────────────────────────────────────────────────┐
+│ APM Agent (premain)                             │
+│                                                 │
+│  Трансформеры:                                  │
+│   JDBC       → время SQL-запросов, тексты      │
+│   HTTP       → время HTTP-запросов, URL, коды  │
+│   Spring     → @Controller, @Service timing    │
+│   Redis      → команды, latency               │
+│                                                 │
+│  Data Collection:                               │
+│   Transaction traces, errors, metrics          │
+│                                                 │
+│  Reporter (daemon thread):                      │
+│   Batch → compress → HTTPS → APM Backend       │
+│   (каждые 10-60 секунд)                        │
+└────────────────────────────────────────────────┘
 ```
 
-**Использование:**
-```bash
-# Найти процесс
-jps -l
-# Output: 12345 com.example.Application
+Собранные данные буферизуются в памяти и периодически (каждые 10-60 секунд) отправляются фоновым потоком (daemon thread) на backend через HTTPS. Батчинг и сжатие минимизируют network overhead.
 
-# Подключить агент
-java -cp .:$JAVA_HOME/lib/tools.jar DynamicAttacher 12345 agent.jar
-```
+### Профилирование
+
+Профайлеры (YourKit, JProfiler, async-profiler) используют как Java agents, так и JVMTI. Типичный профайлер комбинирует оба подхода: JVMTI для низкоуровневых данных (CPU sampling, native stack traces, GC events), Java agent для инструментации бизнес-кода (method timing, allocation tracking).
+
+Async-profiler заслуживает отдельного упоминания: он использует `perf_events` Linux и `AsyncGetCallTrace` JVMTI для получения CPU-профиля без остановки потоков — так называемое «sampling without safepoints». Традиционные профайлеры останавливают все потоки на safepoint для сбора stack trace'ов, что искажает результаты (safepoint bias). Async-profiler решает эту проблему на уровне JVMTI native agent'а.
+
+### Code Coverage
+
+JaCoCo (Java Code Coverage) — стандартный инструмент измерения покрытия кода тестами — работает как Java agent. При загрузке каждого класса JaCoCo вставляет «зонды» (probes) — булевые флаги, которые переключаются при прохождении через соответствующие участки кода. После завершения тестов JaCoCo анализирует, какие зонды были активированы, и генерирует отчёт о покрытии.
+
+JaCoCo использует ASM для трансформации байткода — выбор обусловлен минимальным overhead: зонд — это одна инструкция `ALOAD` + `ICONST_1` + `BASTORE`, которая добавляет менее 1 наносекунды к каждому прохождению.
+
+### Безопасность (RASP)
+
+Runtime Application Self-Protection (RASP) — относительно новая область, где Java agents используются для защиты приложения изнутри. RASP-agent инструментирует опасные операции (SQL-запросы, файловый ввод-вывод, выполнение команд ОС) и анализирует параметры на предмет injection-атак. В отличие от WAF (Web Application Firewall), который работает на уровне HTTP, RASP видит контекст вызова: какой метод вызвал SQL-запрос, с какими параметрами, из какого потока. Это позволяет обнаруживать SQL injection даже если payload прошёл через WAF.
+
+### Hot Reload и Live Debugging
+
+Ещё одна практическая область — hot reload кода в процессе разработки. Инструменты вроде JRebel и Spring DevTools используют agentmain + retransformation для замены тела методов без перезапуска приложения. Когда разработчик изменяет исходный код и компилирует его, agent обнаруживает изменённый `.class`-файл и вызывает `retransformClasses()` для обновления определения класса в работающей JVM. Ограничение остаётся: нельзя менять структуру класса (добавлять поля или методы), но изменение логики внутри существующих методов работает мгновенно — без потери состояния приложения.
 
 ---
 
-## Retransformation
+## Создание простого agent'а: пошагово
 
-### Перезагрузка уже загруженных классов
+Теория позади — рассмотрим минимальный работающий agent. Для создания agent'а нужны три компонента: класс с `premain`, `MANIFEST.MF` и правильная сборка в JAR.
 
-```java
-public class ReloadableAgent {
-    private static Instrumentation instrumentation;
-
-    public static void agentmain(String args, Instrumentation inst) {
-        instrumentation = inst;
-        inst.addTransformer(new HotSwapTransformer(), true);
-    }
-
-    // Вызывается через JMX или HTTP endpoint
-    public static void reloadClass(String className) throws Exception {
-        Class<?> clazz = Class.forName(className);
-
-        if (!instrumentation.isModifiableClass(clazz)) {
-            throw new IllegalStateException("Not modifiable: " + className);
-        }
-
-        instrumentation.retransformClasses(clazz);
-        System.out.println("Retransformed: " + className);
-    }
-
-    // Перезагрузить все классы пакета
-    public static void reloadPackage(String packagePrefix) throws Exception {
-        List<Class<?>> classes = new ArrayList<>();
-
-        for (Class<?> clazz : instrumentation.getAllLoadedClasses()) {
-            if (clazz.getName().startsWith(packagePrefix) &&
-                instrumentation.isModifiableClass(clazz)) {
-                classes.add(clazz);
-            }
-        }
-
-        instrumentation.retransformClasses(classes.toArray(new Class[0]));
-        System.out.println("Retransformed " + classes.size() + " classes");
-    }
-}
-```
-
----
-
-## APM Agent Architecture
-
-### Структура коммерческих APM
-
-**Как работают New Relic, DataDog, Dynatrace:**
-
-```
-┌──────────────────────────────────────┐
-│ Application JVM                      │
-│                                      │
-│ ┌────────────────────────────────┐  │
-│ │ Bootstrap Agent (premain)      │  │
-│ │ - Инжектирует фреймворк        │  │
-│ └─────────┬──────────────────────┘  │
-│           │                          │
-│ ┌─────────▼──────────────────────┐  │
-│ │ Instrumentation Modules        │  │
-│ │ • JDBC → перехват DB queries   │  │
-│ │ • HTTP → перехват requests     │  │
-│ │ • Spring → @Controller         │  │
-│ │ • Redis → cache operations     │  │
-│ └─────────┬──────────────────────┘  │
-│           │                          │
-│ ┌─────────▼──────────────────────┐  │
-│ │ Data Collection                │  │
-│ │ - Transaction traces           │  │
-│ │ - Error tracking               │  │
-│ │ - Metrics buffering            │  │
-│ └─────────┬──────────────────────┘  │
-│           │                          │
-│ ┌─────────▼──────────────────────┐  │
-│ │ Reporter (background thread)   │  │
-│ │ - Batch send every 60s         │  │
-│ └─────────┬──────────────────────┘  │
-└───────────┼──────────────────────────┘
-            │ HTTPS
-            ↓
-    ┌──────────────┐
-    │ APM Backend  │
-    │ (Cloud SaaS) │
-    └──────────────┘
-```
-
-### Упрощённый APM агент
+Класс agent'а регистрирует трансформер, который фильтрует классы по prefix'у пакета. Внутри трансформера используется ASM или ByteBuddy для модификации байткода (подробнее о библиотеках — в [[jvm-bytecode-manipulation]]).
 
 ```java
-public class SimpleAPMAgent {
-    private static final MetricsCollector metrics = new MetricsCollector();
-
+// Минимальный agent: фильтрация + делегирование трансформации
+public class SimpleAgent {
     public static void premain(String args, Instrumentation inst) {
-        // Фоновый reporter
-        startReporter();
-
-        // Трансформеры для разных слоёв
-        inst.addTransformer(new JDBCTransformer());    // БД
-        inst.addTransformer(new HTTPTransformer());    // HTTP
-        inst.addTransformer(new SpringTransformer());  // Spring
-    }
-
-    private static void startReporter() {
-        Thread reporter = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(60_000);  // Отправка каждую минуту
-                    metrics.flush();
-                } catch (InterruptedException e) {
-                    break;
-                }
-            }
-        }, "apm-reporter");
-        reporter.setDaemon(true);
-        reporter.start();
+        inst.addTransformer((loader, name, cls, domain, bytes) -> {
+            if (name == null || !name.startsWith("com/example/"))
+                return null;            // Ранняя фильтрация
+            return transformClass(bytes); // ASM/ByteBuddy внутри
+        });
     }
 }
 ```
 
----
-
-## Performance Considerations
-
-### Overhead агентов
-
-```
-Приложение без агента:       100ms (baseline)
-Лёгкий агент (logging):      105ms (+5%)
-Средний (metrics):           115ms (+15%)
-Тяжёлый (full APM):          130ms (+30%)
-Плохо написанный агент:      180ms (+80%) ⚠️
-```
-
-### Оптимизация производительности
-
-**1. Ранняя фильтрация:**
-```java
-@Override
-public byte[] transform(ClassLoader loader, String className, ...) {
-    // Быстрое отклонение
-    if (className == null) return null;
-    if (className.startsWith("java/")) return null;
-    if (className.startsWith("sun/")) return null;
-    if (className.contains("$$")) return null;  // Generated classes
-
-    // Только свои классы
-    if (!className.startsWith("com/example/app")) return null;
-
-    // Теперь дорогая трансформация
-    return doTransform(bytecode);
-}
-```
-
-**2. Кэширование:**
-```java
-private static final ConcurrentHashMap<String, Boolean> classCache =
-    new ConcurrentHashMap<>();
-
-private static boolean shouldInstrument(String className) {
-    return classCache.computeIfAbsent(className, key -> {
-        return expensiveAnalysis(key);  // Только один раз на класс
-    });
-}
-```
-
-**3. Батчинг метрик:**
-```java
-static class BatchedMetrics {
-    private final AtomicLong counter = new AtomicLong();
-
-    public void record(long duration) {
-        counter.incrementAndGet();
-
-        // Flush каждые 1000 вызовов, а не на каждом
-        if (counter.get() % 1000 == 0) {
-            flush();
-        }
-    }
-}
-```
-
-**4. COMPUTE_MAXS вместо COMPUTE_FRAMES:**
-```java
-// Быстрее, но требует корректного байткода
-ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
-```
+MANIFEST.MF объявляет agent и его возможности. После сборки в JAR (`mvn package` или `gradle shadowJar`) agent запускается через `-javaagent:target/agent.jar -jar app.jar`.
 
 ---
 
-## Типичные проблемы
+## Performance: overhead и оптимизация
 
-### 1. ClassCircularityError
+### Сколько стоит agent
 
-**Причина:** Загрузка класса во время трансформации этого же класса
+Overhead agent'а зависит от количества трансформируемых классов и тяжести инструментации. Ориентировочные значения для типичного web-приложения:
 
-**Решение:** Предзагрузить хелперы в premain()
-```java
-public static void premain(String args, Instrumentation inst) {
-    // Предзагрузить все вспомогательные классы
-    try {
-        Class.forName("com.example.agent.MetricsCollector");
-        Class.forName("com.example.agent.TimingHelper");
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-
-    inst.addTransformer(new MyTransformer());
-}
+```
+Без agent'а:                     baseline (100%)
+Лёгкий agent (logging):          +3-5%
+Средний (APM, основные метрики): +5-15%
+Тяжёлый (full distributed trace):+15-30%
+Плохо написанный agent:          +50-100%
 ```
 
-### 2. VerifyError после трансформации
+Разница между «средним» и «плохо написанным» — в оптимизации. Три главных источника overhead: трансформация классов при загрузке (замедляет startup), инструментированный код в hot-path методах (замедляет каждый вызов), и отправка телеметрии (потребляет CPU и сеть).
 
-**Причина:** Некорректный байткод
+### Оптимизация: три принципа
 
-**Решение:** Использовать `COMPUTE_FRAMES`
-```java
-ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
-```
+**Принцип 1: ранняя фильтрация.** 90% классов в типичном приложении — системные и библиотечные, которые не нужно трансформировать. Проверка prefix'а — наносекунды; попытка трансформации — микросекунды. При загрузке тысяч классов эта разница превращается в секунды startup'а.
 
-### 3. Медленный startup
+**Принцип 2: кэширование решений.** Если трансформер выполняет «дорогой» анализ (проверка аннотаций, analysis байткода), результат нужно кэшировать. `ConcurrentHashMap<String, Boolean>` с `computeIfAbsent` — стандартный паттерн.
 
-**Причина:** Трансформация слишком многих классов
+**Принцип 3: батчинг метрик.** Отправка метрики при каждом вызове метода — антипаттерн. APM-agent'ы буферизуют метрики в lock-free структурах данных и отправляют батчами каждые 10-60 секунд. Это снижает network overhead и давление на GC (меньше аллокаций).
 
-**Решение:** Добавить фильтрацию (см. выше)
-
-### 4. NoClassDefFoundError
-
-**Причина:** Agent классы не в bootstrap classpath
-
-**Решение:** `Boot-Class-Path` в MANIFEST.MF
-```
-Boot-Class-Path: asm-9.5.jar my-agent-helpers.jar
-```
+Также важен выбор между `COMPUTE_FRAMES` и `COMPUTE_MAXS` при использовании ASM. `COMPUTE_FRAMES` безопаснее (ASM сам вычисляет stack map frames), но дороже — для каждого метода выполняется dataflow analysis. `COMPUTE_MAXS` быстрее, но требует, чтобы вы корректно указали stack map frames сами. Для production agent'ов часто используют `COMPUTE_MAXS` с ручным управлением frames для performance-critical классов.
 
 ---
 
-## JVMTI Native Agents
+## Типичные проблемы и их решения
 
-Java agents построены поверх **JVMTI** (JVM Tool Interface) — низкоуровневого C API.
+### ClassCircularityError
 
-**Возможности JVMTI:**
-- Breakpoint callbacks
-- GC events
-- Thread lifecycle
-- Heap inspection
-- Method entry/exit на native уровне
+Самая коварная ошибка в agent-разработке. Возникает, когда трансформер использует класс, который сам ещё загружается. Пример: трансформер обращается к `MetricsCollector`, JVM начинает загружать `MetricsCollector`, вызывает трансформер для этого класса, трансформер снова обращается к `MetricsCollector` — циркулярная зависимость. Решение: предзагрузить все хелперные классы в `premain()` через `Class.forName()` до регистрации трансформера.
 
-**Когда использовать:**
-- Нужна максимальная производительность
-- Требуется доступ к JVM internals
-- Кросс-язычное профилирование
+### VerifyError после трансформации
 
-**Пример нативного агента:**
-```c
-// agent.c
-JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) {
-    jvmtiEnv *jvmti;
-    (*jvm)->GetEnv(jvm, (void **)&jvmti, JVMTI_VERSION_1_2);
+Если трансформер генерирует невалидный байткод — JVM отклонит класс с `VerifyError`. Это часто происходит при некорректных stack map frames. Решение: использовать `ClassWriter.COMPUTE_FRAMES` для автоматического вычисления, или ByteBuddy Advice API, который генерирует корректный байткод автоматически.
 
-    // Запросить возможности
-    jvmtiCapabilities capabilities;
-    memset(&capabilities, 0, sizeof(capabilities));
-    capabilities.can_generate_method_entry_events = 1;
-    jvmti->AddCapabilities(&capabilities);
+### Медленный startup
 
-    // Установить callbacks
-    // ...
+Agent трансформирует слишком много классов. Решение: добавить whitelist пакетов, кэшировать решения о трансформации, использовать `ByteBuddy AgentBuilder` с `.ignore()` для системных классов.
 
-    return JNI_OK;
-}
+### NoClassDefFoundError
 
-// Компиляция:
-// gcc -shared -fPIC -I$JAVA_HOME/include -o libagent.so agent.c
+Классы agent'а (ASM, ByteBuddy) не видны ClassLoader'у инструментируемого класса. Решение: добавить зависимости в `Boot-Class-Path` manifest-атрибута, или использовать shading (maven-shade-plugin) для включения зависимостей прямо в agent JAR.
 
-// Запуск:
-// java -agentpath:/path/to/libagent.so -jar app.jar
-```
+### Конфликт нескольких agent'ов
+
+Два agent'а трансформируют один класс — результат зависит от порядка `-javaagent:` флагов. Решение: документировать порядок agent'ов, использовать retransformation-safe трансформеры (которые работают корректно независимо от того, был ли байткод уже модифицирован).
 
 ---
 
-## Debugging
+## Распространённые заблуждения
 
-### Включение debug-логов
-
-```java
-public class DebugAgent {
-    private static final boolean DEBUG = Boolean.getBoolean("agent.debug");
-
-    public static void premain(String args, Instrumentation inst) {
-        if (DEBUG) {
-            System.out.println("Agent args: " + args);
-            System.out.println("Retransform supported: " +
-                inst.isRetransformClassesSupported());
-        }
-
-        inst.addTransformer(new DebugTransformer());
-    }
-
-    static class DebugTransformer implements ClassFileTransformer {
-        @Override
-        public byte[] transform(...) {
-            if (DEBUG && className.startsWith("com/example")) {
-                System.out.println("Transforming: " + className);
-            }
-            return null;
-        }
-    }
-}
-
-// java -Dagent.debug=true -javaagent:agent.jar -jar app.jar
-```
+| Заблуждение | Реальность |
+|-------------|-----------|
+| «Agent'ы значительно замедляют приложение» | Хорошо написанный agent добавляет **1-5% overhead**. Проблема — в неэффективной фильтрации и частом логировании, не в самой технологии |
+| «premain и agentmain — одно и то же» | premain запускается **ДО main()** и видит все загружаемые классы. agentmain подключается к **работающей JVM** и требует retransformation для уже загруженных классов |
+| «Agent может модифицировать любой класс» | Системные классы (`java.lang.*`) часто **нельзя retransform**. Bootstrap-loaded классы имеют ограничения. Нельзя менять схему класса (добавлять/удалять поля/методы) |
+| «ClassFileTransformer вызывается один раз» | Трансформер вызывается при **каждой загрузке** класса. С retransformation может вызываться **повторно** для одного и того же класса |
+| «ASM — единственный вариант для agent'ов» | ByteBuddy `AgentBuilder` и `Advice` API — **более высокоуровневые** и безопасные альтернативы. ASM нужен только для performance-critical agent'ов |
+| «Can-Retransform-Classes всегда нужен» | Retransformation **дорогая**: JVM перезагружает класс, JIT-компилятор сбрасывает оптимизации. Для startup-only инструментации достаточно premain без retransform |
+| «Agent работает в том же ClassLoader, что и приложение» | Agent может иметь **свой ClassLoader** (`Boot-Class-Path`). Это **изолирует** зависимости agent'а от зависимостей приложения |
+| «Dynamic attach работает везде» | Начиная с Java 21, dynamic attach **ограничен** по умолчанию. Требуется `-XX:+EnableDynamicAgentLoading` |
+| «Один agent на JVM» | Можно добавить **несколько**: `-javaagent:a.jar -javaagent:b.jar`. Порядок определяет порядок трансформации |
+| «Исключение в трансформере ломает JVM» | JVM **продолжает** работать — но класс загрузится без трансформации. Всегда возвращайте `null` в `catch`-блоке |
 
 ---
 
-## Связанные темы
+## Когда НЕ использовать agent'ы
 
-**Манипуляция байткодом:**
-- [[jvm-bytecode-manipulation]] — ASM, Javassist, ByteBuddy
-- [[jvm-class-loader-deep-dive]] — Архитектура загрузки классов
-- [[jvm-jit-compiler]] — Как JIT взаимодействует с агентами
-
-**Альтернативные подходы:**
-- [[jvm-annotations-processing]] — Генерация кода на compile-time
-- AspectJ load-time weaving
-- Spring AOP (proxy-based)
-
-**Мониторинг:**
-- JMX для runtime мониторинга
-- [[jvm-profiling]] — Профилирование
-- [[jvm-production-debugging]] — JFR, thread dumps
-
----
-
-## Чек-лист
-
-### Разработка агента
-- [ ] Выбрать тип агента (premain vs agentmain)
-- [ ] Создать MANIFEST.MF с Premain-Class/Agent-Class
-- [ ] Реализовать ClassFileTransformer
-- [ ] Добавить раннюю фильтрацию классов
-- [ ] Обрабатывать исключения (никогда не ронять приложение)
-- [ ] Использовать COMPUTE_FRAMES для безопасности
-- [ ] Тестировать с целевым приложением
-
-### Build & Packaging
-- [ ] Включить все зависимости (maven-shade-plugin)
-- [ ] Установить Boot-Class-Path если нужно
-- [ ] Документировать command-line аргументы
-- [ ] Предоставить примеры запуска
-
-### Производительность
-- [ ] Фильтровать классы перед трансформацией
-- [ ] Кэшировать дорогие операции
-- [ ] Батчинг для метрик/логов
-- [ ] Минимизировать метод exit инструментацию
-- [ ] Профилировать overhead агента
-- [ ] Тестировать с production load
-
-### Безопасность
-- [ ] Проверить, что агент можно отключить
-- [ ] Защитить чувствительные данные в логах
-- [ ] Использовать HTTPS для телеметрии
-- [ ] Реализовать rate limiting
-- [ ] Аудит собираемых данных
-
-### Тестирование
-- [ ] Разные версии JVM (8, 11, 17, 21)
-- [ ] Разные ClassLoaders
-- [ ] Dynamic attach
-- [ ] Retransformation
-- [ ] Нет ClassCircularityError
-- [ ] Load тесты для оценки overhead
-
----
-
-**Summary:** Java agents — это мощный механизм runtime модификации байткода через `java.lang.instrument` API. Используются в APM инструментах (New Relic, DataDog), профайлерах (YourKit), code coverage (JaCoCo). Premain для startup инструментации, agentmain для dynamic attach. Всегда фильтруйте классы рано, используйте ASM COMPUTE_FRAMES, минимизируйте overhead. Коммерческие APM построены на этих основах с модульной архитектурой трансформеров для разных слоёв (JDBC, HTTP, Spring, Redis).
-
----
-
-## Мифы и заблуждения
-
-| Миф | Реальность |
-|-----|-----------|
-| "Agents замедляют приложение значительно" | Хорошо написанный agent добавляет 1-5% overhead. Проблема в неэффективной фильтрации и частом логировании |
-| "premain и agentmain взаимозаменяемы" | premain запускается ДО main(). agentmain — через dynamic attach к запущенному процессу. Разные use cases |
-| "Agent может модифицировать любой класс" | Системные классы (java.lang.*) часто нельзя retransform. Bootstrap loaded classes имеют ограничения |
-| "ClassFileTransformer вызывается один раз" | Transformer вызывается при каждой загрузке класса. С retransformation — может вызываться повторно |
-| "ASM — единственный вариант" | ByteBuddy, Javassist — более высокоуровневые альтернативы. ASM быстрее, но сложнее |
-| "Can-Retransform-Classes всегда нужен" | Retransformation дорогая. Для startup-only инструментации достаточно premain без retransform |
-| "Agent работает в том же classloader что и app" | Agent может иметь свой classloader (Boot-Class-Path). Это изолирует зависимости |
-| "Dynamic attach работает везде" | На некоторых JVM/ОС dynamic attach отключен по безопасности. -XX:+EnableDynamicAgentLoading |
-| "Один agent на JVM" | Можно добавить несколько agents: -javaagent:a.jar -javaagent:b.jar. Порядок имеет значение |
-| "Исключение в transformer ломает JVM" | JVM продолжает работать, но класс может не загрузиться. Всегда возвращайте null при ошибке |
+Agent'ы — мощный инструмент, но не универсальный. Не используйте agent для реализации бизнес-логики — это затрудняет отладку, тестирование и понимание кода. Не используйте agent, когда достаточно annotation processor'а (compile-time code generation): annotation processors безопаснее, потому что ошибки обнаруживаются при компиляции. Не используйте agent для задач, которые решаются Spring AOP: если вы уже используете Spring, proxy-based AOP проще и прозрачнее. Agent оправдан, когда нужна инструментация сторонних библиотек без доступа к исходному коду, когда нужно dynamic attach к работающему процессу, или когда overhead Spring AOP proxy'ей неприемлем.
 
 ---
 
@@ -749,17 +381,40 @@ public class DebugAgent {
 
 | CS-концепция | Применение в Java Agents |
 |--------------|-------------------------|
-| **Bytecode Instrumentation** | Модификация скомпилированного кода без доступа к исходникам. AOP на уровне bytecode |
-| **Aspect-Oriented Programming** | Agents реализуют cross-cutting concerns (logging, monitoring) без изменения business logic |
-| **Proxy Pattern** | Agents могут обернуть методы в proxy-like логику (before/after/around advice) |
-| **Class Loading Interception** | ClassFileTransformer перехватывает загрузку классов — hook в ClassLoader chain |
-| **JVM Tool Interface (JVMTI)** | Instrumentation API построен на JVMTI — native interface для profilers и debuggers |
-| **Dynamic Code Generation** | ASM/ByteBuddy генерируют bytecode в runtime — метапрограммирование на низком уровне |
-| **Attach API** | Dynamic attach использует процессный socket/pipe для коммуникации с JVM |
-| **Stack Frame Computation** | COMPUTE_FRAMES автоматически вычисляет stack map frames, требуемые с Java 7+ |
-| **Manifest Attributes** | MANIFEST.MF декларирует agent capabilities — convention-based configuration |
-| **Two-Phase Class Loading** | Классы загружаются в два этапа: find (читаем bytes) → define (парсим в Class). Transformer работает между ними |
+| **Bytecode Instrumentation** | Модификация скомпилированного кода без доступа к исходникам — AOP на уровне bytecode |
+| **Aspect-Oriented Programming** | Agent'ы реализуют cross-cutting concerns (logging, monitoring) без изменения business logic |
+| **Proxy Pattern** | Agent'ы оборачивают методы в proxy-like логику (before/after/around advice) |
+| **Class Loading Interception** | ClassFileTransformer — hook в ClassLoader chain, перехватывающий загрузку классов |
+| **JVMTI** | Нативный C API — фундамент всех инструментов профилирования и отладки JVM |
+| **Dynamic Code Generation** | ASM/ByteBuddy генерируют байткод в runtime — метапрограммирование на низком уровне |
+| **Attach API** | Межпроцессное взаимодействие через Unix domain socket / named pipe для подключения к JVM |
+| **Stack Frame Computation** | COMPUTE_FRAMES автоматически вычисляет stack map frames, требуемые JVM verifier'ом |
+| **Two-Phase Class Loading** | Классы загружаются в два этапа: find (чтение bytes) → define (создание Class). Трансформер работает между ними |
 
 ---
 
-*Проверено: 2026-01-09 — Педагогический контент проверен*
+## Связь с другими темами
+
+**[[jvm-bytecode-manipulation]]** — Bytecode manipulation (ASM, ByteBuddy, Javassist) является «двигателем» внутри Java agents. Agent через Instrumentation API перехватывает загрузку класса и получает сырые байты; библиотека bytecode manipulation трансформирует эти байты, добавляя инструментацию. Без понимания ASM visitor pattern или ByteBuddy Advice API невозможно написать ClassFileTransformer, который корректно модифицирует байткод. Рекомендуется сначала изучить bytecode manipulation на простых примерах, затем переходить к agents как к механизму доставки трансформаций.
+
+**[[jvm-profiling]]** — Профайлеры (YourKit, JProfiler, async-profiler) внутренне построены на Java agents и JVMTI. Понимание agents помогает разобраться, как профайлер собирает метрики без изменения исходного кода: agent инструментирует method entry/exit для timing, а JVMTI предоставляет нативные callbacks для GC events и thread lifecycle. Если вы разрабатываете custom monitoring — знание agents обязательно; если только используете профайлеры — достаточно понимать принцип для интерпретации overhead.
+
+**[[observability]]** — APM-инструменты (Datadog, New Relic, Dynatrace) — это production-grade Java agents, реализующие distributed tracing, metrics collection и error tracking. Каждый APM agent содержит модульные ClassFileTransformer'ы для разных фреймворков (JDBC, HTTP, Spring, gRPC). Изучение agents даёт понимание, почему APM добавляет определённый overhead и как его минимизировать через фильтрацию и батчинг. Рекомендуется изучить agents перед настройкой APM в production.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Lindholm, T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition, Chapter 5: Loading, Linking, and Initializing. — Описывает процесс загрузки классов, в который встраивается ClassFileTransformer. Фундамент для понимания того, на каком этапе agent модифицирует байткод.
+
+- Oracle (2004). *JSR-163: Java Platform Profiling Architecture*. — Спецификация, которая ввела `java.lang.instrument` и JVMTI в Java 5. Объясняет design decisions и мотивацию создания agent API вместо JVMPI/JVMDI.
+
+- Oaks, S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond*, 2nd Edition. — Главы о мониторинге и диагностике описывают использование agent'ов для сбора метрик производительности и их влияние на JIT-компиляцию.
+
+- Venners, B. (2000). *Inside the Java Virtual Machine*, 2nd Edition. — Подробное описание class loading и верификации байткода — процессов, которые agent'ы перехватывают и модифицируют через ClassFileTransformer.
+
+- Winterhalter, R. (2020). *The Definitive Guide to Java Agents*. infoq.com. — Практическое руководство от создателя ByteBuddy по разработке Java agent'ов с использованием AgentBuilder и Advice API. Лучший стартовый ресурс для практической разработки.
+
+---
+
+*Проверено: 2026-02-11 — Педагогический контент расширен: теория, аналогии, история, терминология*

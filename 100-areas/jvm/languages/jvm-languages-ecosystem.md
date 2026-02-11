@@ -14,9 +14,14 @@ type: comparison
 status: published
 area: programming
 confidence: high
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-virtual-machine-concept]]"
 related:
   - "[[jvm-basics-history]]"
   - "[[kotlin-basics]]"
+  - "[[kotlin-coroutines]]"
+  - "[[kotlin-multiplatform]]"
   - "[[java-modern-features]]"
 sources:
   - "https://www.baeldung.com/jvm-languages"
@@ -846,13 +851,25 @@ Clojure  █  1%
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[jvm-basics-history]] — как работает JVM
-- [[kotlin-basics]] — основы Kotlin
-- [[kotlin-coroutines]] — асинхронное программирование
-- [[kotlin-multiplatform]] — кроссплатформенная разработка
-- [[java-modern-features]] — современные возможности Java 17-21
+**[[jvm-basics-history]]** — все JVM-языки (Kotlin, Scala, Clojure, Groovy) работают поверх одной виртуальной машины и компилируются в один и тот же bytecode. Понимание архитектуры JVM объясняет общие ограничения: type erasure в generics, single inheritance, garbage collection — эти свойства наследуют все JVM-языки. Начните с JVM basics, чтобы понять, что объединяет языки экосистемы и почему их interoperability возможна.
+
+**[[kotlin-basics]]** — Kotlin стал доминирующим альтернативным JVM-языком благодаря прагматичному подходу: null-safety, data classes, coroutines при сохранении полной совместимости с Java. Знакомство с Kotlin после обзора экосистемы позволяет оценить его design decisions в контексте проблем Java и подходов Scala. Рекомендуется изучать Kotlin basics как первый шаг после понимания ландшафта JVM-языков.
+
+**[[kotlin-coroutines]]** — coroutines в Kotlin — один из самых ярких примеров того, как JVM-язык может добавить модель конкурентности поверх существующей платформы. Сравнение с Scala Futures, Clojure core.async и Java Virtual Threads показывает разные философии решения одной проблемы — асинхронного программирования на JVM. Изучение coroutines после обзора экосистемы даёт более глубокое понимание trade-offs каждого подхода.
+
+**[[kotlin-multiplatform]]** — KMP демонстрирует уникальную эволюцию JVM-языка за пределы JVM: один язык компилируется в JVM bytecode, Native (LLVM) и JavaScript. Ни один другой JVM-язык не достиг такого уровня кроссплатформенности. Понимание экосистемы JVM-языков помогает оценить амбициозность и уникальность KMP-подхода.
+
+**[[java-modern-features]]** — Java 8-21 активно перенимает идеи из альтернативных JVM-языков: lambdas из Scala, records из Kotlin data classes, virtual threads как ответ на Kotlin coroutines. Сравнение оригинальных реализаций в альтернативных языках с адаптациями в Java показывает компромиссы backward compatibility. Изучайте параллельно для понимания эволюции экосистемы.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Bloch J. (2018). *Effective Java, 3rd Edition.* — Каноническая книга по Java, помогает понять, какие проблемы языка мотивировали создание Kotlin и Scala, и почему modern Java перенимает их решения.
+- Urma R.-G., Fusco M., Mycroft A. (2018). *Modern Java in Action.* — Покрывает функциональные фичи Java 8+, позволяет сравнить подходы Java и Scala к streams, lambdas и pattern matching.
+- Subramaniam V. (2014). *Functional Programming in Java.* — Функциональное программирование на JVM через призму Java, даёт базу для понимания FP-подходов Scala и Clojure.
 
 ---
 

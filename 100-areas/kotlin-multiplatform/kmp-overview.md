@@ -403,4 +403,20 @@ Netflix, например, использует KMP для mobile, TV apps и ba
 
 ---
 
+## Связь с другими темами
+
+**[[kotlin-overview]]** — Kotlin Multiplatform построен на фундаменте языка Kotlin и его экосистемы. Понимание ключевых возможностей Kotlin (null safety, extension functions, sealed classes, DSL builders) критически важно для эффективной работы с KMP. Все мультиплатформенные абстракции (expect/actual, common source sets) опираются на систему типов и компилятор Kotlin. Изучение основ языка необходимо до погружения в мультиплатформенную разработку.
+
+**[[kotlin-coroutines]]** — Корутины являются основным механизмом асинхронного программирования в KMP. Они обеспечивают единый подход к concurrency на всех платформах: JVM использует thread pool, Native — worker threads, а JS — event loop. Понимание structured concurrency, Flow, Channel и CoroutineScope необходимо для написания shared-кода, работающего корректно на каждой целевой платформе. Без корутин невозможно реализовать networking, базы данных и UI-обновления в KMP.
+
+**[[android-architecture-patterns]]** — Android является основной платформой, где KMP чаще всего внедряется первым. Паттерны Android-архитектуры (MVVM, MVI, Clean Architecture) напрямую переносятся в KMP через shared ViewModel и UseCase слои. Опыт работы с Jetpack Compose, Navigation Component и ViewModel помогает быстрее освоить Compose Multiplatform и мультиплатформенную навигацию.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундаментальное руководство по языку Kotlin от разработчиков JetBrains. Необходимо для глубокого понимания языковых механизмов, которые лежат в основе KMP: системы типов, корутин, DSL и взаимодействия с JVM.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию идиоматичного Kotlin-кода. Помогает избежать типичных ошибок при создании shared-модулей KMP и формирует правильные привычки в мультиплатформенной разработке.
+3. **Martin R. (2017).** *Clean Architecture.* — Принципы проектирования архитектуры, которые лежат в основе разделения shared и platform-specific кода в KMP. Концепции Dependency Inversion и Boundary Objects напрямую применяются при проектировании мультиплатформенных модулей.
+
+---
+
 *Проверено: 2026-01-09 | KMP Stable, Kotlin 2.1.21, Compose Multiplatform iOS Stable*

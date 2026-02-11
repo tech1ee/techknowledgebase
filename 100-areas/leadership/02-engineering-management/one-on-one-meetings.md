@@ -19,6 +19,8 @@ related:
   - "[[em-fundamentals]]"
   - "[[performance-management]]"
   - "[[delegation]]"
+prerequisites:
+  - "[[em-fundamentals]]"
 ---
 
 # 1-on-1 Meetings: Главный инструмент менеджера
@@ -726,6 +728,22 @@ that it's the employee's meeting, not yours."
 - "The Making of a Manager" by Julie Zhuo — 1-on-1 chapter
 - "Radical Candor" by Kim Scott — direct but caring conversations
 - "Resilient Management" by Lara Hogan — practical scripts
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — 1-on-1 встречи — это практическая реализация фундаментальных принципов EM. Servant leadership, multiplier effect и psychological safety — все эти концепции воплощаются именно через регулярные качественные 1-on-1. Без понимания фундамента EM 1-on-1 рискуют превратиться в бессодержательные status updates вместо мощного инструмента развития людей.
+
+**[[performance-management]]** — 1-on-1 и performance management тесно переплетены: именно на 1-on-1 даётся continuous feedback, обсуждаются цели, отслеживается прогресс и проводятся career conversations. Если performance review становится сюрпризом для сотрудника, значит 1-on-1 проводились неправильно. Качественные еженедельные 1-on-1 делают формальные review предсказуемыми и нестрессовыми.
+
+**[[delegation]]** — Делегирование и 1-on-1 — взаимодополняющие инструменты. На 1-on-1 происходит handoff делегированных задач, check-in на прогресс и coaching при затруднениях. Через 1-on-1 менеджер балансирует между micromanagement и abdication, находя правильный уровень involvement для каждого человека и каждой задачи.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Содержит практические рекомендации по проведению 1-on-1 на каждом уровне менеджмента, включая конкретные вопросы, структуры и anti-patterns. Особенно ценна глава о том, как 1-on-1 меняется при переходе от EM к Director.
+- **Kim et al., "The Phoenix Project" (2016)** — Хотя книга фокусируется на DevOps transformation, она ярко иллюстрирует, как отсутствие коммуникации и feedback loops приводит к организационному хаосу. 1-on-1 — это тот самый feedback loop на уровне людей, который предотвращает накопление скрытых проблем.
+- **Peter Drucker, "The Effective Executive" (2006)** — Концепция Drucker о "contribution focus" помогает менеджерам превратить 1-on-1 из reactive status meetings в proactive development conversations, где фокус на вкладе каждого человека в общий результат.
 
 ---
 

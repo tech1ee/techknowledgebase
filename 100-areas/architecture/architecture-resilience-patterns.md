@@ -17,6 +17,8 @@ related:
   - "[[architecture-overview]]"
   - "[[architecture-distributed-systems]]"
   - "[[architecture-rate-limiting]]"
+prerequisites:
+  - "[[architecture-distributed-systems]]"
 ---
 
 # Resilience Patterns: Circuit Breaker, Retry, Bulkhead

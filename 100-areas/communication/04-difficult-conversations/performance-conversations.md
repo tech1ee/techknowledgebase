@@ -19,6 +19,10 @@ related:
   - "[[receiving-feedback]]"
   - "[[active-listening]]"
   - "[[delivering-bad-news]]"
+prerequisites:
+  - "[[giving-feedback]]"
+  - "[[receiving-feedback]]"
+  - "[[active-listening]]"
 ---
 
 # Performance Conversations: говорить о performance без разрушения отношений

@@ -14,6 +14,9 @@ related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-hilt-deep-dive]]"
   - "[[android-koin-deep-dive]]"
+prerequisites:
+  - "[[android-architecture-patterns]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Dagger & Dagger 2: Deep-Dive
@@ -1590,10 +1593,20 @@ interface FeatureBindingModule
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-- [[dependency-injection-fundamentals]] — Теория DI
-- [[android-hilt-deep-dive]] — Hilt (построен на Dagger)
-- [[android-koin-deep-dive]] — Альтернатива: Koin
-- [[android-kotlin-inject-deep-dive]] — Альтернатива: kotlin-inject
-- [[android-metro-deep-dive]] — Новейший: Metro
+**[[dependency-injection-fundamentals]]** — Dagger реализует принцип Dependency Inversion (DIP) и паттерн Inversion of Control (IoC). Без понимания теоретических основ DI — зачем нужна инъекция зависимостей, чем она отличается от Service Locator, какие проблемы решает — сложно оценить преимущества compile-time подхода Dagger. Рекомендуется начинать с теории DI, затем переходить к Dagger.
+
+**[[android-hilt-deep-dive]]** — Hilt построен поверх Dagger 2 и является его упрощённой надстройкой с предопределёнными компонентами и scopes. Понимание Dagger необходимо для глубокой работы с Hilt: когда стандартные Hilt-компоненты не подходят, приходится спускаться на уровень Dagger. Рекомендуется изучить Dagger перед Hilt для понимания того, что Hilt генерирует под капотом.
+
+**[[android-koin-deep-dive]]** — Koin — альтернатива Dagger с принципиально другим подходом: runtime DI вместо compile-time code generation. Сравнение Dagger и Koin помогает выбрать правильный инструмент: Dagger для enterprise-приложений с жёсткими требованиями к type safety, Koin для KMP и быстрого прототипирования. Порядок изучения не важен.
+
+**[[android-kotlin-inject-deep-dive]]** — kotlin-inject предлагает compile-time DI с полной поддержкой Kotlin Multiplatform, чего нет у Dagger. API похож на Dagger (@Component, @Inject, @Provides), но без Modules. Полезно изучить после Dagger для понимания KMP-совместимой альтернативы.
+
+**[[android-architecture-patterns]]** — Dagger тесно интегрирован с архитектурными паттернами Android: MVVM, Clean Architecture. Component hierarchy отражает слои архитектуры, а scopes управляют временем жизни зависимостей в каждом слое. Понимание архитектуры — предпосылка для правильного проектирования Dagger графа.
+
+### Книги
+
+- **Bloch J. (2018)** *Effective Java* — глава о dependency injection объясняет, почему конструкторное внедрение предпочтительнее статических фабрик. Фундамент для понимания подхода Dagger.
+- **Moskala M. (2021)** *Effective Kotlin* — раздел о DI и управлении зависимостями в Kotlin, включая best practices для Android проектов.
+- **Meier R. (2022)** *Professional Android* — практические примеры интеграции Dagger/Hilt в production Android приложения с MVVM архитектурой.

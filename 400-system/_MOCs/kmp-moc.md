@@ -12,6 +12,8 @@ tags:
 
 > Kotlin Multiplatform: кросс-платформенная разработка для Android, iOS, Desktop и Web из единого Kotlin-кода.
 
+**Путь обучения:** [[kmp-learning-path]]
+
 ---
 
 ## Рекомендуемый путь изучения

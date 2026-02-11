@@ -628,16 +628,27 @@ async function good() {
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[processes-threads-fundamentals]]
+Async модели возникли как ответ на ограничения потоковой модели — дорогие context switches, высокое потребление памяти на stack, сложность синхронизации. Глубокое понимание того, как работают threads и процессы на уровне ОС, позволяет оценить, почему coroutines с их кооперативным scheduling настолько эффективнее. Знание thread pools и scheduling помогает понять, на чём в итоге выполняются coroutines.
+
+### [[synchronization-primitives]]
+Async модели не устраняют потребность в синхронизации — они меняют её форму. Вместо mutex и семафоров coroutines используют channels (CSP) и actors для безопасного обмена данными. Понимание классических примитивов синхронизации даёт фундамент для осознания того, почему structured concurrency в Kotlin и actor model в Swift предотвращают race conditions без явных lock'ов.
+
+### [[kotlin-coroutines]]
+Kotlin coroutines — это практическая реализация async моделей, описанных в этом файле. Знание CPS-трансформации, state machines и continuation на теоретическом уровне позволяет глубже понять, как Kotlin компилятор реализует suspend-функции. Это связывает абстрактные концепции (cooperative multitasking, structured concurrency) с конкретным инструментом, используемым ежедневно в KMP-разработке.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Hoare C.A.R. (1978). *Communicating Sequential Processes*. — оригинальная работа по CSP, заложившая основы channel-based конкурентности (Go, Kotlin channels)
+- Hewitt C., Bishop P., Steiger R. (1973). *A Universal Modular Actor Formalism for Artificial Intelligence*. — оригинальная paper по Actor Model, реализованной в Erlang и Akka
+- Marlin C. (1980). *Coroutines: A Programming Methodology, a Language Design and an Implementation*. — одна из первых систематизаций coroutines как парадигмы программирования
 - [ui.dev: Async JavaScript Evolution](https://ui.dev/async-javascript-from-callbacks-to-promises-to-async-await) — история JS async
-- [MDN: Using Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) — официальная документация
-- [Lydia Hallie: Event Loop Visualized](https://www.lydiahallie.com/blog/event-loop) — визуализация event loop
-- [Node.js: Event Loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick) — Node.js специфика
 - [Kotlin Docs: Coroutines](https://kotlinlang.org/docs/coroutines-basics.html) — официальная документация
 - [kt.academy: Coroutines Under the Hood](https://kt.academy/article/cc-under-the-hood) — внутреннее устройство
-- [Wikipedia: CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) — история CSP
-- [Wikipedia: Futures and Promises](https://en.wikipedia.org/wiki/Futures_and_promises) — история promises
 
 ---
 

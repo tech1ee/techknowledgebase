@@ -12,6 +12,11 @@ related:
   - "[[graph-algorithms]]"
   - "[[graph-advanced]]"
   - "[[shortest-paths]]"
+prerequisites:
+  - "[[graphs]]"
+  - "[[graph-algorithms]]"
+  - "[[dfs-bfs-patterns]]"
+  - "[[shortest-paths]]"
 ---
 
 # Network Flow

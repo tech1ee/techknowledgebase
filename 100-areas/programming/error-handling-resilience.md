@@ -18,6 +18,9 @@ related:
   - "[[testing-strategies]]"
   - "[[clean-code-solid]]"
   - "[[functional-programming]]"
+prerequisites:
+  - "[[clean-code-solid]]"
+  - "[[type-systems-theory]]"
 ---
 
 # Error Handling & Resilience: Обработка ошибок и устойчивость

@@ -17,6 +17,9 @@ related:
   - "[[android-dependency-injection]]"
   - "[[android-hilt-deep-dive]]"
   - "[[kotlin-multiplatform]]"
+prerequisites:
+  - "[[android-architecture-patterns]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Koin Deep-dive: Kotlin-native DI для Android и KMP
@@ -1147,21 +1150,19 @@ Koin:
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**DI основы:**
-→ [[dependency-injection-fundamentals]] — базовые концепции DI
+**[[dependency-injection-fundamentals]]** — Koin реализует паттерн Service Locator с DI-подобным DSL API, и понимание разницы между true DI (constructor injection) и Service Locator критично для оценки архитектурных компромиссов Koin. Базовые концепции IoC, Composition Root и lifetime management объясняют, почему Koin работает иначе, чем Dagger/Hilt. Обязательно начинайте с теоретических основ DI.
 
-**Android DI:**
-→ [[android-dependency-injection]] — обзор DI решений
-→ [[android-hilt-deep-dive]] — альтернатива с compile-time safety
+**[[android-dependency-injection]]** — Обзорная статья по DI решениям для Android даёт общую картину экосистемы (Dagger, Hilt, Koin, Kodein, kotlin-inject) и помогает понять позиционирование Koin как наиболее простого в освоении runtime-фреймворка. Сравнительная таблица фреймворков из обзора дополняет детальный анализ Koin в этой статье. Рекомендуется прочитать обзор перед погружением в конкретный фреймворк.
 
-**Multiplatform:**
-→ [[kotlin-multiplatform]] — KMP архитектура
+**[[android-hilt-deep-dive]]** — Hilt является главной альтернативой Koin для Android-проектов, предлагая compile-time safety вместо runtime resolution. Понимание trade-off между простотой Koin (нет annotation processing, быстрая сборка) и надёжностью Hilt (ошибки при компиляции, не в runtime) — ключевой вопрос при выборе DI фреймворка для проекта. Изучайте оба фреймворка для осознанного выбора.
+
+**[[kotlin-multiplatform]]** — Koin является одним из наиболее зрелых DI решений для Kotlin Multiplatform, поддерживая все KMP таргеты (Android, iOS, Desktop, Web, WASM) без platform-specific tooling. Паттерны использования Koin в KMP (expect/actual modules, platform-specific scopes) напрямую связаны с архитектурой KMP приложений. После освоения Koin изучайте KMP для применения DI в мультиплатформенных проектах.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 **Официальная документация:**
 - [Koin Official Documentation](https://insert-koin.io/docs/quickstart/android/)
@@ -1171,6 +1172,12 @@ Koin:
 **Релизы и roadmap:**
 - [Koin 4.0 Official Release](https://blog.insert-koin.io/koin-4-0-official-release-f4827bbcfce3)
 - [Koin 2025 Roadmap](https://blog.insert-koin.io/koin-framework-2025-roadmap-from-4-0-to-future-milestones-68b0558e56a9)
+
+### Книги
+
+- **Moskala M.** *Effective Kotlin* (2021) — лучшие практики проектирования Kotlin-кода, включая паттерны управления зависимостями и DSL-конструкции, используемые в Koin
+- **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования, включая Favor composition over inheritance и DI паттерны, лежащие в основе Koin
+- **Meier R.** *Professional Android* (2022) — практическое руководство по архитектуре Android-приложений с интеграцией DI фреймворков
 
 ---
 

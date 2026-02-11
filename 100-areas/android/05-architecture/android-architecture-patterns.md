@@ -19,6 +19,9 @@ related:
   - "[[clean-code-solid]]"
   - "[[kotlin-flow]]"
 cs-foundations: [separation-of-concerns, unidirectional-data-flow, dependency-inversion, layered-architecture]
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Архитектура приложения: MVVM, MVI, Clean Architecture
@@ -949,25 +952,27 @@ class GetUsersUseCase(private val repo: UserRepository) {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Android раздел:**
-→ [[android-overview]] — карта раздела
-→ [[android-activity-lifecycle]] — ViewModel переживает lifecycle, решает проблему потери данных при rotation
-→ [[android-compose]] — declarative UI идеально сочетается с MVI (state flows down, events flow up)
-→ [[android-threading]] — coroutines в viewModelScope, StateFlow/SharedFlow для reactive state
+**[[android-activity-lifecycle]]** — ViewModel, центральный компонент MVVM и MVI, был создан для решения проблемы потери данных при configuration changes (поворот экрана). Понимание жизненного цикла Activity необходимо для правильной работы с viewModelScope, LiveData/StateFlow observers и lifecycle-aware компонентами. Изучайте lifecycle до архитектурных паттернов.
 
-**Архитектура:**
-→ [[design-patterns]] — Repository, Observer, Strategy используются в MVVM/MVI
-→ [[clean-code-solid]] — Clean Architecture построена на принципах SOLID (особенно Dependency Inversion)
-→ [[microservices-vs-monolith]] — принципы разделения слоёв похожи (границы, независимость)
+**[[android-compose]]** — декларативный UI Compose идеально сочетается с MVI-паттерном: state flows down, events flow up (unidirectional data flow). Compose eliminates многие проблемы View-based UI (управление состоянием View, привязка данных), делая MVI естественным выбором архитектуры. Изучайте Compose параллельно с архитектурными паттернами для понимания современных best practices.
 
-**Kotlin:**
-→ [[kotlin-flow]] — StateFlow для UI state, Channel для side effects в MVI
+**[[kotlin-flow]]** — StateFlow является стандартным механизмом для UI state в MVVM/MVI, а Channel используется для one-shot side effects (навигация, показ Snackbar). Понимание cold/hot flows, operators и backpressure критично для правильной реализации reactive state management. Рекомендуется как обязательный prerequisite для MVI.
+
+**[[design-patterns]]** — архитектурные паттерны Android строятся на классических GoF-паттернах: Repository (Facade + Gateway), Observer (LiveData/Flow), Strategy (инъекция use cases). Clean Architecture использует Dependency Inversion для создания независимых слоёв. Понимание базовых паттернов помогает глубже осмыслить архитектурные решения.
+
+**[[clean-code-solid]]** — Clean Architecture, рекомендованная Google для Android, построена на принципах SOLID, особенно Dependency Inversion (зависимость от абстракций, а не реализаций) и Single Responsibility (разделение на слои). Понимание SOLID необходимо для правильного проектирования слоёв Data, Domain и Presentation.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
+
+**Книги:**
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая архитектурные паттерны и ViewModel
+- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin, применяемые в архитектурных паттернах (sealed classes для state, coroutines для async)
+- Bloch J. (2018). Effective Java, 3rd Edition. — лучшие практики Java/JVM, принципы проектирования интерфейсов и классов, лежащие в основе Clean Architecture
+- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и Flow, являющиеся основой reactive state management в MVVM/MVI
 
 **Официальная документация:**
 - [Guide to App Architecture](https://developer.android.com/topic/architecture) — официальное руководство

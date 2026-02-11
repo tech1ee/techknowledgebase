@@ -14,6 +14,9 @@ related:
   - "[[linkedin-optimization]]"
   - "[[personal-brand]]"
   - "[[standing-out]]"
+prerequisites:
+  - "[[resume-strategy]]"
+  - "[[linkedin-optimization]]"
 ---
 
 # Portfolio Strategy 2026: доказательство экспертизы
@@ -810,6 +813,24 @@ MONTHLY:
 → [[standing-out]] — использование portfolio для differentiation
 
 ---
+
+## Связь с другими темами
+
+- [[resume-strategy]] — Резюме и portfolio дополняют друг друга: резюме рассказывает о твоём опыте словами и метриками, а portfolio показывает его в коде. В резюме упоминай ссылки на GitHub-проекты, а в portfolio README ссылайся на результаты из резюме. Hiring manager читает резюме за 7 секунд, потом открывает GitHub — оба должны быть согласованы.
+
+- [[linkedin-optimization]] — LinkedIn Featured section — идеальное место для showcase portfolio-проектов. Pinned repos с GitHub, blog-посты о проектах и demo-видео размещаются в Featured и привлекают внимание рекрутеров. LinkedIn даёт visibility, GitHub — proof of work.
+
+- [[personal-brand]] — Portfolio — это техническая основа личного бренда. Без качественных проектов на GitHub бренд остаётся пустыми словами. Portfolio показывает code quality, architecture thinking и ability to finish projects — именно эти сигналы формируют репутацию эксперта.
+
+- [[standing-out]] — В 2026 году portfolio с AI-интеграцией и KMP-проектами — один из сильнейших дифференциаторов. Когда 50 кандидатов присылают одинаковые резюме, тот, у кого есть polished GitHub с modern stack, автоматически попадает в top-5. Portfolio превращает "I can do this" в "Here's proof".
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Помимо подготовки к интервью, книга объясняет, что именно hiring managers ищут в кандидатах. Это помогает выбрать правильные проекты для portfolio: не tutorial follow-alongs, а проекты, демонстрирующие problem-solving и architecture thinking.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff+ уровне portfolio смещается от personal projects к open source contributions, RFCs и architecture templates. Книга помогает понять, какие артефакты работы ценятся на высших уровнях карьеры.
+
+- Xu A. (2020). *System Design Interview*. — System design знания из этой книги помогают создать architecture template repository — один из самых ценных типов portfolio-проектов для Senior/Staff уровня. Показывает не только код, но и архитектурное мышление.
 
 ## Источники 2026
 

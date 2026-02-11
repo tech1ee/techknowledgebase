@@ -21,6 +21,8 @@ related:
   - "[[transition-to-management]]"
   - "[[one-on-one-meetings]]"
   - "[[performance-management]]"
+prerequisites:
+  - "[[ic-vs-management]]"
 ---
 
 # Engineering Management: Фундаментальные принципы
@@ -592,6 +594,26 @@ EM так занят командой, что не развивает собст
 - "Radical Candor" by Kim Scott — feedback culture
 - "Multipliers" by Liz Wiseman — leverage через людей
 - "The Five Dysfunctions of a Team" by Patrick Lencioni — team health
+
+---
+
+## Связь с другими темами
+
+**[[ic-vs-management]]** — Понимание фундаментальных различий между IC и management треками — необходимый prerequisite для осознанного вхождения в роль EM. Без чёткого понимания, что management — это career change, а не promotion, новые EM часто пытаются совмещать обе роли и терпят неудачу. Ic-vs-management помогает сформировать правильные ожидания до перехода.
+
+**[[tech-lead-role]]** — Tech Lead и EM формируют партнёрство, которое определяет успех команды. Понимание границ между ролями (TL — технология, EM — люди) предотвращает конфликты и обеспечивает полное покрытие всех аспектов командной работы. Многие EM приходят из Tech Lead роли, и умение отпустить технический контроль — одна из ключевых задач фундамента EM.
+
+**[[transition-to-management]]** — Transition-to-management описывает сам процесс перехода из IC в EM, тогда как em-fundamentals фокусируется на навыках и практиках уже в роли. Вместе эти материалы покрывают полный цикл: от принятия решения о переходе до уверенной работы в новой роли. Identity shift, coding withdrawal и другие вызовы перехода нужно преодолеть, чтобы начать применять фундаментальные принципы EM.
+
+**[[one-on-one-meetings]]** — 1-on-1 — главный инструмент в арсенале EM, и качество их проведения напрямую определяет успех менеджера. Через 1-on-1 реализуются все ключевые обязанности EM: feedback, career development, coaching, выявление проблем. Менеджер без хороших 1-on-1 — как инженер без IDE: формально может работать, но неэффективно.
+
+**[[performance-management]]** — Performance management — это одна из наиболее сложных и ответственных частей работы EM. Фундамент EM закладывает понимание того, почему continuous feedback важнее годовых review, и как выстроить culture of growth. Навыки performance management определяют, будет ли команда расти или стагнировать.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Главная книга для Engineering Manager на любом этапе карьеры. Детально описывает обязанности, навыки и типичные ошибки на каждом уровне от Tech Lead до CTO. Должна быть прочитана в первый месяц работы EM.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Модель пяти дисфункций команды помогает EM диагностировать проблемы и строить здоровые, высокоэффективные команды. Фокус на trust как фундаменте всего остального напрямую связан с принципом psychological safety.
+- **L. David Marquet, "Turn the Ship Around!" (2012)** — Демонстрирует модель servant leadership на практике, показывая, как создать среду, где люди принимают решения сами. Intent-based leadership — альтернатива микроменеджменту, одной из главных ошибок новых EM.
 
 ---
 

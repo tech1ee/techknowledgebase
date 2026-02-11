@@ -13,6 +13,9 @@ related:
   - "[[job-search-strategy]]"
   - "[[networking-tactics]]"
   - "[[recruiter-relationships]]"
+prerequisites:
+  - "[[job-search-strategy]]"
+  - "[[networking-tactics]]"
 ---
 
 # Hidden Job Market: как найти вакансию до её публикации
@@ -352,6 +355,22 @@ SPREADSHEET / NOTION:
 → [[linkedin-optimization]] — оптимизация профиля
 
 ---
+
+## Связь с другими темами
+
+- [[job-search-strategy]] — Hidden job market — один из ключевых каналов в стратегии поиска работы. Targeted outreach из job-search-strategy (Step 3: Build Relationships) — это конкретный метод доступа к скрытым вакансиям. 70-80% позиций заполняются через referrals, поэтому networking-first стратегия из job-search-strategy критически зависит от понимания hidden market.
+
+- [[networking-tactics]] — Содержит конкретные тактики построения relationships, которые открывают доступ к hidden market: informational interviews, community engagement, conference networking. Текущий материал объясняет ПОЧЕМУ hidden market существует и ГДЕ искать, а networking-tactics — КАК строить connections, которые приведут к referrals.
+
+- [[recruiter-relationships]] — Internal и external рекрутеры — один из каналов доступа к hidden market. Internal recruiter знает о позициях до публикации, external — работает с несколькими компаниями и может узнать о req раньше job board. Текущий материал описывает роль рекрутеров в контексте hidden market, а recruiter-relationships — как построить долгосрочные отношения с ними.
+
+## Источники и дальнейшее чтение
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking помогает в проактивном outreach: prototype conversations (informational interviews), identify pain points (company challenges), design value propositions. Подход "сначала пойми проблему, потом предложи решение" — основа value-forward communication для hidden market.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание perspective hiring manager помогает определить, когда и почему создаются позиции. Книга описывает, как engineering managers планируют headcount, что помогает читать signals (funding, growth, leadership changes) и обращаться проактивно.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ позиций hidden market ещё важнее: 1/3 Staff engineers получают позицию через смену компании. Книга описывает, как Staff+ candidates находятся через network, conference talks и open source contributions.
 
 ## Источники
 

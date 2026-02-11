@@ -18,6 +18,8 @@ tags:
 related:
   - "[[em-fundamentals]]"
   - "[[development-process]]"
+prerequisites:
+  - "[[em-fundamentals]]"
 ---
 
 # Инженерные практики
@@ -191,6 +193,20 @@ POST-INCIDENT:
 | [Accelerate](https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339) | Book |
 | [DORA Research](https://dora.dev/) | Research |
 | [Google Engineering Practices](https://google.github.io/eng-practices/) | Guide |
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — Engineering practices — это operationalization фундаментальных принципов EM. Если em-fundamentals говорит о создании условий для эффективной команды, то engineering practices определяет конкретные standards и процессы: DORA metrics как north star, code review для knowledge sharing, testing pyramid для quality. EM отвечает за adoption и evolution этих practices в команде.
+
+**[[development-process]]** — Engineering practices и development process — complementary: practices определяют quality standards (как делаем code review, какая testing strategy), а process определяет workflow (когда deploy, как планируем sprint). Вместе они формируют полную engineering operating model. DORA metrics (deployment frequency, lead time, MTTR, change failure rate) связывают обе области единой measurement framework.
+
+## Источники и дальнейшее чтение
+
+- **Kim et al., "The Phoenix Project" (2016)** — Описывает transformation от broken engineering practices (manual deploys, no testing, siloed knowledge) к DevOps culture через Three Ways. Книга демонстрирует impact engineering practices на business outcomes и показывает, что speed и stability не противоречат друг другу.
+- **Camille Fournier, "The Manager's Path" (2017)** — Содержит практические рекомендации по установлению engineering practices в команде, включая как внедрять code review culture, как балансировать tech debt с feature work и как использовать metrics without gaming them.
+- **Will Larson, "An Elegant Puzzle" (2019)** — Системный подход к engineering practices: Larson описывает, как practices масштабируются (и ломаются) при росте организации, и предлагает frameworks для их адаптации на каждой стадии роста.
 
 ---
 

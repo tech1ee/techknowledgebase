@@ -19,6 +19,9 @@ related:
   - "[[em-fundamentals]]"
   - "[[architecture-decisions]]"
   - "[[engineering-practices]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[engineering-practices]]"
 ---
 
 # Управление техническим долгом
@@ -187,6 +190,22 @@ Regular reporting
 |----------|-----|
 | [Martin Fowler: Tech Debt](https://martinfowler.com/bliki/TechnicalDebt.html) | Article |
 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
+
+---
+
+## Связь с другими темами
+
+**[[architecture-decisions]]** — ADR и tech debt management тесно связаны: многие ADR фиксируют осознанные trade-offs, которые создают deliberate tech debt. Когда ADR документирует "мы выбрали X потому что deadline", это создаёт traceable debt с понятным context. Без ADR tech debt накапливается inadvertently, и через год никто не помнит, почему решение было принято и нужно ли его менять.
+
+**[[engineering-practices]]** — Engineering practices (code review, testing, CI/CD) — первая линия обороны против inadvertent tech debt. Хорошие practices предотвращают accumulation reckless debt, но deliberately accumulated debt нуждается в systematic management. DORA metrics из engineering-practices помогают измерять impact tech debt: если cycle time растёт при стабильном scope — это debt signal.
+
+**[[technical-vision]]** — Tech vision определяет target state, а gap между current state и target state — это часть tech debt. Tech debt management — operational mechanism для closing этого gap. Без vision tech debt management становится reactive (fix что болит), а с vision — strategic (fix что мешает двигаться к цели). 20% sprint tax на tech debt должен быть aligned с vision priorities.
+
+## Источники и дальнейшее чтение
+
+- **Kim et al., "The Phoenix Project" (2016)** — Ярко иллюстрирует, как накопленный tech debt (в книге — "unplanned work") может paralyzed целую организацию. Three Ways предлагают системный подход к управлению: flow (быстрая доставка), feedback (быстрое обнаружение проблем) и continuous learning (предотвращение повторения).
+- **Will Larson, "An Elegant Puzzle" (2019)** — Содержит practical framework для prioritization tech debt: migrations approach, system health scoring и strategic investment planning. Larson показывает, как коммуницировать tech debt business stakeholders и получать buy-in на remediation.
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает, как tech leaders на разных уровнях управляют tech debt: Tech Lead идентифицирует и prioritizes, EM балансирует с feature work, Director/VP устанавливает organizational policy.
 
 ---
 

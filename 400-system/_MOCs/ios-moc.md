@@ -12,6 +12,8 @@ tags:
 
 > Полная карта iOS-разработки: от Darwin/XNU до SwiftUI и production deployment
 
+**Путь обучения:** [[ios-learning-path]]
+
 ---
 
 ## Рекомендуемый путь изучения

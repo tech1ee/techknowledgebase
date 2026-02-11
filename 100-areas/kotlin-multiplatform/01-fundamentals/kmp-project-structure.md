@@ -858,4 +858,22 @@ kotlin {
 
 ---
 
+## Связь с другими темами
+
+- **[[kmp-getting-started]]** — Getting Started создаёт шаблонный проект, а этот материал объясняет, почему он устроен именно так. После запуска первого проекта возникают вопросы: зачем столько папок в src, что такое commonMain и androidMain, почему build.gradle.kts такой длинный. Понимание структуры — следующий обязательный шаг после hello-world, который превращает новичка в осознанного KMP-разработчика.
+
+- **[[kmp-source-sets]]** — Source sets — центральный элемент структуры KMP-проекта. Этот материал объясняет targets и module-level организацию, а source sets детализируют внутреннее устройство каждого модуля: dependencies per source set, compiler options, правила видимости, dependsOn-механизм. Без понимания source sets невозможно правильно добавить зависимость или создать intermediate source set.
+
+- **[[kmp-expect-actual]]** — Структура проекта определяет, где живут expect и actual декларации. commonMain содержит expect (контракт), а platform source sets (androidMain, iosMain) — actual (реализацию). Иерархия source sets через dependsOn определяет, в каком именно source set можно разместить actual. Это фундаментальная связь: структура проекта → source set hierarchy → expect/actual placement.
+
+## Источники и дальнейшее чтение
+
+- Martin R. (2017). *Clean Architecture.* — Принципы модульности (cohesion, coupling, dependency rule) определяют, как структурировать KMP-проект: когда переходить на multi-module, как организовать feature-модули, зачем нужен umbrella module. Книга объясняет архитектурные принципы, которые масштабируют проект от одного shared-модуля до enterprise-уровня.
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Понимание Kotlin packages, visibility modifiers (internal, public) и модульной системы необходимо для работы со структурой KMP-проекта. Книга объясняет, как Kotlin организует код в модули и как visibility модификаторы контролируют API shared-модуля.
+
+- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по организации кода (минимизация видимости, API design, модульность) напрямую применимы к структуре KMP-проекта. Совет «ограничивай видимость API» особенно важен для shared-модуля, где каждый public class = ObjC adapter в iOS binary.
+
+---
+
 *Проверено: 2026-01-09 | Kotlin 2.1.21, Gradle 8.5+, Android Studio Otter 2025.2.1*

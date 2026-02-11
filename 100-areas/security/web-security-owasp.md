@@ -18,6 +18,9 @@ related:
   - "[[ci-cd-pipelines]]"
   - "[[network-dns-tls]]"
   - "[[network-http-evolution]]"
+prerequisites:
+  - "[[security-fundamentals]]"
+  - "[[authentication-authorization]]"
 ---
 
 # Web Security: OWASP Top 10 и защита приложений
@@ -444,6 +447,29 @@ HTTPS защищает:              HTTPS НЕ защищает:
 
 **Последняя верификация**: 2025-11-24
 **Уровень достоверности**: high
+
+---
+
+## Связь с другими темами
+
+[[api-design]] — проектирование API напрямую определяет поверхность атаки веб-приложения. Broken Access Control (A01), Injection (A04) и Authentication Failures (A07) чаще всего эксплуатируются именно через API endpoints. Знание принципов безопасного проектирования API (rate limiting, input validation, proper authorization) является практическим применением защиты от OWASP Top 10. Рекомендуется изучать параллельно.
+
+[[ci-cd-pipelines]] — интеграция SAST/DAST-инструментов (CodeQL, Snyk, OWASP ZAP) в CI/CD pipeline позволяет автоматически обнаруживать уязвимости из OWASP Top 10 на каждом этапе разработки. Supply Chain Failures (A03) также требуют защиты самого pipeline от компрометации. DevSecOps-подход превращает разовые проверки безопасности в непрерывный процесс.
+
+[[authentication-authorization]] — глубокое понимание механизмов AuthN/AuthZ критично для защиты от A01 (Broken Access Control) и A07 (Authentication Failures), которые составляют две из десяти ключевых категорий OWASP Top 10. Правильная реализация OAuth 2.0, JWT, RBAC и MFA является основной контрмерой для этих уязвимостей. Рекомендуется как обязательный prerequisite перед OWASP Top 10.
+
+[[security-fundamentals]] — базовые принципы безопасности (CIA Triad, Defense in Depth, Least Privilege, Assume Breach) формируют мышление, необходимое для понимания OWASP Top 10. Каждая категория Top 10 нарушает один или несколько принципов CIA, и понимание этой связи помогает приоритизировать контрмеры и строить многослойную защиту.
+
+[[threat-modeling]] — threat modeling предоставляет методологию систематического выявления уязвимостей из OWASP Top 10 на этапе проектирования. Категории STRIDE напрямую соответствуют категориям Top 10: Spoofing связан с A07, Tampering с A08, Information Disclosure с A02. Threat modeling на раннем этапе дешевле, чем исправление уязвимостей в production.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws.* 2nd Edition. Wiley. — практическое руководство по обнаружению и эксплуатации веб-уязвимостей, покрывающее все категории OWASP Top 10 с детальными примерами.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальный труд по инженерии безопасности, включая веб-безопасность в контексте проектирования распределённых систем.
+- Seitz J. (2021). *Black Hat Go: Go Programming for Hackers and Pentesters.* No Starch Press. — для понимания инструментов тестирования безопасности и автоматизации проверок OWASP Top 10.
+- OWASP Foundation (2021). *OWASP Testing Guide v4.* — официальное руководство по тестированию безопасности веб-приложений, систематически покрывающее все категории OWASP Top 10.
 
 ---
 

@@ -15,6 +15,8 @@ related:
   - "[[system-design-android]]"
   - "[[behavioral-interview]]"
   - "[[negotiation]]"
+prerequisites:
+  - "[[job-search-strategy]]"
 ---
 
 # Android Interview 2025: 4-6 раундов до оффера
@@ -599,6 +601,24 @@ Focus: Cultural fit, versatility
 → [[metacognition]] — рефлексия над своим обучением
 
 ---
+
+## Связь с другими темами
+
+- [[technical-interview]] — Детальный разбор технических раундов: DSA coding, live coding, system design, Android domain. Текущий материал описывает общий процесс от заявки до оффера, а technical-interview погружается в каждый технический раунд с конкретными tips, timeline минуты за минутой и оценочными критериями по уровням.
+
+- [[system-design-android]] — Mobile System Design — обязательный раунд для Senior+ и часто deciding factor для L5/E5 уровня. Текущий материал описывает его как часть onsite, а system-design-android даёт полный framework (timeline, architecture diagram, deep dive примеры), mobile-specific considerations и типичные ошибки.
+
+- [[behavioral-interview]] — Behavioral раунд часто недооценивается, но может определить итоговое решение. Текущий материал упоминает STAR method в контексте onsite, а behavioral-interview раскрывает 8 dimensions оценки, company-specific подготовку (Amazon LP, Google Googleyness, Meta Values) и 6-8 историй, которые нужно подготовить.
+
+- [[negotiation]] — Финальный этап после успешного прохождения интервью. Текущий материал заканчивается на Stage 5 (Offer/Reject), а negotiation объясняет, как превратить первый оффер в +15-30% к compensation через стратегические переговоры, competing offers и правильные scripts.
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Помимо 189 задач, книга содержит подробное описание interview process в FAANG: как устроен каждый раунд, что оценивают, как принимают решение hire/no-hire. Главы об offer negotiation и company-specific tips дополняют текущий материал.
+
+- Xu A. (2020). *System Design Interview*. — Для System Design раунда, который обязателен для Senior+. Книга даёт 13 реальных задач с пошаговым разбором, framework для ответа и checklist компонентов. Адаптируй backend-ориентированные задачи для mobile контекста.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание того, как hiring managers принимают решения на каждом уровне (Junior → Staff), помогает правильно позиционировать себя в процессе. Книга описывает expectations для каждого уровня, что полезно для behavioral раунда.
 
 ## Источники
 

@@ -14,6 +14,10 @@ related:
   - "[[dependency-injection-fundamentals]]"
   - "[[android-dagger-deep-dive]]"
   - "[[android-kotlin-inject-deep-dive]]"
+prerequisites:
+  - "[[android-architecture-patterns]]"
+  - "[[android-dagger-deep-dive]]"
+  - "[[android-kotlin-inject-deep-dive]]"
 ---
 
 # Metro: Deep-Dive
@@ -798,10 +802,18 @@ Metro в активной разработке. Запланированные �
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-- [[dependency-injection-fundamentals]] — Теория DI
-- [[android-dagger-deep-dive]] — Dagger (Metro interop)
-- [[android-kotlin-inject-deep-dive]] — kotlin-inject (Metro interop)
-- [[android-hilt-deep-dive]] — Hilt (альтернатива для Android-only)
-- [[android-koin-deep-dive]] — Koin (runtime альтернатива)
+**[[dependency-injection-fundamentals]]** — теоретическая основа всех DI-фреймворков, включая Metro. Понимание принципов Inversion of Control, Composition Root и разницы между compile-time и runtime DI помогает оценить, почему Metro выбрал подход compiler plugin вместо annotation processing. Metro реализует все классические DI-паттерны, но оптимизирует их через интеграцию в Kotlin compiler. Начните с теории, затем переходите к Metro.
+
+**[[android-dagger-deep-dive]]** — Dagger является предшественником Metro и основным фреймворком для interop при миграции. Metro поддерживает инклюд Dagger-компонентов через @Includes, что позволяет постепенную миграцию (опыт Cash App с 1500 модулями). Понимание Dagger concepts (Components, Modules, Scopes, Subcomponents) критично для эффективной миграции на Metro. Изучите Dagger первым, если работаете с legacy-проектом.
+
+**[[android-kotlin-inject-deep-dive]]** — kotlin-inject разделяет с Metro подход к Kotlin-first API и KMP-поддержку. Metro заимствовал API-дизайн kotlin-inject (@Inject на конструкторах, @Provides прямо в графе), добавив Anvil-style aggregation. Понимание kotlin-inject помогает быстрее освоить Metro API и оценить уникальные фичи Metro (optional deps, Composable injection). Для KMP-проектов Metro предпочтительнее kotlin-inject благодаря aggregation.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Moskala (2021). *Effective Kotlin*. — best practices Kotlin, включая compiler plugins, DSL-дизайн и паттерны создания объектов, которые помогают понять архитектурные решения Metro как Kotlin compiler plugin.
+- Bloch (2018). *Effective Java*. — классические принципы API-дизайна и dependency management (Item 5: Prefer dependency injection), которые лежат в основе всех DI-фреймворков включая Metro.
+- Leiva (2017). *Kotlin for Android Developers*. — практические паттерны Kotlin для Android, включая организацию зависимостей и модульную архитектуру, что даёт контекст для понимания Metro в Android-проектах.

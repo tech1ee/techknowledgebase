@@ -15,6 +15,11 @@ related:
   - "[[kmp-ci-cd]]"
   - "[[kmp-debugging]]"
   - "[[kmp-testing-strategies]]"
+prerequisites:
+  - "[[kmp-architecture-patterns]]"
+  - "[[kmp-testing-strategies]]"
+  - "[[kmp-ci-cd]]"
+  - "[[kmp-debugging]]"
 cs-foundations:
   - release-engineering
   - observability
@@ -616,6 +621,24 @@ android {
 | [Play Store Guidelines](https://developer.android.com/distribute/best-practices/launch) | Official | Android launch |
 | [App Store Guidelines](https://developer.apple.com/app-store/review/guidelines/) | Official | iOS requirements |
 | [CrashKiOS](https://crashkios.touchlab.co/) | Tool | Crash reporting |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-ci-cd]]** — CI/CD — неотъемлемая часть production readiness. Чеклист определяет ЧТО нужно проверить, а CI/CD автоматизирует КАК это проверяется. Настройка GitHub Actions с отдельными jobs для Android (ubuntu) и iOS (macos), кэширование ~/.konan, автоматическая загрузка dSYM и деплой в App Store/Play Store — всё это детали, которые отличают production pipeline от ручной сборки. Без автоматизированного CI/CD чеклист остаётся теорией.
+
+- **[[kmp-debugging]]** — Crash reporting — один из критичных пунктов чеклиста, и его правильная настройка требует глубокого понимания отладки в KMP. CrashKiOS для Kotlin stack traces, загрузка dSYM для символикации, Kermit для structured logging — это инструменты, детально описанные в материале по debugging. Без них production-приложение генерирует нечитаемые crash reports с адресами `konan::abort()` вместо имён файлов и строк.
+
+- **[[kmp-testing-strategies]]** — Тестирование — фундамент quality gates в production checklist. Unit tests в commonTest с coverage не менее 80%, integration tests с Ktor MockEngine и SQLDelight in-memory, platform-specific тесты на реальных устройствах — стратегия тестирования определяет, насколько вы уверены в релизе. Материал по testing strategies детализирует подходы к тестированию shared-кода, которые чеклист лишь перечисляет.
+
+## Источники и дальнейшее чтение
+
+- Martin R. (2017). *Clean Architecture.* — Принципы архитектуры, заложенные в первый пункт чеклиста: правильная структура модулей, separation of concerns, dependency rule. Чистая архитектура — необходимое условие для прохождения всех остальных пунктов чеклиста, от тестирования до релиза.
+
+- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по написанию production-ready кода: обработка ошибок, работа с null safety, API design. Каждый пункт security checklist (нет секретов в коде, HTTPS, шифрование) требует качественной реализации на Kotlin, и книга помогает избежать типичных ошибок.
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины используются в shared-модуле для сетевых запросов, работы с БД и асинхронных операций. Неправильная работа с корутинами — частая причина крашей в production (утечки scope, неперехваченные исключения, blocking calls на main thread). Книга помогает написать надёжный асинхронный код.
 
 ---
 

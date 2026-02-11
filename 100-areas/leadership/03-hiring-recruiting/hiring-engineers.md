@@ -20,6 +20,8 @@ related:
   - "[[interview-process-design]]"
   - "[[sourcing-candidates]]"
   - "[[making-offers]]"
+prerequisites:
+  - "[[em-fundamentals]]"
 ---
 
 # Как нанимать инженеров: Полный гайд
@@ -758,6 +760,24 @@ Great credentials, poor interview
 - "Work Rules!" by Laszlo Bock — Google hiring
 - "The Talent Delusion" by Tomas Chamorro-Premuzic — science of hiring
 - "Hiring Engineers" newsletter by The Pragmatic Engineer
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — Найм — одна из самых критичных обязанностей Engineering Manager, описанных в em-fundamentals. Качество hiring decisions определяет будущее команды: правильный hire умножает output, неправильный — создаёт technical debt и демотивирует окружающих. EM должен понимать, что hiring — это не побочная задача, а стратегическая инвестиция, требующая 20-30% рабочего времени в активном hiring сезоне.
+
+**[[interview-process-design]]** — Дизайн процесса интервью — следующий шаг после определения hiring philosophy и критериев. Structured interviews с одинаковыми вопросами, evidence-based оценкой и чётким scorecard дают в 3-5 раз лучшие предсказания успеха, чем unstructured "gut feel" подход. Без правильного процесса даже самые чёткие hiring criteria не помогут.
+
+**[[sourcing-candidates]]** — Sourcing определяет, из какого pool кандидатов вы выбираете. Referrals дают лучшие результаты (5x retention), но для масштаба нужна диверсификация: inbound через employer brand, outbound через активный sourcing, и работа с passive candidates. Без активного sourcing позиции остаются открытыми месяцами, создавая нагрузку на существующую команду.
+
+**[[making-offers]]** — Оффер — критический moment в hiring funnel: здесь компания может потерять кандидата, в которого уже инвестировала 10-20 часов процесса. Персонализированный pitch, understanding мотивации кандидата и fair negotiation определяют acceptance rate. 70% кандидатов negotiate, и готовность к этому — часть hiring competency менеджера.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Содержит практические рекомендации по hiring на каждом уровне менеджмента, включая как писать job descriptions, как оценивать culture fit и как избежать bias в interview process.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Помогает понять, что hiring — это не только поиск технически сильных кандидатов, но и поиск людей, способных строить trust и commitment в команде. Модель Lencioni объясняет, почему culture fit так критичен при найме.
+- **Ed Catmull, "Creativity Inc." (2014)** — Показывает подход Pixar к hiring: важнее нанимать правильных людей и давать им правильную среду, чем пытаться микроменеджить результат. "Getting the right people and the right chemistry is more important than getting the right idea."
 
 ---
 

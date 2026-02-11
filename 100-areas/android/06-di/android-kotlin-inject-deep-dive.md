@@ -15,6 +15,9 @@ related:
   - "[[android-dagger-deep-dive]]"
   - "[[android-hilt-deep-dive]]"
   - "[[android-koin-deep-dive]]"
+prerequisites:
+  - "[[android-architecture-patterns]]"
+  - "[[android-dagger-deep-dive]]"
 ---
 
 # kotlin-inject: Deep-Dive
@@ -1079,7 +1082,21 @@ protected fun provideApi(): Api = ...
 
 ---
 
-## Источники
+## Связь с другими темами
+
+**[[dependency-injection-fundamentals]]** — kotlin-inject реализует compile-time Dependency Injection с API, вдохновлённым Dagger, и понимание базовых концепций (IoC, constructor injection, scoping, multibindings) необходимо для эффективного использования фреймворка. Теоретическая база объясняет, почему compile-time проверки предпочтительнее runtime resolution и какие гарантии даёт статический анализ зависимостей. Начинайте с фундаментальных концепций DI.
+
+**[[android-dagger-deep-dive]]** — kotlin-inject напрямую вдохновлён API Dagger (@Component, @Inject, @Provides), но убирает концепцию Modules в пользу component inheritance и упрощает конфигурацию. Понимание Dagger помогает быстро освоить kotlin-inject и оценить, какие проблемы Dagger (сложность Modules, boilerplate, только JVM) были решены. Рекомендуется изучить Dagger перед kotlin-inject для понимания эволюции подхода.
+
+**[[android-hilt-deep-dive]]** — Hilt является Android-специфичной надстройкой над Dagger с автоматической интеграцией в Android компоненты (Activity, Fragment, ViewModel), тогда как kotlin-inject требует ручной передачи компонента. Сравнение показывает trade-off между удобством Hilt на Android и кроссплатформенностью kotlin-inject в KMP проектах. Изучайте оба для выбора оптимального решения под конкретный проект.
+
+**[[android-koin-deep-dive]]** — Koin представляет runtime-подход к DI в противовес compile-time подходу kotlin-inject, и сравнение двух фреймворков показывает фундаментальную разницу: Koin проще в настройке, но ошибки обнаруживаются только при запуске, тогда как kotlin-inject ловит все проблемы при компиляции. Оба фреймворка поддерживают KMP, что делает их прямыми конкурентами в мультиплатформенных проектах. Изучайте параллельно для обоснованного выбора.
+
+**[[android-metro-deep-dive]]** — Metro является новейшим compile-time DI фреймворком для Kotlin от Slack, развивающим идеи kotlin-inject и Anvil с фокусом на упрощение модульной архитектуры. Понимание kotlin-inject помогает оценить эволюцию compile-time DI в Kotlin экосистеме и новые паттерны, предлагаемые Metro. Рекомендуется после kotlin-inject как следующий шаг в изучении современных DI решений.
+
+---
+
+## Источники и дальнейшее чтение
 
 ### Официальные
 - [kotlin-inject GitHub](https://github.com/evant/kotlin-inject)
@@ -1091,12 +1108,8 @@ protected fun provideApi(): Api = ...
 - [From Dagger to kotlin-inject (droidcon)](https://www.droidcon.com/2023/03/23/from-dagger-hilt-into-the-multiplatform-world-with-kotlin-inject/)
 - [Using kotlin-inject in KMP (John O'Reilly)](https://johnoreilly.dev/posts/kotlin-inject-kmp/)
 
----
+### Книги
 
-## Связанные материалы
-
-- [[dependency-injection-fundamentals]] — Теория DI
-- [[android-dagger-deep-dive]] — Dagger (основа для Hilt)
-- [[android-hilt-deep-dive]] — Hilt (Android-специфичный)
-- [[android-koin-deep-dive]] — Koin (runtime альтернатива)
-- [[android-metro-deep-dive]] — Metro (новейший compile-time)
+- **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования API, включая паттерны DI и static factory methods, концептуально связанные с @Component/@Provides в kotlin-inject
+- **Moskala M.** *Effective Kotlin* (2021) — Kotlin-специфичные паттерны проектирования и управления зависимостями, актуальные для kotlin-inject с его Kotlin-native API
+- **Meier R.** *Professional Android* (2022) — архитектурные паттерны Android-приложений, включая практику интеграции DI фреймворков в production-проекты

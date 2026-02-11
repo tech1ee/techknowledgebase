@@ -18,6 +18,8 @@ tags:
 related:
   - "[[ic-vs-management]]"
   - "[[startup-cto]]"
+prerequisites:
+  - "[[ic-vs-management]]"
 ---
 
 # Founding Engineer
@@ -391,20 +393,19 @@ ALTERNATIVES:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[startup-cto]] — the CTO perspective
-- [[ic-track-vs-management]] — career path choices
-- [[scaling-from-zero]] — what comes next
-- [[negotiation]] — equity negotiation skills
+**[[ic-vs-management]]** — Роль founding engineer — это уникальная точка на карте карьерных путей IC vs Management. В стартапе границы размыты: founding engineer одновременно пишет код (IC), нанимает людей (management) и принимает архитектурные решения (tech lead). Понимание различий между IC и management треками помогает founding engineer осознанно выбрать свой путь развития по мере роста компании.
 
-## Источники
+**[[startup-cto]]** — Founding engineer и CTO стартапа — тесно связанные, но различные роли. Founding engineer часто становится первым кандидатом на роль VP Engineering или Tech Lead по мере роста компании, если CTO — основатель. Понимание эволюции роли CTO помогает founding engineer планировать свою карьерную траекторию и выстраивать правильные отношения с техническим сооснователем.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Levels.fyi](https://www.levels.fyi/blog/founding-engineer.html) | Analysis |
-| [Holloway Guide to Equity](https://www.holloway.com/g/equity-compensation) | Guide |
-| [First Round Review](https://review.firstround.com/) | Blog |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
 
 ---
 

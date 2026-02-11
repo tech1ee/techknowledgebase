@@ -18,6 +18,10 @@ related:
   - "[[android-view-rendering-pipeline]]"
   - "[[android-touch-handling]]"
   - "[[android-graphics-apis]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-custom-view-fundamentals]]"
+  - "[[android-view-measurement]]"
 ---
 
 # Canvas Drawing: отрисовка на Canvas
@@ -862,20 +866,29 @@ fun updateData() {
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-| Материал | Зачем изучать |
-|----------|---------------|
-| [[android-custom-view-fundamentals]] | Основы Custom Views, конструкторы, lifecycle |
-| [[android-view-measurement]] | onMeasure перед onDraw |
-| [[android-touch-handling]] | Интерактивность для Canvas |
-| [[android-view-rendering-pipeline]] | Как Canvas превращается в пиксели |
-| [[android-compose]] | Compose Canvas — современная альтернатива |
-| [[android-graphics-apis]] | OpenGL, Vulkan — низкоуровневые Graphics APIs |
+**[[android-custom-view-fundamentals]]** — Custom View lifecycle (конструкторы, onAttachedToWindow, onDetachedFromWindow) определяет, когда безопасно инициализировать Paint/Path объекты и когда освобождать ресурсы. Canvas drawing является частью Custom View: onDraw() вызывается после onMeasure() и onLayout(). Изучайте fundamentals перед погружением в Canvas.
+
+**[[android-view-measurement]]** — onMeasure() вызывается перед onDraw() и определяет доступное пространство для рисования. Правильное измерение критично: Canvas.getWidth()/getHeight() в onDraw() возвращают размеры, установленные в onMeasure(). Без корректного measurement рисование может выходить за границы View или не использовать доступное пространство.
+
+**[[android-view-rendering-pipeline]]** — Canvas drawing является частью draw-фазы rendering pipeline (measure -> layout -> draw). Hardware acceleration переносит Canvas-операции на GPU через DisplayList/RenderNode, но не все Canvas операции поддерживаются в HW-accelerated mode. Понимание pipeline объясняет, почему некоторые операции требуют software rendering.
+
+**[[android-touch-handling]]** — для интерактивных Canvas-элементов (графики, диаграммы, рисование) необходимо обрабатывать touch events через onTouchEvent(). Координаты MotionEvent соответствуют координатной системе Canvas, но трансформации (scale, translate, rotate) усложняют маппинг. Изучайте touch handling для создания интерактивных Canvas.
+
+**[[android-compose]]** — Compose Canvas (через Canvas composable или Modifier.drawBehind/drawWithContent) предоставляет аналогичное API рисования, но в декларативном стиле. DrawScope в Compose оборачивает Android Canvas и добавляет Kotlin DSL. Compose Canvas — рекомендованный подход для новых проектов.
+
+**[[android-graphics-apis]]** — для сценариев, где Canvas недостаточно (3D-графика, сложные шейдеры, высокая производительность), используются OpenGL ES и Vulkan. Canvas оптимален для 2D-графики, а GPU APIs — для игровых и AR/VR приложений. Понимание Canvas закладывает базу для изучения низкоуровневых graphics APIs.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
+
+**Книги:**
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Canvas drawing, custom views и graphics pipeline
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с примерами создания custom views и Canvas drawing
+
+**Веб-ресурсы:**
 
 | Источник | Тип | Вклад |
 |----------|-----|-------|

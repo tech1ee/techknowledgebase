@@ -14,6 +14,8 @@ related:
   - "[[behavioral-interview]]"
   - "[[interview-process]]"
   - "[[negotiation]]"
+prerequisites:
+  - "[[behavioral-interview]]"
 ---
 
 # Behavioral Questions: 50+ вопросов с примерами STAR ответов
@@ -667,6 +669,24 @@ COMPANY-SPECIFIC:
 □ Не звучит заученно — естественная речь
 □ Подготовлены follow-up details если спросят
 ```
+
+---
+
+## Связь с другими темами
+
+- **[[behavioral-interview]]** — Поведенческое интервью — формат, в котором задаются эти вопросы. Понимание формата (STAR, calibration criteria, scoring rubrics) помогает структурировать истории правильно. Без понимания формата даже хорошие истории теряют 50% своей силы из-за неправильной подачи.
+
+- **[[interview-process]]** — Behavioral раунд — обычно 1 из 4-6 раундов в полном цикле интервью. Его вес варьируется: в Amazon — до 40% (Leadership Principles), в Google — 20% (Googleyness). Знание веса behavioral в конкретной компании помогает правильно распределить время подготовки.
+
+- **[[negotiation]]** — Behavioral интервью часто включает вопросы о конфликтах и переговорах внутри команды. Навыки negotiation применимы и к интервью (как вести дискуссию), и к рассказу историй (демонстрация influence without authority). Сильные переговорные навыки усиливают каждую STAR-историю.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Fournier C. (2017). The Manager's Path.** — Незаменима для подготовки behavioral-историй о leadership, mentoring, и conflict resolution. Главы о transition to management и team dynamics дают vocabulary и frameworks для STAR-ответов на Senior+ позиции.
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит главу о behavioral интервью с конкретными примерами STAR-ответов и типичными ошибками. Помогает понять, как интервьюер оценивает ответы и что отличает сильный ответ от слабого.
 
 ---
 

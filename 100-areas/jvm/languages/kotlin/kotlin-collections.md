@@ -9,7 +9,14 @@ tags:
   - functional-programming
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-functional]]"
 status: published
+related:
+  - "[[kotlin-functional]]"
+  - "[[kotlin-flow]]"
+  - "[[arrays-strings]]"
 ---
 
 # Kotlin Collections: List, Set, Map
@@ -44,6 +51,8 @@ status: published
 ---
 
 Kotlin разделяет коллекции на read-only (`List`, `Set`, `Map`) и mutable (`MutableList`, `MutableSet`, `MutableMap`). Read-only — это API без методов модификации, но не гарантия иммутабельности: если оригинал mutable, изменения видны через read-only ссылку.
+
+Представьте библиотеку. **Read-only List** — это каталог книг: вы можете просматривать записи, но не можете добавить или убрать карточку из каталога. Однако если кто-то (с mutable-ссылкой) добавит книгу на полку, она появится и в каталоге — каталог лишь «окно», а не отдельная коллекция. **Sequence** — это конвейер на фабрике: вместо того чтобы сначала отсортировать все детали, потом отфильтровать бракованные, потом покрасить годные (три прохода по всем деталям), конвейер обрабатывает каждую деталь за один проход — сортировка, проверка, покраска — и передаёт дальше. Если нужны только первые 10 годных деталей, конвейер остановится, не обработав остальные тысячи.
 
 Sequences — ленивые коллекции для больших данных. `list.map{}.filter{}.toList()` создаёт промежуточные списки на каждом шаге; `list.asSequence().map{}.filter{}.toList()` обрабатывает элементы по одному без промежуточных аллокаций. Для миллиона элементов Sequence экономит память в 10x. Операторы те же (map, filter, reduce), но момент вычисления разный: eager vs lazy.
 
@@ -570,43 +579,29 @@ val result = orders
 
 ### Разница между Collection и Sequence
 
+При eager evaluation (Collection) все элементы проходят через каждую операцию, создавая промежуточные коллекции:
+
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
 
-// Collection - eager evaluation
+// Collection - eager: все 8 элементов фильтруются,
+// затем все 4 чётных маппятся, затем берутся 2
 val resultList = numbers
-    .filter {
-        println("filter: $it")
-        it % 2 == 0
-    }
-    .map {
-        println("map: $it")
-        it * it
-    }
-    .take(2)
+    .filter { it % 2 == 0 }   // [2, 4, 6, 8] — новый список
+    .map { it * it }           // [4, 16, 36, 64] — ещё один
+    .take(2)                   // [4, 16]
+```
 
-// Output:
-// filter: 1, filter: 2, filter: 3, ..., filter: 8  (все элементы)
-// map: 2, map: 4, map: 6, map: 8                    (все чётные)
-// Result: [4, 16]
+При lazy evaluation (Sequence) каждый элемент проходит всю цепочку до конца, и обработка останавливается, как только набраны нужные результаты:
 
-// Sequence - lazy evaluation
+```kotlin
+// Sequence - lazy: обработали 1 (не прошёл filter),
+// 2 (прошёл → map → первый результат), 3, 4 (второй) — стоп
 val resultSeq = numbers.asSequence()
-    .filter {
-        println("filter: $it")
-        it % 2 == 0
-    }
-    .map {
-        println("map: $it")
-        it * it
-    }
+    .filter { it % 2 == 0 }
+    .map { it * it }
     .take(2)
-    .toList()
-
-// Output:
-// filter: 1, filter: 2, map: 2  (нашли первый)
-// filter: 3, filter: 4, map: 4  (нашли второй)
-// Result: [4, 16]
+    .toList()                  // [4, 16] — обработали 4 элемента, не 8
 ```
 
 **Почему Sequence эффективнее?**
@@ -968,10 +963,9 @@ val result = (1..1_000_000).asSequence()
 
 ### Паттерны в production
 
-```
-Паттерн 1: Data Pipeline с Sequence
-───────────────────────────────────
-// Обработка миллионов записей без OOM
+**Паттерн 1: Data Pipeline с Sequence.** Обработка миллионов записей без OutOfMemoryError — lineSequence читает файл построчно:
+
+```kotlin
 File("logs.txt")
     .bufferedReader()
     .lineSequence()                      // Lazy reading
@@ -983,29 +977,21 @@ File("logs.txt")
     .sortedByDescending { it.value }
     .take(10)
     .forEach { println("${it.key}: ${it.value}") }
+```
 
-Паттерн 2: Immutable Collections для Compose
-────────────────────────────────────────────
-// kotlinx.collections.immutable
+**Паттерн 2: Immutable Collections для Compose.** Библиотека `kotlinx.collections.immutable` гарантирует, что данные не изменятся между рендерами:
+
+```kotlin
 val items: ImmutableList<Item> = persistentListOf()
+val newItems = items.add(newItem)  // Новый список, без мутации
+```
 
-// Новый список без мутации
-val newItems = items.add(newItem)
+**Паттерн 3: Batch Processing с chunked.** Отправка данных в API пачками по 100 элементов:
 
-// Compose автоматически перерисовывает
-@Composable
-fun ItemList(items: ImmutableList<Item>) {
-    // items гарантированно не меняются между render
+```kotlin
+users.chunked(100).forEach { batch ->
+    api.createUsers(batch)
 }
-
-Паттерн 3: Batch Processing с chunked
-─────────────────────────────────────
-// Отправка в API пачками по 100
-users
-    .chunked(100)
-    .forEach { batch ->
-        api.createUsers(batch)
-    }
 ```
 
 ---
@@ -1044,21 +1030,21 @@ users
 
 ---
 
-## Рекомендуемые источники
+## Связь с другими темами
 
-### Официальная документация
-- [Kotlin Collections](https://kotlinlang.org/docs/collections-overview.html) — полный гайд
-- [Sequences](https://kotlinlang.org/docs/sequences.html) — lazy collections
-- [Collection Operations](https://kotlinlang.org/docs/collection-operations.html) — все операторы
+**[[kotlin-functional]]** — collection operators (`map`, `filter`, `flatMap`, `fold`) — это прямое применение функционального программирования к данным. Higher-order functions принимают лямбды для трансформации коллекций, а Sequence реализует lazy evaluation из FP. Без понимания лямбд и function types невозможно эффективно работать с коллекциями. Рекомендуется изучать functional programming параллельно с collections.
 
-### Книги
-- **"Kotlin in Action"** (2nd ed) — глава о коллекциях
-- **"Effective Kotlin"** — best practices для коллекций
-- **"Functional Programming in Kotlin"** — продвинутые паттерны
+**[[kotlin-flow]]** — Flow можно рассматривать как асинхронную версию Sequence: те же операторы (`map`, `filter`, `collect`), но для данных, приходящих со временем. Понимание cold/hot collections (List vs Sequence) готовит к пониманию cold/hot streams (Flow vs SharedFlow). Коллекции — синхронные данные «здесь и сейчас», Flow — асинхронные данные «по мере поступления». Изучите collections перед Flow для плавного перехода.
 
-### Библиотеки
-- [kotlinx.collections.immutable](https://github.com/Kotlin/kotlinx.collections.immutable) — persistent collections
-- [Arrow-kt](https://arrow-kt.io/) — функциональные расширения
+**[[arrays-strings]]** — массивы и строки — низкоуровневые коллекции со своими особенностями: `IntArray` vs `Array<Int>` (boxing), `String` как `CharSequence`. Kotlin предоставляет extension functions для конвертации между массивами и коллекциями (`toList()`, `toTypedArray()`). Понимание разницы между примитивными массивами и коллекциями критично для performance-sensitive кода.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — глава о коллекциях подробно объясняет разницу между read-only и mutable интерфейсами, variance в коллекциях и основные операторы с примерами.
+- Moskala M. (2024). *Effective Kotlin.* — best practices для работы с коллекциями: когда использовать Sequence vs Collection, как избежать лишних аллокаций и правильно применять функциональные цепочки.
+- Vermeulen M. et al. (2021). *Functional Programming in Kotlin.* — продвинутые паттерны функциональных коллекций: persistent data structures, structural sharing, монадические операции над контейнерами.
 
 ---
 

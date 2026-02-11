@@ -19,6 +19,10 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-process-memory]]"
 cs-foundations: [serialization, ipc, binary-protocol, memory-layout, decorator-pattern, object-pool]
+prerequisites:
+  - "[[android-activity-lifecycle]]"
+  - "[[android-app-components]]"
+  - "[[android-navigation]]"
 ---
 
 # Bundle и Parcelable: сериализация данных в Android
@@ -1852,7 +1856,14 @@ Annotation processor (KAPT/KSP) не подходит потому что **не
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
+
+**Книги:**
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник Android с подробным разбором Bundle, Parcelable и передачи данных между компонентами
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: Binder IPC, Parcel native implementation, TransactionTooLargeException на уровне ядра
+- Bloch J. (2018). Effective Java, 3rd Edition. — лучшие практики сериализации в Java, Item 85-90 о Serializable vs альтернативах
+
+**Веб-ресурсы:**
 
 | Источник | Тип | Описание |
 |----------|-----|----------|

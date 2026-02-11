@@ -17,6 +17,9 @@ related:
   - "[[ci-cd-pipelines]]"
   - "[[kubernetes-basics]]"
   - "[[docker-for-developers]]"
+prerequisites:
+  - "[[docker-for-developers]]"
+  - "[[ci-cd-pipelines]]"
 ---
 
 # Infrastructure as Code: Terraform и декларативный подход

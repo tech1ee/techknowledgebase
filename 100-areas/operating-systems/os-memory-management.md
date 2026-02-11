@@ -18,6 +18,9 @@ related:
   - "[[os-processes-threads]]"
   - "[[jvm-memory-model]]"
   - "[[jvm-gc-tuning]]"
+prerequisites:
+  - "[[os-processes-threads]]"
+  - "[[data-structures-fundamentals]]"
 ---
 
 # Управление памятью: виртуальная память и paging
@@ -1321,15 +1324,15 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-overview]] — карта раздела, базовые концепции (syscalls, kernel mode), которые объясняют почему page faults требуют перехода в kernel
-- [[os-processes-threads]] — адресное пространство процесса (stack, heap, text), page tables для каждого процесса
+**[[os-overview]]** — Обзор ОС объясняет разделение kernel mode и user mode, без которого невозможно понять, почему page fault — это дорогая операция: при обращении к отсутствующей странице CPU генерирует исключение, происходит переход в kernel mode, ядро находит нужную страницу (или загружает с диска), обновляет page table и возвращает управление. Системные вызовы mmap(), brk(), madvise() — это интерфейсы kernel для управления виртуальной памятью, каждый требующий перехода через syscall boundary. Понимание архитектуры ядра также объясняет, почему ядро имеет собственное виртуальное адресное пространство (kernel space), отображённое в верхнюю часть адресного пространства каждого процесса.
 
-**Применение:**
-- [[jvm-memory-model]] — JVM heap = виртуальная память, понимание paging объясняет поведение при memory pressure
-- [[jvm-gc-tuning]] — почему GC чувствителен к swap, как huge pages улучшают производительность
+**[[os-processes-threads]]** — Процессы и потоки непосредственно определяют структуру виртуальной памяти: каждый процесс получает изолированное адресное пространство с сегментами text, data, heap, stack, а каждый поток — собственный стек внутри этого пространства. Page table — это структура данных, привязанная к процессу: при context switch между процессами ядро переключает CR3 (указатель на page table), что приводит к сбросу TLB и последующим TLB miss. Механизм fork() использует Copy-on-Write — один из ключевых примеров взаимодействия управления процессами и памятью: вместо копирования страниц ядро помечает их read-only и копирует только при записи. Понимание этой связи критично для оптимизации серверных приложений, где fork() используется для создания worker processes.
+
+**[[jvm-memory-model]]** — JVM heap целиком находится в виртуальной памяти процесса, и его поведение напрямую зависит от механизмов paging и виртуальной памяти ОС. Когда JVM запрашивает -Xmx8g, ОС выделяет виртуальные страницы, которые отображаются в физическую память по мере первого обращения (demand paging), поэтому RSS может быть значительно меньше heap size. Memory ordering и visibility гарантии JMM (volatile, happens-before) реализуются через memory barriers процессора и страничные атрибуты, что связывает Java-модель памяти с аппаратными механизмами. При memory pressure ОС может вытеснять страницы JVM heap в swap, создавая непредсказуемые latency spikes при обращении к объектам.
+
+**[[jvm-gc-tuning]]** — Настройка сборщика мусора тесно связана с виртуальной памятью, потому что GC должен обходить весь heap для поиска мусора, и каждое обращение к swap-странице — это major page fault со стоимостью 0.1-10 ms. Full GC на 8 GB heap может занять 500 ms в RAM, но 10+ секунд если часть heap в swap, что приводит к катастрофическим stop-the-world паузам. Huge pages (2 MB вместо 4 KB) значительно улучшают производительность GC, сокращая количество TLB entries: для 8 GB heap нужно 2M записей TLB при 4 KB страницах vs 4K записей при 2 MB. Понимание paging также объясняет, почему рекомендуется отключать swap для JVM-серверов и использовать -XX:+AlwaysPreTouch для предварительного fault-in всех страниц при старте.
 
 **Связанные концепции:**
 - [[os-virtualization]] — контейнеры используют cgroups для ограничения памяти, что влияет на OOM поведение
@@ -1337,6 +1340,14 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ---
 
 ## Рекомендуемые источники
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 3 (Memory Management) охватывает всё от базового swapping до сегментации и paging; глава 4 (File Systems) показывает связь виртуальной памяти с файлами через memory-mapped I/O.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — главы 9 (Main Memory) и 10 (Virtual Memory) детально разбирают page replacement алгоритмы (LRU, Clock, Working Set) с формальным анализом; полезен для подготовки к интервью.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — главы 13-24 (Virtual Memory) — лучшее бесплатное объяснение от address spaces до page replacement с практическими симуляторами.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 9 (Virtual Memory) даёт уникальную перспективу программиста: от VM как инструмента кэширования до malloc-реализации и memory-related bugs.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — главы 12 (Memory Management) и 15 (The Process Address Space) описывают реализацию mm_struct, VMA, page allocator и slab allocator в ядре Linux.
 
 ### Книги и курсы
 - [OSTEP: Virtual Memory chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-intro.pdf) — бесплатная книга, главы 13-24 о виртуальной памяти

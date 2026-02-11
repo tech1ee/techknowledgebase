@@ -7,7 +7,7 @@ status: published
 confidence: high
 tags:
   - topic/cloud
-  - gcp
+  - topic/gcp
   - bigquery
   - compute-engine
   - cloud-functions
@@ -17,6 +17,8 @@ related:
   - "[[cloud-overview]]"
   - "[[cloud-serverless-patterns]]"
   - "[[cloud-networking-security]]"
+prerequisites:
+  - "[[cloud-platforms-essentials]]"
 ---
 
 # GCP Core Services: Compute Engine, Cloud SQL, BigQuery

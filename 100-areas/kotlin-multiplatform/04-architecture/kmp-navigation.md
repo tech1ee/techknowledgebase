@@ -16,6 +16,9 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[compose-mp-overview]]"
+prerequisites:
+  - "[[kmp-architecture-patterns]]"
+  - "[[compose-mp-overview]]"
 cs-foundations:
   - "[[graph-data-structures]]"
   - "[[stack-data-structure]]"
@@ -975,6 +978,22 @@ Compose Navigation упрощает mapping, но не eliminates platform setup
 | State Machines | Screen transitions model | [[state-machines-theory]] |
 | Tree Traversal | Component hierarchy | [[tree-data-structures]] |
 | Lifecycle Patterns | Component lifecycle | [[component-lifecycle]] |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор KMP описывает общую структуру мультиплатформенного проекта, в рамках которого навигация является одним из ключевых архитектурных решений. Выбор навигационной библиотеки (Compose Navigation, Decompose, Voyager) определяет степень sharing между платформами: от UI-only навигации до полностью shared navigation graph с бизнес-логикой.
+
+**[[kmp-architecture-patterns]]** — Архитектурные паттерны напрямую влияют на выбор навигационного решения: MVVM лучше сочетается с Compose Navigation, MVI — с Decompose, который предоставляет lifecycle-aware компоненты. Навигация определяет, как ViewModel и состояние экранов создаются, хранятся и уничтожаются при переходах.
+
+**[[compose-mp-overview]]** — Compose Multiplatform является UI-фреймворком, с которым интегрируются все навигационные решения. Compose Navigation работает напрямую с @Composable функциями, Decompose предоставляет мост между component-based архитектурой и Compose UI, Voyager использует Screen-абстракцию. Понимание Compose lifecycle и recomposition необходимо для корректной работы навигации.
+
+## Источники и дальнейшее чтение
+
+1. **Martin R. (2017).** *Clean Architecture.* — Навигация в мультиплатформенном приложении должна следовать принципам Clean Architecture: UI-слой (навигация) не должен содержать бизнес-логику, а переходы между экранами определяются use cases. Книга помогает спроектировать навигационный граф, независимый от конкретного фреймворка.
+2. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Навигация тесно связана с корутинами: загрузка данных при переходе на экран, отмена операций при уходе с экрана, shared flows для навигационных событий. Понимание structured concurrency и lifecycle необходимо для предотвращения утечек при навигации.
+3. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по Kotlin-коду применимы к навигации: sealed classes для навигационных маршрутов, data classes для аргументов, и type-safe builders для описания навигационного графа.
 
 ---
 

@@ -17,6 +17,8 @@ related:
   - "[[devops-overview]]"
   - "[[observability]]"
   - "[[security-incident-response]]"
+prerequisites:
+  - "[[observability]]"
 ---
 
 # Incident Management: On-call, Runbooks, Post-mortems

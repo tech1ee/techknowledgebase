@@ -2,7 +2,7 @@
 title: "Interview Tracking System 2026: templates и отчёты"
 created: 2026-01-11
 modified: 2026-01-11
-type: system
+type: reference
 status: published
 confidence: high
 tags:
@@ -14,6 +14,9 @@ related:
   - "[[interview-process]]"
   - "[[job-search-strategy]]"
   - "[[ai-interview-preparation]]"
+prerequisites:
+  - "[[interview-process]]"
+  - "[[job-search-strategy]]"
 ---
 
 # Interview Tracking System 2026
@@ -838,5 +841,21 @@ ZAPIER/MAKE WORKFLOWS:
 → [[job-search-strategy]] — Overall approach
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Tracking system из текущего материала накладывается на каждый этап процесса интервью. Pipeline tracker отслеживает прогресс от Applied до Offer, а stage-specific checklists соответствуют раундам из interview-process: Recruiter Screen, Technical Screen, Onsite. Вместе они дают полную систему: знание процесса + инструменты отслеживания.
+
+- [[job-search-strategy]] — Стратегия поиска работы определяет, ЧТО отслеживать (target companies, networking contacts, conversion rates), а tracking system — КАК это делать. Weekly Progress Report из текущего материала помогает итерировать стратегию: если response rate < 10%, нужно улучшить outreach; если onsite → offer < 25%, нужно усилить interview prep.
+
+- [[ai-interview-preparation]] — AI-инструменты интегрируются в tracking system: AI для company research (Phase 1 prep), AI для mock interviews (practice log), AI для post-interview debrief (feedback analysis). Tracking system фиксирует, какие AI-промпты сработали лучше и для каких этапов.
+
+## Источники и дальнейшее чтение
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking применима к job search tracking: prototype (подай 5 заявок), test (отследи результаты), iterate (улучши подход). Книга помогает превратить хаотичный поиск в системный эксперимент с метриками.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Содержит рекомендации по организации подготовки: timeline, checklists, practice schedule. Stage-specific checklists из текущего материала дополняют preparation framework из книги конкретными шаблонами для трекинга.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание того, как debrief и решения принимаются внутри компаний, помогает правильно интерпретировать rejection analysis. Книга описывает hiring process с perspective hiring manager, что делает post-mortem анализ более точным.
 
 *Обновлено: 2026-01-11*

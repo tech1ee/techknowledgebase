@@ -19,6 +19,9 @@ related:
   - "[[active-listening]]"
   - "[[negotiation-fundamentals]]"
   - "[[stakeholder-negotiation]]"
+prerequisites:
+  - "[[active-listening]]"
+  - "[[communication-styles]]"
 ---
 
 # Saying No: искусство профессионального отказа

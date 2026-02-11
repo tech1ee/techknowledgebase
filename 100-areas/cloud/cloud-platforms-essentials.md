@@ -20,6 +20,8 @@ related:
   - "[[ci-cd-pipelines]]"
   - "[[network-cloud-modern]]"
   - "[[networking-overview]]"
+prerequisites:
+  - "[[network-fundamentals-for-developers]]"
 ---
 
 # Cloud Platforms: от bare metal до serverless

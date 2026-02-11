@@ -3,7 +3,7 @@ title: "Tech Knowledge Base: главный индекс"
 created: 2026-01-09
 modified: 2026-01-11
 type: index
-status: verified
+status: published
 confidence: high
 tags:
   - type/index

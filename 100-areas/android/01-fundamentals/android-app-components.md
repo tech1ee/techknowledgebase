@@ -17,6 +17,8 @@ related:
   - "[[android-activity-lifecycle]]"
   - "[[android-process-memory]]"
   - "[[android-context-internals]]"
+prerequisites:
+  - "[[android-overview]]"
 ---
 
 # Компоненты приложения: Activity, Service, BR, CP
@@ -968,8 +970,14 @@ Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))  // Система 
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник Android с подробным разбором всех четырёх компонентов приложения
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая компонентную модель и IPC
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android, детальное описание ActivityManagerService и механизма запуска компонентов
+
+**Веб-ресурсы:**
 - [Introduction to Activities - Android Developers](https://developer.android.com/guide/components/activities/intro-activities) — официальная документация
 - [Services Overview - Android Developers](https://developer.android.com/guide/components/services) — документация по Services
 - [Broadcasts Overview - Android Developers](https://developer.android.com/guide/components/broadcasts) — BroadcastReceiver

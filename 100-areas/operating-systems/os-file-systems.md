@@ -17,6 +17,9 @@ related:
   - "[[os-overview]]"
   - "[[os-io-devices]]"
   - "[[database-design-optimization]]"
+prerequisites:
+  - "[[os-io-devices]]"
+  - "[[os-memory-management]]"
 ---
 
 # Файловые системы: как данные хранятся на диске
@@ -1150,22 +1153,29 @@ iotop                     # I/O по процессам
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-overview]] — syscalls (open, read, write), VFS абстракция
-- [[os-io-devices]] — как работают блочные устройства, interrupts, DMA
+**[[os-overview]]** — Обзор ОС объясняет системные вызовы (open, read, write, close), через которые приложения взаимодействуют с файловой системой, и VFS (Virtual File System) — абстракцию, позволяющую ядру работать с ext4, XFS, Btrfs и NFS через единый интерфейс. Каждый файловый системный вызов проходит через VFS layer, затем конкретную FS-реализацию, затем block I/O layer — и понимание этого стека критично для диагностики производительности. Концепция file descriptor, возвращаемого open(), связывает процесс с файлом через таблицу открытых файлов ядра и таблицу inodes. Понимание kernel/user mode разделения объясняет, почему каждый read()/write() — это системный вызов с переходом в ядро, что мотивирует буферизацию в userspace (stdio).
 
-**Углубление:**
+**[[os-io-devices]]** — Устройства ввода-вывода являются физическим фундаментом файловых систем: файловая система — это абстракция поверх блочного устройства (HDD, SSD, NVMe). Понимание разницы между HDD (seek time 4-10 ms, sequential throughput 100-200 MB/s) и SSD (random access 50-100 µs, throughput 500-7000 MB/s) объясняет, почему файловые системы оптимизируют размещение данных по-разному: ext4 использует extents для sequential allocation, а Btrfs — COW (Copy-on-Write) для SSD-friendly записи. Механизмы DMA и interrupt-driven I/O определяют, как данные перемещаются между диском и page cache без участия CPU. Планировщик I/O (CFQ, mq-deadline, BFQ) взаимодействует с файловой системой, переупорядочивая запросы для минимизации seek time на HDD.
+
+**[[database-design-optimization]]** — Базы данных строят свои storage engine поверх файловых систем (или обходят их через direct I/O), и понимание FS-механизмов критично для оптимизации производительности БД. Многие СУБД (PostgreSQL, MySQL InnoDB) используют O_DIRECT для обхода page cache ядра, реализуя собственный buffer pool с более интеллектуальным управлением — ядро не знает паттерны доступа к B-tree страницам, а БД знает. Журналирование файловой системы (ext4 journal) и WAL (Write-Ahead Log) базы данных решают одну и ту же проблему — crash recovery — но на разных уровнях абстракции; двойное журналирование (FS + DB) создаёт overhead, который O_DIRECT помогает устранить. fsync() — критическая операция для durability баз данных: без fsync() после записи WAL данные могут потеряться при crash, а стоимость fsync() (0.1-10 ms) определяет максимальную пропускную способность транзакций.
+
+**Связанные концепции:**
 - [[os-memory-management]] — page cache использует виртуальную память, mmap() связывает файлы и память
-
-**Применение:**
-- Базы данных используют direct I/O (O_DIRECT) чтобы обойти page cache и управлять буферизацией самостоятельно
 - [[os-virtualization]] — контейнеры могут использовать overlay filesystems (aufs, overlayfs)
 
 ---
 
 ## Рекомендуемые источники
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 4 (File Systems) покрывает от directory structure до journaling и NFS; глава 11 (Case Study: Linux) показывает реализацию VFS и ext-семейства в Linux.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — главы 13 (File-System Interface), 14 (File-System Implementation) и 15 (File-System Internals) — полный цикл от API до allocation methods (contiguous, linked, indexed) и free-space management; хорош для подготовки к экзаменам.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — главы 36-43 (Persistence) — от устройств до crash consistency и journaling, с пошаговыми примерами создания файла и fsck; бесплатно.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 10 (System-Level I/O) объясняет Unix I/O модель (file descriptors, buffering) с точки зрения программиста; практический код с open/read/write/mmap.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — глава 13 (The Virtual Filesystem) и глава 16 (The Page Cache and Page Writeback) — VFS как абстракция, inode operations, dentry cache, writeback механизм в ядре Linux.
 
 ### Книги и курсы
 - [OSTEP: File Systems chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/file-intro.pdf) — бесплатная книга, главы 36-43

@@ -16,6 +16,9 @@ related:
   - "[[security-overview]]"
   - "[[devops-incident-management]]"
   - "[[observability]]"
+prerequisites:
+  - "[[security-fundamentals]]"
+  - "[[threat-modeling]]"
 ---
 
 # Incident Response: detection, containment, recovery
@@ -481,6 +484,28 @@ Key takeaways for the team.
 - [NIST Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
 - [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)
 - [AWS Security Incident Response Guide](https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/)
+
+---
+
+## Связь с другими темами
+
+[[threat-modeling]] — threat model является входным документом для планирования incident response. Идентифицированные угрозы (через STRIDE, attack trees) определяют, какие playbooks необходимо подготовить заранее, какие индикаторы компрометации мониторить и какие severity levels назначать. После каждого инцидента threat model обновляется на основе lessons learned, создавая цикл непрерывного улучшения. Рекомендуется сначала изучить threat-modeling, затем incident-response.
+
+[[devops-incident-management]] — SRE incident management фокусируется на доступности и производительности, тогда как security incident response — на защите конфиденциальности и целостности. Оба процесса используют схожие структуры (incident commander, communication channels, post-mortem), и их интеграция критична для эффективного реагирования. Понимание обоих подходов позволяет построить единый процесс обработки инцидентов любого типа.
+
+[[observability]] — системы мониторинга и логирования являются фундаментом фазы Detection в incident response lifecycle. SIEM-системы, метрики, distributed tracing и structured logging обеспечивают данные для обнаружения IOC и проведения forensic analysis. Без качественной observability время обнаружения (TTD) инцидента увеличивается на порядки, а расследование становится невозможным.
+
+[[security-secrets-management]] — компрометация секретов является одним из самых распространённых типов инцидентов. Наличие автоматизированной ротации и centralized secrets management значительно сокращает время containment и recovery. Playbooks для credential compromise должны включать процедуры emergency rotation через Vault или cloud-native secrets managers.
+
+[[databases-backup-recovery]] — фаза Recovery в incident response напрямую зависит от стратегии резервного копирования баз данных. Знание RPO/RTO, типов бэкапов (full, incremental, differential) и процедур восстановления критично для минимизации data loss при инциденте. Forensic analysis также может потребовать анализа бэкапов для определения момента компрометации.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — глава по incident response и forensics в контексте проектирования устойчивых систем, включая организационные аспекты реагирования на инциденты.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — связь между моделированием угроз и планированием реагирования: как результаты threat modeling формируют playbooks и приоритеты мониторинга.
+- McGraw G. (2006). *Software Security: Building Security In.* Addison-Wesley. — принципы встроенной безопасности, включая подготовку к инцидентам на этапе проектирования и разработки.
 
 ---
 

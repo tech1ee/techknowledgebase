@@ -26,6 +26,9 @@ sources:
   - "https://www.infoworld.com/article/2334607/project-loom-understand-the-new-java-concurrency-model.html"
   - Effective Java 3rd Edition by Joshua Bloch (2018)
   - Modern Java in Action by Raoul-Gabriel Urma (2018)
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-virtual-machine-concept]]"
 related:
   - "[[jvm-basics-history]]"
   - "[[jvm-concurrency-overview]]"
@@ -2728,12 +2731,26 @@ ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[jvm-basics-history]] — История JVM и архитектура
-- [[jvm-memory-model]] — Как работает память в JVM
-- [[jvm-performance-overview]] — Оптимизация современного Java кода
-- [[jvm-languages-ecosystem]] — Другие языки на JVM
+**[[jvm-basics-history]]** — современные фичи Java не появились в вакууме: каждая версия (8, 17, 21) строится на архитектуре JVM. Lambdas используют invokedynamic (появился в Java 7 для dynamic languages), virtual threads опираются на continuations в JVM runtime. Понимание истории и архитектуры JVM объясняет, почему фичи появились именно в таком порядке и с такими ограничениями. Рекомендуется изучить basics перед погружением в modern features.
+
+**[[jvm-memory-model]]** — virtual threads (Java 21) кардинально меняют модель работы с памятью: миллионы потоков с микроскопическими стеками вместо тысяч с мегабайтными. Records изменяют паттерны создания объектов (immutable, компактные). Понимание memory model необходимо для осознанного выбора между platform и virtual threads и для оценки влияния новых фич на GC pressure.
+
+**[[jvm-performance-overview]]** — каждая modern feature имеет performance implications: streams vs for-loops (allocation overhead), virtual threads vs thread pools (scheduling cost), records vs POJOs (memory layout). Performance overview помогает оценить, когда новые фичи дают реальный выигрыш, а когда добавляют overhead. Изучайте modern features для продуктивности, performance overview — для критичных путей.
+
+**[[jvm-concurrency-overview]]** — Virtual Threads (Java 21) невозможно оценить без понимания традиционной модели потоков в Java: Thread, ExecutorService, ForkJoinPool. Concurrency overview объясняет проблемы, которые решают virtual threads: ограниченное количество OS-потоков, дорогостоящее переключение контекста, необходимость реактивных фреймворков для high-throughput I/O. Рекомендуется изучить классическую конкурентность перед погружением в Project Loom, чтобы понять масштаб улучшений.
+
+**[[jvm-languages-ecosystem]]** — Kotlin, Scala и Clojure повлияли на эволюцию Java: lambdas пришли из Scala, null-safety из Kotlin, pattern matching из ML-семейства. Сравнение показывает, что Java перенимает лучшие идеи, но адаптирует их к своей философии backward compatibility. Изучение экосистемы JVM-языков помогает понять design decisions в modern Java.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Urma R.-G., Fusco M., Mycroft A. (2018). *Modern Java in Action.* — Фундаментальная книга по Java 8-17: lambdas, streams, Optional, модули. Каждая фича разбирается с мотивацией, примерами и внутренним устройством. Лучший источник для понимания функциональной революции Java.
+- Bloch J. (2018). *Effective Java, 3rd Edition.* — 90 практических рекомендаций по написанию качественного Java-кода. Покрывает lambdas (Items 42-48), streams (Items 45-48), Optional (Item 55). Незаменимый справочник для перехода от знания синтаксиса к пониманию идиом.
+- Goetz B. et al. (2006). *Java Concurrency in Practice.* — Классика конкурентного программирования на Java. Хотя написана до virtual threads, объясняет фундамент (Java Memory Model, happens-before, thread safety), без которого невозможно понять, почему Project Loom стал необходим.
+- Oaks S. (2020). *Java Performance, 2nd Edition.* — Покрывает производительность streams vs loops, lambda allocation cost, влияние модулей на startup time. Необходим для осознанного выбора между новыми и классическими подходами в performance-critical коде.
 
 ---
 

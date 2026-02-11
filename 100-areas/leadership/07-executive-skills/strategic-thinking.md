@@ -19,6 +19,10 @@ related:
   - "[[em-fundamentals]]"
   - "[[technical-vision]]"
   - "[[stakeholder-management]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[stakeholder-management]]"
+  - "[[engineering-metrics]]"
 ---
 
 # Стратегическое мышление
@@ -153,19 +157,21 @@ Environment changes. Revisit quarterly.
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[technical-vision]] — tech strategy
-- [[stakeholder-management]] — influencing strategy
-- [[executive-communication]] — communicating strategy
+**[[em-fundamentals]]** — Стратегическое мышление строится на фундаменте управленческих навыков: невозможно думать стратегически, не освоив тактический уровень менеджмента. EM-фундаментал даёт понимание операционной реальности, на основе которой строятся стратегические решения. По мере карьерного роста от EM к Director и VP доля стратегического мышления в работе возрастает с 10% до 80%.
 
-## Источники
+**[[technical-vision]]** — Техническая стратегия (technical vision) является прямым применением стратегического мышления к технологическому контексту компании. Фреймворки Rumelt (diagnosis → guiding policy → coherent actions) и Playing to Win напрямую используются при формировании технической vision. Стратегическое мышление определяет «куда идём», а technical vision переводит это в конкретные технологические решения и архитектурные принципы.
+
+**[[stakeholder-management]]** — Реализация стратегии невозможна без поддержки ключевых стейкхолдеров. Стратегическое мышление помогает понять контекст и приоритеты каждого стейкхолдера, а навыки influence without authority позволяют продвигать стратегические инициативы. Умение формулировать стратегию в терминах бизнес-ценности для каждого стейкхолдера — это пересечение стратегического мышления и stakeholder management.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Good Strategy Bad Strategy](https://www.amazon.com/Good-Strategy-Bad-Difference-Matters/dp/0307886239) | Book |
-| [Playing to Win](https://www.amazon.com/Playing-Win-Strategy-Really-Works/dp/142218739X) | Book |
-| [Wardley Maps](https://learnwardleymapping.com/) | Framework |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
 
 ---
 

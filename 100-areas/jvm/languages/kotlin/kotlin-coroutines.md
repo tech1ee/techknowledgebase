@@ -11,11 +11,15 @@ tags:
   - flow
   - type/concept
   - level/intermediate
-related:
-  - [kotlin-flow]]
+prerequisites:
+  - "[[kotlin-basics]]"
   - "[[kotlin-functional]]"
   - "[[jvm-concurrency-overview]]"
-  - "[[kotlin-testing]"
+related:
+  - "[[kotlin-flow]]"
+  - "[[kotlin-functional]]"
+  - "[[jvm-concurrency-overview]]"
+  - "[[kotlin-testing]]"
 status: published
 ---
 
@@ -127,9 +131,9 @@ Suspend функции приостанавливаются без блокир�
 
 ### Что такое корутина?
 
-```kotlin
-import kotlinx.coroutines.*
+Сравним обычную функцию, которая блокирует поток, с suspend-функцией, которая освобождает его:
 
+```kotlin
 // Обычная функция блокирует поток
 fun fetchData(): String {
     Thread.sleep(1000)  // Блокирует поток!
@@ -141,8 +145,12 @@ suspend fun fetchDataSuspend(): String {
     delay(1000)  // Приостанавливает корутину, НЕ блокирует поток!
     return "Data"
 }
+```
 
-fun main() = runBlocking {  // Создаёт корутину
+Вызов suspend-функции возможен только из корутины или другой suspend-функции. `runBlocking` создаёт корутину и блокирует текущий поток до её завершения:
+
+```kotlin
+fun main() = runBlocking {
     println("Start")
     val data = fetchDataSuspend()  // Вызов suspend функции
     println("Data: $data")
@@ -160,37 +168,35 @@ fun main() = runBlocking {  // Создаёт корутину
 
 ### suspend функции
 
+Ключевое слово `suspend` маркирует функцию как способную приостановиться. Вызвать её можно только из другой suspend-функции или из корутины:
+
 ```kotlin
-// suspend = может быть приостановлена
 suspend fun doWork(): Int {
     delay(1000)  // Приостановка на 1 секунду
     return 42
 }
 
-// suspend функции можно вызывать только из:
-// 1. Других suspend функций
 suspend fun caller() {
-    val result = doWork()  // ✅ OK
+    val result = doWork()  // OK из suspend функции
 }
 
-// 2. Корутин (launch, async, runBlocking)
 fun regularFunction() {
-    // val result = doWork()  // ❌ Ошибка компиляции!
-
+    // val result = doWork()  // Ошибка компиляции!
     GlobalScope.launch {
-        val result = doWork()  // ✅ OK внутри корутины
+        val result = doWork()  // OK внутри корутины
     }
 }
+```
 
-// suspend модификатор в сигнатуре функции
+Suspend-модификатор применим и к extension-функциям. Внутри suspend-функции можно вызывать другие suspend-функции свободно:
+
+```kotlin
 suspend fun fetchUser(id: String): User {
-    // Можем вызывать другие suspend функции
-    val data = apiCall(id)
+    val data = apiCall(id)  // suspend вызов
     delay(100)
     return parseUser(data)
 }
 
-// suspend для extension функций
 suspend fun String.fetchFromNetwork(): ByteArray {
     delay(500)
     return this.toByteArray()
@@ -286,11 +292,10 @@ Coroutine (~100 bytes):
 
 ### Корутина билдеры
 
-```kotlin
-import kotlinx.coroutines.*
+`runBlocking` блокирует текущий поток до завершения корутины и всех её дочерних. Используется в `main()` и в тестах, но никогда в production-коде Android:
 
-// runBlocking - блокирует текущий поток до завершения корутины
-fun main() = runBlocking {  // Блокирует main thread
+```kotlin
+fun main() = runBlocking {
     launch {
         delay(1000)
         println("World")
@@ -298,11 +303,12 @@ fun main() = runBlocking {  // Блокирует main thread
     println("Hello")
     // Ждёт завершения всех дочерних корутин
 }
-// Output:
-// Hello
-// World (через 1 секунду)
+// Output: Hello, World (через 1 секунду)
+```
 
-// launch - запуск корутины fire-and-forget
+`launch` запускает корутину "fire-and-forget" и возвращает `Job`. `async` запускает корутину с результатом и возвращает `Deferred<T>`:
+
+```kotlin
 fun example1() = runBlocking {
     val job: Job = launch {
         delay(1000)
@@ -312,7 +318,6 @@ fun example1() = runBlocking {
     job.join()  // Ждём завершения
 }
 
-// async - запуск корутины с результатом
 fun example2() = runBlocking {
     val deferred: Deferred<Int> = async {
         delay(1000)
@@ -322,15 +327,16 @@ fun example2() = runBlocking {
     val result = deferred.await()  // Ждём и получаем результат
     println("Result: $result")
 }
+```
 
-// Множественные async для параллельных вычислений
+Множественные `async` внутри `coroutineScope` позволяют выполнять несколько операций параллельно. Функция не вернётся, пока все дочерние корутины не завершатся:
+
+```kotlin
 suspend fun fetchUserData(userId: String): UserData = coroutineScope {
-    // Запускаем параллельно
     val user = async { fetchUser(userId) }
     val posts = async { fetchPosts(userId) }
     val friends = async { fetchFriends(userId) }
 
-    // Ждём всех
     UserData(
         user = user.await(),
         posts = posts.await(),
@@ -348,20 +354,22 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
 
 ### CoroutineScope - область видимости корутин
 
-```kotlin
-// Плохо: GlobalScope живёт вечно
-GlobalScope.launch {
-    // Корутина не привязана к жизненному циклу приложения
-    // Может продолжать работать после Activity.onDestroy()
-}
+`GlobalScope` живёт вечно -- корутины в нём не привязаны к жизненному циклу компонента. Это антипаттерн:
 
-// Хорошо: собственный scope
+```kotlin
+GlobalScope.launch {
+    // Корутина может продолжать работать после Activity.onDestroy()
+}
+```
+
+Правильный подход -- создать собственный scope и отменить его при уничтожении компонента:
+
+```kotlin
 class MyViewModel {
     private val scope = CoroutineScope(Dispatchers.Main + Job())
 
     fun loadData() {
         scope.launch {
-            // Корутина привязана к scope
             val data = fetchData()
             updateUI(data)
         }
@@ -371,8 +379,11 @@ class MyViewModel {
         scope.cancel()  // Отменяет все корутины в scope
     }
 }
+```
 
-// Android: viewModelScope из lifecycle
+В Android используйте готовый `viewModelScope`, который автоматически отменяется при `onCleared()`:
+
+```kotlin
 class MyViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
@@ -1360,29 +1371,24 @@ Case 3: Ktor высоконагруженный API
 
 ---
 
-## Рекомендуемые источники
+## Связь с другими темами
 
-### Официальная документация
-- [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html) — полное руководство
-- [Coroutines Basics](https://kotlinlang.org/docs/coroutines-basics.html) — основы корутин
-- [Android Coroutines](https://developer.android.com/kotlin/coroutines) — корутины в Android
+**[[kotlin-flow]]** — Flow строится поверх coroutines: каждый flow builder (`flow {}`) запускается в coroutine, операторы Flow используют suspend functions, а collection происходит в coroutine scope. Без понимания coroutines (structured concurrency, dispatchers, cancellation) невозможно правильно использовать Flow. Coroutines — механизм выполнения, Flow — абстракция для потоков данных. Изучите coroutines перед Flow.
 
-### Книги
-- **"Kotlin Coroutines: Deep Dive"** — Marcin Moskała. Единственная книга полностью о корутинах
-- **"Kotlin in Action"** (2nd ed) — глава о coroutines
-- **"Programming Android with Kotlin"** — O'Reilly, async паттерны
+**[[kotlin-functional]]** — suspend functions, по сути, являются продолжением функционального программирования: continuation — это callback, structured concurrency — композиция функций с управлением жизненным циклом. Лямбды и higher-order functions, изученные в functional programming, используются повсеместно в coroutines API: `launch {}`, `async {}`, `withContext {}`. FP даёт основу для понимания coroutines API.
 
-### Курсы
-- [Lukas Lechner Coroutines Course](https://www.udemy.com/course/kotlin-coroutines/) — Udemy, глубокое погружение
-- [Kodeco Kotlin Coroutines](https://www.kodeco.com/books/kotlin-coroutines-by-tutorials) — практические tutorials
+**[[jvm-concurrency-overview]]** — Kotlin coroutines работают поверх JVM threading model: Dispatchers.Default использует ForkJoinPool, Dispatchers.IO — cached thread pool. Понимание JVM concurrency (threads, locks, volatile, happens-before) помогает при отладке coroutine-кода и выборе правильного dispatcher. Coroutines абстрагируют threading, но не устраняют необходимость понимать thread safety.
 
-### Видео
-- [Roman Elizarov talks](https://www.youtube.com/@RomanElizarov) — автор Kotlin Coroutines, глубокие доклады
-- [KotlinConf talks](https://www.youtube.com/results?search_query=kotlinconf+coroutines) — ежегодные обновления
+**[[kotlin-testing]]** — тестирование coroutine-кода требует специальных инструментов: `runTest`, `TestDispatcher`, `advanceUntilIdle`. Без понимания structured concurrency и dispatchers написание тестов для async-кода превращается в борьбу с race conditions и flaky tests. Turbine (от Square) стал стандартом для тестирования Flow. Изучайте testing после освоения coroutines basics.
 
-### Инструменты
-- [kotlinx-coroutines-test](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/) — тестирование корутин
-- [Turbine](https://github.com/cashapp/turbine) — тестирование Flow от Square
+---
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. — Единственная книга, полностью посвящённая корутинам: CPS-трансформация, structured concurrency, dispatcher internals, тестирование. Обязательна для глубокого понимания.
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. — Глава о coroutines даёт фундамент: suspend functions, builders, dispatchers. Хорошее введение от создателей языка.
+- Elizarov R. (2018). *Structured Concurrency* (KotlinConf talk). — Доклад автора Kotlin Coroutines о философии structured concurrency и design decisions библиотеки. Объясняет ПОЧЕМУ корутины устроены именно так.
+- Herlihy M., Shavit N. (2012). *The Art of Multiprocessor Programming*. — CS-фундамент конкурентного программирования: от теории к практике. Помогает понять, какие проблемы корутины решают на уровне абстракций над потоками.
 
 ---
 

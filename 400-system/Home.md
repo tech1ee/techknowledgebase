@@ -2,12 +2,12 @@
 title: "Home"
 created: 2025-11-24
 modified: 2026-02-09
-type: navigation
+type: index
 aliases:
   - Home
   - Dashboard
 tags:
-  - type/navigation
+  - type/index
   - navigation
 ---
 
@@ -36,6 +36,21 @@ tags:
 | Ищу работу? | [[career-moc]] |
 | Хочу стать лидером? | [[leadership-overview]] → [[leadership-moc]] |
 | Улучшаю коммуникацию? | [[communication-overview]] → [[communication-moc]] |
+
+---
+
+## Учебные маршруты
+
+> Структурированные пути обучения от основ до экспертного уровня по ключевым областям.
+
+| Область | Путь обучения | Файлов |
+|---------|---------------|--------|
+| Android | [[android-learning-path]] | 66 |
+| CS Fundamentals | [[cs-fundamentals-learning-path]] | 62 |
+| iOS | [[ios-learning-path]] | 45 |
+| JVM | [[jvm-learning-path]] | 37 |
+| Kotlin Multiplatform | [[kmp-learning-path]] | 37 |
+| CS Foundations | [[cs-foundations-learning-path]] | 23 |
 
 ---
 

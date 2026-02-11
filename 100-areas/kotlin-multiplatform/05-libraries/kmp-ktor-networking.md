@@ -15,6 +15,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-architecture-patterns]]"
   - "[[kmp-di-patterns]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-kotlinx-libraries]]"
+  - "[[kotlin-coroutines]]"
 cs-foundations:
   - "[[http-protocol-fundamentals]]"
   - "[[async-io-models]]"
@@ -1156,6 +1160,24 @@ class UserApi(private val client: HttpClient) {
 | [[connection-pooling]] | HttpClient reuse, keep-alive | OkHttp Connection Pool |
 | [[retry-strategies]] | Exponential backoff, jitter | AWS architecture blog |
 | [[serialization-theory]] | ContentNegotiation, JSON | kotlinx.serialization docs |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — Ktor Client является официально рекомендованным HTTP-клиентом для KMP-проектов. Понимание общей архитектуры KMP — source sets, expect/actual, target-специфичных зависимостей — необходимо для правильной настройки engine-ов (OkHttp для Android, Darwin для iOS) и организации сетевого слоя в multiplatform-проекте.
+
+- **[[kmp-architecture-patterns]]** — Ktor вписывается в чистую архитектуру KMP как инфраструктурный слой: HttpClientFactory через expect/actual, ApiService в data layer, DTOs с @Serializable и mappers в domain. Знание архитектурных паттернов KMP позволяет правильно организовать сетевой код, разделить ответственность между слоями и обеспечить тестируемость через MockEngine.
+
+- **[[kmp-di-patterns]]** — HttpClient должен создаваться один раз и инжектироваться через DI (Koin, kotlin-inject) во все сервисы. Неправильное управление жизненным циклом клиента — создание нового HttpClient на каждый запрос — приводит к потере connection pooling и деградации производительности. DI-паттерны обеспечивают единый экземпляр и правильное закрытие ресурсов.
+
+## Источники и дальнейшее чтение
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Ktor полностью построен на корутинах: все I/O операции используют suspend-функции, а Flow применяется для WebSocket-стримов. Книга раскрывает механику structured concurrency и cancellation, критичные для понимания поведения Ktor при отмене запросов и таймаутах.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв и инверсии зависимостей напрямую применяются к организации сетевого кода в KMP: Repository pattern, DTO → Domain mapping и абстракция HttpClient через интерфейсы.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические паттерны Kotlin, включая правильную обработку ошибок через sealed classes (ApiResult), использование inline-функций (safeApiCall) и работу с nullable типами, что составляет основу robust сетевого слоя.
 
 ---
 

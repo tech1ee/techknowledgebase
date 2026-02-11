@@ -6,6 +6,12 @@ tags:
   - topic/databases
   - type/guide
   - level/intermediate
+related:
+  - "[[vector-databases-guide]]"
+  - "[[embeddings-complete-guide]]"
+  - "[[nosql-databases-complete]]"
+prerequisites:
+  - "[[nosql-databases-complete]]"
 ---
 
 # AI/ML Databases: Vector Databases & Embeddings
@@ -1623,6 +1629,22 @@ Chunking:
 - [Qdrant Benchmarks](https://qdrant.tech/benchmarks/)
 - [ANN Benchmarks](https://ann-benchmarks.com/)
 - [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
+
+## Связь с другими темами
+
+[[vector-databases-guide]] — Этот гайд по векторным базам данных даёт концептуальное введение в embeddings, similarity search и ANN-алгоритмы. Текущий документ углубляет эту тему практическими сравнениями конкретных решений (Pinecone, Milvus, Qdrant, Weaviate) и production-паттернами. Рекомендуется сначала прочитать vector-databases-guide для понимания теории, затем этот материал для выбора конкретного решения.
+
+[[embeddings-complete-guide]] — Полный гайд по embeddings объясняет, как создаются и используются векторные представления текста и изображений. Без понимания природы embeddings (размерность, метрики сходства, модели генерации) невозможно правильно выбрать vector database и настроить chunking-стратегию. Этот материал является обязательным пререквизитом.
+
+[[nosql-databases-complete]] — NoSQL-базы данных (MongoDB, Redis, Cassandra) решают задачи неструктурированного хранения, которые пересекаются с vector databases. Понимание Document DB и Key-Value stores помогает оценить, когда достаточно NoSQL с vector-расширением (MongoDB Atlas Vector Search), а когда нужна специализированная vector DB. Рекомендуется для формирования целостной картины.
+
+[[databases-fundamentals-complete]] — Фундаментальные концепции баз данных (индексы, транзакции, CAP-теорема) применимы и к vector databases: HNSW — это тип индекса, metadata filtering использует стандартную фильтрацию, а выбор между managed и self-hosted определяется теми же критериями. Полезен как теоретическая база перед изучением специализированных решений.
+
+## Источники и дальнейшее чтение
+
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о хранилищах данных, индексах и распределённых системах дают фундамент для понимания архитектуры vector databases и trade-offs между consistency, availability и performance.
+- Petrov A. (2019). *Database Internals*. — Глубокий разбор алгоритмов индексации (B-Tree, LSM-Tree), который помогает понять, почему ANN-алгоритмы (HNSW, IVF) работают принципиально иначе и какие trade-offs они предлагают.
+- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор различных моделей данных (document, graph, key-value), который помогает выбрать правильный тип хранилища для AI/ML-задач и понять, когда vector DB необходима, а когда достаточно расширения существующей БД.
 
 ---
 

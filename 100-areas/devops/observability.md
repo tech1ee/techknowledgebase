@@ -18,6 +18,9 @@ related:
   - "[[kubernetes-basics]]"
   - "[[ci-cd-pipelines]]"
   - "[[network-cloud-modern]]"
+prerequisites:
+  - "[[docker-for-developers]]"
+  - "[[ci-cd-pipelines]]"
 ---
 
 # Observability: видеть, что происходит в системе

@@ -10,7 +10,6 @@ tags:
   - rag
   - agents
   - type/moc
-  - level/intermediate
 related:
   - "[[ai-ml-overview-v2]]"
   - "[[llm-fundamentals]]"

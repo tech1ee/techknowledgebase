@@ -11,6 +11,8 @@ tags:
   - level/advanced
 related:
   - "[[ic-vs-management]]"
+prerequisites:
+  - "[[ic-vs-management]]"
 ---
 
 # Staff+ Engineering: путь выше Senior
@@ -898,6 +900,14 @@ PROCESS:
 - [[android-modularization]] — Модуляризация Android
 
 ---
+
+## Источники и дальнейшее чтение
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Основополагающая книга по теме Staff+ engineering. Описывает 4 архетипа (Tech Lead, Architect, Solver, Right Hand), стратегии получения promotion, day-to-day работу и challenges на Staff уровне. Обязательна к прочтению для любого, кто планирует карьеру выше Senior.
+
+- Fournier C. (2017). *The Manager's Path*. — Хотя книга ориентирована на management track, она отлично описывает IC/Management pendulum, ожидания на каждом уровне и как работать с engineering managers. Для Staff+ IC важно понимать management perspective, чтобы эффективно влиять без authority.
+
+- Xu A. (2020). *System Design Interview*. — System Design — решающий раунд для Staff+ интервью. Слабый design = downlevel к Senior. Книга даёт структурированный framework для проектирования систем, который необходимо дополнить mobile-specific знаниями для Android Staff ролей.
 
 ## Источники
 

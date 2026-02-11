@@ -18,6 +18,9 @@ related:
   - "[[api-design]]"
   - "[[microservices-vs-monolith]]"
   - "[[network-dns-tls]]"
+prerequisites:
+  - "[[security-fundamentals]]"
+  - "[[security-cryptography-fundamentals]]"
 ---
 
 # Authentication & Authorization: кто ты и что тебе можно

@@ -21,6 +21,8 @@ related:
   - "[[leadership-interviews]]"
   - "[[making-offers]]"
   - "[[sourcing-candidates]]"
+prerequisites:
+  - "[[hiring-engineers]]"
 ---
 
 # Дизайн процесса интервью
@@ -697,6 +699,24 @@ If can't decide — problem is criteria, not data.
 - "Who" by Geoff Smart — structured hiring
 - "Work Rules!" by Laszlo Bock — Google hiring
 - "The Effective Hiring Manager" by Mark Horstman — Manager Tools
+
+---
+
+## Связь с другими темами
+
+**[[hiring-engineers]]** — Hiring-engineers задаёт общую философию найма и критерии оценки, а interview-process-design превращает их в конкретный structured процесс. Без чётких hiring criteria процесс интервью становится subjective и inconsistent. Вместе они формируют полную систему: ЧТО оценивать (hiring-engineers) и КАК оценивать (interview-process-design).
+
+**[[leadership-interviews]]** — Интервью на leadership роли (EM, Director, VP, CTO) требуют принципиально другого подхода, чем интервью IC. Фокус смещается с technical skills на leadership competencies: people development, strategic thinking, execution history. Failure rate при executive hiring составляет 40-50%, что делает правильный process design для leadership позиций особенно критичным.
+
+**[[making-offers]]** — Дизайн interview процесса влияет не только на quality of hire, но и на candidate experience, которая определяет acceptance rate на этапе оффера. Затянутый, неорганизованный процесс теряет лучших кандидатов, даже если финальное решение правильное. Respect к времени кандидата через efficient process — часть employer brand.
+
+**[[sourcing-candidates]]** — Sourcing и interview process должны быть согласованы: нет смысла sourcing'ить passive candidates через персонализированный outreach, а потом проводить generic, стрессовый interview. Candidate experience должна быть consistent от первого контакта до финального решения. Кроме того, feedback loop из interview результатов помогает улучшить sourcing quality.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает, как менеджер на каждом уровне участвует в interview process: от проведения individual interviews до дизайна hiring pipeline для целого отдела. Практические рекомендации по calibration и debrief.
+- **Kim et al., "The Phoenix Project" (2016)** — Хотя книга не о hiring напрямую, она демонстрирует, как системный подход к процессам (Theory of Constraints) применим к любому pipeline, включая hiring funnel. Bottleneck analysis помогает оптимизировать interview process.
+- **Peter Drucker, "The Effective Executive" (2006)** — Глава о staffing decisions — одна из самых сильных. Drucker утверждает, что hiring — это единственное решение, которое executive не может отменить без последствий, и поэтому ему нужно уделять максимум внимания.
 
 ---
 

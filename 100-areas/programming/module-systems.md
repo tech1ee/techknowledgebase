@@ -16,11 +16,25 @@ related:
   - "[[build-systems-theory]]"
   - "[[dependency-resolution]]"
   - "[[clean-code-solid]]"
+prerequisites:
+  - "[[clean-code-solid]]"
 ---
 
 # Module Systems: модульность от CommonJS до ESM
 
 > **TL;DR:** Модульная система позволяет разбивать код на независимые части с явными зависимостями. CommonJS (Node.js) — синхронный require(), ESM (браузеры, современный Node) — статический import/export. Kotlin Multiplatform использует expect/actual для кроссплатформенной модульности. Хорошая модульность = низкая связанность + высокая связность.
+
+---
+
+## Исторический контекст
+
+Идея модульности в программировании формализована **David Parnas** в знаковой статье *"On the Criteria To Be Used in Decomposing Systems into Modules"* (1972). Parnas показал, что декомпозиция должна основываться на **information hiding** — каждый модуль скрывает "design decision", а не просто группирует код по функциональности. Этот принцип остаётся фундаментом модульного проектирования.
+
+Ранние языки реализовывали модульность по-разному. **Modula-2** (Niklaus Wirth, 1978) ввёл явное разделение на definition module (интерфейс) и implementation module. **Ada** (1983) использовал packages с public/private секциями. **C** до сих пор использует примитивную модульность через header files (.h) и compilation units (.c) — подход, известный своей хрупкостью (include guards, forward declarations).
+
+В JavaScript модульность долго отсутствовала: до 2009 года весь код жил в глобальном scope. **CommonJS** (Kevin Dangoor, 2009) решил эту проблему для Node.js через `require()`/`module.exports`. **AMD** (RequireJS, 2010) адаптировал идею для браузеров с асинхронной загрузкой. Наконец, **ES Modules** (ECMAScript 2015) стандартизировал модульную систему на уровне языка с статическим анализом, что открыло путь для tree shaking.
+
+В Java-мире модульность на уровне языка появилась лишь в **Java 9** (2017) с **JPMS** (Java Platform Module System, Project Jigsaw) — после 10 лет разработки. JPMS добавил module-info.java с явными requires/exports, решив проблему "classpath hell", когда любой публичный класс был доступен из любой точки приложения.
 
 ---
 
@@ -547,22 +561,27 @@ export const b = 2;
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[build-systems-theory]] — как собираются модули
-- [[dependency-resolution]] — как разрешаются зависимости
-- [[clean-code-solid]] — принципы проектирования
-- [[kmp-source-sets]] — модульность в Kotlin Multiplatform
+**[[build-systems-theory]]** — Build system непосредственно работает с module boundaries: Gradle multi-project build, webpack/Vite для JavaScript, Swift Package Manager — все они должны понимать, какие модули существуют, в каком порядке компилировать и какие зависимости разрешить. Incremental build возможен только при чётких границах модулей: если изменился модуль A, пересобираются только A и зависящие от него модули, но не весь проект.
+
+**[[dependency-resolution]]** — Module system определяет "контракт" (что экспортируется), а dependency resolution определяет "какую версию контракта использовать". ESM `import` указывает на модуль, но конкретную версию этого модуля подбирает npm/yarn через resolution-алгоритм. В JPMS `requires` объявляет зависимость между модулями, а Gradle разрешает конкретные артефакты. Циклические зависимости между модулями — это проблема и для module system, и для dependency resolver.
+
+**[[clean-code-solid]]** — Принципы SOLID напрямую определяют качество модульного дизайна. Single Responsibility Principle говорит, что модуль должен иметь одну причину для изменения (high cohesion). Interface Segregation — что лучше много маленьких интерфейсов, чем один большой (fine-grained modules). Dependency Inversion — что модули верхнего уровня зависят от абстракций, а не от конкретных реализаций нижнего уровня. Information hiding Parnas (1972) — прямой предшественник этих принципов.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [MDN: JavaScript Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) | Docs | ESM reference |
-| 2 | [Node.js ESM](https://nodejs.org/api/esm.html) | Docs | Node.js specifics |
-| 3 | [Clean Architecture (Martin)](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164) | Book | Модульность принципы |
+Parnas D.L. (1972). *"On the Criteria To Be Used in Decomposing Systems into Modules."* Communications of the ACM. — Основополагающая статья о модульности. Parnas показал, что правильная декомпозиция основана на information hiding (сокрытии design decisions), а не на функциональной декомпозиции. Каждый модуль должен скрывать одно решение, которое может измениться. Обязательно к прочтению.
+
+Martin R.C. (2017). *"Clean Architecture: A Craftsman's Guide to Software Structure and Design."* — Развивает идеи Parnas в контексте современных систем. Главы о Component Principles (REP, CCP, CRP) и Component Coupling (ADP, SDP, SAP) дают практические правила проектирования модулей и управления зависимостями между ними.
+
+Osmani A. (2023). *"Learning JavaScript Design Patterns."* — Практическое руководство по паттернам модульности в JavaScript: Module Pattern, Revealing Module, ESM best practices. Особенно полезны главы о tree shaking, dynamic import и migration от CommonJS к ESM.
+
+- [MDN: JavaScript Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) — полный справочник по ESM в браузерах
+- [Node.js ESM](https://nodejs.org/api/esm.html) — спецификация ESM в Node.js
+- [JPMS Guide](https://openjdk.org/projects/jigsaw/quick-start) — quick start по Java Platform Module System
 
 ---
 

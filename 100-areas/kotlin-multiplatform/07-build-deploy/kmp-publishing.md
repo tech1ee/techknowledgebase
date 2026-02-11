@@ -11,6 +11,10 @@ tags:
   - cocoapods
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-project-structure]]"
+  - "[[kmp-ci-cd]]"
+  - "[[kmp-gradle-deep-dive]]"
 related:
   - [kmp-gradle-deep-dive]]
   - "[[kmp-ci-cd]]"
@@ -640,4 +644,22 @@ kotlin {
 | [Publish Without Mac](https://kdroidfilter.github.io/blog/2025/publish-kmp-library-to-maven-central) | Blog | Linux CI setup |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-gradle-deep-dive]]** — публикация KMP-библиотеки полностью зависит от Gradle: vanniktech plugin конфигурируется в build.gradle.kts, координаты задаются в gradle.properties, convention plugins обеспечивают единообразную конфигурацию publishing для multi-module проектов. Понимание Gradle tasks (publishToMavenCentral, publishToMavenLocal) и Version Catalog необходимо для настройки воспроизводимого процесса публикации.
+
+- **[[kmp-ci-cd]]** — CI/CD автоматизирует процесс публикации: tag-based workflows запускают Gradle tasks для Maven Central и KMMBridge для iOS. GPG ключи, Sonatype credentials и GitHub tokens хранятся в GitHub Secrets и передаются как environment variables. Без CI/CD публикация с разных машин приводит к duplicate artifacts и нарушению GPG-подписей.
+
+- **[[kmp-third-party-libs]]** — публикация превращает ваш KMP-модуль в библиотеку, которая становится частью экосистемы klibs.io. Понимание того, как потребители подключают KMP-зависимости (Maven coordinates в commonMain, SPM через Package.swift, CocoaPods через podspec), определяет требования к качеству публикации: POM metadata, Javadoc/Dokka, semantic versioning.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin-экосистемы и Gradle-интеграции, включая понимание артефактов (jar, aar, klib), repositories и dependency resolution, что составляет фундамент для настройки publishing в KMP.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы компонентного проектирования (Common Closure, Common Reuse, Acyclic Dependencies) определяют, как разбивать KMP-библиотеку на модули для публикации и какие зависимости включать в каждый артефакт.
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по проектированию публичных API: минимальная поверхность API, backward compatibility, правильное использование visibility modifiers — всё это критично при публикации KMP-библиотеки, которую будут использовать другие разработчики.
+
+---
+
 *Проверено: 2026-01-09 | vanniktech 0.35.0, KMMBridge 1.2.0*

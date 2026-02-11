@@ -16,6 +16,9 @@ related:
   - "[[module-systems]]"
   - "[[dependency-resolution]]"
   - "[[ci-cd-pipelines]]"
+prerequisites:
+  - "[[module-systems]]"
+  - "[[dependency-resolution]]"
 ---
 
 # Build Systems: от Make до Gradle
@@ -117,7 +120,13 @@ REMOTE КЭШ (CI):
 
 ---
 
-## Эволюция build систем
+## Исторический контекст
+
+Первой build-системой стал **Make**, созданный Stuart Feldman в Bell Labs в 1976 году. Make решал конкретную проблему: при изменении одного файла пересобирать только зависящие от него части, используя timestamps файлов и граф зависимостей (Makefile). За Make Feldman получил ACM Software System Award (2003).
+
+В Java-мире build-системы прошли три поколения. **Apache Ant** (2000) перенёс идеи Make в XML-формат, но остался императивным — разработчик описывал "как" собирать. **Maven** (Jason van Zyl, 2004) совершил revolution, введя convention-over-configuration: стандартная структура каталогов, lifecycle phases и централизованные репозитории артефактов (Maven Central). **Gradle** (Hans Dockter, 2007) объединил декларативность Maven с гибкостью Groovy/Kotlin DSL, добавив incremental build и build cache.
+
+Параллельно Google внутренне разработал Blaze (2005), опубликованный как **Bazel** (2015) — build-систему с hermetic builds (полная изоляция от окружения) и remote execution, рассчитанную на монорепозитории с миллионами файлов. Facebook создал **Buck** (2013) для мобильной разработки. В JavaScript-экосистеме появились **Turborepo** и **Nx** (2020+) для управления монорепозиториями.
 
 ```
 1976: Make (файлы, timestamps)
@@ -518,22 +527,27 @@ Gradle не знает, что считать результатом работ�
 
 ---
 
-## Связи
+## Связь с другими темами
 
-- [[module-systems]] — как организованы модули
-- [[dependency-resolution]] — как разрешаются зависимости
-- [[ci-cd-pipelines]] — build в CI/CD
-- [[kmp-build-deploy]] — Gradle для KMP
+**[[module-systems]]** — Build system и module system тесно связаны: build system должна понимать границы модулей, порядок компиляции и visibility rules. Gradle multi-project build напрямую отражает модульную структуру проекта. JPMS (Java Platform Module System) добавляет module-info.java, который build system обрабатывает при компиляции. Правильная модульность — prerequisite для эффективного incremental build.
+
+**[[dependency-resolution]]** — Dependency resolution является подсистемой build system. Gradle, Maven и npm решают задачу: какие версии библиотек включить в сборку, как разрешить конфликты транзитивных зависимостей, когда кэшировать артефакты. Без понимания resolution-алгоритмов (newest wins, nearest wins) невозможно диагностировать проблемы сборки.
+
+**[[ci-cd-pipelines]]** — Build system — это ядро CI/CD pipeline. Jenkins, GitHub Actions, GitLab CI вызывают Gradle/Maven/npm для сборки, тестирования и упаковки. Remote build cache (Gradle Enterprise, Bazel Remote Cache) ускоряет CI в разы, разделяя результаты между разработчиками и CI-серверами. Понимание build lifecycle критично для оптимизации pipeline time.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) | Docs | Официальная документация |
-| 2 | [Gradle Build Cache](https://docs.gradle.org/current/userguide/build_cache.html) | Docs | Кэширование |
-| 3 | [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html) | Docs | Performance |
+Humble J., Farley D. (2010). *"Continuous Delivery."* — Фундаментальная книга о pipeline от коммита до production. Объясняет почему reproducible builds, artifact management и deployment automation критичны для надёжной поставки софта. Build system рассматривается как первое звено delivery pipeline.
+
+Mokhov A., Mitchell N., Peyton Jones S. (2018). *"Build Systems a la Carte."* — Академическая статья (Microsoft Research), систематизирующая теорию build-систем. Классифицирует Make, Shake, Bazel и др. по двум осям: scheduling (topological vs restarting) и rebuilding (dirty bit vs traces). Даёт глубокое понимание "почему" системы устроены именно так.
+
+Aho A.V., Lam M.S., Sethi R., Ullman J.D. (2006). *"Compilers: Principles, Techniques, and Tools"* (Dragon Book). — Хотя фокус на компиляторах, главы о dependency analysis, intermediate representations и code generation объясняют что происходит "внутри" шага compilation, который build system оркестрирует.
+
+- [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) — официальная документация Gradle
+- [Gradle Build Cache](https://docs.gradle.org/current/userguide/build_cache.html) — руководство по кэшированию
+- [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html) — оптимизация configuration phase
 
 ---
 

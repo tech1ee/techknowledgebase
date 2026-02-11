@@ -1430,6 +1430,16 @@ def reverse_list(head):
 
 ---
 
+## Связь с другими темами
+
+**[[stacks-queues]]** --- стеки и очереди часто реализуются через linked list: стек --- через singly linked list с push/pop на голове за O(1), очередь --- через singly linked list с указателем на хвост (enqueue в хвост, dequeue с головы). Хотя на практике ArrayDeque обычно предпочтительнее из-за cache locality, linked list реализация остаётся важной для понимания фундаментальных абстракций и часто спрашивается на собеседованиях.
+
+**[[trees-binary]]** --- деревья обобщают идею связного списка: один указатель next превращается в два указателя left и right. Узел linked list хранит `val + next`, узел бинарного дерева --- `val + left + right`. Многие техники из linked lists (рекурсивный обход, dummy node, pointer manipulation) напрямую переносятся на деревья. Reverse linked list и invert binary tree --- структурно аналогичные задачи.
+
+**[[graphs]]** --- граф является обобщением связного списка: каждый узел может указывать на произвольное число соседей (adjacency list --- это массив linked lists). Linked list --- это граф-путь (path graph), дерево --- связный ациклический граф, а общий граф допускает циклы и произвольную степень вершин. Понимание указателей и обхода в linked list --- фундамент для работы с графовыми структурами.
+
+---
+
 ## 15. Источники
 
 | # | Источник | Тип | Что взято |
@@ -1441,6 +1451,12 @@ def reverse_list(head):
 | 5 | [GeeksforGeeks - Floyd's Algorithm](https://www.geeksforgeeks.org/dsa/floyds-cycle-finding-algorithm/) | Reference | Fast/slow pointer math |
 | 6 | [DEV.to - Visual Guide to Reversing](https://dev.to/jacobjzhang/a-visual-guide-to-reversing-a-linked-list-161e) | Tutorial | Step-by-step reverse |
 | 7 | [HappyCoders - Array vs Linked List](https://www.happycoders.eu/algorithms/array-vs-linked-list/) | Analysis | Cache locality, performance |
+
+### Книги
+
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms."** --- глава 10: linked lists как элементарная структура данных, sentinels, реализация с doubly linked list
+- **Sedgewick & Wayne (2011). "Algorithms."** --- linked lists с детальным анализом performance vs arrays, итераторы и generic-реализация на Java
+- **Knuth (1997). "The Art of Computer Programming, Vol. 1: Fundamental Algorithms."** --- фундаментальный анализ связных структур: singly/doubly/circular linked lists, memory allocation, garbage collection
 
 *Исследование проведено: 2025-12-29*
 *Обновлено: 2026-01-06*

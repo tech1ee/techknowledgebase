@@ -18,6 +18,8 @@ tags:
 related:
   - "[[hiring-engineers]]"
   - "[[interview-process-design]]"
+prerequisites:
+  - "[[hiring-engineers]]"
 ---
 
 # Где искать кандидатов
@@ -676,6 +678,20 @@ LONG-TERM
 | 3 | [Greenhouse Blog](https://www.greenhouse.io/blog) | Articles | Process tips |
 | 4 | [First Round: Sourcing](https://review.firstround.com/) | Articles | Startup sourcing |
 | 5 | [Textio](https://textio.com/) | Tool | Inclusive job posts |
+
+---
+
+## Связь с другими темами
+
+**[[hiring-engineers]]** — Sourcing — это первый этап hiring pipeline. Hiring-engineers определяет criteria и philosophy найма, а sourcing обеспечивает pipeline кандидатов, соответствующих этим criteria. Без активного sourcing менеджер зависит от случайных откликов, что ограничивает quality и diversity pool кандидатов. Системный подход к sourcing — prerequisite для системного hiring.
+
+**[[interview-process-design]]** — Sourcing и interview process должны работать как единый pipeline: candidate experience начинается с первого outreach и продолжается через interview до оффера. Качество sourced кандидатов влияет на interview efficiency: лучше sourced candidates — меньше wasted interview time. Feedback из interview результатов помогает calibrate sourcing criteria.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает роль менеджера в sourcing, включая building referral network, writing effective job descriptions и personal outreach к passive candidates. Подчёркивает, что hiring — обязанность менеджера, а не только HR.
+- **Ed Catmull, "Creativity Inc." (2014)** — Pixar's подход к talent acquisition: "If you give a good idea to a mediocre team, they will screw it up. If you give a mediocre idea to a brilliant team, they will either fix it or throw it away and come up with something better." Это philosophy определяет, почему sourcing top talent так критичен.
+- **Simon Sinek, "Start with Why" (2009)** — Employer brand строится на чётком "why" компании. Passive candidates, которые не ищут работу, откликаются на compelling mission и vision, а не на generic job descriptions. Sinek's framework помогает craft authentic outreach, который резонирует с top talent.
 
 ---
 

@@ -17,6 +17,9 @@ related:
   - "[[cloud-overview]]"
   - "[[databases-backup-recovery]]"
   - "[[databases-replication-sharding]]"
+prerequisites:
+  - "[[cloud-platforms-essentials]]"
+  - "[[databases-backup-recovery]]"
 ---
 
 # Cloud Disaster Recovery: Multi-AZ, Multi-Region, RTO/RPO

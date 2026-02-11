@@ -16,6 +16,9 @@ related:
   - "[[security-overview]]"
   - "[[authentication-authorization]]"
   - "[[api-design]]"
+prerequisites:
+  - "[[authentication-authorization]]"
+  - "[[security-fundamentals]]"
 ---
 
 # API Protection: rate limiting, input validation, API keys

@@ -16,6 +16,10 @@ related:
   - "[[android-view-rendering-pipeline]]"
   - "[[android-performance-profiling]]"
   - "[[android-state-management]]"
+prerequisites:
+  - "[[android-compose]]"
+  - "[[android-state-management]]"
+  - "[[android-view-rendering-pipeline]]"
 ---
 
 # Jetpack Compose Internals
@@ -963,14 +967,15 @@ trace("MyComposable") {
 
 ---
 
-## Связанные материалы
+## Связь с другими темами
 
-| Материал | Зачем смотреть |
-|----------|----------------|
-| [[android-view-rendering-pipeline]] | Сравнение с View rendering |
-| [[android-performance-profiling]] | Profiling tools |
-| [[android-state-management]] | State patterns |
-| [[android-compose]] | Basics если нужно вернуться к основам |
+**[[android-compose]]** — основы Compose UI (composable functions, state, modifiers, layouts) являются обязательным prerequisite. Internals объясняют, ПОЧЕМУ Compose работает так, как описано в basics: почему remember сохраняет значения (Slot Table), почему @Stable влияет на recomposition (Compose Compiler), и почему порядок вызовов composables важен (positional memoization).
+
+**[[android-view-rendering-pipeline]]** — сравнение View rendering pipeline (measure -> layout -> draw) с Compose three-phase rendering (Composition -> Layout -> Drawing) показывает принципиальные различия: Compose выполняет phases независимо и может пропускать фазы (например, при изменении цвета пропускается Composition и Layout). Понимание обоих подходов важно для migration и interop.
+
+**[[android-state-management]]** — Snapshot System в Compose internals является фундаментом state management. MutableState, derivedStateOf и snapshotFlow работают через Snapshot isolation (аналог MVCC в базах данных), что объясняет thread safety и automatic recomposition tracking. Изучение state patterns помогает избежать ненужных recompositions.
+
+**[[android-performance-profiling]]** — Layout Inspector, Compose compiler reports (stability diagnostics), и Perfetto traces — основные инструменты для диагностики проблем производительности Compose. Recomposition counter, stability annotations (@Stable, @Immutable) и Strong Skipping Mode видны через эти инструменты. Профилирование необходимо для оптимизации Compose UI.
 
 ---
 
@@ -989,8 +994,14 @@ trace("MyComposable") {
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin: immutability, sealed classes, inline functions — паттерны, лежащие в основе Compose internals
+- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их роль в Compose: LaunchedEffect использует coroutines, Snapshot System интегрирован с structured concurrency
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Compose fundamentals и architecture
+
+**Веб-ресурсы:**
 - [Android Developers — Compose Phases](https://developer.android.com/develop/ui/compose/phases)
 - [Android Developers — Side Effects](https://developer.android.com/develop/ui/compose/side-effects)
 - [Android Developers — Stability](https://developer.android.com/develop/ui/compose/performance/stability)

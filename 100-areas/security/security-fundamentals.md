@@ -6,6 +6,10 @@ tags:
   - topic/security
   - type/concept
   - level/beginner
+related:
+  - "[[security-cryptography-fundamentals]]"
+  - "[[threat-modeling]]"
+  - "[[network-security-fundamentals]]"
 ---
 
 # Security Fundamentals: Основы информационной безопасности
@@ -1448,6 +1452,22 @@ MFA снижает риск компрометации на 99.9% (Microsoft).
 - [History of Cybersecurity - Maryville University](https://online.maryville.edu/blog/history-of-cybersecurity/)
 - [NIST Cybersecurity Program History](https://csrc.nist.gov/nist-cyber-history)
 - [GDPR vs HIPAA vs PCI DSS - Enov8](https://www.enov8.com/blog/hipaa-vs-gdpr-vs-pci/)
+
+---
+
+## Связь с другими темами
+
+### [[security-cryptography-fundamentals]]
+
+Криптография — это основной инструмент реализации Confidentiality и Integrity из CIA Triad. Без понимания принципов шифрования (symmetric vs asymmetric), хеширования (SHA-256 для проверки целостности) и цифровых подписей (non-repudiation) невозможно проектировать безопасные системы. Security Fundamentals объясняет ЗАЧЕМ нужна криптография, а криптографический материал — КАК она работает. Принцип Керкгоффса, описанный здесь, является фундаментальным для всей криптографии.
+
+### [[threat-modeling]]
+
+Threat modeling — практическое применение концепций Risk Management и Threat Landscape, изложенных здесь. Если Security Fundamentals даёт общую формулу Risk = Likelihood x Impact и типы атакующих, то STRIDE-методология в threat modeling даёт конкретный пошаговый процесс анализа угроз для конкретного приложения. Знание CIA Triad, Defense in Depth и Cyber Kill Chain необходимо для эффективного моделирования угроз.
+
+### [[network-security-fundamentals]]
+
+Сетевая безопасность — это применение Defense in Depth и Least Privilege на сетевом уровне. Firewalls реализуют Network Segmentation, TLS обеспечивает Confidentiality in transit, IDS/IPS — Detective Controls. Понимание базовых концепций из этого материала (CIA Triad, типы контролей, AAA Framework) позволяет осмысленно проектировать сетевую архитектуру безопасности, а не просто копировать чеклисты.
 
 ---
 

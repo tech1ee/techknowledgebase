@@ -5,8 +5,8 @@ modified: 2026-01-05
 tags:
   - topic/jvm
   - topic/kmp
-  - compose
-  - ios
+  - topic/android
+  - topic/ios
   - swiftui
   - uikit
   - metal
@@ -17,6 +17,9 @@ related:
   - "[[compose-mp-overview]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-overview]]"
+prerequisites:
+  - "[[compose-mp-overview]]"
+  - "[[kmp-ios-deep-dive]]"
 cs-foundations:
   - "[[graphics-apis-fundamentals]]"
   - "[[native-code-interop]]"
@@ -891,6 +894,21 @@ Semantic tree из Compose синхронизируется с iOS accessibility
 | [[accessibility-fundamentals]] | Assistive technologies | VoiceOver, semantic tree |
 | [[touch-event-handling]] | iOS touch system | Gesture recognition |
 | [[memory-management-arc]] | Apple ARC | Kotlin/Native ↔ iOS |
+
+---
+
+## Связь с другими темами
+
+**[[compose-mp-overview]]** — Обзор Compose Multiplatform описывает общую архитектуру фреймворка: Skia-рендеринг, Resources API, lifecycle management. iOS-платформа наследует все общие механизмы Compose MP и добавляет Metal-based rendering, UIKit interop и iOS-специфичную accessibility. Понимание общей архитектуры помогает разграничить общий и iOS-платформенный код.
+
+**[[kmp-ios-deep-dive]]** — Глубокое погружение в iOS-интеграцию KMP описывает низкоуровневый фундамент: Kotlin/Native, XCFramework, SKIE, Swift Export, memory management. Compose MP iOS работает поверх этого фундамента, и понимание interop-механизмов необходимо для решения проблем с производительностью, отладкой и интеграцией с нативным Swift/UIKit кодом.
+
+**[[kmp-overview]]** — Общий обзор Kotlin Multiplatform объясняет роль iOS target в мультиплатформенной стратегии. iOS Stable статус Compose MP (с версии 1.8.0) сделал KMP production-ready решением для кросс-платформенной мобильной разработки. Понимание общей roadmap KMP помогает планировать внедрение Compose MP iOS в существующие проекты.
+
+## Источники и дальнейшее чтение
+
+1. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины на iOS через Kotlin/Native имеют свои особенности: Main dispatcher привязан к iOS Main RunLoop, cancellation работает через CancellationException. Книга помогает понять асинхронную модель, которая управляет UI-обновлениями в Compose MP iOS.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по эффективному Kotlin-коду критически важны для iOS-производительности: минимизация аллокаций, правильное использование inline-функций и оптимизация recomposition напрямую влияют на плавность UI на iOS-устройствах.
 
 ---
 

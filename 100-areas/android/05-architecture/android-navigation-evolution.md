@@ -569,4 +569,38 @@ navController.navigate(Routes.Profile(userId))  // IDE подскажет
 
 *Детальное описание каждого подхода с примерами кода см. в [[android-navigation]]*
 
+---
+
+## Связь с другими темами
+
+### [[android-navigation]]
+
+Этот overview-файл даёт высокоуровневое понимание эволюции навигации, тогда как android-navigation содержит полное детальное руководство по каждому подходу с production-ready примерами кода. Каждый раздел overview (Activity-based, Fragment Transactions, Navigation Component, Compose Navigation, Navigation 3) раскрывается в деталях в основном гайде. Для реальной реализации навигации в проекте необходимо обращаться к детальной документации.
+
+### [[android-activity-lifecycle]]
+
+Навигация в Android неразрывно связана с lifecycle — каждый переход между экранами trigger'ит lifecycle callbacks (onCreate, onResume, onDestroy). Понимание activity lifecycle критично для корректного сохранения navigation state при configuration changes и process death. Ошибки в lifecycle handling — одна из главных причин потери navigation state и UX-проблем, описанных в секции "Почему навигация сложна".
+
+### [[android-compose]]
+
+Jetpack Compose кардинально изменил подход к навигации: от императивных FragmentTransaction к декларативным composable destinations с type-safe routes. Compose Navigation (2.8+) и Navigation 3 опираются на фундаментальные концепции Compose — recomposition, state hoisting, side effects — поэтому глубокое понимание Compose необходимо для эффективного использования современных навигационных API.
+
+### [[android-architecture]]
+
+Архитектурные решения (MVVM, MVI, Clean Architecture) определяют, как навигация интегрируется в приложение: кто инициирует переходы (ViewModel через events или UI напрямую), как передаются аргументы (через SavedStateHandle или navigation arguments), и как организуется navigation graph в модульном проекте. Single Activity architecture, ставшая стандартом благодаря Navigation Component, — это архитектурное решение, влияющее на всю структуру приложения.
+
+### [[android-fragment-lifecycle]]
+
+Fragments остаются основой Navigation Component и используются в большинстве существующих Android-проектов. Понимание fragment lifecycle (onAttach, onViewCreated, onDestroyView), child fragment manager и fragment result API необходимо для работы с legacy навигацией и миграции на современные подходы. Back stack в Navigation Component внутренне работает через FragmentManager, поэтому знание fragment internals помогает при debugging навигационных проблем.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Google (2024). *Navigation Component Documentation*. — официальное руководство по Navigation Component и Navigation 3 с примерами, migration guides и best practices. Первоисточник для всех API, описанных в этом обзоре.
+- Leiva, A. (2023). *Kotlin for Android Developers*. — практические примеры навигации в Kotlin, включая Safe Args, deep links и модульную навигацию. Полезен для понимания Kotlin-специфичных паттернов в навигации.
+- Google I/O (2024). *What's New in Navigation* (talk). — презентация Navigation 3 с объяснением design decisions: почему отказались от XML graph, зачем type-safe routes, как работает back stack ownership.
+
+---
+
 *Проверено: 2026-01-09 | Navigation 2.8+, Navigation 3 alpha, Compose 1.7+*

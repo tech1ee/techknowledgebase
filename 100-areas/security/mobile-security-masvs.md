@@ -6,6 +6,13 @@ tags:
   - topic/security
   - type/concept
   - level/intermediate
+related:
+  - "[[mobile-security-owasp]]"
+  - "[[mobile-app-protection]]"
+  - "[[web-security-owasp]]"
+prerequisites:
+  - "[[mobile-security-owasp]]"
+  - "[[security-fundamentals]]"
 ---
 
 # OWASP MASVS & MASTG: Mobile Application Security Verification
@@ -2909,6 +2916,29 @@ PRIVACY  → Consent? Data minimization? User control?
 5. Интегрировать автоматические проверки в CI/CD
 6. Запланировать регулярные security reviews
 ```
+
+---
+
+## Связь с другими темами
+
+[[mobile-security-owasp]] — OWASP Mobile Top 10 и MASVS тесно связаны: Mobile Top 10 описывает наиболее критичные угрозы, а MASVS определяет систематические требования к верификации безопасности. Каждая категория Mobile Top 10 (M1-M10) отображается на одну или несколько категорий MASVS (STORAGE, CRYPTO, AUTH, NETWORK, PLATFORM, CODE, RESILIENCE, PRIVACY). Рекомендуется сначала изучить Mobile Top 10 для общего ландшафта угроз, затем MASVS для формализованного подхода к проверке.
+
+[[mobile-app-protection]] — техники защиты мобильных приложений (RASP, code hardening, attestation) являются практической реализацией требований категорий MASVS-RESILIENCE, MASVS-STORAGE и MASVS-CRYPTO. MASVS определяет ЧТО нужно проверить (например, "приложение обнаруживает root/jailbreak"), а mobile-app-protection показывает КАК это реализовать (multi-layer root detection, Frida detection, integrity verification). Изучение MASVS формирует чеклист, а mobile-app-protection даёт конкретный код.
+
+[[web-security-owasp]] — OWASP Top 10 для веб-приложений дополняет MASVS в контексте серверной части мобильных приложений. Мобильное приложение взаимодействует с бэкендом через API, и уязвимости на стороне сервера (Broken Access Control, Injection) не менее критичны, чем проблемы на клиенте. MASVS фокусируется на клиентской безопасности, а Web OWASP Top 10 покрывает серверную — вместе они обеспечивают комплексную защиту.
+
+[[security-fundamentals]] — базовые принципы безопасности (CIA Triad, Defense in Depth, Least Privilege) являются теоретическим фундаментом всех категорий MASVS. MASVS-STORAGE реализует Confidentiality, MASVS-CRYPTO обеспечивает Integrity, MASVS-NETWORK защищает данные in transit. Без понимания фундаментальных принципов сложно приоритизировать требования MASVS и оценивать их критичность для конкретного приложения.
+
+[[threat-modeling]] — threat modeling определяет MAS Testing Profile (L1, L2, R, P) для конкретного приложения на основе risk assessment. Результаты threat modeling сессии определяют, какие контроли MASVS обязательны, какие рекомендуемы, а какие избыточны. Это позволяет фокусировать усилия на наиболее критичных областях и избегать over-engineering безопасности для low-risk приложений.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по тестированию безопасности мобильных приложений, охватывающее практически все категории MASVS с конкретными инструментами и техниками.
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — для понимания серверных уязвимостей, которые дополняют клиентские требования MASVS, особенно в контексте API security.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальные принципы инженерии безопасности, на которых строятся все категории MASVS, включая криптографию, аутентификацию и защиту данных.
+- OWASP Foundation (2021). *OWASP Testing Guide v4.* — методология тестирования безопасности, дополняющая MASTG для серверной части мобильных приложений.
 
 ---
 

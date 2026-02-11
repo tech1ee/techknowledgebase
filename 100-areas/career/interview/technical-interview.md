@@ -15,6 +15,10 @@ related:
   - "[[coding-challenges]]"
   - "[[system-design-android]]"
   - "[[android-questions]]"
+prerequisites:
+  - "[[interview-process]]"
+  - "[[coding-challenges]]"
+  - "[[android-questions]]"
 ---
 
 # Technical Interview: 4-6 раундов глубокой проверки
@@ -515,6 +519,24 @@ GENERAL:
 → [[behavioral-interview]] — behavioral раунд
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Текущий материал описывает технические раунды (DSA, System Design, Android Domain, Live Coding) в деталях, а interview-process даёт общую картину всего loop от заявки до оффера. Technical rounds — ядро процесса, но не единственная часть: recruiter screen и behavioral тоже влияют на финальное решение.
+
+- [[coding-challenges]] — Полный гайд по 12 DSA-паттернам с примерами кода на Kotlin. Текущий материал объясняет, как coding rounds оцениваются и какие паттерны must-know, а coding-challenges даёт каждый паттерн с реализацией, типичными задачами и планом подготовки. Используй coding-challenges для ежедневной практики.
+
+- [[system-design-android]] — Mobile System Design framework с примерами проектирования и mobile-specific considerations. Текущий материал описывает System Design как один из раундов, а system-design-android погружается в каждый шаг: Requirements, Architecture, Deep Dive, Trade-offs с реальными задачами (Instagram Feed, Chat App).
+
+- [[android-questions]] — Банк Android-specific вопросов для Domain Round. Текущий материал объясняет формат и темы Domain Round, а android-questions содержит конкретные вопросы по Lifecycle, Compose, Coroutines, Architecture с ожидаемой глубиной ответа для каждого уровня.
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Покрывает все аспекты технического интервью: DSA задачи, System Design основы, tips по communication во время coding. 189 задач с разбором — основной ресурс для Rounds 1-2 (DSA Coding).
+
+- Xu A. (2020). *System Design Interview*. — Для Round 3 (System Design). 13 задач с пошаговым framework: от requirements gathering до trade-offs discussion. Адаптируй для mobile контекста, добавляя offline-first, caching и sync considerations.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ technical interviews, где оценивается не только решение, но и leadership, architectural judgment и ability to drive discussion. Книга помогает понять, какой depth и breadth ожидают на L6+ coding и design rounds.
 
 ## Источники
 

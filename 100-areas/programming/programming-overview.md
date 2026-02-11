@@ -8,7 +8,6 @@ tags:
   - topic/programming
   - principles
   - type/moc
-  - level/beginner
 ---
 
 # Programming: Карта раздела

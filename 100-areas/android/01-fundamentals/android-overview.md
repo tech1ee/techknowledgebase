@@ -13,58 +13,10 @@ tags:
 cs-foundations: [mobile-platform-architecture, application-sandbox, component-lifecycle]
 related:
   - "[[mobile-ai-ml-guide]]"
-  - "[[android-architecture]]"
-  - "[[android-app-components]]"
-  - "[[android-activity-lifecycle]]"
-  - "[[android-process-memory]]"
-  - "[[android-ui-views]]"
-  - "[[android-compose]]"
-  - "[[android-threading]]"
-  - "[[android-data-persistence]]"
-  - "[[android-networking]]"
-  - "[[android-architecture-patterns]]"
-  - "[[android-architecture-evolution]]"
-  - "[[android-viewmodel-internals]]"
-  - "[[android-state-management]]"
-  - "[[android-repository-pattern]]"
-  - "[[android-modularization]]"
-  - "[[android-navigation-evolution]]"
-  - "[[android-navigation]]"
-  - "[[android-dependency-injection]]"
-  - "[[android-testing]]"
-  - "[[android-permissions-security]]"
-  - "[[android-background-work]]"
-  - "[[android-async-evolution]]"
-  - "[[android-handler-looper]]"
-  - "[[android-asynctask-deprecated]]"
-  - "[[android-executors]]"
-  - "[[android-rxjava]]"
-  - "[[android-coroutines-mistakes]]"
-  - "[[android-build-evolution]]"
-  - "[[android-gradle-fundamentals]]"
-  - "[[android-project-structure]]"
-  - "[[android-manifest]]"
-  - "[[android-resources-system]]"
-  - "[[android-compilation-pipeline]]"
-  - "[[android-proguard-r8]]"
-  - "[[android-apk-aab]]"
-  - "[[android-dependencies]]"
-  - "[[android-bundle-parcelable]]"
-  - "[[android-memory-leaks]]"
-  - "[[android-context-internals]]"
-  - "[[android-intent-internals]]"
-  - "[[android-fragment-lifecycle]]"
-  - "[[android-service-internals]]"
-  - "[[android-recyclerview-internals]]"
-  - "[[android-window-system]]"
-  - "[[android-content-provider-internals]]"
-  - "[[android-broadcast-internals]]"
-  - "[[android-notifications]]"
-  - "[[android-app-startup-performance]]"
-  - "[[android-animations]]"
-  - "[[android-graphics-apis]]"
   - "[[os-overview]]"
   - "[[kotlin-basics]]"
+  - "[[jvm-overview]]"
+  - "[[kmp-overview]]"
 ---
 
 # Android: карта раздела
@@ -564,6 +516,14 @@ ANDROID РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
 - [Recommendations for Android Architecture](https://developer.android.com/topic/architecture/recommendations) — best practices от Google
 - [Modern Android App Architecture Pathway](https://developer.android.com/courses/pathways/android-architecture) — курс по современной архитектуре
 - [MVVM with Clean Architecture - Toptal](https://www.toptal.com/android/android-apps-mvvm-with-clean-architecture) — практическое руководство
+
+---
+
+## Источники и дальнейшее чтение
+
+- Meier (2022). *Professional Android*. — наиболее полное современное руководство по Android-разработке, охватывающее все ключевые компоненты от Activity lifecycle до WorkManager, Compose и модуляризации.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое введение в Android-разработку с Kotlin, идеально для систематизации знаний и заполнения пробелов в понимании компонентной модели.
+- Vasavada (2019). *Android Internals*. — системный взгляд на Android: ART, Zygote, Binder IPC, process model и memory management. Даёт глубокое понимание того, почему Android работает именно так, а не иначе.
 
 ---
 

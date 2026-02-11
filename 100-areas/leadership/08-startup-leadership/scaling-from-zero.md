@@ -19,6 +19,10 @@ related:
   - "[[startup-cto]]"
   - "[[scaling-engineering-org]]"
   - "[[technical-vision]]"
+prerequisites:
+  - "[[startup-cto]]"
+  - "[[scaling-engineering-org]]"
+  - "[[technical-vision]]"
 ---
 
 # Масштабирование с нуля
@@ -483,20 +487,21 @@ LEADERSHIP:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[startup-cto]] — CTO role evolution
-- [[scaling-engineering-org]] — organizational patterns
-- [[technical-vision]] — planning for scale
-- [[team-structures]] — organizing teams
+**[[startup-cto]]** — Масштабирование с нуля напрямую определяет эволюцию роли CTO: от 80% кодирования на стадии 0-10 до 0% кодирования на стадии 100+. CTO должен менять свой стиль лидерства на каждом этапе роста, и неспособность адаптироваться — одна из главных причин замены CTO в растущих компаниях. Понимание этапов масштабирования помогает CTO заранее готовиться к следующему transition.
 
-## Источники
+**[[scaling-engineering-org]]** — Масштабирование с нуля в стартапе и масштабирование инженерной организации описывают один процесс с разных ракурсов: startup-контекст добавляет ограничения по бюджету, скорости и культуре. Организационные паттерны (Conway's Law, span of control, coordination mechanisms) применяются на каждом этапе роста стартапа, но с учётом ограниченных ресурсов. Reorg в стартапе из 30 человек кардинально отличается от реорганизации в компании с 300 инженерами.
+
+**[[technical-vision]]** — Технический vision определяет архитектурные решения на каждом этапе масштабирования: когда переходить от монолита к сервисам, когда инвестировать в platform team. Без долгосрочного технического видения масштабирование превращается в постоянное тушение пожаров и бесконечные переписывания. Strangler Fig pattern и другие паттерны миграции — практическое применение технической vision при масштабировании.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [High Growth Handbook](https://www.amazon.com/High-Growth-Handbook-Elad-Gil/dp/1732265100) | Book |
-| [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
-| [Blitzscaling](https://www.amazon.com/Blitzscaling-Lightning-Fast-Building-Massively-Valuable/dp/1524761419) | Book |
+| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
 
 ---
 

@@ -21,6 +21,10 @@ related:
   - "[[interview-process-design]]"
   - "[[first-90-days]]"
   - "[[cto-vs-vpe]]"
+prerequisites:
+  - "[[hiring-engineers]]"
+  - "[[interview-process-design]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Интервью на EM/Director/VP/CTO
@@ -695,6 +699,24 @@ ADDITIONAL:
 | 3 | [HBR: Executive Hiring](https://hbr.org/topic/subject/hiring) | Research | Failure rates |
 | 4 | [First Round: Hiring Leaders](https://review.firstround.com/) | Articles | Practical tips |
 | 5 | [ghSmart Research](https://ghsmart.com/) | Research | Reference importance |
+
+---
+
+## Связь с другими темами
+
+**[[hiring-engineers]]** — Leadership hiring строится на тех же фундаментальных принципах, что и hiring инженеров (structured process, evidence-based evaluation), но с существенно другим фокусом. Вместо оценки coding skills оцениваются leadership competencies. Понимание общего hiring framework из hiring-engineers помогает адаптировать процесс для leadership позиций, сохраняя rigorous и fair подход.
+
+**[[interview-process-design]]** — Для leadership ролей дизайн процесса приобретает дополнительные измерения: chronological interview (разбор всей карьерной истории), reference calls (5-10 для senior roles), cultural fit assessment и simulation exercises. Стандартные whiteboard interviews неприменимы, и процесс должен быть redesigned с учётом специфики оцениваемых компетенций.
+
+**[[first-90-days]]** — Результат leadership hiring напрямую определяет успех первых 90 дней нового лидера. Вопросы, заданные на интервью, должны покрывать те же области, которые будут критичны в first-90-days: способность слушать и учиться, building relationships, execution capability. Плохой interview process нанимает людей, которые провалят первые 90 дней.
+
+**[[cto-vs-vpe]]** — При найме на senior technology leadership позиции критически важно понимать разницу между CTO и VP Engineering ролями. Часто компании ищут "CTO", но на самом деле нужен VP Engineering (или наоборот). Clarity о роли до начала interview процесса предотвращает expectations mismatch и costly mis-hires.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает компетенции, которые нужно оценивать на каждом уровне leadership: от первого EM до CTO. Помогает составить scorecard для leadership интервью с конкретными expectations по уровням.
+- **Will Larson, "An Elegant Puzzle" (2019)** — Содержит практические рекомендации по hiring engineering leaders, включая разницу между hiring менеджеров "with experience" и "with potential". Larson описывает, как оценить, сможет ли кандидат масштабироваться с ростом организации.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — При оценке leadership кандидатов модель Lencioni помогает проверить, сможет ли кандидат строить trust, manage conflict productively и hold people accountable — три ключевые competencies, которые часто упускаются при focus на technical leadership.
 
 ---
 

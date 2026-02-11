@@ -918,4 +918,22 @@ fun getPlatform(): String = getPlatformImpl().ifEmpty { "Unknown" }
 
 ---
 
+## Связь с другими темами
+
+- **[[kmp-project-structure]]** — expect/actual напрямую зависит от структуры проекта: expect объявляется в commonMain, а actual — в platform source sets (androidMain, iosMain). Понимание того, как устроены targets и source sets, объясняет, почему actual нужен для каждой платформы и почему intermediate source sets (iosMain) позволяют написать один actual для всех iOS-архитектур. Без понимания структуры проекта ошибки вида «actual not found» становятся неразрешимыми.
+
+- **[[kmp-source-sets]]** — Source sets определяют правила видимости, которые являются фундаментом expect/actual: commonMain не видит platform code, platform source sets видят common. Механизм dependsOn создаёт иерархию, в которой expect/actual реализует compile-time platform polymorphism. Понимание source set hierarchy объясняет, почему actual можно определить в intermediate source set и как default hierarchy template автоматизирует создание iosMain.
+
+- **[[kmp-getting-started]]** — Первый KMP-проект из Getting Started уже содержит пример expect/actual (Platform.kt / Platform.android.kt / Platform.ios.kt). Возвращение к этому простому примеру после изучения паттернов (Factory Function + Interface, DI с expect/actual, Platform Context) помогает увидеть, как начальный hello-world масштабируется до production-ready архитектуры.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Главы о системе типов, интерфейсах и generics дают необходимый фундамент для понимания expect/actual как compile-time platform polymorphism. Связь с type system (structural compatibility для typealias, contract enforcement) становится понятнее на основе фундаментальных знаний о типах.
+
+- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по проектированию API (interface vs abstract class, factory functions, dependency injection) напрямую применимы к выбору между expect/actual class и interface + expect factory function. Книга помогает принять решение: когда использовать expect/actual, а когда — interfaces + DI.
+
+- Martin R. (2017). *Clean Architecture.* — Dependency Inversion Principle, лежащий в основе паттерна «interface в commonMain + actual factory в platform», подробно разобран в этой книге. Принцип «зависимости направлены внутрь» объясняет, почему common код определяет контракт, а platform код его реализует.
+
+---
+
 *Проверено: 2026-01-09 | Kotlin 2.1.21, expect classes в Beta*

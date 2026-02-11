@@ -6,6 +6,13 @@ tags:
   - topic/security
   - type/concept
   - level/intermediate
+related:
+  - "[[mobile-security-masvs]]"
+  - "[[mobile-app-protection]]"
+  - "[[android-permissions-security]]"
+prerequisites:
+  - "[[security-fundamentals]]"
+  - "[[web-security-owasp]]"
 ---
 
 # OWASP Mobile Top 10 2024: Угрозы мобильных приложений
@@ -1324,6 +1331,29 @@ OWASP Mobile Top 10 соответствует категориям OWASP MASVS:
 - [OWASP Mobile Top 10 2024 - Astra](https://www.getastra.com/blog/mobile/owasp-mobile-top-10-2024-a-security-guide/)
 - [2024 OWASP Mobile Top Ten Risks - Approov](https://approov.io/blog/2024-owasp-mobile-top-ten-risks)
 - [OWASP Mobile Top 10 - Strobes](https://strobes.co/blog/owasp-mobile-top-10-vulnerabilities-2024-updated/)
+
+---
+
+## Связь с другими темами
+
+[[mobile-security-masvs]] — MASVS определяет стандарт верификации безопасности мобильных приложений и предоставляет систематический чеклист для проверки каждой категории OWASP Mobile Top 10. Если Mobile Top 10 описывает ЧТО может пойти не так, то MASVS + MASTG описывают КАК это проверить и исправить. Рекомендуется изучить Mobile Top 10 для понимания ландшафта угроз, затем MASVS для построения процесса верификации.
+
+[[mobile-app-protection]] — практические техники защиты мобильных приложений (root detection, RASP, attestation, code hardening) являются конкретными реализациями контрмер для уязвимостей из Mobile Top 10. Например, M7 (Insufficient Binary Protections) митигируется через obfuscation и integrity checks, а M1 (Improper Credential Usage) — через runtime secrets delivery и BFF pattern. Mobile Top 10 определяет проблемы, mobile-app-protection предлагает решения.
+
+[[android-permissions-security]] — Android-специфичная безопасность (permissions model, exported components, data storage) непосредственно связана с категориями M8 (Security Misconfiguration) и M9 (Insecure Data Storage) из Mobile Top 10. Глубокое понимание Android permission system и sandbox model необходимо для правильной реализации защиты на платформе Android. Изучайте вместе с соответствующими категориями Mobile Top 10.
+
+[[security-fundamentals]] — базовые принципы безопасности (CIA Triad, Defense in Depth, Least Privilege) составляют фундамент, на котором построены все категории OWASP Mobile Top 10. Без понимания этих принципов сложно оценить критичность уязвимостей и приоритизировать контрмеры. Рекомендуется как обязательный prerequisite.
+
+[[security-https-tls]] — категория M5 (Insecure Communication) требует глубокого понимания TLS, certificate pinning и PKI. Знание механизмов работы TLS handshake, различий между TLS 1.2 и 1.3, а также принципов certificate validation критично для правильной реализации защиты сетевых коммуникаций мобильного приложения.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по безопасности мобильных приложений, покрывающее уязвимости из OWASP Mobile Top 10 с практическими примерами для Android и iOS.
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — несмотря на фокус на веб, многие атаки (injection, broken auth, IDOR) применимы к мобильным API и бэкендам, с которыми взаимодействуют мобильные приложения.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — методология моделирования угроз, применимая к мобильным приложениям для систематического выявления уязвимостей из Mobile Top 10 на этапе проектирования.
+- OWASP Foundation (2021). *OWASP Testing Guide v4.* — практическое руководство по тестированию безопасности, включая мобильные приложения и связанные с ними веб-API.
 
 ---
 

@@ -10,13 +10,17 @@ tags:
   - gitops
   - argocd
   - flux
-  - kubernetes
+  - topic/kubernetes
   - type/concept
   - level/intermediate
 related:
   - "[[devops-overview]]"
   - "[[kubernetes-basics]]"
   - "[[ci-cd-pipelines]]"
+prerequisites:
+  - "[[kubernetes-basics]]"
+  - "[[ci-cd-pipelines]]"
+  - "[[git-workflows]]"
 ---
 
 # GitOps: ArgoCD, Flux, Declarative Deployments

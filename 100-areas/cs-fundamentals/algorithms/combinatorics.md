@@ -12,6 +12,10 @@ related:
   - "[[number-theory]]"
   - "[[dynamic-programming]]"
   - "[[backtracking]]"
+prerequisites:
+  - "[[recursion-fundamentals]]"
+  - "[[dynamic-programming]]"
+  - "[[number-theory]]"
 ---
 
 # Combinatorics for Competitive Programming

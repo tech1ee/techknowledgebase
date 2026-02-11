@@ -20,6 +20,9 @@ related:
   - "[[one-on-one-meetings]]"
   - "[[scaling-engineering-org]]"
   - "[[building-engineering-team]]"
+prerequisites:
+  - "[[em-fundamentals]]"
+  - "[[one-on-one-meetings]]"
 ---
 
 # Делегирование: Отпустить контроль
@@ -707,6 +710,24 @@ not rules and control."
 - "Multipliers" by Liz Wiseman — how leaders amplify capability
 - "Drive" by Daniel Pink — motivation through autonomy
 - "The Effective Executive" by Peter Drucker — delegation principles
+
+---
+
+## Связь с другими темами
+
+**[[em-fundamentals]]** — Делегирование — один из фундаментальных навыков Engineering Manager, без которого невозможно масштабировать свой impact. Em-fundamentals описывает общую модель ответственности EM, где делегирование играет ключевую роль в переходе от индивидуального output к командному результату. Менеджер, который не умеет делегировать, остаётся bottleneck и не может эффективно выполнять другие обязанности EM.
+
+**[[one-on-one-meetings]]** — 1-on-1 встречи — это основная площадка для обсуждения делегированных задач. Именно на 1-on-1 менеджер проводит handoff conversation, check-ins на прогресс, coaching при трудностях и feedback по завершении. Без регулярных качественных 1-on-1 делегирование превращается в abdication — задачи бросаются без support и follow-up.
+
+**[[scaling-engineering-org]]** — При масштабировании инженерной организации делегирование становится не просто полезным навыком, а критической необходимостью. Директора и VP Engineering делегируют целые области ответственности менеджерам, которые в свою очередь делегируют дальше. Умение выстроить многоуровневую систему делегирования определяет, сможет ли организация вырасти без потери качества и скорости.
+
+**[[building-engineering-team]]** — Делегирование — один из ключевых инструментов развития команды. Через stretch assignments и outcome delegation менеджер создаёт growth opportunities для инженеров. Правильно делегированная задача одновременно решает бизнес-потребность и развивает человека, формируя culture of ownership в команде.
+
+## Источники и дальнейшее чтение
+
+- **L. David Marquet, "Turn the Ship Around!" (2012)** — Фундаментальная книга об intent-based leadership, которая показывает, как передача authority вместе с responsibility трансформирует организацию. Пример USS Santa Fe демонстрирует, что делегирование на самом глубоком уровне создаёт лидеров на каждом уровне организации.
+- **Peter Drucker, "The Effective Executive" (2006)** — Drucker формулирует принципы эффективного руководства, включая фокус на contribution и делегирование всего, что может быть сделано другими. Его концепция "what can I contribute that nobody else can?" помогает менеджерам определить, что не делегировать.
+- **Camille Fournier, "The Manager's Path" (2017)** — Практическое руководство по делегированию на каждом уровне management карьеры, от Tech Lead до VP Engineering, с конкретными примерами и anti-patterns.
 
 ---
 

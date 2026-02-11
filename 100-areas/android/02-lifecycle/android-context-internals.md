@@ -19,6 +19,11 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-view-rendering-pipeline]]"
 cs-foundations: [decorator-pattern, delegation, abstract-class, factory-method, service-locator, caching, ipc, singleton]
+prerequisites:
+  - "[[android-activity-lifecycle]]"
+  - "[[android-app-components]]"
+  - "[[android-process-memory]]"
+  - "[[android-memory-leaks]]"
 ---
 
 # Context: иерархия, ContextImpl и getSystemService под капотом
@@ -1772,27 +1777,23 @@ override fun attachBaseContext(newBase: Context) {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-### Прямые зависимости (prerequisite)
-- **[[android-activity-lifecycle]]** — Activity наследует от ContextThemeWrapper; lifecycle определяет время жизни Activity Context; `Activity.attach()` вызывает `attachBaseContext()` с ContextImpl
-- **[[android-app-components]]** — Activity, Service, Application — три типа компонентов, каждый получает свой ContextImpl от ActivityThread
-- **[[android-memory-leaks]]** — Context — главный источник memory leaks; неправильное хранение Activity Context в Singleton/ViewModel/static → утечка View hierarchy
+**[[android-activity-lifecycle]]** — Activity наследует от ContextThemeWrapper и получает полноценный Context с window token и темой. Lifecycle Activity определяет время жизни Activity Context: после onDestroy() Context становится невалидным. Метод Activity.attach() вызывает attachBaseContext() с ContextImpl, что является ключевым моментом инициализации. Рекомендуется сначала изучить Activity lifecycle, затем Context internals.
 
-### Тесно связанные темы
-- **[[android-process-memory]]** — ContextImpl создаётся ActivityThread внутри процесса приложения; число Context-ов влияет на потребление памяти
-- **[[android-handler-looper]]** — ActivityThread.mH (Handler) управляет созданием Context-ов через сообщения LAUNCH_ACTIVITY, CREATE_SERVICE
-- **[[android-view-rendering-pipeline]]** — LayoutInflater получается через Context.getSystemService(); тема применяется через ContextThemeWrapper
-- **[[android-dependency-injection]]** — Hilt предоставляет @ApplicationContext и @ActivityContext для правильного scope; решает проблему передачи Context
+**[[android-app-components]]** — Activity, Service и Application — три типа компонентов, каждый из которых получает собственный ContextImpl от ActivityThread. Понимание этой связи объясняет формулу N(Context) = N(Activity) + N(Service) + 1(Application) и почему разные компоненты имеют разные возможности (UI, темы, системные сервисы). Изучение компонентов — необходимая предпосылка.
 
-### Дополнительный контекст
-- **[[android-bundle-parcelable]]** — savedInstanceState работает через Context (Activity); Bundle передаётся через Binder, к которому Context обеспечивает доступ
-- **[[android-state-management]]** — SavedStateHandle, ViewModel, SharedPreferences — все требуют Context для работы
-- **[[android-navigation]]** — NavController использует Activity Context для запуска новых Activity/Fragment через Intent/FragmentManager
+**[[android-memory-leaks]]** — Context является главным источником memory leaks в Android. Передача Activity Context в долгоживущие объекты (Singleton, ViewModel, static поля) приводит к утечке всего View hierarchy (5-50 МБ). Понимание иерархии Context и правильного выбора между Activity Context и Application Context — ключевой навык для предотвращения утечек. Рекомендуется изучать параллельно с Context.
+
+**[[android-process-memory]]** — ContextImpl создаётся ActivityThread внутри процесса приложения. Каждый экземпляр ContextImpl содержит mServiceCache массив и ссылки на LoadedApk, Resources, что влияет на потребление памяти процесса. Понимание процессной модели помогает оценить overhead от множества Context-ов.
+
+**[[android-handler-looper]]** — ActivityThread.mH (Handler) управляет созданием Context-ов через системные сообщения (LAUNCH_ACTIVITY, CREATE_SERVICE). Когда ActivityThread получает сообщение о создании Activity, он создаёт новый ContextImpl и привязывает его через attach(). Понимание Handler/Looper механизма объясняет, как Context-ы появляются в процессе.
+
+**[[android-view-rendering-pipeline]]** — LayoutInflater получается через Context.getSystemService(), причём ContextThemeWrapper перехватывает этот вызов для применения темы Activity. Использование Application Context для inflate приводит к потере стилей Material Design. Эта связь критична для понимания, почему тип Context влияет на внешний вид UI.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
@@ -1812,3 +1813,9 @@ override fun attachBaseContext(newBase: Context) {
 | 14 | [Android Developers Blog: Avoiding memory leaks](https://android-developers.googleblog.com/2009/01/avoiding-memory-leaks.html) | Blog | Romain Guy (2009) — оригинальный пост Google о Context leaks |
 | 15 | [Activity Context vs Application Context: A Deep Dive](https://medium.com/@mahmoud.alkateb22/activity-context-vs-application-context-a-deep-dive-into-android-development-94fc41233de7) | Article | Mahmoud Alkateb — сравнение двух типов Context |
 | 16 | [Context and memory leaks in Android](https://medium.com/swlh/context-and-memory-leaks-in-android-82a39ed33002) | Article | Juan Rinconada — утечки через Context и как их предотвратить |
+
+### Книги
+
+- **Meier R. (2022)** *Professional Android* — подробно описывает иерархию Context, различия Application/Activity Context и паттерны безопасного использования Context в production-коде.
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практические примеры работы с Context в Activity, Fragment и Service. Полезно для понимания, когда какой Context использовать.
+- **Vasavada N. (2019)** *Android Internals* — глубокий разбор ContextImpl, ActivityThread и SystemServiceRegistry на уровне AOSP. Незаменимо для понимания внутреннего устройства.

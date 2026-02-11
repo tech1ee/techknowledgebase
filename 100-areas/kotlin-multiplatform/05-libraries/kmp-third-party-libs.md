@@ -16,6 +16,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kmp-sqldelight-database]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-source-sets]]"
+  - "[[kmp-kotlinx-libraries]]"
 cs-foundations:
   - "[[library-evaluation-criteria]]"
   - "[[dependency-management]]"
@@ -805,6 +809,24 @@ iosMain.dependencies {
 | [[dependency-management]] | Transitive dependencies, conflicts | Gradle documentation |
 | [[caching-strategies]] | Apollo cache, Coil cache | Cache-Aside, Write-Through patterns |
 | [[graphql-vs-rest]] | Apollo vs Ktor выбор | GraphQL specification |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — экосистема сторонних библиотек определяет зрелость и практическую применимость KMP как платформы. Понимание общей архитектуры KMP — targets, source sets, expect/actual — критично для оценки совместимости библиотек: не все поддерживают все платформы, и проверка targets через klibs.io или GitHub должна быть первым шагом перед добавлением зависимости.
+
+- **[[kmp-ktor-networking]]** — Ktor является фундаментом для многих библиотек экосистемы: Coil 3.x использует Ktor для загрузки изображений по сети, Apollo Kotlin может работать поверх Ktor-транспорта. Понимание Ktor Client необходимо для интеграции сетевых библиотек и правильной конфигурации единого HttpClient, который переиспользуется всеми компонентами приложения.
+
+- **[[kmp-sqldelight-database]]** — SQLDelight конкурирует и дополняет другие решения хранения данных в экосистеме: Realm для offline-first с MongoDB sync, multiplatform-settings для простого key-value, DataStore для типизированных preferences. Понимание trade-offs между этими решениями — SQL-мощь SQLDelight vs простота Realm vs легковесность settings — определяет правильный выбор для конкретного проекта.
+
+## Источники и дальнейшее чтение
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по проектированию API и управлению зависимостями в Kotlin, включая принципы минимизации coupling и правильного использования abstractions, что критично при выборе и интеграции сторонних библиотек.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы инверсии зависимостей и разделения слоёв позволяют изолировать сторонние библиотеки за интерфейсами, упрощая их замену. Это особенно актуально для KMP, где библиотеки могут терять поддержку или заменяться (например, Kamel → Coil, moko-resources → Compose Resources).
+
+- **Skeen J. et al. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Основы Kotlin-экосистемы, включая работу с Gradle, зависимостями и multiplatform-проектами, что даёт базу для понимания конфигурации сторонних KMP-библиотек через Version Catalog и source sets.
 
 ---
 

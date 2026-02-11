@@ -16,6 +16,8 @@ tags:
 related:
   - "[[ci-cd-pipelines]]"
   - "[[technical-debt]]"
+prerequisites:
+  - "[[kubernetes-basics]]"
 ---
 
 # Git Workflows: от хаоса к порядку

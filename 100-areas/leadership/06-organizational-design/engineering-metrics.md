@@ -18,6 +18,8 @@ tags:
 related:
   - "[[em-fundamentals]]"
   - "[[okrs-kpis]]"
+prerequisites:
+  - "[[em-fundamentals]]"
 ---
 
 # Метрики инженерии
@@ -156,19 +158,19 @@ DON'T:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[okrs-kpis]] — OKRs и KPIs
-- [[engineering-practices]] — что улучшает metrics
-- [[performance-management]] — individual metrics
+**[[em-fundamentals]]** — Метрики инженерии являются одним из ключевых инструментов в арсенале engineering manager. Понимание DORA metrics и SPACE framework помогает менеджеру объективно оценивать здоровье команды и принимать data-driven решения. Без фундаментального понимания роли EM невозможно правильно интерпретировать и использовать метрики — они должны служить инструментом развития команды, а не инструментом контроля.
 
-## Источники
+**[[okrs-kpis]]** — Метрики инженерии напрямую связаны с OKR и KPI фреймворками, поскольку именно метрики формируют Key Results в инженерных OKR. DORA metrics часто становятся основой для KPI команд разработки, а SPACE framework помогает выбрать сбалансированный набор показателей. Правильная связка метрик с OKR позволяет команде видеть свой прогресс и влияние на бизнес-результаты.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Accelerate](https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339) | Book |
-| [DORA](https://dora.dev/) | Research |
-| [SPACE Framework](https://queue.acm.org/detail.cfm?id=3454124) | Paper |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
 
 ---
 

@@ -18,6 +18,8 @@ related:
   - "[[type-erasure-reification]]"
   - "[[kotlin-type-system]]"
   - "[[memory-safety-ownership]]"
+prerequisites:
+  - "[[data-structures-fundamentals]]"
 ---
 
 # Type Systems: теория и практика систем типов

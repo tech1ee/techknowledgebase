@@ -10,7 +10,14 @@ tags:
   - scope-functions
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-oop]]"
 status: published
+related:
+  - "[[kotlin-collections]]"
+  - "[[functional-programming]]"
+  - "[[kotlin-coroutines]]"
 ---
 
 # Kotlin ФП: лямбды, scope functions, inline
@@ -46,6 +53,10 @@ status: published
 ---
 
 Функции в Kotlin — first-class citizens: передаются как параметры, возвращаются из функций, хранятся в переменных. Лямбды с замыканиями `{ x -> x * 2 }`, trailing lambda синтаксис делает DSL естественным. Scope functions (let, apply, run, also, with) — пять способов работать с объектом в разном контексте.
+
+Представьте кулинарию. **Higher-order function** — это шеф-повар, который не готовит сам, а даёт инструкции помощникам (лямбдам): «возьми каждый овощ и нарежь» (`map`), «оставь только спелые» (`filter`), «сложи всё в одну кастрюлю» (`fold`). Шеф-повар работает с любыми помощниками — главное, чтобы они умели выполнять инструкцию. **Scope functions** — это разные способы обратиться к одному ингредиенту: `let` — «передай его дальше и получи результат», `apply` — «приправь его и верни обратно», `also` — «запиши, что ты с ним сделал, и верни как есть».
+
+Другая аналогия: **inline-функция** — это не готовый блок, а чертёж. Вместо того чтобы вызывать отдельную мастерскую (создавать объект функции на heap), компилятор копирует чертёж прямо на место строительства. Результат — никаких накладных расходов на «поездку в мастерскую», всё делается на месте.
 
 `let` для null-safety и трансформации (возвращает результат лямбды), `apply` для конфигурации объекта (возвращает сам объект). Inline функции устраняют overhead анонимных классов — без inline каждая лямбда = объект в heap. `reified` сохраняет generic типы в runtime: `inline fun <reified T> parse(): T` — невозможно в Java из-за type erasure.
 
@@ -918,8 +929,9 @@ fetchUserData(userId)
 
 ### DSL Builders
 
+DSL строится на function types с receiver. Сначала создаём builder-класс, который собирает структуру:
+
 ```kotlin
-// HTML DSL
 class HtmlElement(private val tag: String) {
     private val children = mutableListOf<HtmlElement>()
     private val attributes = mutableMapOf<String, String>()
@@ -935,16 +947,12 @@ class HtmlElement(private val tag: String) {
         children.add(child)
         return child
     }
-
-    override fun toString(): String {
-        val attrs = attributes.entries.joinToString(" ") { """${it.key}="${it.value}"""" }
-        val attrsStr = if (attrs.isNotEmpty()) " $attrs" else ""
-        val childrenStr = children.joinToString("")
-        val content = if (text.isNotEmpty()) text else childrenStr
-        return "<$tag$attrsStr>$content</$tag>"
-    }
 }
+```
 
+Затем создаём entry-point функцию и extension functions для удобного синтаксиса:
+
+```kotlin
 fun html(init: HtmlElement.() -> Unit): HtmlElement {
     val root = HtmlElement("html")
     root.init()
@@ -953,25 +961,19 @@ fun html(init: HtmlElement.() -> Unit): HtmlElement {
 
 fun HtmlElement.head(init: HtmlElement.() -> Unit) = element("head", init)
 fun HtmlElement.body(init: HtmlElement.() -> Unit) = element("body", init)
-fun HtmlElement.div(init: HtmlElement.() -> Unit) = element("div", init)
 fun HtmlElement.p(init: HtmlElement.() -> Unit) = element("p", init)
+```
 
-// Использование
+Результат — код, который читается как разметка, но проверяется компилятором:
+
+```kotlin
 val page = html {
-    head {
-        element("title") { text = "My Page" }
-    }
+    head { element("title") { text = "My Page" } }
     body {
-        div {
-            attr("class", "container")
-            p { text = "Hello, World!" }
-            p { text = "Welcome to DSL" }
-        }
+        p { text = "Hello, World!" }
+        p { text = "Welcome to DSL" }
     }
 }
-
-println(page)
-// <html><head><title>My Page</title></head><body><div class="container"><p>Hello, World!</p><p>Welcome to DSL</p></div></body></html>
 ```
 
 ## Распространённые ошибки
@@ -1102,39 +1104,33 @@ fun processLargeData(data: ByteArray, processor: (Byte) -> Unit) {
 
 ### DSL в production
 
-```
-Пример 1: Gradle Kotlin DSL
-───────────────────────────
-// Вместо Groovy:
-// dependencies {
-//     implementation 'org.example:lib:1.0'
-// }
+**Gradle Kotlin DSL** — type-safe конфигурация сборки с автокомплитом IDE:
 
-// Kotlin DSL (type-safe):
+```kotlin
 dependencies {
     implementation("org.example:lib:1.0")  // IDE autocomplete!
 }
+```
 
-Пример 2: Ktor Routing
-──────────────────────
+**Ktor Routing** — декларативное определение HTTP-маршрутов:
+
+```kotlin
 routing {
-    get("/users") {
-        call.respond(userService.getAll())
-    }
+    get("/users") { call.respond(userService.getAll()) }
     post("/users") {
         val user = call.receive<User>()
         call.respond(userService.create(user))
     }
 }
+```
 
-Пример 3: Spring Functional Beans
-─────────────────────────────────
+**Spring Functional Beans** — type-safe конфигурация DI-контейнера:
+
+```kotlin
 beans {
     bean<UserRepository>()
     bean<UserService>()
-    bean {
-        UserController(ref())  // type-safe references
-    }
+    bean { UserController(ref()) }
 }
 ```
 
@@ -1174,25 +1170,21 @@ beans {
 
 ---
 
-## Рекомендуемые источники
+## Связь с другими темами
 
-### Официальная документация
-- [Kotlin Lambdas](https://kotlinlang.org/docs/lambdas.html) — официальный гайд
-- [Scope Functions](https://kotlinlang.org/docs/scope-functions.html) — let, apply, run, also, with
-- [Inline Functions](https://kotlinlang.org/docs/inline-functions.html) — inline, reified, crossinline
+**[[kotlin-collections]]** — функциональное программирование в Kotlin наиболее ярко проявляется при работе с коллекциями: `map`, `filter`, `flatMap`, `fold`, `reduce` — всё это higher-order functions, принимающие лямбды. Sequence реализует lazy evaluation — ключевую концепцию FP. Коллекции — основная «площадка» для применения функциональных навыков в повседневном Kotlin-коде. Изучайте FP и collections параллельно для взаимного усиления.
 
-### Книги
-- **"Kotlin in Action"** (2nd ed) — глава о функциональном программировании
-- **"Effective Kotlin"** — best practices для лямбд и scope functions
-- **"Functional Programming in Kotlin"** — Arrow-kt и продвинутые паттерны
+**[[functional-programming]]** — Kotlin FP (лямбды, inline, scope functions) — практическая реализация общих концепций функционального программирования: first-class functions, closures, immutability, pure functions. Общий курс FP даёт теоретический фундамент (lambda calculus, referential transparency, monads), а Kotlin — прагматичное применение этих идей на JVM. Рекомендуется изучить теорию FP для глубокого понимания, почему Kotlin-конструкции спроектированы именно так.
 
-### Видео
-- [Kotlin Vocabulary](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc_T0fSZc9obnmnWcjvmJdw_) — Google, scope functions
-- [KotlinConf talks on FP](https://www.youtube.com/results?search_query=kotlinconf+functional+programming) — продвинутые темы
+**[[kotlin-coroutines]]** — coroutines активно используют функциональный стиль: suspend functions — аналог continuations, `launch {}` и `async {}` — higher-order functions с trailing lambda, structured concurrency — композиция функций с управлением ресурсами. Функциональное мышление (composability, immutability, pure functions) помогает писать предсказуемый asynchronous код. Изучите FP basics перед coroutines для более лёгкого освоения.
 
-### Библиотеки
-- [Arrow-kt](https://arrow-kt.io/) — функциональная библиотека (Either, IO, Validated)
-- [Kotlin Gradle DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html) — пример production DSL
+---
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — глава о функциональном программировании подробно объясняет лямбды, higher-order functions, inline оптимизацию и scope functions с примерами из реальных проектов.
+- Moskala M. (2024). *Effective Kotlin.* — best practices для лямбд и scope functions: когда использовать let vs run, как избегать вложенных scope functions и правильно применять inline.
+- Vermeulen M. et al. (2021). *Functional Programming in Kotlin.* — Arrow-kt и продвинутые паттерны: Either, IO, Validated. Объясняет теоретические основы FP (монады, аппликативные функторы) через практические примеры на Kotlin.
 
 ---
 

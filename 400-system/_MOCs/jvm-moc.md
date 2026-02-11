@@ -12,6 +12,8 @@ tags:
 
 > Платформа JVM: от байткода и ClassLoader до GC tuning и production debugging
 
+**Путь обучения:** [[jvm-learning-path]]
+
 ---
 
 ## Рекомендуемый путь изучения

@@ -11,6 +11,9 @@ tags:
 related:
   - "[[technical-presentations]]"
   - "[[presentation-design]]"
+prerequisites:
+  - "[[technical-presentations]]"
+  - "[[presentation-design]]"
 ---
 
 # Technical Storytelling: Нарратив в IT-коммуникации

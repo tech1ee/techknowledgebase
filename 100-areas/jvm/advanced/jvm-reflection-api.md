@@ -13,11 +13,19 @@ type: concept
 status: published
 area: programming
 confidence: high
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-memory-model]]"
 sources:
   - "Java Language Specification: Chapter 12 - Execution (Reflection)"
   - "Effective Java" by Joshua Bloch (3rd Edition, 2018)
   - "Java Reflection in Action" by Ira R. Forman (2004)
   - Oracle Java Reflection Documentation
+related:
+  - "[[jvm-bytecode-manipulation]]"
+  - "[[kotlin-interop]]"
+  - "[[android-dagger-deep-dive]]"
 ---
 
 # Reflection API: Интроспекция и динамическое поведение в Java
@@ -76,6 +84,8 @@ sources:
 **Метафора:** Reflection = зеркало для программы.
 - Обычный код: "Я делаю X"
 - Reflection: "Кто я? Что у меня есть? Что я могу делать?"
+
+> **Аналогия из жизни: рентген в больнице.** Обычный осмотр пациента — это как обычный вызов метода: врач видит только то, что «открыто» (public API). Рентгеновский аппарат — это Reflection: он позволяет заглянуть внутрь тела (private поля), увидеть скрытые структуры (internal методы) и даже обнаружить проблемы, невидимые снаружи. Как и рентген, Reflection — мощный диагностический инструмент, но использовать его на каждом шагу (performance overhead) нецелесообразно: для обычных задач достаточно стандартного осмотра.
 
 ---
 
@@ -392,6 +402,8 @@ int age2 = (int) ageField.get(user);
 
 ## Dynamic Proxies: Создание классов на лету
 
+> **Аналогия из жизни: секретарь-посредник в приёмной директора.** Представьте, что вы не можете попасть к директору напрямую — все вопросы идут через секретаря. Секретарь записывает каждый визит в журнал (logging), проверяет ваш пропуск (security), при необходимости откладывает встречу (caching) и только потом передаёт вопрос директору. Вы общаетесь с секретарём так же, как общались бы с директором (один и тот же «интерфейс»), но секретарь добавляет дополнительное поведение к каждому взаимодействию. Dynamic Proxy в Java работает именно так: это объект-посредник, который перехватывает все вызовы методов и может добавить логику до и после передачи вызова реальному объекту.
+
 ### Концепция
 
 **Dynamic Proxy — класс, созданный JVM во время выполнения.**
@@ -519,6 +531,16 @@ Fetching user 1
 │    UserServiceImpl.getUser(1L)                     │
 └────────────────────────────────────────────────────┘
 ```
+
+### Dynamic Proxy Internals: Что происходит внутри
+
+Когда вызывается `Proxy.newProxyInstance()`, JVM выполняет нетривиальную работу, которая скрыта за простым API. Первый шаг — **генерация байткода нового класса** прямо в памяти. JVM создаёт класс с именем вида `$Proxy0`, `$Proxy1` и т.д. (числовой суффикс увеличивается для каждого нового proxy). Этот класс наследуется от `java.lang.reflect.Proxy` и реализует все указанные интерфейсы. Для каждого метода каждого интерфейса генерируется stub-метод, который делегирует вызов `InvocationHandler.invoke()`. Байткод создаётся через внутренний класс `sun.misc.ProxyGenerator` (до Java 9) или `java.lang.reflect.ProxyGenerator` (Java 9+), который напрямую генерирует массив `byte[]` в формате class-файла.
+
+Второй важный аспект — **кэширование сгенерированных классов**. JVM не создаёт новый proxy-класс каждый раз: для одной и той же комбинации ClassLoader + набор интерфейсов возвращается уже сгенерированный класс из кэша (реализовано через `WeakCache`). Это означает, что overhead генерации байткода оплачивается только при первом создании proxy для данной комбинации интерфейсов. Последующие вызовы `Proxy.newProxyInstance()` с теми же параметрами создают только новый instance уже существующего класса — операция, сравнимая по стоимости с обычным `new`.
+
+Третий аспект — **ограничение: только интерфейсы**. Dynamic Proxy работает исключительно с интерфейсами, не с классами. Это архитектурное решение обусловлено тем, что Java не поддерживает множественное наследование классов: сгенерированный proxy уже наследуется от `java.lang.reflect.Proxy`, и унаследовать ещё один класс невозможно. Для создания proxy классов (а не интерфейсов) используются библиотеки bytecode generation: CGLIB генерирует подкласс целевого класса и переопределяет его методы, ByteBuddy предоставляет более современный и гибкий API для той же задачи. Spring использует JDK Dynamic Proxy для интерфейсов и CGLIB для классов — это поведение настраивается через `@EnableAspectJAutoProxy(proxyTargetClass = true)`.
+
+Четвёртый аспект — **производительность proxy-вызовов**. Каждый вызов метода через proxy проходит через `InvocationHandler.invoke()`, что добавляет overhead: создание массива `Object[] args`, boxing примитивных аргументов, Reflection-вызов `method.invoke()` для делегирования реальному объекту. На практике этот overhead составляет 50-200 наносекунд на вызов. Для большинства бизнес-операций (обращение к базе данных, HTTP-запросы) это пренебрежимо мало. Однако в hot paths с миллионами вызовов в секунду proxy может стать узким местом — в таких случаях ByteBuddy генерирует прямые вызовы без Reflection, устраняя overhead полностью.
 
 ---
 
@@ -1063,6 +1085,24 @@ UserService proxy = new ByteBuddy()
 - [ ] Понимаю проблемы безопасности (setAccessible)
 - [ ] Знаю альтернативы (MethodHandles, bytecode generation)
 - [ ] Умею читать аннотации через Reflection
+
+---
+
+## Связь с другими темами
+
+**[[jvm-bytecode-manipulation]]** — Reflection и bytecode manipulation — два подхода к метапрограммированию на JVM, дополняющие друг друга. Reflection анализирует структуру классов в runtime (introspection), но медленнее прямых вызовов в 7-100x. Bytecode manipulation (ByteBuddy) генерирует реальный байткод, который после загрузки работает как обычный код без overhead'а Reflection. Spring, Hibernate и Mockito используют оба подхода: Reflection для чтения аннотаций и discovery, ByteBuddy для генерации proxy-классов.
+
+**[[kotlin-interop]]** — Kotlin имеет собственный Reflection API (kotlin-reflect) с типами KClass, KFunction, KProperty, который отличается от Java Reflection. Java Reflection видит Kotlin-код «как Java»: companion object превращается в static-методы, data class — в обычный POJO с componentN(). При работе с Kotlin-кодом через Java Reflection нужно учитывать маппинг: nullable типы, default parameters, inline классы имеют специфическое представление в байткоде. Для Kotlin-первых проектов рекомендуется kotlin-reflect; для фреймворков, работающих с обоими языками — Java Reflection.
+
+**[[android-dagger-deep-dive]]** — Dagger — пример сознательного отказа от Reflection в пользу compile-time code generation. В отличие от Spring (который использует Reflection для DI), Dagger генерирует код через annotation processor, что критично для Android: Reflection медленнее, увеличивает startup time и несовместима с ProGuard/R8 obfuscation. Сравнение Dagger (compile-time) и Spring (runtime Reflection) демонстрирует фундаментальный trade-off: гибкость runtime vs производительность compile-time.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 65 «Prefer interfaces to reflection» объясняет, почему Reflection следует использовать минимально и как интерфейсы обеспечивают ту же гибкость без потери type safety.
+- Forman I., Forman N. (2004). *Java Reflection in Action*. — Единственная книга, полностью посвящённая Java Reflection: от базовых API до паттернов проектирования с Reflection, включая Dynamic Proxy и annotation processing.
+- Goetz B. et al. (2006). *Java Concurrency in Practice*. — Раздел о publication и visibility объясняет, почему setAccessible() и модификация полей через Reflection может нарушить thread safety, особенно для final полей.
 
 ---
 

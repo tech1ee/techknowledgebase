@@ -19,6 +19,9 @@ related:
   - "[[android-graphics-apis]]"
   - "[[android-animations]]"
   - "[[android-window-system]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Android View Rendering Pipeline
@@ -714,6 +717,28 @@ Glide.with(this).load(R.drawable.photo).override(48, 48).into(imageView)
 
 ---
 
+## Связь с другими темами
+
+### [[android-compose-internals]]
+Compose использует собственный rendering pipeline (Composition → Layout → Drawing), который отличается от View-based pipeline. Однако оба подхода в итоге рисуют через те же Canvas/RenderNode и проходят через RenderThread и SurfaceFlinger. Понимание View rendering pipeline помогает осознать, какие оптимизации Compose делает автоматически (skip, recomposition) и почему interop между View и Compose может вызвать performance issues.
+
+### [[android-performance-profiling]]
+Profiling — практическое применение знаний о rendering pipeline. Systrace/Perfetto показывают timing каждой фазы (measure, layout, draw, sync, GPU), Profile GPU Rendering визуализирует frame budget. Без понимания pipeline невозможно интерпретировать результаты profiling tools. Рекомендуется изучить pipeline теоретически, затем закрепить через profiling реального приложения.
+
+### [[android-ui-views]]
+View System — потребитель rendering pipeline: каждая View проходит через measure → layout → draw. Знание View hierarchy (depth, overdraw, nested weights) напрямую влияет на rendering performance. Глубокие иерархии увеличивают время traversal, а overdraw тратит GPU-ресурсы на невидимые пиксели. Изучите View System перед rendering pipeline для понимания контекста.
+
+### [[android-graphics-apis]]
+Graphics APIs (Canvas, Paint, Path, Shader, RenderEffect) — инструменты, используемые в draw-фазе rendering pipeline. Canvas преобразуется в Display List (набор GPU-команд), который кэшируется в RenderNode. Hardware Layers кэшируют результат draw в GPU-текстуру для ускорения анимаций. Понимание graphics APIs объясняет, что происходит внутри onDraw() и как оптимизировать отрисовку.
+
+### [[android-animations]]
+Анимации — главный потребитель rendering pipeline: каждый кадр анимации проходит полный цикл invalidate → measure → layout → draw. Property animations (ValueAnimator, ObjectAnimator) изменяют свойства View и вызывают invalidate(). Hardware Layer animations обновляют только GPU-трансформацию без перерисовки, обеспечивая 60fps. Понимание rendering pipeline критично для создания плавных анимаций.
+
+### [[android-window-system]]
+Window System определяет Surface — конечный target рендеринга. Каждое окно (Activity, Dialog, Toast) имеет свой Surface, в который View tree рисует через RenderThread. SurfaceFlinger композитит все Surface в финальное изображение. Понимание window system объясняет, как rendering pipeline связан с compositor и VSYNC.
+
+---
+
 ## Источники
 
 - [Android Developers — Profile GPU Rendering](https://developer.android.com/topic/performance/rendering/profile-gpu)
@@ -723,6 +748,12 @@ Glide.with(this).load(R.drawable.photo).override(48, 48).into(imageView)
 - [AOSP — VSYNC](https://source.android.com/docs/core/graphics/implement-vsync)
 - [Perfetto — FrameTimeline](https://perfetto.dev/docs/data-sources/frametimeline)
 - [Dan Lew — Hardware Layers](https://blog.danlew.net/2015/10/20/using-hardware-layers-to-improve-animation-performance/)
+
+## Источники и дальнейшее чтение
+
+- **Vasavada N. (2019). Android Internals.** — Глубокое описание ViewRootImpl, Choreographer, RenderThread и SurfaceFlinger. Единственный ресурс, подробно объясняющий полный путь от invalidate() до пикселей на экране. Обязательна для понимания rendering internals.
+- **Meier R. (2022). Professional Android.** — Практическое покрытие rendering optimization: overdraw reduction, layout hierarchy flattening, hardware layer usage. Связывает теорию rendering pipeline с реальными оптимизациями в production-приложениях.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Введение в custom drawing, Canvas API и анимации с учётом rendering performance. Помогает понять draw-фазу pipeline через практические проекты.
 
 ---
 

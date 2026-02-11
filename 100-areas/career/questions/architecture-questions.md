@@ -14,6 +14,9 @@ related:
   - "[[android-questions]]"
   - "[[system-design-android]]"
   - "[[technical-interview]]"
+prerequisites:
+  - "[[android-questions]]"
+  - "[[kotlin-questions]]"
 ---
 
 # Architecture Interview Questions: проектирование Android приложений
@@ -580,6 +583,26 @@ data class CheckoutState(
    project size, team experience, and long-term
    maintenance requirements."
 ```
+
+---
+
+## Связь с другими темами
+
+- **[[android-questions]]** — Базовые Android-вопросы (lifecycle, Compose, coroutines) — фундамент, на котором строятся архитектурные решения. Невозможно проектировать MVI без понимания StateFlow, или Clean Architecture без знания ViewModel lifecycle. Интервьюеры часто переходят от базовых вопросов к архитектурным, проверяя глубину понимания.
+
+- **[[system-design-android]]** — System Design — расширение архитектурных вопросов на уровень всей системы: не только UI-архитектура, но и networking, caching, sync, и scaling. На Staff+ интервью System Design занимает до 30% всего процесса. Умение масштабировать архитектурное мышление от экрана до системы — ключевой Senior+ навык.
+
+- **[[technical-interview]]** — Архитектурные вопросы — один из столпов технического интервью наряду с coding и System Design. Понимание формата интервью помогает правильно структурировать ответы: не просто описать паттерн, а обсудить trade-offs и показать decision-making process.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Xu A. (2020). System Design Interview.** — Даёт фреймворк для обсуждения архитектурных решений на интервью: как структурировать ответ, какие trade-offs обсуждать, как рисовать диаграммы. Хотя фокус на backend, подход полностью применим к mobile architecture.
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Главы об Object-Oriented Design показывают, как интервьюеры оценивают архитектурное мышление. Полезна для понимания формата вопросов и ожидаемой глубины ответов на Senior-позиции.
+
+- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Объясняет, как архитектурные решения связаны с technical leadership на Staff+ уровне. Помогает выйти за рамки паттернов к стратегическому мышлению об архитектуре.
 
 ---
 

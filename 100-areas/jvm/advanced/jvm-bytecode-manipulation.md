@@ -9,6 +9,10 @@ tags:
   - code-generation
   - type/concept
   - level/advanced
+prerequisites:
+  - "[[jvm-basics-history]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[jvm-jit-compiler]]"
 sources:
   - asm-guide
   - javassist-tutorial
@@ -17,572 +21,352 @@ sources:
 confidence: high
 date: 2025-12-02
 status: published
+related:
+  - "[[jvm-instrumentation-agents]]"
+  - "[[jvm-class-loader-deep-dive]]"
+  - "[[android-proguard-r8]]"
 ---
 
 # JVM Bytecode Manipulation
 
-## TL;DR
+## Зачем это знать
 
-**Bytecode manipulation** позволяет **читать, анализировать и модифицировать** Java байткод во время выполнения или сборки. Три основные библиотеки: **ASM** (низкоуровневая, быстрая), **Javassist** (высокоуровневая, Java-подобный API), **ByteBuddy** (современная, fluent API).
+Каждый раз, когда Spring оборачивает ваш `@Transactional`-метод в транзакцию, когда Hibernate подгружает коллекцию при первом обращении, когда Mockito создаёт mock-объект — за кулисами работает bytecode manipulation. Это не экзотика и не хакерство: это фундаментальный механизм Java-экосистемы, без которого невозможно понять, как функционируют основные фреймворки. Если вы когда-нибудь видели `VerifyError` при старте приложения, сталкивались с «магическим» поведением proxy-объектов или пытались разобраться, почему вызов `this.method()` внутри Spring-бина обходит аспект — вам нужно понимание bytecode manipulation.
 
-**Основные библиотеки:**
-- **ASM** — visitor pattern, максимальный контроль, сложный API
-- **Javassist** — source-level API, проще использовать, медленнее
-- **ByteBuddy** — fluent API, отлично для runtime proxies
-
-**Когда использовать bytecode manipulation:**
-
-Runtime proxy generation — основной use case. Spring создаёт proxies для `@Transactional` методов, Hibernate — для lazy loading entities. Без bytecode manipulation пришлось бы писать proxy-классы вручную для каждого сервиса.
-
-Code instrumentation позволяет добавить profiling/tracing без изменения исходного кода. APM инструменты (Datadog, New Relic) инструментируют HTTP клиенты, database drivers, чтобы собирать метрики автоматически.
-
-**Когда НЕ использовать:** Если можно решить задачу annotation processor (compile-time code generation) — используйте его, это проще и безопаснее. Если есть исходный код — модифицируйте его напрямую, не добавляйте магию.
+> **Ключевая идея:** Bytecode manipulation — это способность читать, анализировать и модифицировать скомпилированный Java-код (байткод) без доступа к исходникам. Три основные библиотеки — ASM, Javassist, ByteBuddy — покрывают весь спектр задач: от низкоуровневого контроля до высокоуровневого DSL.
 
 ---
 
-## Проблема: Генерация кода в runtime
+## Аналогия: хирургия программы
 
-### Зачем манипулировать байткодом?
+Представьте, что компиляция — это рождение программы. Исходный код — ДНК, а скомпилированный `.class`-файл — уже сформировавшийся организм. Bytecode manipulation — это хирургия: возможность изменить «организм» программы после «рождения». Можно добавить новый орган (метод), заменить ткань (переписать тело метода), или поставить датчик (добавить код мониторинга) — всё это без пересборки из исходников.
 
-**Сценарий 1: Dynamic Proxies (Spring AOP)**
+Как и в реальной хирургии, здесь есть разные уровни вмешательства. ASM — это микрохирургия: работа на уровне отдельных клеток (байткод-инструкций), максимальный контроль, но требуется глубокая специализация. ByteBuddy — это лапароскопия: современный, минимально инвазивный подход, который решает большинство задач быстро и безопасно. Javassist — это хирургия по учебнику: понятный процесс, но менее точный инструмент.
+
+---
+
+## Терминология
+
+| Термин | Значение | Аналогия из жизни |
+|--------|----------|--------------------|
+| **Bytecode** | Промежуточное представление Java-кода — набор инструкций для JVM | Чертёж здания — не сам дом, но достаточно для строительства |
+| **ClassReader** | Компонент ASM, который читает `.class`-файл и генерирует события | Сканер, который «читает» книгу вслух |
+| **ClassWriter** | Компонент ASM, который собирает новый `.class`-файл из событий | Писатель, который записывает под диктовку (от visitor) |
+| **Visitor Pattern** | Паттерн проектирования: обход структуры без изменения самой структуры | Экскурсовод в музее — проходит по залам, рассказывая о каждом, но ничего не переставляет |
+| **Proxy** | Объект-посредник, перехватывающий вызовы к оригинальному объекту | Секретарь руководителя — фильтрует звонки, записывает время, но в итоге соединяет |
+| **Instrumentation** | Добавление измерительного кода без изменения бизнес-логики | Установка датчиков в автомобиль — машина та же, но теперь видны все параметры |
+| **VerifyError** | Ошибка при загрузке класса с невалидным байткодом | Строительная инспекция отклонила проект — чертёж нарушает нормы |
+| **Class Enhancement** | Модификация класса (добавление полей, методов, перехватчиков) | Тюнинг автомобиля — не новая машина, а улучшение существующей |
+
+---
+
+## Историческая справка
+
+Потребность в манипуляции байткодом возникла практически одновременно с появлением Java. С самого начала разработчики осознали, что промежуточное представление кода (байткод) — это не просто этап компиляции, а точка, в которой можно вмешиваться в поведение программы.
+
+**ASM** был создан Эриком Брюнето (Eric Bruneton) в 2002 году в исследовательском институте INRIA (Франция). Брюнето разработал ASM как компактную и быструю альтернативу существовавшему на тот момент BCEL (Byte Code Engineering Library от Apache). Ключевое решение — использование visitor pattern вместо object model — позволило ASM обрабатывать байткод потоково, без загрузки всего class-файла в память. Это сделало ASM в 3-5 раз быстрее BCEL и привело к его повсеместному распространению: сегодня ASM используют JaCoCo, Gradle, Groovy, Kotlin compiler и десятки других инструментов.
+
+**Javassist** появился раньше — в 1999 году, создан Шигэру Тибой (Shigeru Chiba) в Токийском технологическом институте. Ключевая идея Тибой была революционной для того времени: вместо работы с байткод-инструкциями напрямую — позволить разработчику писать модификации на Java, как обычный исходный код в виде строк. Javassist компилирует эти строки в байткод внутри себя. Подход сделал библиотеку доступной для широкого круга разработчиков и обеспечил её распространение в Hibernate, JBoss и других фреймворках.
+
+**ByteBuddy** — самая молодая из троицы, создана Рафаэлем Винтерхальтером (Rafael Winterhalter) в 2014 году. Винтерхальтер, работая над проектами с bytecode manipulation, был разочарован тем, что ASM слишком низкоуровневый, а Javassist ненадёжен из-за строкового подхода. ByteBuddy предложил fluent API с type safety: ошибки обнаруживаются при компиляции, а не в runtime. Библиотека завоевала Java Community Award в 2015 году (Duke's Choice Award) и быстро стала стандартом де-факто — Mockito 2+ (2016), Spring 6+ (2022), Hibernate 6+ (2022) перешли на ByteBuddy.
+
+---
+
+## Вторая аналогия: конструкторы LEGO и IKEA
+
+Чтобы различать три библиотеки интуитивно, представьте три типа конструкторов.
+
+**ASM — конструктор LEGO на уровне отдельных кирпичиков.** У вас есть базовые элементы (байткод-инструкции: `ILOAD`, `INVOKEVIRTUAL`, `ARETURN`), и вы собираете из них что угодно. Свобода абсолютна, но инструкция занимает десятки строк, а ошибка в одном кирпичике делает всю конструкцию нерабочей. Подходит мастеру, который точно знает, что строит.
+
+**ByteBuddy — конструктор IKEA с пошаговой инструкцией.** Детали крупнее, инструкция понятна, результат предсказуем. Вы описываете _что_ хотите получить («подкласс с перехватом всех методов»), а библиотека сама разбирается _как_ это реализовать на уровне байткода. Покрывает 90% задач с минимальными усилиями.
+
+**Javassist — конструктор из дерева с ручной обработкой.** Вы пишете код в виде строк на Java, а Javassist компилирует их в байткод. Подход интуитивен — вы работаете с привычным синтаксисом — но инструмент менее точный: строковый код не проверяется IDE, а компиляция происходит в runtime, что медленнее и менее надёжно.
+
+---
+
+## Проблема: зачем генерировать код в runtime
+
+Прежде чем разбирать инструменты, важно понять _почему_ bytecode manipulation вообще нужна. Ведь если есть исходный код — можно модифицировать его напрямую. Если нужна генерация — есть annotation processors на этапе компиляции.
+
+Ответ в трёх категориях задач, которые не решаются без runtime bytecode manipulation.
+
+**Категория 1: Dynamic Proxies.** Spring, Hibernate, Mockito создают proxy-объекты, тип которых неизвестен на этапе компиляции. Когда вы пишете `@Transactional` на методе, Spring не знает заранее, какие классы будут помечены этой аннотацией — это выясняется только при запуске, когда classpath сканируется. Proxy-класс генерируется динамически: он наследует оригинальный класс, перехватывает вызовы методов и добавляет транзакционную логику (begin/commit/rollback) вокруг вызова реального метода.
+
+**Категория 2: Code Instrumentation.** APM-инструменты (Datadog, New Relic, Dynatrace) добавляют мониторинг без изменения исходного кода приложения. Они перехватывают загрузку классов и вставляют измерительный код в HTTP-клиенты, драйверы баз данных, очереди сообщений. Это невозможно сделать annotation processor'ом, потому что инструментируемые классы — библиотечные, а не ваши.
+
+**Категория 3: ORM Enhancement.** Hibernate модифицирует entity-классы для поддержки lazy loading и dirty checking. При загрузке `User` с `@OneToMany(fetch = LAZY)` коллекцией `orders` Hibernate подменяет класс enhanced-версией, где геттер `getOrders()` при первом вызове выполняет SQL-запрос. Без bytecode enhancement каждое обращение к полю загружало бы все связанные данные — катастрофа для производительности.
+
+**Когда НЕ использовать bytecode manipulation.** Если задачу можно решить annotation processor'ом (compile-time code generation) — используйте его: это проще, безопаснее и даёт ошибки при компиляции, а не при запуске. Если есть исходный код — модифицируйте его напрямую, не добавляйте «магию». Bytecode manipulation оправдана только когда runtime-генерация неизбежна.
+
+Рассмотрим короткий пример, иллюстрирующий суть proxy-генерации. Spring при обнаружении `@Transactional` создаёт подкласс, который оборачивает вызов метода в транзакционную логику.
 
 ```java
-// Оригинальный класс - хотим добавить логирование БЕЗ изменения кода
+// Оригинальный класс — Spring обнаруживает @Transactional
+@Service
 public class UserService {
-    public User findUser(Long id) {
-        return userRepository.findById(id);
+    @Transactional
+    public void updateUser(User user) {
+        userRepository.save(user);       // Бизнес-логика без boilerplate
     }
 }
-
-// Создаём proxy с логированием
-UserService proxy = createLoggingProxy(new UserService());
-proxy.findUser(1L);
-
-// Вывод:
-// [LOG] Вызов findUser(1)
-// [LOG] findUser завершён за 45ms
+// Spring генерирует proxy: begin → super.updateUser() → commit/rollback
 ```
 
-**Как это работает:**
-- Фреймворк генерирует класс-прокси во время выполнения
-- Прокси перехватывает вызовы методов
-- Добавляет логику до/после вызова (логирование, транзакции, security)
-- Вызывает оригинальный метод
-
-**Сценарий 2: ORM Entity Enhancement (Hibernate)**
-
-```java
-// JPA entity
-@Entity
-public class User {
-    private String name;
-    private String email;
-}
-
-// Hibernate генерирует enhanced версию во время load:
-public class User$$EnhancedByHibernate extends User {
-    private transient boolean $$_hibernate_dirty;
-
-    @Override
-    public void setName(String name) {
-        super.setName(name);
-        this.$$_hibernate_dirty = true;  // Отслеживание изменений
-    }
-}
-```
-
-**Зачем это нужно:**
-- Lazy loading (поля загружаются по требованию)
-- Dirty checking (отслеживание изменений для UPDATE)
-- Cascade operations (автоматическое сохранение связанных объектов)
-
-**Сценарий 3: Mocking (Mockito)**
-
-```java
-// Mockito генерирует mock-объекты в runtime
-UserService mock = Mockito.mock(UserService.class);
-when(mock.findUser(1L)).thenReturn(new User("John"));
-
-// Mockito динамически создаёт подкласс UserService,
-// перехватывает все вызовы методов
-```
+Весь транзакционный код (begin, commit, rollback, обработка исключений) добавляется автоматически в proxy-классе — разработчик пишет только бизнес-логику. Именно это делает bytecode manipulation незаменимой.
 
 ---
 
-## Библиотеки для работы с байткодом
+## ASM — низкоуровневая библиотека
 
-### ASM — низкоуровневая библиотека
+### Архитектура: ClassReader → Visitor → ClassWriter pipeline
 
-**Особенности:**
-- Самая быстрая библиотека
-- Visitor pattern для обхода байткода
-- Максимальный контроль
-- Сложный API (работа напрямую с инструкциями JVM)
+ASM построен на visitor pattern — одном из классических паттернов проектирования (GoF, 1994). Идея проста: вместо того чтобы загружать весь `.class`-файл в объектную модель (граф объектов в памяти), ASM «проходит» по файлу последовательно и вызывает методы-обратные вызовы для каждого элемента: класса, поля, метода, инструкции. Это как чтение XML через SAX вместо DOM — потоковая обработка вместо полной загрузки.
 
-**Пример - добавление логирования:**
+Конвейер (pipeline) ASM состоит из трёх компонентов. **ClassReader** принимает массив байтов `.class`-файла и генерирует последовательность событий: «начало класса», «поле такое-то», «метод такой-то», «инструкция ILOAD», «конец метода», «конец класса». **ClassVisitor** — абстрактный класс, реализации которого обрабатывают эти события. Вы переопределяете нужные методы (`visitMethod`, `visitField`, `visitInsn`) и добавляете свою логику. **ClassWriter** — конкретный ClassVisitor, который собирает обработанные события обратно в массив байтов нового `.class`-файла.
+
+Красота подхода — в композиции visitor'ов. Можно выстроить цепочку: ClassReader → LoggingVisitor → PerformanceVisitor → ClassWriter. Каждый visitor обрабатывает своё и передаёт дальше. Visitor'ы не знают друг о друге — это чистое разделение ответственности.
+
+```
+ClassReader ──events──► Visitor A ──events──► Visitor B ──events──► ClassWriter
+  (читает)              (добавляет           (добавляет              (записывает
+                         логирование)         метрики)               результат)
+```
+
+Потоковая модель имеет принципиальное преимущество: ASM не создаёт промежуточное дерево объектов. Для обработки `.class`-файла размером 100 КБ ASM расходует минимум памяти сверх самого файла. Это критично для инструментов вроде JaCoCo или Gradle, которые обрабатывают тысячи классов при каждой сборке.
+
+Однако у visitor pattern есть цена: вы работаете не с «объектом класса», а с потоком событий. Нельзя «вернуться назад» и перечитать предыдущий метод — поток однонаправленный. Для задач, требующих анализа всего класса перед модификацией, ASM предлагает Tree API — объектную модель поверх visitor API, но она медленнее.
+
+### Когда выбирать ASM
+
+ASM — выбор для инструментов, где каждая микросекунда на счету. Профайлеры (async-profiler), APM-инструменты (Datadog agent), code coverage (JaCoCo) используют ASM, потому что их код выполняется миллионы раз в секунду. Даже 10% overhead от более медленной библиотеки превращается в заметное замедление приложения.
+
+Также ASM незаменим, когда нужен полный контроль над байткодом — например, при реализации нестандартных JVM-фич или оптимизаций на уровне инструкций. Если вы разрабатываете компилятор (как Kotlin compiler или Groovy compiler), вам нужен именно ASM.
+
+### Почему ASM сложен
+
+ASM работает на уровне JVM-инструкций: `ILOAD`, `INVOKEVIRTUAL`, `ARETURN`. Это как писать на ассемблере вместо Java. Ошибка в порядке инструкций — невалидный байткод, который JVM отвергнет с `VerifyError`. Нет compile-time проверок, всё выявляется только при загрузке класса. Пример ниже показывает, как ASM добавляет вызов `System.out.println` в начало каждого метода — обратите внимание на количество низкоуровневых деталей.
 
 ```java
-import org.objectweb.asm.*;
-
-public class LoggingClassVisitor extends ClassVisitor {
-
-    public LoggingClassVisitor(ClassVisitor cv) {
-        super(Opcodes.ASM9, cv);
-    }
-
-    @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor,
-                                     String signature, String[] exceptions) {
-        MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
-        // Добавляем логирование для каждого метода
-        return new LoggingMethodVisitor(mv, name);
-    }
-}
-
-class LoggingMethodVisitor extends MethodVisitor {
-    private String methodName;
-
-    public LoggingMethodVisitor(MethodVisitor mv, String methodName) {
-        super(Opcodes.ASM9, mv);
-        this.methodName = methodName;
-    }
-
-    @Override
-    public void visitCode() {
-        // Вставить код в начало метода
-        super.visitCode();
-        // System.out.println("Entering " + methodName);
-        mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        mv.visitLdcInsn("Entering " + methodName);
-        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println",
-                          "(Ljava/lang/String;)V", false);
-    }
+// ASM: вставка println в начало метода через visitor
+@Override
+public void visitCode() {
+    super.visitCode();
+    // Эквивалент: System.out.println("Entering " + methodName)
+    mv.visitFieldInsn(GETSTATIC,
+        "java/lang/System", "out",       // Поле System.out
+        "Ljava/io/PrintStream;");         // Тип: PrintStream
+    mv.visitLdcInsn("Entering " + name); // Константа-строка на стек
+    mv.visitMethodInsn(INVOKEVIRTUAL,
+        "java/io/PrintStream", "println", // Метод println
+        "(Ljava/lang/String;)V", false);  // Сигнатура: String→void
 }
 ```
 
-**Когда использовать ASM:**
-
-ASM — выбор для инструментов, где каждая микросекунда на счету. Профайлеры (async-profiler), APM инструменты (Datadog agent), code coverage (JaCoCo) используют ASM, потому что их код выполняется миллионы раз в секунду. Даже 10% overhead от более медленной библиотеки превращается в заметное замедление приложения.
-
-Также ASM незаменим, когда нужен полный контроль над байткодом — например, при реализации нестандартных JVM фич или оптимизаций на уровне инструкций.
-
-**Почему ASM сложен:**
-
-ASM работает на уровне JVM инструкций: `ILOAD`, `INVOKEVIRTUAL`, `ARETURN`. Это как писать на ассемблере вместо Java. Ошибка в порядке инструкций — невалидный байткод, который JVM отвергнет с `VerifyError`. Нет compile-time проверок, всё выявляется только при загрузке класса. Поэтому для большинства задач лучше начать с ByteBuddy или Javassist и переходить на ASM только если профилирование показало bottleneck в генерации байткода.
-
-### Javassist — высокоуровневая библиотека
-
-**Особенности:**
-- Java-подобный синтаксис
-- Можно писать код как строки
-- Проще чем ASM
-- Медленнее ASM
-
-**Пример - создание класса:**
-
-```java
-import javassist.*;
-
-public class JavassistExample {
-    public static void main(String[] args) throws Exception {
-        ClassPool pool = ClassPool.getDefault();
-
-        // Создать новый класс
-        CtClass cc = pool.makeClass("com.example.GeneratedClass");
-
-        // Добавить поле
-        CtField field = new CtField(pool.get("java.lang.String"), "name", cc);
-        field.setModifiers(Modifier.PRIVATE);
-        cc.addField(field);
-
-        // Добавить метод (пишем код как строку!)
-        CtMethod method = CtNewMethod.make(
-            "public String getName() { return this.name; }",
-            cc
-        );
-        cc.addMethod(method);
-
-        // Добавить setter с логированием
-        CtMethod setter = CtNewMethod.make(
-            "public void setName(String name) {" +
-            "    System.out.println(\"Setting name to: \" + name);" +
-            "    this.name = name;" +
-            "}",
-            cc
-        );
-        cc.addMethod(setter);
-
-        // Загрузить класс
-        Class<?> clazz = cc.toClass();
-        Object instance = clazz.getDeclaredConstructor().newInstance();
-
-        // Использовать
-        clazz.getMethod("setName", String.class).invoke(instance, "John");
-        String name = (String) clazz.getMethod("getName").invoke(instance);
-        System.out.println("Name: " + name);
-    }
-}
-```
-
-**Когда использовать Javassist:**
-
-Javassist идеален для быстрого прототипирования и одноразовых скриптов — когда нужно за 10 минут добавить логирование во все методы legacy-приложения без исходного кода. Код в виде строк (`"return this.name;"`) понятен любому Java-разработчику, в отличие от ASM инструкций.
-
-Для модификации существующих классов Javassist удобнее: можно вставить код в начало/конец метода одной строкой (`method.insertBefore("System.out.println(\"called\");")`).
-
-**Ограничения Javassist:**
-
-Строковый код компилируется в runtime, что медленнее предгенерированного байткода (2-3x по сравнению с ASM). Парсер Javassist поддерживает не все конструкции Java — например, лямбды и method references работают не всегда. Отладка строкового кода болезненна: опечатка в строке `"return this.nmae;"` обнаружится только при выполнении, без указания точного места ошибки.
-
-### ByteBuddy — современная библиотека
-
-**Особенности:**
-- Fluent API (DSL)
-- Annotation-driven
-- Type-safe
-- Проще ASM, быстрее Javassist
-
-**Пример - создание proxy:**
-
-```java
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.matcher.ElementMatchers;
-
-public class ByteBuddyExample {
-
-    // Интерфейс для перехвата
-    public static class LoggingInterceptor {
-        public static Object intercept(@AllArguments Object[] args,
-                                      @SuperCall Callable<?> zuper) throws Exception {
-            System.out.println("Method called with args: " + Arrays.toString(args));
-            long start = System.currentTimeMillis();
-
-            Object result = zuper.call();  // Вызов оригинального метода
-
-            long duration = System.currentTimeMillis() - start;
-            System.out.println("Method completed in " + duration + "ms");
-            return result;
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        // Создать подкласс UserService с перехватом
-        Class<?> dynamicType = new ByteBuddy()
-            .subclass(UserService.class)
-            .method(ElementMatchers.any())  // Все методы
-            .intercept(MethodDelegation.to(LoggingInterceptor.class))
-            .make()
-            .load(ByteBuddyExample.class.getClassLoader())
-            .getLoaded();
-
-        // Создать экземпляр
-        UserService service = (UserService) dynamicType.getDeclaredConstructor().newInstance();
-
-        // Использовать - логирование автоматически добавлено
-        User user = service.findUser(1L);
-    }
-}
-```
-
-**Когда использовать ByteBuddy:**
-
-ByteBuddy — default choice для большинства задач по генерации байткода в 2024-2025. Spring 6+, Hibernate 6+, Mockito 5+ используют ByteBuddy как основной инструмент. Если вы создаёте runtime proxies, mocks или инструментируете код — начните с ByteBuddy.
-
-Fluent API с type safety означает, что IDE подсказывает методы, а ошибки обнаруживаются при компиляции, не в runtime. Например, `method(ElementMatchers.named("findUser"))` — если метод переименуют, IDE покажет warning (в отличие от строки в Javassist).
-
-**Почему ByteBuddy популярен:**
-
-Баланс между простотой и производительностью: ByteBuddy в 1.5x медленнее ASM, но это заметно только при генерации тысяч классов. Для типичного приложения (десятки proxies при старте) разницы нет. А вот время разработки сокращается в разы — вместо 100 строк ASM visitor'ов пишете 10 строк fluent API.
-
-Активное сообщество и регулярные релизы (каждые 2-3 месяца) гарантируют поддержку новых версий Java сразу после выхода.
+Шесть строк кода для одного `println` — и каждая требует знания формата дескрипторов (`Ljava/io/PrintStream;`), опкодов (`GETSTATIC`, `INVOKEVIRTUAL`) и правил JVM stack machine. Для большинства задач лучше начать с ByteBuddy и переходить на ASM только если профилирование показало bottleneck в генерации байткода.
 
 ---
 
-## Когда что использовать
+## ByteBuddy — современная библиотека
 
-### Выбор библиотеки
+### Философия: описание, а не инструкции
+
+Если ASM заставляет думать _как_ генерировать байткод (какие инструкции в каком порядке), то ByteBuddy позволяет описать _что_ вы хотите получить. Fluent API с type safety означает, что IDE подсказывает методы, а ошибки обнаруживаются при компиляции, не в runtime.
+
+Рафаэль Винтерхальтер спроектировал ByteBuddy вокруг трёх абстракций: **type matchers** (какие классы/методы модифицировать), **implementations** (какую логику добавить) и **agent builder** (как доставить трансформацию в runtime). Type matchers — декларативные предикаты: `ElementMatchers.named("findUser")`, `ElementMatchers.isAnnotatedWith(Transactional.class)`, `ElementMatchers.returns(String.class)`. Их можно комбинировать через `.and()`, `.or()`, `.not()` — как SQL WHERE-условия.
+
+### Advice API
+
+Одна из самых мощных абстракций ByteBuddy — Advice API. Вместо создания подкласса (что невозможно для `final`-классов) Advice «вклеивает» (inlines) код непосредственно в тело метода. Это работает через аннотации `@Advice.OnMethodEnter` и `@Advice.OnMethodExit`. JVM видит результат как единый метод — без дополнительного вызова, без overhead на delegation. APM-инструменты (Datadog, Elastic APM) активно используют Advice API именно из-за минимального overhead.
+
+Advice API решает ещё одну проблему: совместимость с `final`-классами и `final`-методами. MethodDelegation создаёт подкласс и переопределяет метод — но `final` это запрещает. Advice модифицирует сам метод, а не наследует — `final` не помеха.
+
+### Agent Builder
+
+ByteBuddy предоставляет `AgentBuilder` — высокоуровневый API для создания Java agents. Вместо ручной работы с `ClassFileTransformer` вы описываете трансформации декларативно.
+
+```java
+// ByteBuddy AgentBuilder: декларативное описание трансформации
+new AgentBuilder.Default()
+    .type(nameStartsWith("com.example"))  // Какие классы
+    .transform((builder, type, cl, module, domain) ->
+        builder.method(isAnnotatedWith(Timed.class))  // Какие методы
+               .intercept(Advice.to(TimingAdvice.class))  // Что добавить
+    ).installOn(instrumentation);  // Куда установить
+```
+
+Четыре строки заменяют ~50 строк ручного ClassFileTransformer с ASM внутри. AgentBuilder автоматически обрабатывает edge cases: фильтрацию системных классов, правильный ClassLoader, обработку ошибок трансформации.
+
+### Почему ByteBuddy стал стандартом
+
+Баланс между простотой и производительностью: ByteBuddy в ~1.5x медленнее ASM при массовой генерации классов, но это заметно только при создании тысяч классов. Для типичного приложения (десятки proxies при старте) разницы нет. Время разработки сокращается в разы — вместо 100 строк ASM visitor'ов пишете 10 строк fluent API.
+
+Активное сообщество и регулярные релизы (каждые 2-3 месяца) гарантируют поддержку новых версий Java сразу после выхода. Spring 6+, Hibernate 6+, Mockito 5+ используют ByteBuddy как основной инструмент. Если вы создаёте runtime proxies, mocks или инструментируете код — начните с ByteBuddy.
+
+---
+
+## Javassist — высокоуровневая библиотека
+
+### Source-level manipulation: CtClass и CtMethod
+
+Уникальность Javassist — в идее «пиши модификации на Java». Центральные абстракции: `CtClass` (compile-time class — представление класса) и `CtMethod` (compile-time method). Через `ClassPool` вы получаете `CtClass` любого класса в classpath, модифицируете его и загружаете обратно.
+
+Javassist позволяет вставлять код как строки Java. Вызов `method.insertBefore("System.out.println(\"called\");")` добавит `println` в начало метода. Строка компилируется в байткод внутри Javassist. Это интуитивно понятно любому Java-разработчику — не нужно знать ни visitor pattern, ни опкоды JVM.
+
+`CtClass` поддерживает операции, близкие к reflection, но на этапе «до загрузки»: добавление полей (`addField`), методов (`addMethod`), интерфейсов (`addInterface`), изменение суперкласса (`setSuperclass`). Можно даже создать класс с нуля через `ClassPool.makeClass("com.example.Generated")`.
+
+### Ограничения Javassist
+
+Строковый код компилируется в runtime — это медленнее предгенерированного байткода (2-3x по сравнению с ASM). Парсер Javassist поддерживает не все конструкции Java — лямбды и method references работают не всегда. Отладка строкового кода болезненна: опечатка в строке `"return this.nmae;"` обнаружится только при выполнении, без указания точного места ошибки. IDE не подсвечивает синтаксис внутри строк.
+
+Пример ниже показывает создание класса с помощью Javassist — обратите внимание на строковый Java-код внутри `CtNewMethod.make()`.
+
+```java
+// Javassist: создание метода через строковый Java-код
+ClassPool pool = ClassPool.getDefault();
+CtClass cc = pool.makeClass("com.example.Generated");
+
+CtMethod getter = CtNewMethod.make(
+    "public String getName() { return this.name; }",  // Java-код как строка!
+    cc
+);
+cc.addMethod(getter);
+Class<?> clazz = cc.toClass();  // Компиляция строки → байткод → загрузка
+```
+
+Строковый подход удобен для быстрого прототипирования и одноразовых скриптов — когда нужно за 10 минут добавить логирование во все методы legacy-приложения без исходного кода. Для модификации существующих классов Javassist тоже удобен: `method.insertBefore(...)` и `method.insertAfter(...)` делают это одной строкой.
+
+Тем не менее, для новых проектов ByteBuddy — лучший выбор: type-safe API, активная поддержка новых версий Java, и отсутствие проблем со строковой компиляцией.
+
+---
+
+## Сравнение библиотек
+
+### Когда что использовать
 
 ```
 Требования                           Рекомендация
 ──────────────────────────────────────────────────────
 Максимальная производительность      → ASM
 Сложная манипуляция байткодом        → ASM
-Разработка инструментов              → ASM
+Разработка инструментов/компиляторов → ASM
 
 Быстрое прототипирование             → Javassist
-Модификация существующих классов     → Javassist
-Простые задачи                       → Javassist
+Модификация legacy без исходников    → Javassist
 
 Runtime proxy generation             → ByteBuddy
 Mocking frameworks                   → ByteBuddy
-Современный проект                   → ByteBuddy
-Баланс простоты/производительности   → ByteBuddy
+Java agents                          → ByteBuddy
+Современный проект (default choice)  → ByteBuddy
 ```
 
 ### Сравнение производительности
 
 ```
-Операция: Создание 10,000 proxy классов
+Операция: Создание 10,000 proxy-классов
 
-ASM:        ~50 ms    ← Самый быстрый
-ByteBuddy:  ~120 ms   ← Быстрый + удобный
-Javassist:  ~180 ms   ← Медленнее, но проще ASM
+ASM:        ~50 ms     ← Самый быстрый (ручная работа)
+ByteBuddy:  ~120 ms    ← Быстрый + удобный (оптимальный баланс)
+Javassist:  ~180 ms    ← Медленнее (компиляция строк в runtime)
 
-Вывод: Для большинства случаев ByteBuddy - лучший выбор
+Для типичного приложения (10-50 proxies при старте)
+разница незаметна — все три укладываются в < 5 ms.
 ```
 
 ---
 
 ## Применение в реальных фреймворках
 
+Мы разобрали инструменты. Теперь посмотрим, как именно крупнейшие фреймворки Java-экосистемы используют bytecode manipulation.
+
 ### Spring AOP
 
-```java
-// Spring использует ByteBuddy (раньше CGLib) для создания proxies
+Spring сканирует классы с аннотациями (`@Transactional`, `@Cacheable`, `@Secured`), генерирует proxy-классы через ByteBuddy, добавляет cross-cutting логику и подменяет оригинальные бины на proxy в IoC-контейнере. До Spring 6 использовалась библиотека CGLIB (обёртка над ASM), но начиная с Spring 6 произошла миграция на ByteBuddy.
 
-@Service
-public class UserService {
-    @Transactional  // Spring создаёт proxy
-    public void updateUser(User user) {
-        userRepository.save(user);
-    }
-}
+Важный нюанс: Spring proxy перехватывает только внешние вызовы. Если внутри `@Transactional`-метода вызвать `this.anotherMethod()`, вызов пойдёт напрямую, минуя proxy — аспект не сработает. Это одна из самых частых ошибок при работе со Spring AOP, и понимание bytecode manipulation объясняет _почему_: proxy — это подкласс, а `this` внутри метода указывает на оригинальный объект, не на proxy.
 
-// Сгенерированный proxy (упрощённо):
-public class UserService$$SpringProxy extends UserService {
-    @Override
-    public void updateUser(User user) {
-        // Начать транзакцию
-        transactionManager.begin();
-        try {
-            super.updateUser(user);  // Вызов оригинального метода
-            transactionManager.commit();  // Commit
-        } catch (Exception e) {
-            transactionManager.rollback();  // Rollback
-            throw e;
-        }
-    }
-}
-```
+### Hibernate Enhancement
 
-**Что делает Spring:**
-1. Сканирует классы с `@Transactional`, `@Cacheable`, etc.
-2. Генерирует proxy-классы
-3. Добавляет логику (транзакции, кэширование, security)
-4. Подменяет оригинальные бины на proxies
+Hibernate модифицирует entity-классы для lazy loading (загрузка связанных объектов по требованию), dirty checking (отслеживание изменённых полей для UPDATE) и cascade operations. Enhanced-класс наследует оригинальный и переопределяет геттеры: при первом вызове `getOrders()` выполняется SQL-запрос, результат кэшируется. До Hibernate 6 использовались Javassist и CGLIB; начиная с Hibernate 6 произошла полная миграция на ByteBuddy — это позволило упростить кодовую базу ORM и получить лучшую совместимость с новыми версиями Java.
 
-### Hibernate
-
-```java
-// Hibernate использует ByteBuddy для entity enhancement
-
-@Entity
-public class User {
-    @Id
-    private Long id;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Order> orders;  // Lazy loading
-}
-
-// Hibernate генерирует enhanced класс:
-public class User$$HibernateProxy extends User {
-    private List<Order> orders$lazy;  // Ленивая коллекция
-
-    @Override
-    public List<Order> getOrders() {
-        if (orders$lazy == null) {
-            orders$lazy = session.load(Order.class, userId);  // Загрузка по требованию
-        }
-        return orders$lazy;
-    }
-}
-```
-
-**Что делает Hibernate:**
-1. Enhanced entities — отслеживание изменений, lazy loading
-2. Proxy для lazy associations
-3. Dirty checking — определение изменённых полей для UPDATE
-4. Cascade operations
+Dirty checking заслуживает отдельного объяснения. Без bytecode enhancement Hibernate при каждом `flush()` сравнивает текущее состояние каждой entity с сохранённым snapshot'ом — это O(n) по количеству полей для каждой entity в persistence context. С enhancement Hibernate переопределяет setter'ы: при вызове `user.setName("new")` enhanced setter устанавливает флаг `$$_hibernate_dirty = true`. При `flush()` достаточно проверить один булевый флаг вместо сравнения всех полей — колоссальная экономия для приложений с тысячами entities в контексте.
 
 ### Mockito
 
-```java
-// Mockito использует ByteBuddy для создания mocks
-
-UserService mock = Mockito.mock(UserService.class);
-when(mock.findUser(1L)).thenReturn(new User("John"));
-
-// Mockito генерирует подкласс с перехватом всех методов:
-public class UserService$$MockitoMock extends UserService {
-    private MockHandler handler;
-
-    @Override
-    public User findUser(Long id) {
-        // Перехват вызова
-        return (User) handler.handle(this, "findUser", new Object[]{id});
-    }
-}
-```
+Mockito создаёт подклассы тестируемых классов через ByteBuddy, перехватывая все вызовы методов. Каждый вызов перенаправляется в `MockHandler`, который решает: вернуть заранее настроенный ответ (`when(...).thenReturn(...)`) или записать вызов для последующей верификации (`verify(...)`). Интересная деталь реализации: Mockito использует ByteBuddy `subclass` для обычных классов и `redefine` для `final`-классов (через `mockito-inline` модуль, который применяет Java agent для retransformation).
 
 ---
 
 ## Инструменты анализа байткода
 
-### Просмотр байткода
+Прежде чем манипулировать байткодом, полезно уметь его читать. Утилита `javap` входит в стандартный JDK и дизассемблирует `.class`-файлы. Флаг `-c` показывает байткод-инструкции, `-v` — полную информацию (constant pool, access flags, stack map).
 
 ```bash
-# Дизассемблирование .class файла
-javap -c MyClass.class
-
-# Подробная информация
-javap -v MyClass.class
-
-# Приватные методы и поля
-javap -p -v MyClass.class
+javap -c MyClass.class          # Байткод-инструкции
+javap -v MyClass.class          # Полная информация (constant pool, атрибуты)
+javap -p -v MyClass.class       # Включая private методы и поля
 ```
 
-**Пример вывода:**
+Вывод `javap` показывает JVM-инструкции: `getstatic` (загрузить статическое поле на стек), `ldc` (загрузить константу), `invokevirtual` (вызвать метод). Понимание этих инструкций — основа для работы с ASM, хотя для ByteBuddy и Javassist оно не обязательно.
 
-```
-public class MyClass {
-  public void hello();
-    Code:
-       0: getstatic     #2  // Field java/lang/System.out:Ljava/io/PrintStream;
-       3: ldc           #3  // String Hello World
-       5: invokevirtual #4  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
-       8: return
-}
-```
-
-### Анализ с ASM
-
-```java
-// Visitor для анализа методов
-public class MethodAnalyzer extends ClassVisitor {
-    public MethodAnalyzer() {
-        super(Opcodes.ASM9);
-    }
-
-    @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor,
-                                     String signature, String[] exceptions) {
-        System.out.println("Method: " + name + descriptor);
-
-        // Анализ модификаторов
-        if ((access & Opcodes.ACC_PUBLIC) != 0) {
-            System.out.println("  - public");
-        }
-        if ((access & Opcodes.ACC_STATIC) != 0) {
-            System.out.println("  - static");
-        }
-
-        return super.visitMethod(access, name, descriptor, signature, exceptions);
-    }
-}
-```
+Помимо `javap`, полезен плагин **ASM Bytecode Viewer** для IntelliJ IDEA — он показывает байткод прямо в IDE рядом с исходным кодом. Для визуального анализа class-файлов существует **ClassyShark** (Google) и **JByteMod** (интерактивный редактор байткода).
 
 ---
 
 ## Частые ошибки и best practices
 
-### Ошибка 1: Невалидный байткод
+### Ошибка 1: Невалидный байткод (VerifyError)
+
+Самая распространённая ошибка при работе с ASM — генерация байткода, который не проходит верификацию JVM. Верификатор проверяет: правильность типов на стеке, корректность control flow (все пути заканчиваются `return` или `throw`), и правильность stack map frames (требуются с Java 7+). Решение: используйте `ClassWriter.COMPUTE_FRAMES` — ASM сам вычислит правильные stack map frames.
+
+### Ошибка 2: Неправильный ClassLoader
+
+Сгенерированный класс должен быть загружен ClassLoader'ом, который видит все зависимости этого класса. Если вы загружаете через system ClassLoader, а класс ссылается на `com.example.User` из вашего приложения — `ClassNotFoundException`. ByteBuddy и Javassist требуют явного указания ClassLoader при загрузке.
+
+### Ошибка 3: Отсутствие кэширования
+
+Генерация классов — дорогая операция. Spring и Hibernate кэшируют все proxy-объекты. Без кэша повторная генерация одного и того же proxy при каждом вызове приведёт к серьёзной деградации производительности и утечке PermGen/Metaspace (каждый сгенерированный класс занимает память).
 
 ```java
-// ПРОБЛЕМА: Забыли вызвать visitMaxs
-public void visitEnd() {
-    // ❌ Пропустили visitMaxs - невалидный байткод!
-    super.visitEnd();
-}
+// Кэширование: генерация proxy только один раз на класс
+private static final Map<String, Class<?>> cache =
+    new ConcurrentHashMap<>();
 
-// ПРАВИЛЬНО: Всегда вызывайте visitMaxs
-public void visitEnd() {
-    mv.visitMaxs(0, 0);  // ASM сам вычислит правильные значения
-    super.visitEnd();
+public Class<?> getProxy(Class<?> target) {
+    return cache.computeIfAbsent(       // Повторный вызов → из кэша
+        target.getName(), k -> generateProxy(target));
 }
 ```
 
-### Ошибка 2: ClassLoader проблемы
-
-```java
-// ПРОБЛЕМА: Класс загружен неправильным ClassLoader
-Class<?> clazz = cc.toClass();  // Использует system classloader
-
-// Если класс ссылается на другие классы из вашего приложения,
-// они могут быть не найдены
-
-// ПРАВИЛЬНО: Использовать правильный ClassLoader
-Class<?> clazz = cc.toClass(MyClass.class.getClassLoader(), null);
-```
-
-### Best Practices
-
-1. **Кэшируйте сгенерированные классы**
-   ```java
-   // Генерация дорогая - кэшируйте результаты
-   private static final Map<String, Class<?>> cache = new ConcurrentHashMap<>();
-
-   public Class<?> getProxyClass(Class<?> target) {
-       return cache.computeIfAbsent(target.getName(), k -> generateProxy(target));
-   }
-   ```
-
-2. **Используйте правильные модификаторы доступа**
-   ```java
-   // Учитывайте visibility
-   // public/protected/private/package-private
-   ```
-
-3. **Обрабатывайте исключения**
-   ```java
-   // Bytecode manipulation может выбросить различные исключения
-   try {
-       Class<?> clazz = generate();
-   } catch (CannotCompileException | NotFoundException e) {
-       // Обработка ошибок генерации
-   }
-   ```
+Без этого паттерна каждый вызов `getProxy` создавал бы новый класс в Metaspace. При тысячах вызовов — OutOfMemoryError.
 
 ---
 
-## Чек-лист
+## Распространённые заблуждения
 
-### При выборе библиотеки
-- [ ] Оценить требования к производительности
-- [ ] Учесть сложность задачи
-- [ ] Рассмотреть опыт команды
-- [ ] Проверить совместимость с Java версией
-
-### При разработке
-- [ ] Тестировать сгенерированный код
-- [ ] Использовать javap для проверки байткода
-- [ ] Кэшировать сгенерированные классы
-- [ ] Обрабатывать ошибки генерации
-- [ ] Документировать магию (что и зачем генерируется)
-
-### Безопасность
-- [ ] Валидировать входные данные
-- [ ] Не генерировать код из user input
-- [ ] Учитывать ClassLoader boundaries
-- [ ] Проверять сгенерированный байткод
+| Заблуждение | Реальность |
+|-------------|-----------|
+| «Bytecode manipulation — это хакерство» | Это **стандартная техника** Java-экосистемы. Spring AOP, Hibernate, Mockito, JaCoCo — всё построено на ней. Mainstream, не hack |
+| «ASM быстрее всех, значит всегда выбираю его» | ASM быстрее, но **сложнее в разы**. Для типичного приложения overhead ByteBuddy незаметен, а время разработки сокращается на порядок |
+| «Javassist простой — буду использовать его» | Javassist простой, но **ненадёжный**: строковый код не проверяется IDE, лямбды не поддерживаются. Для новых проектов ByteBuddy лучше |
+| «Генерация нужна при каждом вызове» | **Кэширование обязательно.** Spring, Hibernate кэшируют все proxy. Без кэша — утечка Metaspace и деградация |
+| «Работает везде одинаково» | Java modules (JPMS) могут **блокировать доступ** — нужен `--add-opens`. GraalVM Native Image **не поддерживает** runtime bytecode generation |
+| «Можно генерировать любой байткод» | JVM verifier **проверяет валидность**: типы, стек, control flow. Невалидный байткод → VerifyError |
+| «Reflection и bytecode manipulation — одно и то же» | Reflection — **медленный** dynamic dispatch каждый раз. Bytecode manipulation генерирует **реальный код** один раз — дальше он работает как обычный Java |
+| «Нельзя модифицировать загруженные классы» | Через Instrumentation API **можно**: `retransformClasses()`. APM agents (Datadog, New Relic) делают это постоянно |
+| «Proxy = bytecode manipulation» | `java.lang.reflect.Proxy` работает только для **интерфейсов** через reflection. ByteBuddy/CGLIB создают subclass через bytecode — для **классов** |
+| «Достаточно знать Java для bytecode manipulation» | Для ASM нужны **JVM internals**: stack machine, local variables, constant pool. Для ByteBuddy достаточно знания Java и паттернов |
 
 ---
 
-## Мифы и заблуждения
+## Подводные камни
 
-| Миф | Реальность |
-|-----|-----------|
-| "Bytecode manipulation — это хакерство" | Это **стандартная техника** в Java экосистеме. Spring AOP, Hibernate lazy loading, Mockito mocks, code coverage — всё это bytecode manipulation. Mainstream, не hack |
-| "ASM быстрее всех, поэтому всегда выбираю его" | ASM быстрее, но **сложнее в разы**. ByteBuddy — ~80% скорости ASM при гораздо меньшей сложности. Для большинства задач overhead ByteBuddy незаметен |
-| "Javassist простой, буду использовать его" | Javassist простой, но **медленный** (компиляция из исходников) и имеет проблемы с новыми Java features. Для новых проектов ByteBuddy — лучший выбор |
-| "Генерировать код нужно каждый раз" | **Кэширование обязательно!** Генерация классов дорогая. Spring, Hibernate кэшируют все прокси. Без кэша — серьёзная деградация performance |
-| "Bytecode manipulation работает везде одинаково" | Java modules (JPMS) могут **блокировать доступ**. `--add-opens` нужен для доступа к internal классам. GraalVM Native Image не поддерживает runtime bytecode generation |
-| "Можно генерировать любой bytecode" | JVM verifier **проверяет валидность** bytecode. Неправильный stack, типы, control flow — VerifyError при загрузке. Нужно понимать JVM спецификацию |
-| "Reflection и bytecode manipulation — одно и то же" | Reflection **медленный** (dynamic dispatch каждый раз). Bytecode manipulation генерирует **реальный код** один раз, потом работает как обычный Java код |
-| "Нельзя модифицировать уже загруженные классы" | С Java agents и Instrumentation API **можно**: `redefineClasses()`, `retransformClasses()`. Hot reload, APM agents (NewRelic, Datadog) делают это |
-| "Proxy = bytecode manipulation" | `java.lang.reflect.Proxy` — только для **интерфейсов**, использует reflection. CGLIB/ByteBuddy создают subclass'ы через bytecode для **классов** |
-| "Достаточно знать Java для bytecode manipulation" | Нужно понимать **JVM internals**: stack machine, local variables, constant pool, class file format. Без этого сложно дебажить проблемы |
+**JPMS (Java modules).** Начиная с Java 9, модульная система может блокировать доступ к internal-классам. Bytecode manipulation часто требует `--add-opens java.base/java.lang=ALL-UNNAMED` для доступа к package-private классам. Без этого — `IllegalAccessError` при попытке создать подкласс.
+
+**GraalVM Native Image.** Ahead-of-time компиляция GraalVM принципиально несовместима с runtime bytecode generation — все классы должны быть известны на этапе сборки. Фреймворки адаптируются: Spring Native генерирует proxy на этапе компиляции через build-time code generation вместо runtime bytecode manipulation.
+
+**Metaspace leak.** Каждый сгенерированный класс занимает место в Metaspace (бывший PermGen). Если генерировать классы без кэширования — Metaspace заполнится, и JVM упадёт с `OutOfMemoryError: Metaspace`. Это особенно опасно в long-running серверных приложениях.
+
+**Конфликт агентов.** Если два Java agent'а трансформируют один и тот же класс — результат зависит от порядка загрузки. Трансформации применяются последовательно, и второй agent видит уже модифицированный байткод первого. Это может привести к неожиданным результатам.
 
 ---
 
@@ -590,29 +374,40 @@ Class<?> clazz = cc.toClass(MyClass.class.getClassLoader(), null);
 
 | CS-концепция | Применение в Bytecode Manipulation |
 |--------------|-----------------------------------|
-| **Stack Machine Architecture** | JVM — stack-based VM. Bytecode операции работают со стеком: `ILOAD` (push на стек), `IADD` (pop два, push сумму). Нужно следить за состоянием стека |
-| **Intermediate Representation (IR)** | Bytecode — IR между исходным кодом и machine code. Позволяет трансформировать код на уровне выше машинного, но ниже исходного |
-| **Visitor Pattern** | ASM использует Visitor для обхода class file. ClassVisitor, MethodVisitor, FieldVisitor — стандартный паттерн для трансформации AST-подобных структур |
-| **Type System / Type Checking** | JVM verifier проверяет type safety bytecode. При генерации нужно правильно указывать типы, иначе VerifyError. Strong typing на уровне bytecode |
-| **Code Generation** | Компилятор-подобная задача: из высокоуровневого описания генерируем низкоуровневый код. ByteBuddy DSL → bytecode transformation |
-| **Class File Format** | Спецификация формата .class: magic number, constant pool, access flags, fields, methods, attributes. Понимание формата критично для манипуляций |
-| **Memoization / Caching** | Сгенерированные классы кэшируются. `WeakHashMap<ClassLoader, Map<String, Class<?>>>` — типичный паттерн для избежания повторной генерации |
-| **Proxy Pattern** | Spring AOP, Hibernate lazy loading — реализация Proxy через bytecode. Interceptor вызывается перед/после реального метода |
-| **Metaprogramming** | Код, который генерирует/модифицирует код. Bytecode manipulation — форма runtime metaprogramming в Java, в отличие от compile-time annotation processing |
-| **Instrumentation** | Вставка кода для monitoring, profiling, tracing без изменения исходников. APM tools инструментируют bytecode для сбора метрик |
+| **Stack Machine** | JVM — stack-based VM. Операции работают со стеком: `ILOAD` (push), `IADD` (pop два, push сумму). Нужно следить за состоянием стека |
+| **Intermediate Representation** | Байткод — IR между исходным кодом и machine code. Позволяет трансформировать код ниже исходного, но выше машинного |
+| **Visitor Pattern** | ASM использует Visitor для потокового обхода class-файла. Классический паттерн для трансформации древовидных структур |
+| **Type Checking** | JVM verifier проверяет type safety байткода. Генерация с неправильными типами → VerifyError |
+| **Code Generation** | Компилятор-подобная задача: из высокоуровневого описания — низкоуровневый код. ByteBuddy DSL → bytecode |
+| **Class File Format** | Спецификация `.class`: magic number, constant pool, fields, methods, attributes. Понимание формата критично для ASM |
+| **Memoization** | Сгенерированные классы кэшируются. `ConcurrentHashMap<String, Class<?>>` — типичный паттерн |
+| **Proxy Pattern** | Spring AOP, Hibernate lazy loading — классический Proxy через bytecode generation |
+| **Metaprogramming** | Код, генерирующий код. Bytecode manipulation — runtime metaprogramming в Java |
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[jvm-instrumentation-agents]] — Java agents и bytecode instrumentation
-- [[jvm-class-loader-deep-dive]] — загрузка классов и ClassLoader
-- [[jvm-reflection-api]] — рефлексия и динамический код
+**[[jvm-instrumentation-agents]]** — Java agents являются основным механизмом доставки bytecode manipulation в production. Agent через ClassFileTransformer перехватывает загрузку классов и применяет трансформации с помощью ASM или ByteBuddy. Без понимания bytecode manipulation невозможно написать нетривиальный agent, а без agents bytecode manipulation ограничена compile-time обработкой. Рекомендуется сначала освоить основы bytecode manipulation (этот документ), затем изучить agents как runtime-контейнер для трансформаций.
 
----
+**[[jvm-class-loader-deep-dive]]** — ClassLoader определяет, когда и как загружаются классы, что критично для bytecode manipulation. Сгенерированные классы должны быть загружены правильным ClassLoader'ом, иначе они не увидят зависимости приложения (ClassNotFoundException). ByteBuddy и Javassist требуют явного указания ClassLoader при загрузке сгенерированного кода — неправильный выбор является одной из самых частых ошибок. Изучите ClassLoader перед углублением в runtime-генерацию классов.
 
-**Резюме:** Bytecode manipulation — мощная техника для runtime code generation, используемая в Spring, Hibernate, Mockito. Три основные библиотеки: ASM (быстрый, сложный), Javassist (простой, медленный), ByteBuddy (баланс простоты и скорости). Выбор зависит от требований к производительности и сложности задачи. Для большинства случаев ByteBuddy — лучший выбор.
+**[[android-proguard-r8]]** — ProGuard и R8 — тоже инструменты bytecode manipulation, но работающие в обратном направлении: вместо добавления кода они удаляют неиспользуемый (tree shaking), обфусцируют имена и оптимизируют байткод. Понимание структуры class-файлов и JVM-инструкций, описанное в этом документе, помогает диагностировать проблемы ProGuard/R8 (когда нужный код ошибочно удалён). Оба инструмента используют ASM-подобные библиотеки для чтения и записи байткода.
 
 ---
 
-*Проверено: 2026-01-09 — Педагогический контент проверен*
+## Источники и дальнейшее чтение
+
+- Bruneton, E. et al. (2002). *ASM: a Code Manipulation Tool to Implement Adaptable Systems*. INRIA Research Report. — Оригинальная статья создателя ASM, объясняющая мотивацию visitor pattern и сравнение с BCEL. Обязательна для понимания архитектуры ASM.
+
+- Lindholm, T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition. — Главы 4 и 6 описывают формат class-файлов и набор инструкций JVM — фундамент, без которого невозможно понять bytecode manipulation на уровне ASM.
+
+- Venners, B. (2000). *Inside the Java Virtual Machine*, 2nd Edition. — Доступное объяснение работы JVM stack machine, constant pool и верификации байткода, необходимое для понимания того, почему некорректно сгенерированный байткод вызывает VerifyError.
+
+- Oaks, S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond*, 2nd Edition. — Главы о JIT-компиляции объясняют, как JVM оптимизирует сгенерированный байткод и почему runtime-генерация может быть не медленнее статически скомпилированного кода.
+
+- Winterhalter, R. (2014-2025). *ByteBuddy Tutorial and Documentation*. bytebuddy.net. — Официальная документация ByteBuddy с подробными примерами Advice API, AgentBuilder и type matchers. Лучший стартовый ресурс для практического использования.
+
+---
+
+*Проверено: 2026-02-11 — Педагогический контент расширен: теория, аналогии, история, терминология*

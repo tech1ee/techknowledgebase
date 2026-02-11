@@ -14,6 +14,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-ktor-networking]]"
   - "[[kmp-architecture-patterns]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
+  - "[[kmp-expect-actual]]"
 cs-foundations:
   - "[[relational-database-theory]]"
   - "[[acid-transactions]]"
@@ -1086,6 +1090,24 @@ JOIN User ON Task.userId = User.id;
 | [[sql-query-optimization]] | Индексы, EXPLAIN QUERY PLAN | SQLite Query Planning |
 | [[schema-migration-patterns]] | .sqm файлы, версионирование | Evolutionary Database Design |
 | [[type-systems-theory]] | Compile-time SQL verification | Types and Programming Languages |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-overview]]** — SQLDelight является основным решением для локального хранения данных в KMP-проектах. Понимание архитектуры KMP — source sets, expect/actual для platform-specific драйверов (AndroidSqliteDriver, NativeSqliteDriver, JdbcSqliteDriver) — необходимо для правильной настройки базы данных на каждой платформе. SQLDelight полностью вписывается в multiplatform-модель: SQL-схема в commonMain, драйверы через expect/actual.
+
+- **[[kmp-ktor-networking]]** — SQLDelight и Ktor вместе формируют полный data layer в KMP: Ktor загружает данные с сервера, SQLDelight кэширует их локально. Repository pattern объединяет RemoteDataSource (Ktor) и LocalDataSource (SQLDelight), обеспечивая offline-first поведение. Flow-расширения SQLDelight позволяют реактивно обновлять UI при изменении кэшированных данных после сетевой синхронизации.
+
+- **[[kmp-architecture-patterns]]** — SQLDelight диктует SQL-first подход к проектированию data layer, что влияет на всю архитектуру приложения. Сгенерированные классы не должны использоваться напрямую в domain/presentation слоях — необходимы mappers для преобразования в доменные модели. Repository pattern инкапсулирует доступ к базе, а Flow extensions обеспечивают реактивную связь между data и presentation слоями.
+
+## Источники и дальнейшее чтение
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin, включая data classes, extension functions и type system, которые лежат в основе работы с сгенерированными SQLDelight-классами, custom mappers и типобезопасными запросами.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв и Repository pattern, которые определяют, как SQLDelight вписывается в архитектуру приложения: LocalDataSource, маппинг DTO → Domain, инверсия зависимостей через интерфейсы.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Flow extensions SQLDelight (asFlow(), mapToList()) построены на корутинах. Книга объясняет механику Flow, StateFlow и операторы трансформации, без которых невозможна реактивная работа с базой данных в KMP.
 
 ---
 

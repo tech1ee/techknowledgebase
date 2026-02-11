@@ -12,6 +12,9 @@ related:
   - "[[generics-parametric-polymorphism]]"
   - "[[variance-covariance]]"
   - "[[bytecode-virtual-machines]]"
+prerequisites:
+  - "[[generics-parametric-polymorphism]]"
+  - "[[bytecode-virtual-machines]]"
 ---
 
 # Type Erasure и Reification: что происходит с типами в runtime
@@ -391,11 +394,25 @@ val typeArg = UserRepository::class.supertypes
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[generics-parametric-polymorphism]]
+Type erasure — это прямое следствие реализации generics на JVM. Без понимания того, как работают type parameters, upper bounds и generic functions, невозможно осознать, что именно стирается при компиляции и почему. Generics дают теоретический фундамент, а type erasure показывает практические ограничения этого фундамента на конкретной платформе.
+
+### [[variance-covariance]]
+Variance и type erasure пересекаются в вопросах runtime-проверок типов. Когда `List<String>` и `List<Int>` неотличимы в runtime, variance constraints (`out`, `in`) становятся единственной гарантией type safety — они работают на уровне компилятора, компенсируя отсутствие runtime-информации. Понимание обоих механизмов необходимо для написания безопасного generic-кода.
+
+### [[bytecode-virtual-machines]]
+Type erasure — это архитектурное решение JVM. Понимание того, как JVM обрабатывает bytecode, объясняет, почему erasure был необходим: JVM не различает `Ljava/util/List;` с разными type arguments на уровне bytecode. Знание структуры bytecode помогает понять, как bridge methods и casts вставляются компилятором для обеспечения type safety после стирания типов.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — теоретическая основа type erasure: erasure semantics и параметричность, объясняющие, почему стирание типов сохраняет корректность
+- Bloch J. (2018). *Effective Java*, 3rd ed. — Item 26-33 детально описывают практические последствия type erasure, включая unchecked warnings, type tokens и super type tokens
+- Bracha G. (2004). *Generics in the Java Programming Language*. — tutorial от одного из авторов Java Generics, объясняющий design decisions за type erasure
 - [Android Developers: Reification of the Erased](https://medium.com/androiddevelopers/reification-of-the-erased-41e246725d2c) — отличное объяснение
-- [Baeldung: Type Erasure in Java](https://www.baeldung.com/java-type-erasure) — Java perspective
-- [Baeldung: Reified Functions in Kotlin](https://www.baeldung.com/kotlin/reified-functions) — практические примеры
 - [Oracle: Type Erasure](https://docs.oracle.com/javase/tutorial/java/generics/erasure.html) — официальная документация
 
 ---

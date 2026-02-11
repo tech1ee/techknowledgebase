@@ -1624,6 +1624,14 @@ unlocks (открывает):
 
 ---
 
+## Связь с другими темами
+
+**[[linked-lists]]** --- стеки и очереди часто реализуются поверх связного списка, что даёт O(1) для push/pop без необходимости предварительного выделения памяти. Singly linked list достаточен для стека (push/pop с головы), а для очереди --- singly linked list с указателем на хвост (enqueue в хвост, dequeue с головы). На практике ArrayDeque обычно быстрее из-за cache locality, но linked list implementation важна для понимания основ и появляется на собеседованиях.
+
+**[[trees-binary]]** --- DFS на деревьях использует стек (явный или неявный через рекурсию), а BFS использует очередь. Preorder/inorder/postorder обходы --- это варианты DFS с разным порядком обработки узла относительно рекурсивных вызовов. Level-order обход --- это BFS, где очередь хранит узлы текущего уровня. Понимание связи стек--DFS и очередь--BFS критично для решения задач на деревья и графы.
+
+---
+
 ## CS-фундамент
 
 | CS-концепция | Применение в Stacks & Queues |
@@ -1643,6 +1651,12 @@ unlocks (открывает):
 - [DEV.to - Monotonic Stack Pattern](https://dev.to/alex_hunter_44f4c9ed6671e/monotonic-stacks-the-pattern-that-makes-next-greater-problems-easy-jd6) — проверено 2025-12-29
 - [GeeksforGeeks - Circular Queue](https://www.geeksforgeeks.org/dsa/advantages-of-circular-queue-over-linear-queue/) — проверено 2025-12-29
 - [Baeldung - Java Deque vs Stack](https://www.baeldung.com/java-deque-vs-stack) — проверено 2025-12-29
+
+### Книги
+
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms."** --- глава 10: стеки и очереди как элементарные структуры данных, реализация на массивах с анализом амортизированной сложности
+- **Sedgewick & Wayne (2011). "Algorithms."** --- стеки и очереди с реализацией на основе массивов и связных списков, включая resizing array и итераторы
+- **Aho, Hopcroft & Ullman (1983). "Data Structures and Algorithms."** --- классическое введение в abstract data types: стек и очередь как канонические примеры ADT с разделением интерфейса и реализации
 
 ---
 

@@ -11,6 +11,10 @@ tags:
   - sqldelight
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-unit-testing]]"
+  - "[[kmp-testing-strategies]]"
+  - "[[kmp-ktor-networking]]"
 cs-foundations:
   - "[[integration-testing-theory]]"
   - "[[test-doubles-patterns]]"
@@ -1273,4 +1277,22 @@ jobs:
 | Integration Testing | Component interaction verification | Continuous Delivery book |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-testing-strategies]]** — integration тесты занимают среднюю часть тестовой пирамиды (20%) между unit тестами и UI тестами. Стратегия тестирования определяет, какие компоненты тестировать вместе (Repository + DataSource), какие seams использовать для подмены (MockEngine, in-memory DB) и какой уровень coverage считать достаточным (60-70%). Без общей стратегии integration тесты дублируют unit тесты или пропускают критические взаимодействия.
+
+- **[[kmp-unit-testing]]** — integration тесты дополняют unit тесты, проверяя контракты между компонентами, которые unit тесты не покрывают. Если unit тест проверяет, что Repository правильно маппит данные с fake-зависимостью, то integration тест проверяет, что Repository + реальный MockEngine + реальный SQLDelight корректно синхронизируют данные. Технический стек (kotlin.test, Kotest, Turbine, runTest) общий для обоих типов.
+
+- **[[kmp-ktor-networking]]** — MockEngine является ключевым инструментом для integration тестирования сетевого слоя в KMP. Он позволяет контролировать HTTP-ответы, тестировать error scenarios (5xx, таймауты), верифицировать отправленные запросы через requestHistory и обеспечивать детерминированное поведение без реальной сети. Понимание архитектуры Ktor (engines, plugins, Content Negotiation) необходимо для написания реалистичных integration тестов.
+
+## Источники и дальнейшее чтение
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы Boundary interfaces и Dependency Inversion определяют, где проходят seams для integration тестирования: constructor injection для Repository, Engine injection для Ktor, Driver injection для SQLDelight. Книга объясняет архитектурные решения, которые делают код тестируемым.
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Integration тесты в KMP активно используют runTest, Flow testing с Turbine и virtual time. Книга раскрывает механику корутин, необходимую для правильного тестирования асинхронных взаимодействий между Repository, DataSource и Database.
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin, включая интерфейсы, generics и extension functions, которые используются для создания expect/actual test drivers, typed fakes и custom assertions в integration тестах.
+
+---
+
 *Проверено: 2026-01-09 | SQLDelight 2.2.1, Ktor 3.1.0, kotlin.test 2.1.21*

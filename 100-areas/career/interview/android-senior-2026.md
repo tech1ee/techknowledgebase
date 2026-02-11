@@ -15,6 +15,10 @@ related:
   - "[[system-design-android]]"
   - "[[staff-plus-engineering]]"
   - "[[se-interview-foundation]]"
+prerequisites:
+  - "[[se-interview-foundation]]"
+  - "[[system-design-android]]"
+  - "[[android-questions]]"
 ---
 
 # Android Senior Interview 2026: полный гайд
@@ -797,6 +801,24 @@ WEEK 12: POLISH
 → [[ai-interview-preparation]] — AI-assisted prep
 
 ---
+
+## Связь с другими темами
+
+- [[android-questions]] — Полный банк вопросов по Android: Lifecycle, Compose, Coroutines, Architecture, Performance. Текущий материал даёт обзор 60+ вопросов по категориям, а android-questions содержит детальные ответы с примерами кода и follow-up вопросами. Используй как reference для domain deep-dive раунда.
+
+- [[system-design-android]] — Детальный гайд по Mobile System Design с framework, примерами и mobile-specific considerations. System Design составляет 30% веса на Senior интервью и является deciding factor для L5/E5. Текущий материал даёт RESHADED framework обзорно, а system-design-android разбирает каждый шаг с реальными задачами.
+
+- [[staff-plus-engineering]] — Следующий уровень после Senior. Понимание Staff expectations помогает на Senior интервью: показывая leadership potential и cross-team thinking, ты демонстрируешь growth trajectory. Hiring managers ищут кандидатов, которые не просто "хороший Senior", а потенциальный Staff.
+
+- [[se-interview-foundation]] — Универсальная база для всех SE интервью: DSA паттерны, System Design компоненты, STAR method, AI-enabled формат. Текущий материал специализирован для Android, а foundation даёт кросс-платформенный фундамент, который нужен для coding rounds и general system design.
+
+## Источники и дальнейшее чтение
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Покрывает DSA-подготовку, которая составляет 25% веса на Senior Android интервью. 189 задач с разбором, паттерны решения, стратегии для каждого типа coding round.
+
+- Xu A. (2020). *System Design Interview*. — System Design = 30% веса. Книга даёт backend-ориентированный framework, который нужно адаптировать для mobile: добавить offline-first, caching, sync и battery considerations из текущего материала.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для behavioral раунда (20% веса) важно показать leadership potential. Книга объясняет разницу между Senior execution и Staff influence, что помогает правильно позиционировать STAR-истории на интервью.
 
 ## Источники
 

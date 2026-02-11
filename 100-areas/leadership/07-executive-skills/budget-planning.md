@@ -18,6 +18,10 @@ tags:
 related:
   - "[[strategic-thinking]]"
   - "[[executive-communication]]"
+prerequisites:
+  - "[[strategic-thinking]]"
+  - "[[executive-communication]]"
+  - "[[engineering-metrics]]"
 ---
 
 # Планирование бюджета
@@ -171,18 +175,19 @@ DON'T:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[strategic-thinking]] — budget follows strategy
-- [[executive-communication]] — presenting to leadership
-- [[scaling-engineering-org]] — growth planning
+**[[strategic-thinking]]** — Бюджет является финансовым выражением стратегии: куда направить ресурсы, а где сэкономить. Без стратегического мышления планирование бюджета превращается в механическое распределение денег, а не в инструмент достижения целей. Умение обосновать инвестиции через ROI и связать каждую статью расходов со стратегическими приоритетами — ключевой навык VP+ уровня.
 
-## Источники
+**[[executive-communication]]** — Представление бюджета руководству требует навыков executive communication: BLUF (Bottom Line Up Front), Pyramid Principle, бизнес-язык вместо технического жаргона. Успешное согласование бюджета зависит не только от качества расчётов, но и от умения убедительно представить данные, ответить на вопросы и показать альтернативы. Каждый запрос на ресурсы должен проходить тест «So what?» с точки зрения бизнес-влияния.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [CFO Partnership](https://hbr.org/topic/subject/finance) | HBR |
-| [SaaS Metrics](https://www.saastr.com/) | Blog |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
 
 ---
 

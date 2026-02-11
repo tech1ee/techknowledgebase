@@ -21,6 +21,9 @@ related:
   - "[[os-processes-threads]]"
   - "[[os-scheduling]]"
 cs-foundations: [thread-safety, main-thread-rule, thread-pool, dispatcher-pattern]
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Threading в Android: Main Thread и Coroutines
@@ -1270,23 +1273,31 @@ class MyActivity : AppCompatActivity() {
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Android — архитектура и lifecycle:**
-→ [[android-overview]] — общая карта Android раздела, контекст threading в экосистеме
-→ [[android-activity-lifecycle]] — как lifecycle влияет на threading (lifecycleScope, repeatOnLifecycle)
+### [[android-overview]]
+Threading — одна из ключевых тем в экосистеме Android, связанная с производительностью, UI-отзывчивостью и background work. Карта Android раздела показывает, как threading пересекается с activity lifecycle, service, networking и data persistence. Понимание общей архитектуры платформы помогает выбрать правильный threading-механизм для каждой задачи.
 
-**Kotlin — асинхронность и реактивность:**
-→ [[kotlin-coroutines]] — детали coroutines, suspend функции, structured concurrency
-→ [[kotlin-flow]] — реактивные потоки, операторы, интеграция с UI
+### [[android-activity-lifecycle]]
+Lifecycle компонентов напрямую влияет на threading: lifecycleScope автоматически отменяет корутины при уничтожении Activity, repeatOnLifecycle запускает/останавливает сбор Flow при переходах между состояниями. Без понимания lifecycle невозможно безопасно работать с потоками — утечки, краши после onDestroy() и обновления невидимого UI. Изучите lifecycle перед threading.
 
-**JVM — многопоточность:**
-→ [[jvm-concurrency-overview]] — Thread, ExecutorService, thread pools на уровне JVM
+### [[android-handler-looper]]
+Handler и Looper — низкоуровневый механизм, на котором построен Main Thread и межпоточное взаимодействие в Android. Main Thread — это Thread с Looper, обрабатывающий Message queue. Корутины с Dispatchers.Main используют Handler внутри для отправки задач на Main Thread. Понимание Handler-Looper объясняет, почему ANR происходит и как Choreographer координирует рендеринг.
 
-**OS — фундаментальные концепции:**
-→ [[os-processes-threads]] — как ОС управляет потоками, контекст переключения, thread states
-→ [[os-scheduling]] — алгоритмы планирования потоков, priority, стратегии
-→ [[os-synchronization]] — mutex, semaphore, race conditions, deadlock
+### [[kotlin-coroutines]]
+Корутины — основной механизм асинхронности в современном Android. Suspend-функции, Dispatchers (Main, IO, Default), structured concurrency и CoroutineScope — инструменты, которые заменили AsyncTask, HandlerThread и RxJava. Без глубокого понимания корутин невозможно писать production-ready асинхронный код. Рекомендуется изучить основы threading, затем углубиться в корутины.
+
+### [[kotlin-flow]]
+Flow — реактивный примитив для потоковой обработки данных, построенный на корутинах. StateFlow и SharedFlow используются для передачи данных между потоками и UI. Операторы flowOn, buffer, conflate управляют тем, на каких потоках выполняется работа. Понимание Flow критично для reactive state management и efficient data streaming.
+
+### [[os-processes-threads]]
+Потоки на уровне ОС — фундамент, на котором построена вся модель threading в Android. Понимание thread states, context switching, CPU scheduling и thread priorities объясняет, почему Dispatchers.IO имеет пул из 64 потоков, а Dispatchers.Default — по числу ядер CPU. Изучите OS-уровень для глубокого понимания производительности и trade-offs.
+
+### [[os-scheduling]]
+Алгоритмы планирования потоков ОС (CFS в Linux) определяют, как Android распределяет CPU-время между потоками приложения. Priority inversion, thread starvation и preemption — концепции, которые объясняют поведение многопоточного кода. Android использует cgroups и nice values для приоритизации foreground-потоков над background.
+
+### [[os-synchronization]]
+Mutex, semaphore, race conditions и deadlock — фундаментальные концепции синхронизации, актуальные для Android threading. Kotlin Mutex, synchronized блоки, AtomicReference и Channel — всё это построено на OS-примитивах синхронизации. Понимание этих концепций предотвращает data races и deadlocks в многопоточном коде.
 
 ---
 
@@ -1296,6 +1307,12 @@ class MyActivity : AppCompatActivity() {
 - [Best Practices for Coroutines in Android](https://developer.android.com/kotlin/coroutines/coroutines-best-practices) — лучшие практики
 - [Coroutines Overview - Kotlin Documentation](https://kotlinlang.org/docs/coroutines-overview.html) — официальная документация Kotlin
 - [Improve App Performance with Kotlin Coroutines](https://developer.android.com/kotlin/coroutines/coroutines-adv) — продвинутые техники
+
+## Источники и дальнейшее чтение
+
+- **Goetz B. (2006). Java Concurrency in Practice.** — Фундаментальная книга по многопоточности на JVM: thread safety, visibility, ordering, concurrent collections. Несмотря на возраст, концепции актуальны — корутины строятся поверх тех же JVM-потоков. Обязательна для глубокого понимания threading.
+- **Moskala M. (2022). Kotlin Coroutines Deep Dive.** — Полное руководство по корутинам: от suspend-функций до structured concurrency, Dispatchers и Flow. Объясняет, как корутины работают внутри и как правильно использовать их в Android. Лучший ресурс по теме.
+- **Meier R. (2022). Professional Android.** — Практическое покрытие threading в контексте Android: Main Thread rule, background processing, WorkManager и интеграция корутин с lifecycle компонентов.
 
 ---
 

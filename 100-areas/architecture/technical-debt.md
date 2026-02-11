@@ -17,6 +17,8 @@ related:
   - "[[microservices-vs-monolith]]"
   - "[[clean-code-solid]]"
   - "[[design-patterns]]"
+prerequisites:
+  - "[[clean-code-solid]]"
 ---
 
 # Технический долг: $2 триллиона проблем

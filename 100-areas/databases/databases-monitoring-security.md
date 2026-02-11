@@ -18,6 +18,9 @@ related:
   - "[[database-design-optimization]]"
   - "[[security-overview]]"
   - "[[observability]]"
+prerequisites:
+  - "[[databases-sql-fundamentals]]"
+  - "[[databases-transactions-acid]]"
 ---
 
 # Database Monitoring & Security: pg_stat, RLS, encryption

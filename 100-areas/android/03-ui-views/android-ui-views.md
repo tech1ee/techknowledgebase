@@ -16,6 +16,9 @@ related:
   - "[[android-activity-lifecycle]]"
   - "[[android-compose]]"
   - "[[android-threading]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # View System: XML Layouts, ViewBinding, RecyclerView
@@ -709,21 +712,19 @@ textView.setTextColor(RED)  // invalidate()
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Обязательный контекст:**
-→ [[android-overview]] — карта Android раздела, понимание общей архитектуры платформы
-→ [[android-activity-lifecycle]] — View существуют внутри Activity/Fragment, понимание lifecycle критично для правильной работы с ViewBinding и избежания крашей
+### [[android-overview]]
+View System — центральная часть UI-подсистемы Android, связанная практически со всеми аспектами платформы. Карта Android раздела показывает, как View System пересекается с lifecycle, threading, state management и navigation. Понимание общей архитектуры платформы помогает увидеть, почему View System спроектирован именно так и какие ограничения он накладывает. Начните с overview для контекста.
 
-**Прямая альтернатива:**
-→ [[android-compose]] — современная декларативная UI система, заменяющая View System. Понимание обеих систем важно для migration и interop
+### [[android-activity-lifecycle]]
+View существуют внутри Activity и Fragment, поэтому их lifecycle неразрывно связан. ViewBinding безопасно использовать только между onCreateView() и onDestroyView(), иначе — memory leaks или crashes. Понимание lifecycle критично для правильной работы с findViewById, ViewBinding и RecyclerView.Adapter. Без этого знания типичные ошибки: NullPointerException при обращении к View после onDestroyView() в Fragment.
 
-**Технические зависимости:**
-→ [[android-threading]] — View можно трогать только из Main Thread, иначе CalledFromWrongThreadException. Корутины и Dispatchers.Main решают эту проблему
+### [[android-compose]]
+Compose — современная декларативная UI-система, постепенно заменяющая View System. Понимание обеих систем важно: миллионы существующих приложений используют Views, а migration и interop (ComposeView, AndroidView) требуют знания обоих подходов. Compose устраняет многие проблемы View System (boilerplate, findViewById, XML parsing), но под капотом использует тот же rendering pipeline. Изучите View System для фундамента, затем Compose для нового кода.
 
-**Следующие шаги:**
-→ После освоения View System изучи Compose — проще писать, меньше boilerplate, лучше для нового кода
-→ Для списков изучи Paging library — работа с большими данными (тысячи элементов из БД/сети)
+### [[android-threading]]
+View можно модифицировать только из Main Thread — нарушение этого правила приводит к CalledFromWrongThreadException. RecyclerView.Adapter.notifyDataSetChanged() и View.invalidate() должны вызываться из Main Thread. Корутины с Dispatchers.Main, View.post() и Handler решают эту проблему. Понимание threading критично для безопасной работы с UI.
 
 ---
 
@@ -733,6 +734,12 @@ textView.setTextColor(RED)  // invalidate()
 - [View Binding - Android Developers](https://developer.android.com/topic/libraries/view-binding) — ViewBinding
 - [RecyclerView - Android Developers](https://developer.android.com/develop/ui/views/layout/recyclerview) — RecyclerView и Adapter
 - [ConstraintLayout - Android Developers](https://developer.android.com/develop/ui/views/layout/constraint-layout) — ConstraintLayout
+
+## Источники и дальнейшее чтение
+
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Лучшее пошаговое введение в View System: layouts, RecyclerView, ViewBinding, ConstraintLayout. Каждая глава строит реальное приложение, что помогает закрепить концепции на практике.
+- **Meier R. (2022). Professional Android.** — Глубокое покрытие View hierarchy, custom views, RecyclerView optimization и integration с Architecture Components. Подходит для перехода от базового понимания к production-level знаниям.
+- **Vasavada N. (2019). Android Internals.** — Внутреннее устройство LayoutInflater, View rendering pipeline и window system. Объясняет, как XML превращается в объекты View и как они размещаются на экране. Для тех, кто хочет понять «под капотом».
 
 ---
 

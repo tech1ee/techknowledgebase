@@ -13,6 +13,9 @@ related:
   - "[[arrays-strings]]"
   - "[[string-algorithms-advanced]]"
   - "[[hash-tables]]"
+prerequisites:
+  - "[[arrays-strings]]"
+  - "[[hash-tables]]"
 ---
 
 # String Algorithms

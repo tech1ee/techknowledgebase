@@ -19,6 +19,9 @@ related:
   - "[[active-listening]]"
   - "[[performance-conversations]]"
   - "[[conflict-resolution]]"
+prerequisites:
+  - "[[active-listening]]"
+  - "[[giving-feedback]]"
 ---
 
 # Receiving Feedback: искусство слышать правду и расти

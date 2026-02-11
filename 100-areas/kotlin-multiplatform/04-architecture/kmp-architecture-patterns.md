@@ -16,6 +16,10 @@ related:
   - "[[kmp-overview]]"
   - "[[kmp-di-patterns]]"
   - "[[kmp-state-management]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
+  - "[[kmp-expect-actual]]"
 cs-foundations:
   - "[[software-architecture-principles]]"
   - "[[separation-of-concerns]]"
@@ -1006,6 +1010,22 @@ class LogoutUseCase(
 | Separation of Concerns | Layer isolation | [[separation-of-concerns]] |
 | Dependency Inversion | Repository pattern | [[dependency-inversion-principle]] |
 | Pure Functions | Reducer predictability | [[functional-programming-basics]] |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзор KMP описывает общую архитектуру мультиплатформенных проектов, в рамках которой применяются паттерны Clean Architecture, MVVM и MVI. Архитектурные паттерны определяют, как организуется shared-код в commonMain и как он взаимодействует с платформенными слоями. Понимание структуры KMP проекта необходимо для правильного размещения ViewModel, UseCase и Repository в source sets.
+
+**[[kmp-di-patterns]]** — Dependency Injection является неотъемлемой частью архитектурных паттернов в KMP. Clean Architecture требует инверсии зависимостей между слоями (domain не зависит от data), что реализуется через DI-фреймворки (Koin, kotlin-inject). Понимание DI-паттернов необходимо для практической реализации архитектурных решений, описанных в данном материале.
+
+**[[kmp-state-management]]** — Управление состоянием тесно связано с выбором архитектурного паттерна: MVVM использует StateFlow в ViewModel, MVI реализует однонаправленный поток данных через Reducer, Redux применяет единый Store. Архитектурные паттерны определяют стратегию state management, а state management, в свою очередь, влияет на выбор паттерна.
+
+## Источники и дальнейшее чтение
+
+1. **Martin R. (2017).** *Clean Architecture.* — Фундаментальная книга об архитектурных принципах, которые напрямую применяются в KMP: Dependency Rule, Boundary Objects, Use Case Driven Design. Определяет, как проектировать границы между shared и platform-specific кодом.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию идиоматичного Kotlin-кода, которые влияют на реализацию архитектурных паттернов: sealed classes для MVI State, data classes для immutable models, scope functions для builder patterns.
+3. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины и Flow являются основой реактивных архитектурных паттернов в KMP. Главы про StateFlow, SharedFlow и structured concurrency напрямую применяются при реализации MVVM и MVI.
 
 ---
 

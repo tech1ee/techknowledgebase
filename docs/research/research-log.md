@@ -3,7 +3,7 @@ title: "Research Log"
 created: 2025-12-25
 modified: 2025-12-30
 type: index
-status: verified
+status: published
 tags:
   - type/index
   - navigation

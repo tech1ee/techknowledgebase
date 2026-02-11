@@ -5,7 +5,7 @@ modified: 2026-01-05
 tags:
   - topic/jvm
   - topic/kmp
-  - android
+  - topic/android
   - jetpack
   - room
   - datastore
@@ -18,6 +18,9 @@ related:
   - "[[kmp-project-structure]]"
   - "[[android-architecture-patterns]]"
   - "[[kotlin-coroutines]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-project-structure]]"
 cs-foundations:
   - "[[bytecode-virtual-machines]]"
   - "[[compilation-pipeline]]"
@@ -1160,6 +1163,24 @@ benchmark {
 | [#multiplatform](https://kotlinlang.slack.com/) | Slack | Kotlin Slack |
 | [r/Kotlin](https://reddit.com/r/Kotlin) | Reddit | Community |
 | [klibs.io](https://klibs.io) | Directory | 2000+ KMP библиотек |
+
+---
+
+## Связь с другими темами
+
+**[[kmp-overview]]** — Обзорный материал по Kotlin Multiplatform, описывающий общую архитектуру проекта, структуру source sets и roadmap изучения. Android-интеграция является одной из ключевых платформенных целей KMP, и понимание общей картины помогает правильно позиционировать Android-специфичный код относительно shared-модулей. Начинать изучение KMP рекомендуется именно с overview перед погружением в платформенные детали.
+
+**[[kmp-project-structure]]** — Структура проекта KMP определяет, как организованы source sets (commonMain, androidMain, iosMain) и как Gradle конфигурирует зависимости для каждой платформы. Для Android-интеграции критически важно понимать, как androidMain source set взаимодействует с commonMain и какие Jetpack-библиотеки можно подключать напрямую. Правильная организация модулей позволяет максимизировать переиспользование кода между платформами.
+
+**[[android-architecture-patterns]]** — Паттерны Android-архитектуры (MVVM, MVI, Clean Architecture) напрямую влияют на то, как организуется shared-код в KMP. ViewModel, Repository и UseCase из Android Jetpack адаптируются для мультиплатформенного использования через lifecycle-viewmodel-compose. Знание Android-паттернов помогает проектировать shared-слой так, чтобы Android-приложение получало нативный developer experience.
+
+**[[kotlin-coroutines]]** — Корутины обеспечивают асинхронные операции в shared KMP-коде, который затем используется на Android. Room KMP, Ktor, DataStore — все ключевые библиотеки в Android-интеграции работают через корутины и Flow. Понимание Dispatchers, structured concurrency и StateFlow необходимо для корректной реализации реактивного UI на Android с shared бизнес-логикой.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Глубокое понимание Kotlin необходимо для работы с KMP на Android: корутины, sealed classes, delegation и extension functions используются повсеместно в Android-интеграции.
+2. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Детальное руководство по корутинам, которые являются основой асинхронного программирования в KMP. Особенно важны главы про Flow, StateFlow и интеграцию с Android Lifecycle.
+3. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения ответственности и dependency inversion, которые определяют границу между shared KMP-модулем и Android-платформенным кодом. Помогает правильно спроектировать слой интеграции с Jetpack.
 
 ---
 

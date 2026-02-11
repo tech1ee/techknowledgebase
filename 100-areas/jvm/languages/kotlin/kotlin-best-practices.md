@@ -10,10 +10,16 @@ tags:
   - idioms
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-oop]]"
+  - "[[kotlin-functional]]"
 related:
-  - "[[kotlin-overview]]"
-  - "[[kotlin-advanced-features]]"
-  - "[[kotlin-type-system]]"
+  - "[[kotlin-basics]]"
+  - "[[kotlin-functional]]"
+  - "[[kotlin-collections]]"
+  - "[[kotlin-coroutines]]"
+  - "[[kotlin-testing]]"
 status: published
 ---
 
@@ -110,42 +116,27 @@ Scope functions (let, apply, run, also, with) — мощный инструме�
 
 ### Общие правила именования
 
+Kotlin следует общепринятым соглашениям: PascalCase для классов, camelCase для функций и свойств, UPPER_SNAKE_CASE для констант:
+
 ```kotlin
-// ✅ Классы - PascalCase
-class UserRepository
-class HttpClient
-class StringBuilder
+class UserRepository         // PascalCase
+fun calculateTotal()         // camelCase
+const val MAX_RETRY_COUNT = 3  // UPPER_SNAKE_CASE
+package com.example.myapp    // lowercase
+```
 
-// ✅ Функции и свойства - camelCase
-fun calculateTotal()
-val userName: String
-var itemCount: Int
+Избегайте венгерской нотации и `m`-префиксов из Java/Android. Boolean-свойства именуйте в вопросительной форме:
 
-// ✅ Константы - UPPER_SNAKE_CASE
-const val MAX_RETRY_COUNT = 3
-const val DEFAULT_TIMEOUT = 5000
-
-// ✅ Package names - lowercase
-package com.example.myapp
-package org.company.project
-
-// ❌ Избегайте венгерской нотации
-// val strName: String  // ❌
-val name: String  // ✅
-
-// ❌ Избегайте префиксов для членов класса
-class User {
-    // var mName: String  // ❌ Android/Java стиль
-    var name: String  // ✅
-}
-
-// ✅ Boolean свойства - вопросительная форма
-val isEmpty: Boolean
-val isValid: Boolean
+```kotlin
+val name: String     // НЕ strName или mName
+val isEmpty: Boolean // Вопросительная форма
 val hasChildren: Boolean
 val canEdit: Boolean
+```
 
-// ✅ Test функции - backticks с описанием
+Для тестов используйте backtick-имена -- они читаются как спецификация поведения:
+
+```kotlin
 @Test
 fun `should return user when ID exists`() { }
 
@@ -185,31 +176,26 @@ class Function<in P, out R>  // Parameter, Return
 
 ### Используйте val вместо var
 
+`val` по умолчанию -- главный принцип. Если значение не меняется после инициализации, используйте `val`:
+
 ```kotlin
-// ❌ Лишняя мутабельность
-var name = "Alice"
-var age = 25
+var name = "Alice"  // Лишняя мутабельность
+val name = "Alice"  // Правильно: val если не меняется
 
-// ✅ Используйте val где возможно
-val name = "Alice"
-val age = 25
-
-// ✅ val для ссылки, мутабельность внутри
 val list = mutableListOf<String>()
-list.add("item")  // ✅ OK, изменяем содержимое
+list.add("item")  // val для ссылки, мутабельность внутри
+```
 
-// ❌ var когда можно вычислить сразу
+Когда значение зависит от условия -- используйте `if` или `when` как выражение вместо `var` с присвоением:
+
+```kotlin
+// Плохо: var + присвоение в ветках
 var result: String
-if (condition) {
-    result = "A"
-} else {
-    result = "B"
-}
+if (condition) { result = "A" } else { result = "B" }
 
-// ✅ Используйте выражения
+// Хорошо: val + expression
 val result = if (condition) "A" else "B"
 
-// ✅ Или when
 val result = when {
     x > 0 -> "positive"
     x < 0 -> "negative"
@@ -486,49 +472,22 @@ fun disconnect() {
 
 ### Используйте подходящие операции
 
+Kotlin предлагает операции коллекций, заменяющие ручные циклы. `map` для трансформации, `filter` для фильтрации:
+
 ```kotlin
-// ❌ Ручные циклы
-val result = mutableListOf<String>()
-for (user in users) {
-    result.add(user.name)
-}
+// Ручной цикл -> map
+val names = users.map { it.name }
 
-// ✅ map
-val result = users.map { it.name }
-
-// ❌ Фильтрация с циклом
-val adults = mutableListOf<User>()
-for (user in users) {
-    if (user.age >= 18) {
-        adults.add(user)
-    }
-}
-
-// ✅ filter
+// Фильтрация с циклом -> filter
 val adults = users.filter { it.age >= 18 }
+```
 
-// ❌ Проверка наличия
-var found = false
-for (user in users) {
-    if (user.name == "Alice") {
-        found = true
-        break
-    }
-}
+`any`, `count`, `first`, `find` -- для поиска и проверок. Они делают код декларативным: описываете ЧТО нужно, а не КАК:
 
-// ✅ any
+```kotlin
 val found = users.any { it.name == "Alice" }
-
-// ❌ Подсчёт
-var count = 0
-for (user in users) {
-    if (user.age >= 18) {
-        count++
-    }
-}
-
-// ✅ count
 val count = users.count { it.age >= 18 }
+val alice = users.find { it.name == "Alice" }
 ```
 
 ### Sequence для больших коллекций
@@ -1176,29 +1135,25 @@ data class Request(
 
 ---
 
-## Связанные темы
-- [[kotlin-basics]] — Основы для понимания best practices
-- [[kotlin-functional]] — Функциональное программирование
-- [[kotlin-collections]] — Коллекции и их операции
-- [[kotlin-coroutines]] — Best practices для асинхронного кода
-- [[kotlin-testing]] — Тестирование кода
+## Связь с другими темами
+
+**[[kotlin-basics]]** — best practices строятся на знании основ: нельзя оценить идиоматичность кода, не зная базовых конструкций (val vs var, when, null-safety operators). Basics объясняют «что можно написать», best practices — «как писать правильно». Многие anti-patterns (использование `!!`, Java-style if-null) возникают от незнания базовых возможностей Kotlin. Рекомендуется освоить basics, затем изучать best practices для закрепления правильных привычек.
+
+**[[kotlin-functional]]** — scope functions (let, apply, run, also, with), lambda expressions и higher-order functions — ключевая часть идиоматичного Kotlin. Best practices устанавливают правила их использования: одна scope function на выражение, `let` для null-safety, `apply` для конфигурации. Без понимания functional programming невозможно писать идиоматичный Kotlin, но без best practices — легко злоупотребить функциональными конструкциями.
+
+**[[kotlin-collections]]** — операции с коллекциями (`map`, `filter`, `groupBy`, `associate`) — одна из самых частых задач в Kotlin-коде. Best practices определяют выбор между `List` и `Sequence` (lazy vs eager), immutable и mutable коллекциями, `forEach` и `for` циклом. Знание collections API и best practices их применения — маркер уровня Kotlin-разработчика на code review.
+
+**[[kotlin-coroutines]]** — асинхронный код имеет собственный набор best practices: structured concurrency, правильный выбор dispatcher, обработка ошибок через SupervisorJob. Best practices для sequential и concurrent кода различаются фундаментально: в coroutines появляются cancellation, scope management и backpressure. Изучите coroutines basics, затем best practices для async-кода.
+
+**[[kotlin-testing]]** — идиоматичный код легче тестировать: val-переменные предсказуемы, sealed classes позволяют exhaustive testing, extension functions изолированы. Best practices и testing взаимно усиливают друг друга: написание тестов помогает выявить неидиоматичный код, а идиоматичный код упрощает написание тестов.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
-| # | Источник | Тип | Описание |
-|---|----------|-----|----------|
-| 1 | [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) | Docs | Официальные coding conventions |
-| 2 | [Kotlin Idioms](https://kotlinlang.org/docs/idioms.html) | Docs | Идиоматичные паттерны Kotlin |
-| 3 | [Effective Kotlin](https://effectivekotlin.com/) | Book | Книга Marcin Moskala — глубокие best practices |
-| 4 | [Kotlin Performance Guide](https://developer.android.com/kotlin/performance) | Docs | Оптимизация Kotlin для Android |
-| 5 | [Kotlin Blog](https://blog.jetbrains.com/kotlin/) | Blog | Официальные анонсы и практики |
-| 6 | [What's New in Kotlin 2.0](https://kotlinlang.org/docs/whatsnew20.html) | Docs | Новые best practices в Kotlin 2.0 |
-| 7 | [Android Kotlin Style Guide](https://developer.android.com/kotlin/style-guide) | Docs | Гайд Google для Android |
-| 8 | [Kotlin in Action, 2nd Ed](https://www.manning.com/books/kotlin-in-action-second-edition) | Book | Обновлённая книга от создателей языка |
-| 9 | [KotlinConf Videos](https://kotlinconf.com/) | Video | Доклады с KotlinConf |
-| 10 | [Jake Wharton's Kotlin Talks](https://jakewharton.com/) | Video | Практики от эксперта |
+- Moskala M. (2024). *Effective Kotlin*. — Главная книга о Kotlin best practices: 60+ правил с объяснениями, от null-safety до coroutines. Аналог Effective Java для Kotlin-экосистемы.
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. — Каноническая книга от создателей языка, объясняет design decisions и идиоматичные паттерны с позиции авторов языка.
+- Bloch J. (2018). *Effective Java, 3rd Edition*. — Многие Java best practices применимы к Kotlin (immutability, defensive copies, API design). Помогает понять, какие Java-проблемы Kotlin решает на уровне языка.
 
 ---
 

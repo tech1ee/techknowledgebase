@@ -18,6 +18,8 @@ related:
   - "[[network-cloud-modern]]"
   - "[[network-realtime-protocols]]"
   - "[[api-design]]"
+prerequisites:
+  - "[[dependency-injection-fundamentals]]"
   - "[[caching-strategies]]"
   - "[[jvm-memory-model]]"
 ---

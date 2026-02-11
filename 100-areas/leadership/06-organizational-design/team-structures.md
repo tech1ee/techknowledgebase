@@ -18,6 +18,9 @@ tags:
 related:
   - "[[scaling-engineering-org]]"
   - "[[engineering-metrics]]"
+prerequisites:
+  - "[[building-engineering-team]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Структуры команд
@@ -150,19 +153,19 @@ RULE OF THUMB:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[scaling-engineering-org]] — scaling context
-- [[building-engineering-team]] — single team
-- [[agile-practices]] — team practices
+**[[scaling-engineering-org]]** — Структуры команд являются основным инструментом масштабирования инженерной организации. При росте с 10 до 300+ инженеров необходимо пересматривать team topology — от плоской структуры к stream-aligned, platform и enabling командам. Правильный выбор структуры минимизирует cognitive load, обеспечивает clear ownership и ускоряет поток создания ценности.
 
-## Источники
+**[[engineering-metrics]]** — Эффективность выбранной структуры команд можно и нужно измерять через инженерные метрики. DORA metrics (deployment frequency, lead time) показывают, насколько хорошо структура команд поддерживает быструю доставку. Если метрики ухудшаются при росте — это сигнал к пересмотру team topology и организационного дизайна.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [Team Topologies](https://teamtopologies.com/) | Book |
-| [Spotify Engineering Culture](https://engineering.atspotify.com/) | Videos |
-| [Scaling Up](https://www.amazon.com/Scaling-Up-Companies-Rockefeller-Habits/dp/0986019593) | Book |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
 
 ---
 

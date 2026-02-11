@@ -19,6 +19,10 @@ related:
   - "[[os-memory-management]]"
   - "[[jvm-basics-history]]"
   - "[[jvm-gc-tuning]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-app-components]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Архитектура Android: от Linux до приложения
@@ -806,8 +810,14 @@ adb shell dumpsys binder_transactions
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android на уровне ядра: Binder IPC, Zygote, ART runtime, system_server
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая архитектуру платформы и ART
+- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM, применимо к пониманию threading model в ART и Android
+
+**Веб-ресурсы:**
 - [Android Runtime and Dalvik - AOSP](https://source.android.com/docs/core/runtime) — официальная документация ART
 - [Platform Architecture - Android Developers](https://developer.android.com/guide/platform) — архитектура платформы
 - [ART JIT Compiler - AOSP](https://source.android.com/docs/core/runtime/jit-compiler) — JIT компилятор

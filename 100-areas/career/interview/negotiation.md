@@ -14,6 +14,10 @@ related:
   - "[[interview-process]]"
   - "[[salary-benchmarks]]"
   - "[[behavioral-interview]]"
+prerequisites:
+  - "[[interview-process]]"
+  - "[[salary-benchmarks]]"
+  - "[[behavioral-interview]]"
 ---
 
 # Salary Negotiation: $2M+ разницы за карьеру
@@ -627,6 +631,22 @@ AFTER:
 → [[remote-first-companies]] — где искать remote работу
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — Negotiation — финальный этап interview process. Всё, что происходило до оффера (technical performance, behavioral impression, cultural fit), определяет силу позиции в переговорах. Сильный interview = больше leverage. Текущий материал начинается там, где interview-process заканчивается.
+
+- [[salary-benchmarks]] — Данные о compensation по регионам, компаниям и уровням — основа для informed negotiation. Без benchmark-данных из Levels.fyi невозможно определить target и minimum. Текущий материал объясняет КАК negotiating, salary-benchmarks — ЗА СКОЛЬКО.
+
+- [[behavioral-interview]] — Soft skills, продемонстрированные на behavioral раунде, напрямую влияют на negotiation. Кандидат, показавший leadership, communication и confidence в behavioral, воспринимается как более ценный. Recruiter видит feedback от behavioral interviewers и калибрует flexibility в negotiation.
+
+## Источники и дальнейшее чтение
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание perspective hiring manager помогает в negotiation: как бюджет устроен, какие компоненты flexible, почему компании делают exploding offers. Книга объясняет внутреннюю механику compensation decisions.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff+ уровне compensation резко растёт ($300K-$600K TC), и negotiation становится критически важным. Книга описывает, как Staff+ engineers позиционируют себя и какой leverage имеют при internal promotion vs external hire.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Помогает принять финальное решение по офферу: не только compensation, но и fit с жизненными целями, growth trajectory и work-life balance. Важно не оптимизировать только зарплату, а выбрать правильную роль.
 
 ## Источники
 

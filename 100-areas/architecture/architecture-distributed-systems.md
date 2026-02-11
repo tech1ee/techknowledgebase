@@ -17,6 +17,9 @@ related:
   - "[[architecture-overview]]"
   - "[[architecture-resilience-patterns]]"
   - "[[databases-transactions-acid]]"
+prerequisites:
+  - "[[microservices-vs-monolith]]"
+  - "[[api-design]]"
 ---
 
 # Distributed Systems: CAP, consistency, Saga pattern

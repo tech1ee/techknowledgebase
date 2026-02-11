@@ -16,6 +16,9 @@ related:
   - "[[android-threading]]"
   - "[[kotlin-coroutines]]"
 cs-foundations: [structured-concurrency, cooperative-cancellation, thread-safety, exception-propagation]
+prerequisites:
+  - "[[android-threading]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Kotlin Coroutines: 10 типичных ошибок в Android
@@ -3094,6 +3097,12 @@ result.onSuccess { data -> handleData(data) }
 | 8 | [Exception Handling](https://kt.academy/article/cc-exception-handling) | Article | Детали обработки ошибок |
 | 9 | [Top 10 Coroutine Mistakes](https://www.droidcon.com/2024/11/22/top-10-coroutine-mistakes-we-all-have-made-as-android-developers/) | Conference | Актуальные ошибки 2024 |
 | 10 | [Understanding SupervisorJob](https://www.revenuecat.com/blog/engineering/supervisorjob-kotlin/) | Article | SupervisorJob deep-dive |
+
+### Книги
+
+- **Moskala M. (2022)** *Kotlin Coroutines: Deep Dive* — фундаментальное руководство по корутинам, подробно описывающее structured concurrency, CancellationException, SupervisorJob и exception handling. Обязательное чтение для понимания каждой из 10 ошибок, описанных в этом документе.
+- **Goetz B. (2006)** *Java Concurrency in Practice* — хотя книга о Java, концепции thread safety, visibility и happens-before остаются актуальными для понимания Dispatchers и concurrent access к shared state в корутинах.
+- **Moskala M. (2021)** *Effective Kotlin* — содержит практические рекомендации по использованию корутин, включая правильный выбор scope, обработку ошибок и предотвращение memory leaks.
 
 Все примеры кода протестированы с Kotlin 2.0+, kotlinx.coroutines 1.8+, Android Gradle Plugin 8.0+.
 

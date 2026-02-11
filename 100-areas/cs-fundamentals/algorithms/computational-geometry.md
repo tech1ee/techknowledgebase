@@ -11,6 +11,10 @@ tags:
 related:
   - "[[divide-and-conquer]]"
   - "[[sorting-algorithms]]"
+prerequisites:
+  - "[[sorting-algorithms]]"
+  - "[[divide-and-conquer]]"
+  - "[[binary-search-pattern]]"
 ---
 
 # Computational Geometry
@@ -2388,4 +2392,27 @@ private fun circumcircle(a: Point, b: Point, c: Point): Circle {
 
 ---
 
-*Обновлено: 2026-01-09 — добавлены педагогические секции (интуиция cross product/convex hull/point-in-polygon/rotating calipers/shoelace, 6 типичных ошибок floating-point/overflow/degenerate cases, 5 ментальных моделей)*
+## Связь с другими темами
+
+**[[divide-and-conquer]]** --- многие ключевые геометрические алгоритмы основаны на стратегии «разделяй и властвуй». Closest pair за O(n log n) делит точки вертикальной линией, рекурсивно решает подзадачи и объединяет через strip шириной 2d. Merge-подход используется для построения convex hull (алгоритм Preparata--Hong), а также для построения диаграммы Вороного за O(n log n). Понимание D&C --- необходимая база для эффективных геометрических алгоритмов.
+
+**[[sorting-algorithms]]** --- sweep line алгоритмы требуют предварительной сортировки событий по одной из координат, что определяет нижнюю границу O(n log n) для многих геометрических задач. Graham scan сортирует точки по полярному углу, Andrew's algorithm --- по координатам, closest pair --- по X-координате. Bentley-Ottmann для пересечения отрезков сортирует events. Сортировка по углу (atan2) --- специфический геометрический приём, который не встречается в других областях алгоритмов.
+
+---
+
+## Источники и дальнейшее чтение
+
+### Книги
+
+- **de Berg, Cheong, van Kreveld & Overmars (2008). "Computational Geometry: Algorithms and Applications."** --- каноническая книга по вычислительной геометрии: convex hull, line segment intersection, polygon triangulation, Voronoi diagrams с доказательствами и анализом
+- **O'Rourke (1998). "Computational Geometry in C."** --- практическая реализация геометрических алгоритмов на C с детальным разбором edge cases и numerical precision
+- **Preparata & Shamos (1985). "Computational Geometry: An Introduction."** --- классическое введение в область, охватывающее divide-and-conquer подходы, lower bounds и теоретические основы
+
+### Онлайн-ресурсы
+
+- [CP-Algorithms: Geometry](https://cp-algorithms.com/) --- реализации с объяснениями на C++ для соревновательного программирования
+- **Halim (2013). "Competitive Programming 3."** --- глава по геометрии для соревнований: типичные задачи, подводные камни precision, шаблонный код
+
+---
+
+*Обновлено: 2026-01-09 --- добавлены педагогические секции (интуиция cross product/convex hull/point-in-polygon/rotating calipers/shoelace, 6 типичных ошибок floating-point/overflow/degenerate cases, 5 ментальных моделей)*

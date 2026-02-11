@@ -17,6 +17,9 @@ related:
   - "[[docker-for-developers]]"
   - "[[technical-debt]]"
   - "[[git-workflows]]"
+prerequisites:
+  - "[[git-workflows]]"
+  - "[[docker-for-developers]]"
 ---
 
 # CI/CD: автоматизация, которая меняет всё

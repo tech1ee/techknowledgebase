@@ -13,6 +13,9 @@ tags:
 related:
   - "[[interview-process]]"
   - "[[architecture-questions]]"
+prerequisites:
+  - "[[interview-process]]"
+  - "[[architecture-questions]]"
 ---
 
 # Mobile System Design: не код, а архитектурное мышление
@@ -454,6 +457,20 @@ Must mention:
 → [[coding-challenges]] — coding rounds
 
 ---
+
+## Связь с другими темами
+
+- [[interview-process]] — System Design — обязательный раунд для Senior+ в onsite loop. Текущий материал даёт framework и примеры для этого раунда, а interview-process объясняет его место в общем процессе: обычно Round 3, после coding. Слабый System Design = downlevel с L6 на L5, даже если coding прошёл отлично.
+
+- [[architecture-questions]] — Содержит конкретные вопросы по архитектуре Android: MVVM vs MVI trade-offs, Clean Architecture layers, modularization patterns. Текущий материал использует эти архитектурные паттерны как строительные блоки для System Design ответов. Architecture — фундамент, System Design — применение этого фундамента к реальным задачам.
+
+## Источники и дальнейшее чтение
+
+- Xu A. (2020). *System Design Interview*. — Основная книга для подготовки к System Design раундам. Хотя ориентирована на backend, framework (Requirements → Estimations → Design → Deep Dive → Trade-offs) применим к mobile. Адаптируй задачи, добавляя offline-first, battery optimization и caching.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Глава о System Design даёт базовые концепции: scalability, load balancing, database design. Для mobile System Design эти backend-концепции нужны на уровне understanding, чтобы проектировать клиент-серверное взаимодействие.
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff уровне System Design оценивается не только технически, но и с точки зрения leadership: как ты ведёшь discussion, какие trade-offs предлагаешь, как учитываешь бизнес-контекст. Книга помогает понять эти expectations.
 
 ## Источники
 

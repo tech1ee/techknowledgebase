@@ -19,6 +19,9 @@ related:
   - "[[building-engineering-team]]"
   - "[[team-culture]]"
   - "[[motivation]]"
+prerequisites:
+  - "[[building-engineering-team]]"
+  - "[[team-culture]]"
 ---
 
 # Динамика команды
@@ -149,6 +152,22 @@ HEALTHY:                        UNHEALTHY:
 | [Google Project Aristotle](https://rework.withgoogle.com/) | Research |
 | [Five Dysfunctions of a Team](https://www.amazon.com/Five-Dysfunctions-Team-Leadership-Fable/dp/0787960756) | Book |
 | [Tuckman's Stages](https://en.wikipedia.org/wiki/Tuckman%27s_stages_of_group_development) | Model |
+
+---
+
+## Связь с другими темами
+
+**[[building-engineering-team]]** — Team dynamics — это поведенческое измерение team building. Если building-engineering-team фокусируется на структуре (кого нанимать, как компоновать), то team-dynamics раскрывает, что происходит после: как люди взаимодействуют, проходят через стадии Tuckman (forming → storming → norming → performing) и формируют рабочие паттерны. Менеджер, понимающий динамику, может предвидеть и направлять конфликты вместо их тушения.
+
+**[[team-culture]]** — Культура и динамика — два лица одной медали. Culture определяет expected behaviors ("как мы здесь делаем вещи"), а dynamics показывает actual behaviors в реальном времени. Gap между declared culture и observed dynamics — важнейший diagnostic signal для менеджера. Если culture говорит "мы ценим feedback", а dynamics показывает, что люди избегают conflict — это проблема.
+
+**[[motivation]]** — Мотивация тесно связана с team dynamics: psychological safety (#1 фактор из Google Aristotle) напрямую влияет на intrinsic motivation. В команде с healthy dynamics люди чувствуют себя safe для risk-taking, creative thinking и honest communication, что усиливает мотивацию через autonomy и purpose. Toxic dynamics, наоборот, разрушают даже самую сильную intrinsic motivation.
+
+## Источники и дальнейшее чтение
+
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Центральная книга для понимания team dynamics. Модель пяти дисфункций (absence of trust, fear of conflict, lack of commitment, avoidance of accountability, inattention to results) — это diagnostic framework, который помогает менеджеру идентифицировать корневые причины проблем в team dynamics.
+- **Camille Fournier, "The Manager's Path" (2017)** — Описывает, как менеджер на разных уровнях влияет на team dynamics: от первого EM, строящего trust через 1-on-1, до Director, управляющего dynamics между несколькими командами.
+- **Ed Catmull, "Creativity Inc." (2014)** — Pixar's Braintrust — пример управляемой team dynamics, где honest, direct feedback является нормой, а не источником conflict. Catmull показывает, как создать среду, где productive conflict (storming) ведёт к creative breakthroughs.
 
 ---
 

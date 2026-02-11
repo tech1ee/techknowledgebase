@@ -18,6 +18,9 @@ related:
   - "[[android-compose-internals]]"
   - "[[android-custom-view-fundamentals]]"
   - "[[android-app-startup-performance]]"
+prerequisites:
+  - "[[android-overview]]"
+  - "[[android-ui-views]]"
 ---
 
 # Android Animations — от ValueAnimator до Compose Transition
@@ -2476,29 +2479,30 @@ override fun onDetachedFromWindow() {
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-### Фундамент
-- `[[android-view-rendering-pipeline]]` — measure/layout/draw pipeline, который рисует каждый кадр анимации
-- `[[android-handler-looper]]` — Choreographer работает через Handler/Looper на main thread
-- `[[android-custom-view-fundamentals]]` — Canvas drawing для кастомных анимированных View
+**[[android-view-rendering-pipeline]]** — rendering pipeline (measure/layout/draw) отвечает за отрисовку каждого кадра анимации. Понимание того, как работает invalidate(), VSYNC и SurfaceFlinger, объясняет, почему анимации иногда дёргаются и как оптимизировать перерисовку. Рекомендуется изучить rendering pipeline до глубокого погружения в анимации.
 
-### Compose
-- `[[android-compose-internals]]` — Snapshot State, recomposition phases, и как Compose оптимизирует анимации
-- `[[android-compose]]` — Compose UI framework и декларативный подход
+**[[android-handler-looper]]** — Choreographer, центральный компонент системы анимации, работает через Handler/Looper на main thread. Каждый кадр анимации планируется как callback в Choreographer, который привязан к VSYNC сигналу. Понимание механизма message queue помогает диагностировать jank и пропущенные кадры.
 
-### Performance
-- `[[android-app-startup-performance]]` — Choreographer frame scheduling, Perfetto для анализа jank
-- `[[android-performance-profiling]]` — Инструменты профилирования: GPU rendering, frame timing
+**[[android-compose-internals]]** — Compose использует собственную систему анимации, основанную на Snapshot State и recomposition. В отличие от View animations, Compose оптимизирует обновления через three-phase rendering (Composition, Layout, Drawing), что позволяет пропускать ненужные фазы. Изучайте после освоения View animations для сравнения подходов.
 
-### UI
-- `[[android-ui-views]]` — View system, на котором работает Property Animation
-- `[[android-window-system]]` — Surface и SurfaceFlinger, куда попадают отрисованные кадры
+**[[android-custom-view-fundamentals]]** — Canvas drawing является основой для создания кастомных анимированных View. При реализации сложных анимаций (графики, диаграммы, игровые элементы) необходимо рисовать непосредственно на Canvas через onDraw(), комбинируя ValueAnimator с ручной отрисовкой.
+
+**[[android-app-startup-performance]]** — Choreographer frame scheduling, используемый анимациями, тот же механизм, что управляет рендерингом при старте приложения. Perfetto и systrace — ключевые инструменты для анализа jank в анимациях, показывающие точное время каждой фазы кадра.
+
+**[[android-performance-profiling]]** — GPU rendering profiler и frame timing tools позволяют визуализировать производительность анимаций в реальном времени. Overlay GPU overdraw, Profile GPU Rendering bars и Layout Inspector — необходимые инструменты для оптимизации анимаций до стабильных 60/120fps.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
+**Книги:**
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Property Animation и оптимизацию UI
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с примерами реализации анимаций
+- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin, включая DSL-паттерны, применяемые в Compose Animation API
+
+**Веб-ресурсы:**
 1. **[Property Animation Overview](https://developer.android.com/develop/ui/views/animations/prop-animation)** — docs — Официальный гайд по Property Animation
 2. **[Compose Animation](https://developer.android.com/develop/ui/compose/animation/introduction)** — docs — Compose Animation документация
 3. **[Physics-based Animation](https://developer.android.com/develop/ui/views/animations/physics-based-motion)** — docs — SpringAnimation и FlingAnimation

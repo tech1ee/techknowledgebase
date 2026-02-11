@@ -13,6 +13,9 @@ related:
   - "[[personal-brand]]"
   - "[[portfolio-strategy]]"
   - "[[job-search-strategy]]"
+prerequisites:
+  - "[[job-search-strategy]]"
+  - "[[resume-strategy]]"
 ---
 
 # Standing Out: как стать заметным в море кандидатов
@@ -340,6 +343,22 @@ SELF-CHECK:
 → [[linkedin-optimization]] — где тебя найдут
 
 ---
+
+## Связь с другими темами
+
+- [[personal-brand]] — Standing out в краткосрочной перспективе — это тактика для конкретного job search. Personal brand — это долгосрочная стратегия, которая делает standing out естественным. Когда у тебя есть visible expertise (блог, GitHub, доклады), тебя уже знают до того, как ты подашь заявку. Идеально: строить бренд заранее, применять тактики из standing out при активном поиске.
+
+- [[portfolio-strategy]] — Portfolio — конкретный инструмент для дифференциации. "Contribution Portfolio" из текущего материала (tailored one-pager, technical artifact, video intro) — это расширение GitHub-portfolio для конкретной компании. Portfolio доказывает экспертизу, standing out объясняет, как это доказательство презентовать.
+
+- [[job-search-strategy]] — Standing out работает внутри системной стратегии поиска. Targeted outreach с персонализацией, value-forward communication, warm introductions — всё это требует системного подхода из job search strategy. Без стратегии standing out превращается в хаотичные попытки; без дифференциации стратегия даёт средние результаты.
+
+## Источники и дальнейшее чтение
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking подход помогает определить свою уникальную ценность и найти правильные компании, где эта ценность наиболее востребована. Вместо "я ищу любую работу" — "я решаю конкретную проблему для конкретных компаний".
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Техническая подготовка — основа, без которой никакая дифференциация не поможет. Книга обеспечивает прохождение technical bar, а standing out стратегии работают поверх этого фундамента, превращая "прошёл барьер" в "запомнился".
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Senior+ уровне дифференциация смещается от coding skills к leadership, architecture decisions и cross-team impact. Книга помогает найти правильные истории и артефакты для "Contribution Portfolio" на высоком уровне.
 
 ## Источники
 

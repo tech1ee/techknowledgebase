@@ -10,7 +10,7 @@ tags:
   - production
   - mlops
   - serving
-  - optimization
+  - performance
   - type/concept
   - level/intermediate
 related:
@@ -800,6 +800,23 @@ class LLMABTest:
 ---
 
 *Проверено: 2025-12-22*
+
+---
+
+## Связь с другими темами
+
+**[[ai-ml-overview]]** — Обзор AI/ML-раздела показывает полный путь от экспериментов до продакшена. Production systems — это финальный этап AI Engineering pipeline, где прототип превращается в надёжный сервис. Понимание всех предшествующих этапов (prompt engineering, RAG, fine-tuning, evaluation) необходимо для проектирования production-системы, которая корректно обрабатывает edge cases.
+
+**[[ai-evaluation-metrics]]** — Метрики оценки в продакшене принципиально отличаются от offline-метрик: online evaluation включает A/B-тестирование, мониторинг качества в реальном времени, отслеживание degradation и drift. Production AI-система без метрик — это чёрный ящик, где невозможно обнаружить проблемы до жалоб пользователей. LLM-as-a-Judge, user feedback loops и автоматические алерты — ключевые компоненты production-мониторинга.
+
+**[[cloud-serverless-patterns]]** — Serverless-паттерны (Lambda, Cloud Functions, Modal) предлагают экономичную альтернативу для AI-инференса: оплата только за использование, автоматическое масштабирование, отсутствие управления серверами. Однако cold start, ограничения по памяти и таймауты создают специфические вызовы для LLM-сервисов. Выбор между serverless и dedicated GPU-инстансами зависит от паттерна нагрузки и требований к latency.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — наиболее практичное руководство по ML в продакшене, покрывающее serving, мониторинг, A/B-тестирование, data pipelines и все аспекты MLOps, необходимые для production AI-систем
+- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — теоретическая база для понимания trade-offs в AI-системах: точность vs скорость, exploration vs exploitation, что важно для принятия архитектурных решений в продакшене
 
 ---
 

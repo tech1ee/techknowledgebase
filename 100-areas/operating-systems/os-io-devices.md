@@ -19,6 +19,9 @@ related:
   - "[[os-processes-threads]]"
   - "[[os-file-systems]]"
   - "[[os-memory-management]]"
+prerequisites:
+  - "[[os-processes-threads]]"
+  - "[[os-memory-management]]"
 ---
 
 # Ввод/Вывод и Устройства
@@ -1031,37 +1034,32 @@ watch -n1 'cat /proc/interrupts | grep eth'  # Мониторинг сетевы
 
 ---
 
-## Связи
-
-**Фундамент:**
-- [[os-overview]] — syscalls, kernel mode, обработка прерываний
-- [[os-processes-threads]] — blocking I/O блокирует поток, async I/O освобождает
-
-**Углубление:**
-- [[os-file-systems]] — файловые системы используют block I/O, page cache
-- [[os-memory-management]] — DMA работает с физической памятью, page cache — с виртуальной
-
-**Применение:**
-- Сетевое программирование: epoll/kqueue для multiplexed I/O
-- [[os-virtualization]] — virtio для I/O в виртуальных машинах
-
----
-
 ## Связь с другими темами
 
-- [[os-processes-threads|Процессы и потоки]] — каждый процесс имеет таблицу открытых файловых дескрипторов. Файловый дескриптор — это индекс в таблице ядра, указывающий на структуру, описывающую устройство или файл.
+**[[os-overview]]** — Обзор ОС объясняет ключевые механизмы, на которых построена подсистема I/O: системные вызовы (read, write, ioctl) обеспечивают интерфейс между приложениями и устройствами, а переход kernel/user mode происходит при каждом I/O-запросе. Обработка прерываний (interrupts) — центральная концепция для I/O: когда устройство завершает операцию, оно генерирует hardware interrupt, CPU сохраняет состояние текущего потока и переходит в interrupt handler ядра. Без понимания interrupt-driven модели невозможно осознать, почему polling (busy-waiting) неэффективен и почему DMA (Direct Memory Access) позволяет CPU заниматься другими задачами во время передачи данных.
 
-- [[os-file-systems|Файловые системы]] — VFS (Virtual File System) предоставляет единый интерфейс для всех устройств через структуру `file_operations`. Благодаря VFS `read()` работает одинаково для файла на диске, сетевого сокета или /dev/random.
+**[[os-processes-threads]]** — Процессы и потоки непосредственно связаны с I/O через модели ввода-вывода: blocking I/O блокирует весь поток до завершения операции, что требует отдельного потока на каждое соединение в серверных приложениях (модель thread-per-connection). Каждый процесс имеет таблицу открытых файловых дескрипторов — индексов в таблице ядра, указывающих на структуры file, которые описывают устройства, файлы или сокеты. Multiplexed I/O (select, poll, epoll) позволяет одному потоку обслуживать тысячи соединений, что революционизировало серверное программирование — nginx обслуживает 10K+ соединений на нескольких потоках благодаря epoll. Async I/O (io_uring) идёт ещё дальше: submission queue и completion queue в shared memory минимизируют syscall overhead.
 
-- [[os-memory-management|Управление памятью]] — DMA работает с физическими адресами, а приложения — с виртуальными. IOMMU (I/O Memory Management Unit) транслирует адреса для DMA, подобно MMU для CPU. Это также обеспечивает изоляцию — устройство не может получить доступ к произвольной памяти.
+**[[os-file-systems]]** — Файловые системы — это абстракция, построенная поверх подсистемы I/O: VFS (Virtual File System) предоставляет единый интерфейс для всех устройств через структуру file_operations, благодаря чему read() работает одинаково для файла на диске, сетевого сокета или /dev/random. Block I/O layer переводит файловые операции в запросы к блочным устройствам, а I/O scheduler (mq-deadline, BFQ) переупорядочивает эти запросы для оптимизации производительности диска. Page cache — ключевое связующее звено между файловыми системами и I/O: данные кэшируются в RAM, и только при cache miss происходит реальное обращение к устройству. Понимание I/O устройств объясняет, почему fsync() стоит 0.1-10 ms — данные должны физически записаться на устройство, что включает flush write cache контроллера.
 
-- [[kotlin-coroutines|Kotlin Coroutines]] — `Dispatchers.IO` использует отдельный thread pool для блокирующего I/O. Это позволяет не блокировать корутины: пока один поток ждёт I/O, другие корутины выполняются на других потоках.
+**[[os-memory-management]]** — Управление памятью и I/O пересекаются в нескольких критических точках. DMA работает с физическими адресами, а приложения — с виртуальными, поэтому IOMMU (I/O Memory Management Unit) транслирует адреса для DMA, подобно MMU для CPU, обеспечивая изоляцию — устройство не может получить доступ к произвольной памяти. Page cache — связующее звено: read() сначала проверяет, есть ли данные в RAM (page cache hit), и только при промахе инициирует I/O-запрос к устройству, который заполняет страницу через DMA. mmap() связывает файлы и память напрямую: файл отображается в адресное пространство процесса, и обращение к этой памяти может вызвать page fault с последующим чтением с устройства — это zero-copy подход, исключающий промежуточное копирование данных.
 
-- **Java NIO (New I/O)** — Java NIO использует selectors (обёртка над epoll на Linux), позволяя одному потоку обслуживать множество соединений. NIO появился в Java 1.4 и предоставляет non-blocking I/O через `Selector`, `Channel` и `ByteBuffer`. Selector работает аналогично epoll: регистрируются каналы (сокеты), и `select()` возвращает только готовые к операции. NIO2 (Java 7) добавил асинхронные каналы `AsynchronousSocketChannel` с callback-based API.
+**Связанные концепции:**
+- [[os-virtualization]] — virtio для I/O в виртуальных машинах
+- [[kotlin-coroutines|Kotlin Coroutines]] — `Dispatchers.IO` использует отдельный thread pool для блокирующего I/O, позволяя не блокировать корутины
+- **Java NIO (New I/O)** — selectors (обёртка над epoll на Linux), non-blocking I/O через `Selector`, `Channel`, `ByteBuffer`; NIO2 (Java 7) добавил `AsynchronousSocketChannel`
 
 ---
 
 ## Рекомендуемые источники
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 5 (Input/Output) — от принципов аппаратного I/O (interrupts, DMA) до программного (drivers, disk scheduling); одно из лучших объяснений многоуровневой архитектуры I/O-подсистемы.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — глава 12 (I/O Systems) и глава 11 (Mass-Storage Structure) — hardware I/O, application I/O interface, kernel I/O subsystem, disk scheduling алгоритмы (SCAN, C-SCAN, LOOK) с анализом производительности.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — глава 36 (I/O Devices) — от polling до interrupts и DMA с чёткими диаграммами; бесплатно.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 10 (System-Level I/O) — Unix I/O модель глазами программиста: file descriptors, reading/writing files, RIO package, I/O redirection, standard I/O vs Unix I/O trade-offs.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — глава 14 (The Block I/O Layer) — request queues, I/O schedulers (Deadline, CFQ, Noop), bio structure; глава 7 (Interrupts and Interrupt Handlers) — top half/bottom half, softirqs, tasklets.
 
 ### Книги и курсы
 - [OSTEP: I/O Devices chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/file-devices.pdf) — бесплатная книга

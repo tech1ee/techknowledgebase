@@ -12,6 +12,8 @@ tags:
 
 > Полная карта Android-разработки: от архитектуры платформы до production-оптимизаций
 
+**Путь обучения:** [[android-learning-path]]
+
 ---
 
 ## Рекомендуемый путь изучения
@@ -35,7 +37,7 @@ tags:
          ↓
 9. [[android-architecture-patterns]]   — MVVM, MVI, Clean Architecture
          ↓
-10. [[android-data-persistence]]       — Room, DataStore, файловое хранилище
+10. [[android-data-persistence]]       — Обзор хранения данных: Room, DataStore, Files
          ↓
 11. [[android-networking]]             — Retrofit, OkHttp, Ktor
          ↓
@@ -119,7 +121,11 @@ tags:
 - [[android-background-work]] — WorkManager, Foreground Services, Doze, App Standby
 
 ### Данные и сеть
-- [[android-data-persistence]] — Room, DataStore, файловое хранилище
+- [[android-data-persistence]] — навигационный хаб: обзор и выбор подхода к хранению данных
+- [[android-room-deep-dive]] — Room: compile-time ORM, Entity, DAO, Relations, TypeConverters
+- [[android-room-migrations]] — миграции Room: AutoMigration, ручные, тестирование схем
+- [[android-room-performance]] — производительность Room: индексы, WAL, batch-операции, Paging
+- [[android-datastore-guide]] — DataStore: Preferences, Proto, миграция с SharedPreferences
 - [[android-networking]] — Retrofit, OkHttp, Ktor: HTTP-клиенты и сериализация
 
 ### Build и CI/CD

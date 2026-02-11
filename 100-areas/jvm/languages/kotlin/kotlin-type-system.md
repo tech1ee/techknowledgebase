@@ -11,11 +11,15 @@ tags:
   - reified
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[kotlin-oop]]"
+  - "[[kotlin-functional]]"
 related:
-  - [kotlin-collections]]
+  - "[[kotlin-collections]]"
   - "[[kotlin-advanced-features]]"
   - "[[kotlin-functional]]"
-  - "[[kotlin-best-practices]"
+  - "[[kotlin-best-practices]]"
 status: published
 ---
 
@@ -90,6 +94,8 @@ status: published
 Java стирает generic типы в runtime (type erasure) — `List<String>` и `List<Int>` становятся одинаковыми `List`. Kotlin решает это через `reified` типы в inline функциях: `inline fun <reified T> parse(): T` сохраняет тип T в runtime, позволяя проверки `is T` и получение `T::class.java`.
 
 Variance определяет, когда `List<Dog>` можно использовать вместо `List<Animal>`. Ковариантность (`out T`) — коллекция-производитель, можно только читать: `List<Dog>` подходит для `List<out Animal>`. Контравариантность (`in T`) — коллекция-потребитель, можно только добавлять: `Comparator<Animal>` подходит для `Comparator<in Dog>`. В Kotlin это объявляется на уровне интерфейса (declaration-site variance), а не на месте использования как в Java wildcards.
+
+Аналогия из жизни: представьте автомат по продаже напитков. **Covariance (out)** — это торговый автомат. Автомат с яблочным соком (Producer<AppleJuice>) подходит как автомат с напитками (Producer<Drink>): вы только берёте из него, и яблочный сок — это напиток. **Contravariance (in)** — это мусорное ведро. Ведро для любого мусора (Consumer<Trash>) подходит как ведро для пластика (Consumer<Plastic>): вы только кладёте в него, и если оно принимает любой мусор, оно примет и пластик. **Invariance** — это почтовый ящик с ключом определённого размера. Только этот ключ подходит, никакие «похожие» не подойдут — потому что вы и кладёте, и забираете.
 
 ---
 
@@ -196,8 +202,9 @@ inline fun <reified T> createArray(size: Int): Array<T?> {
 
 ### Generic constraints в деталях
 
+Upper bound ограничивает generic тип сверху. `T : Number` означает «T должен быть подтипом Number»:
+
 ```kotlin
-// Upper bound - T должен быть подтипом Number
 class NumberBox<T : Number>(val value: T) {
     fun doubleValue(): Double = value.toDouble()
 }
@@ -205,44 +212,29 @@ class NumberBox<T : Number>(val value: T) {
 val intBox = NumberBox(42)      // OK: Int : Number
 val doubleBox = NumberBox(3.14) // OK: Double : Number
 // val strBox = NumberBox("42")    // ❌ Ошибка: String не Number
+```
 
-// Nullable upper bound
-class NullableBox<T : Any?>(val value: T) {
-    // T может быть nullable
-}
+По умолчанию upper bound — `Any?` (T может быть nullable). Для non-null ограничения используйте `T : Any`:
 
-val box1 = NullableBox(42)    // T = Int
-val box2 = NullableBox(null)  // T = Nothing?
+```kotlin
+class NonNullBox<T : Any>(val value: T)
 
-// Non-null upper bound (по умолчанию - Any?)
-class NonNullBox<T : Any>(val value: T) {
-    // T не может быть nullable
-}
+val box = NonNullBox(42)     // OK
+// val bad = NonNullBox(null)   // ❌ Ошибка
+```
 
-val box3 = NonNullBox(42)     // OK
-// val box4 = NonNullBox(null)   // ❌ Ошибка
+Множественные constraints задаются через `where`. Рекурсивные type bounds позволяют типу ссылаться на себя — классический паттерн для самотипизированных иерархий:
 
-// Множественные constraints
-interface Printable {
-    fun print()
-}
-
+```kotlin
 fun <T> process(item: T)
         where T : Comparable<T>,
-              T : Printable,
               T : CharSequence {
-    item.print()
-    item.compareTo("")
-    println(item.length)
+    println(item.length)         // CharSequence
+    println(item.compareTo(""))  // Comparable
 }
 
-// Рекурсивные type bounds
-interface Node<T : Node<T>> {
+interface Node<T : Node<T>> {   // Рекурсивный bound
     val children: List<T>
-}
-
-class TreeNode : Node<TreeNode> {
-    override val children: List<TreeNode> = emptyList()
 }
 ```
 
@@ -520,77 +512,53 @@ println(getClassName<String>())  // "String"
 println(getClassName<List<Int>>())  // "List"
 ```
 
-**Почему только для inline?**
-- inline вставляет код функции в место вызова
-- В месте вызова тип T известен
-- Компилятор подставляет конкретный тип вместо T
+**Почему только для inline?** Обычная generic-функция компилируется один раз — в ней T стёрт (type erasure). Но inline-функция не существует как отдельный метод в bytecode: её тело копируется в каждое место вызова. В месте вызова конкретный тип T известен компилятору, поэтому он подставляет реальный тип вместо T. Если вы написали `isInstanceOfReified<String>(value)`, компилятор вставит `value is String` — никакого generic, просто конкретная проверка.
+
+**Механизм работы.** Когда компилятор встречает вызов inline-функции с reified-параметром, он выполняет три шага: (1) копирует тело функции в место вызова, (2) заменяет все `T` на конкретный тип, (3) заменяет `T::class` на `String::class` (или другой конкретный KClass). Результат — в bytecode нет никаких generics, только конкретный код. Это означает, что каждый вызов с разным типом генерирует свою копию кода, что увеличивает размер bytecode, но даёт возможности, недоступные обычным generics.
+
+**Ограничения подхода.** Reified работает только для inline-функций — это принципиальное ограничение, не техническое решение. Обычные функции нельзя сделать reified, потому что они компилируются один раз и вызываются через vtable. Также reified не решает проблему полностью: вложенные generic-типы (`List<String>`) теряют внутренний тип — `T::class` для `List<String>` вернёт `List`, а не `List<String>`. Для работы с параметризованными типами в runtime нужен TypeToken-паттерн (используется в Gson, Jackson).
 
 ### Практические примеры reified
 
+Самый частый паттерн — фильтрация по типу. Стандартная библиотека Kotlin использует reified именно для этого:
+
 ```kotlin
-// Фильтрация по типу
 inline fun <reified T> List<*>.filterIsInstance(): List<T> {
     val result = mutableListOf<T>()
     for (element in this) {
-        if (element is T) {
-            result.add(element)
-        }
+        if (element is T) result.add(element)
     }
     return result
 }
 
 val mixed: List<Any> = listOf(1, "two", 3.0, "four", 5)
 val strings = mixed.filterIsInstance<String>()  // ["two", "four"]
-val numbers = mixed.filterIsInstance<Number>()  // [1, 3.0, 5]
+```
 
-// JSON parsing
+Другой распространённый паттерн — JSON-парсинг, где reified избавляет от явной передачи `Class<T>`:
+
+```kotlin
 inline fun <reified T> String.fromJson(): T {
     return Gson().fromJson(this, T::class.java)
 }
 
 val user: User = jsonString.fromJson()  // Тип выводится!
-val users: List<User> = jsonArrayString.fromJson()
+```
 
-// Intent extras (Android)
-inline fun <reified T> Intent.getExtra(key: String): T? {
-    return when (T::class) {
-        String::class -> getStringExtra(key) as? T
-        Int::class -> getIntExtra(key, 0) as? T
-        Boolean::class -> getBooleanExtra(key, false) as? T
-        else -> getSerializableExtra(key) as? T
-    }
-}
+Reified также полезен для dependency injection — ServiceLocator может выдавать сервисы по типу без явного указания класса:
 
-val name: String? = intent.getExtra("name")
-val age: Int? = intent.getExtra("age")
-
-// Создание массива generic типа
-inline fun <reified T> genericArray(size: Int, init: (Int) -> T): Array<T> {
-    return Array(size) { init(it) }
-}
-
-val intArray = genericArray(5) { it * 2 }     // Array<Int>
-val strArray = genericArray(3) { "Item $it" } // Array<String>
-
-// Dependency injection
+```kotlin
 class ServiceLocator {
     private val services = mutableMapOf<Class<*>, Any>()
-
-    fun <T : Any> register(instance: T, clazz: Class<T>) {
-        services[clazz] = instance
-    }
 
     inline fun <reified T : Any> get(): T {
         @Suppress("UNCHECKED_CAST")
         return services[T::class.java] as? T
-            ?: throw IllegalStateException("Service not found: ${T::class.simpleName}")
+            ?: throw IllegalStateException("Not found: ${T::class.simpleName}")
     }
 }
 
-val locator = ServiceLocator()
-locator.register(MyServiceImpl(), MyService::class.java)
-
-val service = locator.get<MyService>()  // Без явного указания класса!
+val service = locator.get<MyService>()  // Без Class<T>!
 ```
 
 ### Ограничения reified
@@ -1102,25 +1070,28 @@ MutableList читается и пишется → invariant необходим
 
 ---
 
-## Связанные темы
-- [[kotlin-collections]] — Variance в коллекциях (List<out T>)
-- [[kotlin-advanced-features]] — Reified в extension functions
-- [[kotlin-functional]] — Variance в function types
-- [[kotlin-best-practices]] — Best practices для generics
+## Связь с другими темами
+
+[[kotlin-collections]] — Коллекции Kotlin (List, Set, Map) являются главным практическим примером variance: List<out T> — ковариантен (read-only), MutableList<T> — инвариантен (read-write). Понимание variance необходимо для осознания, почему List<String> можно присвоить в List<Any>, а MutableList<String> нельзя. Рекомендуется изучать коллекции и variance параллельно.
+
+[[kotlin-advanced-features]] — Продвинутые фичи Kotlin (inline functions, extension functions, delegates) тесно связаны с системой типов: reified типы работают только в inline-функциях, extension functions разрешаются статически по compile-time типу, а delegated properties используют generic-контракты. Этот материал расширяет понимание того, как type system влияет на продвинутые конструкции языка.
+
+[[kotlin-functional]] — Функциональные типы Kotlin ((A) -> B) имеют встроенную variance: параметры контравариантны (in), возвращаемое значение ковариантно (out). Это позволяет подставлять (Any) -> Int вместо (String) -> Number. Понимание variance в function types критически важно для проектирования type-safe callback API и DSL.
+
+[[kotlin-best-practices]] — Best practices для generics включают правила выбора variance (PECS principle), ограничения на использование star projections, рекомендации по reified типам и contracts. Знание type system помогает следовать этим практикам осознанно, а не механически. Рекомендуется как справочник после освоения теории.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Главы о generics и variance с подробным объяснением declaration-site vs use-site variance, сравнением с Java wildcards, и практическими примерами PECS.
+- Moskala M. (2021). *Effective Kotlin*. — Best practices для работы с generic-типами, включая правила выбора variance, ограничения reified типов и рекомендации по contracts.
+- Skeen J. (2019). *Kotlin Programming: The Big Nerd Ranch Guide*. — Доступное введение в систему типов Kotlin с пошаговыми примерами generics, variance и type projections.
 
 ---
 
-## Источники
+## Дополнительные ресурсы
 
-| # | Источник | Тип | Ключевой вклад |
-|---|----------|-----|----------------|
-| 1 | [Null Safety](https://kotlinlang.org/docs/null-safety.html) | Official Docs | Null safety система |
-| 2 | [Generics: in, out, where](https://kotlinlang.org/docs/generics.html) | Official Docs | Variance и bounds |
-| 3 | [Type System Specification](https://kotlinlang.org/spec/type-system.html) | Official Spec | Формальная спецификация |
-| 4 | [Type Checks and Casts](https://kotlinlang.org/docs/typecasts.html) | Official Docs | Smart casts, as, is |
-| 5 | [Kotlin Generics Explained](https://www.droidcon.com/2025/04/29/kotlin-generics-explained-once-upon-a-type/) | Conference | Практические примеры |
-| 6 | [Advanced Generics and Variance](https://carrion.dev/en/posts/advanced-kotlin-generics/) | Blog | Глубокий разбор variance |
-| 7 | [Smart Casts and Type Inference](https://jamshidbekboynazarov.medium.com/smart-casts-and-type-inference-in-kotlin-explained-6e325c07d620) | Blog | Smart casts примеры |
+- [Generics: in, out, where](https://kotlinlang.org/docs/generics.html) — официальная документация Kotlin по generics и variance
+- [Type System Specification](https://kotlinlang.org/spec/type-system.html) — формальная спецификация системы типов Kotlin
 
 ---
 

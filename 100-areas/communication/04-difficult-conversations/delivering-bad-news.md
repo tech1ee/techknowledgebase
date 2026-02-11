@@ -18,6 +18,10 @@ related:
   - "[[empathetic-listening]]"
   - "[[giving-feedback]]"
   - "[[conflict-resolution]]"
+prerequisites:
+  - "[[empathetic-listening]]"
+  - "[[giving-feedback]]"
+  - "[[conflict-resolution]]"
 ---
 
 # Delivering Bad News: как сообщать о сложном профессионально

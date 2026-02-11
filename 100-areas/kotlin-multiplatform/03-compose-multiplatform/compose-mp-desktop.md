@@ -5,7 +5,7 @@ modified: 2026-01-05
 tags:
   - topic/jvm
   - topic/kmp
-  - compose
+  - topic/android
   - desktop
   - windows
   - macos
@@ -18,6 +18,9 @@ related:
   - "[[compose-mp-overview]]"
   - "[[kmp-desktop-jvm]]"
   - "[[kmp-overview]]"
+prerequisites:
+  - "[[compose-mp-overview]]"
+  - "[[kmp-desktop-jvm]]"
 cs-foundations:
   - "[[jvm-internals]]"
   - "[[graphics-apis-fundamentals]]"
@@ -1131,6 +1134,22 @@ jobs:
 | [[native-packaging-distribution]] | Installers, signing | jpackage, Conveyor |
 | [[process-memory-management]] | JVM heap, native memory | Performance tuning |
 | [[cross-platform-development]] | Shared code strategies | Code organization |
+
+---
+
+## Связь с другими темами
+
+**[[compose-mp-overview]]** — Обзор Compose Multiplatform описывает общий фреймворк, а Desktop является его наиболее зрелой платформой. JetBrains использует Compose MP Desktop в собственных продуктах (Toolbox, Fleet), что обеспечивает production-grade стабильность. Понимание общей архитектуры (Skia rendering, composition, state management) необходимо перед погружением в desktop-специфичные возможности.
+
+**[[kmp-desktop-jvm]]** — Desktop JVM target описывает платформенный фундамент: JVM runtime, jpackage для нативных инсталляторов, системные API и работу с файловой системой. Compose MP Desktop работает поверх этого фундамента, предоставляя декларативный UI с Window API, Swing interop, нативными меню и системным треем. Вместе эти материалы дают полную картину desktop-разработки.
+
+**[[kmp-overview]]** — Обзор Kotlin Multiplatform помогает понять роль Desktop target в мультиплатформенной стратегии. Desktop JVM часто используется как первая платформа для прототипирования shared-кода благодаря быстрому циклу разработки и отладки на JVM. Понимание общей архитектуры KMP помогает организовать desktop-специфичный код в jvmMain source set.
+
+## Источники и дальнейшее чтение
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Глубокое понимание Kotlin на JVM необходимо для desktop-разработки: Java interop (Swing), работа с потоками, корутины и extension functions используются повсеместно в desktop-приложениях.
+2. **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по эффективному коду особенно актуальны для desktop: управление ресурсами (use, Closeable), обработка ошибок и оптимизация производительности JVM-приложений с GUI.
+3. **Skeen A. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое руководство по Kotlin с акцентом на JVM. Помогает понять взаимодействие Kotlin с Java-экосистемой, что важно для Swing interop и использования Java-библиотек в desktop-приложениях.
 
 ---
 

@@ -14,6 +14,9 @@ related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-compose]]"
   - "[[android-view-rendering-pipeline]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-custom-view-fundamentals]]"
 ---
 
 # Android Touch Handling
@@ -900,6 +903,19 @@ MotionEvent.ACTION_UP -> {
 
 ---
 
+## Связь с другими темами
+
+### [[android-custom-view-fundamentals]]
+Custom Views — основная область применения touch handling. Создание собственных жестов (swipe-to-dismiss, drag-and-drop, pinch-to-zoom) требует переопределения onTouchEvent() и понимания MotionEvent lifecycle. Без знания Custom View API невозможно корректно обрабатывать касания — нужно понимать, как View получает размеры, рисуется и реагирует на input. Изучите Custom Views перед углублением в touch handling.
+
+### [[android-compose]]
+Compose предоставляет декларативный API для обработки касаний: pointerInput, detectTapGestures, detectDragGestures. Этот API проще View-based подхода для 90% случаев, но под капотом использует те же принципы event dispatching. Понимание View touch system помогает при работе с interop (AndroidView в Compose) и при создании сложных кастомных жестов, которые выходят за рамки стандартных Compose API.
+
+### [[android-view-rendering-pipeline]]
+Touch handling и rendering pipeline тесно связаны: InputEvent проходит через тот же ViewRootImpl, который координирует measure/layout/draw. Choreographer обрабатывает input events до rendering, обеспечивая отзывчивость UI. Понимание rendering pipeline объясняет timing touch events и почему тяжёлые операции в onTouchEvent() приводят к пропуску кадров и jank.
+
+---
+
 ## Источники
 
 - [Android Developers — Manage touch events in ViewGroup](https://developer.android.com/develop/ui/views/touch-and-input/gestures/viewgroup)
@@ -908,6 +924,12 @@ MotionEvent.ACTION_UP -> {
 - [Android Developers — Track touch movements](https://developer.android.com/develop/ui/views/touch-and-input/gestures/movement)
 - [droidcon — Android Touch System](https://www.droidcon.com/2022/02/11/android-touch-system-part-1-touch-functions-and-the-view-hierarchy/)
 - [Android Design Patterns — Nested Scrolling](https://www.androiddesignpatterns.com/2018/01/experimenting-with-nested-scrolling.html)
+
+## Источники и дальнейшее чтение
+
+- **Meier R. (2022). Professional Android.** — Покрытие touch event dispatching, GestureDetector и custom gesture handling в контексте Android View system. Практические примеры обработки multi-touch и nested scrolling.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое введение в обработку касаний с проектами, включающими drag-and-drop и custom views с touch interaction. Хороший старт для понимания touch event flow.
+- **Vasavada N. (2019). Android Internals.** — Детали InputDispatcher, InputChannel и пути touch event от hardware через kernel input driver до ViewRootImpl. Для тех, кто хочет понять полный stack обработки касаний.
 
 ---
 

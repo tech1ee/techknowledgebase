@@ -16,6 +16,10 @@ related:
   - "[[android-dependency-injection]]"
   - "[[android-koin-deep-dive]]"
   - "[[android-architecture-patterns]]"
+prerequisites:
+  - "[[android-architecture-patterns]]"
+  - "[[android-dagger-deep-dive]]"
+  - "[[android-activity-lifecycle]]"
 ---
 
 # Hilt Deep-dive: от Dagger до production
@@ -1338,22 +1342,21 @@ val repo = entryPoint.getRepository()
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**DI основы:**
-→ [[dependency-injection-fundamentals]] — базовые концепции DI, DIP, IoC
+**[[dependency-injection-fundamentals]]** — Hilt реализует Dependency Inversion Principle и Inversion of Control через compile-time code generation. Без понимания базовых концепций DI (конструкторная инъекция, field injection, scope, lifetime) сложно оценить преимущества предопределённых Hilt-компонентов. Рекомендуется начинать с теории DI.
 
-**Android DI:**
-→ [[android-dependency-injection]] — обзор DI решений для Android
-→ [[android-koin-deep-dive]] — альтернатива Hilt для KMP
+**[[android-dagger-deep-dive]]** — Hilt построен поверх Dagger 2 и генерирует Dagger-компоненты, модули и entry points автоматически. Понимание Dagger необходимо для отладки Hilt: сгенерированный код содержит Dagger @Component, @Module и @Subcomponent. Когда стандартные Hilt scopes не подходят, приходится работать на уровне Dagger. Рекомендуется изучить Dagger перед Hilt.
 
-**Архитектура:**
-→ [[android-architecture-patterns]] — MVVM, Clean Architecture с Hilt
-→ [[android-testing]] — тестирование с Hilt
+**[[android-koin-deep-dive]]** — Koin является альтернативой Hilt с runtime DI подходом и поддержкой Kotlin Multiplatform. Сравнение: Hilt даёт compile-time safety и лучшую интеграцию с Jetpack, Koin — простоту и KMP-совместимость. Выбор зависит от требований проекта. Порядок изучения не важен.
+
+**[[android-architecture-patterns]]** — Hilt тесно интегрирован с MVVM и Clean Architecture через предопределённые scopes (SingletonComponent, ActivityComponent, ViewModelComponent). @HiltViewModel автоматически предоставляет ViewModel с injected dependencies. Понимание архитектурных паттернов — предпосылка для правильного проектирования Hilt модулей.
+
+**[[android-testing]]** — Hilt предоставляет мощный инструментарий для тестирования: @HiltAndroidTest, @UninstallModules, @BindValue. Эти механизмы позволяют подменять зависимости в unit и integration тестах без рефакторинга production-кода. Изучайте после освоения Hilt.
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
 
 **Официальная документация:**
 - [Hilt — Android Developers](https://developer.android.com/training/dependency-injection/hilt-android)
@@ -1365,6 +1368,12 @@ val repo = entryPoint.getRepository()
 - [Scoping in Android and Hilt — Manuel Vivo](https://medium.com/androiddevelopers/scoping-in-android-and-hilt-c2e5222317c0)
 - [Using Hilt's ViewModelComponent](https://medium.com/androiddevelopers/using-hilts-viewmodelcomponent-53b46515c4f4)
 - [Dagger 2 Generated Code — MindOrks](https://medium.com/mindorks/dagger-2-generated-code-9def1bebc44b)
+
+### Книги
+
+- **Bloch J. (2018)** *Effective Java* — Item 5 "Prefer dependency injection to hardwiring resources" — теоретическое обоснование DI, которое Hilt автоматизирует.
+- **Moskala M. (2021)** *Effective Kotlin* — практические рекомендации по DI в Kotlin, включая scoping, lifecycle management и тестирование с Hilt.
+- **Meier R. (2022)** *Professional Android* — интеграция Hilt с Jetpack компонентами (ViewModel, WorkManager, Navigation) в production Android приложениях.
 
 ---
 

@@ -20,6 +20,10 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-process-memory]]"
 cs-foundations: [publish-subscribe, observer-pattern, message-queue, event-bus, ordered-delivery, priority-queue, binder-ipc]
+prerequisites:
+  - "[[android-app-components]]"
+  - "[[android-activity-lifecycle]]"
+  - "[[android-permissions-security]]"
 ---
 
 # Broadcast Internals: механизм рассылки событий в Android
@@ -2431,7 +2435,14 @@ context.sendBroadcast(Intent("com.example.IMAGE_READY").apply {
 
 ---
 
-## Источники
+## Источники и дальнейшее чтение
+
+**Книги:**
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: BroadcastQueue, ActivityManagerService, Binder IPC — механизмы, через которые работает система рассылки событий
+- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая BroadcastReceiver, Intent filters и security best practices
+- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM: понимание thread safety критично при работе с goAsync() и фоновыми потоками в broadcast receivers
+
+**Веб-ресурсы:**
 
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|

@@ -16,6 +16,9 @@ related:
   - "[[android-custom-view-fundamentals]]"
   - "[[android-ui-views]]"
   - "[[android-view-rendering-pipeline]]"
+prerequisites:
+  - "[[android-ui-views]]"
+  - "[[android-custom-view-fundamentals]]"
 ---
 
 # View Measurement: onMeasure и MeasureSpec
@@ -888,6 +891,19 @@ Debug.stopMethodTracing()
 
 ---
 
+## Связь с другими темами
+
+### [[android-custom-view-fundamentals]]
+View Measurement — первый и самый критичный этап при создании Custom Views. Каждый Custom View должен правильно реализовать onMeasure(), иначе он будет иметь нулевой размер или занимать всё доступное пространство. Понимание MeasureSpec, setMeasuredDimension() и resolveSize() — обязательный фундамент для любой кастомной View. Изучите основы Custom Views перед углублением в measurement.
+
+### [[android-ui-views]]
+View hierarchy и LayoutParams определяют, какие constraints передаются в onMeasure(). match_parent транслируется в EXACTLY, wrap_content — в AT_MOST, а ScrollView передаёт UNSPECIFIED. Без понимания View hierarchy невозможно предсказать, какой MeasureSpec получит конкретная View. Изучите View System для понимания контекста, в котором работает measurement.
+
+### [[android-view-rendering-pipeline]]
+Measurement — первая фаза rendering pipeline (measure → layout → draw). Результаты onMeasure() используются в onLayout() для позиционирования views, а затем в onDraw() для отрисовки. Double taxation (многократные проходы measure) — главная причина jank в сложных layout hierarchies. Понимание полного pipeline объясняет, почему оптимизация measurement критична для производительности.
+
+---
+
 ## Источники
 
 | Источник | Тип | Вклад |
@@ -898,6 +914,12 @@ Debug.stopMethodTracing()
 | [Custom View: mastering onMeasure](https://medium.com/@quiro91/custom-view-mastering-onmeasure-a0a0bb11784d) | Expert Blog | onMeasure best practices |
 | [ViewGroup.MarginLayoutParams](https://developer.android.com/reference/android/view/ViewGroup.MarginLayoutParams) | Official | MarginLayoutParams API |
 | [The Life Cycle of a View](https://proandroiddev.com/the-life-cycle-of-a-view-in-android-6a2c4665b95e) | Technical | View lifecycle |
+
+## Источники и дальнейшее чтение
+
+- **Meier R. (2022). Professional Android.** — Детальное описание View measurement process, включая custom ViewGroup implementation и оптимизацию layout passes. Практические примеры onMeasure() для различных сценариев.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое создание custom views с корректным measurement. Помогает понять, как MeasureSpec работает на практике через построение реальных компонентов.
+- **Vasavada N. (2019). Android Internals.** — Внутреннее устройство ViewRootImpl.performMeasure(), алгоритмы обхода view tree и механизм double taxation. Для глубокого понимания того, как Android измеряет тысячи views за 16ms.
 
 ---
 

@@ -18,6 +18,10 @@ tags:
 related:
   - "[[building-engineering-team]]"
   - "[[team-structures]]"
+prerequisites:
+  - "[[building-engineering-team]]"
+  - "[[team-structures]]"
+  - "[[em-fundamentals]]"
 ---
 
 # Масштабирование инженерной организации
@@ -173,19 +177,19 @@ Self-service, internal products.
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[team-structures]] — структуры команд
-- [[building-engineering-team]] — базовые принципы
-- [[startup-cto]] — scaling в стартапах
+**[[building-engineering-team]]** — Масштабирование организации начинается с умения строить отдельные команды. Принципы формирования команды — найм, онбординг, создание культуры — остаются фундаментом на каждом этапе роста. Понимание динамики малых групп критично для того, чтобы при масштабировании не потерять качество отдельных команд ради количества.
 
-## Источники
+**[[team-structures]]** — Выбор структуры команд (stream-aligned, platform, enabling) является ключевым решением при масштабировании инженерной организации. Conway's Law показывает, что архитектура системы отражает структуру организации, поэтому правильный выбор team topology напрямую определяет архитектурные возможности. На каждом этапе роста (10, 30, 100, 300+ инженеров) оптимальная структура команд меняется.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
-| [Team Topologies](https://teamtopologies.com/) | Book |
-| Conway's Law | Concept |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
 
 ---
 

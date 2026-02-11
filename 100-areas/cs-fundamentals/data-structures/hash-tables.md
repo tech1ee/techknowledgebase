@@ -1542,6 +1542,16 @@ fun subarraySum(nums: IntArray, k: Int): Int {
 
 ---
 
+## Связь с другими темами
+
+**[[lru-cache]]** --- классическая комбинация HashMap + DoublyLinkedList, дающая O(1) для операций get и put. HashMap обеспечивает мгновенный доступ к узлу по ключу, а двусвязный список поддерживает порядок использования --- последний запрошенный элемент перемещается в голову, а при переполнении удаляется хвост. Эта задача --- одна из самых частых на собеседованиях (LeetCode #146) и демонстрирует силу комбинирования структур данных.
+
+**[[two-pointers-pattern]]** --- hash lookup часто выступает альтернативой одному из указателей в паттерне two pointers. Классический пример --- задача Two Sum: через отсортированный массив + два указателя решается за O(n), но hash map позволяет обойтись без сортировки и также получить O(n). Выбор между подходами зависит от ограничений: hash требует O(n) памяти, two pointers --- предварительной сортировки O(n log n).
+
+**[[frequency-counting]]** --- HashMap является основным инструментом для подсчёта частот элементов. Паттерн `map[key] = map.getOrDefault(key, 0) + 1` используется в десятках задач: анаграммы, majority element, top-K frequent. Frequency map также лежит в основе паттерна sliding window с переменным размером окна, где map отслеживает состав текущего окна.
+
+---
+
 ## 20. Источники
 
 | # | Источник | Тип | Что взято |
@@ -1553,6 +1563,12 @@ fun subarraySum(nums: IntArray, k: Int): Int {
 | 5 | [Baeldung - Java HashMap](https://www.baeldung.com/java-hashmap) | Deep dive | Java internals |
 | 6 | [GeeksforGeeks - Hash Table](https://www.geeksforgeeks.org/dsa/hash-table-data-structure/) | Reference | Collision resolution |
 | 7 | [Medium - Magic of O(1)](https://medium.com/nerd-for-tech/the-magic-of-hash-tables-a-quick-deep-dive-into-o-1-1295199fcd05) | Explanation | O(1) proof |
+
+### Книги
+
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms."** --- глава 11: hash tables, universal hashing, perfect hashing с полными доказательствами ожидаемых сложностей
+- **Knuth (1998). "The Art of Computer Programming, Vol. 3: Sorting and Searching."** --- глубочайший анализ хеширования: линейное и квадратичное пробирование, double hashing, математический анализ кластеризации
+- **Sedgewick & Wayne (2011). "Algorithms."** --- hash tables с реализацией separate chaining и linear probing на Java, визуализации распределения коллизий
 
 *Исследование проведено: 2025-12-29*
 *Обновлено: 2026-01-06 — добавлены педагогические секции (интуиция хеширования, типичные ошибки, 4 ментальные модели)*

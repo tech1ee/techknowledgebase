@@ -14,6 +14,8 @@ related:
   - "[[portfolio-strategy]]"
   - "[[ai-interview-preparation]]"
   - "[[android-senior-2026]]"
+prerequisites:
+  - "[[job-search-strategy]]"
 ---
 
 # Resume Strategy 2026: 6 секунд и 95% AI-скрининг
@@ -629,6 +631,26 @@ FINAL:
 → [[portfolio-strategy]] — GitHub portfolio для Senior
 → [[ai-interview-prompts]] — AI промпты для подготовки
 → [[interview-tracking-system]] — трекинг откликов
+
+---
+
+## Связь с другими темами
+
+- **[[linkedin-optimization]]** — LinkedIn — расширение резюме, которое рекрутеры проверяют в 95% случаев. Keywords, achievements и позиционирование должны совпадать в обоих документах. LinkedIn дополняет резюме social proof (endorsements, activity), которого нет в PDF. Стратегия для обоих документов строится вместе.
+
+- **[[portfolio-strategy]]** — GitHub portfolio — доказательная база для claims в резюме. «Led migration to Compose» в резюме + публичный repo с Compose code = гораздо более убедительная история. Portfolio особенно важен для remote-позиций, где нет возможности продемонстрировать навыки в офисе.
+
+- **[[ai-interview-preparation]]** — AI tools (Claude, GPT) используются для оптимизации резюме: анализ JD, генерация impact statements, ATS score check. AI-подготовка к интервью начинается с правильного резюме — оно определяет, какие вопросы зададут. Промпты из этого гайда помогают tailoring резюме под конкретные вакансии.
+
+- **[[android-senior-2026]]** — Гайд по Senior Android интервью определяет, какие навыки и achievements должны быть в резюме. Compose, KMP, System Design — must-have keywords. Resume strategy для Android Senior строится на требованиях конкретного рынка 2026 года.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит примеры резюме для tech-позиций и детальный разбор, как рекрутеры оценивают каждый bullet point. Формула «Action + Task + Result» из книги — основа impact statements.
+
+- **Bolles R.N. (2023). What Color Is Your Parachute?** — Фундаментальный подход к resume strategy: не просто список навыков, а storytelling карьерного пути. Помогает выстроить narrative, который резонирует с hiring managers и проходит AI-скрининг.
 
 ---
 

@@ -6,6 +6,13 @@ tags:
   - topic/databases
   - type/guide
   - level/intermediate
+related:
+  - "[[cloud-platforms-essentials]]"
+  - "[[databases-replication-sharding]]"
+  - "[[cloud-aws-core-services]]"
+prerequisites:
+  - "[[databases-replication-sharding]]"
+  - "[[cloud-platforms-essentials]]"
 ---
 
 # Cloud Databases: Complete Guide
@@ -2272,3 +2279,21 @@ pscale deploy-request create mydb feature-branch
 neon branches list
 neon connection-string
 ```
+
+---
+
+## Связь с другими темами
+
+[[cloud-platforms-essentials]] — Основы облачных платформ (AWS, GCP, Azure) дают контекст для понимания managed database сервисов: VPC, IAM, регионы, зоны доступности. Без этого фундамента сложно настроить безопасный доступ к cloud-базам и правильно выбрать конфигурацию Multi-AZ. Рекомендуется изучить до перехода к конкретным database-сервисам.
+
+[[databases-replication-sharding]] — Репликация и шардинг являются ключевыми механизмами, которые cloud databases реализуют «под капотом»: Aurora использует shared storage с 6 копиями, DynamoDB автоматически шардирует по partition key, Spanner реплицирует глобально. Понимание этих концепций помогает правильно интерпретировать cloud-настройки и диагностировать проблемы производительности.
+
+[[cloud-aws-core-services]] — Основные сервисы AWS (EC2, S3, VPC, IAM) формируют экосистему вокруг managed databases: RDS работает в VPC, Aurora интегрируется с S3 для backup, DynamoDB Streams подключается к Lambda. Знание этих сервисов необходимо для построения полноценной cloud-архитектуры с базами данных. Рекомендуется как параллельный материал.
+
+[[databases-fundamentals-complete]] — Фундаментальные концепции баз данных (ACID, индексы, нормализация, CAP-теорема) остаются актуальными и для cloud databases. Managed-сервисы автоматизируют операционные задачи, но разработчик по-прежнему отвечает за schema design, query optimization и выбор isolation level. Это обязательный пререквизит для данного материала.
+
+## Источники и дальнейшее чтение
+
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о репликации, партиционировании и распределённых транзакциях объясняют внутренние механизмы Aurora, Spanner и Cosmos DB. Незаменимая книга для понимания trade-offs cloud databases.
+- Petrov A. (2019). *Database Internals*. — Разделы о distributed storage и consensus-протоколах (Paxos, Raft) помогают понять, как работают globally distributed databases (Spanner, CockroachDB) и почему они обеспечивают strong consistency.
+- Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Классический учебник, который даёт академическое понимание concurrency control, recovery и query processing — фундамент для оценки возможностей managed database сервисов.

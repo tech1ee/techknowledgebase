@@ -19,6 +19,10 @@ related:
   - "[[negotiation-fundamentals]]"
   - "[[performance-conversations]]"
   - "[[delivering-bad-news]]"
+prerequisites:
+  - "[[active-listening]]"
+  - "[[negotiation-fundamentals]]"
+  - "[[empathetic-listening]]"
 ---
 
 # Conflict Resolution для IT-специалистов

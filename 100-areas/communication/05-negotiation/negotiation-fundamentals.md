@@ -18,6 +18,9 @@ tags:
 related:
   - "[[active-listening]]"
   - "[[stakeholder-negotiation]]"
+prerequisites:
+  - "[[active-listening]]"
+  - "[[communication-styles]]"
 ---
 
 # Negotiation Fundamentals для IT-специалистов

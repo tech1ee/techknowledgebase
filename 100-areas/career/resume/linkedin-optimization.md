@@ -14,6 +14,8 @@ related:
   - "[[portfolio-strategy]]"
   - "[[networking-tactics]]"
   - "[[personal-brand]]"
+prerequisites:
+  - "[[resume-strategy]]"
 ---
 
 # LinkedIn 2026: AI-алгоритм и 95% рекрутеров
@@ -832,6 +834,26 @@ TARGET: 70+ для хорошей visibility
 → [[portfolio-strategy]] — GitHub portfolio
 → [[networking-tactics]] — использование connections
 → [[personal-brand]] — долгосрочная стратегия
+
+---
+
+## Связь с другими темами
+
+- **[[resume-strategy]]** — LinkedIn и резюме — два лица одного кандидата. LinkedIn — расширенная версия резюме с activity, endorsements и social proof. Рекрутеры проверяют LinkedIn в 95% случаев после просмотра резюме, и несоответствия вызывают red flags. Оба документа должны быть синхронизированы по ключевым достижениям и keywords.
+
+- **[[portfolio-strategy]]** — GitHub portfolio усиливает LinkedIn через Featured секцию и ссылки в Experience. Сильный portfolio (pinned repos, contributions, demo apps) добавляет доказательности к LinkedIn claims. Вместе они создают полную картину: LinkedIn показывает карьерный путь, portfolio — технические навыки в действии.
+
+- **[[networking-tactics]]** — LinkedIn — основная платформа для профессионального networking. Тактики networking (value-first approach, informational interviews, 6-8 touchpoints) реализуются именно через LinkedIn. Оптимизированный профиль кратно усиливает каждое networking-действие: больше accept rate, больше InMail ответов.
+
+- **[[personal-brand]]** — LinkedIn Creator Mode, посты, и Top Voice badges — инструменты building personal brand. Долгосрочная стратегия personal brand определяет, какой контент постить и как позиционировать себя на LinkedIn. Personal brand превращает LinkedIn из пассивного профиля в активный канал входящих возможностей.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Bolles R.N. (2023). What Color Is Your Parachute?** — Содержит актуальные главы об онлайн-присутствии и использовании LinkedIn для поиска работы. Помогает выстроить стратегию использования LinkedIn не как «онлайн-резюме», а как инструмент active career management.
+
+- **Fournier C. (2017). The Manager's Path.** — Для Senior+ разработчиков, строящих personal brand на LinkedIn. Понимание engineering leadership помогает создавать контент, который резонирует с hiring managers и recruiters на Staff+ позициях.
 
 ---
 

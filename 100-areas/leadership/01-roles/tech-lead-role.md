@@ -18,6 +18,8 @@ tags:
 related:
   - "[[ic-vs-management]]"
   - "[[em-fundamentals]]"
+prerequisites:
+  - "[[ic-vs-management]]"
 ---
 
 # Tech Lead: роль, обязанности, навыки
@@ -617,6 +619,20 @@ SOFT SKILLS:
 - **Talking with Tech Leads** (Pat Kua) — интервью с TLs
 
 *Исследование проведено: 2026-01-18*
+
+---
+
+## Связь с другими темами
+
+**[[ic-vs-management]]** — Tech Lead — это часто развилка, после которой инженер выбирает между IC track (Staff Engineer) и Management track (Engineering Manager). Понимание различий между треками помогает Tech Lead осознанно планировать следующий карьерный шаг. Tech Lead роль уникальна тем, что даёт опыт как технического лидерства, так и элементов management, что делает её идеальной "пробной площадкой" перед окончательным выбором.
+
+**[[em-fundamentals]]** — Для Tech Lead, рассматривающего переход в Engineering Manager, em-fundamentals показывает, как изменится ежедневная работа. Если Tech Lead тратит 30-50% на код и 40-50% на meetings, то EM переходит к 0-20% кода и 60-80% meetings. Понимание этих различий и конкретных обязанностей EM (performance reviews, career conversations, hiring ownership) помогает Tech Lead оценить, готов ли он к такому сдвигу фокуса.
+
+## Источники и дальнейшее чтение
+
+- **Camille Fournier, "The Manager's Path" (2017)** — Содержит отдельную главу о роли Tech Lead, включая детальное описание обязанностей, распределения времени и типичных ошибок. Показывает Tech Lead как ступень в карьерной лестнице и объясняет, как эта роль связана с последующим выбором IC или management трека.
+- **Will Larson, "Staff Engineer" (2022)** — Описывает Tech Lead как один из четырёх архетипов Staff Engineer (наряду с Architect, Solver и Right Hand). Помогает понять, как роль Tech Lead эволюционирует при расширении scope от одной команды к нескольким.
+- **Patrick Lencioni, "The Five Dysfunctions of a Team" (2002)** — Хотя Tech Lead не является формальным менеджером, он значительно влияет на динамику команды. Понимание пяти дисфункций помогает Tech Lead распознавать проблемы в команде и работать с EM над их решением.
 
 ---
 

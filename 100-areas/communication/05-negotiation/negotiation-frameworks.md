@@ -17,6 +17,8 @@ tags:
 related:
   - "[[negotiation-fundamentals]]"
   - "[[stakeholder-negotiation]]"
+prerequisites:
+  - "[[negotiation-fundamentals]]"
 ---
 
 # Negotiation Frameworks: от Harvard Method до современных подходов

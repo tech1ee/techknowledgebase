@@ -18,6 +18,8 @@ related:
   - "[[technical-debt]]"
   - "[[networking-overview]]"
   - "[[os-networking]]"
+prerequisites:
+  - "[[git-workflows]]"
 ---
 
 # Docker для разработчиков: от хаоса к порядку

@@ -13,6 +13,9 @@ related:
   - "[[sorting-algorithms]]"
   - "[[recursion-fundamentals]]"
   - "[[binary-search-pattern]]"
+prerequisites:
+  - "[[recursion-fundamentals]]"
+  - "[[big-o-complexity]]"
 ---
 
 # Divide and Conquer

@@ -11,6 +11,10 @@ tags:
   - fastlane
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kmp-getting-started]]"
+  - "[[kmp-testing-strategies]]"
+  - "[[kmp-project-structure]]"
 related:
   - [kmp-gradle-deep-dive]]
   - "[[kmp-publishing]]"
@@ -779,4 +783,22 @@ jobs:
 | [GitHub Actions Pricing](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-actions/about-billing-for-github-actions) | Official | Cost optimization |
 
 ---
+## Связь с другими темами
+
+- **[[kmp-gradle-deep-dive]]** — CI/CD pipeline напрямую зависит от Gradle-конфигурации проекта: задачи `allTests`, `koverHtmlReport`, `assembleSharedReleaseXCFramework` вызываются из workflow. Оптимизация Gradle (parallel builds, configuration cache, ~/.konan caching) критически влияет на время и стоимость CI. Без понимания Gradle tasks невозможно настроить эффективный pipeline с правильным порядком зависимостей между jobs.
+
+- **[[kmp-publishing]]** — CI/CD является финальным этапом перед публикацией: tag-based workflows запускают публикацию в Maven Central (GPG signing, Sonatype) и генерацию XCFramework через KMMBridge для SPM. Автоматизация publishing через GitHub Actions устраняет человеческий фактор и обеспечивает воспроизводимые релизы с правильной версионированием и подписями.
+
+- **[[kmp-testing-strategies]]** — CI pipeline должен запускать тесты в правильном порядке: сначала быстрые JVM-тесты на дешёвом Linux runner ($0.008/min), затем iOS-тесты на дорогом macOS runner ($0.08/min) только после успеха JVM. Стратегия тестирования определяет, какие Gradle tasks включать в каждый job и как оптимизировать затраты через needs-зависимости между jobs.
+
+## Источники и дальнейшее чтение
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации Kotlin-проектов, включая Gradle conventions и модульность, которые напрямую влияют на структуру CI/CD: convention plugins упрощают конфигурацию, а правильная модуляризация позволяет параллельно билдить независимые модули.
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения ответственности и boundary interfaces применяются к организации CI/CD pipeline: отдельные jobs для lint, test, build, deploy с чёткими зависимостями образуют DAG, аналогичный архитектурным слоям приложения.
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin-экосистемы и Gradle-интеграции, необходимые для понимания KMP-билд процесса: targets, source sets, expect/actual — всё это определяет, какие Gradle tasks генерируются и как их организовать в CI workflow.
+
+---
+
 *Проверено: 2026-01-09 | GitHub Actions, Fastlane, Bitrise*

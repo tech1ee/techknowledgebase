@@ -1977,3 +1977,21 @@ fun countDistinctSubstrings(s: String): Long {
 - [Brilliant: KMP Algorithm](https://brilliant.org/wiki/knuth-morris-pratt-algorithm/)
 - [Wikipedia: Suffix Array](https://en.wikipedia.org/wiki/Suffix_array)
 - [GeeksforGeeks: Manacher's Algorithm](https://www.geeksforgeeks.org/manachers-algorithm-linear-time-longest-palindromic-substring-part-1/)
+
+---
+
+## Связь с другими темами
+
+### [[two-pointers-pattern]]
+Two Pointers используется в базовых строковых задачах (проверка палиндрома, reverse string), а продвинутые строковые алгоритмы решают те же классы задач, но для более сложных случаев. Например, Manacher's algorithm находит все палиндромные подстроки за O(n), тогда как наивный two-pointer подход требует O(n^2). Понимание two-pointer подхода формирует интуицию для перехода к продвинутым методам: если two pointers недостаточно быстры, значит нужна предобработка (prefix function, Z-function, hashing).
+
+### [[sliding-window-pattern]]
+Sliding Window и строковые алгоритмы тесно связаны через концепцию «окна» по тексту. Rabin-Karp использует rolling hash — по сути скользящее окно фиксированного размера, где хеш пересчитывается за O(1) при сдвиге. Многие задачи на строки (longest substring without repeating characters, minimum window substring) решаются именно sliding window. Продвинутые алгоритмы вроде KMP и Aho-Corasick можно рассматривать как «умное скользящее окно», которое не возвращается назад при несовпадении.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Cormen, Leiserson, Rivest & Stein (2009). *Introduction to Algorithms (CLRS).* — глава 32 (String Matching): формальное изложение Rabin-Karp, KMP и автоматного подхода; доказательства корректности и анализ сложности каждого алгоритма
+- Gusfield (1997). *Algorithms on Strings, Trees, and Sequences.* — наиболее полное академическое изложение строковых алгоритмов: suffix trees, suffix arrays, Aho-Corasick; стандартный учебник для углублённого изучения
+- Crochemore & Rytter (2003). *Jewels of Stringology.* — элегантные строковые алгоритмы с математическими доказательствами; глубокий разбор Z-function, prefix function и их связи; для продвинутого уровня

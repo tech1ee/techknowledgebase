@@ -6,6 +6,12 @@ tags:
   - topic/security
   - type/concept
   - level/intermediate
+related:
+  - "[[security-fundamentals]]"
+  - "[[mobile-security-owasp]]"
+  - "[[architecture-resilience-patterns]]"
+prerequisites:
+  - "[[security-fundamentals]]"
 ---
 
 # Threat Modeling: Моделирование угроз
@@ -1335,6 +1341,31 @@ Mitigation:
 - [Shift Left Security - Fortinet](https://www.fortinet.com/resources/cyberglossary/shift-left-security)
 - [Top 10 Threat Modeling Tools 2024 - daily.dev](https://daily.dev/blog/top-10-threat-modeling-tools-compared-2024)
 - [Data Flow Diagrams in Threat Modeling](https://threat-modeling.com/data-flow-diagrams-in-threat-modeling/)
+
+---
+
+## Связь с другими темами
+
+[[security-fundamentals]] — фундамент, на котором строится threat modeling. CIA Triad (Confidentiality, Integrity, Availability) напрямую соответствует категориям STRIDE: Spoofing нарушает аутентичность, Tampering — целостность, Information Disclosure — конфиденциальность, Denial of Service — доступность. Без понимания базовых принципов безопасности невозможно грамотно идентифицировать угрозы и оценивать их критичность. Рекомендуется изучить security-fundamentals перед погружением в threat modeling.
+
+[[mobile-security-owasp]] — OWASP Mobile Top 10 предоставляет конкретный каталог угроз, специфичных для мобильных приложений, который используется при threat modeling мобильных систем. При построении Data Flow Diagrams для мобильных приложений знание M1-M10 позволяет систематически идентифицировать угрозы на каждом элементе DFD. Threat modeling определяет методологию анализа, а Mobile Top 10 наполняет её конкретными паттернами атак — эти знания дополняют друг друга.
+
+[[architecture-resilience-patterns]] — паттерны устойчивости (Circuit Breaker, Bulkhead, Retry) являются конкретными контрмерами для угроз категории Denial of Service из STRIDE. При моделировании угроз важно знать, какие архитектурные решения доступны для митигации, а resilience patterns предоставляют проверенные подходы к защите от нарушения доступности. Рекомендуется изучать параллельно с threat modeling для формирования полного набора контрмер.
+
+[[web-security-owasp]] — OWASP Top 10 для веб-приложений даёт конкретные примеры уязвимостей (Broken Access Control, Injection, SSRF), которые должны быть идентифицированы при STRIDE-анализе веб-систем. Каждая категория OWASP Top 10 может быть отнесена к одной или нескольким категориям STRIDE, что делает эти фреймворки взаимодополняющими. Понимание конкретных уязвимостей из OWASP Top 10 значительно повышает качество threat modeling сессий.
+
+[[authentication-authorization]] — глубокое понимание механизмов аутентификации и авторизации критично для анализа угроз Spoofing и Elevation of Privilege из STRIDE. При threat modeling каждого пересечения trust boundary необходимо оценивать, насколько надёжно реализованы AuthN/AuthZ. Знание конкретных механизмов (MFA, OAuth, RBAC) позволяет предлагать эффективные контрмеры при обнаружении угроз.
+
+[[security-incident-response]] — threat model является входными данными для планирования incident response: идентифицированные угрозы определяют, какие playbooks нужно подготовить, какие IOC мониторить и какие severity levels назначать. Когда инцидент происходит, threat model помогает быстрее определить вектор атаки и масштаб воздействия. Обратная связь из post-mortem обогащает threat model новыми угрозами.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — основополагающая книга по threat modeling, автор Four Question Framework. Обязательна для всех, кто проводит моделирование угроз.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальный труд по инженерии безопасности, охватывающий threat modeling в контексте проектирования надёжных систем.
+- McGraw G. (2006). *Software Security: Building Security In.* Addison-Wesley. — классическая работа о встраивании безопасности в жизненный цикл разработки, включая architectural risk analysis как форму threat modeling.
+- Stallings W. (2017). *Cryptography and Network Security: Principles and Practice.* 7th Edition. Pearson. — для понимания криптографических контрмер, которые применяются при митигации угроз, выявленных через STRIDE.
 
 ---
 

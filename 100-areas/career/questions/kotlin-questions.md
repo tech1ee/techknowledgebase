@@ -14,6 +14,8 @@ related:
   - "[[android-questions]]"
   - "[[architecture-questions]]"
   - "[[technical-interview]]"
+prerequisites:
+  - "[[interview-process]]"
 ---
 
 # Kotlin Interview Questions: от basics до advanced
@@ -503,6 +505,24 @@ return user.also {
 | Optional | Optional<T> | T? (nullable type) |
 | Anonymous class | new Interface() { } | object : Interface { } |
 | Lambda | (x) -> x + 1 | { x -> x + 1 } или ::function |
+
+---
+
+## Связь с другими темами
+
+- **[[android-questions]]** — Kotlin — язык Android-разработки, и на интервью вопросы по Kotlin и Android тесно переплетаются. Coroutines и Flow появляются и в Kotlin-раунде, и в Android-раунде. Глубокое владение Kotlin (inline, reified, contracts) даёт преимущество в обоих типах вопросов.
+
+- **[[architecture-questions]]** — Архитектурные паттерны (MVI, Clean Architecture) реализуются на Kotlin, и знание языковых возможностей (sealed classes, delegation, extension functions) напрямую влияет на качество архитектурных решений. Интервьюеры оценивают, насколько идиоматично ты используешь Kotlin в архитектуре.
+
+- **[[technical-interview]]** — Kotlin-вопросы — один из столпов технического раунда для Android-позиций. Понимание формата технического интервью помогает правильно расставить приоритеты: basics обязательны, advanced (contracts, context receivers) — для Staff+ позиций. Формат ответа так же важен, как содержание.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Хотя примеры на Java, методология решения алгоритмических задач полностью применима к Kotlin. Главы о подходе к задачам, оптимизации решений и обсуждении trade-offs — универсальные навыки.
+
+- **Xu A. (2020). System Design Interview.** — Kotlin используется не только для UI, но и для System Design решений (KMP, backend). Понимание системного дизайна помогает отвечать на вопросы о Kotlin в контексте больших систем, а не изолированных функций.
 
 ---
 

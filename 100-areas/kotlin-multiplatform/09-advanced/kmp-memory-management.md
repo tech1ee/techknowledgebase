@@ -9,13 +9,17 @@ tags:
   - gc
   - arc
   - native
-  - ios
+  - topic/ios
   - type/concept
   - level/advanced
 related:
   - "[[kmp-performance-optimization]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-debugging]]"
+prerequisites:
+  - "[[kmp-ios-deep-dive]]"
+  - "[[kmp-expect-actual]]"
+  - "[[kmp-project-structure]]"
 cs-foundations:
   - "[[garbage-collection-explained]]"
   - "[[reference-counting-arc]]"
@@ -817,6 +821,24 @@ object Constants {
 | Netflix | Первый FAANG в production с KMP |
 | McDonald's | ~40% efficiency gains |
 | Cash App | Shared business logic |
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-performance-optimization]]** — Управление памятью и производительность неразрывно связаны. GC-паузы (stop-the-world) напрямую влияют на UI-фризы, а чрезмерное выделение объектов увеличивает частоту сборок мусора. Техники оптимизации — value classes (меньше аллокаций), sequences (меньше промежуточных коллекций), lazy initialization — это одновременно и memory, и performance оптимизации. Профилирование через Instruments помогает найти как memory leaks, так и bottlenecks.
+
+- **[[kmp-ios-deep-dive]]** — iOS-интеграция создаёт основные memory-сложности в KMP: mixed retain cycles на границе Kotlin-Swift, необходимость autoreleasepool для interop-циклов, особенности deinit на разных потоках. Понимание того, как Kotlin framework встраивается в iOS-приложение, объясняет, почему GC и ARC должны «договариваться» об освобождении объектов и почему memory graph в Xcode показывает Kotlin-объекты как ObjHeader.
+
+- **[[kmp-debugging]]** — Отладка утечек памяти — одна из самых сложных задач в KMP. Инструменты из материала по debugging (GC-логирование через `-Xruntime-logs=gc=info`, Xcode Memory Graph Debugger, Instruments с signposts) являются основными средствами диагностики memory issues. Умение читать GC-логи и находить retain cycles через Instruments — необходимый навык для production-разработки.
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины тесно связаны с управлением памятью: каждый launch создаёт объекты в heap, Dispatchers определяют, на каком потоке выполняется GC, а structured concurrency влияет на lifetime объектов. Книга объясняет, почему корутинный код может вызывать неожиданные memory spikes и как этого избежать.
+
+- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по работе с объектами (избегать лишних аллокаций, переиспользовать immutable объекты, правильно использовать lazy) напрямую влияют на memory footprint приложения. Особенно полезны советы по работе с коллекциями и sequences.
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Базовое понимание Kotlin runtime, type system и null safety необходимо для осознания того, как объекты представлены в памяти и почему nullable типы (boxing) увеличивают потребление памяти. Главы о generics помогают понять overhead type erasure на Native.
 
 ---
 

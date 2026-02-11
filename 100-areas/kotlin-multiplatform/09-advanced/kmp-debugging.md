@@ -9,12 +9,16 @@ tags:
   - lldb
   - xcode
   - crashlytics
-  - ios
-  - android
+  - topic/ios
+  - topic/android
   - type/concept
   - level/advanced
 related:
   - "[[kmp-memory-management]]"
+  - "[[kmp-ios-deep-dive]]"
+  - "[[kmp-testing-strategies]]"
+prerequisites:
+  - "[[kmp-getting-started]]"
   - "[[kmp-ios-deep-dive]]"
   - "[[kmp-testing-strategies]]"
 cs-foundations:
@@ -854,6 +858,24 @@ dwarfdump --uuid Shared.framework.dSYM
 |----------|-------|
 | [[compilation-pipeline]] | Понять debug symbols |
 | [[native-compilation-llvm]] | DWARF и LLDB
+
+---
+
+## Связь с другими темами
+
+- **[[kmp-memory-management]]** — Отладка утечек памяти в KMP требует понимания взаимодействия двух моделей управления памятью: tracing GC Kotlin/Native и ARC Swift. Без этих знаний вы не сможете интерпретировать результаты Xcode Instruments и диагностировать mixed retain cycles. Многие «необъяснимые» краши на iOS связаны именно с некорректным управлением памятью на границе Kotlin-Swift.
+
+- **[[kmp-ios-deep-dive]]** — Глубокое понимание iOS-интеграции необходимо для эффективной отладки: как устроен framework, как работает dSYM-символикация, почему LLDB видит Kotlin как C89. Проблемы с breakpoints, невидимыми переменными и отсутствием expression evaluation напрямую связаны с особенностями компиляции Kotlin/Native через LLVM. Этот материал объясняет архитектурные причины ограничений iOS-отладки.
+
+- **[[kmp-testing-strategies]]** — Юнит-тесты в commonTest — первая линия обороны против багов, и часто более эффективный инструмент отладки, чем debugger. Когда expression evaluation недоступен на iOS, изолированные тесты с runTest позволяют воспроизвести и исследовать проблему без симулятора. Стратегия «debug Android first, test common, verify iOS» основана на взаимодополняемости отладки и тестирования.
+
+## Источники и дальнейшее чтение
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Глубокое понимание корутин критично для отладки асинхронного кода в KMP. Книга объясняет, почему stack traces обрезаются при переключении контекста, как работает structured concurrency и как правильно обрабатывать CancellationException — частая причина крашей при переходе Kotlin→Swift.
+
+- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по обработке ошибок (Item: Prefer Kotlin Result), которые напрямую применимы к стратегии Result types вместо exceptions на границе Kotlin-Swift. Помогает писать код, который легче отлаживать.
+
+- Martin R. (2017). *Clean Architecture.* — Принцип разделения ответственности между слоями упрощает отладку: если баг в Repository, вы точно знаете, где ставить breakpoints. Чистая архитектура делает код предсказуемым и диагностируемым.
 
 ---
 

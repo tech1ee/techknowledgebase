@@ -8,7 +8,15 @@ tags:
   - annotations
   - type/concept
   - level/intermediate
+prerequisites:
+  - "[[kotlin-basics]]"
+  - "[[jvm-basics-history]]"
 status: published
+related:
+  - "[[ios-swift-objc-interop]]"
+  - "[[cross-interop]]"
+  - "[[jvm-jni-deep-dive]]"
+  - "[[kotlin-type-system]]"
 ---
 
 # Kotlin-Java Interop: бесшовная интеграция
@@ -60,36 +68,27 @@ Platform types (`String!`) — главная опасность: Java код в
 
 ### Java классы в Kotlin
 
+Kotlin автоматически распознаёт Java bean паттерн: getters/setters становятся properties. Это работает без каких-либо настроек:
+
 ```kotlin
-// Java класс
+// Java класс с getters/setters
 public class JavaUser {
     private String name;
     private int age;
-
-    public JavaUser(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public int getAge() { return age; }
     public void setAge(int age) { this.age = age; }
-
-    public static JavaUser createDefault() {
-        return new JavaUser("Unknown", 0);
-    }
 }
+```
 
-// Использование в Kotlin
+В Kotlin вызов выглядит естественно -- как обращение к свойствам:
+
+```kotlin
 val user = JavaUser("Alice", 25)
-
-// Getters/Setters → Properties
 println(user.name)  // Автоматически вызывает getName()
 user.age = 30       // Автоматически вызывает setAge(30)
-
-// Static методы
-val defaultUser = JavaUser.createDefault()
+val defaultUser = JavaUser.createDefault()  // Static методы
 ```
 
 **Почему свойства вместо getters/setters?**
@@ -99,42 +98,29 @@ val defaultUser = JavaUser.createDefault()
 
 ### Null-safety и Platform Types
 
+Java метод без аннотаций возвращает Platform Type (`String!`) -- Kotlin не знает, может ли значение быть null. Это самая опасная ситуация:
+
 ```kotlin
-// Java метод без аннотаций
-public String getName() {
-    return name;  // Может вернуть null!
-}
+val name = javaObject.name  // String! -- может быть null
+println(name.length)  // NullPointerException если null!
 
-// В Kotlin - Platform Type (String!)
-val name = javaObject.name  // String! - может быть null
-println(name.length)  // ⚠️ NullPointerException если null!
-
-// Безопасная работа:
+// Безопасная работа: явно укажите тип
 val name: String? = javaObject.name  // Явно nullable
 println(name?.length)  // Safe call
+```
 
-val name: String = javaObject.name  // Явно non-null
-// Если null → IllegalStateException
+Добавление аннотаций `@Nullable/@NotNull` в Java коде решает проблему. Kotlin-компилятор использует их для определения nullability:
 
-// Java с @Nullable/@NotNull аннотациями
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+```kotlin
+// Java код с аннотациями
 public class JavaUser {
-    @NotNull
-    public String getName() {
-        return name;
-    }
-
-    @Nullable
-    public String getMiddleName() {
-        return middleName;
-    }
+    @NotNull public String getName() { return name; }
+    @Nullable public String getMiddleName() { return middleName; }
 }
 
-// В Kotlin теперь правильные типы
-val name: String = user.name         // String (non-null)
-val middle: String? = user.middleName // String? (nullable)
+// Kotlin теперь знает правильные типы
+val name: String = user.name         // Non-null
+val middle: String? = user.middleName // Nullable
 ```
 
 **Platform types (T!):**
@@ -213,50 +199,31 @@ class SafeJavaWrapper(private val javaService: JavaService) {
 
 ### SAM Conversion
 
+SAM conversion позволяет передавать лямбду вместо Java functional interface (интерфейс с одним методом):
+
 ```kotlin
-// Java functional interface
-public interface Callback {
-    void onComplete(String result);
-}
+// Java interface
+public interface Callback { void onComplete(String result); }
 
-public void doAsyncWork(Callback callback) {
-    // ...
-    callback.onComplete("Done");
-}
+// Kotlin -- лямбда вместо anonymous object
+doAsyncWork { result -> println("Completed: $result") }
 
-// Kotlin - SAM conversion автоматически
-doAsyncWork { result ->
-    println("Completed: $result")
-}
-
-// Вместо:
+// Вместо громоздкого:
 doAsyncWork(object : Callback {
-    override fun onComplete(result: String) {
-        println("Completed: $result")
-    }
+    override fun onComplete(result: String) { println(result) }
 })
+```
 
-// Работает только для Java interfaces с одним методом!
-// Kotlin functional types (не interfaces) не работают
-interface KotlinCallback {  // Не SAM!
-    fun onComplete(result: String)
-}
+SAM conversion работает только для Java-интерфейсов. Для Kotlin-интерфейсов нужно явно объявить `fun interface` (с Kotlin 1.4+):
 
-fun doWork(callback: KotlinCallback) { }
+```kotlin
+// Обычный Kotlin interface -- SAM НЕ работает
+interface KotlinCallback { fun onComplete(result: String) }
+// doWork { }  // Ошибка!
 
-// doWork { }  // ❌ Ошибка! Нужен object
-doWork(object : KotlinCallback {
-    override fun onComplete(result: String) { }
-})
-
-// Решение: fun interface (Kotlin 1.4+)
-fun interface KotlinCallback {
-    fun onComplete(result: String)
-}
-
-doWork { result ->  // ✅ Теперь работает!
-    println(result)
-}
+// fun interface -- SAM работает
+fun interface KotlinCallback { fun onComplete(result: String) }
+doWork { result -> println(result) }  // OK
 ```
 
 **Почему SAM только для Java?**
@@ -445,53 +412,26 @@ int timeout = Config.getTimeout();  // Как static метод
 
 ### @JvmOverloads - default параметры
 
+JVM не поддерживает default параметры. `@JvmOverloads` генерирует перегрузки для Java, убирая параметры с конца:
+
 ```kotlin
-// Kotlin с default параметрами
 class User @JvmOverloads constructor(
     val name: String,
     val age: Int = 0,
     val email: String = ""
 )
+// Генерируются: User(name, age, email), User(name, age), User(name)
+```
 
-// Генерируются конструкторы:
-// User(String name, int age, String email)
-// User(String name, int age)
-// User(String name)
+Без `@JvmOverloads` Java видит только полный конструктор. Аннотация применима и к функциям:
 
-// Java может использовать:
-User user1 = new User("Alice", 25, "alice@example.com");
-User user2 = new User("Bob", 30);
-User user3 = new User("Charlie");
-
-// Без @JvmOverloads Java видит только полный конструктор
-class UserWithoutOverloads(
-    val name: String,
-    val age: Int = 0
-)
-
-// Java:
-// UserWithoutOverloads user = new UserWithoutOverloads("Alice");  // ❌ Ошибка!
-UserWithoutOverloads user = new UserWithoutOverloads("Alice", 0);  // Только так
-
-// @JvmOverloads для функций
+```kotlin
 @JvmOverloads
 fun greet(
-    name: String,
-    greeting: String = "Hello",
-    punctuation: String = "!"
-): String {
-    return "$greeting, $name$punctuation"
-}
+    name: String, greeting: String = "Hello", punctuation: String = "!"
+): String = "$greeting, $name$punctuation"
 
-// Генерируются методы:
-// greet(String name, String greeting, String punctuation)
-// greet(String name, String greeting)
-// greet(String name)
-
-// Java:
-String msg1 = UtilsKt.greet("Alice");
-String msg2 = UtilsKt.greet("Bob", "Hi");
-String msg3 = UtilsKt.greet("Charlie", "Hey", "!!!");
+// Java: greet("Alice"), greet("Bob", "Hi"), greet("Charlie", "Hey", "!!!")
 ```
 
 **Когда использовать @JvmOverloads:**
@@ -501,48 +441,25 @@ String msg3 = UtilsKt.greet("Charlie", "Hey", "!!!");
 
 ### @JvmField - public fields
 
+По умолчанию Kotlin property генерирует getter/setter. `@JvmField` убирает accessors и открывает прямой доступ к полю:
+
 ```kotlin
-// Обычно Kotlin property → getter/setter
-class User {
-    var name: String = "Alice"
-}
+class User { @JvmField var name: String = "Alice" }
 
-// Java:
-user.getName();
-user.setName("Bob");
+// Java: user.name (НЕ user.getName())
+// Java: user.name = "Bob" (НЕ user.setName("Bob"))
+```
 
-// @JvmField → прямой field доступ
-class User {
-    @JvmField
-    var name: String = "Alice"
-}
+В companion object `@JvmField` создаёт static field, а `const val` -- compile-time константу (только примитивы и String):
 
-// Java:
-user.name;  // Прямой доступ к полю
-user.name = "Bob";
-
-// Часто используется для lateinit
-class Controller {
-    @JvmField
-    lateinit var dependency: Dependency
-}
-
-// Java:
-controller.dependency = new DependencyImpl();
-
-// @JvmField в companion object
+```kotlin
 class Constants {
     companion object {
-        @JvmField
-        val API_KEY = "secret"
-
-        const val TIMEOUT = 5000  // const val уже static final
+        @JvmField val API_KEY = "secret"      // Runtime static field
+        const val TIMEOUT = 5000              // Compile-time constant
     }
 }
-
-// Java:
-String key = Constants.API_KEY;  // Прямой field
-int timeout = Constants.TIMEOUT;  // const val
+// Java: Constants.API_KEY, Constants.TIMEOUT
 ```
 
 **@JvmField vs const val:**
@@ -1335,30 +1252,7 @@ val bytes = Files.readAllBytes(path)  // Нет предупреждения о 
 
 ## Рекомендуемые источники
 
-### Официальная документация
-
-| Ресурс | Описание |
-|--------|----------|
-| [Calling Java from Kotlin](https://kotlinlang.org/docs/java-interop.html) | Официальный гайд |
-| [Calling Kotlin from Java](https://kotlinlang.org/docs/java-to-kotlin-interop.html) | Обратный interop |
-| [Kotlin-Java Interop Guide](https://developer.android.com/kotlin/interop) | Android гайд от Google |
-| [JSR-305 Support](https://kotlinlang.org/docs/java-interop.html#jsr-305-support) | Nullability аннотации |
-
-### Курсы и туториалы
-
-| Ресурс | Описание |
-|--------|----------|
-| [Kotlin Academy: Java Interop](https://kt.academy/article/ak-java-interop-4) | Серия статей от Marcin Moskala |
-| [Baeldung: Kotlin-Java Interop](https://www.baeldung.com/kotlin/java-interoperability) | Практические примеры |
-| [InformIT: Best Practices](https://www.informit.com/articles/article.aspx?p=2952625&seqNum=3) | Глубокий разбор паттернов |
-
-### Книги
-
-| Книга | Автор | Описание |
-|-------|-------|----------|
-| *Kotlin in Action, 2nd Ed* | Jemerov, Isakova | Глава о Java interop |
-| *Effective Kotlin* | Marcin Moskala | Best practices интеропа |
-| *Java to Kotlin* | Duncan McGregor, Nat Pryce | Полный гайд по миграции |
+Официальная документация: [Calling Java from Kotlin](https://kotlinlang.org/docs/java-interop.html) и [Calling Kotlin from Java](https://kotlinlang.org/docs/java-to-kotlin-interop.html), а также [Android Interop Guide](https://developer.android.com/kotlin/interop) от Google.
 
 ---
 
@@ -1375,11 +1269,21 @@ val bytes = Files.readAllBytes(path)  // Нет предупреждения о 
 - [ ] Знаете про platform types и их риски
 - [ ] Тестируете interop с обеих сторон
 
-## Связанные темы
-- [[kotlin-basics]] — Основы Kotlin для понимания различий с Java
-- [[kotlin-advanced-features]] — Extensions и их ограничения в Java
-- [[kotlin-multiplatform]] — Interop в KMP проектах
-- [[kotlin-best-practices]] — Best practices для interop
+## Связь с другими темами
+
+[[ios-swift-objc-interop]] — Интероперабельность Swift/Objective-C на iOS решает ту же задачу, что и Kotlin-Java interop на Android: бесшовная интеграция нового языка с legacy-кодовой базой. Изучение обоих подходов даёт понимание общих паттернов межъязыковой совместимости (аннотации, bridging headers, name mangling) и позволяет сравнить решения двух платформ. Рекомендуется читать после данного материала для расширения кругозора.
+
+[[cross-interop]] — Кросс-платформенная интероперабельность расширяет тему Java-Kotlin interop до уровня взаимодействия между платформами (Android/iOS/Web). Понимание ограничений Java interop (platform types, type erasure, SAM conversion) помогает проектировать общий код в KMP-проектах так, чтобы платформенные API были удобны на каждой стороне. Рекомендуется изучать после освоения базового interop.
+
+[[jvm-jni-deep-dive]] — JNI (Java Native Interface) представляет собой более низкоуровневый вид интеропа — взаимодействие JVM с нативным кодом (C/C++). Знание JNI помогает понять, как Kotlin/Native взаимодействует с платформенными библиотеками, и даёт фундамент для работы с NDK на Android. Этот материал стоит изучать как углублённое продолжение темы interop.
+
+[[kotlin-type-system]] — Система типов Kotlin (generics, variance, reified) напрямую влияет на поведение interop: type erasure создаёт проблемы при вызове из Java, а variance (in/out) транслируется в Java wildcards. Понимание type system необходимо для написания корректных generic API, доступных из обоих языков.
+
+## Источники и дальнейшее чтение
+
+- Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Глава о Java interop с детальным разбором аннотаций @JvmStatic, @JvmOverloads, platform types. Лучшее введение в тему.
+- Greenhalgh J., Skeen A., Bresler D. (2021). *Kotlin Programming: The Big Nerd Ranch Guide* (2nd ed.). — Практические примеры взаимодействия Kotlin и Java, включая коллекции и nullability.
+- Moskala M. (2021). *Effective Kotlin*. — Best practices для проектирования API, доступных из Java, и правила работы с platform types в production-коде.
 
 ---
 

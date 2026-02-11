@@ -11,6 +11,9 @@ tags:
 related:
   - "[[generics-parametric-polymorphism]]"
   - "[[type-erasure-reification]]"
+prerequisites:
+  - "[[type-systems-fundamentals]]"
+  - "[[generics-parametric-polymorphism]]"
 ---
 
 # Variance: ковариантность и контравариантность
@@ -403,12 +406,23 @@ class Cache<T> {
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[generics-parametric-polymorphism]]
+Variance — это ответ на вопрос "как subtyping взаимодействует с generics". Без понимания type parameters, generic классов и интерфейсов нет смысла говорить о ковариантности и контравариантности. Generics определяют контейнер (`Box<T>`), а variance определяет, можно ли присвоить `Box<Dog>` переменной типа `Box<Animal>`. Это два неразрывно связанных аспекта системы типов.
+
+### [[type-erasure-reification]]
+Type erasure влияет на то, как variance работает в runtime. На JVM `List<Dog>` и `List<Animal>` после erasure неотличимы, поэтому variance constraints (`out`, `in`) проверяются исключительно компилятором. Понимание erasure объясняет, почему Kotlin разделяет `List<out T>` (read-only, covariant) и `MutableList<T>` (invariant): компилятор должен гарантировать безопасность, которую runtime не может обеспечить.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — формальное определение variance через правила subtyping для функциональных типов и generic конструкторов
+- Cardelli L., Wegner P. (1985). *On Understanding Types, Data Abstraction, and Polymorphism*. — классическая систематизация полиморфизма, включая subtype polymorphism, на котором основана variance
+- Bloch J. (2018). *Effective Java*, 3rd ed. — Item 31 "Use bounded wildcards to increase API flexibility" — практическое объяснение PECS и его применения
 - [TypeAlias: Illustrated Guide to Variance](https://typealias.com/guides/illustrated-guide-covariance-contravariance/) — лучшая визуализация
 - [Kotlin Docs: Generics](https://kotlinlang.org/docs/generics.html) — official reference
-- [Baeldung: PECS](https://www.baeldung.com/java-generics-pecs) — PECS examples
-- [Wikipedia: Type Variance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) — формальные определения
 
 ---
 

@@ -12,6 +12,7 @@ tags:
   - autonomous-systems
   - type/concept
   - level/intermediate
+
 related:
   - "[[ai-ml-overview]]"
   - "[[rag-and-prompt-engineering]]"
@@ -748,6 +749,23 @@ with langsmith.trace("agent_execution") as trace:
 ---
 
 *Проверено: 2025-12-22*
+
+---
+
+## Связь с другими темами
+
+**[[ai-ml-overview]]** — Обзор AI/ML-раздела даёт общую карту направлений AI Engineering, в которой агенты занимают одно из ключевых мест. Понимание общей картины — от prompt engineering до production deployment — позволяет увидеть, как агенты объединяют несколько AI-дисциплин (retrieval, planning, tool use) в единую автономную систему. Агенты — это вершина пирамиды AI Engineering, требующая владения всеми нижестоящими уровнями.
+
+**[[rag-and-prompt-engineering]]** — RAG и prompt engineering являются фундаментальными компонентами любого AI-агента. Агент использует промпт-инженерию для планирования действий и интерпретации результатов, а RAG — для обращения к внешним знаниям. Качество агента напрямую зависит от качества его промптов (system prompt, tool descriptions) и настройки retrieval-пайплайна для доступа к релевантной информации.
+
+**[[ai-production-systems]]** — Деплой AI-агентов в продакшен требует решения уникальных инфраструктурных задач: управление длительными сессиями, ограничение стоимости при множественных LLM-вызовах, мониторинг цепочек действий, обработка ошибок в multi-step workflows. Production-паттерны для агентов включают circuit breakers, cost limits, human-in-the-loop и observability, описанные в руководстве по AI production systems.
+
+---
+
+## Источники и дальнейшее чтение
+
+- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — фундаментальные главы об интеллектуальных агентах, планировании и поиске в пространстве состояний, которые являются теоретической основой современных LLM-агентов
+- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практические паттерны проектирования ML-систем, включая мониторинг, A/B-тестирование и итеративное улучшение, применимые к агентным системам в продакшене
 
 ---
 

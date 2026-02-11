@@ -17,6 +17,10 @@ related:
   - "[[cloud-overview]]"
   - "[[cloud-aws-core-services]]"
   - "[[security-overview]]"
+prerequisites:
+  - "[[cloud-platforms-essentials]]"
+  - "[[network-fundamentals-for-developers]]"
+  - "[[security-fundamentals]]"
 ---
 
 # Cloud Networking & Security: VPC, Security Groups, IAM

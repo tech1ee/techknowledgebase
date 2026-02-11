@@ -17,6 +17,9 @@ related:
   - "[[cloud-overview]]"
   - "[[cloud-aws-core-services]]"
   - "[[architecture-event-driven]]"
+prerequisites:
+  - "[[cloud-platforms-essentials]]"
+  - "[[cloud-aws-core-services]]"
 ---
 
 # Serverless Patterns: Lambda, Event-Driven, Step Functions

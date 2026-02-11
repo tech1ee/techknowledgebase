@@ -12,6 +12,8 @@ related:
   - "[[email-communication]]"
   - "[[remote-team-communication]]"
   - "[[technical-writing]]"
+prerequisites:
+  - "[[email-communication]]"
 ---
 
 # Async Communication: Slack, Email и Remote Best Practices

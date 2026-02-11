@@ -18,6 +18,10 @@ related:
   - "[[android-compose]]"
   - "[[android-context-internals]]"
 cs-foundations: [decorator-pattern, bridge-pattern, ipc, compositor, double-buffering]
+prerequisites:
+  - "[[android-activity-lifecycle]]"
+  - "[[android-view-rendering-pipeline]]"
+  - "[[android-process-memory]]"
 ---
 
 # Window System: PhoneWindow, DecorView, WindowManager и Surface
@@ -2228,21 +2232,25 @@ Dialog — полноценное отдельное окно. PopupWindow — s
 
 ---
 
-## Связи
+## Связь с другими темами
 
-### Фундамент
-- **[[android-view-rendering-pipeline]]** — ViewRootImpl запускает measure/layout/draw; Surface — конечный target рисования; Choreographer и VSYNC
-- **[[android-activity-lifecycle]]** — Window создаётся в Activity.attach(), DecorView добавляется в makeVisible() после onResume()
-- **[[android-context-internals]]** — Window token привязан к Activity Context; Application Context не имеет token → Dialog crash
+### [[android-view-rendering-pipeline]]
+Window System и Rendering Pipeline тесно связаны через ViewRootImpl — мост между View tree и WindowManagerService. ViewRootImpl запускает measure/layout/draw, а Surface — конечный target рисования. Choreographer координирует rendering по VSYNC через Handler. Без понимания rendering pipeline невозможно понять, как ViewRootImpl транслирует View operations в GPU-команды и как SurfaceFlinger композитит результат. Изучите rendering pipeline параллельно с window system.
 
-### Тесно связаны
-- **[[android-touch-handling]]** — Input events идут: WMS → ViewRootImpl → DecorView → View tree; touch dispatch policy
-- **[[android-compose]]** — ComposeView встраивается в DecorView; Compose WindowInsets API; Material 3 automatic insets handling
-- **[[android-handler-looper]]** — Choreographer использует Handler для VSYNC callbacks; scheduleTraversals()
+### [[android-activity-lifecycle]]
+Window lifecycle тесно привязан к Activity lifecycle: Window создаётся в Activity.attach() (до onCreate), DecorView добавляется в WindowManager в makeVisible() (после onResume), а при finish() Window удаляется из WMS. Понимание этой последовательности объясняет, почему UI не виден в onCreate(), почему Dialog crash при использовании Application Context (нет window token), и когда безопасно показывать PopupWindow. Изучите Activity lifecycle первым.
 
-### Дополнительно
-- **[[android-performance-profiling]]** — Perfetto показывает SurfaceFlinger timing, frame composition, jank причины
-- **[[android-binder-ipc]]** — Все операции с WMS через Binder: addToDisplay, relayout, remove, finishDrawing
+### [[android-context-internals]]
+Window token привязан к Activity Context, а Application Context не имеет token. Это объясняет классический BadTokenException при попытке показать Dialog с Application Context. Service Context также не имеет window token (кроме SYSTEM_ALERT_WINDOW permission). Понимание иерархии Context и window tokens критично для правильной работы с Dialog, PopupWindow и Toast. Изучите Context internals для понимания, какой Context когда использовать.
+
+### [[android-touch-handling]]
+Input events проходят через Window System: InputDispatcher в system_server → InputChannel → ViewRootImpl → DecorView → View tree. Window flags (FLAG_NOT_TOUCHABLE, FLAG_NOT_FOCUSABLE) определяют, получает ли окно touch events. Понимание window system объясняет, почему overlay windows могут блокировать touch events и как gesture navigation взаимодействует с app windows.
+
+### [[android-compose]]
+ComposeView встраивается в DecorView как обычная View, используя тот же Window System. Compose WindowInsets API предоставляет декларативный способ работы с insets (status bar, navigation bar, IME), а Material 3 автоматически применяет padding. Понимание window system помогает при отладке edge-to-edge проблем в Compose и при interop с View-based компонентами.
+
+### [[android-overview]]
+Window System — один из глубоких системных слоёв Android, связывающий UI-компоненты с compositor (SurfaceFlinger). Карта Android раздела показывает, как window system соединяет Activity lifecycle, rendering pipeline, touch handling и graphics APIs в единую систему. Понимание этого слоя даёт целостную картину того, как пиксели появляются на экране.
 
 ---
 
@@ -2264,3 +2272,9 @@ Dialog — полноценное отдельное окно. PopupWindow — s
 | 12 | [WindowManager Jetpack library](https://developer.android.com/jetpack/androidx/releases/window) | Docs | FoldingFeature, WindowLayoutInfo |
 | 13 | [Android 15 edge-to-edge](https://developer.android.com/about/versions/15/behavior-changes-15) | Docs | Обязательный edge-to-edge в Android 15 |
 | 14 | [How Android Renders UI](https://medium.com/@nicholasnielson/how-android-renders-the-ui) | Article | Window → Surface → SurfaceFlinger pipeline |
+
+## Источники и дальнейшее чтение
+
+- **Vasavada N. (2019). Android Internals.** — Единственная книга с детальным описанием WindowManagerService, SurfaceFlinger, ViewRootImpl и Binder IPC между ними. Объясняет полный путь от Window.addView() до композитинга на экране. Обязательна для понимания window system на уровне AOSP.
+- **Meier R. (2022). Professional Android.** — Практическое покрытие Window API, Dialog/PopupWindow lifecycle, edge-to-edge design и WindowInsets handling. Связывает теорию window system с реальными задачами разработки.
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Введение в Dialog, Toast и window management через пошаговые проекты. Помогает понять, как окна создаются и управляются на прикладном уровне, прежде чем углубляться в internals.

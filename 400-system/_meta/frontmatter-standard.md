@@ -1,7 +1,7 @@
 ---
 title: "Стандарт Frontmatter"
 created: 2026-02-09
-modified: 2026-02-09
+modified: 2026-02-10
 type: reference
 status: published
 confidence: high
@@ -48,6 +48,7 @@ tags:
 | `tags` | list | да | Минимум 1 тег из `topic/` + 1 из `type/` |
 | `status` | enum | нет | Состояние файла |
 | `confidence` | enum | нет | Уверенность в актуальности |
+| `review_date` | date | нет | Когда проверить актуальность (YYYY-MM-DD) |
 | `related` | list | нет | 2-5 связанных файлов как `"[[wikilink]]"` |
 | `prerequisites` | list | нет | Файлы, которые нужно прочитать перед этим |
 
@@ -110,6 +111,41 @@ tags:
 | `low` | Предварительная информация, может быть неточной |
 
 Числовые значения (`4`, `5`) → заменить на текстовые.
+
+---
+
+## Поле `review_date`
+
+Рекомендуется для быстро меняющихся тем. Формат: `review_date: YYYY-MM-DD` -- дата, когда стоит проверить файл на актуальность.
+
+**Когда добавлять:**
+
+| Область | Интервал проверки | Почему |
+|---------|:-----------------:|--------|
+| AI/ML (модели, инструменты) | 3-6 месяцев | Ландшафт меняется ежемесячно |
+| Career (зарплаты, рынок) | 6 месяцев | Данные устаревают быстро |
+| Tools & Ecosystem | 6 месяцев | Версии, deprecated API |
+| DevOps (CI/CD, облака) | 6-12 месяцев | Новые сервисы и практики |
+| Architecture, CS Fundamentals | не нужно | Фундаментальные знания стабильны |
+
+**Пример:**
+
+```yaml
+---
+title: "AI Tools Ecosystem 2025"
+created: 2025-12-15
+modified: 2026-01-09
+review_date: 2026-06-01
+type: reference
+confidence: medium
+tags:
+  - topic/ai-ml
+  - type/reference
+  - level/intermediate
+---
+```
+
+Если `review_date` наступил и файл не обновлён, рекомендуется выставить `status: needs-review`.
 
 ---
 

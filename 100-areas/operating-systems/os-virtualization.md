@@ -10,7 +10,7 @@ tags:
   - topic/os
   - virtualization
   - containers
-  - docker
+  - topic/docker
   - kvm
   - type/deep-dive
   - level/intermediate
@@ -21,6 +21,10 @@ related:
   - "[[os-scheduling]]"
   - "[[docker-for-developers]]"
   - "[[kubernetes-basics]]"
+prerequisites:
+  - "[[os-processes-threads]]"
+  - "[[os-memory-management]]"
+  - "[[os-scheduling]]"
 ---
 
 # Виртуализация и Контейнеры
@@ -1186,24 +1190,35 @@ cat /sys/kernel/debug/kvm/*       # KVM debug info
 
 ---
 
-## Связи
+## Связь с другими темами
 
-**Фундамент:**
-- [[os-overview]] — базовые концепции (kernel/user mode, syscalls), которые виртуализация эмулирует или перехватывает
-- [[os-processes-threads]] — контейнеры = процессы с isolation, VM = отдельные процессы-guests
-- [[os-memory-management]] — nested page tables для VM, memory cgroups для контейнеров
+**[[os-overview]]** — Обзор ОС объясняет разделение kernel/user mode и механизм привилегированных инструкций, которые составляют основу виртуализации: hypervisor перехватывает привилегированные инструкции гостевой ОС (через trap-and-emulate или VT-x/AMD-V hardware extensions) и эмулирует их поведение. Системные вызовы в контейнерах проходят через seccomp-bpf фильтр ядра хоста, что ограничивает набор доступных syscalls — понимание syscall interface критично для настройки безопасности контейнеров. Концепция interrupt handling также связана: в VM hardware interrupts перехватываются hypervisor и маршрутизируются в нужную гостевую ОС через virtual interrupt controller (vAPIC).
 
-**Углубление:**
-- [[os-io-devices]] — virtio для I/O виртуализации, device passthrough
-- [[os-scheduling]] — CPU scheduling гостей hypervisor'ом
+**[[os-processes-threads]]** — Контейнеры — это, по сути, обычные Linux-процессы с дополнительной изоляцией через namespaces (PID, NET, MNT, UTS, IPC, USER) и ограничениями через cgroups. Каждый контейнер получает собственное PID namespace, где его init-процесс имеет PID 1, хотя на уровне хоста он виден как обычный процесс с произвольным PID. VM, в отличие от контейнеров, запускают полноценную гостевую ОС с собственным ядром, планировщиком и всеми процессами — QEMU/KVM создаёт процесс-хост, внутри которого работает весь guest. Понимание процессов объясняет overhead: контейнер стартует за ~100 ms (fork + exec + namespace setup), а VM — за секунды (загрузка ядра, init system).
 
-**Применение:**
-- Kubernetes использует контейнеры + дополнительную оркестрацию
+**[[os-memory-management]]** — Виртуализация добавляет дополнительный уровень трансляции адресов: в VM гостевая ОС управляет своими page tables (guest virtual → guest physical), а hypervisor добавляет ещё один уровень — nested/extended page tables (guest physical → host physical, EPT в Intel, NPT в AMD). Это двойное отображение увеличивает стоимость TLB miss, поскольку page walk проходит через два уровня таблиц. В контейнерах memory cgroups ограничивают потребление памяти: когда контейнер превышает лимит, OOM Killer убивает процессы внутри контейнера, а не произвольные процессы хоста. Технология KSM (Kernel Same-page Merging) позволяет hypervisor дедуплицировать одинаковые страницы памяти между VM, экономя RAM при запуске множества идентичных гостевых ОС.
+
+**[[os-scheduling]]** — Планирование CPU в контексте виртуализации имеет два уровня: hypervisor планирует виртуальные CPU (vCPU) гостевых ОС на физические ядра, а внутри каждой гостевой ОС работает собственный планировщик (CFS), не подозревающий о виртуализации. Эта двухуровневая схема создаёт проблему «stolen time»: когда hypervisor вытесняет vCPU, гостевая ОС не знает, что её поток не выполнялся, что может нарушить тайминги и scheduling-решения внутри guest. В контейнерах CPU cgroups ограничивают процессорное время: cpu.shares определяет относительный вес, а cpu.cfs_quota_us/cpu.cfs_period_us — жёсткий лимит (throttling). Для real-time workloads в VM используется CPU pinning — привязка vCPU к физическому ядру, исключающая конкуренцию с другими VM.
+
+**[[docker-for-developers]]** — Docker — самая популярная реализация контейнеризации, и понимание OS-механизмов объясняет его внутреннее устройство: Docker daemon использует runc (OCI runtime), который вызывает clone() с флагами CLONE_NEWPID, CLONE_NEWNS, CLONE_NEWNET для создания namespaces и настраивает cgroups через /sys/fs/cgroup. Dockerfile инструкции (FROM, RUN, COPY) создают overlay filesystem слои — каждый слой является read-only snapshot, а контейнер добавляет writable layer поверх, что объясняет, почему образы можно разделять между контейнерами. Docker на Mac/Windows запускает Linux VM (HyperKit/WSL2), потому что namespaces и cgroups — это Linux-специфичные механизмы ядра, не доступные в других ОС. Понимание этого объясняет дополнительный overhead и проблемы с производительностью файловой системы при разработке на non-Linux платформах.
+
+**[[kubernetes-basics]]** — Kubernetes строит оркестрацию поверх контейнеров, используя все OS-механизмы виртуализации: каждый Pod — это группа контейнеров, разделяющих network namespace (общий IP) и mount namespace (shared volumes). Kubelet на каждом node управляет container runtime (containerd/CRI-O), который, в свою очередь, использует runc для создания namespaces и cgroups — это цепочка от Kubernetes API до Linux kernel. Resource requests и limits в Kubernetes напрямую транслируются в cgroups: limits.memory → memory.limit_in_bytes, limits.cpu → cpu.cfs_quota_us. Понимание OS-уровня помогает диагностировать проблемы: OOMKilled означает превышение memory cgroup limit, а CPU throttling (nr_throttled в cpu.stat) — превышение CPU quota.
+
+**Связанные концепции:**
+- [[os-io-devices]] — virtio для I/O виртуализации, device passthrough (SR-IOV)
 - Cloud providers: EC2 = VM, ECS/Fargate = контейнеры, Lambda = micro-VM (Firecracker)
 
 ---
 
 ## Рекомендуемые источники
+
+### Учебники
+
+- Tanenbaum A., Bos H. (2014). *"Modern Operating Systems, 4th Edition."* — глава 7 (Virtualization and the Cloud) — от requirements Popek-Goldberg до Type 1/Type 2 hypervisors, paravirtualization и containers; одно из первых учебников, включивших виртуализацию как полноценную тему.
+- Silberschatz A., Galvin P., Gagne G. (2018). *"Operating System Concepts, 10th Edition."* — глава 18 (Virtual Machines) — история виртуализации от IBM VM/370 до современных VT-x/AMD-V, binary translation, paravirtualization, containers, application containment.
+- Arpaci-Dusseau R., Arpaci-Dusseau A. (2018). *"Operating Systems: Three Easy Pieces."* — часть Virtualization (главы 3-24) рассматривает виртуализацию CPU и памяти как центральную функцию ОС; Appendix о VMMs; бесплатно.
+- Bryant R., O'Hallaron D. (2015). *"Computer Systems: A Programmer's Perspective, 3rd Edition."* — глава 9 (Virtual Memory) объясняет address translation, которая является основой nested page tables в hypervisors; глава 8 (Exceptional Control Flow) — trap mechanism, используемый в trap-and-emulate виртуализации.
+- Love R. (2010). *"Linux Kernel Development, 3rd Edition."* — главы о namespaces, cgroups и process isolation дают фундамент для понимания контейнеров; KVM как модуль ядра Linux описан в контексте kernel modules (глава 17).
 
 ### Книги и курсы
 - [OSTEP: Virtualization chapters](https://pages.cs.wisc.edu/~remzi/OSTEP/) — бесплатная книга

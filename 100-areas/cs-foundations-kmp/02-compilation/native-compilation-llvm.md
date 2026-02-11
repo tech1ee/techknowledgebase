@@ -12,6 +12,9 @@ related:
   - "[[compilation-pipeline]]"
   - "[[bytecode-virtual-machines]]"
   - "[[interpretation-jit]]"
+prerequisites:
+  - "[[compilation-pipeline]]"
+  - "[[cpu-architecture-basics]]"
 ---
 
 # Native Compilation и LLVM: как Kotlin становится машинным кодом
@@ -435,12 +438,27 @@ kotlinc-native -Xtemporary-files-dir=./temp -produce library main.kt
 
 ---
 
-## Источники
+## Связь с другими темами
 
+### [[compilation-pipeline]]
+Native compilation через LLVM — это финальная стадия compilation pipeline, где промежуточное представление превращается в машинный код. Понимание полного pipeline (lexing, parsing, semantic analysis, IR generation) необходимо, чтобы осознать, на каком этапе подключается LLVM и почему IR является ключевым звеном. Без знания предыдущих фаз сложно понять, какая информация доступна LLVM optimizer и почему некоторые оптимизации возможны только на уровне frontend.
+
+### [[bytecode-virtual-machines]]
+Bytecode и VM — это альтернативный путь исполнения кода, контрастирующий с native compilation. JVM исполняет bytecode через интерпретацию и JIT, тогда как LLVM генерирует native binary через AOT. Сравнение этих подходов позволяет понять trade-offs между мгновенным стартом (AOT) и runtime-оптимизациями (JIT), что критично для выбора между Kotlin/JVM и Kotlin/Native в KMP-проектах.
+
+### [[interpretation-jit]]
+JIT-компиляция является прямой альтернативой AOT-подходу LLVM. Понимание того, как JIT использует профилирование горячих путей для спекулятивных оптимизаций, объясняет, почему JVM-приложения после warmup могут обгонять native binary по peak performance. Знание обоих подходов необходимо для обоснованного выбора таргета в Kotlin Multiplatform.
+
+---
+
+## Источники и дальнейшее чтение
+
+- Aho A., Lam M., Sethi R., Ullman J. (2006). *Compilers: Principles, Techniques, and Tools* (Dragon Book). — фундаментальное руководство по компиляторам, включая оптимизации и генерацию кода, которые LLVM реализует на практике
+- Appel A. (1998). *Modern Compiler Implementation in ML/Java/C*. — альтернативный подход к теории компиляторов с акцентом на SSA-форму и промежуточные представления, лежащие в основе LLVM IR
+- Grune D., van Reeuwijk K., Bal H., Jacobs C., Langendoen K. (2012). *Modern Compiler Design*. — современный взгляд на компиляторные техники, включая AOT и JIT подходы
 - [LLVM Official](https://llvm.org/) — официальный сайт проекта
 - [AOSA Book: LLVM](https://aosabook.org/en/v1/llvm.html) — архитектура LLVM от создателей
 - [Kotlin/Native Documentation](https://kotlinlang.org/docs/native-overview.html) — официальная документация
-- [A Gentle Introduction to LLVM IR](https://mcyoung.xyz/2023/08/01/llvm-ir/) — понятный туториал
 
 ---
 

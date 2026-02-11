@@ -18,6 +18,10 @@ tags:
 related:
   - "[[stakeholder-management]]"
   - "[[crisis-management]]"
+prerequisites:
+  - "[[stakeholder-management]]"
+  - "[[em-fundamentals]]"
+  - "[[strategic-thinking]]"
 ---
 
 # Коммуникация с руководством
@@ -171,18 +175,19 @@ CONTENT:
 
 ---
 
-## Связанные темы
+## Связь с другими темами
 
-- [[stakeholder-management]] — who you're communicating with
-- [[strategic-thinking]] — what to communicate
-- [[communication/]] — communication fundamentals
+**[[stakeholder-management]]** — Коммуникация с руководством неразрывно связана с управлением stakeholders, поскольку эффективная коммуникация — главный инструмент влияния на стейкхолдеров. Понимание того, что каждый stakeholder хочет услышать (business impact vs technical details), определяет формат и содержание коммуникации. Mapping stakeholders по power/interest матрице помогает выбрать правильную частоту и глубину коммуникации для каждого.
 
-## Источники
+**[[crisis-management]]** — Навыки executive communication критически важны во время кризиса, когда каждое сообщение должно быть максимально чётким и действенным. Pyramid Principle и BLUF формат позволяют быстро донести суть проблемы, текущий статус и необходимые решения до руководства. Умение структурировать escalation updates и post-incident reports — прямое применение принципов коммуникации с руководством.
+
+## Источники и дальнейшее чтение
 
 | Источник | Тип |
 |----------|-----|
-| [The Pyramid Principle](https://www.amazon.com/Pyramid-Principle-Logic-Writing-Thinking/dp/0273710516) | Book |
-| [HBR: Executive Communication](https://hbr.org/topic/subject/communication) | Articles |
+| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
 
 ---
 
