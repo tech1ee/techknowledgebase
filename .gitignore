@@ -1,6 +1,8 @@
 # === Obsidian ===
 .obsidian/
 .trash/
+.smart-env/
+*.base
 
 # === System ===
 .DS_Store
