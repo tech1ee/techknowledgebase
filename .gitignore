@@ -18,7 +18,6 @@ _automation/
 000-inbox/
 
 # === Generated/cached files ===
-docs/sync/
 **/__pycache__/
 *.pyc
 *.pyo
