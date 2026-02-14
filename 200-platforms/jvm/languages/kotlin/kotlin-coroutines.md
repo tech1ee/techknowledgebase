@@ -1397,7 +1397,9 @@ coroutineScope: исключение в одном child отменяет все
 | Направление | Куда | Зачем |
 |-------------|------|-------|
 | Углубление | [[kotlin-flow]] | Flow — реактивные потоки данных на базе корутин |
-| Углубление | [[kotlin-testing]] | runTest, Turbine — тестирование корутин и Flow |
+| Углубление | [[kotlin-channels]] | Channels — межкорутинная коммуникация, fan-out/fan-in |
+| Под капотом | [[kotlin-coroutines-internals]] | CPS, Continuation, state machine — как корутины работают внутри |
+| Тестирование | [[kotlin-testing]] | runTest, Turbine — тестирование корутин и Flow |
 | Связь | [[kotlin-functional]] | Suspend functions как расширение концепции лямбд |
 | Кросс-область | [[java-modern-features]] | Virtual Threads (Java 21) — альтернативный подход к конкурентности на JVM |
 | Навигация | [[jvm-overview]] | Вернуться к обзору JVM-тем |

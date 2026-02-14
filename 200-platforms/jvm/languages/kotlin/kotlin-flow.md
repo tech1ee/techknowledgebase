@@ -1200,7 +1200,9 @@ Turbine — библиотека для тестирования Flow: flow.test
 | Направление | Куда | Зачем |
 |-------------|------|-------|
 | Углубление | [[kotlin-coroutines]] | Основы корутин, на которых строится Flow |
-| Углубление | [[kotlin-testing]] | Тестирование Flow с Turbine и runTest |
+| Альтернатива | [[kotlin-channels]] | Channels — когда нужна point-to-point коммуникация вместо broadcast |
+| Под капотом | [[kotlin-coroutines-internals]] | Как suspend-функции и Flow работают на уровне байткода |
+| Тестирование | [[kotlin-testing]] | Тестирование Flow с Turbine и runTest |
 | Связь | [[kotlin-collections]] | Sequence — синхронный аналог Flow для коллекций |
 | Кросс-область | [[android-state-management]] | StateFlow/SharedFlow в Android архитектуре |
 | Навигация | [[jvm-overview]] | Вернуться к обзору JVM-тем |
