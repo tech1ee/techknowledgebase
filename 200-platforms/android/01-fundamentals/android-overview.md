@@ -284,6 +284,19 @@ Android — мобильная операционная система на ба
 |----------|-------------|----------|
 | [[android-ci-cd]] | GitHub Actions, Fastlane, Play Store automation, testing pipelines | [[android-gradle-fundamentals]] |
 
+### Экосистема и инструменты
+
+| Материал | Что узнаете | Связан с |
+|----------|-------------|----------|
+| [[android-ecosystem-2026]] | Полный справочник: версии, библиотеки, тренды 2026 | Все разделы |
+| [[android-platform-versions]] | API levels, feature matrix, minSdk/targetSdk guide | [[android-manifest]] |
+| [[android-jetpack-libraries-map]] | Карта 80+ Jetpack-библиотек с рекомендациями | [[android-compose]], [[android-navigation]] |
+| [[android-firebase-platform]] | Firebase: Auth, Firestore, FCM, Crashlytics, альтернативы | [[android-notifications]], [[android-networking]] |
+| [[android-analytics-crash-reporting]] | Crashlytics, Sentry, Amplitude, abstraction layer | [[android-firebase-platform]] |
+| [[android-code-quality-tools]] | Detekt, ktlint, Android Lint, Spotless, CI pipeline | [[android-ci-cd]], [[android-gradle-fundamentals]] |
+| [[android-feature-flags-remote-config]] | Firebase RC, LaunchDarkly, архитектура feature flags | [[android-firebase-platform]] |
+| [[android-on-device-ai]] | Gemini Nano, ML Kit GenAI, LiteRT, MediaPipe | [[mobile-ai-ml-guide]] |
+
 ---
 
 ## Android vs Desktop/Server: ключевые отличия

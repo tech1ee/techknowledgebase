@@ -117,12 +117,17 @@ tags:
 - [[mobile-app-protection]] — защита приложения
 - [[android-proguard-r8]] — обфускация и оптимизация
 
+### Качество кода
+- [[android-code-quality-tools]] — Detekt, ktlint, Android Lint, Spotless
+  - Статический анализ, форматирование, CI-интеграция
+
 ### Чеклист
 - [ ] Unit тесты: покрытие > 70% для domain/data
 - [ ] UI тесты: критические сценарии
 - [ ] ProGuard/R8: правила, тестирование release-сборки
 - [ ] Security: Certificate Pinning, encrypted storage
 - [ ] Accessibility: TalkBack, content descriptions
+- [ ] Detekt + ktlint: настроены и запускаются в CI
 
 ---
 
@@ -150,15 +155,19 @@ tags:
 
 ### Наблюдаемость
 - [[observability]] — мониторинг и observability
+- [[android-analytics-crash-reporting]] — Crashlytics, Sentry, Firebase Analytics, Amplitude
+- [[android-firebase-platform]] — Firebase: полная карта сервисов (Auth, Firestore, FCM, Crashlytics)
 - [[android-notifications]] — push-уведомления
 - [[android-performance-profiling]] — профилирование
+- [[android-feature-flags-remote-config]] — Firebase Remote Config, LaunchDarkly, A/B-тесты
 
 ### Чеклист
-- [ ] Crash reporting: Firebase Crashlytics
-- [ ] Analytics: события, воронки, retention
-- [ ] Performance monitoring: ANR, slow renders
+- [ ] Crash reporting: Firebase Crashlytics (custom keys, non-fatals, ANR)
+- [ ] Analytics: события, воронки, retention (Firebase Analytics / Amplitude)
+- [ ] Performance monitoring: ANR, slow renders, network traces
 - [ ] Push notifications: FCM setup
-- [ ] Feature flags: remote config
+- [ ] Feature flags: Firebase Remote Config / LaunchDarkly
+- [ ] Abstraction layer: analytics и feature flags за интерфейсами
 
 ---
 
