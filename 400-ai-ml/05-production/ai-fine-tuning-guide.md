@@ -1,0 +1,669 @@
+---
+title: "Fine-tuning и адаптация моделей: LoRA, QLoRA, когда и зачем"
+created: 2025-12-22
+modified: 2026-02-13
+type: concept
+reading_time: 33
+difficulty: 7
+study_status: not_started
+mastery: 0
+last_reviewed:
+next_review:
+status: published
+confidence: high
+tags:
+  - topic/ai-ml
+  - fine-tuning
+  - lora
+  - type/concept
+  - level/intermediate
+related:
+  - "[[ai-ml-overview]]"
+  - "[[rag-and-prompt-engineering]]"
+  - "[[ai-evaluation-metrics]]"
+---
+
+# Fine-tuning и адаптация моделей: LoRA, QLoRA, когда и зачем
+
+> Fine-tuning — не первый выбор. Это последний resort, когда prompting и RAG не работают.
+
+---
+
+## TL;DR
+
+- **Fine-tuning** — дообучение модели на своих данных для специфичного поведения
+- **Когда нужен:** Уникальный стиль/формат, специфичная domain knowledge, latency requirements
+- **LoRA/QLoRA** — эффективные методы: обучаем ~1% параметров вместо 100%
+- **Главное правило:** Prompting → RAG → Fine-tuning (в таком порядке)
+
+---
+
+## Терминология
+
+| Термин | Значение |
+|--------|----------|
+| **Fine-tuning** | Дообучение pre-trained модели на новых данных |
+| **Full Fine-tuning** | Обновление всех параметров модели |
+| **LoRA** | Low-Rank Adaptation — обучение малых адаптеров |
+| **QLoRA** | LoRA + Quantization — ещё эффективнее |
+| **PEFT** | Parameter-Efficient Fine-Tuning — общее название |
+| **Adapter** | Малый обучаемый модуль, добавляемый к frozen модели |
+| **Rank (r)** | Размерность LoRA матриц (чем больше, тем мощнее) |
+| **Quantization** | Снижение precision весов (16bit → 4bit) |
+
+---
+
+## Когда нужен Fine-tuning
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                   DECISION: DO YOU NEED FINE-TUNING?                        │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ❓ Задача требует специфичного стиля/формата?                             │
+│     │                                                                       │
+│     ├── НЕТ → Используй Prompting                                          │
+│     │                                                                       │
+│     └── ДА → Можно достичь few-shot примерами?                             │
+│              │                                                              │
+│              ├── ДА → Используй Few-shot Prompting                         │
+│              │                                                              │
+│              └── НЕТ → Есть >1000 качественных примеров?                   │
+│                        │                                                    │
+│                        ├── НЕТ → Собирай данные или используй Prompting    │
+│                        │                                                    │
+│                        └── ДА → Fine-tuning может помочь                   │
+│                                                                             │
+│  ❓ Задача требует актуальных/специфичных знаний?                          │
+│     │                                                                       │
+│     ├── ДА → RAG (знания обновляемы, прозрачны)                            │
+│     │                                                                       │
+│     └── НЕТ → Можно через prompting                                        │
+│                                                                             │
+│  ❓ Критична latency (нужен быстрый ответ)?                                │
+│     │                                                                       │
+│     ├── ДА, и RAG слишком медленный → Fine-tuning "вшивает" знания         │
+│     │                                                                       │
+│     └── НЕТ → RAG + Caching                                                │
+│                                                                             │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Сравнение методов адаптации
+
+| Метод | Плюсы | Минусы | Когда использовать |
+|-------|-------|--------|-------------------|
+| **Prompting** | Быстро, дёшево, гибко | Ограничен контекстом | Всегда начинай с него |
+| **RAG** | Актуальные данные, прозрачность | Latency, сложность | Нужны свежие/специфичные данные |
+| **Fine-tuning** | Качество на узкой задаче | Дорого, данные, overfitting | Уникальный стиль, формат |
+
+---
+
+## Методы Fine-tuning
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                     FINE-TUNING METHODS COMPARISON                          │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  FULL FINE-TUNING                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Обновляем: ████████████████████████████████████ 100% параметров   │   │
+│  │                                                                      │   │
+│  │  + Максимальная адаптация                                           │   │
+│  │  - Требует много GPU памяти (7B = ~56GB)                           │   │
+│  │  - Риск catastrophic forgetting                                     │   │
+│  │  - Долго и дорого                                                   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  LoRA (Low-Rank Adaptation)                                                │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Обновляем: ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 0.1-1% параметров │   │
+│  │                                                                      │   │
+│  │  + 10-100x меньше памяти                                            │   │
+│  │  + Быстрое обучение                                                 │   │
+│  │  + Можно хранить много адаптеров                                    │   │
+│  │  - Чуть меньше качество (обычно незаметно)                         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  QLoRA (Quantized LoRA)                                                    │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Обновляем: █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ~0.1% параметров  │   │
+│  │  Модель: 4-bit quantized                                            │   │
+│  │                                                                      │   │
+│  │  + 7B модель на 1x 24GB GPU                                        │   │
+│  │  + 70B модель на 2x 48GB GPU                                       │   │
+│  │  + Качество близко к full fine-tuning                              │   │
+│  │  - Inference чуть медленнее                                        │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Как работает LoRA
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                        LoRA MECHANISM                                       │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Original Weight Matrix W (frozen)                                         │
+│  ┌──────────────────────────────────┐                                      │
+│  │                                  │  d × k                               │
+│  │         W (large)                │  (e.g., 4096 × 4096)                │
+│  │                                  │                                      │
+│  └──────────────────────────────────┘                                      │
+│                                                                             │
+│  LoRA adds low-rank decomposition:                                         │
+│                                                                             │
+│  ┌────────┐                                                                │
+│  │   A    │  d × r                    W' = W + BA                          │
+│  │(down)  │  (4096 × 16)                                                   │
+│  └───┬────┘                           Trainable params:                    │
+│      │                                - Original: 4096 × 4096 = 16.7M      │
+│      ▼                                - LoRA (r=16): 4096×16 + 16×4096     │
+│  ┌────────┐                                        = 131K (0.8%)           │
+│  │   B    │  r × k                                                         │
+│  │ (up)   │  (16 × 4096)                                                   │
+│  └────────┘                                                                │
+│                                                                             │
+│  Output = W×x + B×A×x                                                      │
+│           ↑       ↑                                                        │
+│        frozen  trainable                                                   │
+│                                                                             │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Ключевые параметры LoRA
+
+| Параметр | Типичные значения | Эффект |
+|----------|-------------------|--------|
+| **r (rank)** | 8, 16, 32, 64 | Больше = мощнее, но больше памяти |
+| **alpha** | 16, 32, 64 | Scaling factor, обычно = 2×r |
+| **target_modules** | q, k, v, o, gate, up, down | Какие слои адаптировать |
+| **dropout** | 0.05-0.1 | Регуляризация |
+
+---
+
+## Практический Fine-tuning
+
+### Подготовка данных
+
+```python
+# ✅ Правильный формат данных для instruction tuning
+training_data = [
+    {
+        "instruction": "Summarize the following customer feedback",
+        "input": "The product arrived late but quality was excellent...",
+        "output": "Mixed feedback: delivery issues but product quality praised."
+    },
+    {
+        "instruction": "Classify the sentiment of this review",
+        "input": "Absolutely love this! Best purchase ever!",
+        "output": "positive"
+    }
+]
+
+# Конвертация в chat format (современный подход)
+def to_chat_format(example):
+    return {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": f"{example['instruction']}\n\n{example['input']}"},
+            {"role": "assistant", "content": example['output']}
+        ]
+    }
+
+# Минимум данных для fine-tuning
+# - 100 примеров: Минимум для заметного эффекта
+# - 500-1000: Хороший баланс качество/стоимость
+# - 10000+: Для серьёзной адаптации
+```
+
+### QLoRA с Hugging Face
+
+```python
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    TrainingArguments
+)
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from trl import SFTTrainer
+
+# 1. Quantization config (4-bit)
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_use_double_quant=True
+)
+
+# 2. Load model with quantization
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-3.1-8B-Instruct",
+    quantization_config=bnb_config,
+    device_map="auto",
+    trust_remote_code=True
+)
+
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.1-8B-Instruct")
+tokenizer.pad_token = tokenizer.eos_token
+
+# 3. Prepare for training
+model = prepare_model_for_kbit_training(model)
+
+# 4. LoRA config
+lora_config = LoraConfig(
+    r=16,                          # Rank
+    lora_alpha=32,                 # Scaling
+    target_modules=[               # Which layers to adapt
+        "q_proj", "k_proj", "v_proj", "o_proj",
+        "gate_proj", "up_proj", "down_proj"
+    ],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# 5. Apply LoRA
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+# trainable params: 41,943,040 || all params: 8,030,261,248 || trainable%: 0.52%
+
+# 6. Training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    weight_decay=0.01,
+    warmup_ratio=0.03,
+    lr_scheduler_type="cosine",
+    logging_steps=10,
+    save_strategy="epoch",
+    bf16=True,                     # Use bfloat16
+    optim="paged_adamw_8bit"       # Memory-efficient optimizer
+)
+
+# 7. Train
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=dataset,
+    tokenizer=tokenizer,
+    args=training_args,
+    max_seq_length=2048,
+    dataset_text_field="text"
+)
+
+trainer.train()
+
+# 8. Save adapter (only ~100MB instead of 16GB)
+model.save_pretrained("./lora-adapter")
+```
+
+### OpenAI Fine-tuning
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+# 1. Prepare JSONL file
+# training_data.jsonl:
+# {"messages": [{"role": "system", "content": "..."}, {"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]}
+# {"messages": [...]}
+
+# 2. Upload file
+file = client.files.create(
+    file=open("training_data.jsonl", "rb"),
+    purpose="fine-tune"
+)
+
+# 3. Create fine-tuning job
+job = client.fine_tuning.jobs.create(
+    training_file=file.id,
+    model="gpt-4o-mini-2024-07-18",  # Base model
+    hyperparameters={
+        "n_epochs": 3,
+        "batch_size": "auto",
+        "learning_rate_multiplier": "auto"
+    }
+)
+
+# 4. Monitor progress
+while True:
+    status = client.fine_tuning.jobs.retrieve(job.id)
+    print(f"Status: {status.status}")
+    if status.status in ["succeeded", "failed"]:
+        break
+    time.sleep(60)
+
+# 5. Use fine-tuned model
+response = client.chat.completions.create(
+    model=status.fine_tuned_model,  # ft:gpt-4o-mini-2024-07-18:org::abc123
+    messages=[{"role": "user", "content": "..."}]
+)
+```
+
+---
+
+## Типичные ошибки
+
+```python
+# ❌ Неправильно: Слишком мало данных
+dataset = [{"text": "example 1"}, {"text": "example 2"}]
+# Fine-tuning с 2 примерами = overfitting
+
+# ✅ Правильно: Минимум 100-500 примеров
+dataset = load_dataset("my_data")  # 500+ examples
+
+# ❌ Неправильно: Нет валидационного сплита
+trainer.train(train_dataset=full_dataset)
+
+# ✅ Правильно: Train/Validation split
+train_dataset = dataset["train"]
+eval_dataset = dataset["validation"]
+
+# ❌ Неправильно: Слишком много эпох
+training_args = TrainingArguments(num_train_epochs=20)  # Overfitting
+
+# ✅ Правильно: 1-3 эпохи обычно достаточно
+training_args = TrainingArguments(
+    num_train_epochs=3,
+    eval_strategy="epoch",  # Monitor validation loss
+    load_best_model_at_end=True
+)
+
+# ❌ Неправильно: Не проверяем базовую модель
+model.train()  # Сразу fine-tuning
+
+# ✅ Правильно: Сначала проверь, нужен ли fine-tuning
+# 1. Попробуй prompting
+# 2. Попробуй few-shot
+# 3. Измерь baseline метрики
+# 4. Только потом fine-tuning
+```
+
+---
+
+## Evaluation после Fine-tuning
+
+```python
+# ✅ Правильно: Comprehensive evaluation
+def evaluate_fine_tuned_model(base_model, fine_tuned_model, test_data):
+    results = {
+        "base": {"correct": 0, "total": 0},
+        "fine_tuned": {"correct": 0, "total": 0}
+    }
+
+    for example in test_data:
+        # Base model
+        base_output = base_model.generate(example["input"])
+        if is_correct(base_output, example["expected"]):
+            results["base"]["correct"] += 1
+        results["base"]["total"] += 1
+
+        # Fine-tuned model
+        ft_output = fine_tuned_model.generate(example["input"])
+        if is_correct(ft_output, example["expected"]):
+            results["fine_tuned"]["correct"] += 1
+        results["fine_tuned"]["total"] += 1
+
+    # Calculate improvement
+    base_acc = results["base"]["correct"] / results["base"]["total"]
+    ft_acc = results["fine_tuned"]["correct"] / results["fine_tuned"]["total"]
+
+    print(f"Base accuracy: {base_acc:.2%}")
+    print(f"Fine-tuned accuracy: {ft_acc:.2%}")
+    print(f"Improvement: {(ft_acc - base_acc):.2%}")
+
+    # Check for regression on general tasks
+    general_eval = evaluate_general_capabilities(fine_tuned_model)
+    print(f"General capability retention: {general_eval:.2%}")
+```
+
+---
+
+## Стоимость Fine-tuning
+
+| Метод | GPU требования | Время | Стоимость (примерно) |
+|-------|---------------|-------|---------------------|
+| **Full FT 7B** | 8x A100 80GB | Hours | $100-500 |
+| **LoRA 7B** | 1x A100 40GB | 1-2h | $10-50 |
+| **QLoRA 7B** | 1x RTX 4090 24GB | 2-4h | $5-20 |
+| **OpenAI FT** | Managed | 1-2h | $25 per 1M tokens |
+
+---
+
+## Preference Tuning (2024-2025)
+
+### Что такое Preference Tuning
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                   SFT vs PREFERENCE TUNING                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   SUPERVISED FINE-TUNING (SFT)                                      │
+│   ────────────────────────────                                     │
+│   Учим модель: "На вопрос X отвечай Y"                             │
+│                                                                     │
+│   Данные: (instruction, response)                                   │
+│   Проблема: Откуда взять "идеальные" ответы?                       │
+│                                                                     │
+│   PREFERENCE TUNING (DPO, ORPO)                                     │
+│   ─────────────────────────────                                    │
+│   Учим модель: "Ответ A лучше чем ответ B"                         │
+│                                                                     │
+│   Данные: (instruction, chosen, rejected)                           │
+│   Преимущество: Легче получить сравнения, чем идеальные ответы     │
+│                                                                     │
+│   АНАЛОГИЯ:                                                         │
+│   SFT = "Это единственный правильный ответ"                        │
+│   Preference = "Из двух вариантов этот лучше"                      │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### DPO (Direct Preference Optimization)
+
+```python
+# DPO — прямая оптимизация предпочтений
+# Не требует reward model как RLHF!
+
+from trl import DPOTrainer, DPOConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Данные в формате предпочтений
+training_data = [
+    {
+        "prompt": "Explain quantum computing",
+        "chosen": "Quantum computing uses qubits that can be 0 and 1 simultaneously...",
+        "rejected": "Quantum computers are really fast computers that use atoms..."
+    },
+    # ...
+]
+
+# Конфигурация DPO
+config = DPOConfig(
+    beta=0.1,  # Temperature parameter
+    learning_rate=5e-7,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    max_length=1024,
+    max_prompt_length=512,
+)
+
+# Тренировка
+trainer = DPOTrainer(
+    model=model,
+    ref_model=ref_model,  # Frozen reference
+    args=config,
+    train_dataset=dataset,
+    tokenizer=tokenizer,
+)
+
+trainer.train()
+```
+
+**Когда использовать DPO:**
+- Улучшение качества ответов (helpfulness)
+- Alignment с человеческими предпочтениями
+- Когда есть пары "хороший/плохой" ответ
+
+### ORPO (Odds Ratio Preference Optimization)
+
+```python
+# ORPO — ещё проще: не нужен reference model!
+from trl import ORPOTrainer, ORPOConfig
+
+config = ORPOConfig(
+    beta=0.1,
+    learning_rate=8e-6,
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=4,
+)
+
+# ORPO объединяет SFT + preference в один шаг
+trainer = ORPOTrainer(
+    model=model,
+    # НЕТ ref_model — главное отличие!
+    args=config,
+    train_dataset=dataset,
+    tokenizer=tokenizer,
+)
+
+trainer.train()
+
+# Плюсы ORPO:
+# - Меньше памяти (нет ref model)
+# - Проще pipeline
+# - Часто лучше результаты на alignment
+```
+
+### Сравнение методов
+
+| Метод | Требует Ref Model | Память | Качество | Сложность |
+|-------|-------------------|--------|----------|-----------|
+| **SFT** | Нет | Низкая | Baseline | Простая |
+| **RLHF** | Да + Reward Model | Очень высокая | Высокое | Очень сложная |
+| **DPO** | Да | Высокая | Высокое | Средняя |
+| **ORPO** | Нет | Низкая | Высокое | Простая |
+
+**Рекомендация 2025:** Начинай с ORPO, переходи на DPO если нужно больше контроля.
+
+---
+
+## Инструменты для Fine-tuning (2025)
+
+| Инструмент | Описание | Когда использовать |
+|------------|----------|-------------------|
+| **Unsloth** | 2x быстрее, 60% меньше памяти | QLoRA на consumer GPU |
+| **Axolotl** | Полный pipeline, YAML config | Production fine-tuning |
+| **LLaMA-Factory** | GUI + CLI, много моделей | Быстрый старт |
+| **TRL** | Hugging Face official | DPO, ORPO, PPO |
+| **OpenAI API** | Managed fine-tuning | Простота, без GPU |
+
+### Пример с Unsloth (рекомендуется)
+
+```python
+from unsloth import FastLanguageModel
+from trl import SFTTrainer
+
+# Unsloth автоматически оптимизирует
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name="unsloth/Llama-3.3-70B-Instruct-bnb-4bit",
+    max_seq_length=2048,
+    load_in_4bit=True,
+)
+
+# Добавляем LoRA
+model = FastLanguageModel.get_peft_model(
+    model,
+    r=16,
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
+                    "gate_proj", "up_proj", "down_proj"],
+    lora_alpha=16,
+    use_gradient_checkpointing="unsloth",  # Экономит память
+)
+
+# 2x быстрее стандартного HF!
+```
+
+---
+
+## Связи
+
+- [[ai-ml-overview-v2]] — обзор AI Engineering
+- [[ai-engineering-moc]] — Map of Content
+- [[rag-advanced-techniques]] — альтернатива fine-tuning
+- [[ai-testing-evaluation]] — как оценить результат
+- [[ai-devops-deployment]] — деплой fine-tuned моделей
+- [[ai-data-preparation]] — подготовка данных
+
+---
+
+## Источники
+
+- [LoRA Paper](https://arxiv.org/abs/2106.09685) — оригинальная статья
+- [QLoRA Paper](https://arxiv.org/abs/2305.14314) — quantized LoRA
+- [DPO Paper](https://arxiv.org/abs/2305.18290) — Direct Preference Optimization
+- [ORPO Paper](https://arxiv.org/abs/2403.07691) — Odds Ratio Preference Optimization
+- [Hugging Face TRL](https://huggingface.co/docs/trl) — DPO, ORPO, PPO
+- [Unsloth](https://github.com/unslothai/unsloth) — 2x faster fine-tuning
+- [Sebastian Raschka: Fine-tuning Guide](https://magazine.sebastianraschka.com/)
+
+---
+
+## Проверь себя
+
+> [!question]- Когда fine-tuning оправдан, а когда лучше использовать prompting или RAG?
+> Fine-tuning оправдан когда: нужен уникальный стиль/формат ответов, специфическая domain terminology, жёсткие требования к latency (нет времени на RAG retrieval), или confidential данные нельзя передавать через API. Prompting/RAG предпочтительнее когда: достаточно few-shot примеров, данные часто обновляются, или бюджет ограничен.
+
+> [!question]- Чем LoRA отличается от QLoRA и когда использовать каждый?
+> LoRA обучает low-rank адаптеры (~1% параметров) в fp16/bf16, требует 1 GPU с 16-24 GB VRAM для 7B модели. QLoRA квантизует базовую модель до 4-bit и обучает адаптеры в fp16, сокращая VRAM в 3-4 раза. QLoRA для ограниченных ресурсов, LoRA --- когда нужна максимальная точность.
+
+> [!question]- Как подготовить качественный dataset для fine-tuning?
+> Минимум 100-500 примеров для LoRA (чем специфичнее задача, тем меньше нужно). Формат: instruction-input-output. Качество важнее количества --- 200 отличных примеров лучше 2000 посредственных. Нужна валидация: diversity, consistency, отсутствие contradictions.
+
+---
+
+## Ключевые карточки
+
+Что такое LoRA (Low-Rank Adaptation)?
+?
+Метод эффективного fine-tuning, где вместо обновления всех весов модели обучаются маленькие low-rank матрицы (адаптеры), которые добавляются к замороженным весам. Обучается ~1% параметров, что сокращает compute и memory в 10-100 раз.
+
+Что такое QLoRA и чем она отличается от LoRA?
+?
+QLoRA (Quantized LoRA) квантизует базовую модель до 4-bit (NF4 формат), а LoRA-адаптеры обучает в fp16. Это сокращает VRAM в 3-4 раза: 7B модель помещается в 6 GB вместо 16 GB. Качество близко к полному LoRA при значительной экономии ресурсов.
+
+Какие alignment техники используются после fine-tuning?
+?
+RLHF (Reinforcement Learning from Human Feedback) --- классический, но дорогой. DPO (Direct Preference Optimization) --- проще, без отдельной reward model. ORPO (Odds Ratio Preference Optimization) --- объединяет SFT и alignment в один этап. DPO и ORPO --- современный стандарт.
+
+Какие инструменты используются для fine-tuning в 2025?
+?
+Unsloth (оптимизированный LoRA/QLoRA, 2x скорость), Axolotl (конфигурация через YAML), HuggingFace TRL (reference реализация), и облачные: OpenAI Fine-tuning API, Together.ai, Fireworks.ai. Выбор зависит от бюджета и уровня контроля.
+
+Как оценить качество fine-tuned модели?
+?
+Eval dataset (10-20% от training data), задачи-специфичные метрики (accuracy, BLEU, ROUGE), human evaluation на 50-100 примерах, и A/B тестирование с базовой моделью. Важно проверить на catastrophic forgetting --- модель не должна потерять базовые навыки.
+
+---
+
+## Куда дальше
+
+| Направление | Куда | Зачем |
+|-------------|------|-------|
+| Следующий шаг | [[llm-inference-optimization]] | Оптимизация inference fine-tuned модели |
+| Углубиться | [[local-llms-self-hosting]] | Self-hosting для fine-tuned моделей |
+| Смежная тема | [[jvm-benchmarking-jmh]] | Подходы к бенчмаркингу и оценке |
+| Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+*Проверено: 2026-01-11 | Обновлено: DPO, ORPO, Unsloth, современные инструменты*
