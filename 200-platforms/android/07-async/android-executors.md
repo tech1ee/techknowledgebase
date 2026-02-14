@@ -2963,8 +2963,9 @@ Dispatchers.IO использует shared thread pool (до 64 потоков).
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
-| Следующий шаг | [[android-coroutines-mistakes]] | Корутины -- замена Executors для современного Android |
-| Углубиться | [[android-handler-looper]] | Handler/Looper -- основа Executors на Android |
+| Современная замена | [[android-coroutines-guide]] | Корутины — замена Executors для современного Android |
+| Следующий шаг | [[android-coroutines-mistakes]] | Типичные ошибки при переходе на корутины |
+| Углубиться | [[android-handler-looper]] | Handler/Looper — основа Executors на Android |
 | Смежная тема | [[jvm-executors-futures]] | JVM Executors и Futures детально |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 

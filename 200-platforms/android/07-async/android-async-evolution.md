@@ -16,7 +16,10 @@ related:
   - "[[android-asynctask-deprecated]]"
   - "[[android-executors]]"
   - "[[android-rxjava]]"
+  - "[[android-coroutines-guide]]"
+  - "[[android-flow-guide]]"
   - "[[android-coroutines-mistakes]]"
+  - "[[android-async-testing]]"
   - "[[android-threading]]"
 reading_time: 52
 difficulty: 4
@@ -1030,8 +1033,10 @@ Flow: 1) Kotlin-first API. 2) Работает на любом Dispatcher. 3) О
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
+| Практика | [[android-coroutines-guide]] | Практический гайд по корутинам — итог эволюции |
+| Практика | [[android-flow-guide]] | Flow в Android — реактивный слой поверх корутин |
 | Следующий шаг | [[android-coroutines-mistakes]] | Правильное использование корутин |
-| Углубиться | [[android-handler-looper]] | Handler/Looper -- фундамент всей async модели |
+| Углубиться | [[android-handler-looper]] | Handler/Looper — фундамент всей async модели |
 | Смежная тема | [[cross-concurrency-modern]] | Эволюция async на всех платформах |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 

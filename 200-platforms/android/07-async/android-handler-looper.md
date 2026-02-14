@@ -2630,9 +2630,10 @@ Thread с подготовленным Looper. val thread = HandlerThread('bg');
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
-| Следующий шаг | [[android-executors]] | Executors -- более высокоуровневая абстракция |
+| Следующий шаг | [[android-executors]] | Executors — более высокоуровневая абстракция |
+| Современная замена | [[android-coroutines-guide]] | Корутины заменили Handler для большинства задач |
 | Углубиться | [[android-threading]] | Полная картина threading в Android |
-| Смежная тема | [[ios-gcd-deep-dive]] | GCD в iOS -- аналог Handler/Looper |
+| Смежная тема | [[ios-gcd-deep-dive]] | GCD в iOS — аналог Handler/Looper |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 
 

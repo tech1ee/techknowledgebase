@@ -88,6 +88,8 @@ tags:
 - [ ] [[android-threading]] — Main Thread, Kotlin Coroutines, Dispatchers ⏱ 20m
 - [ ] [[android-handler-looper]] — Handler, Looper, MessageQueue: фундамент async в Android ⏱ 40m
 - [ ] [[android-async-evolution]] — эволюция async: от Thread/Handler до Coroutines ⏱ 20m
+- [ ] [[android-coroutines-guide]] — практический гайд: scopes, dispatchers, patterns ⏱ 45m
+- [ ] [[android-flow-guide]] — Flow на каждом слое архитектуры: data → domain → UI ⏱ 40m
 - [ ] [[android-background-work]] — WorkManager, Foreground Services, Doze ⏱ 25m
 
 ### Build
@@ -144,9 +146,11 @@ tags:
 > [!tip] AsyncTask и RxJava — legacy. Пропусти если работаешь только с Coroutines.
 
 - [ ] [[android-coroutines-mistakes]] — 10 типичных ошибок с Kotlin Coroutines ⏱ 45m
+- [ ] [[android-async-testing]] — тестирование корутин, Flow, Turbine ⏱ 50m
 - [ ] [[android-asynctask-deprecated]] — AsyncTask: история, проблемы и уроки ⏱ 40m
 - [ ] [[android-executors]] — Executors и ThreadPoolExecutor в Android ⏱ 45m
 - [ ] [[android-rxjava]] — RxJava и RxAndroid: реактивный подход ⏱ 40m
+- [ ] [[android-rxjava-migration]] — миграция с RxJava на Coroutines/Flow ⏱ 30m
 - 📝 День повторения
 
 ### Build Deep Dives
