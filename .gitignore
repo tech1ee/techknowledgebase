@@ -42,3 +42,9 @@ secrets.json
 
 # === Misc ===
 *.canvas
+
+
+
+
+# Ignore Smart Environment folder
+.smart-env

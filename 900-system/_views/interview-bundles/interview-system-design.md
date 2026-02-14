@@ -135,6 +135,19 @@ tags:
 - Queue management: state machine
 - Связано: [[android-service-internals]], [[android-notifications]]
 
+### Детальные разборы (step-by-step)
+
+Пошаговые walkthrough в формате диалога кандидат ↔ интервьюер:
+
+| Задача | Ключевые темы | Материал |
+|--------|--------------|----------|
+| Chat App (мессенджер) | WebSocket, offline sync, attachments, Room SSoT | [[sd-exercise-chat-app]] |
+| Caching Library | Dispatcher, Journal, LRU/LFU eviction, BLOB storage | [[sd-exercise-caching-library]] |
+| Image Loading Library | Memory/disk cache, BitmapPool, lifecycle management | [[sd-exercise-image-library]] |
+| File Downloader | Worker pool, resumable downloads, progress tracking | [[sd-exercise-file-downloader]] |
+
+→ Курированные блог-посты из Airbnb, Uber, Instagram и др.: [[sd-industry-resources]]
+
 ---
 
 ## Числа для оценки масштаба

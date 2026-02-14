@@ -38,6 +38,7 @@ tags:
 
 ### День 3: System Design + Behavioral
 - [[system-design-android]] — мобильный system design
+- [[sd-exercise-chat-app]] — практика: мессенджер (диалог)
 - [[behavioral-questions]] — подготовить 5 историй (STAR)
 - [[negotiation]] — подготовка к переговорам
 
@@ -106,10 +107,11 @@ tags:
 - [[architecture-distributed-systems]] — распределённые системы
 - [[caching-strategies]] — кеширование
 
-### Неделя 4: Behavioral + Polish
+### Неделя 4: Behavioral + SD Practice + Polish
 - [[behavioral-interview]] — методология
 - [[behavioral-questions]] — все вопросы + ответы
 - [[negotiation]] — переговоры по офферу
+- SD-практика: [[sd-exercise-chat-app]], [[sd-exercise-caching-library]], [[sd-exercise-image-library]], [[sd-exercise-file-downloader]]
 - [[android-senior-2026]] — финальная ревизия
 - Mock interviews каждый день
 - Повторение слабых тем
@@ -147,6 +149,11 @@ tags:
 | Распределённые системы | [[architecture-distributed-systems]] |
 | API дизайн | [[api-design]] |
 | Offline-first | [[android-data-persistence]] |
+| Практика: Chat App | [[sd-exercise-chat-app]] |
+| Практика: Caching Library | [[sd-exercise-caching-library]] |
+| Практика: Image Library | [[sd-exercise-image-library]] |
+| Практика: File Downloader | [[sd-exercise-file-downloader]] |
+| Блог-посты компаний | [[sd-industry-resources]] |
 
 ### Behavioral Round
 | Тема | Материал |
