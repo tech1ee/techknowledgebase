@@ -37,5 +37,8 @@ _automation/
 credentials.json
 secrets.json
 
+# === Obsidian daily notes ===
+/202?-??-??.md
+
 # === Misc ===
 *.canvas
