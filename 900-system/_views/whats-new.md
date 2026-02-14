@@ -16,6 +16,17 @@ tags:
 
 ## Февраль 2026
 
+### Android Ecosystem Reference (2026-02-14)
+- 8 новых файлов по экосистеме Android (актуально на февраль 2026)
+- **Master справочник:** [[android-ecosystem-2026]] — полная карта инструментов, библиотек и трендов
+- **Платформа:** [[android-platform-versions]] — API levels, feature matrix, minSdk guide
+- **Jetpack:** [[android-jetpack-libraries-map]] — карта 80+ AndroidX-библиотек
+- **Firebase:** [[android-firebase-platform]] — 15+ сервисов, альтернативы, pricing
+- **Аналитика:** [[android-analytics-crash-reporting]] — Crashlytics, Sentry, Amplitude, Mixpanel
+- **Качество кода:** [[android-code-quality-tools]] — Detekt, ktlint, Lint, Spotless
+- **Feature flags:** [[android-feature-flags-remote-config]] — Firebase RC, LaunchDarkly, архитектура
+- **On-device AI:** [[android-on-device-ai]] — Gemini Nano, ML Kit GenAI, LiteRT, MediaPipe
+
 ### Реорганизация (2026-02-14)
 - Зонная структура: 100-foundations/, 200-platforms/, 300-systems/, 400-ai-ml/, 500-craft/
 - 35+ новых навигационных файлов (точки входа)

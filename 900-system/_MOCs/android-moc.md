@@ -148,6 +148,16 @@ tags:
 - [[android-permissions-security]] — Runtime Permissions, EncryptedSharedPreferences, Keystore
 - [[android-notifications]] — система уведомлений: каналы, PendingIntent, Android 13+ permissions
 
+### Экосистема и инструменты
+- [[android-ecosystem-2026]] — полный справочник экосистемы: версии, библиотеки, тренды 2026
+- [[android-platform-versions]] — версии Android: API levels, feature matrix, minSdk guide
+- [[android-jetpack-libraries-map]] — карта 80+ Jetpack-библиотек с рекомендациями
+- [[android-firebase-platform]] — Firebase: 15+ сервисов, альтернативы, pricing, интеграция
+- [[android-analytics-crash-reporting]] — аналитика и крэш-репортинг: Crashlytics, Sentry, Amplitude
+- [[android-code-quality-tools]] — Detekt, ktlint, Android Lint, Spotless: настройка и CI
+- [[android-feature-flags-remote-config]] — feature flags: Firebase RC, LaunchDarkly, архитектура
+- [[android-on-device-ai]] — on-device AI: Gemini Nano, ML Kit GenAI, LiteRT, MediaPipe
+
 ---
 
 ## Ключевые концепции
