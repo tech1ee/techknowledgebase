@@ -2644,9 +2644,10 @@ Android 1.6-2.3: serial (один поток). Android 3.0: parallel (пул). A
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
-| Следующий шаг | [[android-coroutines-mistakes]] | Корутины -- правильная замена AsyncTask |
+| Современная замена | [[android-coroutines-guide]] | Корутины — правильная замена AsyncTask |
+| Следующий шаг | [[android-coroutines-mistakes]] | Типичные ошибки при использовании корутин |
 | Углубиться | [[android-async-evolution]] | Полная история асинхронности в Android |
-| Смежная тема | [[android-executors]] | Executors -- следующий шаг после AsyncTask |
+| Смежная тема | [[android-executors]] | Executors — промежуточный шаг после AsyncTask |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 
 

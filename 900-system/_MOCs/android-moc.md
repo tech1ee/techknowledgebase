@@ -116,8 +116,12 @@ tags:
 - [[android-async-evolution]] — эволюция async: от Thread/Handler до Coroutines (2008-2025)
 - [[android-asynctask-deprecated]] — AsyncTask: история, проблемы и уроки
 - [[android-executors]] — Executors и ThreadPoolExecutor в Android
+- [[android-coroutines-guide]] — практический гайд по корутинам: scopes, dispatchers, patterns
+- [[android-flow-guide]] — Flow на каждом слое Android-архитектуры: data → domain → UI
 - [[android-rxjava]] — RxJava и RxAndroid: реактивный подход
+- [[android-rxjava-migration]] — миграция с RxJava на Coroutines/Flow: стратегия и паттерны
 - [[android-coroutines-mistakes]] — 10 типичных ошибок с Kotlin Coroutines в Android
+- [[android-async-testing]] — тестирование асинхронного кода: корутины, Flow, Turbine
 - [[android-background-work]] — WorkManager, Foreground Services, Doze, App Standby
 
 ### Данные и сеть

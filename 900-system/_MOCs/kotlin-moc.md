@@ -33,6 +33,10 @@ tags:
          ↓
 6. [[kotlin-flow]]                — Reactive streams, StateFlow/SharedFlow
          ↓
+6b. [[kotlin-channels]]           — Channels: межкорутинная коммуникация
+         ↓
+6c. [[kotlin-coroutines-internals]] — Как корутины работают внутри (CPS, state machine)
+         ↓
 7. [[kotlin-advanced-features]]   — Extensions, delegates, DSL
          ↓
 8. [[kotlin-type-system]]         — Generics, variance, contracts
@@ -62,6 +66,8 @@ tags:
 ### Асинхронность (Intermediate → Advanced)
 - [[kotlin-coroutines]] — suspend, launch/async, CoroutineScope, structured concurrency
 - [[kotlin-flow]] — Flow, StateFlow, SharedFlow, операторы, backpressure
+- [[kotlin-channels]] — Channel: межкорутинная коммуникация, fan-out/fan-in, select
+- [[kotlin-coroutines-internals]] — CPS, Continuation, state machine: как корутины работают внутри
 
 ### Продвинутые возможности (Advanced)
 - [[kotlin-advanced-features]] — Extension functions, operator overloading, delegates, DSL
@@ -160,6 +166,8 @@ tags:
 | kotlin-interop | created | Intermediate |
 | kotlin-testing | created | All levels |
 | kotlin-best-practices | created | All levels |
+| kotlin-channels | created | Intermediate/Advanced |
+| kotlin-coroutines-internals | created | Advanced |
 
 ---
 

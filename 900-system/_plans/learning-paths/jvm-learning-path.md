@@ -69,6 +69,7 @@ tags:
 - [ ] [[kotlin-type-system]] — Generics, Variance, Reified Types ⏱ 27m
 - [ ] [[kotlin-coroutines]] — Coroutines: suspend, CoroutineScope, Dispatchers ⏱ 29m
 - [ ] [[kotlin-flow]] — Flow: StateFlow, SharedFlow, reactive streams ⏱ 26m
+- [ ] [[kotlin-channels]] — Channels: межкорутинная коммуникация, fan-out/fan-in ⏱ 35m
 - 📝 День повторения
 - [ ] [[kotlin-interop]] — Kotlin-Java Interoperability: @JvmStatic, @JvmOverloads ⏱ 26m
 - [ ] [[kotlin-best-practices]] — идиоматичный Kotlin и оптимизация ⏱ 24m
@@ -87,6 +88,7 @@ tags:
 > Время: ~3 недели | Чтение: 236 мин
 > Prerequisites: Level 2
 
+- [ ] [[kotlin-coroutines-internals]] — CPS, Continuation, state machine: как корутины работают внутри ⏱ 45m
 - [ ] [[kotlin-advanced-features]] — Extension Functions, Delegates, DSL, operator overloading ⏱ 31m
 - [ ] [[jvm-reflection-api]] — Reflection API: интроспекция классов, dynamic proxy, Method Handles ⏱ 29m
 - [ ] [[jvm-annotations-processing]] — аннотации и APT: compile-time метапрограммирование ⏱ 35m

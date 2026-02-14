@@ -2889,9 +2889,10 @@ map -> map, flatMap -> flatMapConcat, switchMap -> flatMapLatest, combineLatest 
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
-| Следующий шаг | [[android-coroutines-mistakes]] | Корутины -- современная замена RxJava |
+| Миграция | [[android-rxjava-migration]] | Пошаговая миграция с RxJava на Coroutines/Flow |
+| Следующий шаг | [[android-coroutines-mistakes]] | Корутины — современная замена RxJava |
 | Углубиться | [[android-async-evolution]] | Эволюция от RxJava к Coroutines |
-| Смежная тема | [[kotlin-flow]] | Kotlin Flow -- альтернатива RxJava |
+| Смежная тема | [[kotlin-flow]] | Kotlin Flow — альтернатива RxJava |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 
 
