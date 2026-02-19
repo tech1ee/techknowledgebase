@@ -67,7 +67,7 @@ tags:
 | 8 | [[android-app-startup-performance]] | Android | Оптимизация старта приложения |
 | 9 | [[android-memory-leaks]] | Android | Утечки памяти -- #1 проблема в продакшене |
 | 10 | [[patterns-overview]] | CS Fundamentals | 14 паттернов решения задач |
-| 11 | [[clean-code-solid]] | Programming | Принципы чистого кода |
+| 11 | [[solid-principles]] | Programming | Принципы чистого кода |
 | 12 | [[android-testing]] | Android | Стратегии тестирования |
 | 13 | [[ios-architecture-patterns]] | iOS | MVVM, VIPER, TCA для iOS |
 | 14 | [[android-navigation]] | Android | Навигация в Android-приложениях |
@@ -128,6 +128,10 @@ tags:
 8. Продвинутое
    [[kmp-getting-started]] → [[kmp-project-structure]]
    [[compose-mp-overview]]
+
+9. Platform Internals (Deep Dive)
+   [[android-internals-overview]] → [[android-binder-ipc]] → [[android-boot-process]]
+   [[android-art-runtime]] → [[android-system-services]] → [[android-activitythread-internals]]
 ```
 
 ---

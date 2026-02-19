@@ -147,5 +147,5 @@ MVC → MVVM + Coordinator → VIPER → TCA → SwiftUI + TCA
 - [[android-architecture-evolution]] — эволюция Android-архитектуры
 - [[ios-architecture-evolution]] — эволюция iOS-архитектуры
 - [[kmp-architecture-patterns]] — KMP-архитектура
-- [[design-patterns]] — паттерны проектирования
-- [[clean-code-solid]] — принципы SOLID
+- [[design-patterns-overview]] — паттерны проектирования
+- [[solid-principles]] — принципы SOLID

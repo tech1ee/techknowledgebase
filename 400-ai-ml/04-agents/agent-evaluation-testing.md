@@ -31,7 +31,7 @@ status: published
 related:
   - "[[agent-debugging-troubleshooting]]"
   - "[[ai-observability-monitoring]]"
-  - "[[testing-strategies]]"
+  - "[[testing-fundamentals]]"
 ---
 
 # AI Agent Evaluation & Testing: Полное руководство
@@ -1429,7 +1429,7 @@ class AgentABTest:
 
 Continuous evaluation в production напрямую опирается на observability инфраструктуру — tracing для сбора trajectory данных, metrics для отслеживания pass rate и quality scores, alerting для уведомления о degradation. Observability предоставляет raw data, а evaluation framework превращает эти данные в actionable insights о качестве агента. Интеграция с инструментами вроде LangSmith позволяет запускать automated evals на production traces, замыкая feedback loop.
 
-### [[testing-strategies]]
+### [[testing-fundamentals]]
 
 Агентное тестирование расширяет классические стратегии тестирования ПО с учётом стохастической природы LLM. Пирамида тестирования (unit → integration → E2E) сохраняется, но component tests для промптов и tools заменяют классические unit tests, а trajectory evaluation — аналог integration testing с проверкой не только результата, но и процесса. Концепции golden dataset, regression testing и A/B testing напрямую заимствуются из software testing, адаптированные для недетерминированных систем.
 
@@ -1489,7 +1489,7 @@ Offline evaluation: прогон на фиксированном dataset до д
 |-------------|------|-------|
 | Следующий шаг | [[agent-debugging-troubleshooting]] | Дебаг найденных проблем |
 | Углубиться | [[ai-observability-monitoring]] | Мониторинг агентов в production |
-| Смежная тема | [[testing-strategies]] | Общие стратегии тестирования ПО |
+| Смежная тема | [[testing-fundamentals]] | Общие стратегии тестирования ПО |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
 
 *Создано: 2026-01-11*

@@ -1177,7 +1177,7 @@ camelCase для функций и свойств: val userName. PascalCase дл
 | Углубление | [[kotlin-testing]] | Testable код — как best practices влияют на тестируемость |
 | Углубление | [[kotlin-advanced-features]] | Когда продвинутые фичи уместны, а когда избыточны |
 | Связь | [[kotlin-coroutines]] | Structured concurrency и правильные паттерны async кода |
-| Кросс-область | [[clean-code-solid]] | Общие принципы чистого кода, применимые в Kotlin |
+| Кросс-область | [[clean-code]] | Общие принципы чистого кода, применимые в Kotlin |
 | Навигация | [[jvm-overview]] | Вернуться к обзору JVM-тем |
 
 ---

@@ -701,7 +701,7 @@ Presentation: ViewModel state transitions, event handling. Domain: Use Case busi
 |-------------|--------|-------|
 | Следующий шаг | [[system-design-android]] | Mobile System Design — расширение архитектуры на уровень системы |
 | Углубиться | [[android-architecture-patterns]] | MVVM и MVI на практике с реальными примерами |
-| Смежная тема | [[design-patterns]] | Общие паттерны проектирования за пределами mobile |
+| Смежная тема | [[design-patterns-overview]] | Общие паттерны проектирования за пределами mobile |
 | Обзор | [[technical-interview]] | Формат технического интервью — контекст для архитектурных вопросов |
 
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Модуляризация Android-приложений"
 created: 2025-01-15
-modified: 2026-02-13
+modified: 2026-02-19
 type: deep-dive
 status: published
 cs-foundations: [module-systems, dependency-graph, build-optimization, encapsulation]
@@ -15,6 +15,9 @@ related:
   - "[[android-architecture-patterns]]"
   - "[[android-dependencies]]"
   - "[[android-viewmodel-internals]]"
+  - "[[android-clean-architecture]]"
+  - "[[coupling-cohesion]]"
+  - "[[module-systems]]"
 prerequisites:
   - "[[android-gradle-fundamentals]]"
   - "[[android-architecture-patterns]]"
@@ -398,6 +401,259 @@ class UserRepositoryImpl @Inject constructor(
         }
 }
 ```
+
+---
+
+## Стратегии модуляризации
+
+Существует несколько подходов к разделению приложения на модули. Выбор стратегии зависит от размера команды, сложности приложения и организационной структуры.
+
+### 1. По слоям (by layer)
+
+Модули разделяются по архитектурным слоям. Каждый слой — отдельный модуль.
+
+```
+:app
+  │
+  ├── :presentation/    ← все экраны и ViewModels
+  ├── :domain/          ← все UseCases и бизнес-логика
+  └── :data/            ← все repositories и data sources
+
+Зависимости: :presentation → :domain → :data
+```
+
+**Когда подходит:** маленькие команды (1-3 человека), простые приложения до 30K строк.
+
+**Плюсы:**
+- Простая и понятная структура
+- Чёткое разделение ответственности
+- Лёгкий onboarding — все знают где что лежит
+
+**Минусы:**
+- Не масштабируется: добавление фичи затрагивает ВСЕ модули
+- Merge conflicts: вся команда работает в одних модулях
+- Нет изоляции фич — изменение в `:data` перекомпилирует `:domain` и `:presentation`
+- Build time не улучшается существенно (3 модуля — мало для параллелизма)
+
+```
+Проблема масштабирования:
+
+Feature A: presentation/ + domain/ + data/
+Feature B: presentation/ + domain/ + data/    ← те же модули!
+Feature C: presentation/ + domain/ + data/    ← merge conflicts
+
+Каждая фича размазана по ВСЕМ слоям
+```
+
+### 2. По фичам (by feature)
+
+Каждая фича — отдельный модуль, содержащий все слои внутри себя.
+
+```
+:app
+  │
+  ├── :feature:home/       ← UI + logic + data для Home
+  ├── :feature:search/     ← UI + logic + data для Search
+  ├── :feature:profile/    ← UI + logic + data для Profile
+  └── :feature:settings/   ← UI + logic + data для Settings
+
+Фичи изолированы друг от друга
+```
+
+**Когда подходит:** средние и большие команды (3+ человек), приложения с независимыми функциональными областями.
+
+**Плюсы:**
+- Team ownership: каждая команда владеет своими модулями
+- Параллельная разработка без merge conflicts
+- Изолированные билды — изменение в `:feature:home` не затрагивает `:feature:search`
+- Инкрементальная сборка даёт максимальный эффект
+
+**Минусы:**
+- Дублирование общего кода (networking, database, UI компоненты)
+- Сложность навигации между фичами
+- Без shared модулей — код копируется между фичами
+
+```
+Проблема дублирования:
+
+:feature:home/                :feature:search/
+├── data/                     ├── data/
+│   ├── RetrofitSetup.kt     │   ├── RetrofitSetup.kt    ← дублирование!
+│   └── UserRepository.kt    │   └── UserRepository.kt   ← дублирование!
+├── domain/                   ├── domain/
+└── ui/                       └── ui/
+```
+
+### 3. Гибрид: feature + layer (рекомендация Google)
+
+Комбинация обоих подходов: фичи для вертикального разделения + core модули для общего кода. Это **стандартный подход**, описанный в остальных разделах этого файла.
+
+```
+:app
+  │
+  ├── :feature:home/        ← вертикальный срез (UI + ViewModel)
+  ├── :feature:search/      ← вертикальный срез
+  ├── :feature:profile/     ← вертикальный срез
+  │
+  ├── :core:domain/         ← общая бизнес-логика (kotlin-jvm)
+  ├── :core:data/           ← общие repositories
+  ├── :core:ui/             ← Design System, shared composables
+  ├── :core:network/        ← Retrofit, OkHttp
+  └── :core:database/       ← Room, DAO
+
+Feature модули содержат только presentation layer
+Core модули содержат shared infrastructure
+```
+
+**Когда подходит:** любой масштаб, от среднего до крупного. Рекомендован Google в [Now in Android](https://github.com/android/nowinandroid).
+
+**Плюсы:**
+- Баланс между изоляцией фич и переиспользованием кода
+- Масштабируется от 10 до 100+ модулей
+- `:core:domain` как чистый kotlin-jvm — тестируемость и KMP-совместимость
+- Индустриальный стандарт с широкой документацией
+
+**Минусы:**
+- Сложнее начальная настройка (Convention Plugins обязательны)
+- Нужно аккуратно определять границы core vs feature
+
+> Диаграмма гибридной архитектуры подробно показана в разделе **Типы модулей** выше.
+
+### 4. По командам (Conway's Law)
+
+> *"Организации проектируют системы, которые копируют структуру коммуникаций этих организаций"* — Мелвин Конвей, 1968
+
+Модули выстраиваются по границам команд: каждая команда владеет своими feature модулями и соответствующими core модулями.
+
+```
+Команда Payments:              Команда Social:
+├── :feature:payments/         ├── :feature:profile/
+├── :feature:checkout/         ├── :feature:friends/
+├── :core:payments-data/       ├── :core:social-data/
+└── :core:billing/             └── :core:messaging/
+
+Shared (Platform Team):
+├── :core:network/
+├── :core:ui/
+├── :core:analytics/
+└── :core:auth/
+```
+
+**Когда подходит:** крупные организации (5+ команд), приложения с чётким разделением бизнес-доменов.
+
+**Плюсы:**
+- Минимум cross-team зависимостей
+- Команды деплоят независимо
+- Чёткие зоны ответственности (code ownership через CODEOWNERS)
+
+**Риски:**
+- Организационные изменения ломают модульные границы
+- Может приводить к дублированию между командами
+- Требует Platform Team для shared инфраструктуры
+
+### 5. Микро-модули vs макро-модули
+
+Независимо от стратегии, критичен **уровень гранулярности** модулей.
+
+```
+Микро-модули (100+ модулей):        Макро-модули (10-20 модулей):
+├── :feature:home:ui/               ├── :feature:home/
+├── :feature:home:domain/           │   ├── ui/
+├── :feature:home:data/             │   ├── domain/
+├── :feature:home:api/              │   └── data/
+├── :feature:search:ui/             ├── :feature:search/
+├── :feature:search:domain/         │   ├── ui/
+├── :feature:search:data/           │   ├── domain/
+├── :feature:search:api/            │   └── data/
+└── ... (100+ модулей)              └── ... (10-20 модулей)
+```
+
+**Микро-модули:**
+- Экстремальная инкапсуляция — каждый экран или компонент в своём модуле
+- Максимально быстрая инкрементальная сборка (минимальный scope перекомпиляции)
+- Overhead: сложность Gradle конфигурации, медленная configuration phase
+- Используют: крупные компании (Google, Uber) с автоматизацией создания модулей
+
+**Макро-модули:**
+- Один модуль на крупную фичу (Home, Search, Profile)
+- Баланс между изоляцией и overhead конфигурации
+- Рекомендация Google для большинства приложений
+- Используют: 80%+ модульных Android-проектов
+
+**Таблица решений:**
+
+| Фактор | Микро-модули | Макро-модули |
+|--------|-------------|--------------|
+| Размер команды | 20+ разработчиков | 3-15 разработчиков |
+| Build time (incremental) | ~5 сек | ~15-30 сек |
+| Configuration phase | Медленнее (100+ проектов) | Быстрее (10-20 проектов) |
+| Complexity | Высокая | Умеренная |
+| Tooling overhead | Нужна автоматизация | Ручное управление |
+
+### 6. Модуляризация + Clean Architecture
+
+Clean Architecture определяет **логические** слои, а модуляризация превращает их в **физические** Gradle-модули.
+
+```
+Clean Architecture Layers  →  Gradle Modules
+─────────────────────────     ──────────────────
+Presentation Layer         →  :feature:home/ (Android Library)
+                              :feature:search/
+                              :core:ui/
+
+Domain Layer               →  :core:domain/ (kotlin-jvm!)
+                              Чистый Kotlin, без Android
+                              UseCases, Models, Repository interfaces
+
+Data Layer                 →  :core:data/ (Android Library)
+                              :core:network/
+                              :core:database/
+                              Repository implementations
+```
+
+**Ключевое архитектурное решение:** `:core:domain` как **kotlin-jvm** модуль (не Android Library):
+- Не зависит от Android SDK — чистый Kotlin
+- Юнит-тесты без Robolectric — мгновенный feedback
+- KMP-совместимость — domain logic переиспользуется на iOS
+- Dependency Rule: domain не зависит от data (инверсия через interfaces)
+
+```kotlin
+// :core:domain/build.gradle.kts
+plugins {
+    id("kotlin-jvm")  // НЕ com.android.library!
+}
+
+// Нет android {} блока — чистый Kotlin модуль
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.javax.inject)
+}
+```
+
+Feature модули содержат свой presentation layer и зависят от `:core:domain` для бизнес-логики:
+
+```
+:feature:home/
+├── HomeScreen.kt           ← Presentation (Compose UI)
+├── HomeViewModel.kt        ← Presentation (ViewModel)
+├── HomeUiState.kt          ← Presentation (UI State)
+└── di/HomeModule.kt        ← DI wiring
+
+Зависит от: :core:domain (UseCases), :core:ui (Design System)
+НЕ зависит от: :core:data, :core:network (Dependency Inversion)
+```
+
+> Подробнее: **[[android-clean-architecture]]**
+
+### Сравнительная таблица стратегий
+
+| Стратегия | Лучше для | Кол-во модулей | Масштабируемость | Сложность |
+|-----------|-----------|----------------|------------------|-----------|
+| По слоям | Solo / маленькая команда | 3-5 | Низкая | Низкая |
+| По фичам | Средние команды, независимые фичи | 5-15 | Средняя | Средняя |
+| Гибрид (feature + layer) | Любой масштаб (рекомендация Google) | 15-40 | Высокая | Средняя |
+| По командам (Conway's Law) | Крупные организации, 5+ команд | 30-100+ | Очень высокая | Высокая |
+| Микро-модули | Крупные проекты, 20+ разработчиков | 100+ | Максимальная | Очень высокая |
 
 ---
 
@@ -1259,6 +1515,12 @@ dependencies {
 **[[android-repository-pattern]]** — Repository pattern определяет, как feature-модули взаимодействуют с данными через data-модули. В multi-module архитектуре Repository interface живёт в domain/api модуле, а реализация — в data модуле. Это обеспечивает инверсию зависимостей: feature-модули зависят только от абстракций, не от конкретных реализаций Room или Retrofit. Изучите Repository после понимания базовой модульной структуры.
 
 **[[android-dependencies]]** — Version Catalogs и BOM решают критическую проблему multi-module проектов: согласованность версий зависимостей. Без централизованного управления зависимостями каждый модуль может использовать разные версии одной библиотеки, что ведёт к конфликтам и увеличению размера APK. Version Catalogs (libs.versions.toml) стали индустриальным стандартом для модульных проектов. Настройте Version Catalog при создании первого модуля.
+
+**[[android-clean-architecture]]** — Clean Architecture определяет логические слои (data/domain/presentation), а модуляризация превращает их в физические Gradle-модули. Domain Layer как чистый kotlin-jvm модуль — ключевое архитектурное решение, обеспечивающее тестируемость и KMP-совместимость. Изучайте Clean Architecture для понимания какие модули создавать и зачем.
+
+**[[coupling-cohesion]]** — модули — это физическое воплощение coupling/cohesion. `internal` visibility = high cohesion внутри модуля. `implementation` зависимости = low coupling между модулями. Метрики coupling (Ca, Ce, Instability) напрямую применимы к dependency graph модулей.
+
+**[[module-systems]]** — теоретические основы модульных систем: encapsulation, explicit boundaries, dependency management. Kotlin `internal` visibility + Gradle `implementation` vs `api` — практическая реализация этих теорий. JPMS (Java 9) как альтернативный подход к модульности на JVM.
 
 ---
 

@@ -22,7 +22,7 @@ prerequisites:
 related:
   - "[[android-testing]]"
   - "[[ios-testing]]"
-  - "[[testing-strategies]]"
+  - "[[testing-fundamentals]]"
 ---
 
 # Cross-Platform Testing: XCTest vs JUnit
@@ -1113,7 +1113,7 @@ Unit-тесты быстрые, дешёвые и стабильные — их 
 
 **[[ios-testing]]** — XCTest — это единый фреймворк Apple для unit, integration и UI-тестирования, тесно интегрированный с Xcode. Заметка раскрывает XCTestExpectation для async-тестов, Protocol-based mocking, swift-snapshot-testing и XCUITest. Сравнение с JUnit в текущем файле показывает, что iOS-тестирование более монолитно (один фреймворк), тогда как Android использует набор специализированных библиотек.
 
-**[[testing-strategies]]** — Теоретические основы тестирования (testing pyramid, test doubles, TDD, BDD) применимы к обеим платформам. Заметка объясняет, когда использовать unit vs integration vs E2E тесты и как организовать тестовую инфраструктуру. Эта теоретическая база дополняет практическое сравнение инструментов из текущего файла и помогает спроектировать тестовую стратегию для KMP-проекта.
+**[[testing-fundamentals]]** — Теоретические основы тестирования (testing pyramid, test doubles, TDD, BDD) применимы к обеим платформам. Заметка объясняет, когда использовать unit vs integration vs E2E тесты и как организовать тестовую инфраструктуру. Эта теоретическая база дополняет практическое сравнение инструментов из текущего файла и помогает спроектировать тестовую стратегию для KMP-проекта.
 
 ---
 
@@ -1171,5 +1171,5 @@ Unit: изолированная логика, mock зависимости (kotl
 |-------------|------|-------|
 | Следующий шаг | [[cross-build-systems]] | Build systems -- основа для запуска тестов в CI/CD |
 | Углубиться | [[android-testing]] | JUnit, Mockk, Espresso из раздела Android |
-| Смежная тема | [[testing-strategies]] | Теория тестирования: pyramid, TDD, BDD из раздела Programming |
+| Смежная тема | [[testing-fundamentals]] | Теория тестирования: pyramid, TDD, BDD из раздела Programming |
 | Обзор | [[cross-platform-overview]] | Вернуться к обзору раздела |

@@ -50,10 +50,10 @@ tags:
 
 | Файл | Область | Тема |
 |------|---------|------|
-| [[clean-code-solid]] | Programming | SOLID-принципы с примерами кода |
+| [[solid-principles]] | Programming | SOLID-принципы с примерами кода |
 | [[technical-debt]] | Architecture | Что такое техдолг, как его измерять и аргументировать рефакторинг |
-| [[design-patterns]] | Programming | GoF-паттерны: когда применять, когда нет |
-| [[testing-strategies]] | Programming | Пирамида тестирования, TDD, что тестировать |
+| [[design-patterns-overview]] | Programming | GoF-паттерны: когда применять, когда нет |
+| [[testing-fundamentals]] | Programming | Пирамида тестирования, TDD, что тестировать |
 | [[dependency-injection-fundamentals]] | Architecture | DI: зачем, как, когда НЕ нужно |
 | [[architecture-resilience-patterns]] | Architecture | Circuit breaker, retry, bulkhead, timeout |
 

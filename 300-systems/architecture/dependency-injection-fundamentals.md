@@ -21,8 +21,8 @@ tags:
   - type/deep-dive
   - level/beginner
 related:
-  - "[[clean-code-solid]]"
-  - "[[design-patterns]]"
+  - "[[solid-principles]]"
+  - "[[design-patterns-overview]]"
   - "[[android-dependency-injection]]"
   - "[[spring-dependency-injection]]"
 reading_time: 40
@@ -1161,8 +1161,8 @@ class OrderService {
 ## Связи
 
 **Архитектура и паттерны:**
-→ [[clean-code-solid]] — SOLID принципы, особенно Dependency Inversion Principle
-→ [[design-patterns]] — Strategy, Factory, Decorator — связанные паттерны
+→ [[solid-principles]] — SOLID принципы, особенно Dependency Inversion Principle
+→ [[design-patterns-overview]] — Strategy, Factory, Decorator — связанные паттерны
 
 **Platform-specific DI:**
 → [[android-dependency-injection]] — обзор DI в Android (Hilt, Koin)
@@ -1267,9 +1267,9 @@ DI не добавляет сложности, а делает существу�
 | Направление | Куда | Зачем |
 |-------------|------|-------|
 | Обзор | [[architecture-overview]] | Карта всех архитектурных материалов |
-| Углубление | [[clean-code-solid]] | SOLID принципы — теоретическая база для DI, особенно Dependency Inversion Principle |
-| Углубление | [[design-patterns]] | Strategy, Factory, Decorator — паттерны, тесно связанные с DI |
+| Углубление | [[solid-principles]] | SOLID принципы — теоретическая база для DI, особенно Dependency Inversion Principle |
+| Углубление | [[design-patterns-overview]] | Strategy, Factory, Decorator — паттерны, тесно связанные с DI |
 | Android | [[android-dependency-injection]] | Обзор DI-фреймворков в Android: Hilt, Koin, Dagger |
 | Android | [[android-hilt-deep-dive]] | Compile-time DI с Hilt — официальная рекомендация Google для Android |
-| Тестирование | [[testing-strategies]] | Как DI упрощает unit-тестирование через подмену зависимостей mock-объектами |
+| Тестирование | [[testing-fundamentals]] | Как DI упрощает unit-тестирование через подмену зависимостей mock-объектами |
 | Архитектура | [[microservices-vs-monolith]] | Как DI и IoC-контейнеры влияют на выбор между монолитом и микросервисами |

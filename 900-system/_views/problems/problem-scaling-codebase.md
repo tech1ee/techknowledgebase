@@ -67,8 +67,8 @@ tags:
 ### Паттерны для больших кодовых баз
 - [[android-architecture-patterns]] — MVVM, MVI, Clean Architecture
 - [[ios-architecture-patterns]] — архитектурные паттерны iOS
-- [[design-patterns]] — общие паттерны проектирования
-- [[clean-code-solid]] — SOLID-принципы
+- [[design-patterns-overview]] — общие паттерны проектирования
+- [[solid-principles]] — SOLID-принципы
 
 ---
 
@@ -147,4 +147,4 @@ tags:
 - [[scaling-engineering-org]] — масштабирование организации
 - [[team-structures]] — структуры команд
 - [[technical-debt]] — технический долг
-- [[refactoring-techniques]] — техники рефакторинга
+- [[refactoring-catalog]] — техники рефакторинга

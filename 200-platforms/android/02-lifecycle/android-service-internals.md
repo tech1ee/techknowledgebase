@@ -17,6 +17,7 @@ related:
   - "[[android-context-internals]]"
   - "[[android-handler-looper]]"
   - "[[android-intent-internals]]"
+  - "[[android-binder-ipc]]"
 cs-foundations: [client-server, ipc, proxy-pattern, observer-pattern, service-locator, command-pattern, reference-counting]
 prerequisites:
   - "[[android-app-components]]"

@@ -35,7 +35,7 @@ tags:
          ↓
 8. [[android-threading]]               — Main Thread, Coroutines, Dispatchers
          ↓
-9. [[android-architecture-patterns]]   — MVVM, MVI, Clean Architecture
+9. [[android-architecture-patterns]]   — Сравнение паттернов, decision tree
          ↓
 10. [[android-data-persistence]]       — Обзор хранения данных: Room, DataStore, Files
          ↓
@@ -94,11 +94,16 @@ tags:
 - [[android-navigation-evolution]] — эволюция навигации от Activity+Intent до Type-safe Navigation 3
 
 ### Архитектура приложения
-- [[android-architecture-patterns]] — MVVM, MVI, Clean Architecture и UDF
+- [[android-architecture-patterns]] — сравнение паттернов, decision tree, рекомендации
 - [[android-architecture-evolution]] — эволюция от God Activity к Compose + MVI
+- [[android-mvc-mvp]] — MVC, MVP: история, библиотеки (Mosby, Moxy), миграция
+- [[android-mvvm-deep-dive]] — MVVM: три поколения, UiState, события, тестирование
+- [[android-mvi-deep-dive]] — MVI: Orbit, MVIKotlin, Ballast, FlowMVI, ручная реализация
+- [[android-clean-architecture]] — Clean Architecture: слои, Use Cases, Dependency Rule
+- [[android-compose-architectures]] — Circuit, Decompose и Molecule: Compose-native архитектуры
 - [[android-viewmodel-internals]] — как ViewModel переживает configuration change
 - [[android-repository-pattern]] — Single Source of Truth и Offline-First
-- [[android-modularization]] — multi-module архитектура для масштабируемости
+- [[android-modularization]] — multi-module архитектура и стратегии модуляризации
 
 ### Dependency Injection
 - [[android-dependency-injection]] — навигационный хаб по DI-экосистеме Android/KMP
@@ -152,6 +157,15 @@ tags:
 - [[android-permissions-security]] — Runtime Permissions, EncryptedSharedPreferences, Keystore
 - [[android-notifications]] — система уведомлений: каналы, PendingIntent, Android 13+ permissions
 
+### System Internals (Deep Dive)
+- [[android-internals-overview]] — карта раздела: все deep-dive по внутренностям Android
+- [[android-kernel-extensions]] — модификации Linux-ядра: Binder driver, ashmem, lmkd, SELinux, GKI
+- [[android-binder-ipc]] — Binder IPC: mmap 1-copy, Proxy/Stub, AIDL, ServiceManager, security model
+- [[android-boot-process]] — загрузка: Bootloader → init → Zygote → SystemServer → Launcher
+- [[android-art-runtime]] — ART Runtime: DEX format, JIT/AOT, Baseline Profiles, CC GC
+- [[android-system-services]] — System Server: AMS, WMS, PMS, PowerManager, Watchdog
+- [[android-activitythread-internals]] — ActivityThread, ApplicationThread, ClientTransaction, lifecycle dispatch
+
 ### Экосистема и инструменты
 - [[android-ecosystem-2026]] — полный справочник экосистемы: версии, библиотеки, тренды 2026
 - [[android-platform-versions]] — версии Android: API levels, feature matrix, minSdk guide
@@ -171,8 +185,8 @@ tags:
 | ART (Android Runtime) | Виртуальная машина, выполняющая DEX-байткод с AOT + JIT компиляцией | [[android-architecture]] |
 | Lifecycle | State machine компонентов: onCreate → onResume → onPause → onDestroy | [[android-activity-lifecycle]] |
 | Recomposition | Повторный вызов composable-функций при изменении State | [[android-compose-internals]] |
-| Unidirectional Data Flow | Состояние течёт вниз, события — вверх (MVI, Compose) | [[android-architecture-patterns]] |
-| Binder IPC | Механизм межпроцессного взаимодействия (Intent, ContentProvider, AIDL) | [[android-intent-internals]] |
+| Unidirectional Data Flow | Состояние течёт вниз, события — вверх (MVI, Compose) | [[android-mvi-deep-dive]] |
+| Binder IPC | Механизм межпроцессного взаимодействия (Intent, ContentProvider, AIDL) | [[android-binder-ipc]] |
 | Handler/Looper | Event loop Main Thread: MessageQueue обрабатывает сообщения по VSYNC | [[android-handler-looper]] |
 | ViewHolder Pattern | Переиспользование View в списках: inflation 1 раз, binding N раз | [[android-recyclerview-internals]] |
 | Structured Concurrency | Coroutine scope привязан к lifecycle; отмена каскадируется | [[android-coroutines-mistakes]] |

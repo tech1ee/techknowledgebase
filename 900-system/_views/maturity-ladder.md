@@ -61,7 +61,7 @@ tags:
 - [ ] [[problem-solving-framework]] -- фреймворк решения задач
 
 **Программирование:**
-- [ ] [[clean-code-solid]] -- чистый код и SOLID
+- [ ] [[solid-principles]] -- чистый код и SOLID
 
 ### Проверка пробелов:
 
@@ -117,7 +117,7 @@ tags:
 **Тестирование:**
 - [ ] [[android-testing]] -- стратегии тестирования Android
 - [ ] [[ios-testing]] -- тестирование в iOS
-- [ ] [[testing-strategies]] -- общие стратегии тестирования
+- [ ] [[testing-fundamentals]] -- общие стратегии тестирования
 
 **Паттерны (алгоритмы):**
 - [ ] [[patterns-overview]] -- обзор паттернов решения задач
@@ -153,6 +153,10 @@ tags:
 - [ ] [[android-view-rendering-pipeline]] -- rendering pipeline: measure → layout → draw
 - [ ] [[android-touch-handling]] -- обработка касаний
 - [ ] [[android-window-system]] -- оконная система Android
+- [ ] [[android-binder-ipc]] -- Binder IPC: механизм межпроцессного взаимодействия
+- [ ] [[android-art-runtime]] -- ART Runtime: DEX, JIT/AOT, GC
+- [ ] [[android-system-services]] -- System Server: AMS, WMS, PMS
+- [ ] [[android-boot-process]] -- загрузка Android: от кнопки питания до Launcher
 - [ ] [[ios-view-rendering]] -- рендеринг в iOS
 - [ ] [[ios-state-management]] -- управление состоянием SwiftUI
 

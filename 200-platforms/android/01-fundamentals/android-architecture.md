@@ -819,6 +819,10 @@ DEX (Dalvik Executable) -- register-based формат (меньше инстр�
 |-------------|------|-------|
 | Следующий шаг | [[android-activity-lifecycle]] | Lifecycle как следствие архитектуры процессов |
 | Углубиться | [[android-process-memory]] | Как LMK управляет процессами и памятью |
+| Deep Dive | [[android-internals-overview]] | Полная карта deep-dive по внутренностям Android |
+| Deep Dive | [[android-binder-ipc]] | Binder IPC: полный механизм от driver до AIDL |
+| Deep Dive | [[android-art-runtime]] | ART Runtime: DEX, JIT/AOT, GC |
+| Deep Dive | [[android-boot-process]] | Загрузка: от кнопки питания до Launcher |
 | Смежная тема | [[jvm-memory-model]] | Сравнение memory model ART и JVM |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 

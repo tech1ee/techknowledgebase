@@ -227,7 +227,7 @@ Warning Signs:          Recovery Actions:
 
 ### Programming
 - [[programming-overview]] — Принципы проектирования требуют системного мышления
-- [[design-patterns]] — Паттерны = chunking для архитектуры
+- [[design-patterns-overview]] — Паттерны = chunking для архитектуры
 
 ### Architecture
 - [[architecture-moc]] — Architectural thinking = systems thinking
@@ -364,7 +364,7 @@ Warning Signs:          Recovery Actions:
 | Следующий шаг | [[deep-work]] | Как организовать глубокую работу в мире отвлечений |
 | Углубиться | [[desirable-difficulties]] | Теория Bjork: почему полезные трудности усиливают обучение |
 | Углубиться | [[how-brain-learns]] | Нейропластичность, BDNF, формирование памяти |
-| Смежная тема | [[clean-code-solid]] | Принципы кода как снижение когнитивной нагрузки |
+| Смежная тема | [[clean-code]] | Принципы кода как снижение когнитивной нагрузки |
 | Смежная тема | [[network-fundamentals-for-developers]] | Применение ментальных моделей к изучению сетей |
 | AI и мышление | [[ai-augmented-thinking]] | Как использовать AI без потери критического мышления |
 | Обзор | [[Home]] | Вернуться к главной карте знаний |

@@ -461,5 +461,5 @@ Constructor Injection > Property Injection > Service Locator. Constructor дел
 |-------------|------|-------|
 | Следующий шаг | [[cross-kmp-patterns]] | expect/actual и SKIE для KMP-разработки |
 | Углубиться | [[android-hilt-deep-dive]] | Детальное погружение в Hilt из раздела Android |
-| Смежная тема | [[clean-code-solid]] | SOLID-принципы как теоретическая основа DI |
+| Смежная тема | [[solid-principles]] | SOLID-принципы как теоретическая основа DI |
 | Обзор | [[cross-platform-overview]] | Вернуться к обзору раздела |

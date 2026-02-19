@@ -21,7 +21,7 @@ tags:
 | iOS | MVVM + SwiftUI / VIPER (UIKit) | NavigationStack / Coordinator | @Observable / Combine | SPM / Xcode targets | [[ios-architecture-patterns]], [[ios-modularization]] |
 | KMP | MVI / MVVM (shared) | Decompose / Voyager | shared ViewModel + Flow | Gradle KMP modules | [[kmp-architecture-patterns]], [[kmp-state-management]] |
 | Cross-Platform | Зависит от фреймворка | Platform-specific + shared | Shared state layer | Feature modules | [[cross-architecture]], [[cross-state-management]] |
-| Общая теория | SOLID + Clean Architecture | Dependency Rule | Unidirectional Data Flow | Package by feature | [[architecture-overview]], [[clean-code-solid]] |
+| Общая теория | SOLID + Clean Architecture | Dependency Rule | Unidirectional Data Flow | Package by feature | [[architecture-overview]], [[solid-principles]] |
 
 ## Android
 
@@ -54,8 +54,8 @@ tags:
 ## Общая теория
 
 - [[architecture-overview]] — фундаментальные принципы: separation of concerns, dependency inversion, boundaries
-- [[clean-code-solid]] — SOLID-принципы как основа всех архитектурных решений на всех платформах
-- [[design-patterns]] — GoF-паттерны и их применение в мобильной разработке: Strategy, Observer, Factory, Builder
+- [[solid-principles]] — SOLID-принципы как основа всех архитектурных решений на всех платформах
+- [[design-patterns-overview]] — GoF-паттерны и их применение в мобильной разработке: Strategy, Observer, Factory, Builder
 
 ## Глубинные паттерны
 

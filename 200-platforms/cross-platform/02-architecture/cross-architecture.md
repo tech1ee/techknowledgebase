@@ -875,5 +875,5 @@ iOS: protocol UserRepositoryProtocol + final class UserRepository. Android: inte
 |-------------|------|-------|
 | Следующий шаг | [[cross-dependency-injection]] | DI-фреймворки для реализации Clean Architecture |
 | Углубиться | [[kmp-architecture-patterns]] | Архитектура в KMP с shared ViewModel |
-| Смежная тема | [[design-patterns]] | Паттерны проектирования из раздела Programming |
+| Смежная тема | [[design-patterns-overview]] | Паттерны проектирования из раздела Programming |
 | Обзор | [[cross-platform-overview]] | Вернуться к обзору раздела |
