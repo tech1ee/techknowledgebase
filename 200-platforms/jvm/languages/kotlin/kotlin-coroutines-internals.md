@@ -2326,7 +2326,7 @@ scope.launch {
 | **Cooperative multitasking** | Корутины отдают управление в точках приостановки (cooperative, не preemptive) | [[concurrency-vs-parallelism]] |
 | **Work-stealing** | CoroutineScheduler (Dispatchers.Default) использует work-stealing для балансировки | [[jvm-executors-futures]] |
 | **Happens-before** | resume() устанавливает happens-before между suspend и resume; это гарантия JMM | [[jvm-memory-model]] |
-| **Composite pattern** | CoroutineContext.Element является CoroutineContext; одиночный элемент = коллекция | [[design-patterns]] |
+| **Composite pattern** | CoroutineContext.Element является CoroutineContext; одиночный элемент = коллекция | [[design-patterns-overview]] |
 | **Indexed set (map with typed keys)** | CoroutineContext — immutable indexed set с паттерном Key/Element | [[hash-tables]] |
 | **Thread pool и Executor** | Dispatchers — это обёртки над thread pool; CoroutineScheduler = custom Executor | [[jvm-executors-futures]] |
 | **Parent-child tree** | Job hierarchy — дерево; отмена = DFS вниз, ошибки = propagation вверх | [[trees-binary]] |
@@ -2352,7 +2352,7 @@ scope.launch {
 
 **[[android-coroutines-mistakes]]** — Android-специфичные проблемы: viewModelScope, lifecycleScope, liveData builder, repeatOnLifecycle. Все они построены поверх Job hierarchy и Dispatchers.Main.immediate. Зная internals, можно понять, почему `lifecycleScope.launchWhenStarted` deprecated в пользу `repeatOnLifecycle` — первый только приостанавливает корутину, но не отменяет, что приводит к утечкам upstream Flow collectors.
 
-**[[design-patterns]]** — CoroutineContext использует Composite pattern (Element является CoroutineContext). Builder pattern — launch/async создают и настраивают корутину. Decorator pattern — DispatchedContinuation оборачивает Continuation для добавления dispatch. Strategy pattern — Dispatchers подставляют разные стратегии выполнения.
+**[[design-patterns-overview]]** — CoroutineContext использует Composite pattern (Element является CoroutineContext). Builder pattern — launch/async создают и настраивают корутину. Decorator pattern — DispatchedContinuation оборачивает Continuation для добавления dispatch. Strategy pattern — Dispatchers подставляют разные стратегии выполнения.
 
 ---
 
@@ -2461,5 +2461,5 @@ A: (1) Флаг `-Dkotlinx.coroutines.debug` добавляет имя кору�
 | Android lifecycle | [[android-coroutines-mistakes]] | viewModelScope, lifecycleScope, типичные ошибки с lifecycle-aware корутинами |
 | Virtual Threads | [[jvm-concurrency-overview]] | Project Loom, сравнение с корутинами, когда что использовать |
 | Performance profiling | [[jvm-profiling]] | JMH бенчмарки для корутин, профилирование аллокаций, async-profiler |
-| Design patterns | [[design-patterns]] | Composite (CoroutineContext), Decorator (DispatchedContinuation), Strategy (Dispatchers) |
+| Design patterns | [[design-patterns-overview]] | Composite (CoroutineContext), Decorator (DispatchedContinuation), Strategy (Dispatchers) |
 | Synchronization | [[jvm-synchronization]] | CAS, atomic operations — основа lock-free реализации JobSupport и Channel |

@@ -1879,7 +1879,7 @@ ReAct (Reasoning + Acting): модель чередует Thought-Action-Observa
 |-------------|------|-------|
 | Следующий шаг | [[structured-outputs-tools]] | Гарантированный JSON и function calling -- следующий уровень после промптинга |
 | Углубиться | [[ai-agents-advanced]] | Агентные паттерны (ReAct, Plan-and-Execute) -- production-применение промптинга |
-| Смежная тема | [[clean-code-solid]] | Принципы чистого кода применимы к структуре промптов |
+| Смежная тема | [[clean-code]] | Принципы чистого кода применимы к структуре промптов |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте раздела AI Engineering |
 
 *Проверено: 2026-01-09*

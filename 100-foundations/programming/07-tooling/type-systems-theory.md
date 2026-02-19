@@ -1,7 +1,7 @@
 ---
 title: "Type Systems: теория и практика систем типов"
 created: 2026-01-09
-modified: 2026-02-13
+modified: 2026-02-19
 type: concept
 status: published
 confidence: high

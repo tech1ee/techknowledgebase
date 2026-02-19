@@ -1,7 +1,7 @@
 ---
 title: "Эволюция архитектуры Android-приложений"
 created: 2025-01-15
-modified: 2026-02-13
+modified: 2026-02-19
 type: overview
 status: published
 cs-foundations: [architectural-patterns, separation-of-concerns, state-management, design-evolution]
@@ -12,10 +12,16 @@ tags:
   - level/intermediate
 related:
   - "[[android-architecture-patterns]]"
+  - "[[android-mvc-mvp]]"
+  - "[[android-mvvm-deep-dive]]"
+  - "[[android-mvi-deep-dive]]"
+  - "[[android-compose-architectures]]"
   - "[[android-viewmodel-internals]]"
   - "[[android-state-management]]"
   - "[[android-activity-lifecycle]]"
-reading_time: 53
+  - "[[solid-principles]]"
+  - "[[coupling-cohesion]]"
+reading_time: 35
 difficulty: 4
 study_status: not_started
 mastery: 0
@@ -147,79 +153,31 @@ next_review:
 ```kotlin
 // ❌ Типичный код 2010 года — всё в одном месте
 class MainActivity : Activity() {
-
     private var users: ArrayList<User> = ArrayList()
-    private var isLoading = false
     private lateinit var db: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Инициализация БД прямо в Activity
-        val helper = DatabaseHelper(this)
-        db = helper.writableDatabase
-
-        // UI setup
-        val button = findViewById<Button>(R.id.loadButton)
-        button.setOnClickListener {
-            loadUsers()
-        }
-
-        // Регистрация receiver
-        registerReceiver(networkReceiver, IntentFilter(CONNECTIVITY_ACTION))
+        db = DatabaseHelper(this).writableDatabase          // БД в Activity
+        findViewById<Button>(R.id.loadButton).setOnClickListener { loadUsers() }
     }
 
     private fun loadUsers() {
-        isLoading = true
-        showProgress()
-
-        // AsyncTask для сетевого запроса
-        object : AsyncTask<Void, Void, List<User>>() {
-            override fun doInBackground(vararg params: Void?): List<User> {
-                val url = URL("https://api.example.com/users")
-                val connection = url.openConnection() as HttpURLConnection
-                // Парсинг JSON вручную...
-                return parseUsers(connection.inputStream)
-            }
-
+        object : AsyncTask<Void, Void, List<User>>() {     // Сеть в Activity
+            override fun doInBackground(vararg p: Void?) = parseUsers(URL("..."))
             override fun onPostExecute(result: List<User>) {
-                isLoading = false
-                hideProgress()
-                users.clear()
                 users.addAll(result)
-                updateUI()
-
-                // Сохранение в БД
-                saveToDatabase(result)
+                updateUI()                                   // UI в Activity
+                saveToDatabase(result)                       // Persist в Activity
             }
         }.execute()
     }
-
-    private fun saveToDatabase(users: List<User>) {
-        db.beginTransaction()
-        try {
-            for (user in users) {
-                val values = ContentValues()
-                values.put("id", user.id)
-                values.put("name", user.name)
-                db.insert("users", null, values)
-            }
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
-        }
-    }
-
-    // ... ещё 500 строк кода ...
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(networkReceiver)
-        db.close()
-    }
+    // ... saveToDatabase(), 500+ строк, onDestroy() ...
 }
 ```
+
+> [!tip] Подробный разбор MVC на Android и почему God Activity — антипаттерн: [[android-mvc-mvp]]
 
 ### Проблемы
 
@@ -313,100 +271,39 @@ class MainActivity : Activity() {
 ### Реализация MVP
 
 ```kotlin
-// View Interface
+// Contract — ключевая особенность MVP
 interface UsersView {
     fun showLoading()
     fun hideLoading()
     fun showUsers(users: List<User>)
     fun showError(message: String)
-    fun navigateToDetail(userId: Long)
 }
 
-// Presenter
-class UsersPresenter(
-    private val repository: UserRepository
-) {
+// Presenter — бизнес-логика отделена от Activity
+class UsersPresenter(private val repository: UserRepository) {
     private var view: UsersView? = null
 
-    fun attachView(view: UsersView) {
-        this.view = view
-    }
-
-    fun detachView() {
-        this.view = null
-    }
+    fun attachView(view: UsersView) { this.view = view }
+    fun detachView() { this.view = null }
 
     fun loadUsers() {
         view?.showLoading()
-
         repository.getUsers(object : Callback<List<User>> {
             override fun onSuccess(users: List<User>) {
-                view?.hideLoading()
+                view?.hideLoading()       // ← null check обязателен
                 view?.showUsers(users)
             }
-
             override fun onError(error: Throwable) {
                 view?.hideLoading()
                 view?.showError(error.message ?: "Unknown error")
             }
         })
     }
-
-    fun onUserClicked(user: User) {
-        view?.navigateToDetail(user.id)
-    }
 }
-
-// Activity (View implementation)
-class UsersActivity : AppCompatActivity(), UsersView {
-
-    private lateinit var presenter: UsersPresenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_users)
-
-        presenter = UsersPresenter(UserRepositoryImpl())
-        presenter.attachView(this)
-        presenter.loadUsers()
-    }
-
-    override fun onDestroy() {
-        presenter.detachView()
-        super.onDestroy()
-    }
-
-    // View interface implementation
-    override fun showLoading() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun showUsers(users: List<User>) {
-        adapter.submitList(users)
-    }
-
-    override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun navigateToDetail(userId: Long) {
-        startActivity(UserDetailActivity.intent(this, userId))
-    }
-}
+// Activity реализует UsersView, вызывает presenter.attachView(this) / detachView()
 ```
 
-### MVP библиотеки
-
-| Библиотека | Год | Особенности |
-|------------|-----|-------------|
-| **Mosby** | 2015 | ViewState, LCE pattern |
-| **Nucleus** | 2014 | Retained Presenter |
-| **Moxy** | 2016 | ViewState автоматизация |
-| **ThirtyInch** | 2016 | Minimal boilerplate |
+> [!tip] Полный разбор MVP, все библиотеки (Mosby, Moxy, Nucleus) и миграция на MVVM: [[android-mvc-mvp]]
 
 ### Проблемы MVP
 
@@ -498,69 +395,28 @@ Google представил **Architecture Components**:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### MVVM реализация (2017 стиль)
+### MVVM реализация (2017 стиль — исторический снимок)
 
 ```kotlin
-// ViewModel с LiveData (2017-2019)
-class UsersViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
+// ViewModel с LiveData — революция 2017 года
+class UsersViewModel(private val repository: UserRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
 
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
-
-    init {
-        loadUsers()
-    }
-
     fun loadUsers() {
         viewModelScope.launch {
             _isLoading.value = true
-            _error.value = null
-
-            try {
-                _users.value = repository.getUsers()
-            } catch (e: Exception) {
-                _error.value = e.message
-            } finally {
-                _isLoading.value = false
-            }
+            try { _users.value = repository.getUsers() }
+            catch (e: Exception) { /* handle error */ }
+            finally { _isLoading.value = false }
         }
     }
 }
-
-// Activity (View)
-class UsersActivity : AppCompatActivity() {
-
-    private val viewModel: UsersViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_users)
-
-        // Observe LiveData — автоматическая отписка
-        viewModel.isLoading.observe(this) { isLoading ->
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        viewModel.users.observe(this) { users ->
-            adapter.submitList(users)
-        }
-
-        viewModel.error.observe(this) { error ->
-            error?.let {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-    // Нет onDestroy boilerplate!
-}
+// Activity: viewModel.users.observe(this) { adapter.submitList(it) }
+// Нет attachView/detachView, нет onDestroy boilerplate!
 ```
 
 ### Что решили Architecture Components
@@ -573,54 +429,7 @@ class UsersActivity : AppCompatActivity() {
 | Callback после detach | LiveData lifecycle-aware |
 | Boilerplate interfaces | Observe паттерн вместо callbacks |
 
-### Эволюция MVVM (2017 → 2023)
-
-```kotlin
-// 2017: LiveData + multiple fields
-class UsersViewModel : ViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>()
-    private val _users = MutableLiveData<List<User>>()
-    private val _error = MutableLiveData<String?>()
-    // 3 отдельных LiveData — сложно синхронизировать
-}
-
-// 2019: Single UiState + LiveData
-data class UsersUiState(
-    val isLoading: Boolean = false,
-    val users: List<User> = emptyList(),
-    val error: String? = null
-)
-
-class UsersViewModel : ViewModel() {
-    private val _uiState = MutableLiveData(UsersUiState())
-    val uiState: LiveData<UsersUiState> = _uiState
-}
-
-// 2021: StateFlow (Kotlin-first)
-class UsersViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(UsersUiState())
-    val uiState: StateFlow<UsersUiState> = _uiState.asStateFlow()
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            // ...
-        }
-    }
-}
-
-// 2023: Compose + StateFlow
-@Composable
-fun UsersScreen(viewModel: UsersViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    when {
-        uiState.isLoading -> LoadingIndicator()
-        uiState.error != null -> ErrorMessage(uiState.error)
-        else -> UserList(uiState.users)
-    }
-}
-```
+> [!tip] Три поколения MVVM, UiState паттерны, обработка событий и тестирование: [[android-mvvm-deep-dive]]
 
 ---
 
@@ -712,15 +521,14 @@ MVVM решил проблемы lifecycle, но создал новые:
 ### MVI реализация
 
 ```kotlin
-// Intent (что пользователь хочет)
+// Intent — все возможные действия пользователя
 sealed class UsersIntent {
     object LoadUsers : UsersIntent()
     data class Search(val query: String) : UsersIntent()
     data class DeleteUser(val userId: Long) : UsersIntent()
-    object Refresh : UsersIntent()
 }
 
-// State (текущее состояние UI)
+// State — единый объект состояния экрана
 data class UsersState(
     val isLoading: Boolean = false,
     val users: List<User> = emptyList(),
@@ -728,122 +536,27 @@ data class UsersState(
     val error: String? = null
 )
 
-// Effect (one-time events)
-sealed class UsersEffect {
-    data class ShowToast(val message: String) : UsersEffect()
-    data class NavigateToDetail(val userId: Long) : UsersEffect()
-}
-
-// ViewModel с MVI
-class UsersViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
+// ViewModel — ЕДИНСТВЕННАЯ точка входа для всех действий
+class UsersViewModel(private val repository: UserRepository) : ViewModel() {
     private val _state = MutableStateFlow(UsersState())
     val state: StateFlow<UsersState> = _state.asStateFlow()
 
-    private val _effects = Channel<UsersEffect>()
-    val effects: Flow<UsersEffect> = _effects.receiveAsFlow()
-
-    // ЕДИНСТВЕННАЯ точка входа для всех действий
     fun onIntent(intent: UsersIntent) {
         when (intent) {
             is UsersIntent.LoadUsers -> loadUsers()
-            is UsersIntent.Search -> search(intent.query)
-            is UsersIntent.DeleteUser -> deleteUser(intent.userId)
-            is UsersIntent.Refresh -> refresh()
+            is UsersIntent.Search -> reduce { it.copy(searchQuery = intent.query) }
+            is UsersIntent.DeleteUser -> { /* ... */ }
         }
     }
 
-    private fun loadUsers() {
-        viewModelScope.launch {
-            reduce { it.copy(isLoading = true, error = null) }
-
-            repository.getUsers()
-                .onSuccess { users ->
-                    reduce { it.copy(isLoading = false, users = users) }
-                }
-                .onFailure { e ->
-                    reduce { it.copy(isLoading = false, error = e.message) }
-                    _effects.send(UsersEffect.ShowToast("Failed to load"))
-                }
-        }
-    }
-
-    private fun search(query: String) {
-        // Debounce, cancel previous search, etc.
-        reduce { it.copy(searchQuery = query) }
-        // ...
-    }
-
-    // Reducer-like helper
     private fun reduce(reducer: (UsersState) -> UsersState) {
         _state.update(reducer)
     }
 }
-
-// Compose View
-@Composable
-fun UsersScreen(viewModel: UsersViewModel = viewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-
-    // Handle effects
-    LaunchedEffect(Unit) {
-        viewModel.effects.collect { effect ->
-            when (effect) {
-                is UsersEffect.ShowToast -> {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                }
-                is UsersEffect.NavigateToDetail -> {
-                    // Navigate
-                }
-            }
-        }
-    }
-
-    // Render state
-    UsersContent(
-        state = state,
-        onIntent = viewModel::onIntent
-    )
-}
-
-@Composable
-private fun UsersContent(
-    state: UsersState,
-    onIntent: (UsersIntent) -> Unit
-) {
-    Column {
-        SearchBar(
-            query = state.searchQuery,
-            onQueryChange = { onIntent(UsersIntent.Search(it)) }
-        )
-
-        when {
-            state.isLoading -> LoadingIndicator()
-            state.error != null -> ErrorMessage(
-                message = state.error,
-                onRetry = { onIntent(UsersIntent.LoadUsers) }
-            )
-            else -> UserList(
-                users = state.users,
-                onDeleteUser = { onIntent(UsersIntent.DeleteUser(it.id)) }
-            )
-        }
-    }
-}
+// View вызывает onIntent(), подписывается на state — однонаправленный поток
 ```
 
-### MVI библиотеки
-
-| Библиотека | Год | Особенности |
-|------------|-----|-------------|
-| **Orbit MVI** | 2020 | Simple, Kotlin-first |
-| **MVIKotlin** | 2019 | Badoo/Bumble, KMP support |
-| **Ballast** | 2021 | Kotlin-first, Compose |
-| **Circuit** | 2022 | Slack, Compose-native |
-| **Decompose** | 2020 | KMP, Navigation included |
+> [!tip] MVI от ручной реализации до Orbit, MVIKotlin, Ballast — все вариации: [[android-mvi-deep-dive]]
 
 ---
 
@@ -920,191 +633,77 @@ fun UsersContentPreview() {
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Circuit (Slack) пример
+### Circuit (Slack) — пример нового подхода
 
 ```kotlin
-// Screen definition
+// Screen = контракт: State + Events
 @Parcelize
 data class UsersScreen : Screen {
     data class State(
         val users: List<User>,
         val isLoading: Boolean,
-        val eventSink: (Event) -> Unit
+        val eventSink: (Event) -> Unit   // ← events как часть state
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {
         data class DeleteUser(val id: Long) : Event()
-        object Refresh : Event()
     }
 }
 
-// Presenter
-class UsersPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
-    private val repository: UserRepository
-) : Presenter<UsersScreen.State> {
-
-    @Composable
-    override fun present(): UsersScreen.State {
-        var users by remember { mutableStateOf(emptyList<User>()) }
-        var isLoading by remember { mutableStateOf(true) }
-
-        LaunchedEffect(Unit) {
-            users = repository.getUsers()
-            isLoading = false
-        }
-
-        return UsersScreen.State(
-            users = users,
-            isLoading = isLoading,
-            eventSink = { event ->
-                when (event) {
-                    is UsersScreen.Event.DeleteUser -> {
-                        // Handle delete
-                    }
-                    is UsersScreen.Event.Refresh -> {
-                        isLoading = true
-                        // Refresh
-                    }
-                }
-            }
-        )
-    }
-}
-
-// UI
-@CircuitInject(UsersScreen::class, ActivityRetainedComponent::class)
-@Composable
-fun UsersUi(state: UsersScreen.State, modifier: Modifier = Modifier) {
-    // Render state
-    if (state.isLoading) {
-        LoadingIndicator()
-    } else {
-        UserList(
-            users = state.users,
-            onDelete = { state.eventSink(UsersScreen.Event.DeleteUser(it.id)) }
-        )
-    }
-}
+// Presenter — @Composable функция, возвращает State
+// UI — @Composable функция, принимает State
+// Полное разделение: Presenter тестируется без UI, UI — без логики
 ```
+
+> [!tip] Circuit, Decompose и Molecule — Compose-native архитектуры в деталях: [[android-compose-architectures]]
 
 ---
 
 ## Сравнение паттернов
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    СРАВНЕНИЕ АРХИТЕКТУРНЫХ ПАТТЕРНОВ                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  Критерий           │ MVP      │ MVVM      │ MVI       │ Compose-MVI       │
-│  ───────────────────┼──────────┼───────────┼───────────┼───────────────────│
-│  View знает о logic │ Через    │ Через     │ Через     │ Через             │
-│                     │ Presenter│ ViewModel │ ViewModel │ Presenter/VM      │
-│                     │          │           │           │                   │
-│  Logic знает о View │ ДА       │ НЕТ       │ НЕТ       │ НЕТ               │
-│                     │ (interface)│         │           │                   │
-│                     │          │           │           │                   │
-│  State management   │ В        │ Multiple  │ Single    │ Single            │
-│                     │ Presenter│ LiveData  │ State     │ State             │
-│                     │          │           │           │                   │
-│  Data flow          │ Bi-      │ Mixed     │ Uni-      │ Uni-              │
-│                     │ directional│         │ directional│ directional      │
-│                     │          │           │           │                   │
-│  Testability        │ Medium   │ Good      │ Excellent │ Excellent         │
-│                     │          │           │           │                   │
-│  Boilerplate        │ High     │ Low       │ Medium    │ Low               │
-│                     │          │           │           │                   │
-│  Learning curve     │ Low      │ Low       │ Medium    │ Medium            │
-│                     │          │           │           │                   │
-│  Config change      │ Manual   │ Auto      │ Auto      │ Auto              │
-│                     │          │           │           │                   │
-│  Best for           │ Legacy   │ Simple    │ Complex   │ Modern            │
-│                     │          │ apps      │ forms     │ Compose           │
-│                     │          │           │           │                   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+Детальное сравнение всех паттернов (MVC, MVP, MVVM, MVI, Compose-native) по 15+ критериям, decision tree и рекомендации: [[android-architecture-patterns]]
 
 ---
 
-## Decision Tree: Какой паттерн выбрать
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         DECISION TREE                                       │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  Используете Compose?                                                       │
-│  ├── НЕТ (Views) ────────────────────────────────────────────────┐         │
-│  │                                                               │         │
-│  │   Сложные формы/real-time?                                   │         │
-│  │   ├── ДА → MVI + LiveData                                    │         │
-│  │   └── НЕТ → MVVM + LiveData                                  │         │
-│  │                                                               │         │
-│  └── ДА (Compose) ───────────────────────────────────────────────┤         │
-│                                                                   │         │
-│      Размер проекта?                                              │         │
-│      ├── Маленький (1-5 экранов)                                 │         │
-│      │   └── MVVM + StateFlow                                    │         │
-│      │                                                            │         │
-│      ├── Средний (5-20 экранов)                                  │         │
-│      │   └── MVI (Orbit/Ballast) + StateFlow                     │         │
-│      │                                                            │         │
-│      └── Большой (20+ экранов)                                   │         │
-│          │                                                        │         │
-│          ├── Нужен KMP?                                          │         │
-│          │   ├── ДА → Decompose / MVIKotlin                      │         │
-│          │   └── НЕТ → Circuit / Ballast                         │         │
-│          │                                                        │         │
-│          └── Нужна интеграция с navigation?                      │         │
-│              ├── ДА → Circuit / Decompose                        │         │
-│              └── НЕТ → Любой MVI                                 │         │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Мифы и заблуждения
+## Мифы об эволюции архитектуры
 
 | Миф | Реальность |
 |-----|-----------|
-| "MVVM устарел, нужен только MVI" | MVVM отлично работает для большинства приложений. MVI добавляет сложность. Для простых CRUD экранов MVVM проще и достаточно. MVI оправдан для сложных multi-source state экранов |
-| "Clean Architecture обязательна" | Clean Architecture — overkill для малых приложений. 3 слоя (data/domain/presentation) добавляют boilerplate. Для MVP (Minimum Viable Product) достаточно ViewModel + Repository |
-| "ViewModel решает все проблемы lifecycle" | ViewModel не переживает process death. Для восстановления нужен SavedStateHandle. ViewModel — про config changes, не про полное сохранение состояния |
-| "MVI = Redux для Android" | Похоже, но есть отличия. Android MVI обычно проще: нет middleware, reducers более гибкие. Redux strict immutability, Android MVI более pragmatic |
 | "God Activity — просто плохая практика" | God Activity был нормой до 2017. Architecture Components появились с Android Jetpack. Понимание эволюции помогает рефакторить legacy код |
 | "MVP полностью мёртв" | MVP всё ещё используется в legacy проектах. Миграция на MVVM часто не оправдана для стабильного кода. Новые проекты — да, MVVM/MVI лучше |
-| "Compose требует MVI" | Compose работает с любой архитектурой. ViewModel + StateFlow = pseudo-MVI без explicit Intents. Полноценный MVI нужен для complex state management |
-| "UseCase = бизнес-логика" | UseCase — orchestration между repositories. Бизнес-логика может жить в domain models. Анемичные UseCases (просто вызов repository) — антипаттерн |
-| "Single Activity обязателен" | Single Activity + Navigation — рекомендация, не требование. Multiple Activities всё ещё валидны для изолированных flows (deep links, process boundaries) |
-| "Orbit/Circuit лучше чем обычный MVI" | Orbit/Circuit — готовые решения с boilerplate reduction. Но добавляют зависимость и learning curve. Для простых случаев ручной MVI с StateFlow достаточно |
+| "Architecture Components решили все проблемы" | ViewModel не переживает process death (нужен SavedStateHandle). LiveData заменяется на StateFlow. Это был большой шаг, но эволюция продолжается |
+| "Каждая новая эра отменяет предыдущую" | Паттерны накапливаются, а не заменяются. MVVM вобрал идеи MVP. MVI добавил UDF поверх MVVM. Compose-native взял лучшее из всех подходов |
+
+> Полный список мифов об архитектурных паттернах: [[android-architecture-patterns#Мифы и заблуждения]]
 
 ---
 
-## CS-фундамент
+## CS-фундамент эволюции
 
-| CS-концепция | Как применяется в архитектуре |
+| CS-концепция | Роль в эволюции архитектуры |
 |--------------|-------------------------------|
-| **Separation of Concerns** | Разделение UI/бизнес-логики/данных. ViewModel не знает о View. Repository не знает о ViewModel. Каждый слой отвечает за своё |
-| **Single Source of Truth** | Один источник данных для UI. Обычно StateFlow в ViewModel. Нет дублирования state между компонентами |
-| **Unidirectional Data Flow** | State вниз, Events вверх. Предсказуемость изменений. Легче debugging — ясно откуда пришло изменение |
-| **Immutability** | State = data class с val полями. Изменение создаёт новый объект. Нет race conditions при concurrent access |
-| **Observer Pattern** | StateFlow/LiveData notify подписчиков. UI подписывается на state. Слабая связанность между producer и consumer |
-| **State Machine** | MVI Reducer — pure function: (State, Intent) → State. Детерминизм: одинаковый input = одинаковый output |
-| **Dependency Injection** | Hilt/Koin инжектируют зависимости. Инверсия управления. Testability: легко подменить зависимости в тестах |
-| **Repository Pattern** | Абстракция над data sources. ViewModel не знает откуда данные (network/db/cache). Изоляция изменений |
-| **Command Pattern** | MVI Intent = Command. Инкапсуляция запроса как объекта. Можно логировать, отменять, повторять |
-| **Layered Architecture** | Presentation → Domain → Data. Зависимости направлены вниз. Domain не зависит от Android |
+| **Separation of Concerns** | Главный двигатель: God Activity → MVP → MVVM → разделение ответственности на каждом шаге |
+| **Observer Pattern** | От callback hell (MVP) → LiveData (MVVM) → StateFlow (MVI). Каждая эра улучшала подписку на данные |
+| **State Machine** | MVI Reducer — pure function: (State, Intent) → State. Кульминация эволюции state management |
+| **Layered Architecture** | Presentation → Domain → Data. Постепенное появление слоёв от God Activity к Clean Architecture |
+| **Immutability** | От mutable ArrayList в God Activity → data class с val → sealed class State. Эволюция безопасности данных |
+
+> Полная таблица CS-фундамента для архитектурных паттернов: [[android-architecture-patterns#CS-фундамент]]
 
 ---
 
 ## Связи
 
-- **[[android-architecture-patterns]]** — детали реализации MVVM/MVI/Clean
+- **[[android-architecture-patterns]]** — хаб: сравнение паттернов, decision tree, рекомендации
+- **[[android-mvc-mvp]]** — детальный разбор MVC, MVP, библиотеки, миграция
+- **[[android-mvvm-deep-dive]]** — три поколения MVVM, UiState, события, тестирование
+- **[[android-mvi-deep-dive]]** — MVI: Orbit, MVIKotlin, Ballast, ручная реализация
+- **[[android-compose-architectures]]** — Circuit, Decompose, Molecule
 - **[[android-viewmodel-internals]]** — как ViewModel переживает rotation
 - **[[android-state-management]]** — StateFlow vs SharedFlow vs Channel
 - **[[android-activity-lifecycle]]** — понимание lifecycle для архитектуры
+- **[[solid-principles]]** — принципы, которые двигали эволюцию
+- **[[coupling-cohesion]]** — от tight coupling God Activity к loose coupling MVI
 
 ---
 
@@ -1169,10 +768,14 @@ AsyncTask (2008, deprecated) -> RxJava (2015) -> Coroutines (2018) -> Flow (2019
 
 | Направление | Куда | Зачем |
 |-------------|------|-------|
-| Следующий шаг | [[android-architecture-patterns]] | Детально о MVVM, MVI, Clean Architecture |
-| Углубиться | [[android-navigation-evolution]] | Эволюция навигации параллельно архитектуре |
-| Смежная тема | [[cross-architecture]] | Архитектурные подходы на разных платформах |
-| Обзор | [[android-overview]] | Вернуться к карте раздела |
+| Следующий шаг | [[android-architecture-patterns]] | Сравнение всех паттернов, decision tree |
+| MVC/MVP | [[android-mvc-mvp]] | Детали MVC, MVP, библиотеки, миграция |
+| MVVM | [[android-mvvm-deep-dive]] | Три поколения, UiState, события |
+| MVI | [[android-mvi-deep-dive]] | Orbit, MVIKotlin, Ballast |
+| Clean Arch | [[android-clean-architecture]] | Слои, Use Cases, Dependency Rule |
+| Compose | [[android-compose-architectures]] | Circuit, Decompose, Molecule |
+| Навигация | [[android-navigation-evolution]] | Параллельная эволюция навигации |
+| Обзор | [[android-overview]] | Вернуться к карте Android |
 
 
 *Проверено: 2026-01-09 — Педагогический контент проверен*

@@ -107,8 +107,8 @@ tags:
 - [[jvm-languages-ecosystem]] — Kotlin в экосистеме JVM
 - [[jvm-concurrency-overview|jvm-concurrency]] — Модель памяти JVM для корутин
 - [[java-modern-features]] — Сравнение с Java 8-21
-- [[design-patterns]] — Паттерны в Kotlin
-- [[testing-strategies]] — Стратегии тестирования
+- [[design-patterns-overview]] — Паттерны в Kotlin
+- [[testing-fundamentals]] — Стратегии тестирования
 
 ---
 

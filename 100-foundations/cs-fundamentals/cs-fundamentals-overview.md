@@ -315,9 +315,9 @@ CS FUNDAMENTALS
 ├── → [[system-design-android]] — Mobile System Design
 │
 └── PROGRAMMING
-    ├── → [[clean-code-solid]] — принципы чистого кода
-    ├── → [[design-patterns]] — паттерны проектирования
-    └── → [[testing-strategies]] — тестирование
+    ├── → [[solid-principles]] — принципы чистого кода
+    ├── → [[design-patterns-overview]] — паттерны проектирования
+    └── → [[testing-fundamentals]] — тестирование
 ```
 
 ---

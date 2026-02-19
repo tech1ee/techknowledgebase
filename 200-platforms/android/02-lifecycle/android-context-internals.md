@@ -18,6 +18,7 @@ related:
   - "[[android-dependency-injection]]"
   - "[[android-handler-looper]]"
   - "[[android-view-rendering-pipeline]]"
+  - "[[android-activitythread-internals]]"
 cs-foundations: [decorator-pattern, delegation, abstract-class, factory-method, service-locator, caching, ipc, singleton]
 prerequisites:
   - "[[android-activity-lifecycle]]"

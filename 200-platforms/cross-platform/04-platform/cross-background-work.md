@@ -23,7 +23,7 @@ prerequisites:
 related:
   - "[[android-background-work]]"
   - "[[ios-background-execution]]"
-  - "[[concurrency-parallelism]]"
+  - "[[concurrency-fundamentals]]"
 ---
 
 # Cross-Platform: Background Work — BackgroundTasks vs WorkManager
@@ -1026,7 +1026,7 @@ class DownloadWorker(
 
 [[ios-background-execution]] — iOS имеет самую строгую модель фоновой работы среди мобильных платформ: BGTaskScheduler с ограничениями по времени (30 секунд для app refresh, несколько минут для processing), URLSession background transfers для загрузок и Silent Push для пробуждения приложения. Заметка объясняет, почему iOS убивает приложения агрессивнее Android и как проектировать задачи для работы в этих условиях. Понимание ограничений iOS критично для проектирования кросс-платформенной фоновой логики.
 
-[[concurrency-parallelism]] — Фоновая работа на обеих платформах опирается на фундаментальные концепции конкурентности: потоки, очереди, synchronization primitives. Заметка раскрывает теоретические основы — разницу между concurrency и parallelism, модели потоков (preemptive vs cooperative), механизмы синхронизации. Эти знания помогают понять, почему GCD и Dispatchers.IO работают именно так, и как избежать deadlock и race conditions в фоновых задачах.
+[[concurrency-fundamentals]] — Фоновая работа на обеих платформах опирается на фундаментальные концепции конкурентности: потоки, очереди, synchronization primitives. Заметка раскрывает теоретические основы — разницу между concurrency и parallelism, модели потоков (preemptive vs cooperative), механизмы синхронизации. Эти знания помогают понять, почему GCD и Dispatchers.IO работают именно так, и как избежать deadlock и race conditions в фоновых задачах.
 
 ---
 

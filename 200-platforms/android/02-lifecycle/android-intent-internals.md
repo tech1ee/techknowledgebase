@@ -20,7 +20,7 @@ related:
   - "[[android-handler-looper]]"
   - "[[android-process-memory]]"
   - "[[android-background-work]]"
-  - "[[android-binder-internals]]"
+  - "[[android-binder-ipc]]"
   - "[[android-manifest-merging]]"
   - "[[android-testing]]"
 cs-foundations: [message-passing, pattern-matching, uri-scheme, capability-token, ipc, pub-sub, loose-coupling, indexing, delegation, serialization]
@@ -114,7 +114,7 @@ Share Sheet              -> Intent.createChooser()
 | **[[android-bundle-parcelable]]** | Intent extras = Bundle; данные передаются через Parcel/Binder IPC | Раздел Android |
 | **[[android-context-internals]]** | startActivity(), startService(), sendBroadcast() — методы Context | Раздел Android |
 | **[[android-activity-lifecycle]]** | Запуск Activity через Intent связан с lifecycle callbacks | Раздел Android |
-| **[[android-binder-internals]]** | PendingIntent хранится как Binder token в system_server | Раздел Android |
+| **[[android-binder-ipc]]** | PendingIntent хранится как Binder token в system_server | Раздел Android |
 | **URI / URL** | Data часть Intent — это URI (scheme://host:port/path) | Базовые знания |
 | **Kotlin Coroutines** | Современные API (ActivityResultLauncher) используют корутины | Раздел Kotlin |
 | **AndroidManifest.xml** | IntentFilter, queries, exported объявляются в манифесте | Раздел Android |

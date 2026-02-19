@@ -637,6 +637,6 @@ AppContainer class создается в Application. Содержит фабр�
 |-------------|------|-------|
 | Следующий шаг | [[android-dependency-injection]] | Обзор DI подходов и фреймворков |
 | Углубиться | [[android-hilt-deep-dive]] | Hilt как замена manual DI |
-| Смежная тема | [[design-patterns]] | Factory, Builder и другие creational patterns |
+| Смежная тема | [[design-patterns-overview]] | Factory, Builder и другие creational patterns |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 

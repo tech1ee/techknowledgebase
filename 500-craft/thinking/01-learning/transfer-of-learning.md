@@ -814,7 +814,7 @@ Low Road -- автоматический перенос в похожих сит
 |-------------|--------|
 | Следующий шаг | [[deliberate-practice]] |
 | Углубиться | [[learning-complex-things]] |
-| Смежная тема | [[design-patterns]] |
+| Смежная тема | [[design-patterns-overview]] |
 | Обзор | [[thinking-overview]] |
 
 ---

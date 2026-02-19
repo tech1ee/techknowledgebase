@@ -149,13 +149,13 @@ tags:
 > 12 материалов: чистый код, паттерны, принципы
 
 - [[programming-overview]] — Обзор
-- [[clean-code-solid]] — SOLID принципы
-- [[design-patterns]] — Factory, Strategy, Observer
-- [[testing-strategies]] — Пирамида тестов, TDD
+- [[solid-principles]] — SOLID принципы
+- [[design-patterns-overview]] — Factory, Strategy, Observer
+- [[testing-fundamentals]] — Пирамида тестов, TDD
 - [[functional-programming]] — FP основы
-- [[concurrency-parallelism]] — Concurrency
-- [[error-handling-resilience]] — Обработка ошибок
-- [[refactoring-techniques]] — Рефакторинг
+- [[concurrency-fundamentals]] — Concurrency
+- [[error-handling]] — Обработка ошибок
+- [[refactoring-catalog]] — Рефакторинг
 
 **MOC:** [[programming-moc]]
 

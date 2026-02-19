@@ -19,6 +19,8 @@ related:
   - "[[jvm-gc-tuning]]"
   - "[[jvm-memory-model]]"
   - "[[android-memory-leaks]]"
+  - "[[android-kernel-extensions]]"
+  - "[[android-system-services]]"
 cs-foundations: [process-priority, memory-management, garbage-collection, resource-constraints]
 prerequisites:
   - "[[android-overview]]"

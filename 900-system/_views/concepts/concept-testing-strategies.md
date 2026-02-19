@@ -21,7 +21,7 @@ tags:
 | iOS | XCTest + Quick/Nimble | XCUITest | XCTest | Protocol Mocks / OCMock | Тесная интеграция с Xcode, snapshot testing | [[ios-testing]] |
 | KMP | kotlin.test | Compose Multiplatform Test | kotlin.test + expect/actual | MockK (JVM) / manual | Общие тесты для shared-кода | [[kmp-testing-strategies]], [[kmp-unit-testing]] |
 | Cross-Platform | Platform-specific | Appium / Maestro | Зависит от фреймворка | Platform-specific | E2E через единый инструмент | [[cross-testing]] |
-| Теория | Пирамида тестов | Testing Trophy | Концептуальное | Виды test doubles | Стратегия определяет ROI | [[testing-strategies]] |
+| Теория | Пирамида тестов | Testing Trophy | Концептуальное | Виды test doubles | Стратегия определяет ROI | [[testing-fundamentals]] |
 
 ## Android
 
@@ -43,7 +43,7 @@ tags:
 
 ## Общая теория
 
-- [[testing-strategies]] — фундаментальные концепции: пирамида тестов vs Testing Trophy, TDD, BDD, виды test doubles (mock, stub, spy, fake), метрики качества тестов, flaky tests
+- [[testing-fundamentals]] — фундаментальные концепции: пирамида тестов vs Testing Trophy, TDD, BDD, виды test doubles (mock, stub, spy, fake), метрики качества тестов, flaky tests
 
 ## Глубинные паттерны
 

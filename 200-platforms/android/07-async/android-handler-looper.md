@@ -15,6 +15,7 @@ related:
   - "[[android-threading]]"
   - "[[os-processes-threads]]"
   - "[[android-memory-leaks]]"
+  - "[[android-activitythread-internals]]"
 cs-foundations: [event-loop, message-queue, producer-consumer, thread-confinement]
 prerequisites:
   - "[[android-threading]]"

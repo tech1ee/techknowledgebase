@@ -150,8 +150,8 @@ next_review:
 - [[android-coroutines]] — Coroutines в Android (lifecycle, viewModelScope)
 
 ### Связи с архитектурой
-- [[clean-code-solid]] — SOLID принципы в Kotlin
-- [[design-patterns]] — Паттерны GoF в Kotlin идиоматике
+- [[solid-principles]] — SOLID принципы в Kotlin
+- [[design-patterns-overview]] — Паттерны GoF в Kotlin идиоматике
 
 ---
 

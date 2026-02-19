@@ -856,7 +856,7 @@ Anki карточки с активным воспроизведением:
 |-------------|--------|
 | Следующий шаг | [[metacognition]] |
 | Углубиться | [[how-brain-learns]] |
-| Смежная тема | [[testing-strategies]] |
+| Смежная тема | [[testing-fundamentals]] |
 | Обзор | [[thinking-overview]] |
 
 ---

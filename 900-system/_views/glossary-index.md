@@ -25,6 +25,7 @@ tags:
 | Agile | [[agile-practices]] | Leadership |
 | API Design | [[api-design]] | Architecture |
 | ARC (Automatic Reference Counting) | [[reference-counting-arc]] | CS Foundations |
+| ART (Android Runtime) | [[android-art-runtime]] | Android |
 | Async/Await (Swift) | [[ios-async-await]] | iOS |
 
 ## B
@@ -33,7 +34,9 @@ tags:
 |-----------|------|---------|
 | Backpressure | [[kotlin-flow]] | JVM/Kotlin |
 | Big O Notation | [[big-o-complexity]] | CS Fundamentals |
+| Binder IPC | [[android-binder-ipc]] | Android |
 | Binary Search | [[binary-search-pattern]] | CS Fundamentals |
+| Boot Process (Android) | [[android-boot-process]] | Android |
 | Broadcast Receiver | [[android-broadcast-internals]] | Android |
 | Build System (Gradle) | [[android-gradle-fundamentals]] | Android |
 | Bytecode | [[bytecode-virtual-machines]] | CS Foundations |
@@ -62,7 +65,7 @@ tags:
 | Dagger | [[android-dagger-deep-dive]] | Android |
 | Delegation (управление) | [[delegation]] | Leadership |
 | Dependency Injection | [[dependency-injection-fundamentals]] | Architecture |
-| Design Patterns (GoF) | [[design-patterns]] | Programming |
+| Design Patterns (GoF) | [[design-patterns-overview]] | Programming |
 | Docker | [[docker-for-developers]] | DevOps |
 | DORA Metrics | [[engineering-metrics]] | Leadership |
 | Dynamic Programming | [[dp-patterns]] | CS Fundamentals |
@@ -176,13 +179,14 @@ tags:
 | Концепция | Файл | Область |
 |-----------|------|---------|
 | Sharding | [[databases-replication-sharding]] | Databases |
-| SOLID | [[clean-code-solid]] | Programming |
+| SOLID | [[solid-principles]] | Programming |
 | SQLDelight | [[kmp-sqldelight-database]] | KMP |
 | STAR Method | [[behavioral-questions]] | Career |
 | Structured Concurrency | [[kotlin-coroutines]] | JVM/Kotlin |
 | SwiftData | [[ios-swiftdata]] | iOS |
 | SwiftUI | [[ios-swiftui]] | iOS |
 | System Design | [[system-design-android]] | Career |
+| System Server (Android) | [[android-system-services]] | Android |
 
 ## T
 
@@ -208,6 +212,12 @@ tags:
 |-----------|------|---------|
 | WebSocket | [[network-realtime-protocols]] | Networking |
 | WorkManager | [[android-background-work]] | Android |
+
+## Z
+
+| Концепция | Файл | Область |
+|-----------|------|---------|
+| Zygote | [[android-boot-process]] | Android |
 
 ---
 

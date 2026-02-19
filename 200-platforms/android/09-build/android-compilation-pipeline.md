@@ -17,6 +17,7 @@ related:
   - "[[android-proguard-r8]]"
   - "[[android-apk-aab]]"
   - "[[android-architecture]]"
+  - "[[android-art-runtime]]"
 prerequisites:
   - "[[android-overview]]"
   - "[[android-gradle-fundamentals]]"

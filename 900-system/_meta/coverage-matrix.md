@@ -709,15 +709,15 @@ tags:
 | Тема | Beginner | Intermediate | Advanced | Expert |
 |------|:--------:|:------------:|:--------:|:------:|
 | Build Systems: от Make до Gradle | — | [[build-systems-theory]] | — | — |
-| Clean Code и SOLID: код, который не стыдно показать | — | [[clean-code-solid]] | — | — |
-| Concurrency & Parallelism: Threads, Async, Race Cond... | — | [[concurrency-parallelism]] | — | — |
+| Clean Code и SOLID: код, который не стыдно показать | — | [[solid-principles]] | — | — |
+| Concurrency & Parallelism: Threads, Async, Race Cond... | — | [[concurrency-fundamentals]] | — | — |
 | Dependency Resolution: как разрешаются зависимости | — | [[dependency-resolution]] | — | — |
-| Design Patterns: решения, которые уже работают | — | [[design-patterns]] | — | — |
-| Error Handling & Resilience: Обработка ошибок и усто... | — | [[error-handling-resilience]] | — | — |
+| Design Patterns: решения, которые уже работают | — | [[design-patterns-overview]] | — | — |
+| Error Handling & Resilience: Обработка ошибок и усто... | — | [[error-handling]] | — | — |
 | Functional Programming: Pure Functions, Immutability... | — | [[functional-programming]] | — | — |
 | Module Systems: модульность от CommonJS до ESM | — | [[module-systems]] | — | — |
-| Refactoring Techniques: Улучшение кода без изменения... | — | [[refactoring-techniques]] | — | — |
-| Testing: пирамида, которая спасает от 3am багов | — | [[testing-strategies]] | — | — |
+| Refactoring Techniques: Улучшение кода без изменения... | — | [[refactoring-catalog]] | — | — |
+| Testing: пирамида, которая спасает от 3am багов | — | [[testing-fundamentals]] | — | — |
 | Type Systems: теория и практика систем типов | — | [[type-systems-theory]] | — | — |
 
 #### Gaps:

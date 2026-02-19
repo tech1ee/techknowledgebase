@@ -19,6 +19,8 @@ related:
   - "[[android-activity-lifecycle]]"
   - "[[android-handler-looper]]"
   - "[[android-performance-profiling]]"
+  - "[[android-boot-process]]"
+  - "[[android-activitythread-internals]]"
 prerequisites:
   - "[[android-activity-lifecycle]]"
   - "[[android-process-memory]]"

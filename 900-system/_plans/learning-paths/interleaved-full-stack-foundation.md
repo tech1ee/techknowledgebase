@@ -42,12 +42,12 @@ tags:
 > Цель: чистый код, сетевая модель, процессы ОС --- три столпа, на которых стоит всё остальное.
 
 ### День 1
-- [ ] [[clean-code-solid]] --- SOLID, чистый код, принципы проектирования ⏱ 23м
+- [ ] [[solid-principles]] --- SOLID, чистый код, принципы проектирования ⏱ 23м
 - [ ] [[network-fundamentals-for-developers]] --- OSI/TCP-IP, инкапсуляция, основы сетей ⏱ 20м
 
 ### День 2
 - [ ] [[os-processes-threads]] --- процессы, потоки, fork, контекст переключения ⏱ 45м
-- [ ] [[design-patterns]] --- GoF-паттерны, когда применять какой ⏱ 31м
+- [ ] [[design-patterns-overview]] --- GoF-паттерны, когда применять какой ⏱ 31м
 
 ### День 3
 - [ ] [[network-transport-layer]] --- TCP, UDP, congestion control, handshake ⏱ 20м
@@ -78,7 +78,7 @@ tags:
 - [ ] [[databases-fundamentals-complete]] --- реляционная модель, нормализация, индексы ⏱ 41м
 
 ### День 2
-- [ ] [[concurrency-parallelism]] --- потоки, race conditions, модели конкурентности ⏱ 17м
+- [ ] [[concurrency-fundamentals]] --- потоки, race conditions, модели конкурентности ⏱ 17м
 - [ ] [[security-cryptography-fundamentals]] --- симметричное/асимметричное шифрование, хеши ⏱ 7м
 - [ ] [[security-https-tls]] --- TLS handshake, сертификаты, HTTPS ⏱ 6м
 
@@ -88,7 +88,7 @@ tags:
 
 ### День 4
 - [ ] [[os-scheduling]] --- алгоритмы планирования, приоритеты, CFS ⏱ 20м
-- [ ] [[error-handling-resilience]] --- обработка ошибок, retry, circuit breaker ⏱ 15м
+- [ ] [[error-handling]] --- обработка ошибок, retry, circuit breaker ⏱ 15м
 - [ ] [[network-dns-tls]] --- DNS-резолвинг, TLS в контексте DNS, DoH/DoT ⏱ 15м
 
 ### День 5 --- Review Day
@@ -109,7 +109,7 @@ tags:
 
 ### День 1
 - [ ] [[sql-databases-complete]] --- PostgreSQL, MySQL, SQLite: архитектура, фичи, сравнение ⏱ 36м
-- [ ] [[testing-strategies]] --- пирамида тестов, TDD, мокирование ⏱ 15м
+- [ ] [[testing-fundamentals]] --- пирамида тестов, TDD, мокирование ⏱ 15м
 
 ### День 2
 - [ ] [[os-synchronization]] --- мьютексы, семафоры, deadlock, producer-consumer ⏱ 25м
@@ -117,7 +117,7 @@ tags:
 
 ### День 3
 - [ ] [[auth-sessions-jwt-tokens]] --- сессии, JWT, refresh tokens, безопасное хранение ⏱ 31м
-- [ ] [[refactoring-techniques]] --- техники рефакторинга, code smells, когда рефакторить ⏱ 15м
+- [ ] [[refactoring-catalog]] --- техники рефакторинга, code smells, когда рефакторить ⏱ 15м
 
 ### День 4
 - [ ] [[network-realtime-protocols]] --- WebSocket, SSE, gRPC streaming, MQTT ⏱ 15м
@@ -259,13 +259,13 @@ tags:
 ## Сводная таблица прогресса
 
 ### Programming (11 файлов, ~198 мин)
-- [ ] [[clean-code-solid]] ⏱ 23м
-- [ ] [[design-patterns]] ⏱ 31м
+- [ ] [[solid-principles]] ⏱ 23м
+- [ ] [[design-patterns-overview]] ⏱ 31м
 - [ ] [[functional-programming]] ⏱ 17м
-- [ ] [[concurrency-parallelism]] ⏱ 17м
-- [ ] [[error-handling-resilience]] ⏱ 15м
-- [ ] [[testing-strategies]] ⏱ 15м
-- [ ] [[refactoring-techniques]] ⏱ 15м
+- [ ] [[concurrency-fundamentals]] ⏱ 17м
+- [ ] [[error-handling]] ⏱ 15м
+- [ ] [[testing-fundamentals]] ⏱ 15м
+- [ ] [[refactoring-catalog]] ⏱ 15м
 - [ ] [[build-systems-theory]] ⏱ 15м
 - [ ] [[module-systems]] ⏱ 15м
 - [ ] [[dependency-resolution]] ⏱ 15м

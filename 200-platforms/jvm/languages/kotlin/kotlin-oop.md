@@ -23,7 +23,7 @@ status: published
 related:
   - "[[kotlin-basics]]"
   - "[[kotlin-functional]]"
-  - "[[design-patterns]]"
+  - "[[design-patterns-overview]]"
 ---
 
 # Kotlin ООП: классы без boilerplate
@@ -797,8 +797,8 @@ typealias BInner = B.Inner
 → [[kotlin-type-system]] — generics, variance, reified. Продвинутая работа с типами.
 
 **Практическое применение:**
-→ [[design-patterns]] — как паттерны GoF реализуются в Kotlin (часто проще чем в Java).
-→ [[clean-code-solid]] — SOLID принципы и как Kotlin помогает им следовать.
+→ [[design-patterns-overview]] — как паттерны GoF реализуются в Kotlin (часто проще чем в Java).
+→ [[solid-principles]] — SOLID принципы и как Kotlin помогает им следовать.
 
 ---
 
@@ -904,11 +904,11 @@ class TimestampPrinter(
 
 [[kotlin-functional]] — Функциональное программирование в Kotlin (higher-order functions, lambdas, extension functions) дополняет ООП и создаёт уникальный стиль Kotlin: data class + copy() для immutability, sealed class + when для pattern matching, delegation для composition. Изучение обоих подходов позволяет выбирать оптимальный стиль для каждой задачи. Рекомендуется читать параллельно или сразу после ООП.
 
-[[design-patterns]] — Паттерны проектирования GoF получают новое прочтение в Kotlin: Singleton реализуется через object, Factory Method через companion object, Decorator через delegation by, Strategy через higher-order functions. Понимание ООП-конструкций Kotlin необходимо для эффективного применения паттернов без избыточного boilerplate.
+[[design-patterns-overview]] — Паттерны проектирования GoF получают новое прочтение в Kotlin: Singleton реализуется через object, Factory Method через companion object, Decorator через delegation by, Strategy через higher-order functions. Понимание ООП-конструкций Kotlin необходимо для эффективного применения паттернов без избыточного boilerplate.
 
 [[kotlin-type-system]] — Generics, variance (in/out) и reified типы расширяют возможности ООП: generic sealed class для type-safe состояний (UiState<out T>), value class для zero-overhead обёрток, variance для безопасной подстановки типов в коллекциях. Рекомендуется как следующий шаг после освоения базового ООП.
 
-[[clean-code-solid]] — SOLID-принципы тесно связаны с ООП-конструкциями Kotlin: final by default поддерживает Open/Closed Principle, delegation by реализует композицию вместо наследования, sealed class обеспечивает Liskov Substitution через exhaustive when. Изучение SOLID параллельно с ООП формирует правильные привычки проектирования.
+[[solid-principles]] — SOLID-принципы тесно связаны с ООП-конструкциями Kotlin: final by default поддерживает Open/Closed Principle, delegation by реализует композицию вместо наследования, sealed class обеспечивает Liskov Substitution через exhaustive when. Изучение SOLID параллельно с ООП формирует правильные привычки проектирования.
 
 ## Источники и дальнейшее чтение
 
@@ -962,7 +962,7 @@ value class — обёртка типа без runtime overhead: @JvmInline valu
 | Углубление | [[kotlin-functional]] | Лямбды, HOF, scope functions — функциональная сторона Kotlin |
 | Углубление | [[kotlin-type-system]] | Generics, variance, reified — продвинутая система типов |
 | Связь | [[kotlin-basics]] | Вернуться к основам синтаксиса и null-safety |
-| Кросс-область | [[design-patterns]] | Как паттерны GoF реализуются идиоматично в Kotlin |
+| Кросс-область | [[design-patterns-overview]] | Как паттерны GoF реализуются идиоматично в Kotlin |
 | Навигация | [[jvm-overview]] | Вернуться к обзору JVM-тем |
 
 ---

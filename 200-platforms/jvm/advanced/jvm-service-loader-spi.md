@@ -34,7 +34,7 @@ prerequisites:
 related:
   - "[[jvm-class-loader-deep-dive]]"
   - "[[jvm-module-system]]"
-  - "[[design-patterns]]"
+  - "[[design-patterns-overview]]"
 ---
 
 # JVM ServiceLoader & SPI
@@ -766,7 +766,7 @@ Overhead ServiceLoader:
 
 ## Связанные темы
 
-- [[design-patterns]] — DI и паттерны расширяемости как альтернативы ServiceLoader
+- [[design-patterns-overview]] — DI и паттерны расширяемости как альтернативы ServiceLoader
 - [[android-dependency-injection]] — DI в Android (Hilt, Koin)
 - [[jvm-module-system]] — JPMS интеграция
 - [[jvm-class-loader-deep-dive]] — как загружаются провайдеры
@@ -826,7 +826,7 @@ Overhead ServiceLoader:
 
 **[[jvm-module-system]]** — JPMS глубоко интегрирован с ServiceLoader через директивы uses/provides в module-info.java. Модульная система добавляет compile-time проверку сервисных зависимостей: если модуль объявляет uses SomeService, но ни один модуль на module path не объявляет provides SomeService — это обнаруживается при сборке. Это эволюция от runtime-обнаружения (META-INF/services) к compile-time-обнаружению (module declarations). Рекомендуется изучить SPI с META-INF/services для понимания основ, затем модульный подход для новых проектов.
 
-**[[design-patterns]]** — ServiceLoader реализует комбинацию нескольких паттернов: Service Locator (runtime обнаружение реализаций), Strategy (выбор реализации по критерию), и Inversion of Control (потребитель не знает о конкретных реализациях). Сравнение ServiceLoader с DI-контейнерами (Spring, Guice) показывает trade-offs: ServiceLoader проще и не требует внешних зависимостей, но не поддерживает lifecycle management, scoping и injection. Для plugin-архитектуры ServiceLoader достаточен; для application wiring — DI-фреймворк лучше.
+**[[design-patterns-overview]]** — ServiceLoader реализует комбинацию нескольких паттернов: Service Locator (runtime обнаружение реализаций), Strategy (выбор реализации по критерию), и Inversion of Control (потребитель не знает о конкретных реализациях). Сравнение ServiceLoader с DI-контейнерами (Spring, Guice) показывает trade-offs: ServiceLoader проще и не требует внешних зависимостей, но не поддерживает lifecycle management, scoping и injection. Для plugin-архитектуры ServiceLoader достаточен; для application wiring — DI-фреймворк лучше.
 
 ---
 
@@ -889,7 +889,7 @@ JDBC 4.0+ — автоматическая регистрация драйвер
 | Углубление | [[jvm-class-loader-deep-dive]] | Понять как ClassLoader загружает провайдеры и почему child ClassLoader не виден parent'у |
 | Углубление | [[jvm-module-system]] | JPMS uses/provides — compile-time альтернатива META-INF/services |
 | Связь | [[jvm-reflection-api]] | ServiceLoader использует рефлексию для создания экземпляров провайдеров |
-| Кросс-область | [[design-patterns]] | Service Locator, Strategy, IoC — паттерны, реализуемые ServiceLoader |
+| Кросс-область | [[design-patterns-overview]] | Service Locator, Strategy, IoC — паттерны, реализуемые ServiceLoader |
 | Навигация | [[jvm-overview]] | Вернуться к обзору JVM-тем |
 
 ---

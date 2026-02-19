@@ -15,7 +15,7 @@ tags:
   - level/intermediate
 related:
   - "[[microservices-vs-monolith]]"
-  - "[[design-patterns]]"
+  - "[[design-patterns-overview]]"
   - "[[observability]]"
   - "[[architecture-resilience-patterns]]"
 prerequisites:
@@ -834,7 +834,7 @@ events.emit('order:created', order);
 ## Связи
 
 - EDA в микросервисах: [[microservices-vs-monolith]]
-- Observer паттерн: [[design-patterns]]
+- Observer паттерн: [[design-patterns-overview]]
 - Трейсинг событий: [[observability]]
 
 ---

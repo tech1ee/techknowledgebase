@@ -1,7 +1,7 @@
 ---
 title: "Dependency Resolution: как разрешаются зависимости"
 created: 2026-01-09
-modified: 2026-02-13
+modified: 2026-02-19
 type: concept
 status: published
 confidence: high
@@ -16,7 +16,7 @@ tags:
 related:
   - "[[module-systems]]"
   - "[[build-systems-theory]]"
-  - "[[clean-code-solid]]"
+  - "[[solid-principles]]"
 prerequisites:
   - "[[module-systems]]"
 reading_time: 16
@@ -607,7 +607,7 @@ Lock files фиксируют точные версии ВСЕХ зависим�
 
 **[[build-systems-theory]]** — Build system оркестрирует dependency resolution как один из ключевых шагов сборки. Gradle реализует resolution strategy (newest wins, fail on conflict, force), Maven — nearest definition wins, Bazel — hermetic pinning. Понимание того, как build system разрешает транзитивные зависимости, необходимо для диагностики `NoClassDefFoundError`, `ClassNotFoundException` и version mismatch проблем.
 
-**[[clean-code-solid]]** — Dependency Inversion Principle (DIP) из SOLID напрямую связан с dependency resolution на архитектурном уровне. DIP говорит: "модули верхнего уровня не должны зависеть от модулей нижнего уровня; оба должны зависеть от абстракций". Это проявляется в `api` vs `implementation` scope в Gradle — `implementation` скрывает зависимость от потребителей, обеспечивая инверсию на уровне build graph.
+**[[solid-principles]]** — Dependency Inversion Principle (DIP) из SOLID напрямую связан с dependency resolution на архитектурном уровне. DIP говорит: "модули верхнего уровня не должны зависеть от модулей нижнего уровня; оба должны зависеть от абстракций". Это проявляется в `api` vs `implementation` scope в Gradle — `implementation` скрывает зависимость от потребителей, обеспечивая инверсию на уровне build graph.
 
 ---
 

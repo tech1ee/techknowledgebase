@@ -160,6 +160,16 @@ Android — мобильная операционная система на ба
 │  │ Baseline Prof.  │                                            │
 │  └─────────────────┘                                            │
 │                                                                 │
+│  PLATFORM INTERNALS (Deep Dive)                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
+│  │ Kernel          │  │ Binder IPC      │  │ Boot Process    │ │
+│  │ Extensions      │  │ Driver, Proxy   │  │ init → Launcher │ │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
+│  │ ART Runtime     │  │ System Services │  │ ActivityThread  │ │
+│  │ DEX, JIT, GC    │  │ AMS, WMS, PMS   │  │ Internals       │ │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+│                                                                 │
 │  BUILD SYSTEM (Under the Hood)                                  │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
 │  │ Gradle & AGP   │  │ Compilation     │  │ APK/AAB         │ │
@@ -212,7 +222,7 @@ Android — мобильная операционная система на ба
 
 | Материал | Что узнаете | Связан с |
 |----------|-------------|----------|
-| [[android-architecture-patterns]] | MVVM, MVI, Clean Architecture | [[design-patterns]], [[clean-code-solid]] |
+| [[android-architecture-patterns]] | MVVM, MVI, Clean Architecture | [[design-patterns-overview]], [[solid-principles]] |
 | [[android-architecture-evolution]] | Эволюция: God Activity → MVP → MVVM → MVI | [[android-architecture-patterns]] |
 | [[android-viewmodel-internals]] | ViewModelStore, SavedStateHandle, scopes | [[android-activity-lifecycle]] |
 | [[android-state-management]] | StateFlow vs SharedFlow vs Channel, Compose state | [[kotlin-coroutines]] |
@@ -277,6 +287,18 @@ Android — мобильная операционная система на ба
 | [[android-broadcast-internals]] | Normal vs Ordered, AMS dispatch, Android 8+ restrictions, goAsync() | [[android-app-components]], [[android-handler-looper]] |
 | [[android-notifications]] | NotificationChannel, NMS pipeline, PendingIntent, POST_NOTIFICATIONS | [[android-service-internals]], [[android-permissions-security]] |
 | [[android-app-startup-performance]] | Cold/Warm/Hot start, Baseline Profiles, Macrobenchmark, Perfetto | [[android-compilation-pipeline]], [[android-content-provider-internals]] |
+
+### Platform Internals (Deep Dive)
+
+| Материал | Что узнаете | Связан с |
+|----------|-------------|----------|
+| [[android-internals-overview]] | Карта раздела: все deep-dive по внутренностям Android | [[android-architecture]] |
+| [[android-kernel-extensions]] | Linux-ядро Android: Binder driver, ashmem, lmkd, SELinux, GKI | [[os-processes-threads]], [[android-process-memory]] |
+| [[android-binder-ipc]] | Binder IPC: mmap, Proxy/Stub, AIDL, ServiceManager, security | [[android-service-internals]], [[android-intent-internals]] |
+| [[android-boot-process]] | Загрузка: Bootloader → init → Zygote → SystemServer → Launcher | [[android-kernel-extensions]], [[android-app-startup-performance]] |
+| [[android-art-runtime]] | ART: DEX format, JIT/AOT, Baseline Profiles, CC GC | [[android-compilation-pipeline]], [[android-process-memory]] |
+| [[android-system-services]] | System Server: AMS, WMS, PMS, PowerManager, Watchdog | [[android-binder-ipc]], [[android-boot-process]] |
+| [[android-activitythread-internals]] | ActivityThread, ApplicationThread, ClientTransaction, Instrumentation | [[android-handler-looper]], [[android-activity-lifecycle]] |
 
 ### DevOps & CI/CD
 
@@ -451,6 +473,15 @@ Android построен на Linux, но значительно модифиц�
 - [[android-broadcast-internals]] — Normal/Ordered, AMS dispatch, Android 8+ restrictions
 - [[android-notifications]] — NotificationChannel, NMS pipeline, POST_NOTIFICATIONS
 - [[android-app-startup-performance]] — Cold/Warm/Hot start, Baseline Profiles, Macrobenchmark
+
+**Platform Internals (Deep Dive):**
+- [[android-internals-overview]] — карта раздела: все deep-dive по внутренностям Android
+- [[android-kernel-extensions]] — модификации Linux-ядра для Android
+- [[android-binder-ipc]] — Binder IPC: полный механизм межпроцессного взаимодействия
+- [[android-boot-process]] — загрузка Android от кнопки питания до Launcher
+- [[android-art-runtime]] — ART: DEX, JIT/AOT, GC, Baseline Profiles
+- [[android-system-services]] — System Server: AMS, WMS, PMS и другие сервисы
+- [[android-activitythread-internals]] — ActivityThread: lifecycle dispatch в процессе приложения
 
 **Build System:**
 - [[android-build-evolution]] — эволюция систем сборки: Ant → Maven → Gradle
