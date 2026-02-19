@@ -1,50 +1,58 @@
-# === Obsidian ===
-.obsidian/
-.trash/
-.smart-env/
-*.base
+# ============================================================
+# WHITELIST .gitignore — ONLY explicitly allowed paths are tracked
+# Everything else is automatically ignored.
+# This prevents accidental commits from iPad/Obsidian sync.
+# ============================================================
 
-# === System ===
-.DS_Store
+# Step 1: Ignore EVERYTHING by default
+/*
+/**
+
+# Step 2: Allow root meta-files
+!.gitignore
+!LICENSE
+!README.md
+
+# Step 3: Allow knowledge base zones (and all their contents)
+!100-foundations/
+!100-foundations/**
+!200-platforms/
+!200-platforms/**
+!300-systems/
+!300-systems/**
+!400-ai-ml/
+!400-ai-ml/**
+!500-craft/
+!500-craft/**
+!800-resources/
+!800-resources/**
+!900-system/
+!900-system/**
+
+# Step 4: Deny dangerous patterns EVERYWHERE (even inside allowed dirs)
+**/.obsidian/
+**/.DS_Store
+**/.claude/
+**/_automation/
+**/000-inbox/
+**/.smart-env/
+**/.trash/
+**/__pycache__/
+**/.idea/
+**/.vscode/
+
+# File patterns to always ignore
+*.canvas
+*.base
 *.swp
 *~
-Thumbs.db
-
-# === Claude Code ===
-.claude/
-
-# === Internal automation ===
-_automation/
-
-# === Internal work files ===
-000-inbox/
-
-# === Generated/cached files ===
-**/__pycache__/
 *.pyc
 *.pyo
-
-# === IDE ===
-.idea/
-.vscode/
 *.iml
-
-# === Secrets ===
-.env
-.env.*
 *.pem
 *.key
+.env
+.env.*
 credentials.json
 secrets.json
-
-# === Obsidian daily notes ===
-/202?-??-??.md
-
-# === Misc ===
-*.canvas
-
-
-
-
-# Ignore Smart Environment folder
-.smart-env
+Thumbs.db
