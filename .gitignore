@@ -42,6 +42,8 @@
 **/.vscode/
 
 # File patterns to always ignore
+Untitled*
+Untitled *
 *.canvas
 *.base
 *.swp
