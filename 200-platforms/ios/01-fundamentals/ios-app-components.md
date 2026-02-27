@@ -42,6 +42,54 @@ iOS приложения построены вокруг UIApplication (синг
 
 **В iOS-терминах:** UIApplication координирует run loop, делегаты отвечают на lifecycle события, scenes управляют UI instances, а view controllers — это ваш код.
 
+## Теоретические основы
+
+> **Определение:** Компоненты приложения (application components) — это архитектурные единицы, предоставляемые платформой для организации жизненного цикла, обработки событий и управления пользовательским интерфейсом. В iOS эта модель основана на паттерне Application Controller (Fowler, 2002) и Event-Driven Architecture.
+
+### Эволюция модели приложения в iOS
+
+| Этап | Годы | Модель | Архитектурные изменения |
+|------|------|--------|------------------------|
+| iPhone OS 1.0-3.x | 2007-2009 | Single-window, UIApplicationDelegate | Один делегат управляет всем; нет многозадачности |
+| iOS 4-12 | 2010-2018 | Background modes + State Restoration | Появление background execution; UIStateRestoration |
+| iOS 13+ | 2019-н.в. | Scene-based (UISceneDelegate) | Multi-window; разделение app-level и UI-level lifecycle |
+| iOS 14+ | 2020-н.в. | SwiftUI App protocol | Декларативный lifecycle; @main entry point |
+
+### Паттерн Delegation в контексте Apple
+
+> **Delegation** — паттерн проектирования, в котором объект делегирует часть своих обязанностей другому объекту (delegate). В терминологии GoF (Gamma et al., 1994) это реализация паттерна Strategy с использованием протоколов.
+
+Apple систематически применяет delegation во всех ключевых компонентах:
+
+| Компонент | Делегат | Ответственность |
+|-----------|---------|-----------------|
+| UIApplication | UIApplicationDelegate | App-level lifecycle, remote notifications |
+| UIScene | UISceneDelegate | UI lifecycle, window management (iOS 13+) |
+| UITableView | UITableViewDelegate | Выбор, редактирование, scroll |
+| URLSession | URLSessionDelegate | Аутентификация, background transfers |
+
+### Конечный автомат жизненного цикла (FSM)
+
+Жизненный цикл iOS-приложения формально описывается как конечный автомат (Finite State Machine), что соответствует теории автоматов (Hopcroft & Ullman, 1979):
+
+- **Состояния (S):** {Not Running, Inactive, Active, Background, Suspended}
+- **Алфавит (Σ):** {launch, activate, deactivate, enter_background, suspend, terminate}
+- **Функция переходов (δ):** строго определена — нельзя перейти из Not Running в Active минуя Inactive
+
+Детерминированность этого автомата гарантирует предсказуемость поведения приложения и является основой для корректной реализации state restoration.
+
+### Паттерн Responder Chain
+
+> **Responder Chain** — реализация паттерна Chain of Responsibility (GoF, 1994) в UIKit. События (touch, press, motion) передаются по цепочке от конкретного view к UIApplication, давая каждому звену возможность обработать или передать событие дальше.
+
+### Связь с CS-фундаментом
+
+- [[state-machines]] — формальная теория конечных автоматов, применимая к lifecycle
+- [[event-driven-programming]] — событийная модель, лежащая в основе RunLoop
+- [[android-app-components]] — альтернативная component-based модель Android для сравнения
+
+---
+
 ## Интуиция: 5 аналогий из жизни
 
 1. **UIApplication = Авиадиспетчер**
@@ -920,35 +968,20 @@ func scheduleAppRefresh() {
 
 ## Источники
 
-1. Apple Developer Documentation
-   - [Managing Your App's Life Cycle](https://developer.apple.com/documentation/uikit/app_and_environment/managing_your_app_s_life_cycle) (2024)
-   - [UIApplicationDelegate](https://developer.apple.com/documentation/uikit/uiapplicationdelegate)
-   - [UISceneDelegate](https://developer.apple.com/documentation/uikit/uiscenedelegate)
-   - [App Protocol (SwiftUI)](https://developer.apple.com/documentation/swiftui/app)
+### Теоретические основы
+- Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software.* Addison-Wesley — паттерны Delegation (Strategy), Chain of Responsibility, Observer
+- Fowler M. (2002). *Patterns of Enterprise Application Architecture.* Addison-Wesley — Application Controller pattern
+- Hopcroft J. E., Ullman J. D. (1979). *Introduction to Automata Theory, Languages, and Computation.* Addison-Wesley — теория конечных автоматов
+- Harel D. (1987). *Statecharts: A Visual Formalism for Complex Systems.* Science of Computer Programming — формализм для описания иерархических состояний
 
-2. WWDC Sessions
-   - WWDC 2019: [Architecting Your App for Multiple Windows](https://developer.apple.com/videos/play/wwdc2019/258/)
-   - WWDC 2020: [App essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10037/)
-   - WWDC 2020: [Background execution demystified](https://developer.apple.com/videos/play/wwdc2020/10063/)
-   - WWDC 2023: [What's new in App Intents](https://developer.apple.com/videos/play/wwdc2023/10103/)
-
-3. Apple Human Interface Guidelines
-   - [Launching](https://developer.apple.com/design/human-interface-guidelines/launching)
-   - [Going to the background](https://developer.apple.com/design/human-interface-guidelines/going-to-the-background)
-
-4. Technical Notes
-   - [TN2277: Networking and Multitasking](https://developer.apple.com/library/archive/technotes/tn2277/)
-   - [TN2277: Background Execution](https://developer.apple.com/library/archive/technotes/tn2277/)
-
-5. Performance Best Practices
-   - [Energy Efficiency Guide for iOS Apps](https://developer.apple.com/library/archive/documentation/Performance/Conceptual/EnergyGuide-iOS/)
-   - [Instruments Help: Profiling Your App's Energy Use](https://help.apple.com/instruments/mac/current/#/dev1d85a1a07)
-
-## Источники и дальнейшее чтение
-
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — детально описывает UIApplication, AppDelegate, SceneDelegate и жизненный цикл приложения с практическими примерами
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — пошаговое введение в компоненты iOS-приложения, от UIWindow до view controller hierarchy
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — объясняет App protocol и Scene lifecycle в SwiftUI, помогает понять декларативную альтернативу UIKit lifecycle
+### Практические руководства
+- [Managing Your App's Life Cycle](https://developer.apple.com/documentation/uikit/app_and_environment/managing_your_app_s_life_cycle) — Apple Documentation
+- WWDC 2019: [Architecting Your App for Multiple Windows](https://developer.apple.com/videos/play/wwdc2019/258/)
+- WWDC 2020: [App essentials in SwiftUI](https://developer.apple.com/videos/play/wwdc2020/10037/)
+- WWDC 2020: [Background execution demystified](https://developer.apple.com/videos/play/wwdc2020/10063/)
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — UIApplication, AppDelegate, SceneDelegate с практическими примерами
+- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — компоненты iOS-приложения
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — App protocol и Scene lifecycle
 
 ---
 

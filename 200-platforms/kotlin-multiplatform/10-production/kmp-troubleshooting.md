@@ -61,6 +61,54 @@ next_review:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Troubleshooting** — систематический процесс поиска причины неисправности в сложной системе с использованием логического исключения (root cause analysis) и структурированного подхода к диагностике (Kepner & Tregoe, 1965, The Rational Manager).
+
+### Root Cause Analysis (RCA)
+
+Метод «5 Почему» (Ohno, 1988, Toyota Production System) формализует поиск корневой причины:
+
+| Уровень | Вопрос | Пример KMP |
+|---------|--------|-----------|
+| Симптом | Что сломалось? | iOS app crash on launch |
+| Почему 1 | Почему crash? | CrashKiOS incompatible with dynamic framework |
+| Почему 2 | Почему dynamic? | Добавили `-ld_classic` flag |
+| Почему 3 | Почему `-ld_classic`? | Xcode 16 new linker exit code 138 |
+| Почему 4 | Почему exit 138? | SIGBUS при линковке Kotlin/Native binary |
+| Root cause | Корневая причина | Несовместимость нового Apple linker с K/N metadata format |
+
+### Таксономия ошибок KMP
+
+Ошибки KMP классифицируются по **слою toolchain**, в котором они возникают:
+
+| Слой | Время проявления | Типичные ошибки | Диагностика |
+|------|-----------------|-----------------|-------------|
+| **Gradle sync** | IDE time | Dependency resolution, plugin version | `--stacktrace --info` |
+| **Kotlin compilation** | Build time | Type mismatch, expect/actual | Compiler error messages |
+| **iOS linking** | Build time | Framework not found, architecture mismatch | `xcodebuild` log |
+| **Runtime (Android)** | Execution | ClassCastException, coroutine crash | Logcat + debugger |
+| **Runtime (iOS)** | Execution | EXC_BAD_ACCESS, KotlinException | LLDB + dSYM |
+
+### Diagnostic Reasoning
+
+Patrick Winston (1992) формализовал debugging как **Generate and Test**:
+
+```
+1. Observe symptom
+2. Generate hypothesis (based on error taxonomy)
+3. Design experiment (minimal reproduction)
+4. Test hypothesis
+5. If confirmed → fix; else → goto 2
+```
+
+Для KMP критично определить **слой** проблемы (Gradle, Kotlin compiler, iOS linker, runtime) — это сужает пространство гипотез с тысяч вариантов до десятков.
+
+> **CS-фундамент:** Troubleshooting связан с [[kmp-debugging]] (инструменты отладки), [[kmp-gradle-deep-dive]] (build system проблемы) и [[kmp-ios-deep-dive]] (iOS-специфичные ошибки). Теоретическая база — Root Cause Analysis (Ohno, 1988), Diagnostic Reasoning (Winston, 1992), Error Taxonomy (IEEE 1044-2009).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -945,11 +993,16 @@ rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
 ## Источники и дальнейшее чтение
 
-- Moskala M. (2021). *Effective Kotlin.* — Многие проблемы в troubleshooting (freeze deprecated, generics limitation, default arguments на iOS) связаны с неправильным использованием языковых конструкций Kotlin. Книга помогает писать код, который изначально избегает типичных ловушек expect/actual, nullable generics и exception handling.
+### Теоретические основы
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундаментальное понимание компиляции Kotlin (JVM bytecode vs Native machine code), системы типов и interop с Java необходимо для диагностики ошибок компиляции и линковки. Когда вы понимаете, что Kotlin/Native проходит через LLVM, exit code 138 (SIGBUS от линкера) обретает логический смысл.
+- **Kepner C., Tregoe B. (1965).** *The Rational Manager.* — Систематический подход к troubleshooting: problem analysis, decision analysis.
+- **Ohno T. (1988).** *Toyota Production System.* — Метод «5 Почему» для root cause analysis.
+- **Winston P. (1992).** *Artificial Intelligence.* — Generate and Test как формальный метод диагностики.
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Проблемы с freeze() и InvalidMutabilityException (старая memory model) связаны с многопоточностью корутин. Книга объясняет, почему новая memory model убрала freeze, как Dispatchers взаимодействуют с потоками и почему Dispatchers.Main не работает в unit tests без мока.
+### Практические руководства
+
+- [KMP Troubleshooting Guide](https://kotlinlang.org/docs/multiplatform-troubleshooting.html) — Официальный гайд по проблемам.
+- [KDoctor](https://github.com/nicklcm/KDoctor) — Инструмент проверки KMP-окружения.
 
 ---
 

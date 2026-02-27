@@ -31,6 +31,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Real-time протоколы** — протоколы, обеспечивающие двустороннюю или push-коммуникацию с минимальной задержкой. Решают фундаментальную проблему HTTP: request-response модель не подходит для потоковых данных.
+
+### Эволюция real-time в вебе
+
+| Год | Технология | Механизм | Проблема |
+|-----|-----------|----------|----------|
+| 1999 | **Polling** | Периодические HTTP-запросы | Нагрузка, задержки |
+| 2003 | **Long Polling (Comet)** | HTTP-запрос ждёт события | Один канал, overhead |
+| 2011 | **WebSocket** (RFC 6455) | Persistent full-duplex TCP | Proxy/firewall issues |
+| 2015 | **SSE** (EventSource API) | Server → Client push по HTTP | Только server→client |
+| 2011 | **WebRTC** (W3C/IETF) | P2P media + data channels | Сложный NAT traversal |
+| 2022 | **WebTransport** (IETF draft) | HTTP/3 (QUIC) based bidirectional | Новый, ещё adoption |
+
+### Сравнение протоколов
+
+| Аспект | WebSocket | SSE | WebRTC | gRPC Streaming |
+|--------|-----------|-----|--------|---------------|
+| Направление | Bidirectional | Server → Client | Bidirectional (P2P) | Bidirectional |
+| Транспорт | TCP | HTTP/1.1+ | UDP (DTLS/SRTP) | HTTP/2 |
+| Reconnect | Ручной | Автоматический | ICE restart | Ручной |
+| Binary data | ✅ | ❌ (text only) | ✅ | ✅ (protobuf) |
+| Через CDN/proxy | ⚠️ (upgrade) | ✅ (обычный HTTP) | ⚠️ (TURN fallback) | ✅ |
+
+> **См. также**: [[network-http-evolution]] — HTTP/1 → HTTP/3, [[network-transport-layer]] — TCP/UDP
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -2910,11 +2939,15 @@ socket.once('welcome', (data) => {
 
 ## Источники
 
-Проверено: 2025-12-18
+### Теоретические основы
+- [RFC 6455](https://datatracker.ietf.org/doc/html/rfc6455) (2011). *The WebSocket Protocol*. — Fette & Melnikov, IETF
+- [RFC 8831](https://datatracker.ietf.org/doc/html/rfc8831) (2021). *WebRTC Data Channels*. — Формальная модель P2P data transfer
+- Rescorla E. (2018). *WebRTC: APIs and SRTP Architecture*. — Медиа-стек WebRTC
+
+### Практические руководства (проверено 2025-12-18)
 
 **WebSocket:**
 - [WebSockets Standard - WHATWG Living Standard](https://websockets.spec.whatwg.org/)
-- [RFC 6455 - The WebSocket Protocol](https://datatracker.ietf.org/doc/html/rfc6455)
 - [WebSocket API - MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 - [Future of WebSockets: HTTP/3 and WebTransport](https://websocket.org/guides/future-of-websockets/)
 

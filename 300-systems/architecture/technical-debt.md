@@ -33,6 +33,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Технический долг** (Technical Debt) — метафора, введённая **Ward Cunningham (1992)**, описывающая накопленную стоимость доработки кода, который был написан быстро, но неоптимально. Как финансовый долг, он имеет **принципал** (сам плохой код) и **проценты** (дополнительное время на каждое изменение).
+
+### Формализация (Fowler, 2009 — Technical Debt Quadrant)
+
+|  | **Reckless (безрассудный)** | **Prudent (осознанный)** |
+|--|---------------------------|------------------------|
+| **Deliberate (намеренный)** | «Нет времени на дизайн» — сознательно пишем плохо | «Поставляем сейчас, рефакторим позже» — осознанный trade-off |
+| **Inadvertent (случайный)** | «Мы не знали, как правильно» — от незнания | «Теперь мы понимаем, как надо было» — рост экспертизы |
+
+### Экономическая модель
+
+```
+Total Cost = Cost_of_fix_now + ∫(Interest_rate × Changes_per_period) dt
+```
+
+- **Interest rate** — дополнительное время на каждое изменение из-за долга
+- **Tipping point** — момент, когда проценты превышают стоимость исправления
+- **Исследования McKinsey (2022)**: 20-40% IT-бюджета тратится на обслуживание долга
+
+### Метрики технического долга
+
+| Метрика | Что измеряет | Инструмент |
+|---------|-------------|-----------|
+| **Cyclomatic Complexity** | Сложность кода (McCabe, 1976) | SonarQube, Detekt |
+| **Code Churn** | Частота изменений файла | Git analytics |
+| **SQALE Rating** | Соотношение долга к размеру кода | SonarQube |
+| **Dependency Freshness** | Устаревание зависимостей | Dependabot, Renovate |
+| **Test Coverage Delta** | Покрытие нового vs legacy кода | JaCoCo, Kover |
+
+> **См. также**: [[code-smells]] — признаки долга в коде, [[refactoring-catalog]] — методы его устранения, [[legacy-code-strategies]] — работа с legacy
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -538,10 +573,14 @@ Product owner хочет новые фичи. Рефакторинг не вид
 
 ## Источники
 
+### Теоретические основы
+- Cunningham W. (1992). *The WyCash Portfolio Management System* (OOPSLA). — Оригинальная метафора технического долга
+- Fowler M. (2009). *Technical Debt Quadrant*. — Формализация 4 типов долга (deliberate/inadvertent × prudent/reckless)
+- Kruchten P. et al. (2012). *Technical Debt: From Metaphor to Theory and Practice*. — IEEE Software, академический обзор
+
 ### Основные концепции
 - [Martin Fowler: Technical Debt](https://martinfowler.com/bliki/TechnicalDebt.html) — каноническое определение
 - [Martin Fowler: Technical Debt Quadrant](https://martinfowler.com/bliki/TechnicalDebtQuadrant.html) — 4 типа долга
-- [Wikipedia: Technical Debt](https://en.wikipedia.org/wiki/Technical_debt) — история термина Ward Cunningham
 - [Agile Alliance: Introduction to Technical Debt](https://agilealliance.org/introduction-to-the-technical-debt-concept/) — эволюция концепции
 
 ### Статистика и исследования

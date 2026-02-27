@@ -22,6 +22,42 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Factory** — семейство порождающих паттернов, инкапсулирующих логику создания объектов. Отделяют код, использующий объект, от кода, определяющего конкретный тип создаваемого объекта. GoF (1994) определили два формальных варианта: **Factory Method** (наследование) и **Abstract Factory** (композиция).
+
+### Формальная структура
+
+**Factory Method** — определяет интерфейс для создания объекта, но позволяет подклассам решить, какой класс инстанцировать:
+```
+Creator (abstract)            Product (interface)
+├── ConcreteCreatorA  ──→     ├── ConcreteProductA
+└── ConcreteCreatorB  ──→     └── ConcreteProductB
+```
+
+**Abstract Factory** — предоставляет интерфейс для создания семейств связанных объектов:
+```
+AbstractFactory               ProductA    ProductB
+├── ConcreteFactory1  ──→     A1          B1
+└── ConcreteFactory2  ──→     A2          B2
+```
+
+### Связь с принципами
+
+| Принцип | Как Factory его реализует |
+|---------|------------------------|
+| **OCP** | Новый тип = новый ConcreteCreator, существующий код не меняется |
+| **DIP** | Клиент зависит от абстракции (Creator/Product), не от конкретных классов |
+| **SRP** | Логика создания отделена от бизнес-логики |
+
+### Kotlin: языковые фичи vs паттерн
+
+Bloch (Effective Java, Item 1): «Consider static factory methods instead of constructors». В Kotlin это реализуется через `companion object`, `invoke()`, sealed class + when. Фабрика встроена в язык.
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[builder-pattern]] — другой порождающий паттерн, [[solid-principles]] — OCP и DIP
+
+---
+
 ## Проблема
 
 Без фабрики клиентский код знает о конкретных классах и их зависимостях:
@@ -873,6 +909,11 @@ Top-level: `listOf()`, `mutableListOf()`, `mapOf()`, `setOf()`, `sequenceOf()`, 
 
 ## Источники
 
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — оригинальные Factory Method и Abstract Factory: формальные участники, мотивация, связь с OCP и DIP
+- **Bloch J. (2018). Effective Java, Item 1.** — «Consider static factory methods instead of constructors»: преимущества перед конструкторами
+
+### Практические руководства
 - Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* --- оригинальные описания Factory Method и Abstract Factory
 - Bloch J. (2018). *Effective Java*, 3rd ed. --- Item 1: Consider static factory methods instead of constructors
 - Moskala M. (2021). *Effective Kotlin* --- Item 30: Consider factory functions instead of constructors; Item 32: Consider factory functions for complex object creation

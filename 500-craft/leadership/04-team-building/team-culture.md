@@ -36,6 +36,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Организационная культура (Schein, 1985)
+
+> **Определение:** Организационная культура — паттерн базовых допущений, изобретённых, открытых или разработанных группой по мере решения проблем внешней адаптации и внутренней интеграции, работающий достаточно хорошо, чтобы передаваться новым членам как правильный способ восприятия, мышления и отношения к проблемам. — Edgar Schein, *"Organizational Culture and Leadership"* (1985)
+
+Schein описал три уровня культуры:
+
+| Уровень | Описание | Примеры в engineering команде |
+|---------|----------|------------------------------|
+| **Артефакты** (видимый) | Видимые проявления культуры | Code review practices, team rituals, [[company-handbooks\|handbook]] |
+| **Провозглашаемые ценности** | Заявленные принципы | «We value ownership», «Move fast and break things» |
+| **Базовые допущения** (невидимый) | Неосознанные убеждения | «Ошибки — это нормально» vs «Ошибки недопустимы» |
+
+Ключевой insight Schein: **реальная культура** определяется базовыми допущениями, а не тем, что написано на стене. Если заявленная ценность «мы ценим инновации», но базовое допущение «ошибки карают», культура будет risk-averse.
+
+### Культура как shared assumptions
+
+Netflix Culture Deck (2009, обновлён) стал каноническим примером explicit engineering culture. Reed Hastings и Patty McCord формализовали принцип **«Context, not Control»** — лидер задаёт контекст для принятия решений, а не контролирует сами решения. Это перекликается с [[delegation|intent-based leadership]] Marquet.
+
+> «Culture is not what you say. Culture is what you tolerate.» — приписывается различным авторам, концепция восходит к Schein
+
+Ben Horowitz в *"What You Do Is Who You Are"* (2019) расширил модель Schein для tech-компаний, показав, что культура строится через **shocking rules** (правила, нарушающие ожидания и запоминающиеся) и **decisive actions** лидеров в кризисных ситуациях.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -651,6 +677,14 @@ Even if they're your "10x engineer."
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Schein E. H. "Organizational Culture and Leadership" — Jossey-Bass, 1985 | Книга | Три уровня культуры, базовые допущения |
+| 2 | Horowitz B. "What You Do Is Who You Are" — Harper Business, 2019 | Книга | Shocking rules, culture через actions |
+| 3 | Hastings R., Meyer E. "No Rules Rules" — Penguin Press, 2020 | Книга | Netflix culture: context not control |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Netflix Culture Deck](https://jobs.netflix.com/culture) | Document | F&R philosophy |

@@ -93,6 +93,47 @@ MockK — библиотека моков, написанная специаль
 
 ---
 
+## Теоретические основы
+
+Тестирование как дисциплина опирается на формальные концепции из математики, логики и software engineering.
+
+### Test Doubles: формальная классификация
+
+> **Формально:** Meszaros (2007, *xUnit Test Patterns*) систематизировал типы подмен зависимостей (test doubles):
+
+| Test Double | Определение | MockK аналог |
+|-------------|------------|--------------|
+| **Dummy** | Передаётся, но не используется | `mockk(relaxed = true)` без `every {}` |
+| **Stub** | Возвращает заданные значения | `every { mock.method() } returns value` |
+| **Mock** | Проверяет, что метод был вызван | `verify { mock.method() }` |
+| **Spy** | Обёртка над реальным объектом | `spyk(realObject)` |
+| **Fake** | Рабочая реализация (упрощённая) | Ручная реализация (in-memory repository) |
+
+Различие между mocks и stubs формализовано Fowler (2007, *Mocks Aren't Stubs*): **stubs** проверяют состояние (state verification), **mocks** проверяют поведение (behavior verification).
+
+### Property-Based Testing
+
+> **Формально:** property-based testing (Claessen & Hughes, 2000, *QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs*) — метод тестирования, при котором проверяются **инварианты** (свойства), а не конкретные примеры. Генератор создаёт случайные входные данные; при обнаружении ошибки — **shrinking** находит минимальный failing case.
+
+Ключевые типы свойств:
+
+| Свойство | Пример | Формализация |
+|----------|--------|-------------|
+| **Roundtrip** | `decode(encode(x)) == x` | Биекция (обратимость) |
+| **Idempotence** | `sort(sort(x)) == sort(x)` | f(f(x)) = f(x) |
+| **Commutativity** | `add(a, b) == add(b, a)` | f(a, b) = f(b, a) |
+| **Invariant** | `sort(x).size == x.size` | Сохранение инварианта |
+
+### Virtual Time и детерминистичность
+
+`runTest` из kotlinx-coroutines-test реализует **virtual time** — детерминистичную модель времени, в которой `delay()` не блокирует реальный поток, а перематывает виртуальные часы. Это формально аналогично **discrete-event simulation** (Nance, 1993): все события (delay, timeout) помещаются в приоритетную очередь по виртуальному времени и выполняются в порядке наступления.
+
+> **Почему это важно:** реальное время делает тесты **недетерминистичными** (flaky tests). Virtual time устраняет недетерминизм: `delay(5000)` выполняется мгновенно, `advanceTimeBy(5000)` даёт точный контроль. Это применение принципа **deterministic replay** (Lamport, 1978).
+
+См. также: [[kotlin-coroutines]] — API корутин для тестирования, [[kotlin-flow]] — тестирование Flow с Turbine.
+
+---
+
 ## JUnit 5 в Kotlin
 
 ### Базовая структура тестов
@@ -1231,6 +1272,15 @@ fun test() = runTest {
 [[kotlin-functional]] — Функциональный стиль Kotlin (чистые функции, immutable data, higher-order functions) упрощает тестирование: чистые функции не требуют моков, а higher-order functions позволяют подставлять тестовые реализации. Property-based testing из Kotest особенно эффективен для тестирования функциональных трансформаций данных.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Meszaros G. (2007). *xUnit Test Patterns: Refactoring Test Code*. — Систематизация test doubles (Dummy, Stub, Mock, Spy, Fake); каноническая классификация.
+- Claessen K., Hughes J. (2000). *QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs*. ICFP. — Оригинальная работа по property-based testing; основа для Kotest property testing.
+- Fowler M. (2007). *Mocks Aren't Stubs*. — Формализация различия между state verification (stubs) и behavior verification (mocks).
+- Beck K. (2002). *Test Driven Development: By Example*. — Формализация TDD-цикла Red-Green-Refactor.
+
+### Практические руководства
 
 - Moskala M. (2021). *Effective Kotlin*. — Раздел о тестировании best practices, включая рекомендации по выбору test doubles (fakes vs mocks), структуре тестов и property-based testing.
 - Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. — Глава о тестировании корутин с runTest, virtual time, TestDispatchers. Единственная книга с глубоким разбором тестирования suspend-функций и Flow.

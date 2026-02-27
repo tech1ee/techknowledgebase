@@ -34,6 +34,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Теория привлечения талантов
+
+> **Определение:** Talent Acquisition — стратегический подход к привлечению, поиску и найму кандидатов, ориентированный на долгосрочное построение pipeline, в отличие от реактивного recruitment (закрытие конкретной позиции).
+
+Концепция Employer Branding была формализована Simon Barrow и Tim Ambler в статье *"The Employer Brand"* (Journal of Brand Management, 1996):
+
+> **Employer Brand** — совокупность функциональных, экономических и психологических выгод, ассоциируемых с работодателем. Определяет, кто хочет работать в компании, до того как открыта конкретная позиция.
+
+### Talent Pipeline и пассивные кандидаты
+
+Исследования LinkedIn Talent Solutions показывают, что 70% мирового трудоспособного населения составляют **passive candidates** — люди, не ищущие работу активно, но готовые рассмотреть предложение. John Sullivan (*"Hiring Manager Secrets"*, 2017) ввёл понятие talent pipeline — проактивного построения отношений с потенциальными кандидатами до момента открытия вакансии.
+
+| Тип кандидата | Доля рынка | Response rate | Quality of hire |
+|--------------|-----------|---------------|-----------------|
+| **Active** (ищут работу) | ~30% | Высокий (inbound) | Средний |
+| **Passive** (не ищут) | ~70% | 5-30% (зависит от персонализации) | Выше среднего |
+| **Referrals** | N/A | N/A | Наивысший (5x retention) |
+
+Mark Granovetter в *"The Strength of Weak Ties"* (American Journal of Sociology, 1973) показал, что наиболее ценные профессиональные возможности приходят через **слабые связи** (acquaintances), а не через близких друзей. Это теоретическое обоснование referral programs: сотрудники компании — мост к talent pools, недоступным через direct sourcing.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -677,6 +701,14 @@ LONG-TERM
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Barrow S., Ambler T. "The Employer Brand" — Journal of Brand Management, 1996 | Статья | Концепция employer branding |
+| 2 | Granovetter M. "The Strength of Weak Ties" — American Journal of Sociology, 1973 | Статья | Теоретическое обоснование referral programs |
+| 3 | LinkedIn Global Talent Trends — LinkedIn, annual | Исследование | 70% passive candidates, sourcing statistics |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [LinkedIn Talent Insights](https://business.linkedin.com/talent-solutions/recruiting-tips) | Research | Statistics, trends |

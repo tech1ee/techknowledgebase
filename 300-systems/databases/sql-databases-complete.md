@@ -75,6 +75,48 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис SQL-движков
+
+### MVCC: формальная семантика (Bernstein & Goodman, 1983)
+
+> **MVCC (Multi-Version Concurrency Control)** — механизм конкурентного доступа, при котором каждая транзакция видит **snapshot** базы данных на определённый момент времени. Формально: вместо блокировки данных СУБД создаёт новые **версии** строк, а читатели работают со старыми версиями.
+
+Ключевой инвариант: **readers never block writers, writers never block readers**. Каждая строка хранит метаинформацию о версии:
+
+| СУБД | Версионирование | Хранение старых версий |
+|------|-----------------|----------------------|
+| **PostgreSQL** | `xmin/xmax` (transaction ID) | В той же таблице (→ нужен VACUUM) |
+| **MySQL/InnoDB** | Hidden `DB_TRX_ID`, rollback pointer | Undo log (отдельное хранилище) |
+| **SQLite** | WAL + page-level versioning | WAL файл |
+
+PostgreSQL MVCC создаёт **dead tuples** при UPDATE (старая версия остаётся в таблице), что требует VACUUM для очистки — фундаментальный trade-off архитектуры.
+
+### WAL и ARIES Recovery (Mohan et al., 1992)
+
+> **WAL (Write-Ahead Logging)** — протокол, гарантирующий durability: перед модификацией страницы данных запись лога **обязана** быть записана на диск. Формальное правило: `log_flush(LSN) happens-before page_write`.
+
+**ARIES** (Algorithms for Recovery and Isolation Exploiting Semantics) — стандартный алгоритм recovery, используемый PostgreSQL и MySQL/InnoDB:
+1. **Analysis** — сканирование лога для определения dirty pages и active transactions
+2. **Redo** — повторение всех операций (idempotent) для восстановления состояния на момент crash
+3. **Undo** — откат незавершённых транзакций
+
+### Isolation Levels: формальное определение аномалий
+
+Стандарт SQL-92 определяет isolation levels через **допускаемые аномалии**:
+
+| Аномалия | Определение | Read Uncommitted | Read Committed | Repeatable Read | Serializable |
+|----------|-------------|:---:|:---:|:---:|:---:|
+| **Dirty Read** | Чтение данных незакоммиченной транзакции | Да | Нет | Нет | Нет |
+| **Non-repeatable Read** | Повторное чтение даёт другой результат | Да | Да | Нет | Нет |
+| **Phantom Read** | Появление новых строк в диапазоне | Да | Да | Да* | Нет |
+| **Write Skew** | Две транзакции читают одно, пишут разное | Да | Да | Да | Нет |
+
+*PostgreSQL Repeatable Read фактически предотвращает phantoms через Snapshot Isolation (Berenson et al., 1995).
+
+> **Связь**: MVCC → [[databases-fundamentals-complete]], WAL/ARIES → [[database-design-optimization]], Isolation Levels → [[databases-fundamentals-complete]]
+
+---
+
 ## Содержание
 
 1. [Обзор и сравнение](#обзор-и-сравнение)
@@ -1837,6 +1879,14 @@ LIMIT 10;
 [[database-design-optimization]] — Практическая оптимизация запросов и проектирование схем являются прямым применением знаний из этого документа: индексы для ускорения WHERE, EXPLAIN ANALYZE для диагностики, cursor pagination вместо OFFSET. Рекомендуется как следующий шаг после изучения SQL СУБД для перехода к production-уровню.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Bernstein P., Goodman N. (1983). *Multiversion Concurrency Control — Theory and Algorithms.* ACM TODS. — Формальное определение MVCC, на котором основаны PostgreSQL и InnoDB.
+- Mohan C. et al. (1992). *ARIES: A Transaction Recovery Method Supporting Fine-Granularity Locking.* ACM TODS. — Алгоритм WAL-recovery, используемый PostgreSQL и InnoDB.
+- Berenson H. et al. (1995). *A Critique of ANSI SQL Isolation Levels.* ACM SIGMOD. — Формальный анализ недостатков SQL-92 определений isolation levels; введение Snapshot Isolation.
+
+### Практические руководства
 
 - Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Полный университетский курс: SQL, query processing, concurrency control, recovery. Фундаментальный учебник для глубокого понимания реляционных СУБД.
 - Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage engines (B-Tree vs LSM-Tree), репликации (single-leader, multi-leader, leaderless) и транзакциях объясняют архитектурные решения PostgreSQL, MySQL и SQLite.

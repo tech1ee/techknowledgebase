@@ -32,6 +32,44 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **TLS (Transport Layer Security)** -- криптографический протокол, обеспечивающий конфиденциальность, целостность и аутентификацию данных при передаче по сети (RFC 8446, 2018).
+
+### Протокол Диффи -- Хеллмана (1976)
+
+Уитфилд Диффи и Мартин Хеллман в статье *"New Directions in Cryptography"* (IEEE Transactions on Information Theory, 1976) предложили первый метод обмена секретным ключом по открытому каналу. Этот протокол лежит в основе **ECDHE** (Elliptic Curve Diffie-Hellman Ephemeral), используемого в каждом TLS 1.3 handshake для обеспечения **forward secrecy**.
+
+### Формальная модель TLS handshake
+
+TLS 1.3 handshake (RFC 8446, E. Rescorla, 2018) формально верифицирован в работах Cremers et al. *"A Comprehensive Symbolic Analysis of TLS 1.3"* (ACM CCS, 2017):
+
+```
+Client                              Server
+  │── ClientHello (key_share) ─────────→│   1-RTT
+  │←─ ServerHello (key_share, cert) ────│
+  │── Finished ────────────────────────→│
+  │←─ Application Data ────────────────→│
+```
+
+### X.509 и PKI (Public Key Infrastructure)
+
+Система сертификатов X.509 стандартизована ITU-T (1988, обновлена в RFC 5280). **Chain of trust** -- иерархическая модель:
+
+| Уровень | Роль | Срок жизни |
+|---------|------|------------|
+| **Root CA** | Корень доверия (встроен в ОС/браузер) | 20-30 лет |
+| **Intermediate CA** | Выпускает сертификаты (изолирует Root) | 5-10 лет |
+| **Leaf Certificate** | Сертификат конкретного домена | 90 дней (Let's Encrypt) |
+
+Браузер проверяет цепочку от leaf до trusted Root CA. Если цепочка разорвана -- соединение отклоняется.
+
+### Связь с криптографическими примитивами
+
+TLS использует гибридную схему: [[security-cryptography-fundamentals|асимметричная криптография]] (ECDHE) -- для обмена ключами, [[security-cryptography-fundamentals|симметричная]] (AES-256-GCM) -- для шифрования данных. Это компромисс между безопасностью key exchange и скоростью передачи.
+
+---
+
 ## TL;DR
 
 - **TLS 1.3** — используй его (TLS 1.2 минимум)
@@ -314,6 +352,16 @@ openssl s_client -connect example.com:443 -showcerts
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Diffie W., Hellman M. (1976). *"New Directions in Cryptography."* IEEE Transactions on Information Theory. — протокол Диффи--Хеллмана, основа ECDHE в TLS.
+- ITU-T X.509 (1988, обновлён в RFC 5280). — стандарт сертификатов и PKI.
+- Rescorla E. (2018). RFC 8446: *"The Transport Layer Security (TLS) Protocol Version 1.3."* — текущая спецификация TLS.
+- Cremers C. et al. (2017). *"A Comprehensive Symbolic Analysis of TLS 1.3."* ACM CCS. — формальная верификация безопасности протокола.
+- Stallings W. (2017). *Cryptography and Network Security.* 7th Edition. Pearson. — теория протоколов безопасности.
+
+### Практические руководства
 
 - [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/)
 - [SSL Labs Best Practices](https://github.com/ssllabs/research/wiki/SSL-and-TLS-Deployment-Best-Practices)

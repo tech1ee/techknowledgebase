@@ -40,6 +40,21 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Agent** — рациональный агент (Russell & Norvig, 2020), способный воспринимать среду через сенсоры и воздействовать на неё через актуаторы. Для LLM-агентов: сенсоры = текстовый ввод + результаты tools, актуаторы = генерация текста + tool calls.
+
+| Концепция | Автор | Вклад |
+|-----------|-------|-------|
+| **Rational Agent** | Russell & Norvig (2020) | Формальное определение агента через PEAS |
+| **ReAct** | Yao et al. (2022) | Цикл Thought-Action-Observation |
+| **BDI Architecture** | Rao & Georgeff (1995) | Beliefs-Desires-Intentions модель |
+| **Tool Use** | Schick et al. (2023), Toolformer | Self-supervised обучение tool use |
+
+См. также: [[ai-agents-advanced|AI Agents Advanced]] — полная версия с production-паттернами.
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -799,11 +814,21 @@ Single agent — для простых задач, ограниченного б
 
 ## Источники
 
-- [LangChain Agents](https://python.langchain.com/docs/modules/agents/) — документация
-- [Anthropic Tool Use](https://docs.anthropic.com/claude/docs/tool-use) — Claude tools
-- [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling)
-- [CrewAI](https://github.com/joaomdmoura/crewAI) — multi-agent framework
-- [ReAct Paper](https://arxiv.org/abs/2210.03629) — оригинальная статья
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Russell S., Norvig P. (2020). *AI: A Modern Approach*. 4th ed. | Формальное определение рационального агента |
+| 2 | Yao S. et al. (2022). *ReAct*. arXiv:2210.03629 | Foundational pattern |
+| 3 | Rao A., Georgeff M. (1995). *BDI Agents*. ICMAS-95 | BDI-архитектура |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Anthropic Tool Use](https://docs.anthropic.com/claude/docs/tool-use) | Claude tools |
+| 2 | [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling) | GPT tools |
+| 3 | [CrewAI](https://github.com/joaomdmoura/crewAI) | Multi-agent framework |
 
 ---
 
@@ -820,11 +845,6 @@ Single agent — для простых задач, ограниченного б
 **[[ai-production-systems]]** — Деплой AI-агентов в продакшен требует решения уникальных инфраструктурных задач: управление длительными сессиями, ограничение стоимости при множественных LLM-вызовах, мониторинг цепочек действий, обработка ошибок в multi-step workflows. Production-паттерны для агентов включают circuit breakers, cost limits, human-in-the-loop и observability, описанные в руководстве по AI production systems.
 
 ---
-
-## Источники и дальнейшее чтение
-
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — фундаментальные главы об интеллектуальных агентах, планировании и поиске в пространстве состояний, которые являются теоретической основой современных LLM-агентов
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практические паттерны проектирования ML-систем, включая мониторинг, A/B-тестирование и итеративное улучшение, применимые к агентным системам в продакшене
 
 ---
 

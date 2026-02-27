@@ -33,6 +33,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **GCP (Google Cloud Platform)** — облачная платформа Google (2008), построенная на внутренней инфраструктуре Google (Borg, Colossus, Spanner). Отличается лидерством в Kubernetes, data analytics и ML/AI.
+
+### Вклад Google в облачные технологии
+
+| Технология | Внутренний Google | Открытый аналог | Влияние |
+|-----------|------------------|----------------|---------|
+| **Borg** | Оркестрация контейнеров | Kubernetes (2014) | Стандарт индустрии |
+| **MapReduce** | Распределённые вычисления | Hadoop, Spark | Big Data революция |
+| **Bigtable** | Column-family store | HBase, Cassandra | NoSQL движение |
+| **Spanner** | Globally consistent DB | CockroachDB, YugabyteDB | NewSQL |
+| **TensorFlow** | ML framework | TensorFlow (open source) | ML mainstream |
+
+### GCP vs AWS: архитектурные отличия
+
+| Аспект | AWS | GCP |
+|--------|-----|-----|
+| Networking | VPC per region | **Global VPC** (одна сеть на весь мир) |
+| IAM | Per-account | **Organization → Folder → Project** иерархия |
+| Live migration | Нет (reboot при maintenance) | **Да** (VM перемещается без downtime) |
+| Billing | Per-second (EC2) | Per-second + **sustained use discounts** |
+
+> **См. также**: [[cloud-overview]] — карта раздела, [[cloud-aws-core-services]] — AWS для сравнения
+
+---
+
 ## TL;DR
 
 - **Compute Engine** — виртуальные машины (аналог EC2)
@@ -396,6 +423,11 @@ gcloud container clusters create-auto my-autopilot \
 
 ## Источники
 
+### Теоретические основы
+- Burns B. et al. (2016). *Borg, Omega, and Kubernetes* (Google). — Эволюция систем оркестрации контейнеров от Borg к Kubernetes
+- Corbett J. et al. (2012). *Spanner: Google's Globally-Distributed Database*. — Архитектура Cloud Spanner
+
+### Практические руководства
 - [Google Cloud Documentation](https://cloud.google.com/docs)
 - [BigQuery Documentation](https://cloud.google.com/bigquery/docs)
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)

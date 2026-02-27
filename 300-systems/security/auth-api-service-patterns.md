@@ -33,6 +33,44 @@ API -- это граница доверия. Каждый endpoint -- потен
 
 ---
 
+## Теоретические основы
+
+> **Определение.** Аутентификация API — процесс верификации идентичности вызывающей стороны (клиента, сервиса, внешней системы) при машинном взаимодействии, где невозможно использование интерактивных методов (браузер, форма логина). Спектр механизмов определяется уровнем доверия между сторонами и моделью угроз.
+
+### Таксономия паттернов аутентификации API
+
+| Паттерн | Тип секрета | Идентифицирует | Уровень безопасности | Типичное применение |
+|---------|-------------|---------------|---------------------|---------------------|
+| API Key | Статическая строка | Приложение / проект | Низкий | Публичные API, rate limiting |
+| Bearer Token (OAuth 2.0) | Динамический токен | Пользователя или сервис | Средний–высокий | Пользовательские API, SPA, мобильные |
+| HMAC-подпись | Shared secret + подпись запроса | Сервис | Высокий | Webhooks, AWS Signature V4 |
+| mTLS | X.509 сертификаты обеих сторон | Оба конца соединения | Очень высокий | Service mesh, inter-service |
+| DPoP (RFC 9449) | Bearer token + proof-of-possession | Пользователя + привязка к ключу | Очень высокий | Мобильные/SPA с защитой от кражи токенов |
+
+### Zero Trust как архитектурная модель (NIST SP 800-207)
+
+> **Принцип Zero Trust.** «Never trust, always verify» — доверие не наследуется из сетевого расположения. Каждый запрос аутентифицируется и авторизуется независимо, независимо от того, находится ли вызывающая сторона «внутри» или «снаружи» сетевого периметра.
+
+Формальные положения NIST SP 800-207 (Rose S. et al., 2020):
+- **Все источники данных и сервисы — ресурсы.** Нет «доверенной сети».
+- **Коммуникация защищена независимо от расположения.** mTLS и шифрование даже внутри data center.
+- **Доступ к ресурсам — per-session.** Каждый запрос верифицируется; нет долгоживущих implicit trust.
+- **Политики — динамические.** Учитывают идентичность, состояние устройства, поведение, context.
+
+### Модели service-to-service аутентификации
+
+| Модель | Механизм | Преимущества | Недостатки |
+|--------|----------|-------------|------------|
+| Shared secret | Общий ключ для HMAC-подписи | Простота, нет PKI | Ротация, «blast radius» при утечке |
+| mTLS (mutual TLS) | X.509 сертификаты | Идентификация на транспортном уровне | Сложность PKI, certificate rotation |
+| Service mesh sidecar | Автоматический mTLS через Istio/Linkerd | Прозрачно для приложений | Overhead, vendor lock-in |
+| JWT с audience restriction | Token с `aud` claim для конкретного сервиса | Защита от confused deputy | Требует централизованного token issuer |
+| SPIFFE/SPIRE | Workload identity через SVIDs | Cloud-native, автоматическая ротация | Сложность развёртывания |
+
+**См. также:** [[security-https-tls]] — TLS и PKI как фундамент для mTLS; [[auth-oauth2-oidc]] — OAuth 2.0 flows для API; [[auth-sessions-jwt-tokens]] — внутреннее устройство JWT.
+
+---
+
 ## Зачем это знать
 
 Современные системы -- API-first. Мобильное приложение общается с backend через REST или gRPC. Микросервисы вызывают друг друга десятки раз на один пользовательский запрос. Третьи стороны подключаются через публичные API. Webhooks доставляют события между системами. Каждый из этих вызовов должен быть аутентифицирован -- но каждый требует своего подхода.
@@ -577,15 +615,23 @@ Webhook receiver?
 
 ## Источники и дальнейшее чтение
 
-- **Rose, S. et al. (2020).** NIST SP 800-207: Zero Trust Architecture. NIST. -- Формальное определение Zero Trust. Не привязан к конкретным технологиям, описывает архитектурные принципы. Обязателен для тех, кто проектирует security architecture для крупных систем. Стоит читать ради понимания, ЧТО такое Zero Trust на самом деле (а не маркетинговое "купите наш product").
+### Теоретические основы
 
-- **Madden, N. (2020).** API Security in Action. Manning. -- Практическое руководство от основ (HTTPS, tokens) до продвинутых тем (capability-based security, mTLS). Каждая глава содержит код и реальные сценарии. Стоит читать ради понимания связи между аутентификацией, авторизацией и audit trail для API.
+- **Rose, S. et al. (2020).** NIST SP 800-207: Zero Trust Architecture. NIST. -- Формальное определение Zero Trust. Не привязан к конкретным технологиям, описывает архитектурные принципы. Обязателен для тех, кто проектирует security architecture для крупных систем.
 
-- **Richer, J. & Sanso, A. (2017).** OAuth 2 in Action. Manning. -- Глубокое погружение в OAuth 2.0: не только flows, но и security considerations, token introspection, динамическая регистрация клиентов. Стоит читать ради понимания, ПОЧЕМУ OAuth спроектирован именно так -- какие атаки предотвращает каждый параметр.
+- **Li, L. et al. (2021).** "A Systematic Study of the Consistency of Two-Factor Authentication User Journeys on Top-Ranked Websites." USENIX Security. -- Исследование реальных реализаций аутентификации на крупных сайтах. Показывает разрыв между спецификацией и практикой.
 
-- **AWS Documentation.** Signature Version 4 Signing Process. -- Эталонная документация по HMAC-подписи запросов. Подробно описывает canonical request, string-to-sign, signing key derivation. Стоит читать как пример промышленного стандарта подписи API-запросов.
+- **Fett, D., Küsters, R. & Schmitz, G. (2019).** "An Extensive Formal Security Analysis of the OpenID Financial-grade API." IEEE S&P. -- Формальный анализ безопасности FAPI, включая DPoP и mTLS token binding. Применим к любой high-security API-аутентификации.
 
-- **Li, L. et al. (2021).** "A Systematic Study of the Consistency of Two-Factor Authentication User Journeys on Top-Ranked Websites." USENIX Security. -- Исследование реальных реализаций аутентификации на крупных сайтах. Показывает разрыв между спецификацией и практикой. Стоит читать ради понимания, что "правильная реализация" и "реальная реализация" -- часто разные вещи.
+- **SPIFFE (Secure Production Identity Framework For Everyone).** spiffe.io. -- Спецификация workload identity для cloud-native сред. Определяет SVIDs (SPIFFE Verifiable Identity Documents) и API для выпуска и верификации.
+
+### Практические руководства
+
+- **Madden, N. (2020).** API Security in Action. Manning. -- Практическое руководство от основ (HTTPS, tokens) до продвинутых тем (capability-based security, mTLS). Каждая глава содержит код и реальные сценарии.
+
+- **Richer, J. & Sanso, A. (2017).** OAuth 2 in Action. Manning. -- Глубокое погружение в OAuth 2.0: не только flows, но и security considerations, token introspection, динамическая регистрация клиентов.
+
+- **AWS Documentation.** Signature Version 4 Signing Process. -- Эталонная документация по HMAC-подписи запросов. Подробно описывает canonical request, string-to-sign, signing key derivation. Пример промышленного стандарта подписи API-запросов.
 
 ---
 

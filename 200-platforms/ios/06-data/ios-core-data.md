@@ -31,6 +31,47 @@ Core Data — это объектно-графовый фреймворк от A
 
 **Ключевое отличие от SQLite напрямую**: Core Data управляет графом объектов в памяти, SQLite — это просто деталь реализации персистентного хранилища.
 
+## Теоретические основы
+
+> **Object Graph Management** — паттерн управления графом взаимосвязанных объектов в памяти с отслеживанием состояний, ленивой загрузкой и персистентностью. Core Data реализует этот паттерн, а не является ORM в классическом смысле (Fowler, 2002).
+
+### Академический контекст
+
+Core Data объединяет несколько фундаментальных паттернов из каталога Мартина Фаулера (*Patterns of Enterprise Application Architecture*, 2002):
+
+| Паттерн | Определение | Реализация в Core Data |
+|---------|-------------|----------------------|
+| Unit of Work (Fowler, 2002) | Отслеживание изменений объектов для атомарного сохранения | NSManagedObjectContext — регистрирует insert/update/delete, сохраняет атомарно через save() |
+| Identity Map (Fowler, 2002) | Гарантия единственного экземпляра объекта в памяти | NSManagedObjectContext возвращает один и тот же объект по objectID |
+| Lazy Load (Fowler, 2002) | Загрузка данных только при обращении | Faulting — объект существует как «пустышка» до обращения к свойствам |
+| Data Mapper (Fowler, 2002) | Отделение доменных объектов от схемы хранения | NSManagedObjectModel маппит entity ↔ таблицы SQLite |
+| Optimistic Offline Lock | Конфликт определяется при сохранении, не при чтении | Merge policies (NSMergePolicy) при конфликте контекстов |
+
+### Историческая эволюция
+
+Core Data прошёл путь от Enterprise Objects Framework (EOF), созданного для NeXTSTEP:
+
+| Год | Событие | Значимость |
+|-----|---------|------------|
+| 1994 | EOF 1.0 (NeXTSTEP) | Первый object-relational framework для Objective-C |
+| 2005 | Core Data (Mac OS X Tiger) | Перенос EOF-концепций в macOS |
+| 2009 | Core Data на iPhone OS 3.0 | Мобильная персистентность |
+| 2015 | NSPersistentContainer (iOS 10) | Упрощение настройки стека |
+| 2019 | Core Data + CloudKit (iOS 13) | Облачная синхронизация из коробки |
+| 2023 | SwiftData (iOS 17) | Декларативная обёртка над Core Data |
+
+> **Ключевое заблуждение**: Core Data часто называют ORM, но это **Object Graph Manager**. ORM (Hibernate, SQLAlchemy) маппит таблицы → объекты 1:1. Core Data управляет графом объектов в памяти, а SQLite — лишь одна из стратегий персистентности (наряду с in-memory, binary, XML).
+
+### Связь с CS-фундаментом
+
+- [[ios-threading-fundamentals]] — потокобезопасность контекстов (один контекст = один поток)
+- [[ios-data-persistence]] — Core Data в иерархии механизмов хранения
+- [[database-internals-complete]] — SQLite как persistent store: B-tree, WAL, MVCC
+- [[ios-swiftdata]] — декларативная эволюция Core Data
+- [[ios-repository-pattern]] — абстракция data layer поверх Core Data
+
+---
+
 ## Аналогия: Библиотечная система
 
 ```
@@ -2355,6 +2396,12 @@ struct AddBookView: View {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+- Fowler M. (2002). *Patterns of Enterprise Application Architecture.* — Unit of Work, Identity Map, Lazy Load, Data Mapper — все паттерны, реализованные в Core Data
+- Ambler S. (2003). *Agile Database Techniques.* — объектно-реляционный маппинг, эволюция схемы, стратегии миграции данных
+- Cattell R.G.G. (1994). *Object Data Management.* — формализация Object Data Model (ODM), теоретическая основа объектно-графового подхода Core Data
+
+### Практические руководства
 - Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — содержит главы по Core Data stack, NSManagedObjectModel, fetching и migration с практическими примерами
 - Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — пошаговое введение в Core Data с проектом-упражнением, идеальное для первого знакомства с фреймворком
 - Eidhof C. et al. (2019). *Advanced Swift.* — продвинутые паттерны Swift (generics, protocols), которые помогают создавать типобезопасные обёртки над Core Data API

@@ -51,6 +51,40 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Memory Layout** — соглашение о расположении данных в памяти: порядок полей, alignment, padding, endianness.
+
+> **Marshalling** — процесс преобразования данных из in-memory представления одного языка/системы в представление другого. Обратный процесс — **unmarshalling** (или **demarshalling**).
+
+### Ключевые концепции
+
+**Alignment (выравнивание):**
+
+> Тип размером `N` байт должен располагаться по адресу, кратному `N`. Формально: `addr(x) mod alignment(type(x)) = 0`.
+
+Нарушение alignment может привести к: hardware exception (SPARC, ARM strict), performance penalty (2-10x slower на x86), или silent corruption.
+
+**Endianness:**
+
+| Порядок | Формула | Пример (0x12345678) | Платформы |
+|---------|---------|---------------------|-----------|
+| **Little-endian** | LSB first | `78 56 34 12` | x86, ARM (default), RISC-V |
+| **Big-endian** | MSB first | `12 34 56 78` | Network order (TCP/IP), SPARC, Java bytecode |
+
+> **Gulliver's Travels connection:** Термины "big-endian" и "little-endian" введены Danny Cohen (1980) в статье "On Holy Wars and a Plea for Peace", по аналогии со спором в "Путешествиях Гулливера" о том, с какого конца разбивать яйцо.
+
+### Blittable vs Non-blittable типы
+
+| Категория | Определение | Примеры | Marshalling |
+|-----------|-------------|---------|-------------|
+| **Blittable** | Одинаковый layout в managed и native | `Int`, `Long`, `Float`, `Double` | Нет (zero-copy) |
+| **Non-blittable** | Разный layout, требует преобразование | `String`, `Boolean`, `Array` | Copy + conversion |
+
+---
+
 ## Зачем это знать
 
 Понимание memory layout — одна из тех тем, которые отделяют "программиста, пишущего код" от "программиста, понимающего, что происходит внутри компьютера". Почему `sizeof(struct)` не равен сумме размеров полей? Почему переупорядочивание полей в структуре может сэкономить мегабайты памяти? Почему один и тот же бинарный файл, записанный на Intel-машине, читается как мусор на старом PowerPC?
@@ -569,11 +603,14 @@ fun main() {
 
 ## Источники и дальнейшее чтение
 
-- Bryant, R. & O'Hallaron, D. (2015). *Computer Systems: A Programmer's Perspective*. — Глава 3 подробно разбирает data alignment и byte ordering (endianness) с примерами на реальном hardware. Глава 12 объясняет, как network byte order используется в socket programming. Лучший учебник для понимания связи hardware и software.
-- Cohen, D. (1981). *On Holy Wars and a Plea for Peace* (IEN 137). — Историческая статья, давшая название проблеме endianness. Короткая и остроумная — обязательна к прочтению для контекста.
-- [Eric S. Raymond: The Lost Art of Structure Packing](http://www.catb.org/esr/structure-packing/) — самое полное и практичное руководство по layout C-структур, padding и оптимизации размера. Объясняет правила, которые компилятор применяет, с конкретными примерами.
-- [Aleksey Shipilev: JVM Anatomy Quarks #24](https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/) — глубокий разбор layout JVM-объектов от ведущего разработчика OpenJDK. Показывает, как object header, alignment и compressed oops влияют на реальное потребление памяти.
-- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design*. — Объясняет alignment с точки зрения hardware: почему шина памяти работает с выровненными адресами и какова цена unaligned access на разных архитектурах.
+### Теоретические основы
+- Cohen, D. (1981). "On Holy Wars and a Plea for Peace" (IEN 137) — историческая статья, давшая название "endianness"
+- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design* — alignment и hardware
+
+### Практические руководства
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — гл.3: alignment, endianness; гл.12: network byte order
+- [Eric S. Raymond: The Lost Art of Structure Packing](http://www.catb.org/esr/structure-packing/) — layout C-структур
+- [Aleksey Shipilev: JVM Anatomy Quarks #24](https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/) — layout JVM-объектов
 
 ---
 

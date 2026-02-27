@@ -34,6 +34,48 @@ Segment Tree — структура для range queries и updates за O(log n
 
 ---
 
+## Теоретические основы
+
+> **Дерево отрезков (Segment Tree)** — полное бинарное дерево, в котором каждый узел хранит агрегированное значение (сумма, минимум, максимум и т.д.) для соответствующего подотрезка массива. Обеспечивает O(log n) для range query и point/range update.
+
+### Принцип рекурсивной декомпозиции
+
+Segment Tree основан на стратегии Divide and Conquer. Массив A[0..n-1] рекурсивно делится пополам:
+
+- Корень хранит агрегат A[0..n-1]
+- Левый сын — A[0..mid], правый — A[mid+1..n-1]
+- Листья — отдельные элементы A[i]
+
+Для **любой ассоциативной операции** ⊕ (где (a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)) запрос на отрезке [l, r] разбивается на O(log n) узлов дерева, результаты которых объединяются.
+
+### Формальная модель lazy propagation
+
+Lazy propagation решает проблему range update за O(log n) через механизм отложенных обновлений:
+
+1. При range update [l, r] += val помечаем узлы, полностью покрытые [l, r], значением lazy = val
+2. Обновление потомков откладывается до момента запроса (push down)
+3. **Инвариант:** значение узла = агрегат с учётом всех lazy-меток на пути от корня
+
+| Операция | Без lazy | С lazy propagation |
+|----------|---------|-------------------|
+| Point update | O(log n) | O(log n) |
+| Range update | **O(n)** | **O(log n)** |
+| Range query | O(log n) | O(log n) |
+
+### Историческая справка
+
+| Год | Событие | Значение |
+|-----|---------|----------|
+| 1977 | Bentley J., "Solutions to Klee's rectangle problems" | Ранняя работа с иерархической декомпозицией интервалов |
+| 1980-е | Развитие в computational geometry | Segment Tree для задач пересечения отрезков |
+| 2000-е | Стандартизация в CP | Segment Tree стал обязательным инструментом на ICPC и IOI |
+
+> **Выбор структуры:** для prefix sum + point update достаточно [[fenwick-tree]] (проще, меньше памяти). Segment Tree необходим для range update, min/max queries, persistent версий.
+
+**Связанные темы:** [[fenwick-tree]] (более простая альтернатива), [[sparse-table]] (O(1) для статических данных), [[persistent-structures]] (персистентный Segment Tree)
+
+---
+
 ## Интуиция
 
 ### Аналогия 1: Segment Tree как менеджеры в компании
@@ -813,13 +855,14 @@ if (r < start || end < l) return 0
 
 ## Источники и дальнейшее чтение
 
-- **Cormen, T. et al. (2009). Introduction to Algorithms (CLRS).** -- Глава 14 "Augmenting Data Structures" описывает принципы, лежащие в основе деревьев отрезков: аугментация деревьев дополнительной информацией для эффективных запросов.
+### Теоретические основы
+- **Bentley, J. (1977). "Solutions to Klee's Rectangle Problems."** — Одна из ранних работ, использующих идею иерархической декомпозиции интервалов, лежащую в основе Segment Tree.
+- **Cormen, T. et al. (2009). "Introduction to Algorithms (CLRS)."** — Глава 14 "Augmenting Data Structures" описывает принципы аугментации деревьев дополнительной информацией для эффективных запросов. Теоретическая база Divide and Conquer.
+- **de Berg, M. et al. (2008). "Computational Geometry: Algorithms and Applications."** — Применение Segment Tree в вычислительной геометрии: пересечение отрезков, windowing queries, stabbing queries.
 
-- **Halim, S. (2013). Competitive Programming 3, Chapter 2.4.3.** -- Практическое руководство по Segment Tree с примерами задач. Покрывает базовый ST, lazy propagation и продвинутые варианты.
-
-- **CP-Algorithms (cp-algorithms.com/data_structures/segment_tree.html).** -- Наиболее полное онлайн-руководство по Segment Tree с реализациями, примерами и задачами. Де-факто стандарт для изучения в олимпиадном программировании.
-
-- **Bentley, J. (1977). Solutions to Klee's rectangle problems.** -- Одна из ранних работ, использующих идею иерархической декомпозиции интервалов, лежащую в основе Segment Tree.
+### Практические руководства
+- **Halim, S. (2013). "Competitive Programming 3", Chapter 2.4.3.** — Практическое руководство по Segment Tree с примерами задач. Покрывает базовый ST, lazy propagation и продвинутые варианты.
+- [CP-Algorithms — Segment Tree](https://cp-algorithms.com/data_structures/segment_tree.html) — наиболее полное онлайн-руководство с реализациями, примерами и задачами. Де-факто стандарт для изучения в олимпиадном программировании.
 
 ---
 

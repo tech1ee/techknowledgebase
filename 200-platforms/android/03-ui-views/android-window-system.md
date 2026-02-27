@@ -36,6 +36,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Window system** (оконная система) — компонент ОС, управляющий выделением областей экрана для приложений и их композицией в финальное изображение. Концепция формализована в X Window System (Scheifler/Gettys, MIT, 1984): разделение **window manager** (управление окнами) и **display server** (отрисовка).
+
+Android Window System реализует архитектуру **compositing window manager**, где каждое приложение рисует в собственный буфер (Surface), а системный процесс (SurfaceFlinger) собирает все буферы в финальный кадр. Эта архитектура стала стандартом после Compiz (Linux, 2006), Quartz Compositor (macOS, 2001) и DWM (Windows Vista, 2006).
+
+| Компонент | Процесс | Уровень абстракции | Аналог в X11/Wayland |
+|-----------|---------|-------------------|---------------------|
+| PhoneWindow | App process | Высокий (Java API) | Window (Xlib) |
+| ViewRootImpl | App process | Средний (Binder bridge) | — |
+| WindowManagerService | system_server | Системный (политика) | Window Manager (Mutter, KWin) |
+| SurfaceFlinger | Отдельный native процесс | Низкий (compositor) | Display Server (Xorg, Wayland) |
+| HWC (Hardware Composer) | HAL | Аппаратный | DRM/KMS |
+
+> **Двойная/тройная буферизация** (double/triple buffering) — техника устранения **screen tearing**, формализованная в контексте растровых дисплеев (Sproull/Sutherland, 1968). Приложение рисует в back buffer, а дисплей читает из front buffer. Переключение буферов происходит атомарно по сигналу VSYNC.
+
+**BufferQueue** в Android — реализация классической задачи **Producer-Consumer** (Dijkstra, 1965): приложение (producer) заполняет графические буферы, SurfaceFlinger (consumer) забирает их для композитинга. Синхронизация через **fence** — GPU-примитив, сигнализирующий о завершении записи в буфер.
+
+PhoneWindow → DecorView → ContentView — цепочка, реализующая паттерн **Decorator** (Gamma et al., 1994): каждый уровень добавляет функциональность (системные бары, заголовок, тема) к пользовательскому layout без его модификации. `setContentView()` помещает layout разработчика в `android.R.id.content` FrameLayout внутри DecorView.
+
+> **Insets** — формальная модель **пространственных ограничений**: система сообщает приложению, какие области экрана заняты системными элементами (status bar, navigation bar, IME, display cutout). Это реализация принципа **information hiding** (Parnas, 1972): приложение не знает о конкретных системных элементах — только об абстрактных ограничениях.
+
+---
+
 ## Зачем это нужно
 
 | Симптом | Причина | Последствия |
@@ -2176,28 +2200,27 @@ Window System — один из глубоких системных слоёв A
 
 ## Источники
 
+### Теоретические основы
+
+- **Scheifler R., Gettys J. (1986). The X Window System. ACM Transactions on Graphics.** — Архитектура оконных систем (window manager + display server)
+- **Gamma E. et al. (1994). Design Patterns.** — Decorator (PhoneWindow → DecorView → ContentView)
+- **Dijkstra E. (1965). Cooperating Sequential Processes.** — Producer-Consumer (BufferQueue)
+- **Parnas D. (1972). On the Criteria for Decomposing Systems into Modules.** — Information hiding (Insets как абстракция)
+- **Sproull R., Sutherland I. (1968).** — Double/triple buffering
+
+### Практические руководства
+
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
-| 1 | [AOSP: PhoneWindow.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/com/android/internal/policy/PhoneWindow.java) | AOSP | Единственная реализация Window |
-| 2 | [AOSP: ViewRootImpl.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/view/ViewRootImpl.java) | AOSP | Мост View↔WMS (~15,000 строк) |
-| 3 | [AOSP: WindowManagerService.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/core/java/com/android/server/wm/WindowManagerService.java) | AOSP | Системный сервис окон |
-| 4 | [AOSP: DecorView.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/com/android/internal/policy/DecorView.java) | AOSP | Root view окна |
-| 5 | [Edge-to-edge display](https://developer.android.com/develop/ui/views/layout/edge-to-edge) | Docs | Официальное руководство по edge-to-edge |
-| 6 | [Window Insets](https://developer.android.com/develop/ui/views/layout/insets) | Docs | Обработка инсетов |
-| 7 | [SurfaceFlinger and HWC](https://source.android.com/docs/core/graphics/surfaceflinger-windowmanager) | Docs | SurfaceFlinger архитектура |
-| 8 | [BufferQueue and gralloc](https://source.android.com/docs/core/graphics/arch-bq-gralloc) | Docs | BufferQueue internals |
-| 9 | [WindowMetrics API](https://developer.android.com/reference/android/view/WindowMetrics) | Docs | API для размеров окна (Android 11+) |
-| 10 | [Compose Window Insets](https://developer.android.com/develop/ui/compose/layouts/insets) | Docs | Insets в Jetpack Compose |
-| 11 | [Foldables and large screens](https://developer.android.com/guide/topics/large-screens) | Docs | Адаптация для foldables |
-| 12 | [WindowManager Jetpack library](https://developer.android.com/jetpack/androidx/releases/window) | Docs | FoldingFeature, WindowLayoutInfo |
-| 13 | [Android 15 edge-to-edge](https://developer.android.com/about/versions/15/behavior-changes-15) | Docs | Обязательный edge-to-edge в Android 15 |
-| 14 | [How Android Renders UI](https://medium.com/@nicholasnielson/how-android-renders-the-ui) | Article | Window → Surface → SurfaceFlinger pipeline |
+| 1 | [AOSP: PhoneWindow.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/com/android/internal/policy/PhoneWindow.java) | AOSP | Реализация Window |
+| 2 | [AOSP: ViewRootImpl.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/view/ViewRootImpl.java) | AOSP | Мост View↔WMS |
+| 3 | [Edge-to-edge display](https://developer.android.com/develop/ui/views/layout/edge-to-edge) | Docs | Edge-to-edge руководство |
+| 4 | [Window Insets](https://developer.android.com/develop/ui/views/layout/insets) | Docs | Обработка инсетов |
+| 5 | [SurfaceFlinger and HWC](https://source.android.com/docs/core/graphics/surfaceflinger-windowmanager) | Docs | SurfaceFlinger архитектура |
+| 6 | [BufferQueue and gralloc](https://source.android.com/docs/core/graphics/arch-bq-gralloc) | Docs | BufferQueue internals |
 
-## Источники и дальнейшее чтение
-
-- **Vasavada N. (2019). Android Internals.** — Единственная книга с детальным описанием WindowManagerService, SurfaceFlinger, ViewRootImpl и Binder IPC между ними. Объясняет полный путь от Window.addView() до композитинга на экране. Обязательна для понимания window system на уровне AOSP.
-- **Meier R. (2022). Professional Android.** — Практическое покрытие Window API, Dialog/PopupWindow lifecycle, edge-to-edge design и WindowInsets handling. Связывает теорию window system с реальными задачами разработки.
-- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Введение в Dialog, Toast и window management через пошаговые проекты. Помогает понять, как окна создаются и управляются на прикладном уровне, прежде чем углубляться в internals.
+- **Vasavada N. (2019). Android Internals.** — WMS, SurfaceFlinger, ViewRootImpl, Binder IPC
+- **Meier R. (2022). Professional Android.** — Window API, Dialog/PopupWindow, edge-to-edge, Insets
 
 ---
 

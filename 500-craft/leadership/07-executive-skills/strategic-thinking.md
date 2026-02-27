@@ -37,6 +37,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Стратегия: от военного искусства к бизнесу
+
+> **Определение:** Стратегическое мышление — способность видеть системные паттерны, определять долгосрочное направление и делать осознанный выбор trade-offs между альтернативами. В контексте technology leadership — умение связывать технические решения с бизнес-результатами на горизонте 1-5 лет.
+
+Richard Rumelt в *"Good Strategy Bad Strategy"* (2011) формализовал ключевое различие между плохой и хорошей стратегией. Плохая стратегия — набор амбициозных целей без конкретного плана. Хорошая стратегия содержит три обязательных компонента: **Diagnosis** (понимание ситуации), **Guiding Policy** (направляющий принцип), **Coherent Actions** (согласованные действия).
+
+| Фреймворк | Автор, год | Ключевая идея | Применение в engineering |
+|-----------|-----------|---------------|------------------------|
+| **Good Strategy/Bad Strategy** | Rumelt, 2011 | Diagnosis → Policy → Actions | Формулирование tech strategy |
+| **Playing to Win** | Lafley & Martin, 2013 | 5 стратегических выборов (where to play, how to win) | Product/platform strategy |
+| **Porter's Five Forces** | Michael Porter, 1979 | Конкурентные силы определяют стратегию | Build vs buy, technology moats |
+| **Blue Ocean Strategy** | Kim & Mauborgne, 2005 | Создание нового рыночного пространства | Innovation vs optimization |
+| **Wardley Mapping** | Simon Wardley, 2016 | Визуализация value chain + evolution | Where to invest, where to outsource |
+
+Michael Porter в *"Competitive Strategy"* (1979) предложил три generic strategies: Cost Leadership, Differentiation, Focus. Для engineering это определяет, куда инвестировать: оптимизация стоимости (infrastructure efficiency), уникальность (proprietary technology), или нише (specialized solutions).
+
+> «The kernel of good strategy contains three elements: a diagnosis, a guiding policy, and coherent action.» — Richard Rumelt, *"Good Strategy Bad Strategy"* (2011)
+
+Roger Martin и A.G. Lafley в *"Playing to Win"* (2013) предложили strategy as a cascade of choices: от winning aspiration через where to play и how to win к необходимым capabilities и management systems. Этот подход особенно ценен для [[technical-vision|технической стратегии]], где каждый уровень каскада транслируется в конкретные архитектурные и инвестиционные решения.
+
+---
+
 ## Strategy vs Tactics
 
 ```
@@ -171,13 +195,23 @@ Environment changes. Revisit quarterly.
 
 **[[stakeholder-management]]** — Реализация стратегии невозможна без поддержки ключевых стейкхолдеров. Стратегическое мышление помогает понять контекст и приоритеты каждого стейкхолдера, а навыки influence without authority позволяют продвигать стратегические инициативы. Умение формулировать стратегию в терминах бизнес-ценности для каждого стейкхолдера — это пересечение стратегического мышления и stakeholder management.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Rumelt R. "Good Strategy Bad Strategy" — Crown Business, 2011 | Книга | Diagnosis → Guiding Policy → Coherent Actions |
+| 2 | Porter M. "Competitive Strategy" — Free Press, 1979 | Книга | Five Forces, generic strategies |
+| 3 | Lafley A.G., Martin R. "Playing to Win" — Harvard Business Review Press, 2013 | Книга | 5 стратегических выборов |
+| 4 | Kim W.C., Mauborgne R. "Blue Ocean Strategy" — Harvard Business Review Press, 2005 | Книга | Создание нового рыночного пространства |
+| 5 | Wardley S. "Wardley Maps" — 2016 | Книга/Open Source | Value chain mapping, evolution stages |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Drucker P. "The Effective Executive" — Harper Business, 2006 | Книга | Effectiveness practices |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Strategic decision-making under pressure |
+| 3 | Ries E. "The Lean Startup" — Crown Business, 2011 | Книга | Iterative strategy through experimentation |
 
 
 ## Проверь себя

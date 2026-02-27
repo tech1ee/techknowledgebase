@@ -62,6 +62,61 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис информационной безопасности
+
+### Принцип Керкгоффса (1883)
+
+> **Принцип (Auguste Kerckhoffs, 1883):** Криптосистема должна быть безопасной, даже если всё о системе, кроме **ключа**, известно противнику.
+
+Переформулировка Шеннона (1949): "Враг знает систему" (The enemy knows the system). Это фундаментальный принцип — **security through obscurity не работает**. Вся безопасность должна опираться на секретность ключа, а не алгоритма.
+
+Следствия для практики:
+- Открытые алгоритмы (AES, RSA, TLS) **безопаснее** проприетарных
+- Код шифрования должен быть публично проверяемым (open-source)
+- Обфускация ≠ безопасность
+
+### Совершенная секретность Шеннона (1949)
+
+> **Определение (Shannon, 1949, "Communication Theory of Secrecy Systems"):** Криптосистема обладает **совершенной секретностью** (perfect secrecy), если для любого открытого текста M и шифротекста C: P(M|C) = P(M) — наблюдение шифротекста не даёт **никакой** информации об открытом тексте.
+
+**Теорема Шеннона:** Совершенная секретность достижима ⟺ пространство ключей ≥ пространство сообщений. Единственная практическая реализация — **One-Time Pad** (одноразовый блокнот). Все реальные шифры (AES, ChaCha20) — **вычислительно безопасны** (computationally secure), но не совершенно секретны.
+
+### CIA Triad: формальная модель
+
+Saltzer & Schroeder (1975), "The Protection of Information in Computer Systems" — формализация трёх свойств:
+
+| Свойство | Формальное определение | Типичные атаки | Типичные защиты |
+|----------|----------------------|----------------|-----------------|
+| **Confidentiality** | Информация доступна только авторизованным субъектам: ∀s ∉ Auth(r): read(s, r) = ⊥ | Перехват, утечка | Шифрование, ACL |
+| **Integrity** | Информация не изменена неавторизованно: hash(data_received) = hash(data_sent) | MITM, подмена | HMAC, цифровые подписи |
+| **Availability** | Ресурс доступен авторизованным субъектам в разумное время: response_time(r) ≤ T_max | DDoS, resource exhaustion | Rate limiting, redundancy |
+
+Расширения: **CIA + Non-Repudiation** (невозможность отрицания авторства) + **Authenticity** (подтверждение подлинности источника).
+
+### Модель угроз Долева-Яо (1983)
+
+> **Модель (Dolev & Yao, 1983):** Атакующий может **перехватывать, модифицировать, удалять и создавать** любые сообщения в канале связи. Единственное ограничение — он не может сломать криптографические примитивы (шифрование, подпись) без знания ключа.
+
+Это стандартная модель для анализа протоколов безопасности (TLS, SSH, OAuth). Все протоколы безопасности проектируются исходя из того, что **канал полностью контролируется противником**.
+
+### Принципы защиты (Saltzer & Schroeder, 1975)
+
+| Принцип | Суть | Пример |
+|---------|------|--------|
+| **Least Privilege** | Минимальные необходимые привилегии | Microservice с read-only доступом к БД |
+| **Defense in Depth** | Несколько слоёв защиты | Firewall + TLS + auth + encryption at rest |
+| **Fail-Safe Defaults** | По умолчанию — запрет | deny-all firewall rule |
+| **Complete Mediation** | Каждый доступ проверяется | Zero Trust: verify every request |
+| **Economy of Mechanism** | Простота = безопасность | Минимальная attack surface |
+
+### Связи
+
+- [[network-dns-tls]] — TLS как реализация криптографических принципов
+- [[authentication-authorization]] — AAA как реализация CIA
+- [[architecture-distributed-systems]] — безопасность в распределённых системах
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > Прежде чем погружаться в технические детали, построим ментальные образы для ключевых концепций безопасности
@@ -1489,33 +1544,26 @@ requests.get(url, verify=False)  # НИКОГДА в production!
 
 ## Источники и дальнейшее чтение
 
-### Веб-ресурсы
+### Теоретические основы
+
+- **Kerckhoffs, A. (1883). "La cryptographie militaire." Journal des sciences militaires.** — Принцип Керкгоффса: безопасность системы не должна зависеть от секретности алгоритма
+- **Shannon, C. (1949). "Communication Theory of Secrecy Systems." Bell System Technical Journal.** — Формальное определение совершенной секретности, доказательство OTP
+- **Saltzer, J. & Schroeder, M. (1975). "The Protection of Information in Computer Systems." Proceedings of the IEEE.** — 8 принципов защиты (Least Privilege, Defense in Depth и др.)
+- **Dolev, D. & Yao, A. (1983). "On the Security of Public Key Protocols." IEEE Transactions on Information Theory.** — Формальная модель угроз для анализа криптографических протоколов
+
+### Стандарты и практические руководства
 
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
 | 1 | [NIST SP 800-207 Zero Trust](https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-207.pdf) | Standard | ZTA framework |
 | 2 | [OWASP Top 10](https://owasp.org/www-project-top-ten/) | Standard | Web security risks |
-| 3 | [CISA DDoS Guide](https://www.cisa.gov/sites/default/files/2024-03/understanding-and-responding-to-distributed-denial-of-service-attacks_508c.pdf) | Gov | DDoS mitigation |
-| 4 | [Cloudflare DNS Security](https://www.cloudflare.com/learning/dns/dns-over-tls/) | Docs | DoH/DoT |
-| 5 | [Nmap Book](https://nmap.org/book/) | Book | Port scanning, IDS evasion |
-| 6 | [PortSwigger Web Security](https://portswigger.net/web-security) | Academy | XSS, CSRF, SQLi |
-| 7 | [Microsoft Zero Trust](https://www.microsoft.com/en-us/security/business/zero-trust) | Docs | ZT implementation |
-| 8 | [nftables Wiki](https://wiki.debian.org/nftables) | Wiki | Modern firewall |
-| 9 | [Zenarmor DNS Security](https://www.zenarmor.com/docs/network-security-tutorials/what-is-dns-security) | Tutorial | DNS best practices |
-| 10 | [OWASP CSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) | Cheatsheet | CSRF mitigation |
-| 11 | [CM-Alliance Attack Vectors 2024](https://www.cm-alliance.com/cybersecurity-blog/detecting-top-initial-attack-vectors-in-2024) | Blog | Current threats |
-| 12 | [Gcore DDoS Trends 2024](https://gcore.com/blog/ddos-protection-trends-2024) | Blog | DDoS protection |
-| 13 | [SSL Dragon TLS Security](https://www.ssldragon.com/blog/ssl-prevent-mitm-attacks/) | Blog | TLS, MITM prevention |
-| 14 | [fail2ban Baeldung](https://www.baeldung.com/linux/protection-port-scanners) | Tutorial | IDS setup |
-| 15 | [Indusface SSL Pinning](https://www.indusface.com/learning/what-is-ssl-pinning-a-quick-walk-through/) | Guide | Certificate pinning |
+| 3 | [PortSwigger Web Security](https://portswigger.net/web-security) | Academy | XSS, CSRF, SQLi |
 
 ### Книги
 
-- **Kurose J., Ross K. (2021). Computer Networking: A Top-Down Approach, 8th Edition.** — Глава о сетевой безопасности даёт академический фундамент: симметричное/асимметричное шифрование, цифровые подписи, PKI, firewall и IDS. Отличная отправная точка для систематического изучения network security.
-
-- **Tanenbaum A., Wetherall D. (2011). Computer Networks, 5th Edition.** — Разделы о безопасности охватывают криптографию, протоколы аутентификации и защиту на каждом уровне OSI. Помогает понять, как security интегрирован в сетевой стек от Ethernet до приложений.
-
-- **Comer D. (2015). Internetworking with TCP/IP, Volume 1, 6th Edition.** — Практический подход к сетевой безопасности с фокусом на firewall, NAT и VPN. Объясняет, как iptables и packet filtering реализованы на уровне IP-стека.
+- **Kurose J., Ross K. (2021). Computer Networking: A Top-Down Approach, 8th Edition.** — Академический фундамент: шифрование, подписи, PKI, firewall, IDS
+- **Tanenbaum A., Wetherall D. (2011). Computer Networks, 5th Edition.** — Security на каждом уровне OSI
+- **Comer D. (2015). Internetworking with TCP/IP, Volume 1, 6th Edition.** — Firewall, NAT, VPN на уровне IP-стека
 
 ---
 

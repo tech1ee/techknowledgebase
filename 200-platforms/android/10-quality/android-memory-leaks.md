@@ -80,6 +80,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Garbage Collection: формальная модель
+
+> **Reachability-based GC** (McCarthy, 1960, *"Recursive Functions of Symbolic Expressions"*) — объект подлежит сборке, если он **не достижим** от корневых ссылок (GC Roots). Memory leak — ситуация, когда объект больше не нужен программе, но остаётся достижимым от GC Root.
+
+| Тип GC Root | Определение | Пример утечки в Android |
+|-------------|------------|------------------------|
+| **Thread stack** | Локальные переменные активных потоков | `Thread { ... }` с captured Activity reference |
+| **Static field** | `static` / `companion object` переменные | `companion object { var context: Context }` |
+| **JNI reference** | Ссылки из нативного кода | Bitmap не recycled, NDK object |
+| **Thread** | Живой Thread-объект | `HandlerThread` без `quit()` |
+| **Monitor** | Объект в synchronized block | Deadlock удерживает объект |
+
+### Java Reference Types: иерархия силы
+
+> JSR-166 (Doug Lea, 1998) ввёл иерархию ссылок для управления GC:
+
+| Тип | Поведение GC | Использование |
+|-----|-------------|---------------|
+| **Strong** (`T ref`) | Никогда не собирается, пока достижим | Обычные поля |
+| **Soft** (`SoftReference<T>`) | Собирается перед OOM | Image cache |
+| **Weak** (`WeakReference<T>`) | Собирается при следующем GC | Listener без удержания owner |
+| **Phantom** (`PhantomReference<T>`) | Собирается, уведомляет через `ReferenceQueue` | Cleanup finalizers, LeakCanary ReferenceQueue |
+
+> **LeakCanary** использует `WeakReference` + `ReferenceQueue` для обнаружения утечек: если объект не собран после GC и не попал в ReferenceQueue — он удерживается (leak). Затем анализатор **Shark** строит shortest path от GC Root до leaked object через heap dump.
+
+### Паттерн Observer и утечки
+
+> Паттерн **Observer** (GoF, 1994) — частая причина утечек: Observable удерживает strong reference на Observer. Если Observer = Activity, а Observable живёт дольше (singleton, static) — утечка. Lifecycle-aware компоненты (LifecycleObserver, repeatOnLifecycle) автоматически отписываются при уничтожении, разрывая цепочку удержания.
+
+> **Связь**: GC → [[jvm-gc-tuning]], Reference Types → [[jvm-memory-model]], Lifecycle → [[android-activity-lifecycle]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем | Где изучить |
@@ -2296,26 +2331,25 @@ TRI-COLOR MARKING (основа concurrent GC):
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| McCarthy J. *Recursive Functions of Symbolic Expressions* (1960) | GC Reachability Analysis — основа обнаружения утечек |
+| Dahl O.-J., Nygaard K. *SIMULA — An ALGOL-based Simulation Language* (1966) | Reference types — Strong, Weak, Soft, Phantom |
+| GoF. *Design Patterns* (1994) | Observer Pattern — классический источник утечек |
+| Goetz B. et al. *Java Concurrency in Practice* (2006) | Java Memory Model, thread safety, Handler leaks |
+
+### Практические руководства
 | Источник | Тип | Описание |
 |----------|-----|----------|
-| [How LeakCanary Works — Square](https://square.github.io/leakcanary/fundamentals-how-leakcanary-works/) | Docs | Официальная документация внутреннего устройства LeakCanary |
+| [How LeakCanary Works — Square](https://square.github.io/leakcanary/fundamentals-how-leakcanary-works/) | Docs | Внутреннее устройство LeakCanary |
 | [LeakCanary GitHub](https://github.com/square/leakcanary) | Code | Исходный код LeakCanary 2.14+ |
-| [The LeakCanary Method — Block Engineering](https://engineering.block.xyz/blog/the-leakcanary-method) | Article | Философия и подход к обнаружению leaks |
-| [Top 7 Android Memory Leaks 2025 — Artem Asoyan](https://artemasoyan.medium.com/top-7-android-memory-leaks-and-how-to-avoid-them-in-2025-b77e15a7b62e) | Article | Актуальный обзор паттернов утечек |
 | [Memory Leaks in Compose — ProAndroidDev](https://proandroiddev.com/memory-leaks-in-jetpack-compose-a-technical-deep-dive-3afb7b78a82e) | Article | Compose-специфичные leak patterns |
-| [Handler Inner Class Memory Leak — Android Design Patterns](https://www.androiddesignpatterns.com/2013/01/inner-class-handler-memory-leak.html) | Article | Классический разбор Handler leak pattern |
-| [Understanding References in Java/Android — Enrique López-Mañas](https://medium.com/google-developer-experts/finally-understanding-how-references-work-in-android-and-java-26a0d9c92f83) | Article | Reference types deep dive с Android примерами |
-| [State Lifespans in Compose — Android Developers](https://developer.android.com/develop/ui/compose/state-lifespans) | Docs | Официальный гайд по lifecycle state в Compose |
-| [ViewModel Overview — Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel) | Docs | Правила использования ViewModel (no Context) |
-| [Weak, Soft, Phantom References — DZone](https://dzone.com/articles/weak-soft-and-phantom-references-in-java-and-why-they-matter) | Article | Детальное сравнение Java reference types |
+| [Handler Inner Class Memory Leak — Android Design Patterns](https://www.androiddesignpatterns.com/2013/01/inner-class-handler-memory-leak.html) | Article | Классический разбор Handler leak |
 
----
-
-## Источники и дальнейшее чтение
-
-- Goetz (2006). *Java Concurrency in Practice*. — фундаментальное понимание Java Memory Model, happens-before, visibility и thread safety, без которого невозможно понять, почему Handler leaks и threading-связанные утечки возникают на уровне JVM.
-- Vasavada (2019). *Android Internals*. — глубокое погружение в процессную модель Android, GC в ART, heap management и Low Memory Killer, что даёт системный контекст для понимания, почему memory leaks критичны на мобильных устройствах.
-- Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальный разбор coroutine scopes, structured concurrency и правильной отмены, что напрямую связано с предотвращением утечек через GlobalScope и неправильное использование корутин.
+### Книги
+- Vasavada (2019). *Android Internals*. — GC в ART, heap management, LMK.
+- Moskala (2022). *Kotlin Coroutines Deep Dive*. — coroutine scopes, structured concurrency, предотвращение утечек.
 
 ---
 

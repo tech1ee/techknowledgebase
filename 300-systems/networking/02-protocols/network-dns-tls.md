@@ -68,9 +68,60 @@ next_review:
 
 ---
 
+## Теоретические основы: криптография и PKI
+
+### Diffie-Hellman Key Exchange (1976)
+
+> **Протокол Diffie-Hellman** — первый опубликованный метод согласования общего секрета по открытому каналу (Diffie & Hellman, 1976, *"New Directions in Cryptography"*). Формально основан на **задаче дискретного логарифмирования** (Discrete Logarithm Problem, DLP).
+
+Протокол: Alice и Bob публично договариваются о простом числе `p` и генераторе `g`. Alice выбирает секретное `a`, отправляет `g^a mod p`. Bob выбирает секретное `b`, отправляет `g^b mod p`. Общий секрет: `K = g^(ab) mod p` — оба могут вычислить, но подслушивающий знает только `g^a` и `g^b`, а нахождение `a` из `g^a mod p` — вычислительно неразрешимая задача (DLP).
+
+Современный TLS использует **ECDHE** (Elliptic Curve Diffie-Hellman Ephemeral) — вариант DH на эллиптических кривых, дающий эквивалентную безопасность при меньших ключах (256-bit ECDHE ≈ 3072-bit DH).
+
+### Forward Secrecy (Perfect Forward Secrecy)
+
+> **Forward Secrecy** — свойство протокола, при котором компрометация долгосрочного ключа сервера не позволяет расшифровать ранее перехваченные сессии. Формально: знание `SK_server` не даёт информации о сессионных ключах прошлых соединений.
+
+Forward secrecy достигается через **ephemeral keys**: каждая TLS-сессия использует свежую пару DH-ключей, которые уничтожаются после сессии. Даже если злоумышленник получит приватный ключ сервера, он сможет только подделывать будущие сессии (MITM), но не расшифровывать прошлые.
+
+| Cipher Suite | Forward Secrecy | Почему |
+|--------------|-----------------|--------|
+| RSA key exchange | Нет | Сессионный ключ шифруется public key сервера — компрометация private key раскрывает все сессии |
+| DHE / ECDHE | Да | Ephemeral DH — каждая сессия использует уникальную пару ключей |
+| TLS 1.3 | Всегда | RSA key exchange удалён из спецификации; только (EC)DHE |
+
+### X.509 и модель доверия PKI
+
+> **PKI (Public Key Infrastructure)** — система, связывающая публичные ключи с идентичностями через цепочку цифровых подписей. Формально: если Root CA доверен (встроен в ОС/браузер), и Root CA подписал Intermediate CA, и Intermediate CA подписал сертификат сайта, то цепочка доверия (chain of trust) верифицируема.
+
+X.509 — стандарт ITU-T (1988, v3 — 1996), определяющий формат сертификата:
+- **Subject** — кому выдан (CN=example.com)
+- **Issuer** — кто подписал (CA)
+- **Public Key** — публичный ключ субъекта
+- **Signature** — подпись issuer'а, подтверждающая связь subject ↔ public key
+- **Validity** — срок действия
+
+Модель PKI имеет фундаментальную слабость: **любой** доверенный Root CA может выдать сертификат для **любого** домена. Решения: Certificate Transparency (CT logs), CAA DNS records, Certificate Pinning.
+
+### Computational Hardness Assumptions
+
+Вся криптография TLS опирается на **вычислительные предположения** — задачи, которые считаются практически неразрешимыми:
+
+| Предположение | Описание | Используется в |
+|---------------|----------|----------------|
+| **Integer Factorization** | Трудно разложить `n = p × q` на простые множители | RSA |
+| **Discrete Logarithm (DLP)** | Трудно найти `x` из `g^x mod p` | DH, DSA |
+| **Elliptic Curve DLP** | Трудно найти `k` из `k·G` на эллиптической кривой | ECDHE, ECDSA |
+
+Эти предположения НЕ доказаны — криптография полагается на то, что за 40+ лет не найден эффективный алгоритм. Квантовые компьютеры (алгоритм Шора) потенциально решают DLP и factorization — отсюда работа над post-quantum cryptography.
+
+> **Связь**: DH key exchange → [[authentication-authorization]], forward secrecy → [[web-security-owasp]], computational hardness → [[network-transport-layer]] (integrity guarantees)
+
+---
+
 ## Часть 1: Интуиция без кода
 
-> 💡 **Цель раздела**: Понять DNS и TLS через 5 аналогий из реальной жизни, прежде чем погружаться в технические детали.
+> Цель раздела: Понять DNS и TLS через 5 аналогий из реальной жизни, прежде чем погружаться в технические детали.
 
 ### Аналогия 1: DNS как телефонная книга интернета
 
@@ -2475,6 +2526,14 @@ git clone https://github.com/drwetter/testssl.sh.git
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- **Diffie W., Hellman M. (1976).** *New Directions in Cryptography.* IEEE Trans. Information Theory. — Основополагающая работа: определение key exchange по открытому каналу и концепция public-key cryptography.
+- **Rescorla E. (2018).** *RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3.* — Формальная спецификация TLS 1.3: mandatory forward secrecy, 1-RTT handshake, removal of RSA key exchange.
+- **Cooper D. et al. (2008).** *RFC 5280: Internet X.509 PKI Certificate and CRL Profile.* — Формальная спецификация X.509 v3 сертификатов и модели доверия PKI.
+
+### Практические руководства
 
 - **Stevens (1994).** *TCP/IP Illustrated, Vol. 1.* — классическое описание DNS-протокола с детальным разбором форматов пакетов, типов записей и процесса резолюции; незаменимый справочник для глубокого понимания DNS.
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — современный учебник с отличным объяснением DNS-иерархии и TLS-handshake, включая TLS 1.3 и сертификаты; идеален как первый учебник по теме.

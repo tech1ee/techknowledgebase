@@ -30,6 +30,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Нарратология** (Narratology) — наука о структуре повествования. В контексте коммуникации основана на работах Аристотеля (335 до н.э., «Поэтика»), Густава Фрейтага (1863, пирамида драматической структуры) и Джозефа Кэмпбелла (1949, мономиф / «путь героя»).
+
+### Историческая хронология
+
+| Год | Автор / Событие | Вклад |
+|-----|-----------------|-------|
+| 335 до н.э. | Аристотель | «Поэтика» — три акта: начало, середина, конец |
+| 1863 | Gustav Freytag | Пирамида Фрейтага: exposition → rising action → climax → falling action → denouement |
+| 1928 | Vladimir Propp | «Морфология волшебной сказки» — 31 функция нарратива |
+| 1949 | Joseph Campbell | «The Hero with a Thousand Faces» — мономиф (17 стадий путешествия героя) |
+| 2004 | Paul Zak | Исследования oxytocin и нарратива — истории вызывают нейрохимический отклик доверия |
+| 2007 | Chip & Dan Heath | «Made to Stick» — SUCCESs-модель запоминающихся сообщений |
+| 2010 | Nancy Duarte | «Resonate» — анализ структуры выступлений TED |
+
+### Нейронаука сторителлинга
+
+Три механизма объясняют, почему истории эффективнее фактов:
+
+| Механизм | Исследование | Эффект |
+|----------|-------------|--------|
+| **Neural coupling** | Stephens et al., 2010 (Princeton) | Мозг слушателя синхронизируется с мозгом рассказчика при fMRI |
+| **Oxytocin release** | Zak, 2015 | Эмоциональные истории повышают oxytocin → trust +40%, пожертвования +47% |
+| **Cortical activation** | Speer et al., 2009 | Нарратив активирует 7+ зон мозга vs 2 зоны при фактах |
+
+Кэмпбелл обнаружил, что мифы всех культур следуют одной структуре — **мономифу** (hero's journey). Это объясняется тем, что нарративная структура «проблема → борьба → трансформация» соответствует базовым нейронным паттернам обработки информации. Freytag формализовал драматическую структуру в пятиактную пирамиду, которая в современном применении упрощается до трёхактной (Setup → Confrontation → Resolution).
+
+SUCCESs-модель Heath & Heath (2007) дополняет нарратологию шестью принципами «прилипчивых» идей: **S**imple, **U**nexpected, **C**oncrete, **C**redible, **E**motional, **S**tories — история является финальным и самым мощным элементом.
+
+> Связь с другими материалами: [[presentation-design]] применяет визуальный сторителлинг через Assertion-Evidence слайды, [[technical-presentations]] использует SCQA-структуру для hook, [[active-listening]] обеспечивает neural coupling при Q&A.
+
+---
+
 ## Зачем это нужно
 
 **Нейронаука сторителлинга:**
@@ -750,16 +784,27 @@ CONCLUSION:
 
 ## Источники
 
-1. Campbell, J. "The Hero with a Thousand Faces" (1949)
-2. Heath, C. & Heath, D. "Made to Stick" (2007)
-3. Duarte, N. "Resonate: Present Visual Stories" (2010)
-4. Zak, P. "Why Your Brain Loves Good Storytelling" (HBR, 2014)
-5. Stanford GSB Research on narrative memory
-6. Princeton Neuroscience Study on neural coupling
-7. Pixar's "Story Rules" (Emma Coats, 2011)
-8. "The Science of Storytelling" by Will Storr (2020)
-9. TED's guidelines for speakers
-10. Stripe's technical blog storytelling style guide
+### Теоретические основы
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Campbell, J. *The Hero with a Thousand Faces*. Pantheon Books, 1949 | Монография |
+| 2 | Heath, C. & Heath, D. *Made to Stick*. Random House, 2007 | Монография |
+| 3 | Zak, P. "Why Your Brain Loves Good Storytelling". *Harvard Business Review*, 2014 | Статья |
+| 4 | Stephens, G. J. et al. "Speaker–Listener Neural Coupling". *PNAS*, 107(32), 2010 | Статья |
+| 5 | Speer, N. K. et al. "Reading Stories Activates Neural Representations". *Psychological Science*, 20(8), 2009 | Статья |
+| 6 | Freytag, G. *Die Technik des Dramas*. 1863 | Монография |
+
+### Практические руководства
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Duarte, N. *Resonate: Present Visual Stories*. Wiley, 2010 | Книга |
+| 2 | Storr, W. *The Science of Storytelling*. William Collins, 2020 | Книга |
+| 3 | Pixar's "Story Rules" (Emma Coats, 2011) | Ресурс |
+| 4 | Stanford GSB Research on narrative memory | Исследование |
+| 5 | TED's guidelines for speakers | Ресурс |
+| 6 | Stripe's technical blog storytelling style guide | Ресурс |
 
 ---
 

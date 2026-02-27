@@ -29,6 +29,39 @@ next_review:
 
 # AsyncTask: история, проблемы и уроки
 
+## Теоретические основы
+
+### Template Method Pattern как основа AsyncTask
+
+> **Template Method** (GoF, 1994) — поведенческий паттерн, в котором абстрактный класс определяет скелет алгоритма, а подклассы переопределяют конкретные шаги. AsyncTask — классическая реализация Template Method: каркас (execute → doInBackground → onPostExecute) зафиксирован, разработчик переопределяет конкретные шаги.
+
+| Метод AsyncTask | Роль в Template Method | Поток выполнения |
+|----------------|----------------------|------------------|
+| `onPreExecute()` | Инициализация (hook) | Main Thread |
+| `doInBackground()` | Абстрактный шаг — основная работа | Worker Thread |
+| `onProgressUpdate()` | Обратная связь (hook) | Main Thread |
+| `onPostExecute()` | Финализация (hook) | Main Thread |
+
+### Проблема скрытого shared mutable state
+
+AsyncTask воплощает антипаттерн, формализованный Goetz (*Java Concurrency in Practice*, §3.2, 2006): **escape of `this` reference**. Внутренний класс AsyncTask неявно захватывает `this` внешнего класса (Activity), создавая разделяемое мутабельное состояние между потоком AsyncTask и Main Thread. Это нарушает принцип thread confinement и является корневой причиной memory leaks.
+
+### Эволюция Executor Model в AsyncTask
+
+> AsyncTask внутри использует `ThreadPoolExecutor` (с Android 3.0 — `SERIAL_EXECUTOR` для последовательного выполнения). История изменения executor-модели — пример того, как изменение конкурентной политики ломает обратную совместимость:
+
+| Версия Android | Executor | Поведение | Проблемы |
+|---------------|----------|-----------|----------|
+| 1.6–2.3 | Thread pool (5 threads) | Параллельное выполнение | Race conditions между задачами |
+| 3.0+ | SerialExecutor (1 thread) | Последовательное выполнение | Медленнее, блокировка очереди |
+| 3.0+ (opt-in) | `executeOnExecutor(THREAD_POOL_EXECUTOR)` | Параллельное | Требует явного выбора |
+
+Это изменение нарушило принцип **Liskov Substitution Principle**: код, написанный для параллельного AsyncTask, начал вести себя последовательно при обновлении targetSdkVersion.
+
+> **Связь**: Template Method → [[design-patterns-behavioral]], Executor Model → [[android-executors]], Memory Leaks → [[android-memory-leaks]]
+
+---
+
 ## История создания: зачем нужен был AsyncTask
 
 ### Проблема: Thread + Handler слишком verbose
@@ -2571,17 +2604,21 @@ AsyncTask строился поверх более низкоуровневых 
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-**Книги:**
-- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM: thread pools, executor framework, memory model — фундамент, на котором построен AsyncTask
-- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины как современная замена AsyncTask: structured concurrency, cancellation, lifecycle integration
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая эволюцию асинхронных API
+### Теоретические основы
 
-**Веб-ресурсы:**
+- **Gamma E. et al. (1994).** *Design Patterns: Elements of Reusable Object-Oriented Software.* — Template Method Pattern (глава 5), на котором построен API AsyncTask.
+- **Goetz B. (2006).** *Java Concurrency in Practice.* Addison-Wesley. — Thread pools, executor framework, memory model, escape of `this` reference — фундамент проблем AsyncTask.
+- **Lea D. (2000).** *Concurrent Programming in Java.* 2nd ed. — Формальное описание Executor framework и паттернов пулов потоков.
+
+### Практические руководства
+
 - [AsyncTask API Reference](https://developer.android.com/reference/android/os/AsyncTask) — официальная документация (deprecated)
 - [Background Tasks Overview](https://developer.android.com/develop/background-work) — современные альтернативы AsyncTask
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines) — рекомендованная замена AsyncTask
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — корутины как современная замена AsyncTask
+- **Meier R. (2022).** *Professional Android.* 4th Edition. — эволюция асинхронных API в Android
 
 ---
 

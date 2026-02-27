@@ -59,6 +59,44 @@ Crash Rate: < 0.1% сессий
 
 ---
 
+## Теоретические основы
+
+> **Performance Profiling** — систематическое измерение характеристик выполнения программы для обнаружения bottlenecks. Профилирование основано на **принципе Парето**: 80% времени выполнения приходится на 20% кода (Knuth, 1974: «premature optimization is the root of all evil» — но зрелая оптимизация, основанная на данных, необходима).
+
+### Академический контекст
+
+Профилирование iOS-приложений опирается на фундаментальные концепции анализа производительности:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Sampling Profiler | gprof (Graham et al., 1982) | Периодическая выборка стека вызовов | Time Profiler в Instruments (~1ms sampling) |
+| Instrumentation Profiling | Valgrind (Nethercote & Seward, 2007) | Вставка probe-кода для точного подсчёта | Allocations instrument, Leaks instrument |
+| Statistical Profiling | Wall clock vs CPU time | Разделение времени на CPU-bound и I/O-bound | Time Profiler: CPU time vs wall clock |
+| Memory Profiling | Purify (Hastings, 1991) | Обнаружение утечек и неэффективного использования | Memory Graph Debugger, Leaks instrument |
+| Production Monitoring | APM (Application Performance Management) | Метрики с реальных устройств | MetricKit (iOS 13+), Xcode Organizer |
+
+### Ключевые метрики iOS-приложения
+
+| Метрика | Инструмент | Целевое значение | Почему важно |
+|---------|-----------|-----------------|--------------|
+| App Launch | Instruments (App Launch) | < 400ms | Apple guidelines, первое впечатление |
+| Frame Rate | Core Animation instrument | 60/120 fps | Плавность прокрутки |
+| Memory Footprint | Memory Graph, Allocations | < 200MB baseline | Jetsam kills при превышении |
+| Hang Rate | Thread Performance Checker | < 0.1% сессий | App Store отклоняет при >500ms hangs |
+| Battery Impact | Energy Log | < 5%/час active | Пользователь удалит приложение |
+
+> **Knuth (1974)**: «We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that critical 3%.» Instruments позволяет найти именно эти критические 3% — через sampling profiler, который показывает, где CPU реально тратит время.
+
+### Связь с CS-фундаментом
+
+- [[ios-debugging]] — debugging находит ошибки, profiling находит bottlenecks
+- [[ios-view-rendering]] — render loop как основной объект профилирования FPS
+- [[ios-process-memory]] — ARC, Jetsam, memory footprint
+- [[ios-threading-fundamentals]] — main thread blocking как причина hangs
+- [[android-performance-profiling]] — сравнение: Instruments vs Android Profiler
+
+---
+
 ## Аналогии из жизни
 
 ### 1. Instruments = Медицинское обследование
@@ -1665,10 +1703,15 @@ Memory показывает затор между ними
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает работу с Instruments, Xcode debugger и основы оптимизации производительности iOS-приложений; хорошая отправная точка для знакомства с профилированием.
-- Eidhof C. et al. (2019). *Advanced Swift.* — глубокое погружение в performance-характеристики Swift (value types vs reference types, copy-on-write, compiler optimizations), которые являются основой для понимания результатов Time Profiler.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры использования Instruments для поиска утечек памяти и оптимизации скорости прокрутки списков.
+### Теоретические основы
+- Knuth D. (1974). *Structured Programming with go to Statements.* — «premature optimization is the root of all evil» — принцип data-driven оптимизации
+- Graham S., Kessler P., McKusick M. (1982). *gprof: A Call Graph Execution Profiler.* — формализация sampling profiling, call graph analysis
+- Hastings R., Joyce B. (1991). *Purify: Fast Detection of Memory Leaks and Access Errors.* — runtime instrumentation для обнаружения memory leaks
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Instruments, Xcode debugger, основы оптимизации производительности
+- Eidhof C. et al. (2019). *Advanced Swift.* — performance-характеристики Swift: value/reference types, copy-on-write, compiler optimizations
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — Instruments для поиска утечек и оптимизации скорости прокрутки
 
 ### Официальная документация
 - [Instruments User Guide](https://developer.apple.com/documentation/xcode/instruments)

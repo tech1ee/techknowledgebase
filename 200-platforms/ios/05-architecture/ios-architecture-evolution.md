@@ -29,6 +29,36 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Архитектура программного обеспечения — это набор структур, необходимых для рассуждения о системе, включающий программные элементы, отношения между ними и свойства обоих (Bass, Clements & Kazman, 2003). В контексте мобильных приложений архитектура определяет разделение ответственности между UI, бизнес-логикой и данными.
+
+### Историческая эволюция архитектурной мысли
+
+| Год | Архитектурная идея | Автор | Влияние на iOS |
+|-----|-------------------|-------|---------------|
+| 1979 | MVC (Model-View-Controller) | Trygve Reenskaug, Smalltalk, Xerox PARC | Apple MVC в Cocoa/UIKit |
+| 1996 | MVP (Model-View-Presenter) | Potel (Taligent), затем Fowler | Промежуточный шаг к MVVM |
+| 2002 | Patterns of Enterprise Application Architecture | Martin Fowler | Repository, Unit of Work, Data Mapper |
+| 2005 | MVVM (Model-View-ViewModel) | John Gossman, Microsoft (WPF) | Стандарт для SwiftUI + Combine |
+| 2012 | Clean Architecture | Robert C. Martin (Uncle Bob) | Dependency Rule, Use Cases |
+| 2014 | VIPER | Mutual Mobile (адаптация Clean Architecture) | Enterprise iOS projects |
+| 2020 | The Composable Architecture (TCA) | Brandon Williams & Stephen Celis (Point-Free) | Функциональный подход для SwiftUI |
+
+> **Dependency Rule (Martin, 2012):** «Зависимости исходного кода должны быть направлены только внутрь — к политикам более высокого уровня.» Внутренние слои не должны знать о внешних. Это правило лежит в основе Clean Architecture и VIPER.
+
+### Закон «Massive View Controller»
+
+Проблема MVC в iOS — это следствие нарушения принципа Single Responsibility (Martin, 2003): UIViewController совмещает роли Controller, View lifecycle manager, Navigation coordinator, Data source delegate и Event handler. Каждый последующий паттерн (MVP, MVVM, VIPER, TCA) был попыткой декомпозировать эти ответственности.
+
+### Связь с CS-фундаментом
+
+- [[architecture-overview]] — общие принципы программной архитектуры
+- [[ios-architecture-patterns]] — детальный разбор каждого паттерна
+- [[android-architecture-evolution]] — параллельная эволюция в Android
+
+---
+
 ## Временная шкала эволюции
 
 ```
@@ -1056,8 +1086,15 @@ struct MyView: View {
 - Martin R. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. — принципы SOLID и Clean Architecture, лежащие в основе VIPER и слоёных архитектур в iOS
 - Neuburg M. (2021). *iOS Programming Fundamentals with Swift*. — фундаментальное руководство, объясняющее архитектурные паттерны UIKit-эры и их эволюцию
 - Apple Developer Documentation (2024). *Observation Framework*. — официальная документация по @Observable, определяющая современный подход к state management в SwiftUI
-- [Point-Free TCA](https://github.com/pointfreeco/swift-composable-architecture) — The Composable Architecture — reference implementation unidirectional data flow для SwiftUI
-- [Observation Framework WWDC23](https://developer.apple.com/wwdc23/10149) — введение @Observable от Apple
+### Теоретические основы
+- Reenskaug T. (1979). *Models-Views-Controllers.* Xerox PARC — оригинальное описание MVC
+- Martin R. C. (2012). *Clean Architecture.* — Dependency Rule, Use Cases, архитектурные границы
+- Williams B., Celis S. (2020). *The Composable Architecture.* Point-Free — функциональный подход для SwiftUI
+- Bass L. et al. (2003). *Software Architecture in Practice.* Addison-Wesley — формальное определение архитектуры ПО
+
+### Практические руководства
+- [Point-Free TCA](https://github.com/pointfreeco/swift-composable-architecture) — reference implementation
+- [Observation Framework WWDC23](https://developer.apple.com/wwdc23/10149) — @Observable от Apple
 
 ## Related Notes
 - [[android-architecture-evolution]] - сравнение с Android подходами

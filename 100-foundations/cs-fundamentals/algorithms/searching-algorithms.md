@@ -43,6 +43,63 @@ Searching algorithms locate elements in data structures. **Linear search** O(n) 
 
 ---
 
+## Теоретические основы
+
+### Формальное определение задачи поиска
+
+> **Задача поиска (Search Problem):** дано множество элементов `S = {s₁, s₂, ..., sₙ}` и целевое значение `t`. Найти индекс `i` такой, что `sᵢ = t`, или определить, что `t ∉ S`.
+
+Более общая формулировка (decision problem): для предиката `P(x)` найти `x ∈ S` такое, что `P(x) = true`.
+
+### Нижняя граница поиска
+
+> **Теорема (информационно-теоретическая нижняя граница):** Для поиска элемента в неупорядоченном множестве из `n` элементов любой детерминированный алгоритм требует `Ω(n)` сравнений в worst case.
+
+**Доказательство:** Если алгоритм проверил `k < n` элементов и не нашёл target, тот может быть любым из оставшихся `n - k`. Только проверив все `n`, можно гарантировать ответ.
+
+> **Теорема (Binary Search оптимален):** Для поиска в отсортированном массиве из `n` элементов `Ω(log n)` сравнений необходимо и достаточно.
+
+**Доказательство (decision tree):** каждое сравнение делит пространство поиска на ≤3 части (`<`, `=`, `>`). Дерево решений с `n` возможными ответами имеет высоту ≥ `⌈log₂(n+1)⌉`. Binary search достигает этой границы.
+
+### Историческая атрибуция
+
+| Алгоритм | Автор | Год | Ключевая идея |
+|----------|-------|-----|---------------|
+| **Linear Search** | — | Antiquity | Последовательная проверка каждого элемента |
+| **Binary Search** | John Mauchly | 1946 | Первое описание в контексте компьютеров |
+| **Binary Search (correct)** | Bottenbruch | 1962 | Первая корректная реализация (!) |
+| **Interpolation Search** | Peterson | 1957 | Оценка позиции по значению (O(log log n) avg) |
+| **Exponential Search** | Bentley & Yao | 1976 | Поиск границы + binary search |
+| **Fibonacci Search** | Kiefer | 1953 | Деление по числам Фибоначчи (без деления) |
+
+> **Примечательный факт (Knuth, TAOCP vol.3):** Хотя binary search был описан в 1946, первая **корректная** реализация без ошибок off-by-one появилась только в 1962 году. Даже в 2006 году Джошуа Блох обнаружил integer overflow bug в реализации binary search в Java (баг существовал 9 лет).
+
+### Корректность Binary Search
+
+**Инвариант цикла:** На каждой итерации, если target присутствует в массиве, то `target ∈ A[lo..hi]`.
+
+**Доказательство корректности (по индукции):**
+1. **База:** `lo = 0`, `hi = n-1` — весь массив
+2. **Шаг:** Пусть `mid = (lo + hi) / 2`:
+   - Если `A[mid] = target` → найден, корректно
+   - Если `A[mid] < target` → target может быть только в `A[mid+1..hi]` (т.к. массив отсортирован), устанавливаем `lo = mid + 1`
+   - Если `A[mid] > target` → target может быть только в `A[lo..mid-1]`, устанавливаем `hi = mid - 1`
+3. **Завершение:** `lo > hi` ⟹ пространство пусто ⟹ target отсутствует
+
+### Binary Search как абстракция
+
+> **Обобщённый binary search:** для монотонного предиката `P: ℤ → {false, true}` найти наименьшее `x` такое, что `P(x) = true`.
+
+```
+    ❌ ❌ ❌ ❌ ✅ ✅ ✅ ✅     ← монотонный предикат
+                ↑
+        граница перехода (partition point)
+```
+
+Это обобщение лежит в основе паттерна **Binary Search on Answer** — одного из самых мощных алгоритмических приёмов, где binary search применяется не к массиву, а к пространству ответов.
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > **Цель:** понять ИДЕЮ поиска до любого кода. Если ты понимаешь эти аналогии — ты уже понимаешь алгоритмы поиска.
@@ -1787,18 +1844,22 @@ fun findFirstOccurrence(arr: IntArray, target: Int): Int {
 
 ## Источники
 
+### Теоретические основы
+- Knuth, D. (1998). *TAOCP vol.3: Sorting and Searching* — §6.2.1: Binary search, историческая ретроспектива
+- Bottenbruch, H. (1962). "Structure and Use of ALGOL 60" — JACM, первая корректная реализация binary search
+- Bentley, J. & Yao, A. (1976). "An Almost Optimal Algorithm for Unbounded Searching" — Information Processing Letters
+- Peterson, W.W. (1957). "Addressing for Random-Access Storage" — IBM J. Res. Dev., interpolation search
+- Bloch, J. (2006). "Extra, Extra — Read All About It: Nearly All Binary Searches and Mergesorts are Broken" — Google Research Blog, integer overflow bug
+
+### Практические руководства
 1. [Tech Interview Handbook - Sorting & Searching](https://www.techinterviewhandbook.org/algorithms/sorting-searching/) — Interview tips
 2. [CP Algorithms - Binary Search](https://cp-algorithms.com/num_methods/binary_search.html) — Lower/Upper bound
 3. [Wikipedia - Binary Search](https://en.wikipedia.org/wiki/Binary_search_algorithm) — Theory
-4. [InterviewBit - Binary Search Errors](https://www.interviewbit.com/tutorial/binary-search-implementations-and-common-errors/) — Common mistakes
-5. [AlgoMonster Templates](https://algo.monster/templates/binary-search) — Code templates
-6. [GeeksforGeeks - Binary Search on Answer](https://www.geeksforgeeks.org/dsa/binary-search-on-answer-tutorial-with-problems/) — Pattern
-7. [Kotlin Docs - binarySearch](https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/binary-search.html) — Language API
-8. [LeetCode - Comprehensive BS Guide](https://leetcode.com/discuss/post/2371234/an-opinionated-guide-to-binary-search-co-1yfw/) — Community guide
-9. [Towards Data Science - Binary Search Intuition](https://towardsdatascience.com/everything-you-need-to-know-about-the-binary-search-algorithm-6bc4f9a3127d/) — Visual explanations
-10. [USACO Guide - Binary Search](https://usaco.guide/silver/binary-search) — Competitive programming perspective
-11. [interviewing.io - Binary Search Interview Questions](https://interviewing.io/binary-search-interview-questions) — Interview patterns
-12. [Medium - Binary Search Patterns](https://thebytestream.medium.com/patterns-and-variations-of-the-binary-search-algorithm-0e36b1fb0621) — Variations
+4. [AlgoMonster Templates](https://algo.monster/templates/binary-search) — Code templates
+5. [GeeksforGeeks - Binary Search on Answer](https://www.geeksforgeeks.org/dsa/binary-search-on-answer-tutorial-with-problems/) — Pattern
+6. [Kotlin Docs - binarySearch](https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/binary-search.html) — Language API
+7. [LeetCode - Comprehensive BS Guide](https://leetcode.com/discuss/post/2371234/an-opinionated-guide-to-binary-search-co-1yfw/) — Community guide
+8. [USACO Guide - Binary Search](https://usaco.guide/silver/binary-search) — Competitive programming perspective
 
 ---
 

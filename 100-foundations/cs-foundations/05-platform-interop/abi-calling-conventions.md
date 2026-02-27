@@ -53,6 +53,44 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **ABI (Application Binary Interface)** — полный набор соглашений, определяющих как скомпилированный код взаимодействует с ОС и другими бинарными модулями: calling conventions, data layout, object file format, system call interface, exception handling.
+
+> **Calling Convention** — подмножество ABI, определяющее протокол вызова функций: где передаются аргументы (регистры/стек), кто сохраняет регистры (caller/callee), как возвращается результат.
+
+### Историческая атрибуция
+
+| Событие | Автор/Стандарт | Год | Вклад |
+|---------|---------------|-----|-------|
+| **cdecl** | Ritchie, D. (C language) | 1972 | Caller cleans stack — основа C calling convention |
+| **x86-64 System V ABI** | AMD/SCO/Linux | 2003 | 6 регистров для аргументов (RDI, RSI, RDX, RCX, R8, R9) |
+| **ARM AAPCS** | ARM Ltd. | 2003 | 8 регистров для аргументов (X0-X7) |
+| **Swift ABI Stability** | Apple | 2019 | Swift 5.0 — ABI stability → framework без перекомпиляции |
+| **C ABI de facto** | — | ongoing | C ABI — универсальный lingua franca для FFI между языками |
+
+### Почему C ABI — lingua franca
+
+Почти все языки могут вызывать C-функции (через FFI), потому что C ABI:
+1. **Минимален** — нет exceptions, нет name mangling, нет vtable
+2. **Стабилен** — не менялся десятилетиями для каждой платформы
+3. **Документирован** — формально специфицирован для каждой архитектуры
+
+> **Следствие:** для interop между Kotlin и Swift на iOS оба языка проходят через C/Objective-C ABI (Objective-C runtime). Kotlin/Native → C ABI → ObjC runtime → Swift.
+
+### Caller-saved vs Callee-saved регистры
+
+| Свойство | Caller-saved (volatile) | Callee-saved (non-volatile) |
+|----------|------------------------|----------------------------|
+| **Кто сохраняет** | Вызывающая функция | Вызываемая функция |
+| **Когда** | Перед вызовом (если нужны) | В прологе (push) / эпилоге (pop) |
+| **x86-64** | RAX, RCX, RDX, R8-R11 | RBX, RBP, R12-R15 |
+| **ARM64** | X0-X18 | X19-X28, FP, LR |
+
+---
+
 ## Зачем это знать
 
 Понимание ABI — одна из тех тем, которые отделяют разработчика, "пишущего код", от разработчика, "понимающего, что происходит под капотом". Когда ты вызываешь функцию из чужой библиотеки, когда линкуешь C-код с Kotlin/Native, когда обновляешь системную библиотеку и внезапно всё ломается — за всем этим стоит ABI.
@@ -796,12 +834,16 @@ kotlin {
 
 ## Источники и дальнейшее чтение
 
-- Levine, J. (1999). *Linkers and Loaders*. — Фундаментальная книга о том, как линкер соединяет отдельно скомпилированные модули, как работает name resolution, relocation и symbol tables. Единственная книга, которая объясняет весь путь от объектного файла до исполняемого.
-- Bryant, R. & O'Hallaron, D. (2015). *Computer Systems: A Programmer's Perspective*. — Глава 7 (Linking) подробно разбирает, как ABI влияет на линковку, а глава 3 (Machine-Level Representation) объясняет calling conventions на уровне ассемблера с примерами.
-- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design*. — Глава о procedure calls объясняет, как calling conventions связаны с hardware архитектурой и почему ARM и x86 выбрали разные подходы.
-- [Agner Fog: Calling Conventions](https://www.agner.org/optimize/calling_conventions.pdf) — самый полный технический справочник по calling conventions разных платформ, поддерживается в актуальном состоянии.
-- [System V ABI x86-64 Specification](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) — оригинальная спецификация ABI для Linux/macOS на x86-64.
-- [Swift ABI Stability and More](https://www.swift.org/blog/abi-stability-and-more/) — как Apple решила проблему ABI stability для Swift, и почему это заняло 5 лет (от Swift 1.0 до 5.0).
+### Теоретические основы
+- [System V ABI x86-64 Specification](https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf) — формальная спецификация ABI для Linux/macOS
+- [ARM AAPCS64](https://developer.arm.com/documentation/ihi0055/latest) — ARM64 calling convention specification
+- Levine, J. (1999). *Linkers and Loaders* — от объектного файла до исполняемого
+
+### Практические руководства
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — гл.3 (asm calling conventions), гл.7 (linking)
+- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design* — procedure calls
+- [Agner Fog: Calling Conventions](https://www.agner.org/optimize/calling_conventions.pdf) — полный справочник
+- [Swift ABI Stability](https://www.swift.org/blog/abi-stability-and-more/) — 5 лет к ABI stability
 
 ---
 

@@ -30,6 +30,50 @@ prerequisites:
 
 SwiftUI предоставляет мощную систему управления состоянием через property wrappers: `@State` для локального состояния, `@Binding` для передачи состояния вниз по иерархии, `@StateObject` для владения ObservableObject, `@ObservedObject` для наблюдения, `@EnvironmentObject` для глобального состояния, `@Environment` для системных значений, `@AppStorage` для UserDefaults и `@SceneStorage` для восстановления состояния сцены. Ключевой принцип — single source of truth.
 
+## Теоретические основы
+
+> **Определение:** Управление состоянием (state management) — это дисциплина организации, хранения и распространения данных, определяющих текущее поведение и отображение пользовательского интерфейса. Формально описывается как задача поддержания единственного источника истины (Single Source of Truth, SSOT) в иерархической структуре компонентов.
+
+### Теоретические модели управления состоянием
+
+| Модель | Автор/Происхождение | Принцип | Реализация в iOS |
+|--------|---------------------|---------|-----------------|
+| Observer Pattern | GoF (Gamma et al., 1994) | Publish-subscribe для изменений | `@Published`, `ObservableObject` |
+| Unidirectional Data Flow | Flux (Facebook, 2014) | State → View → Action → State | TCA (Point-Free, 2020) |
+| Reactive Streams | Reactive Manifesto (2013) | Асинхронные потоки данных | Combine, `@Observable` |
+| Single Source of Truth | Normalization theory (Codd, 1970) | Одно каноническое место для данных | `@State`, `@Binding` |
+
+> **SSOT (Single Source of Truth)** — принцип, заимствованный из теории нормализации баз данных (Codd, 1970): каждый элемент данных должен иметь ровно одно каноническое представление. В контексте SwiftUI это означает, что `@State` определяет единственное место владения данными, а `@Binding` предоставляет ссылку на него.
+
+### Эволюция State Management в iOS
+
+| Эпоха | Подход | Механизм | Проблемы |
+|-------|--------|----------|----------|
+| 2008-2014 | Manual UIKit | KVO, NotificationCenter, delegates | Boilerplate, scattered state |
+| 2014-2019 | Reactive (RxSwift) | Observable streams, binding | Крутая кривая обучения, debug |
+| 2019 | SwiftUI launch | @State, @Binding, @ObservedObject | Ограниченный контроль lifecycle |
+| 2020 | Combine integration | @Published + Combine pipelines | Сложная отладка |
+| 2023 | @Observable (iOS 17) | Macro-based observation | Несовместимость с iOS < 17 |
+
+### Property Wrappers как формализм (SE-0258)
+
+Property wrappers в Swift формализуют паттерн «обёртка над хранением значения» через проецируемые значения (projected value, `$`):
+
+| Property Wrapper | wrappedValue | projectedValue ($) | Семантика |
+|-----------------|--------------|--------------------|-----------|
+| `@State` | `T` | `Binding<T>` | Владение + двусторонняя привязка |
+| `@Binding` | `T` | `Binding<T>` | Ссылка на чужой State |
+| `@StateObject` | `ObservableObject` | `ObservedObject<T>.Wrapper` | Владение + observation |
+| `@Environment` | `T` | — | Чтение системных значений |
+
+### Связь с CS-фундаментом
+
+- [[functional-reactive-programming]] — теоретическая основа реактивного управления состоянием
+- [[ios-swiftui]] — практическое использование property wrappers в SwiftUI
+- [[android-state-management]] — аналогичные паттерны в Android (ViewModel, StateFlow)
+
+---
+
 ## Аналогии
 
 1. **@State vs @Binding** — как владелец дома (@State) и арендатор (@Binding): владелец контролирует недвижимость, арендатор может использовать, но не владеет
@@ -1629,10 +1673,15 @@ struct DataView: View {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — фундаментальная книга по SwiftUI state management, объясняющая ментальную модель property wrappers, identity-based rendering и оптимизацию перерисовок; обязательна для понимания темы.
-- Apple (2023). *The Swift Programming Language.* — раздел Properties описывает property wrappers как языковую конструкцию, а раздел Concurrency объясняет @MainActor и actor isolation для thread-safe state management.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — практические примеры использования всех property wrappers в контексте реальных приложений, включая @Observable (iOS 17) и Observation framework.
+### Теоретические основы
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Observer pattern как основа реактивного state management
+- Codd E. F. (1970). *A Relational Model of Data for Large Shared Data Banks.* Communications of the ACM — нормализация и SSOT
+- Abadi M. et al. (2014). *TensorFlow: A System for Large-Scale ML.* — Flux/Redux architecture (Facebook) как unidirectional data flow
+
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — property wrappers, identity-based rendering, оптимизация перерисовок
+- Apple (2023). *The Swift Programming Language.* — property wrappers, @MainActor, actor isolation
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — @Observable, Observation framework
 
 ---
 

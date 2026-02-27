@@ -37,6 +37,63 @@ next_review:
 - **Java/Kotlin basics**: знание generics, interfaces, lambda syntax
 - **Android lifecycle**: понимание жизненного цикла Activity/Fragment
 
+## Теоретические основы: формальный базис реактивного программирования
+
+### Observable/Iterable дуальность (Meijer, 2012)
+
+> Erik Meijer формализовал ключевое наблюдение: **Observable — это категорный дуал Iterable**. Если Iterable — синхронный pull-based источник данных, то Observable — его асинхронный push-based двойник. Все операции над коллекциями (map, filter, reduce) имеют точные дуалы на Observable.
+
+```
+         Синхронный (pull)          Асинхронный (push)
+         ─────────────────          ──────────────────
+single:  T getData()        ←dual→  void onNext(T)
+         throws Exception   ←dual→  void onError(Throwable)
+multi:   Iterable<T>        ←dual→  Observable<T>
+         Iterator<T>        ←dual→  Observer<T>
+```
+
+Эта дуальность — не аналогия, а **математическое утверждение**: если развернуть стрелки в интерфейсе Iterator (из `T next()` в `void onNext(T)`), получается Observer. Это объясняет, почему RxJava-операторы повторяют API коллекций.
+
+### Reactive Streams Specification (2013-2014)
+
+Reactive Streams — формальная спецификация (`org.reactivestreams`), определяющая минимальный контракт для асинхронной обработки потоков с non-blocking backpressure. Четыре интерфейса:
+
+| Интерфейс | Контракт | RxJava 2+ аналог |
+|-----------|----------|------------------|
+| `Publisher<T>` | Источник 0..N элементов + completion/error | `Flowable<T>` |
+| `Subscriber<T>` | Потребитель, управляет demand | `FlowableSubscriber<T>` |
+| `Subscription` | Связь publisher↔subscriber, `request(n)` + `cancel()` | `Subscription` |
+| `Processor<T,R>` | Publisher + Subscriber | `FlowableProcessor<T,R>` |
+
+**Правило #1**: Publisher НЕ ДОЛЖЕН посылать больше элементов, чем запрошено через `Subscription.request(n)`. Это формальный контракт backpressure.
+
+RxJava 2+ реализует Reactive Streams через `Flowable`. `Observable` — сознательное нарушение спецификации для случаев, где backpressure не нужен (UI events, малые потоки).
+
+### Backpressure: формальное определение
+
+> **Backpressure** — механизм flow control, при котором consumer сигнализирует producer о допустимой скорости потребления. Необходим, когда `rate(producer) > rate(consumer)` в течение достаточного времени для переполнения буфера.
+
+По **закону Литтла** (Little's Law): `L = λW`, где L — среднее число элементов в системе, λ — скорость поступления, W — среднее время обработки. Если λ·W > buffer_size, система переполняется.
+
+| Стратегия | RxJava | Семантика |
+|-----------|--------|-----------|
+| **Buffer** | `onBackpressureBuffer()` | Неограниченный буфер (риск OOM) |
+| **Drop** | `onBackpressureDrop()` | Отбрасывать элементы при отсутствии demand |
+| **Latest** | `onBackpressureLatest()` | Хранить только последний элемент |
+| **Error** | `MissingBackpressureException` | Ошибка при переполнении (default) |
+
+### Functional Reactive Programming (FRP)
+
+Термин FRP введён Conal Elliott и Paul Hudak (1997, *"Functional Reactive Animation"*). Оригинальный FRP определяет два примитива:
+- **Behavior** `a` — непрерывная функция от времени: `Behavior a = Time → a`
+- **Event** `a` — дискретная последовательность пар (время, значение): `Event a = [(Time, a)]`
+
+RxJava реализует только **Event** (дискретные потоки), а не **Behavior** (непрерывные). Поэтому точнее называть RxJava "Reactive Programming", а не "Functional Reactive Programming".
+
+> **Связь**: Дуальность Meijer → [[ios-combine]], Reactive Streams → [[kotlin-flow]], FRP → [[functional-programming]]
+
+---
+
 ## Введение в реактивное программирование
 
 RxJava — это implementation паттерна Observer с акцентом на композицию асинхронных операций и обработку потоков данных. Это библиотека для композиции асинхронных и event-based программ с использованием observable sequences.
@@ -2840,6 +2897,14 @@ observable
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Meijer E. (2012). *Your Mouse is a Database.* ACM Queue. — Формализация дуальности Observable/Iterable, теоретический фундамент всего ReactiveX.
+- Elliott C., Hudak P. (1997). *Functional Reactive Animation.* ICFP '97. — Определение FRP: Behavior и Event. RxJava реализует Event-часть FRP.
+- Reactive Streams Specification (2014). *org.reactivestreams.* — Формальный контракт backpressure (4 интерфейса, 40+ правил), которому RxJava 2+ Flowable соответствует.
+
+### Практические руководства
 
 - Goetz (2006). *Java Concurrency in Practice*. — фундаментальное понимание threading, visibility, happens-before и executor model, на которых построены RxJava Schedulers. Без знания Java concurrency невозможно понять, почему observeOn/subscribeOn работают именно так и как избежать race conditions.
 - Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальное сравнение RxJava и Kotlin Coroutines/Flow, включая миграционные паттерны (Observable → Flow, Single → suspend). Помогает принять обоснованное решение о миграции legacy RxJava кода.

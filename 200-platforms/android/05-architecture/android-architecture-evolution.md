@@ -35,6 +35,25 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Architectural evolution** — закономерный процесс усложнения программных систем, формализованный Lehman в **законах эволюции программного обеспечения** (Lehman, 1980): система, используемая в реальном мире, неизбежно усложняется, если ей не противодействовать (Law of Increasing Complexity).
+
+Эволюция архитектуры Android отражает общую траекторию GUI-архитектур, начиная с **MVC** (Reenskaug, Smalltalk-80, 1979). Каждый переход решал конкретную проблему предыдущего поколения:
+
+| Переход | Год (Android) | Решаемая проблема | Теоретическая основа |
+|---------|--------------|-------------------|---------------------|
+| Монолит → MVC/MVP | 2014 | God Activity (SRP violation) | Separation of Concerns (Dijkstra, 1974) |
+| MVP → MVVM | 2017 | Boilerplate, ручной lifecycle | Observer pattern (Gamma et al., 1994) |
+| MVVM → MVI | 2020 | Race conditions, multiple states | FSM + Event Sourcing (Fowler, 2005) |
+| MVI → Compose-native | 2023 | ViewModel overhead, testability | Functional UI (Elliott/Hudak, 1997) |
+
+> **Separation of Concerns** (Dijkstra, 1974) — принцип, согласно которому программа должна быть разделена на секции, каждая из которых отвечает за отдельный аспект функциональности. Все архитектурные паттерны Android — это варианты разделения трёх concerns: **UI rendering**, **business logic** и **data management**.
+
+Параллельная эволюция на других платформах подтверждает универсальность этих переходов: iOS прошла путь MVC → MVVM → TCA (The Composable Architecture), Web — от jQuery спагетти через MVC (Backbone) к Component Architecture (React) и далее к Server Components. Каждая платформа приходит к **Unidirectional Data Flow** (UDF) как к конвергентному решению проблемы state management.
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** Android-разработка сильно изменилась за 15+ лет. Код, написанный "правильно" в 2015, сегодня считается антипаттерном. Без понимания эволюции:
@@ -709,20 +728,22 @@ data class UsersScreen : Screen {
 
 ## Источники
 
+### Теоретические основы
+
+- **Lehman M. (1980). Programs, Life Cycles, and Laws of Software Evolution.** — Законы эволюции ПО (Law of Increasing Complexity)
+- **Dijkstra E. (1974). On the Role of Scientific Thought.** — Separation of Concerns
+- **Reenskaug T. (1979). Models-Views-Controllers.** — Оригинальный MVC (Smalltalk-80)
+- **Fowler M. (2005). Event Sourcing.** — Основа MVI: state как результат применения событий
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [Guide to App Architecture](https://developer.android.com/topic/architecture) | Docs | Официальные рекомендации Google |
-| 2 | [Recommendations for Android architecture](https://developer.android.com/topic/architecture/recommendations) | Docs | Best practices 2024 |
-| 3 | [Modern Android App Architecture](https://developer.android.com/courses/pathways/android-architecture) | Course | Официальный курс |
-| 4 | [Architecture Samples](https://github.com/android/architecture-samples) | GitHub | Референсная реализация |
-| 5 | [Orbit MVI](https://orbit-mvi.org/) | Library | Kotlin-first MVI |
-| 6 | [Circuit by Slack](https://slackhq.github.io/circuit/) | Library | Compose-native MVI |
-| 7 | [MVIKotlin](https://arkivanov.github.io/MVIKotlin/) | Library | KMP-ready MVI |
-| 8 | [Decompose](https://arkivanov.github.io/Decompose/) | Library | Navigation + MVI для KMP |
-| 9 | [MVI vs MVVM comparison](https://medium.com/@androidlab/the-state-of-android-architecture-your-mvvm-is-already-outdated-7c81f0d27bd4) | Article | Сравнение подходов |
-| 10 | [Android version history](https://en.wikipedia.org/wiki/Android_version_history) | Wiki | История платформы |
-| 11 | [Rebuilding our guide to app architecture](https://android-developers.googleblog.com/2021/12/rebuilding-our-guide-to-app-architecture.html) | Blog | Google I/O 2021 |
-| 12 | [Compose UI Architecture](https://developer.android.com/develop/ui/compose/architecture) | Docs | Compose + архитектура |
+| 2 | [Architecture Samples](https://github.com/android/architecture-samples) | GitHub | Референсная реализация |
+| 3 | [Circuit by Slack](https://slackhq.github.io/circuit/) | Library | Compose-native MVI |
+| 4 | [Decompose](https://arkivanov.github.io/Decompose/) | Library | Navigation + MVI для KMP |
+| 5 | [Compose UI Architecture](https://developer.android.com/develop/ui/compose/architecture) | Docs | Compose + архитектура |
 
 ---
 

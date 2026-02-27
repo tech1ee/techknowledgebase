@@ -33,6 +33,32 @@ Technical interview для Android engineer в FAANG — это 4-6 раундо
 
 ---
 
+## Теоретические основы
+
+> **Technical Interview** — формализованная оценка инженерных навыков кандидата через решение задач в реальном времени. Включает coding (алгоритмы), system design (архитектура), domain knowledge (специализация) и live coding (практическая разработка).
+
+**Эволюция технического интервью:**
+
+| Эпоха | Формат | Что оценивалось | Критика |
+|-------|--------|-----------------|---------|
+| 1990-е | Brain teasers (Microsoft) | Lateral thinking | Не коррелирует с performance (Google, 2013) |
+| 2000-е | Whiteboard coding | Algorithmic thinking | "Inverting a binary tree on a whiteboard" meme |
+| 2010-е | Online coding + onsite | DSA + System Design | High false negative (interviewing.io data) |
+| 2020-е | Practical/Live coding | Real-world skills | DoorDash, TikTok: build actual UI |
+| 2026 | AI-enabled coding (Meta) | AI collaboration skills | Формат формируется |
+
+**Whiteboard vs Practical debate:**
+
+Исследование Max Howell (2015, "I can't invert a binary tree, so I was rejected by Google") вызвало дискуссию о релевантности алгоритмических интервью. Последующие исследования (Behroozi et al., 2020, *"Does Stress Impact Technical Interview Performance?"*) показали, что whiteboard coding измеряет **стрессоустойчивость**, а не программирование — кандидаты показывают результаты на 50% хуже в стрессовых условиях интервью по сравнению с private setting.
+
+Это привело к двум трендам: (1) take-home assignments (Basecamp, Shopify) и (2) practical coding rounds (DoorDash live coding, TikTok UI round), где кандидат работает в привычной IDE.
+
+> **Triangulation principle:** FAANG используют 4-6 раундов не для перестраховки, а для **triangulation** — каждый раунд оценивает другой аспект. Кандидат может быть слабым в одном раунде, но сильным в других. Committee review агрегирует сигналы для принятия решения.
+
+→ Связано: [[interview-process]], [[coding-challenges]], [[system-design-android]], [[android-questions]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -536,15 +562,19 @@ GENERAL:
 
 - [[android-questions]] — Банк Android-specific вопросов для Domain Round. Текущий материал объясняет формат и темы Domain Round, а android-questions содержит конкретные вопросы по Lifecycle, Compose, Coroutines, Architecture с ожидаемой глубиной ответа для каждого уровня.
 
-## Источники и дальнейшее чтение
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Покрывает все аспекты технического интервью: DSA задачи, System Design основы, tips по communication во время coding. 189 задач с разбором — основной ресурс для Rounds 1-2 (DSA Coding).
-
-- Xu A. (2020). *System Design Interview*. — Для Round 3 (System Design). 13 задач с пошаговым framework: от requirements gathering до trade-offs discussion. Адаптируй для mobile контекста, добавляя offline-first, caching и sync considerations.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ technical interviews, где оценивается не только решение, но и leadership, architectural judgment и ability to drive discussion. Книга помогает понять, какой depth и breadth ожидают на L6+ coding и design rounds.
-
 ## Источники
+
+### Теоретические основы
+
+- Behroozi M. et al. (2020). *Does Stress Impact Technical Interview Performance?*. — Whiteboard coding измеряет стрессоустойчивость, не programming skill; кандидаты на 50% хуже в стрессовых условиях.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — 189 задач с разбором, DSA + System Design основы, tips по communication.
+
+- Xu A. (2020). *System Design Interview*. — 13 задач с framework для Round 3 (System Design).
+
+- Larson W. (2022). *Staff Engineer*. — Staff+ expectations: leadership, architectural judgment, ability to drive discussion.
+
+### Практические руководства
 
 - [Prepfully: Google Android Engineer](https://prepfully.com/interview-guides/google-android-engineer)
 - [Prepfully: Meta Android Engineer](https://prepfully.com/interview-guides/meta-android-engineer)

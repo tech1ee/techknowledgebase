@@ -58,6 +58,43 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Компиляция** — преобразование программы из языка высокого уровня в машинный код через серию промежуточных представлений (IR). Swift компилятор реализует многоуровневый pipeline: Source → AST → SIL (Swift Intermediate Language) → LLVM IR → Machine Code, где каждый уровень оптимизирует специфичные аспекты.
+
+### Академический контекст
+
+Компиляция Swift основана на десятилетиях исследований в области трансляции языков:
+
+| Концепция | Автор / год | Суть | Проявление в Swift |
+|-----------|-------------|------|---------------------|
+| Multi-pass Compilation | Aho, Sethi, Ullman, 1986 («Dragon Book») | Разделение компиляции на фазы: lexing, parsing, semantic analysis, codegen | swiftc: Parse → Sema → SILGen → IRGen → LLVM |
+| SSA Form | Cytron et al., 1991 | Статическое однократное присваивание для оптимизаций | SIL и LLVM IR используют SSA |
+| Type Inference | Hindley-Milner, 1969/1978 | Автоматический вывод типов из контекста | Swift type checker (constraint solver) |
+| LLVM Architecture | Lattner & Adve, 2004 | Модульная компиляторная инфраструктура | Swift → SIL → LLVM IR → Target Machine Code |
+| ABI Stability | Исследования 2000-х | Бинарная совместимость между версиями | Swift ABI stability (Swift 5.0, 2019) |
+
+### Уникальность SIL (Swift Intermediate Language)
+
+SIL — промежуточное представление, уникальное для Swift. Оно находится между AST и LLVM IR и позволяет выполнять Swift-специфичные оптимизации:
+
+- **ARC-оптимизации**: удаление избыточных retain/release (невозможно на уровне LLVM IR)
+- **Девиртуализация**: замена dynamic dispatch на static dispatch для протоколов
+- **Проверка эксклюзивности доступа**: enforcement of memory exclusivity rules (Swift ownership model)
+- **Generics specialization**: монoморфизация generic-кода для конкретных типов
+
+> **Lattner & Adve (2004)**: «LLVM provides a compilation strategy designed to enable effective program optimization across the entire lifetime of a program.» Swift расширяет эту идею через SIL, добавляя уровень оптимизаций, специфичных для семантики языка (ARC, ownership, protocol conformance).
+
+### Связь с CS-фундаментом
+
+- [[compilation-pipeline]] — общая теория компиляции, применимая к любому языку
+- [[native-compilation-llvm]] — LLVM как бэкенд Swift, Rust, C++
+- [[ios-xcode-fundamentals]] — Xcode как orchestrator compilation pipeline
+- [[ios-process-memory]] — ARC как результат SIL-оптимизаций
+- [[android-compilation-pipeline]] — сравнение: Swift/LLVM vs Kotlin/JVM/ART
+
+---
+
 ## Аналогии из жизни
 
 ### Кулинарная аналогия компиляции
@@ -1372,9 +1409,15 @@ Assets.xcassets/
 
 ## Источники и дальнейшее чтение
 
-- Eidhof C. et al. (2019). *Advanced Swift.* — объясняет продвинутые механизмы Swift (generics specialization, protocol witness tables, value types vs reference types), которые напрямую влияют на оптимизации на уровне SIL
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает структуру Xcode проекта, build settings и процесс сборки с практической точки зрения разработчика
-- Apple (2023). *The Swift Programming Language.* — официальная документация языка, необходимая для понимания типов и конструкций, которые компилятор обрабатывает на каждом этапе pipeline
+### Теоретические основы
+- Aho A., Lam M., Sethi R., Ullman J. (2006). *Compilers: Principles, Techniques, and Tools (Dragon Book).* — фундаментальная теория компиляции: lexing, parsing, semantic analysis, code generation
+- Lattner C., Adve V. (2004). *LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation.* — архитектура LLVM, SSA form, модульная компиляция
+- Cytron R. et al. (1991). *Efficiently Computing Static Single Assignment Form and the Control Dependence Graph.* — SSA как основа оптимизаций в SIL и LLVM IR
+
+### Практические руководства
+- Eidhof C. et al. (2019). *Advanced Swift.* — generics specialization, protocol witness tables, влияние на SIL-оптимизации
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — структура Xcode проекта, build settings, процесс сборки
+- Apple (2023). *The Swift Programming Language.* — типы и конструкции, обрабатываемые компилятором на каждом этапе
 
 ---
 

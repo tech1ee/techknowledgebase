@@ -98,6 +98,46 @@ related:
 2025: Специализация   → GraphRAG, Self-RAG, Contextual Retrieval
 ```
 
+---
+
+## Теоретические основы
+
+### Формальное определение RAG
+
+> **Retrieval-Augmented Generation (RAG)** — архитектурный паттерн, в котором генеративная модель дополняется механизмом извлечения релевантной информации из внешнего корпуса документов. Формально: P(y|x) = Σ P(y|x,z) · P(z|x), где z — извлечённые документы, x — запрос, y — ответ (Lewis et al., 2020, *"Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"*, Facebook AI).
+
+### Ключевые работы
+
+| Год | Работа | Авторы | Вклад |
+|-----|--------|--------|-------|
+| 2020 | RAG | Lewis et al. (Facebook AI) | Формализация retrieve-then-generate |
+| 2020 | REALM | Guu et al. (Google) | Pre-training с retrieval |
+| 2023 | Self-RAG | Asai et al. (U. Washington) | Reflection tokens для самопроверки |
+| 2023 | CRAG | Yan et al. | Corrective RAG с web search fallback |
+| 2024 | GraphRAG | Microsoft Research | Knowledge graph для тематических запросов |
+| 2024 | Contextual Retrieval | Anthropic | Добавление контекста к чанкам, -49% failed retrieval |
+
+### Эволюция архитектур RAG
+
+> **Naive RAG** → фиксированный pipeline: embed → retrieve → generate. Проблемы: нет самокоррекции, единственный запрос, нет оценки качества.
+>
+> **Advanced RAG** → pre-retrieval (query rewriting, decomposition) + post-retrieval (reranking, compression). Качество retrieval улучшается, но pipeline остаётся фиксированным.
+>
+> **Modular RAG** → компонентная архитектура с взаимозаменяемыми модулями (Gao et al., 2024, *"Retrieval-Augmented Generation for Large Language Models: A Survey"*).
+>
+> **[[agentic-rag|Agentic RAG]]** → агент контролирует retrieval: решает нужен ли поиск, формулирует query, оценивает результаты, итерирует.
+
+### Метрики качества RAG (RAGAS Framework)
+
+| Метрика | Формула (упрощённо) | Что измеряет |
+|---------|---------------------|--------------|
+| **Faithfulness** | claims_supported / total_claims | Ответ основан на контексте |
+| **Answer Relevance** | cosine_sim(answer, question) | Ответ отвечает на вопрос |
+| **Context Precision** | relevant_chunks_ranked_high / total | Релевантные чанки вверху |
+| **Context Recall** | gt_claims_in_context / total_gt_claims | Нужная информация найдена |
+
+Фреймворк RAGAS (Es et al., 2023) стал стандартом де-факто для оценки RAG-систем.
+
 **Результаты продвинутых техник:**
 - Self-RAG: **+40% accuracy** за счёт self-reflection
 - GraphRAG: **+76%** на сложных reasoning задачах
@@ -1792,14 +1832,21 @@ print(result)
 |---|----------|-----|-------|
 | 1 | [Agentic RAG with LangGraph](https://blog.langchain.com/agentic-rag-with-langgraph/) - LangChain | Tutorial | LangGraph паттерны |
 | 2 | [Self-RAG: Learning to Retrieve, Generate and Critique](https://selfrag.github.io/) | Paper | Reflection tokens |
-| 3 | [Corrective RAG Tutorial](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_crag/) - LangGraph | Tutorial | CRAG implementation |
-| 4 | [Contextual Retrieval](https://www.anthropic.com/news/contextual-retrieval) - Anthropic | Blog | Chunk contextualization |
-| 5 | [GraphRAG](https://github.com/microsoft/graphrag) - Microsoft | GitHub | Knowledge graphs для RAG |
-| 6 | [RAGAS Documentation](https://docs.ragas.io/) | Docs | LLM-as-a-Judge метрики |
-| 7 | [Query Decomposition Cookbook](https://haystack.deepset.ai/cookbook/query_decomposition) - Haystack | Tutorial | Multi-hop decomposition |
-| 8 | [Late Chunking](https://arxiv.org/abs/2409.04701) - Jina AI | Paper | Альтернатива Contextual Retrieval |
-| 9 | [Original RAG Paper](https://arxiv.org/abs/2005.11401) - Lewis et al. 2020 | Paper | Основа RAG |
-| 10 | [LangChain RAG Documentation](https://python.langchain.com/docs/tutorials/rag/) | Docs | Практические примеры |
+### Теоретические основы
+- Lewis, P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. NeurIPS. arXiv:2005.11401.
+- Guu, K. et al. (2020). *REALM: Retrieval-Augmented Language Model Pre-Training*. ICML.
+- Asai, A. et al. (2023). *Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection*. arXiv:2310.11511.
+- Gao, Y. et al. (2024). *Retrieval-Augmented Generation for Large Language Models: A Survey*. arXiv:2312.10997.
+- Es, S. et al. (2023). *RAGAS: Automated Evaluation of Retrieval Augmented Generation*. arXiv:2309.15217.
+- Microsoft Research (2024). *GraphRAG: Unlocking LLM Discovery on Narrative Private Data*.
+
+### Практические руководства
+- [Corrective RAG Tutorial — LangGraph](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_crag/)
+- [Contextual Retrieval — Anthropic](https://www.anthropic.com/news/contextual-retrieval)
+- [GraphRAG — Microsoft](https://github.com/microsoft/graphrag)
+- [RAGAS Documentation](https://docs.ragas.io/)
+- [LangChain RAG Documentation](https://python.langchain.com/docs/tutorials/rag/)
+- [Late Chunking — Jina AI](https://arxiv.org/abs/2409.04701)
 
 ---
 
@@ -1814,16 +1861,6 @@ print(result)
 **[[vector-databases-guide]]** — Векторные базы данных являются инфраструктурной основой любого RAG-пайплайна. Выбор векторной БД (Pinecone, Weaviate, Qdrant, Chroma) напрямую влияет на качество retrieval-этапа: скорость поиска, поддержка гибридного поиска, метаданные для фильтрации. Продвинутые RAG-техники, такие как multi-index routing или hierarchical retrieval, требуют понимания индексов (HNSW, IVF) и особенностей конкретных векторных БД.
 
 **[[embeddings-complete-guide]]** — Эмбеддинги определяют качество семантического поиска в RAG-системе. Выбор модели эмбеддингов, стратегия чанкинга и методы улучшения (contextual retrieval, late chunking) критически влияют на recall и precision поиска. Продвинутые RAG-техники, такие как query decomposition и hypothetical document embeddings (HyDE), работают именно на уровне эмбеддингов, трансформируя запрос или документы для улучшения семантического соответствия.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Jurafsky D., Martin J.H. (2023). Speech and Language Processing. 3rd edition.** — фундаментальный учебник по NLP, покрывающий информационный поиск, семантическое сходство и модели языка, что даёт теоретическую базу для понимания retrieval-компонентов RAG
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практическое руководство по проектированию ML-систем в продакшене, включая паттерны работы с данными, мониторинг и итеративное улучшение, применимые к RAG-пайплайнам
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — классический учебник, покрывающий поиск, представление знаний и reasoning, что важно для понимания теоретических основ multi-hop и graph-based RAG
-
----
 
 ---
 

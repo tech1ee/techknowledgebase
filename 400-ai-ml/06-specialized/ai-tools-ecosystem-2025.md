@@ -65,6 +65,36 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **AI Technology Stack** — многослойная архитектура инструментов и сервисов для разработки, деплоя и эксплуатации AI-приложений. Аналогично классическому LAMP/MEAN стеку в веб-разработке, AI stack стандартизирует выбор компонентов на каждом уровне.
+
+Формирование AI-стека следует паттернам, наблюдаемым в предыдущих технологических циклах:
+
+| Фаза | Характеристика | Пример из web | AI (2025) |
+|------|---------------|--------------|-----------|
+| **Fragmentation** | Множество конкурирующих решений | 2000-е: CGI, PHP, ASP, JSP | 2023: десятки agent frameworks |
+| **Consolidation** | Выделение лидеров | 2010-е: React, Vue, Angular | 2025: LangGraph, OpenAI SDK, CrewAI |
+| **Standardization** | Открытые протоколы | HTTP, REST, GraphQL | MCP, A2A, OpenTelemetry для LLM |
+| **Platform** | Полные платформы | AWS, Vercel | LangSmith, Vertex AI |
+
+> **Закон Conway (1968)**: архитектура системы отражает организационную структуру. AI stack формируется вокруг ролей: AI Engineer (SDK, frameworks), Platform Engineer (serving, monitoring), Data Engineer (pipelines, vector DB). Это объясняет слоистость стека.
+
+**Критерии выбора инструментов (Technology Radar approach, ThoughtWorks):**
+
+| Критерий | Что оценивать | Почему важно |
+|----------|--------------|-------------|
+| **Maturity** | Stars, contributors, release cadence | Риск abandonware |
+| **Lock-in** | Vendor dependency, data portability | Гибкость замены |
+| **Ecosystem** | Интеграции, community, documentation | Скорость разработки |
+| **Cost model** | Free tier, scaling costs | TCO при масштабировании |
+
+Тренд 2025: **unbundling** — вместо monolithic фреймворков (early LangChain) рынок движется к composable architecture, где каждый компонент заменяем. MCP и OpenTelemetry ускоряют этот процесс.
+
+См. также: [[agent-frameworks-comparison|Agent Frameworks]] — сравнение фреймворков, [[ai-api-integration|API Integration]] — LLM API providers, [[ai-observability-monitoring|Observability]] — мониторинг.
+
+---
+
 ## Архитектура современного AI Stack
 
 ```
@@ -1073,5 +1103,25 @@ Braintrust (eval-as-a-service), Promptfoo (open-source, CLI-first), RAGAS (RAG-s
 | Углубиться | [[ai-api-integration]] | Практическая работа с LLM API |
 | Смежная тема | [[android-dependencies]] | Управление зависимостями в мобильной разработке |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Conway M. (1968). *How Do Committees Invent?*. Datamation | Закон Conway — архитектура отражает организацию |
+| 2 | Christensen C. (1997). *The Innovator's Dilemma*. Harvard Business School Press | Disruptive innovation — как новые инструменты вытесняют старые |
+| 3 | ThoughtWorks. *Technology Radar*. thoughtworks.com | Фреймворк оценки технологий (Adopt/Trial/Assess/Hold) |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [a16z AI Landscape](https://a16z.com/) | Инвестиционный анализ AI-экосистемы |
+| 2 | [Sequoia AI Ascent](https://www.sequoiacap.com/) | Тренды AI-инфраструктуры |
+| 3 | [AI Engineer Stack Survey](https://ai-engineer.com/) | Community survey AI-инструментов |
 
 *Проверено: 2026-01-09*

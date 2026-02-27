@@ -70,6 +70,36 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Протокол (Protocol)** в computer science — формальное описание правил и форматов обмена сообщениями между вычислительными системами. MCP — это **application-layer протокол** поверх JSON-RPC 2.0, стандартизирующий взаимодействие между AI-моделями и внешними сервисами.
+
+Проблема, которую решает MCP, имеет классическую формулировку в теории интеграции систем. Без стандартного протокола $M$ AI-клиентов и $N$ сервисов требуют $M \times N$ интеграций. Стандартный протокол снижает это до $M + N$ — каждая сторона реализует протокол один раз. Это прямая аналогия с **USB** в hardware и **HTTP** в web.
+
+| Концепция | Теоретическая база | Применение в MCP |
+|-----------|-------------------|------------------|
+| **RPC (Remote Procedure Call)** | Birrell & Nelson (1984) | JSON-RPC 2.0 как транспортный протокол |
+| **Capability Discovery** | Service-Oriented Architecture (SOA) | Клиент автоматически узнаёт доступные tools/resources |
+| **Принцип инверсии зависимостей** | Martin R. (2000), SOLID | Модель зависит от абстракции (MCP), а не от конкретных API |
+| **Принцип наименьших привилегий** | Saltzer & Schroeder (1975) | Capability negotiation — клиент и сервер согласовывают разрешения |
+| **Middleware Pattern** | Enterprise Integration Patterns (2003) | MCP Server как middleware между AI и внешним сервисом |
+
+> **Архитектурный паттерн MCP** следует модели **клиент-сервер** с элементами **publish-subscribe**: клиент (Host) управляет сессиями с несколькими серверами, каждый из которых предоставляет набор capabilities (tools, resources, prompts). Это реализация паттерна **Facade** (GoF, 1994) — единый интерфейс для подсистемы сервисов.
+
+**Эволюция подходов к интеграции AI с инструментами:**
+
+| Поколение | Подход | Стандартизация | Ограничения |
+|-----------|--------|---------------|-------------|
+| 1-е (2023) | Function Calling (OpenAI) | Проприетарный per-provider | M x N проблема |
+| 2-е (2023) | Tool Use (Anthropic, Google) | Частичная совместимость | Разные форматы схем |
+| 3-е (2024) | **MCP** | Открытый стандарт (Linux Foundation) | Экосистема ещё формируется |
+
+Передача MCP в Linux Foundation (2025) и создание Agentic AI Foundation — стратегическое решение, обеспечивающее **vendor-neutral governance** протокола, аналогично передаче Kubernetes в CNCF.
+
+См. также: [[structured-outputs-tools|Structured Outputs]] — механизмы tool use внутри моделей, [[ai-agents-advanced|AI Agents]] — агенты как основные потребители MCP.
+
+---
+
 ## TL;DR
 
 > **MCP** (Model Context Protocol) - это открытый стандарт от Anthropic, который решает фундаментальную проблему интеграции AI систем с внешним миром. Вместо того чтобы каждый AI assistant создавал свои собственные интеграции с каждым сервисом, MCP предлагает единый "язык общения" между AI и инструментами. Представьте USB-C для мира AI - один стандартный разъём вместо десятков проприетарных.
@@ -1579,16 +1609,29 @@ if __name__ == "__main__":
 
 ## Источники
 
-1. [Anthropic: Introducing the Model Context Protocol](https://www.anthropic.com/news/model-context-protocol)
-2. [MCP Specification (November 2025)](https://modelcontextprotocol.io/specification/2025-11-25)
-3. [MCP GitHub: Reference Servers](https://github.com/modelcontextprotocol/servers)
-4. [Claude Help: Getting Started with MCP](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop)
-5. [MCP Blog: One Year Anniversary](https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/)
-6. [Anthropic: Donating MCP to Linux Foundation](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation)
-7. [Descope: MCP vs Function Calling](https://www.descope.com/blog/post/mcp-vs-function-calling)
-8. [IBM: What is Model Context Protocol](https://www.ibm.com/think/topics/model-context-protocol)
-9. [Wikipedia: Model Context Protocol](https://en.wikipedia.org/wiki/Model_Context_Protocol)
-10. [The New Stack: Build a Simple MCP Server](https://thenewstack.io/tutorial-build-a-simple-mcp-server-with-claude-desktop/)
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Birrell A., Nelson B. (1984). *Implementing Remote Procedure Calls*. ACM TOCS | Формализация RPC — основа JSON-RPC |
+| 2 | Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems*. IEEE | Принцип наименьших привилегий — capability negotiation |
+| 3 | Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley | Facade, Adapter — архитектурные паттерны MCP |
+| 4 | Hohpe G., Woolf B. (2003). *Enterprise Integration Patterns*. Addison-Wesley | Messaging, middleware — интеграционные паттерны |
+| 5 | Fielding R. (2000). *Architectural Styles and the Design of Network-based Software Architectures*. PhD Dissertation, UC Irvine | REST как альтернативный архитектурный стиль |
+| 6 | Martin R. (2000). *Design Principles and Design Patterns*. objectmentor.com | SOLID, Dependency Inversion Principle |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Anthropic: Introducing MCP](https://www.anthropic.com/news/model-context-protocol) | Официальный анонс |
+| 2 | [MCP Specification (November 2025)](https://modelcontextprotocol.io/specification/2025-11-25) | Полная спецификация протокола |
+| 3 | [MCP GitHub: Reference Servers](https://github.com/modelcontextprotocol/servers) | Референсные реализации |
+| 4 | [Claude Help: Getting Started with MCP](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop) | Quickstart для разработчиков |
+| 5 | [Anthropic: Donating MCP to Linux Foundation](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation) | Vendor-neutral governance |
+| 6 | [Descope: MCP vs Function Calling](https://www.descope.com/blog/post/mcp-vs-function-calling) | Сравнение подходов |
+| 7 | [IBM: What is Model Context Protocol](https://www.ibm.com/think/topics/model-context-protocol) | Enterprise perspective |
+| 8 | [The New Stack: Build a Simple MCP Server](https://thenewstack.io/tutorial-build-a-simple-mcp-server-with-claude-desktop/) | Пошаговый туториал |
 
 ---
 
@@ -1605,12 +1648,6 @@ if __name__ == "__main__":
 **[[api-design]]** — MCP построен на JSON-RPC 2.0 и следует паттернам проектирования API, описанным в гайде по API Design. Понимание REST vs RPC, версионирования, идемпотентности и error handling помогает как в создании собственных MCP-серверов, так и в оценке архитектурных решений протокола. MCP-серверы — это по сути специализированные API с discovery-механизмом.
 
 ---
-
-## Источники и дальнейшее чтение
-
-- **Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach*, 4th ed.** — Главы об агентах и интеграции AI с внешней средой дают теоретическую базу для понимания, почему стандартизированные протоколы взаимодействия (как MCP) неизбежны при масштабировании AI-систем.
-
-- **Huyen, C. (2022). *Designing Machine Learning Systems*. O'Reilly.** — Разделы о production deployment и интеграции ML-моделей с внешними системами объясняют инженерные проблемы, которые MCP решает на архитектурном уровне: изоляция credentials, стандартизация интерфейсов, управление жизненным циклом интеграций.
 
 ---
 

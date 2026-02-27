@@ -34,6 +34,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cloud Computing** — модель предоставления вычислительных ресурсов (серверы, хранилища, сети, ПО) по запросу через интернет с оплатой по использованию. Формализовано NIST (2011) через 5 обязательных характеристик.
+
+### 5 характеристик облака (NIST SP 800-145)
+
+| Характеристика | Определение |
+|----------------|-------------|
+| **On-demand self-service** | Потребитель может выделить ресурсы самостоятельно, без участия провайдера |
+| **Broad network access** | Доступ через стандартные сетевые механизмы (HTTP, SSH) с любого устройства |
+| **Resource pooling** | Ресурсы провайдера обслуживают множество потребителей (multi-tenancy) |
+| **Rapid elasticity** | Ресурсы масштабируются быстро и автоматически по спросу |
+| **Measured service** | Использование измеряется, контролируется и тарифицируется |
+
+### Три модели обслуживания
+
+| Модель | Что управляет провайдер | Что управляет клиент | Пример |
+|--------|------------------------|---------------------|--------|
+| **IaaS** | Hardware, networking, hypervisor | OS, middleware, apps, data | EC2, Compute Engine |
+| **PaaS** | + OS, middleware, runtime | Apps, data | App Engine, Elastic Beanstalk |
+| **SaaS** | Всё | Данные и конфигурация | Gmail, Salesforce |
+
+> **См. также**: [[cloud-platforms-essentials]] — AWS/GCP/Azure, [[os-virtualization]] — основы виртуализации
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -251,10 +277,15 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+- NIST SP 800-145 (2011). *The NIST Definition of Cloud Computing*. — Формальное определение 5 характеристик, 3 моделей обслуживания, 4 моделей развёртывания
+- Armbrust M. et al. (2010). *A View of Cloud Computing* (Berkeley). — Академический взгляд на облачные вычисления
+
+### Практические руководства
 - [AWS Documentation](https://docs.aws.amazon.com/)
 - [Google Cloud Documentation](https://cloud.google.com/docs)
 - [Azure Documentation](https://docs.microsoft.com/azure/)
-- "Cloud Native Patterns" by Cornelia Davis
+- Davis C. (2019). *Cloud Native Patterns*. — Паттерны облачных приложений
 
 ---
 

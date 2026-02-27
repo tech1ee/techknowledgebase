@@ -78,6 +78,39 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис кэширования
+
+### Принцип локальности (Denning, 1968)
+
+> **Принцип локальности** — наблюдение, что программы обращаются к малому подмножеству адресного пространства в каждый момент времени. Формально: **temporal locality** (недавно использованные данные будут использованы снова) и **spatial locality** (данные рядом с использованными тоже будут нужны).
+
+Кэширование работает именно потому, что реальные workloads подчиняются закону локальности. Без локальности кэш бесполезен — random access к uniform distribution данных даёт hit rate = cache_size / total_size.
+
+### Cache Replacement Policies: формальный анализ
+
+| Алгоритм | Механизм | Оптимальность | Сложность |
+|----------|----------|--------------|-----------|
+| **LRU** (Least Recently Used) | Вытеснение наименее недавно использованного | Оптимален для temporal locality | O(1) с doubly-linked list + HashMap |
+| **LFU** (Least Frequently Used) | Вытеснение наименее часто используемого | Лучше при stable popularity distribution | O(log n), O(1) с O'Neil LFU |
+| **FIFO** | Вытеснение самого старого | Прост, но подвержен Bélády's anomaly | O(1) |
+| **Bélády's OPT** | Вытеснение того, что понадобится позже всего | Теоретически оптимальный (offline) | Невычислим online |
+
+**Bélády's anomaly** (1969): для FIFO увеличение размера кэша может **ухудшить** hit rate. LRU и LFU свободны от этой аномалии (stack algorithms).
+
+### Cache Coherency в распределённых системах
+
+> **Cache Coherency Problem** — проблема обеспечения согласованности данных между несколькими кэшами. В CPU это решается протоколами MESI/MOESI; в distributed системах — протоколами инвалидации.
+
+Две стратегии:
+- **Invalidation-based**: при изменении данных уведомить все кэши об инвалидации (pub/sub, Redis keyspace notifications)
+- **Update-based**: при изменении данных обновить все кэши (write-through to all replicas)
+
+Инвалидация проще и предпочтительна в большинстве случаев. Phil Karlton: *"There are only two hard things in Computer Science: cache invalidation and naming things."*
+
+> **Связь**: Принцип локальности → [[jvm-memory-model]], Cache coherency → [[concurrency-fundamentals]], LRU analysis → [[database-design-optimization]]
+
+---
+
 ## Почему это важно (Проблема латентности)
 
 ### Разница в скорости операций
@@ -1677,6 +1710,16 @@ const user = await cache.get(
 ---
 
 ## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| T1 | Denning P.J. (1968). *The Working Set Model for Program Behavior.* Communications ACM. | Принцип локальности — формальное обоснование эффективности кэширования |
+| T2 | Bélády L. (1969). *A Study of Replacement Algorithms for a Virtual-Storage Computer.* IBM Systems Journal. | Anomaly: увеличение кэша может ухудшить hit rate для FIFO |
+| T3 | Sleator D., Tarjan R. (1985). *Amortized Efficiency of List Update and Paging Rules.* Communications ACM. | Доказательство k-competitiveness LRU: miss rate ≤ k × OPT |
+
+### Практические руководства
 
 | # | Источник | Тип | Достоверность | Вклад |
 |---|----------|-----|---------------|-------|

@@ -33,6 +33,36 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение API Level
+
+> **API Level** — монотонно возрастающий целочисленный идентификатор, однозначно определяющий набор framework API, доступных в конкретной версии Android. Каждый новый API level является надмножеством предыдущего: `API(N) ⊂ API(N+1)` — принцип **backward compatibility** (обратной совместимости), формализованный в Liskov Substitution Principle (Liskov B., Wing J. *«A Behavioral Notion of Subtyping»*, 1994).
+
+### Модель версионирования платформы
+
+Android использует **triple versioning scheme**: `compileSdk ≥ targetSdk ≥ minSdk`. Эта модель решает классическую проблему совместимости распределённых систем, описанную Brewer E. в контексте CAP-теоремы (2000):
+
+| Параметр | Роль | Аналогия |
+|----------|------|----------|
+| `compileSdk` | Доступные API при компиляции | «Словарный запас» разработчика |
+| `targetSdk` | Заявленная поведенческая совместимость | «Контракт» с системой |
+| `minSdk` | Минимальная поддерживаемая версия | «Порог входа» для устройств |
+
+### Behavioral Changes как контракт
+
+Механизм **behavioral changes** в Android реализует паттерн **Feature Toggles** (Fowler M. *«Feature Toggles»*, 2010): новое поведение активируется только при `targetSdk >= порог`. Это позволяет:
+
+1. Вводить breaking changes без массовой поломки приложений
+2. Давать разработчикам время на адаптацию
+3. Сохранять compatibility mode для устаревших приложений
+
+Такой подход аналогичен **capability-based security** (Dennis J., Van Horn E. *«Programming Semantics for Multiprogrammed Computations»*, 1966): приложение получает новые поведенческие контракты только при явном заявлении готовности.
+
+> **Историческая справка:** Модель API levels была введена с Android 1.0 (2008) и является уникальной среди мобильных ОС. iOS использует простое числовое версионирование без separation of concerns между compileSdk и targetSdk. Это делает Android-модель более гибкой, но и более сложной для понимания разработчиками.
+
+---
+
 ## История версий
 
 | Версия | API | Codename | Релиз | Доля (кум.) | Ключевые фичи для разработчика |
@@ -345,6 +375,14 @@ OWASP рекомендует minSdk 29 (Android 10) из соображений 
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Liskov B., Wing J. (1994). *A Behavioral Notion of Subtyping*. — формализация backward compatibility как подтипизации
+- Fowler M. (2010). *Feature Toggles*. — паттерн, реализованный в Android через targetSdk behavioral changes
+- Dennis J., Van Horn E. (1966). *Programming Semantics for Multiprogrammed Computations*. — capability-based security
+
+### Практические руководства
 
 - [Android API Levels — apilevels.com](https://apilevels.com/) — кумулятивное распределение по API levels
 - [Android version history — Wikipedia](https://en.wikipedia.org/wiki/Android_version_history) — полная история версий

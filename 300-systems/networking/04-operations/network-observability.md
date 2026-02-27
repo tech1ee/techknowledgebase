@@ -31,6 +31,48 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Network Telemetry** — систематический сбор данных о состоянии и поведении сети. В отличие от мониторинга (проверка известных метрик), telemetry обеспечивает observability — способность понимать внутреннее состояние системы по её внешним выходным данным (Charity Majors, 2018).
+
+### Модели сетевой телеметрии
+
+| Технология | Модель сбора | Гранулярность | Overhead | Стандарт |
+|------------|-------------|---------------|----------|----------|
+| SNMP | Pull (polling) | Счётчики интерфейсов | Низкий | RFC 3416 (v2c), RFC 3414 (v3) |
+| NetFlow / IPFIX | Push (export) | Потоки (5-tuple) | Средний | RFC 7011 (IPFIX), Cisco NetFlow v9 |
+| sFlow | Sampling | Сэмплированные пакеты | Низкий | RFC 3176 (InMon, 2001) |
+| OpenTelemetry | Push (OTLP) | Spans, metrics, logs | Настраиваемый | CNCF OpenTelemetry Spec (2019+) |
+| eBPF/XDP | Kernel hooks | Пакеты, syscalls | Минимальный | Linux Kernel 4.18+ |
+| Streaming Telemetry | Push (gRPC) | Структурированные данные | Настраиваемый | gNMI (OpenConfig) |
+
+### RED метрики для сетевых сервисов
+
+> **RED (Rate, Errors, Duration)** — методология мониторинга сервисов, предложенная Tom Wilkie (Grafana Labs, 2018). Для сетевых сервисов RED транслируется как:
+> - **Rate** — количество запросов/пакетов в секунду (packets/sec, requests/sec)
+> - **Errors** — частота ошибок (retransmissions, 5xx, packet drops)
+> - **Duration** — задержка обработки (RTT, TTFB, P50/P95/P99 latency)
+
+### USE метрики для сетевой инфраструктуры
+
+| Метрика | Определение | Пример для сети | Инструмент |
+|---------|-------------|-----------------|------------|
+| **Utilization** | % использования ресурса | Bandwidth utilization (%) | SNMP, Prometheus node_exporter |
+| **Saturation** | Очередь / backlog | TX/RX queue length, conntrack table | `ss -s`, `nstat` |
+| **Errors** | Счётчик ошибок | CRC errors, drops, overruns | `ethtool -S`, `ip -s link` |
+
+### Три столпа observability
+
+- **Metrics** (числовые агрегаты) — "что происходит?" — Prometheus, SNMP, StatsD
+- **Logs** (структурированные события) — "почему?" — Loki, ELK, Fluentd
+- **Traces** (путь запроса) — "где именно?" — Jaeger, Zipkin, Tempo
+
+> **Golden Signals** (Google SRE Book, Beyer et al., 2016): Latency, Traffic, Errors, Saturation — четыре метрики, достаточные для мониторинга любого сервиса. Это расширение RED-модели с добавлением Saturation.
+
+**См. также:** [[network-debugging-basics]] (ручная диагностика как дополнение к observability), [[network-performance-optimization]] (оптимизация на основе метрик), [[network-kubernetes-deep-dive]] (observability в K8s)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1405,6 +1447,16 @@ requests.get(url, headers=headers)
 
 ## Источники
 
+### Теоретические основы
+- Beyer B. et al. (2016). *Site Reliability Engineering* — Google. Глава "Monitoring Distributed Systems": Golden Signals
+- RFC 3416 (2002). SNMP v2c — Protocol Operations
+- RFC 7011 (2013). IPFIX — IP Flow Information Export Protocol
+- RFC 3176 (2001). InMon Corporation's sFlow
+- Wilkie T. (2018). "The RED Method" — Grafana Labs Blog
+- Majors C. (2018). "Observability — A 3-Year Retrospective" — o11y.io
+
+### Практические руководства
+
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
 | 1 | [Grafana Observability Survey 2024](https://grafana.com/observability-survey/2024/) | Report | Industry trends |
@@ -1437,7 +1489,11 @@ requests.get(url, headers=headers)
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — фундаментальные принципы работы сетевых протоколов, знание которых необходимо для правильной интерпретации сетевых метрик и логов.
+- **Beyer B. et al. (2016).** *Site Reliability Engineering.* — определение Golden Signals и подходы к мониторингу распределённых систем от Google SRE.
+
+### Практические руководства
 - **Grigorik (2013).** *High Performance Browser Networking.* — практические методы измерения и анализа сетевой производительности, включая Navigation Timing API и Resource Timing API, которые являются источниками метрик для observability.
 - **Sanders (2017).** *Practical Packet Analysis with Wireshark.* — навыки глубокого анализа сетевого трафика, которые дополняют высокоуровневую observability возможностью детального расследования на уровне пакетов.
 

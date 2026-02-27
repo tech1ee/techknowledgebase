@@ -29,6 +29,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Algorithmic Interview** — оценка способности кандидата решать задачи с использованием алгоритмов и структур данных за ограниченное время (обычно 45 минут). Формат восходит к практике Google 2000-х годов и опирается на идею, что алгоритмическое мышление — proxy для engineering ability.
+
+**Теоретический фундамент:**
+
+| Концепция | Автор | Год | Применение к coding interviews |
+|-----------|-------|-----|-------------------------------|
+| Bloom's Taxonomy | Benjamin Bloom | 1956 | 6 уровней когнитивных навыков: от Remember до Create |
+| Deliberate Practice | K. Anders Ericsson | 1993 | Целенаправленная практика с feedback > случайная практика |
+| Pattern Recognition | Herbert Simon | 1973 | Эксперты распознают паттерны, а не перебирают варианты |
+| Chunking Theory | George Miller | 1956 | Эксперты группируют информацию в chunks, снижая когнитивную нагрузку |
+
+**Bloom's Taxonomy применительно к DSA:**
+
+```
+Level 6: Create     → Разработать новый алгоритм для нестандартной задачи
+Level 5: Evaluate   → Сравнить два подхода, обосновать выбор
+Level 4: Analyze    → Определить time/space complexity
+Level 3: Apply      → Применить паттерн к новой задаче ← ЦЕЛЬ ИНТЕРВЬЮ
+Level 2: Understand → Объяснить, почему паттерн работает
+Level 1: Remember   → Знать определения (Array, HashMap)
+```
+
+FAANG-интервью оценивает уровни 3-5: **Apply** (распознать паттерн), **Analyze** (оценить сложность), **Evaluate** (обосновать trade-offs). Pattern-based подготовка эффективнее случайного решения задач, потому что формирует **chunks** (Miller, 1956) — кандидат видит "Sliding Window задачу", а не "незнакомую задачу".
+
+> **Ericsson (1993):** эффективная подготовка = deliberate practice: задачи на границе текущих способностей + немедленная обратная связь + рефлексия ошибок. 100 задач с разбором > 500 задач без анализа.
+
+→ Связано: [[interview-process]], [[technical-interview]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -589,15 +621,21 @@ NeetCode 150 или Blind 75
 
 - [[technical-interview]] — Детальный обзор всех технических раундов: DSA coding, live coding, system design, Android domain. Текущий материал фокусируется на DSA-паттернах, а technical-interview описывает, как эти паттерны оцениваются на разных уровнях (Junior → Staff) и в разных компаниях (Google, Meta, DoorDash).
 
-## Источники и дальнейшее чтение
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Главная книга для DSA-подготовки: 189 задач с детальными разборами, классификация по структурам данных и алгоритмам. Дополняет pattern-based подход из текущего материала конкретными задачами и edge cases.
-
-- Xu A. (2020). *System Design Interview*. — Хотя фокус книги — system design, главы о data structures (consistent hashing, bloom filters) и алгоритмах (rate limiting) полезны для advanced coding rounds на Staff уровне, где задачи выходят за рамки классического LeetCode.
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Помогает справиться с эмоциональной стороной grinding: как не выгореть при подготовке 150 задач, как структурировать процесс обучения и сохранять мотивацию на протяжении 2-3 месяцев подготовки.
-
 ## Источники
+
+### Теоретические основы
+
+- Bloom B.S. (1956). *Taxonomy of Educational Objectives*. — 6 уровней когнитивных навыков; coding interview оценивает Apply, Analyze, Evaluate.
+
+- Ericsson K.A. et al. (1993). *The Role of Deliberate Practice in the Acquisition of Expert Performance*. — Целенаправленная практика с feedback эффективнее random grinding.
+
+- Simon H., Chase W. (1973). *Perception in Chess*. — Pattern recognition у экспертов: обоснование pattern-based подхода к подготовке.
+
+- Miller G.A. (1956). *The Magical Number Seven, Plus or Minus Two*. — Chunking theory: эксперты группируют информацию, снижая когнитивную нагрузку.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — 189 задач с разбором, классификация по структурам данных.
+
+### Практические руководства
 
 - [Sean Prashad's LeetCode Patterns](https://seanprashad.com/leetcode-patterns/)
 - [NeetCode](https://neetcode.io)

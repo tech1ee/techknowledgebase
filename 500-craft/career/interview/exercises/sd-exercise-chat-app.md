@@ -36,6 +36,36 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Messaging System** — распределённая система для доставки сообщений между участниками с гарантиями порядка, доставки и персистентности. На мобильном устройстве задача усложняется offline-режимом, push-уведомлениями и real-time синхронизацией.
+
+**Ключевые теоретические концепции:**
+
+| Концепция | Источник | Суть | Применение к чату |
+|-----------|----------|------|-------------------|
+| Pub/Sub Pattern | — | Publisher отправляет сообщения в topic, subscribers получают | Чат-комнаты, group messaging |
+| Exactly-Once Delivery | Distributed systems | Гарантия доставки без дубликатов | Idempotency keys, dedup на клиенте |
+| Eventual Consistency | Werner Vogels (2008) | Система придёт к согласованности, но не мгновенно | Offline-сообщения синхронизируются при reconnect |
+| Vector Clocks | Lamport (1978) | Определение порядка событий в распределённой системе | Ordering messages from multiple sources |
+| Optimistic UI | — | Показать результат до подтверждения сервером | "Sent" → "Delivered" → "Read" |
+
+**Message Delivery Guarantees:**
+
+```
+At-most-once:   Fire-and-forget (UDP)           — потеря допустима
+At-least-once:  Retry until ACK (HTTP+retry)    — дубликаты возможны
+Exactly-once:   Idempotent retry + dedup         — сложно, но нужно для чата
+```
+
+В мессенджере нужен **exactly-once** на уровне восприятия пользователя. Реализация: at-least-once delivery (retry) + client-side deduplication (по idempotency key). Это проще, чем настоящий exactly-once на уровне транспорта.
+
+> **WebSocket vs HTTP Polling vs SSE:** WebSocket обеспечивает bidirectional real-time канал (идеально для чата). HTTP Long Polling — fallback для ограниченных сетей. SSE — unidirectional (только сервер → клиент). Выбор зависит от mobile-specific ограничений: WebSocket держит connection open, что влияет на battery.
+
+→ Связано: [[system-design-android]], [[android-networking]], [[android-background-work]]
+
+---
+
 ## Задача — "Design Chat Application"
 
 > **Interviewer**: Design a chat application similar to WhatsApp. Focus on the mobile client.
@@ -799,6 +829,14 @@ PENDING → SENT → DELIVERED → READ (или PENDING → FAILED при оши
 
 ## Источники
 
-- [iartr/mobile-system-design — Chat App Exercise](https://github.com/iartr/mobile-system-design/blob/master/exercises/chat-app.md) — оригинальный репозиторий с набором Mobile System Design exercises
+### Теоретические основы
+
+- Lamport L. (1978). *Time, Clocks, and the Ordering of Events in a Distributed System*. — Логические часы для определения порядка событий; основа ordering в messaging.
+
+- Vogels W. (2008). *Eventually Consistent*. ACM Queue. — Eventual consistency модель для offline-first мобильных приложений.
+
+### Практические руководства
+
+- [iartr/mobile-system-design — Chat App Exercise](https://github.com/iartr/mobile-system-design/blob/master/exercises/chat-app.md) — оригинальный репозиторий
 - [Android Developers — Room Persistence Library](https://developer.android.com/training/data-storage/room)
 - [OkHttp WebSocket API](https://square.github.io/okhttp/4.x/okhttp/okhttp3/-web-socket/)

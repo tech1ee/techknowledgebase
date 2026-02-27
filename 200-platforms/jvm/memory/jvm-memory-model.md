@@ -388,6 +388,35 @@ void process() {
 
 JMM — это не про структуру памяти, а про **правила видимости** изменений между потоками. Без понимания JMM легко написать код с race conditions. Важно понимать эту разницу: предыдущие разделы описывали, где физически размещаются данные (heap, stack, metaspace). JMM описывает, как данные в этих областях видны разным потокам.
 
+### Формальные основы JMM
+
+> **Java Memory Model** --- формальная спецификация, определяющая, какие значения может наблюдать чтение переменной в многопоточной программе. Текущая спецификация: JSR-133 (Manson, Pugh, Adve, 2005), заменила сломанную модель из JLS 1.0.
+
+**Зачем формальная модель?** Без неё невозможно определить, какие оптимизации допустимы для JIT-компилятора и CPU. JMM --- контракт между программистом ("я использую volatile/synchronized правильно") и реализацией ("я гарантирую видимость").
+
+**Ключевые формальные понятия:**
+
+| Понятие | Определение | Практическое значение |
+|---------|-------------|----------------------|
+| **Program order** | Порядок инструкций в одном потоке (как написано в коде) | Внутри одного потока всё выглядит последовательно |
+| **Synchronization order** | Total order на synchronization actions (lock, unlock, volatile read/write) | Определяет, какая запись "видна" какому чтению |
+| **Happens-before** | Partial order: объединение program order и synchronization order (Lamport, 1978; JSR-133, 2004) | Если `a` HB `b`, все эффекты `a` видны в `b` |
+| **Sequential consistency** | Все потоки видят единый глобальный порядок операций (Lamport, 1979) | JMM **не** гарантирует SC --- только HB гарантии |
+| **Data race** | Два доступа к одной переменной из разных потоков (хотя бы один --- запись) без HB-связи | Программа с data race --- undefined behavior в JMM |
+
+**Почему JMM слабее sequential consistency?** Sequential consistency запрещает все hardware reordering --- это интуитивно, но медленно. JMM разрешает CPU и JIT переупорядочивать операции, *если* это не нарушает happens-before. Это позволяет использовать store buffers, write combining и out-of-order execution --- оптимизации, дающие 2--10x производительности.
+
+**Типы memory barriers (формально):**
+
+| Barrier | Запрещает | Когда вставляется |
+|---------|-----------|-------------------|
+| **LoadLoad** | Reorder двух чтений | Перед volatile read |
+| **StoreStore** | Reorder двух записей | Перед volatile write |
+| **LoadStore** | Reorder чтения перед записью | После volatile read |
+| **StoreLoad** | Reorder записи перед чтением (самый дорогой) | После volatile write |
+
+Подробнее о happens-before в контексте concurrency: [[concurrency-fundamentals]].
+
 ### Почему видимость — проблема
 
 Современные CPU имеют многоуровневые кэши (L1, L2, L3). Когда поток записывает значение переменной, он записывает его в кэш своего CPU, а не сразу в основную память. Другой поток на другом CPU может не увидеть это изменение, потому что его кэш содержит старое значение. Это не баг — это оптимизация: доступ к L1 кэшу в 100 раз быстрее доступа к RAM.
@@ -922,6 +951,16 @@ jmap -dump:live,format=b,file=heap.hprof <pid>
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Manson J., Pugh W., Adve S.V. (2005). *The Java Memory Model.* POPL '05. — Формальная спецификация JSR-133, определяющая happens-before, causality requirements и semantics of data races. Первоисточник для понимания формальной модели JMM.
+
+- Lamport L. (1979). *How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs.* IEEE Trans. Computers. — Определение Sequential Consistency — эталонной модели памяти, относительно которой JMM определяет свои ослабления.
+
+- Adve S.V., Gharachorloo K. (1996). *Shared Memory Consistency Models: A Tutorial.* IEEE Computer. — Систематический обзор моделей памяти (SC, TSO, PSO, weak ordering), необходимый для понимания контекста, в котором возникла JMM.
+
+### Практические руководства
 
 - Goetz B. et al. (2006). *Java Concurrency in Practice.* — Каноническое объяснение happens-before, volatile и synchronized. Без этой книги невозможно понять visibility и ordering гарантии JMM. Главы 3 (Sharing Objects) и 16 (Java Memory Model) — must-read для любого Java-разработчика.
 

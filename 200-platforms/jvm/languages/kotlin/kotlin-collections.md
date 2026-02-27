@@ -56,6 +56,48 @@ related:
 
 ---
 
+## Теоретические основы
+
+Дизайн коллекций Kotlin опирается на формальные концепции из теории типов, функционального программирования и алгоритмического анализа.
+
+### Read-only vs Immutable: важное различие
+
+> **Формально:** Kotlin `List<T>` — это **covariant read-only projection** (`out T`) интерфейса, скрывающая методы мутации. Это **не** иммутабельная структура данных. Истинная иммутабельность (persistent data structures) реализуется через структурное разделение (structural sharing, Okasaki, 1998, *Purely Functional Data Structures*) — см. `kotlinx.collections.immutable`.
+
+Различие между read-only interface и immutable structure восходит к работе Liskov & Wing (1994, *A Behavioral Notion of Subtyping*): read-only ссылка ограничивает **клиента**, но не ограничивает **владельца** данных.
+
+### Eager vs Lazy evaluation
+
+| Стратегия | Определение | Kotlin реализация | Происхождение |
+|-----------|------------|-------------------|---------------|
+| **Eager** | Вычисление немедленно, полный проход | `List.map {}`, `List.filter {}` | Strict evaluation (по умолчанию в ML, Java) |
+| **Lazy** | Вычисление по требованию, элемент за элементом | `Sequence.map {}`, `Sequence.filter {}` | Lazy evaluation (Haskell; Wadler et al., 1987) |
+
+> **Формально:** `Sequence<T>` реализует **pull-based lazy evaluation**: каждый элемент проходит всю цепочку операций перед переходом к следующему. Это модель **stream fusion** (Coutts et al., 2007) — устранение промежуточных структур данных через композицию трансформаций.
+
+### Функциональные операции на коллекциях
+
+Основные операции Kotlin-коллекций — это классические конструкции функционального программирования:
+
+| Операция Kotlin | Функциональный аналог | Формальное определение |
+|----------------|----------------------|----------------------|
+| `map` | Functor.map | `F<A> → (A → B) → F<B>` (Moggi, 1991) |
+| `flatMap` | Monad.bind | `F<A> → (A → F<B>) → F<B>` (Wadler, 1992) |
+| `filter` | — | `F<A> → (A → Bool) → F<A>` |
+| `fold` | Catamorphism | `F<A> → B → (B × A → B) → B` (Meijer et al., 1991) |
+| `reduce` | Fold без начального значения | Partial: UnsupportedOperationException на пустой коллекции |
+| `groupBy` | Equivalence partitioning | Разбиение по отношению эквивалентности |
+
+> **`fold` как универсальный оператор.** Любая операция на списке (map, filter, flatMap, sum, max) выразима через fold — это следствие теоремы об универсальности fold для списков (Hutton, 1999, *A tutorial on the universality and expressiveness of fold*).
+
+### Variance в коллекциях
+
+Kotlin использует **declaration-site variance** (в отличие от Java use-site wildcards): `List<out T>` (ковариантный — producer), `MutableList<T>` (инвариантный — producer + consumer). Это формализация PECS-принципа Bloch (2008): Producer Extends, Consumer Super.
+
+См. также: [[kotlin-functional]] — higher-order functions и лямбды, [[kotlin-type-system]] — variance и generics.
+
+---
+
 Kotlin разделяет коллекции на read-only (`List`, `Set`, `Map`) и mutable (`MutableList`, `MutableSet`, `MutableMap`). Read-only — это API без методов модификации, но не гарантия иммутабельности: если оригинал mutable, изменения видны через read-only ссылку.
 
 Представьте библиотеку. **Read-only List** — это каталог книг: вы можете просматривать записи, но не можете добавить или убрать карточку из каталога. Однако если кто-то (с mutable-ссылкой) добавит книгу на полку, она появится и в каталоге — каталог лишь «окно», а не отдельная коллекция. **Sequence** — это конвейер на фабрике: вместо того чтобы сначала отсортировать все детали, потом отфильтровать бракованные, потом покрасить годные (три прохода по всем деталям), конвейер обрабатывает каждую деталь за один проход — сортировка, проверка, покраска — и передаёт дальше. Если нужны только первые 10 годных деталей, конвейер остановится, не обработав остальные тысячи.
@@ -1047,6 +1089,16 @@ users.chunked(100).forEach { batch ->
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Okasaki C. (1998). *Purely Functional Data Structures*. — Persistent data structures и structural sharing: теоретическая основа для `kotlinx.collections.immutable`.
+- Liskov B., Wing J. (1994). *A Behavioral Notion of Subtyping*. ACM TOPLAS. — Формализация подтипирования, мотивация для разделения `List<out T>` / `MutableList<T>`.
+- Coutts D., Leshchinskiy R., Stewart D. (2007). *Stream Fusion: From Lists to Streams to Nothing at All*. — Устранение промежуточных структур через fusion; теоретическая основа `Sequence`.
+- Hutton G. (1999). *A tutorial on the universality and expressiveness of fold*. JFP. — Доказательство что map, filter, flatMap выразимы через fold.
+- Meijer E., Fokkinga M., Paterson R. (1991). *Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire*. — Catamorphisms (fold), anamorphisms (unfold) — алгебра рекурсивных типов.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — глава о коллекциях подробно объясняет разницу между read-only и mutable интерфейсами, variance в коллекциях и основные операторы с примерами.
 - Moskala M. (2024). *Effective Kotlin.* — best practices для работы с коллекциями: когда использовать Sequence vs Collection, как избежать лишних аллокаций и правильно применять функциональные цепочки.

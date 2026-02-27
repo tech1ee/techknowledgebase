@@ -65,6 +65,42 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Виртуализация списков (list virtualization) — техника оптимизации, при которой в памяти и в DOM/view hierarchy существуют только видимые элементы списка, а данные за пределами viewport загружаются по требованию. Впервые формализована как «объектный пул» (object pool pattern) в контексте UI.
+
+### Паттерн Object Pool и Cell Reuse
+
+UITableView/UICollectionView реализуют паттерн **Object Pool** (GoF-adjacent, Gamma, 1994):
+
+| Концепция | Теория | Реализация в iOS |
+|-----------|--------|-----------------|
+| Object Pool | Переиспользование дорогих объектов вместо создания новых | `dequeueReusableCell(withIdentifier:)` |
+| Flyweight | Разделение intrinsic (shared) и extrinsic (unique) state | Cell class (shared) + данные модели (unique) |
+| Prefetching | Предзагрузка данных до момента отображения | `UITableViewDataSourcePrefetching` (iOS 10+) |
+
+### Frame Budget и Human Perception
+
+> **Закон Вебера-Фехнера (1860):** Восприятие изменений в сенсорном стимуле логарифмически зависит от интенсивности стимула. Применительно к UI: падение с 60 FPS до 30 FPS воспринимается как катастрофическое, тогда как с 120 FPS до 90 FPS — как незначительное.
+
+| Target FPS | Frame budget | Устройства | Восприятие |
+|------------|-------------|-----------|-----------|
+| 60 FPS | 16.67 мс | Стандартные iPhone/iPad | Плавно |
+| 120 FPS | 8.33 мс | ProMotion (iPhone 13 Pro+) | Ультра-плавно |
+| < 30 FPS | > 33.33 мс | — | Видимые рывки (jank) |
+
+### Diffable Data Sources: теоретическая основа
+
+NSDiffableDataSourceSnapshot использует алгоритм *edit distance* (Wagner & Fischer, 1974) для вычисления минимального набора операций (insert, delete, move) между двумя состояниями списка. Это гарантирует корректные анимации без ручного управления beginUpdates/endUpdates.
+
+### Связь с CS-фундаментом
+
+- [[ios-view-rendering]] — render pipeline и compositing
+- [[android-recyclerview-internals]] — аналогичная виртуализация в Android
+- [[performance-optimization]] — общие принципы оптимизации производительности
+
+---
+
 ## Аналогии из жизни
 
 ### 1. Cell Reuse = Тарелки в ресторане 🍽️
@@ -1478,10 +1514,15 @@ cell.layer.rasterizationScale = UIScreen.main.scale
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — подробный разбор UITableView и UICollectionView с практическими примерами cell reuse, custom cells и optimization techniques; лучшая книга для начала работы со списками.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает Diffable Data Sources, Compositional Layout и современные API UICollectionView; рекомендуется для освоения новейших подходов Apple к спискам.
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — объясняет как SwiftUI List и LazyVStack управляют производительностью скролла через lazy evaluation и identity-based diffing; необходима для SwiftUI-проектов.
+### Теоретические основы
+- Wagner R. A., Fischer M. J. (1974). *The String-to-String Correction Problem.* JACM — алгоритм edit distance (основа Diffable Data Sources)
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Object Pool, Flyweight patterns
+- Weber E. H. (1834). *De Pulsu, Resorptione, Auditu Et Tactu.* — закон восприятия изменений (применим к FPS drops)
+
+### Практические руководства
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — UITableView, UICollectionView, cell reuse
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Diffable Data Sources, Compositional Layout
+- WWDC 2021: [Make blazing fast lists and collection views](https://developer.apple.com/videos/play/wwdc2021/10252/)
 
 ### WWDC Sessions
 

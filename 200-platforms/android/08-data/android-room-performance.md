@@ -61,6 +61,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### B-tree: фундамент индексов SQLite
+
+> **B-tree** (Bayer & McCreight, 1972, *"Organization and Maintenance of Large Ordered Indexes"*) — сбалансированная древовидная структура данных, оптимизированная для систем с блочным доступом к данным (диски). SQLite хранит каждую таблицу и каждый индекс в виде B-tree.
+
+| Операция | Без индекса (full scan) | С B-tree индексом | Объяснение |
+|----------|------------------------|-------------------|------------|
+| `SELECT WHERE id = ?` | O(N) — просмотр всех строк | O(log N) — обход дерева | B-tree высоты log_m(N), где m — branching factor |
+| `INSERT` | O(1) — append в конец | O(log N) — поиск + вставка + балансировка | Индекс требует обновления при каждой вставке |
+| `SELECT ORDER BY` | O(N log N) — сортировка в памяти | O(N) — последовательный обход листьев | B-tree хранит данные отсортированными |
+
+### Write-Ahead Logging (WAL)
+
+> **WAL** — стратегия журналирования, формализованная Jim Gray (1978, *"Notes on Data Base Operating Systems"*). Принцип: записать изменения в лог **до** модификации основного файла. Если система упадёт между записью лога и обновлением файла — данные восстанавливаются из лога.
+
+SQLite WAL mode (3.7.0, 2010) изменил модель конкурентности:
+
+| Режим | Читатели при записи | Запись при чтении | Использование |
+|-------|--------------------|--------------------|---------------|
+| **Rollback Journal** | Блокируются | Блокируется | Legacy (до Room 2.x) |
+| **WAL** | Не блокируются | Не блокируются (кроме checkpoint) | Default в Room 2.x+ |
+
+### Query Optimization: EXPLAIN QUERY PLAN
+
+> Оптимизатор запросов SQLite использует **cost-based optimization**: для каждого запроса строится набор альтернативных планов выполнения, и выбирается план с наименьшей «стоимостью» (количество дисковых чтений). `EXPLAIN QUERY PLAN` раскрывает выбранный план. Три ключевых индикатора: `SCAN TABLE` (full scan, O(N)), `SEARCH TABLE USING INDEX` (index lookup, O(log N)), `USING COVERING INDEX` (все данные в индексе, без обращения к таблице).
+
+> **Связь**: B-tree → [[database-design-optimization]], WAL → [[android-room-deep-dive]], Query optimization → [[database-design-optimization]]
+
+---
+
 ## Историческая справка
 
 SQLite создал D. Richard Hipp в 2000 году. Причина была конкретной: Hipp работал над программным обеспечением для эсминцев ВМС США и был разочарован тем, что Informix — промышленная СУБД — требовала администратора и могла не запуститься из-за проблем с конфигурацией сервера. Hipp задался вопросом: почему нельзя иметь базу данных, которая работает без сервера, без настройки, хранится в одном файле и просто работает?
@@ -697,15 +728,19 @@ class DatabaseBenchmark {
 
 ## Источники и дальнейшее чтение
 
-- **Kleppmann, M. (2017). Designing Data-Intensive Applications.** — главы 3 (Storage and Retrieval) и 7 (Transactions). Фундаментальное объяснение B-tree, LSM-tree, WAL и транзакций. Лучшее из доступного для понимания как базы данных работают внутри. Концепции напрямую применимы к SQLite.
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Bayer R., McCreight E. *Organization and Maintenance of Large Ordered Indexes* (1972) | B-tree — индексная структура SQLite |
+| Gray J. *Notes on Data Base Operating Systems* (1978) | Write-Ahead Logging (WAL) |
+| Kleppmann M. *Designing Data-Intensive Applications* (2017), Ch.3, 7 | Storage engines, B-tree, WAL, транзакции |
+| Selinger P. et al. *Access Path Selection in a Relational DBMS* (1979) | Query optimization — EXPLAIN QUERY PLAN |
 
-- **Hipp, D.R. SQLite Documentation (sqlite.org/docs.html).** — официальная документация SQLite. Разделы "How SQLite Works", "Query Planning", "Write-Ahead Logging" — первоисточник для всего, что касается SQLite internals. Hipp пишет удивительно понятно для автора СУБД.
-
-- **Meier, R. (2022). Professional Android.** — главы по Room, data persistence, performance. Практические паттерны использования Room в production-приложениях. Хорошие примеры batch-операций и работы с Paging.
-
-- **Google. Android Developers Documentation: Room Persistence Library.** — официальные гайды по Room: define entities, DAOs, database views, testing, migrations. Обновляются с каждой версией Room и содержат актуальные best practices.
-
-- **Owens, M. (2006). The Definitive Guide to SQLite.** — глубокое погружение в архитектуру SQLite: B-tree, pager, virtual machine. Книга старая, но внутренняя архитектура SQLite не изменилась принципиально с тех пор.
+### Практические руководства
+- **Hipp D.R.** SQLite Documentation — [sqlite.org](https://sqlite.org/docs.html) — "How SQLite Works", "Query Planning", "Write-Ahead Logging".
+- **Meier R. (2022).** *Professional Android.* — Room, data persistence, performance patterns.
+- **Google.** Android Developers — Room Persistence Library — официальные гайды.
+- **Owens M. (2006).** *The Definitive Guide to SQLite.* — архитектура SQLite: B-tree, pager, virtual machine.
 
 ---
 

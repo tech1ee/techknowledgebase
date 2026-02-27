@@ -37,6 +37,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Теория компенсации и Total Rewards
+
+> **Определение:** Total Rewards — совокупная ценность, получаемая сотрудником от работодателя, включающая: compensation (base + variable), benefits (healthcare, retirement), work-life balance, career development и recognition.
+
+WorldatWork (профессиональная ассоциация HR) формализовала модель Total Rewards в 2000-х годах, показав, что monetary compensation — лишь один из пяти компонентов привлечения и удержания талантов.
+
+| Компонент Total Rewards | Примеры | Влияние на decision |
+|------------------------|---------|-------------------|
+| **Compensation** | Base salary, RSU/options, bonus | High (hygiene factor) |
+| **Benefits** | Healthcare, 401k, PTO | Medium (table stakes) |
+| **Work-Life** | Flexibility, remote, PTO policy | High (для senior) |
+| **Development** | Career growth, learning budget | High (для IC/early career) |
+| **Recognition** | Title, scope, impact | High (для senior/staff) |
+
+### Теория переговоров
+
+Roger Fisher и William Ury в *"Getting to Yes: Negotiating Agreement Without Giving In"* (1981) заложили основу **principled negotiation** (interest-based bargaining):
+
+> **Principled Negotiation** (Fisher & Ury, 1981) — подход к переговорам, при котором стороны фокусируются на интересах (interests), а не позициях (positions). В контексте офферов: не «сколько вы хотите?», а «что для вас важно в работе?».
+
+Frederick Herzberg (*"One More Time: How Do You Motivate Employees?"*, Harvard Business Review, 1968) показал различие между hygiene factors (зарплата, условия — их отсутствие демотивирует, но наличие не мотивирует) и motivators (achievement, recognition, growth). Для closing инженеров это означает: конкурентная compensation — необходимое условие, но mission, team и [[motivation|growth opportunities]] — часто решающие факторы.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -678,6 +704,14 @@ SPEED IS KEY:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fisher R., Ury W. "Getting to Yes" — Penguin, 1981 | Книга | Principled negotiation, interest-based bargaining |
+| 2 | Herzberg F. "One More Time: How Do You Motivate Employees?" — HBR, 1968 | Статья | Hygiene factors vs motivators |
+| 3 | WorldatWork "Total Rewards Model" — WorldatWork, 2000s | Framework | Пять компонентов Total Rewards |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Patrick McKenzie: Salary Negotiation](https://www.kalzumeus.com/2012/01/23/salary-negotiation/) | Article | Negotiation dynamics |

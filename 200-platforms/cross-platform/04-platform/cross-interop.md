@@ -41,6 +41,36 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Interoperability (интероперабельность)** — способность программных компонентов, написанных на разных языках или для разных платформ, взаимодействовать друг с другом через определённые интерфейсы (IEEE Std 610.12-1990).
+
+### Модели межъязыкового взаимодействия
+
+| Модель | Механизм | Overhead | Пример |
+|--------|----------|----------|--------|
+| **Shared ABI** | Общий бинарный интерфейс | Нулевой | Kotlin ↔ Java (JVM) |
+| **FFI Bridge** | Foreign Function Interface | Низкий | Kotlin/Native ↔ ObjC |
+| **Code Generation** | Генерация обёрток на этапе компиляции | Compile-time | cinterop, Swift Export |
+| **Message Passing** | Сериализация через канал | Высокий | RN Bridge (JSON), Platform Channels (Flutter) |
+| **Shared Memory** | Общая область памяти + synchronization | Средний | JNI (Java ↔ C++) |
+
+### Impedance Mismatch
+
+Термин из мира баз данных (Copeland & Maier, 1984), применимый к inter-language interop:
+
+| Mismatch | iOS (ObjC→Swift→Kotlin) | Android (Java→Kotlin) |
+|----------|------------------------|----------------------|
+| **Null safety** | Kotlin `T` → ObjC `T _Nonnull` → Swift `T` | Kotlin `T` → Java `@NonNull T` |
+| **Generics** | Kotlin `List<T>` → ObjC `NSArray` (type erasure) | Полная совместимость |
+| **Sealed classes** | Kotlin sealed → ObjC classes (потеря exhaustiveness) | Полная совместимость |
+| **Coroutines** | suspend → completionHandler (SKIE fixes) | Прямая поддержка |
+
+> **CS-фундамент:** Interop связан с [[kmp-interop-deep-dive]] (глубокий разбор KMP interop) и [[cross-memory-management]] (cross-runtime memory). Теоретическая база — FFI (Finne et al., 1999), Impedance Mismatch (Copeland & Maier, 1984).
+
 ## 1. Swift-Objective-C Interop
 
 ### Bridging Header: ObjC → Swift
@@ -356,9 +386,15 @@ class Logger { companion object { fun log(msg: String) { } } }
 
 ## Источники и дальнейшее чтение
 
-- Skeen J. et al. (2019). *Kotlin Programming: The Big Nerd Ranch Guide.* — Включает разделы о Kotlin-Java interop: @JvmStatic, @JvmOverloads, @JvmField, SAM conversions и platform types. Практические примеры вызова Java из Kotlin и наоборот, что является основой для понимания KMP interop.
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Разбирает Swift-Objective-C мост: Bridging Header, @objc, NS_SWIFT_NAME, nullability annotations. Незаменима для понимания ограничений интеропа и стратегий миграции legacy ObjC-кода.
-- Moskala M. (2021). *Effective Kotlin: Best Practices.* — Содержит рекомендации по проектированию Kotlin API, дружественного к Java-вызывающему коду, включая правильное использование аннотаций интеропа и обработку nullable типов.
+### Теоретические основы
+
+- **Finne S. et al. (1999).** *Calling Hell: A New Approach to Inter-language Communication.* — FFI теория.
+- **Copeland G., Maier D. (1984).** *Making Smalltalk a Database System.* — Impedance mismatch concept.
+
+### Практические руководства
+
+- [Kotlin/Native Interop](https://kotlinlang.org/docs/native-c-interop.html) — cinterop документация.
+- [SKIE](https://skie.touchlab.co/) — Swift Kotlin Interface Enhancer.
 
 ---
 

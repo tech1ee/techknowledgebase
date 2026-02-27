@@ -42,6 +42,28 @@ JVM-приложение устроено точно так же. Приложе
 
 ---
 
+## Теоретические основы
+
+Оптимизация производительности JVM опирается на фундаментальные принципы системного анализа, теории очередей и методологии измерений.
+
+> **Закон Амдала (1967):** *Максимальное ускорение программы ограничено долей кода, которую нельзя распараллелить. Если 10% кода последовательны, максимальное ускорение — 10x, независимо от количества ядер.*
+
+| Принцип | Автор / Источник | Применение к JVM Performance |
+|---------|-----------------|------------------------------|
+| **Закон Амдала** | Amdahl, 1967 | Определяет предел масштабирования многопоточного кода; lock contention как последовательная доля |
+| **Принцип Парето (80/20)** | Pareto / Juran | 20% кода отвечают за 80% времени выполнения — фокусируйся на hotspots |
+| **Закон Little** | Little, 1961 | L = λW (запросы в системе = throughput × latency) — связывает метрики производительности |
+| **Premature optimization** | Knuth, 1974 | «Преждевременная оптимизация — корень всего зла» — сначала измеряй, потом оптимизируй |
+| **USE Method** | Gregg, 2013 | Utilization, Saturation, Errors — методология диагностики ресурсов (CPU, Memory, I/O) |
+
+> **Закон Little (1961):** *L = λW* — среднее число запросов в системе (L) равно произведению средней скорости поступления запросов (λ) на среднее время обработки (W). Для JVM-сервиса: если throughput = 1000 req/s и средняя latency = 50ms, в среднем 50 запросов обрабатываются одновременно. Этот закон определяет размер thread pool и queue capacity.
+
+Методология **USE** (Utilization, Saturation, Errors), предложенная **Brendan Gregg (2013)**, систематизирует диагностику: для каждого ресурса (CPU, heap, threads, I/O) проверяется утилизация (насколько загружен), насыщение (есть ли очередь ожидания) и ошибки (есть ли отказы). Для JVM это транслируется в: CPU utilization (flame graph), heap saturation (GC frequency), thread saturation (lock contention), I/O errors (timeouts).
+
+Связанные темы: [[jvm-profiling]] (инструменты измерения), [[jvm-gc-tuning]] (GC как ключевой фактор latency), [[jvm-jit-compiler]] (JIT как фактор throughput).
+
+---
+
 ## Что такое JVM Performance
 
 JVM Performance — это дисциплина, изучающая как JVM-приложение использует ресурсы (CPU, память, I/O, потоки) и как добиться лучшего использования этих ресурсов для конкретной задачи. Слово "лучшее" здесь ключевое: нет универсального "быстро" — есть конкретные метрики для конкретного use case.
@@ -287,11 +309,18 @@ Allocation rate: 500 MB/s -> 50 MB/s. Меньше мусора — реже GC 
 
 ## Источники и дальнейшее чтение
 
-- Oaks S. (2014). *Java Performance: The Definitive Guide.* — Самая практичная книга по JVM performance. Покрывает все пять областей: memory, GC, JIT, concurrency, benchmarking. Начинать с неё, если у вас одна книга на всю тему. Второе издание (2020) добавляет Java 11 и контейнеры.
+### Теоретические основы
 
-- Hunt C., John B. (2011). *Java Performance.* — Системный подход к performance engineering: от методологии (как определить что оптимизировать) до практики (JVM flags, OS tuning, monitoring). Особенно полезна глава про методологию — она учит думать о performance как о процессе, а не как о наборе трюков.
+- **Amdahl G.M. (1967). Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities.** — закон Амдала, определяющий предел масштабирования.
+- **Little J.D.C. (1961). A Proof for the Queuing Formula: L = λW.** — фундаментальная связь throughput и latency.
+- **Knuth D.E. (1974). Structured Programming with go to Statements.** — «premature optimization is the root of all evil», методология оптимизации.
+- **Gregg B. (2013). Systems Performance: Enterprise and the Cloud.** — USE Method и системный подход к анализу производительности.
 
-- Evans B., Gough J., Newland C. (2018). *Optimizing Java.* — Современный взгляд на оптимизацию: hardware sympathy, JIT internals, GC algorithms. Хороша для тех, кто хочет понять "почему" за каждой оптимизацией, а не просто знать "что делать".
+### Практические руководства
+
+- **Oaks S. (2020). Java Performance, 2nd ed.** — практичное руководство по всем областям JVM performance.
+- **Hunt C., John B. (2011). Java Performance.** — системный подход к performance engineering: методология и практика.
+- **Evans B., Gough J., Newland C. (2018). Optimizing Java.** — hardware sympathy, JIT internals, GC algorithms.
 
 ---
 

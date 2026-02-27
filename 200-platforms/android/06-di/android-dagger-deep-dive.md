@@ -33,6 +33,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Dagger** (Directed Acyclic Graph + -er) реализует DI через **compile-time code generation**: annotation processor анализирует аннотации (`@Inject`, `@Module`, `@Component`) и генерирует Java-код, разрешающий граф зависимостей. Это устраняет runtime reflection (как в Guice/Spring) и обеспечивает **compile-time safety**.
+
+Теоретически граф зависимостей Dagger — это **Directed Acyclic Graph (DAG)** из теории графов (Cormen et al., *Introduction to Algorithms*, 2009): узлы — типы (классы), рёбра — зависимости. Ацикличность обязательна (Dagger обнаруживает циклические зависимости при компиляции). Порядок инициализации определяется **топологической сортировкой** графа.
+
+| Концепция Dagger | Формальное определение | Паттерн GoF |
+|-----------------|----------------------|-------------|
+| Component | Контейнер (корень DAG) | Abstract Factory |
+| Module + @Provides | Фабричные методы | Factory Method |
+| Subcomponent | Вложенный контейнер | Composite |
+| Scope | Lifetime management (singleton per scope) | Flyweight / Registry |
+| @Qualifier | Различение одинаковых типов | Named instances |
+
+> **Annotation Processing** — техника метапрограммирования, при которой Java/Kotlin компилятор вызывает пользовательский процессор для генерации кода на основе аннотаций (JSR 269, Java 6, 2006). Dagger 2 использует это для генерации `DaggerXxxComponent` — factory классов, которые знают, как создать каждую зависимость. KSP (Kotlin Symbol Processing, 2021) — более быстрая альтернатива KAPT для Kotlin.
+
+Dagger 1 (Square, 2012) использовал runtime reflection; Dagger 2 (Google, 2015) полностью перешёл на compile-time generation — ключевой design decision, сделавший DI пригодным для мобильных устройств с ограниченными ресурсами.
+
+---
+
 ## ПОЧЕМУ: Зачем нужен Dagger
 
 ### Проблема, которую решает Dagger
@@ -1611,11 +1631,18 @@ interface FeatureBindingModule
 
 **[[android-architecture-patterns]]** — Dagger тесно интегрирован с архитектурными паттернами Android: MVVM, Clean Architecture. Component hierarchy отражает слои архитектуры, а scopes управляют временем жизни зависимостей в каждом слое. Понимание архитектуры — предпосылка для правильного проектирования Dagger графа.
 
-### Книги
+### Теоретические основы
 
-- **Bloch J. (2018)** *Effective Java* — глава о dependency injection объясняет, почему конструкторное внедрение предпочтительнее статических фабрик. Фундамент для понимания подхода Dagger.
-- **Moskala M. (2021)** *Effective Kotlin* — раздел о DI и управлении зависимостями в Kotlin, включая best practices для Android проектов.
-- **Meier R. (2022)** *Professional Android* — практические примеры интеграции Dagger/Hilt в production Android приложения с MVVM архитектурой.
+- **Cormen T. et al. (2009). Introduction to Algorithms.** — DAG, топологическая сортировка (граф зависимостей Dagger)
+- **Gamma E. et al. (1994). Design Patterns.** — Abstract Factory (Component), Factory Method (@Provides)
+- **Fowler M. (2004). Inversion of Control Containers and the DI Pattern.** — IoC, Composition Root
+- **JSR 269 (2006). Pluggable Annotation Processing API.** — Основа KAPT/KSP
+
+### Книги (практические)
+
+- **Bloch J. (2018)** *Effective Java* — DI vs static factories
+- **Moskala M. (2021)** *Effective Kotlin* — DI в Kotlin
+- **Meier R. (2022)** *Professional Android* — Dagger/Hilt в production
 
 ---
 

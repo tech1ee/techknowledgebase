@@ -36,6 +36,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Infrastructure as Code (IaC)** — управление инфраструктурой через декларативные или императивные описания в файлах, версионируемых в VCS. Принцип: инфраструктура должна быть **воспроизводимой, версионируемой и тестируемой** так же, как код приложения.
+
+### Два подхода к IaC
+
+| Подход | Принцип | Пример |
+|--------|---------|--------|
+| **Declarative** | Описываешь **ЧТО** хочешь (desired state) | Terraform, CloudFormation, Pulumi |
+| **Imperative** | Описываешь **КАК** достичь (процедура) | Ansible playbooks, shell scripts |
+
+### Ключевые свойства
+
+| Свойство | Определение |
+|----------|-------------|
+| **Idempotency** | Повторное применение даёт тот же результат (apply × N = apply × 1) |
+| **Immutable Infrastructure** | Не меняй сервер — удали и создай новый из образа |
+| **State Management** | Terraform хранит state (текущее состояние) для вычисления diff |
+| **Plan → Apply** | Предварительный просмотр изменений перед применением |
+
+### Историческая эволюция
+
+| Год | Инструмент | Подход |
+|-----|-----------|--------|
+| 2006 | Puppet | Declarative, Ruby DSL |
+| 2009 | Chef | Imperative, Ruby |
+| 2012 | Ansible | Imperative, YAML, agentless |
+| 2014 | **Terraform** | Declarative, HCL, multi-cloud |
+| 2017 | Pulumi | Declarative, general-purpose languages |
+| 2022 | **OpenTofu** | Fork Terraform (open-source) |
+
+> **См. также**: [[cloud-platforms-essentials]] — облачные платформы, [[gitops-argocd-flux]] — GitOps
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -622,6 +657,10 @@ terraform import aws_instance.app i-1234567890abcdef
 - [HashiCorp: Infrastructure as Code Introduction](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code) — проверено 2025-01-03
 - [OpenTofu Documentation](https://opentofu.org/docs/) — проверено 2025-01-03
 - [Pulumi Docs](https://www.pulumi.com/docs/) — проверено 2025-01-03
+
+### Теоретические основы
+- Morris K. (2016). *Infrastructure as Code: Managing Servers in the Cloud*. — Формализация IaC-практик и принципов
+- Humble J., Farley D. (2010). *Continuous Delivery*. — IaC как компонент delivery pipeline
 
 ### Кейсы компаний
 - [Medium: Spotify + Terraform](https://medium.com/@ppraveen2150/how-spotify-scaled-its-infrastructure-and-improved-reliability-with-terraform-0e4b7cb44fa5) — проверено 2025-01-03

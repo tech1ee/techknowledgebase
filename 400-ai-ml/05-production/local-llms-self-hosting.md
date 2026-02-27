@@ -150,6 +150,37 @@ status: published
 
 ---
 
+## Теоретические основы
+
+> **Self-hosting LLM** — запуск языковых моделей на собственной инфраструктуре (on-premises, private cloud), обеспечивающий полный контроль над данными, латентностью и стоимостью inference. Это альтернатива Model-as-a-Service (MaaS), обоснованная при высоких объёмах или строгих требованиях к privacy.
+
+Возможность self-hosting стала реальной благодаря нескольким теоретическим прорывам:
+
+| Прорыв | Авторы | Вклад |
+|--------|--------|-------|
+| **Quantization** | Dettmers et al. (2022), NeurIPS | INT8/INT4: модель 70B в 40GB → 10GB VRAM |
+| **GGUF format** | Gerganov (2023), llama.cpp | Унифицированный формат для квантизованных моделей |
+| **PagedAttention** | Kwon et al. (2023), vLLM | 2-4x больше concurrent requests |
+| **Distillation** | Hinton et al. (2015) | Transfer знаний из большой модели в маленькую |
+| **Open-weight movement** | Meta (Llama), DeepSeek, Mistral | Модели уровня GPT-4 в open access |
+
+> **Экономический порог self-hosting**: при стоимости GPU-инстанса ~$2/час (A100 80GB) и средней стоимости API-вызова $0.01, точка безубыточности — **~200 запросов/час** (без учёта DevOps overhead). При >1000 запросов/час self-hosting экономит 60-80%.
+
+**Quantization — ключевая технология:**
+
+| Уровень | Bits | Размер 7B | Размер 70B | Потеря качества |
+|---------|------|-----------|------------|-----------------|
+| FP16 | 16 | 14 GB | 140 GB | Baseline |
+| INT8 | 8 | 7 GB | 70 GB | <0.5% |
+| **Q4_K_M** | 4.5 | ~4 GB | ~40 GB | <1% |
+| Q2_K | 2.5 | ~2.5 GB | ~25 GB | 3-5% |
+
+Теоретическое обоснование quantization: распределение весов обученной модели имеет низкую энтропию (большинство весов близки к нулю). По теореме Шеннона, такое распределение можно кодировать значительно меньшим числом бит без существенной потери информации.
+
+См. также: [[llm-inference-optimization|Inference Optimization]] — оптимизация, [[mobile-ai-ml-guide|Mobile AI]] — on-device inference, [[ai-cost-optimization|Cost Optimization]] — экономика.
+
+---
+
 ## Зачем локальные LLM?
 
 ```
@@ -1713,5 +1744,28 @@ Q8_0: минимальная потеря качества, -50% memory. Q5_K_M:
 | Углубиться | [[mobile-ai-ml-guide]] | AI на мобильных устройствах |
 | Смежная тема | [[docker-for-developers]] | Docker для контейнеризации моделей |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Dettmers T. et al. (2022). *GPT3.int8(): 8-bit Matrix Multiplication for Transformers*. NeurIPS | INT8 quantization |
+| 2 | Hinton G. et al. (2015). *Distilling the Knowledge in a Neural Network*. arXiv:1503.02531 | Knowledge distillation |
+| 3 | Kwon W. et al. (2023). *Efficient Memory Management for LLM Serving with PagedAttention*. SOSP | vLLM, PagedAttention |
+| 4 | Frantar E. et al. (2022). *GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers*. arXiv:2210.17323 | GPTQ quantization |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Ollama](https://ollama.com/) | Самый простой self-hosting |
+| 2 | [LM Studio](https://lmstudio.ai/) | GUI для self-hosting |
+| 3 | [llama.cpp](https://github.com/ggerganov/llama.cpp) | Low-level inference engine |
+| 4 | [HuggingFace Models](https://huggingface.co/models) | Каталог open-weight моделей |
+| 5 | [MLX — Apple](https://github.com/ml-explore/mlx) | Inference на Apple Silicon |
 
 *Проверено: 2026-01-09*

@@ -41,6 +41,63 @@ Publisher → [Operators] → Subscriber
 
 ---
 
+## Теоретические основы: формальный базис реактивных потоков
+
+### Functional Reactive Programming (FRP)
+
+> **FRP** — парадигма программирования, описывающая поведение (behavior) как непрерывную функцию от времени и события (event) как дискретные точки во времени. Введена Conal Elliott и Paul Hudak (1997) в работе *"Functional Reactive Animation"*.
+
+Combine реализует **дискретный** вариант FRP: Publisher эмитирует дискретные значения (events), а не моделирует непрерывные behaviors. Это отличает Combine от оригинального FRP Elliott'а, но соответствует практической традиции ReactiveX.
+
+### Reactive Streams Specification
+
+Reactive Streams — спецификация (2013-2014), определяющая минимальный контракт для асинхронной обработки потоков данных с non-blocking backpressure. Формально специфицирует 4 интерфейса:
+
+| Интерфейс | Роль | Combine-аналог |
+|-----------|------|----------------|
+| `Publisher<T>` | Источник данных (потенциально бесконечный) | `Publisher` protocol |
+| `Subscriber<T>` | Потребитель данных | `Subscriber` protocol |
+| `Subscription` | Связь publisher-subscriber, управление demand | `Subscription` protocol |
+| `Processor<T,R>` | Одновременно Subscriber и Publisher | Operators (map, filter...) |
+
+Combine не реализует Reactive Streams напрямую (это JVM-спецификация, `org.reactivestreams`), но следует тем же принципам. Ключевое свойство — **demand-driven pull**: subscriber явно запрашивает количество элементов.
+
+### Backpressure: формальное определение
+
+> **Backpressure** — механизм управления потоком данных, при котором consumer сообщает producer допустимую скорость потребления. Формально: если rate(producer) > rate(consumer), система должна иметь стратегию обработки разницы.
+
+Стратегии backpressure:
+
+| Стратегия | Описание | Combine |
+|-----------|----------|---------|
+| **Buffer** | Буферизовать избыток | `buffer(size:prefetch:whenFull:)` |
+| **Drop** | Отбрасывать лишнее | `.dropFirst`, `.drop(while:)` |
+| **Latest** | Хранить только последнее | `Publishers.MergeMany` с `.max(1)` |
+| **Error** | Ошибка при переполнении | Buffer strategy `.customError` |
+| **Demand** | Producer не генерирует без запроса | `Subscribers.Demand` — основной механизм Combine |
+
+Combine использует **demand-based** подход: `Subscribers.Demand` — аддитивный неубывающий счётчик. Publisher не эмитирует значения, пока Subscriber не запросит через `request(_ demand:)`.
+
+### Observable/Iterable дуальность (Meijer)
+
+Erik Meijer (2012) формализовал дуальность между синхронными и асинхронными потоками:
+
+```
+Синхронный (pull)              Асинхронный (push)
+─────────────────              ──────────────────
+Iterable<T>           ←dual→   Observable<T>
+Iterator<T>           ←dual→   Observer<T>
+T next()              ←dual→   onNext(T)
+throws Exception      ←dual→   onError(Exception)
+returns (завершение)  ←dual→   onCompleted()
+```
+
+Combine Publisher — это асинхронная сторона дуальности: вместо синхронного pull (`for item in sequence`) используется асинхронный push (`receive(_ input:)`). Эта дуальность объясняет, почему операторы коллекций (map, filter, reduce) работают и на Sequence, и на Publisher — они являются **категорно-теоретическими** дуалами.
+
+> **Связь**: Теоретические основы FRP → [[functional-programming]], Reactive Streams → [[kotlin-flow]], дуальность Meijer → [[android-rxjava]]
+
+---
+
 ## Основные концепции
 
 ### Publishers и Subscribers Protocol
@@ -2005,6 +2062,14 @@ Combine идеально подходит для реактивных UI, а `as
 **[[ios-architecture-patterns]]** — Combine является ключевым компонентом MVVM-архитектуры на iOS, обеспечивая data binding между View и ViewModel без явных callbacks. В Clean Architecture Combine используется для реактивной передачи данных между слоями (Domain → Presentation), а в TCA — для Side Effects через Effect type. Понимание Combine необходимо для реализации любого современного архитектурного паттерна на iOS.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Elliott C., Hudak P. (1997). *Functional Reactive Animation.* ICFP '97. — Основополагающая работа по FRP: формальные определения Behavior и Event, на которых основана вся реактивная парадигма.
+- Meijer E. (2012). *Your Mouse is a Database.* ACM Queue. — Формализация дуальности Observable/Iterable. Объясняет, почему реактивные операторы повторяют API коллекций.
+- Reactive Streams Specification (2014). *org.reactivestreams.* — Формальный контракт backpressure: 4 интерфейса и 40+ правил, которым Combine следует концептуально.
+
+### Практические руководства
 
 - Eidhof C. et al. (2019). *Advanced Swift.* — продвинутые паттерны Swift (generics, protocol extensions), которые активно используются в Combine для создания кастомных Publishers и Operators
 - Sundell J. (2022). *Swift by Sundell.* — практические примеры использования Combine в реальных проектах, включая интеграцию с async/await и SwiftUI

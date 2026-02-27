@@ -34,7 +34,40 @@ next_review:
 
 ---
 
-## Интуиция: 5 аналогий из жизни
+## Теоретические основы
+
+> **Система типов** — формальная система, приписывающая типы программным конструкциям для предотвращения определённых классов ошибок на этапе компиляции или выполнения (Pierce, 2002).
+
+### Формальное определение (Pierce, 2002)
+
+> «A type system is a tractable syntactic method for proving the absence of certain program behaviors by classifying phrases according to the kinds of values they compute.»
+
+### Две оси классификации
+
+| | **Статическая** (compile-time) | **Динамическая** (runtime) |
+|-|-------------------------------|---------------------------|
+| **Сильная** | Kotlin, Rust, Haskell | Python, Ruby |
+| **Слабая** | C (implicit casts) | JavaScript, PHP |
+
+### Ключевые теоретические результаты
+
+| Результат | Автор | Значение |
+|-----------|-------|----------|
+| **Typed λ-calculus** | Church (1940) | Типы предотвращают парадоксы в λ-исчислении |
+| **Hindley-Milner** | Hindley (1969), Milner (1978) | Автоматический вывод типов (type inference) |
+| **Curry-Howard** | Howard (1969) | Типы = логические утверждения, программы = доказательства |
+| **Type soundness** | — | «Well-typed programs don't go wrong» (Milner) |
+
+### Связь с другими CS-foundations
+
+- [[type-systems-fundamentals]] — формальные основы (Church, Hindley-Milner, Curry-Howard)
+- [[generics-parametric-polymorphism]] — параметрический полиморфизм (System F)
+- [[variance-covariance]] — подтиповой полиморфизм и вариантность
+- [[type-erasure-reification]] — реализация generics на JVM
+
+---
+
+
 
 ### 1. Типы как контейнеры
 ```

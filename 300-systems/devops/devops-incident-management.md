@@ -33,6 +33,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Incident Management** — структурированный процесс обнаружения, реагирования, разрешения и обучения на основе инцидентов. Формализован в **ITIL** (1980s), переосмыслен в контексте **SRE** (Google, Beyer et al., 2016).
+
+### Жизненный цикл инцидента
+
+```
+Detection → Triage → Response → Resolution → Post-mortem → Prevention
+    │          │         │           │             │            │
+    │     Severity    Incident    Mitigation   Blameless    Action
+    │     assessment  commander   → fix        review       items
+Alerting              Runbooks
+```
+
+### Классификация severity
+
+| Level | Определение | Пример | Response time |
+|-------|-------------|--------|---------------|
+| **SEV1** (Critical) | Полный outage основного сервиса | Production down, data loss | Немедленно |
+| **SEV2** (Major) | Значительная деградация | 50% пользователей затронуто | < 30 мин |
+| **SEV3** (Minor) | Ограниченное влияние | Один микросервис degraded | < 4 часа |
+| **SEV4** (Low) | Косметическое | UI glitch, non-critical feature | Следующий рабочий день |
+
+### Blameless Post-mortem (Allspaw, 2012)
+
+> Фокус на **системных** причинах, не на людях. Принцип: «В системе, спроектированной так, что один человек может вызвать outage, проблема — в **системе**, не в человеке».
+
+5 компонентов: timeline, root cause, impact, action items, lessons learned.
+
+> **См. также**: [[observability]] — мониторинг и алерты, [[security-incident-response]] — security-инциденты
+
+---
+
 ## TL;DR
 
 - **On-call** — дежурство с чёткой ротацией и эскалацией
@@ -509,11 +542,16 @@ db_pool_size = 5   # Should have been 50
 
 ## Источники
 
+### Теоретические основы
+- Allspaw J. (2012). *Blameless PostMortems and a Just Culture*. — Фундамент blameless culture в SRE
+- Dekker S. (2014). *The Field Guide to Understanding Human Error*. — Системный подход к ошибкам (New View vs Old View)
+- Beyer B. et al. (2016). *Site Reliability Engineering* (Google). — Формализация incident response
+
+### Практические руководства
 - [Google SRE Book - Incident Management](https://sre.google/sre-book/managing-incidents/)
 - [PagerDuty Incident Response Guide](https://response.pagerduty.com/)
 - [Atlassian Incident Management](https://www.atlassian.com/incident-management)
-- [Gremlin Chaos Engineering](https://www.gremlin.com/)
-- "Incident Management for Operations" by Rob Schnepp
+- Schnepp R. *Incident Management for Operations*.
 
 ---
 

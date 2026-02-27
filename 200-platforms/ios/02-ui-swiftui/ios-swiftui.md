@@ -56,6 +56,54 @@ SwiftUI — это декларативный фреймворк от Apple дл
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Декларативное программирование пользовательских интерфейсов — парадигма, в которой разработчик описывает *что* должно быть на экране (желаемое состояние), а фреймворк самостоятельно определяет *как* обновить UI для достижения этого состояния. Формализовано в работах по функциональному реактивному программированию (Elliott & Hudak, 1997).
+
+### Историческая эволюция декларативного UI
+
+| Год | Технология | Создатель | Ключевая идея |
+|-----|-----------|-----------|---------------|
+| 1997 | Functional Reactive Programming | Elliott & Hudak (Yale) | UI как функция от времени и состояния |
+| 2006 | XAML / WPF | Microsoft | Декларативный UI + data binding |
+| 2013 | React | Jordan Walke (Facebook) | Virtual DOM, component model, JSX |
+| 2017 | Flutter | Google | Widget tree, собственный rendering engine |
+| 2019 | SwiftUI | Apple (WWDC 2019) | Property wrappers, View protocol, opaque return types |
+| 2019 | Jetpack Compose | Google (анонс) | Kotlin compiler plugin, slot API |
+
+> **Ключевое уравнение:** `View = f(State)` — UI является чистой функцией от состояния приложения. При изменении State фреймворк вычисляет новое описание View и применяет минимальный diff к реальному дереву (reconciliation).
+
+### View Identity и Lifetime (WWDC 2021: Demystify SwiftUI)
+
+SwiftUI различает два типа идентичности view:
+
+| Тип идентичности | Механизм | Пример | Значение |
+|-----------------|----------|--------|----------|
+| **Structural Identity** | Позиция в ViewBuilder | `VStack { Text("A"); Text("B") }` | Определяется расположением в коде |
+| **Explicit Identity** | `id()` модификатор или Identifiable | `ForEach(items, id: \.self)` | Задаётся разработчиком явно |
+
+Идентичность определяет **lifetime** view: при изменении идентичности view уничтожается и создаётся заново, при сохранении — обновляется (@State сохраняется).
+
+### Property Wrappers как формализм управления состоянием
+
+Property wrappers в Swift (SE-0258, 2019) формализуют паттерн Observer (GoF, 1994) на уровне языка:
+
+| Wrapper | Ownership | Lifecycle | Аналог в React |
+|---------|-----------|-----------|----------------|
+| `@State` | View владеет | Привязан к view identity | `useState()` |
+| `@Binding` | Не владеет, ссылается | Зависит от source | Props с callback |
+| `@StateObject` | View владеет, class | Привязан к view identity | `useRef()` + `useState()` |
+| `@ObservedObject` | Не владеет, class | Зависит от parent | Props (object) |
+| `@EnvironmentObject` | Глобальный, class | App-level | React Context |
+
+### Связь с CS-фундаментом
+
+- [[functional-reactive-programming]] — FRP как теоретическая основа декларативного UI
+- [[ios-state-management]] — практическое применение property wrappers
+- [[android-jetpack-compose]] — аналогичная парадигма в Android (Compose)
+
+---
+
 ## 5 жизненных аналогий
 
 ### 1. Декларативный UI = Заказ в ресторане
@@ -1647,9 +1695,17 @@ Text("Core")
 
 ## Источники и дальнейшее чтение
 
-- **Eidhof C., Willeke F., et al. (2020). *Thinking in SwiftUI.* objc.io.** — Лучшая книга для формирования правильных ментальных моделей SwiftUI. Авторы детально разбирают layout system, view lifecycle и data flow, помогая перейти от императивного мышления UIKit к декларативному подходу SwiftUI.
-- **Eidhof C., Airspeed Velocity, et al. (2019). *Advanced Swift.* objc.io.** — Глубокое погружение в Swift-механизмы, лежащие в основе SwiftUI: протоколы, generics, property wrappers и result builders (@ViewBuilder). Понимание этих концепций на уровне языка критически важно для написания эффективных и переиспользуемых SwiftUI-компонентов.
-- **Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly.** — Комплексное руководство, охватывающее основы Swift, жизненный цикл iOS-приложения и новые возможности SwiftUI в iOS 17 (включая Observable macro, NavigationStack и интеграцию с SwiftData). Подходит как для начинающих, так и для опытных разработчиков, обновляющих знания.
+### Теоретические основы
+- Elliott C., Hudak P. (1997). *Functional Reactive Animation.* ICFP — основа декларативного UI как функции от состояния
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Observer pattern, лежащий в основе property wrappers
+- Czaplicki E. (2012). *Elm: Concurrent FRP for Functional GUIs.* — Elm Architecture как предшественник SwiftUI data flow
+
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* objc.io — ментальные модели layout, data flow, view lifecycle
+- Eidhof C. et al. (2019). *Advanced Swift.* objc.io — протоколы, generics, property wrappers
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly — Observable macro, NavigationStack, SwiftData
+- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui) — официальная документация Apple
+- [Hacking with Swift](https://www.hackingwithswift.com/quick-start/swiftui) — туториалы Paul Hudson
 
 ---
 

@@ -62,6 +62,28 @@ related:
 
 ---
 
+## Теоретические основы
+
+JNI (Java Native Interface) реализует концепцию **Foreign Function Interface (FFI)** — механизма вызова функций, написанных на одном языке, из кода на другом.
+
+> **Определение:** *FFI (Foreign Function Interface) — интерфейс, позволяющий программе на одном языке вызывать подпрограммы и использовать данные, определённые на другом языке.*
+
+| Теоретическая концепция | Автор / Источник | Применение в JNI |
+|------------------------|-----------------|-----------------|
+| **FFI** | Concept from OS/language interop | JNI как FFI между Java (managed) и C/C++ (unmanaged) |
+| **Type marshalling** | RPC, CORBA tradition | Конвертация типов: `jint` ↔ `int`, `jstring` ↔ `const char*` |
+| **Memory safety boundary** | Managed vs unmanaged memory | Java (GC, type safety) vs C (manual memory, unsafe) |
+| **Reference types** | JNI Spec | Local references (автоочистка при возврате), Global references (явное освобождение), Weak references (GC может собрать) |
+| **Invocation API** | JNI Spec | Создание JVM из native-кода, вызов Java из C/C++ |
+
+> **Ключевой trade-off:** JNI пересекает границу между managed (Java) и unmanaged (C/C++) кодом. В managed-мире действуют GC, type safety, bounds checking. В unmanaged — полная свобода и ответственность. Каждое пересечение границы стоит ~20ns overhead (native call convention, JNIEnv lookup, parameter marshalling). Это определяет правило: JNI оправдан для крупных блоков работы, но не для мелких операций.
+
+Современная альтернатива — **Panama Project (JEP 424, JDK 22)** — Foreign Function & Memory API, позволяющий вызывать нативные функции без JNI: без написания C-кода, без native method declarations, с автоматическим управлением off-heap памятью и type-safe API.
+
+Связанные темы: [[jvm-security-model]] (JNI обходит security manager), [[jvm-class-loader-deep-dive]] (System.loadLibrary и native library loading), [[jvm-memory-model]] (off-heap память через Direct ByteBuffer и JNI).
+
+---
+
 ## Проблема: Зачем вызывать нативный код?
 
 > **Аналогия из жизни: переводчик при деловых переговорах.** Представьте встречу двух бизнесменов, говорящих на разных языках. Каждый прекрасно работает в своей среде, но для взаимодействия нужен переводчик. Переводчик (JNI) принимает фразу от одной стороны (Java), конвертирует её в понятный формат (C-типы), передаёт другой стороне и возвращает ответ обратно. Перевод стоит времени (overhead вызова ~20ns), поэтому для короткого «Да/Нет» вызывать переводчика нерационально — лучше объясниться жестами (использовать чистый Java). Но для сложных технических переговоров (системные API, SIMD-оптимизации) переводчик незаменим.
@@ -737,9 +759,16 @@ public class PanamaExample {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
 - Liang S. (1999). *The Java Native Interface: Programmer's Guide and Specification*. — Единственная полная книга по JNI от создателей API; несмотря на возраст, фундаментальные концепции (JNIEnv, reference types, error handling) не изменились.
 - Lindholm T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition. — Раздел о native method interface описывает контракт между JVM и нативным кодом, включая правила передачи типов и управления потоками.
 - Venners B. (2000). *Inside the Java Virtual Machine*, 2nd Edition. — Главы о native method stacks и взаимодействии GC с нативным кодом объясняют, почему неправильное управление JNI-ссылками приводит к утечкам памяти и crashes.
+
+### Практические руководства
+
+- Oracle. *Java Native Interface Specification*. — Официальная спецификация JNI: сигнатуры, типы, функции JNIEnv, правила управления ссылками.
+- OpenJDK. *JEP 424: Foreign Function & Memory API (Preview)*. — Описание Panama Project как современной альтернативы JNI: Foreign Function API, MemorySegment, Arena.
 
 ---
 

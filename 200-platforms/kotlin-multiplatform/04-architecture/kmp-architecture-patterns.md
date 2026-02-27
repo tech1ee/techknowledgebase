@@ -70,6 +70,47 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Software Architecture** — фундаментальная организация системы, воплощённая в её компонентах, их взаимоотношениях друг с другом и со средой, а также в принципах, определяющих проектирование и эволюцию системы (IEEE 1471-2000).
+
+В KMP архитектура приобретает дополнительное измерение: разделение на **shared** (commonMain) и **platform** (androidMain, iosMain) создаёт boundary, которая должна быть спроектирована осознанно.
+
+### Теоретический фундамент: Clean Architecture
+
+Clean Architecture (Martin, 2012) определяет концентрические круги зависимостей:
+
+| Круг | Содержимое | В KMP |
+|------|-----------|-------|
+| Entities | Бизнес-правила, domain models | commonMain: data classes, enums |
+| Use Cases | Application-specific rules | commonMain: interactors, repositories |
+| Interface Adapters | Controllers, presenters, gateways | commonMain: ViewModels, mappers |
+| Frameworks & Drivers | UI, DB, Web | androidMain/iosMain: platform UI, drivers |
+
+**Dependency Rule:** зависимости направлены строго внутрь — outer circle зависит от inner, но не наоборот. В KMP это естественно: androidMain dependsOn commonMain.
+
+### Сравнение архитектурных паттернов для кросс-платформы
+
+| Паттерн | Разделение UI/Logic | State management | Testability | Сложность |
+|---------|-------------------|-----------------|-------------|-----------|
+| MVVM | ViewModel (shared) + View (platform) | Observable state | Высокая | Средняя |
+| MVI | Reducer (shared) + View (platform) | Unidirectional flow | Максимальная | Высокая |
+| MVP | Presenter (shared) + View (platform) | Imperative updates | Высокая | Низкая |
+| VIPER | Полное разделение всех слоёв | Per-module state | Максимальная | Очень высокая |
+
+### Принцип Boundary Object (Martin, 2017)
+
+Граница между shared и platform кодом — это **Boundary**: интерфейс, через который взаимодействуют два слоя. В KMP boundary реализуется через:
+
+- **expect/actual** — compile-time boundary
+- **interface + DI** — runtime boundary (более гибкий)
+- **ViewModel API** — boundary между presentation и UI
+
+> **Академические источники:** Martin R. (2012). *Clean Architecture.* IEEE Software. Fowler M. (2002). *Patterns of Enterprise Application Architecture.* Addison-Wesley.
+
+
 ## Почему архитектурные паттерны критичны для Multiplatform?
 
 ### Проблема: Code Sharing ≠ Architecture Sharing
@@ -1029,9 +1070,17 @@ class LogoutUseCase(
 
 ## Источники и дальнейшее чтение
 
-1. **Martin R. (2017).** *Clean Architecture.* — Фундаментальная книга об архитектурных принципах, которые напрямую применяются в KMP: Dependency Rule, Boundary Objects, Use Case Driven Design. Определяет, как проектировать границы между shared и platform-specific кодом.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию идиоматичного Kotlin-кода, которые влияют на реализацию архитектурных паттернов: sealed classes для MVI State, data classes для immutable models, scope functions для builder patterns.
-3. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины и Flow являются основой реактивных архитектурных паттернов в KMP. Главы про StateFlow, SharedFlow и structured concurrency напрямую применяются при реализации MVVM и MVI.
+### Теоретические основы
+
+- **Martin R. (2017).** *Clean Architecture.* — Dependency Rule и Boundary Object как основа архитектуры KMP shared-модуля.
+- **IEEE 1471-2000.** *Recommended Practice for Architectural Description.* — Формальное определение программной архитектуры.
+- **Buschmann F. et al. (1996).** *Pattern-Oriented Software Architecture (POSA).* — Каталог архитектурных паттернов.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin-идиомы для реализации архитектурных паттернов в KMP.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации для архитектурного кода.
+- [KMP Architecture Guide](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html) — Официальный гайд JetBrains.
 
 ---
 

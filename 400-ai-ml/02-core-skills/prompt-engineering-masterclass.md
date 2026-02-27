@@ -98,6 +98,49 @@ sources_verified: true
 
 ---
 
+## Теоретические основы
+
+### Формальное определение промпта
+
+> **Промпт** (prompt) — входная текстовая последовательность, подаваемая на вход авторегрессионной языковой модели для управления процессом генерации. Промпт определяет условное распределение P(output | prompt), из которого модель сэмплирует выходную последовательность (Liu et al., 2023, *"Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in NLP"*).
+
+### Теоретические основания ключевых техник
+
+| Техника | Год | Авторы | Теоретическое обоснование |
+|---------|-----|--------|--------------------------|
+| **Zero-shot prompting** | 2019 | Radford et al. (GPT-2) | Модель обобщает, используя pre-training knowledge |
+| **Few-shot prompting** | 2020 | Brown et al. (GPT-3) | In-context learning: модель «обучается» из примеров в контексте |
+| **Chain-of-Thought (CoT)** | 2022 | Wei et al. (Google) | Промежуточные шаги рассуждения улучшают сложные задачи |
+| **Self-Consistency** | 2022 | Wang et al. (Google) | Мажоритарное голосование по нескольким CoT-путям |
+| **Tree-of-Thought (ToT)** | 2023 | Yao et al. (Princeton) | Поиск в пространстве рассуждений с бэктрекингом |
+| **ReAct** | 2022 | Yao et al. (Princeton) | Чередование reasoning и action для [[ai-agents-advanced\|агентов]] |
+| **Constitutional AI** | 2022 | Bai et al. (Anthropic) | Self-supervision через набор принципов |
+
+### In-Context Learning: феномен без градиентного обучения
+
+> **In-Context Learning (ICL)** — способность больших языковых моделей адаптировать своё поведение на основе примеров, предоставленных в промпте, без обновления весов модели. Формально: модель неявно реализует алгоритм обучения (meta-learning) внутри forward pass (Dai et al., 2023, *"Why Can GPT Learn In-Context?"*).
+
+Ключевые теоретические результаты:
+- Garg et al. (2022) показали, что трансформеры могут выучить алгоритм линейной регрессии in-context
+- Olsson et al. (2022, Anthropic) идентифицировали **induction heads** — механизм в attention, отвечающий за копирование паттернов
+
+### Prompt Engineering как новая парадигма программирования
+
+Согласно Karpathy (2023), промпт-инжиниринг представляет собой **Software 3.0** — программирование на естественном языке. Reynolds & McDonell (2021, *"Prompt Programming for Large Language Models"*) предложили аналогию с программированием: промпт = программа, LLM = интерпретатор.
+
+| Парадигма | Software 1.0 | Software 2.0 | Software 3.0 |
+|-----------|-------------|-------------|-------------|
+| **Код** | C++, Python | Обученные нейросети | Промпты на естественном языке |
+| **Детерминизм** | Полный | Статистический | Стохастический |
+| **Отладка** | Breakpoints | Метрики, визуализация | Итерация промптов, evals |
+| **Тестирование** | Unit tests | Validation sets | [[agent-evaluation-testing\|LLM-as-Judge]], RAGAS |
+
+### Context Engineering: расширение парадигмы (2025)
+
+> **Context Engineering** — проектирование полного контекста, подаваемого модели: system prompt + user input + RAG context + conversation history + tool descriptions + output format constraints. Термин популяризирован Симоном Виллисоном (2025) и отражает сдвиг фокуса с отдельного промпта на архитектуру всего контекстного окна.
+
+---
+
 ## Актуальность 2024-2025
 
 | Тренд | Статус | Что важно знать |
@@ -1814,16 +1857,25 @@ Prompt engineering -- это не магия. Это понимание того
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
-| 1 | [Chain-of-Thought Prompting](https://arxiv.org/abs/2201.11903) - Wei et al. 2022 | Paper | Основа CoT техники |
-| 2 | [Self-Consistency](https://arxiv.org/abs/2203.11171) - Wang et al. 2022 | Paper | Голосование большинством |
-| 3 | [Tree of Thoughts](https://arxiv.org/abs/2305.10601) - Yao et al. 2023 | Paper | Deliberate problem solving |
-| 4 | [ReAct](https://arxiv.org/abs/2210.03629) - Yao et al. 2022 | Paper | Reasoning + Acting паттерн |
-| 5 | [Step-Back Prompting](https://arxiv.org/abs/2310.06117) - Google DeepMind 2023 | Paper | Abstraction для reasoning |
-| 6 | [APE: Automatic Prompt Engineer](https://arxiv.org/abs/2211.01910) - Zhou et al. 2022 | Paper | Автогенерация промптов |
-| 7 | [OpenAI Prompt Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering) | Docs | Официальные best practices |
-| 8 | [Claude Prompting Best Practices](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices) | Docs | XML структура, Claude 4 |
-| 9 | [OWASP LLM Top 10 2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | Security | Prompt injection защита |
-| 10 | [Prompt Engineering Guide](https://www.promptingguide.ai/) | Guide | Комплексный обзор техник |
+### Теоретические основы
+- Wei, J. et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models*. arXiv:2201.11903.
+- Wang, X. et al. (2022). *Self-Consistency Improves Chain of Thought Reasoning*. arXiv:2203.11171.
+- Yao, S. et al. (2023). *Tree of Thoughts: Deliberate Problem Solving with LLMs*. arXiv:2305.10601.
+- Yao, S. et al. (2022). *ReAct: Synergizing Reasoning and Acting in Language Models*. arXiv:2210.03629.
+- Brown, T. et al. (2020). *Language Models are Few-Shot Learners*. NeurIPS. (GPT-3, in-context learning)
+- Liu, P. et al. (2023). *Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in NLP*. ACM Computing Surveys.
+- Dai, D. et al. (2023). *Why Can GPT Learn In-Context?* arXiv:2303.07895.
+- Olsson, C. et al. (2022). *In-context Learning and Induction Heads*. Anthropic. arXiv:2209.11895.
+- Reynolds, L. & McDonell, K. (2021). *Prompt Programming for Large Language Models*. arXiv:2102.07350.
+- Bai, Y. et al. (2022). *Constitutional AI: Harmlessness from AI Feedback*. Anthropic. arXiv:2212.08073.
+
+### Практические руководства
+- [OpenAI Prompt Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering)
+- [Claude Prompting Best Practices](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices)
+- [OWASP LLM Top 10 2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
+- [Prompt Engineering Guide](https://www.promptingguide.ai/)
+- Zhou, Y. et al. (2022). *APE: Automatic Prompt Engineer*. arXiv:2211.01910.
+- Google DeepMind (2023). *Step-Back Prompting*. arXiv:2310.06117.
 
 ---
 

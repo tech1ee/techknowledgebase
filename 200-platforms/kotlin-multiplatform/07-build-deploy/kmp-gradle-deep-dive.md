@@ -58,6 +58,34 @@ next_review:
 | Composite Build | Включенный под-билд | Субподрядчик внутри проекта |
 | Precompiled Script Plugin | Плагин из .gradle.kts файла | Макрос в Excel |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Build System** — инструмент автоматизации компиляции, линковки, тестирования и упаковки исходного кода в исполняемые артефакты. Gradle реализует модель **task-based builds** с directed acyclic graph (DAG) зависимостей (Gradle Inc., 2012).
+
+### Теоретическая модель: Build как DAG
+
+Build-процесс Gradle формализуется как DAG (Kahn, 1962):
+
+| Свойство | Описание | В Gradle |
+|----------|----------|---------|
+| Вершины | Задачи (tasks) | `compileKotlin`, `linkFramework` |
+| Рёбра | Зависимости между задачами | `dependsOn`, `mustRunAfter` |
+| Топологическая сортировка | Порядок выполнения | Gradle execution plan |
+| Параллелизм | Независимые задачи параллельно | `--parallel` flag |
+
+### Incremental Compilation: формальная модель
+
+Инкрементальная компиляция Kotlin основана на **dependency tracking** (Demers et al., 1981): компилятор отслеживает граф зависимостей между файлами и перекомпилирует только изменённые файлы и их dependents.
+
+### Convention Plugins: принцип DRY в build-системе
+
+Convention Plugins реализуют принцип **Don't Repeat Yourself** (Hunt, Thomas, 1999): общая конфигурация KMP-модулей (targets, dependencies, compiler options) определяется один раз и применяется ко всем модулям.
+
+> **Академические источники:** Kahn A. (1962). *Topological Sorting of Large Networks.* Communications of ACM. Feldman S. (1979). *Make — A Program for Maintaining Computer Programs.* Bell Labs.
+
 ## Почему Gradle — DAG и кэширование?
 
 **Gradle как DAG (Directed Acyclic Graph):** Tasks связаны зависимостями без циклов. Это позволяет параллельное выполнение независимых веток и инкрементальную пересборку только изменившихся узлов.
@@ -750,11 +778,16 @@ kotlin.build.report.file.output_dir=build/reports/kotlin-build
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin и его интеграции с инструментами сборки, включая Gradle Kotlin DSL. Книга закладывает фундамент для понимания build.gradle.kts синтаксиса, plugins DSL и конфигурации source sets, что является ежедневной задачей при работе с KMP.
+### Теоретические основы
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации Kotlin-проектов, включая модульность, управление зависимостями и API design. Эти принципы напрямую применяются к convention plugins: правильная абстракция, переиспользование и минимизация coupling между модулями.
+- **Feldman S. (1979).** *Make — A Program for Maintaining Computer Programs.* — Формализация DAG для систем сборки.
+- **Kahn A. (1962).** *Topological Sorting of Large Networks.* — Алгоритм топологической сортировки, используемый в Gradle task graph.
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы компонентного дизайна (Acyclic Dependencies, Stable Dependencies, Stable Abstractions) определяют правильную организацию multi-module KMP-проекта в Gradle: зависимости между модулями образуют DAG, стабильные модули (core, domain) зависят только от абстракций.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin DSL для Gradle build scripts.
+- [Gradle Documentation](https://docs.gradle.org/) — Официальная документация Gradle.
+- [KMP Gradle Plugin](https://kotlinlang.org/docs/multiplatform-dsl-reference.html) — Справочник KMP Gradle DSL.
 
 ---
 

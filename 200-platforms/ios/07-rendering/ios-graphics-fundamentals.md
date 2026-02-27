@@ -30,6 +30,45 @@ iOS имеет многоуровневый графический стек: **C
 
 Ключевой принцип: **чем выше уровень абстракции, тем меньше контроля, но проще использование**. UIKit/SwiftUI работают поверх Core Animation, который автоматически оптимизирует отрисовку через GPU.
 
+## Теоретические основы
+
+> **Rendering pipeline** (конвейер рендеринга) — последовательность этапов преобразования геометрического описания сцены в растровое изображение на экране. В iOS реализован как многоуровневый стек: CPU-рисование (Core Graphics) → GPU-композиция (Core Animation) → низкоуровневый GPU-доступ (Metal).
+
+### Академический контекст
+
+Графический стек iOS основан на фундаментальных концепциях компьютерной графики:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Retained Mode vs Immediate Mode | Strauss & Carey, 1992 | Два подхода к рендерингу: хранение сцены vs перерисовка каждого кадра | Core Animation (retained) vs Core Graphics (immediate) |
+| Scene Graph | SGI, 1990-е | Иерархическая структура объектов сцены | CALayer tree — дерево слоёв с наследованием трансформаций |
+| GPU Pipeline | Akeley & Hanrahan, 2001 (Stanford) | Параллельная обработка вершин и фрагментов | Metal shader pipeline: vertex → fragment → framebuffer |
+| Compositing (Porter-Duff) | Porter & Duff, 1984 | Алгебра операций над изображениями с альфа-каналом | Core Animation alpha compositing, blend modes |
+| Affine Transformations | Computer Graphics, Foley et al., 1990 | Линейные преобразования: translate, rotate, scale | CGAffineTransform, CATransform3D |
+
+### Эволюция графического стека iOS
+
+| Год | Технология | Значимость |
+|-----|-----------|------------|
+| 2001 | Quartz 2D (Mac OS X) | PDF-based 2D rendering engine на CPU |
+| 2007 | Core Animation (iPhone OS) | GPU-ускоренная композиция слоёв |
+| 2014 | Metal 1.0 (iOS 8) | Замена OpenGL ES, прямой доступ к GPU |
+| 2017 | Metal 2 (iOS 11) | ML inference, VR, indirect command buffers |
+| 2019 | RealityKit (iOS 13) | AR-рендеринг поверх Metal |
+| 2023 | Metal 3 + visionOS | Spatial computing, mesh shading |
+
+> **Retained Mode rendering** (Core Animation): приложение строит дерево CALayer, а система решает, когда и как перерисовать. **Immediate Mode** (Core Graphics): приложение рисует каждый пиксель вручную через CGContext. Retained mode эффективнее для стандартного UI (GPU-ускорение), immediate mode даёт полный контроль для кастомной графики (Strauss & Carey, 1992).
+
+### Связь с CS-фундаментом
+
+- [[ios-view-rendering]] — render loop как конвейер: layout → display → commit
+- [[ios-scroll-performance]] — практическое применение знаний о GPU-композиции
+- [[cross-graphics-rendering]] — сравнение iOS (Metal) vs Android (Vulkan/Skia)
+- [[ios-process-memory]] — backing store и VRAM как часть иерархии памяти
+- [[compilation-pipeline]] — Metal shaders компилируются в AIR (Apple IR) → GPU bytecode
+
+---
+
 ## Зачем это нужно?
 
 **Реальные проблемы, которые решает понимание графического стека:**
@@ -1762,10 +1801,15 @@ class GoodShadowView: UIView {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Lockwood N. (2014). *iOS Core Animation: Advanced Techniques.* — наиболее детальный разбор Core Animation, включая implicit/explicit анимации, layer geometry, offscreen rendering и производительность; обязательна для глубокого освоения графики iOS.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — содержит практические примеры использования Core Graphics и работы с CGContext, объясняет связь между UIKit и графическим стеком; хорошая отправная точка.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — главы по рисованию и анимации дают практическое понимание работы с Core Graphics в контексте UIKit-приложений.
+### Теоретические основы
+- Porter T., Duff T. (1984). *Compositing Digital Images.* SIGGRAPH. — формализация операций композиции с альфа-каналом, основа Core Animation blending
+- Foley J., van Dam A., Feiner S., Hughes J. (1990). *Computer Graphics: Principles and Practice.* — фундаментальный учебник по компьютерной графике: аффинные трансформации, rendering pipeline, координатные системы
+- Akeley K., Hanrahan P. (2001). *Real-Time Graphics Architecture.* Stanford. — архитектура GPU pipeline, основы retained mode rendering
+
+### Практические руководства
+- Lockwood N. (2014). *iOS Core Animation: Advanced Techniques.* — наиболее детальный разбор Core Animation, включая implicit/explicit анимации, layer geometry, offscreen rendering и производительность
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — практические примеры использования Core Graphics и работы с CGContext
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — главы по рисованию и анимации в контексте UIKit-приложений
 
 ### Документация
 - [Core Animation Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html)

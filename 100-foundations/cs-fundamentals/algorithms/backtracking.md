@@ -43,6 +43,81 @@ Backtracking explores all possible solutions by incrementally building candidate
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Backtracking** — систематический метод перебора всех потенциальных решений задачи путём построения дерева пространства состояний (state-space tree) и отсечения (pruning) ветвей, которые заведомо не ведут к допустимому решению.
+
+Термин "backtracking" введён **Деррик Генри Лемером** (Derrick Henry Lehmer) в 1950-х годах, хотя сам метод использовался задолго до этого. Формализация алгоритма и анализ его эффективности принадлежат нескольким исследователям:
+
+| Автор | Год | Вклад |
+|-------|-----|-------|
+| **Gauss** | 1850 | Задача N ферзей — одна из первых задач, решаемых перебором с возвратом |
+| **Lehmer, D.H.** | 1950s | Ввёл термин "backtracking" |
+| **Golomb & Baumert** | 1965 | Формализация backtracking как общего метода ("Backtrack Programming", JACM) |
+| **Knuth, D.** | 1968 | Анализ деревьев поиска, оценка размера пространства (TAOCP vol.4) |
+| **Nillsson** | 1971 | Связь backtracking с поиском в пространстве состояний (AI) |
+
+### Дерево пространства состояний (State-Space Tree)
+
+Backtracking работает над **неявным деревом решений**:
+
+```
+                        ∅                    ← корень (пустое решение)
+                    /   |   \
+                  a     b     c              ← уровень 1: первый выбор
+                / \   / \   / \
+              ab  ac ba bc ca cb             ← уровень 2: второй выбор
+             ...  ...                        ← и т.д.
+```
+
+**Формально:** пусть задача требует найти вектор `(x₁, x₂, ..., xₙ)`, где каждое `xᵢ ∈ Sᵢ`. Дерево пространства состояний — это дерево, в котором:
+- Корень = пустой вектор `()`
+- Узел на глубине `k` = частичное решение `(x₁, ..., xₖ)`
+- Листья = полные кандидаты `(x₁, ..., xₙ)`
+- Размер дерева = `|S₁| × |S₂| × ... × |Sₙ|`
+
+### Pruning и корректность
+
+Ключевое свойство backtracking — **безопасное отсечение** (safe pruning):
+
+> **Теорема:** Если для частичного решения `(x₁, ..., xₖ)` можно доказать, что никакое его расширение `(x₁, ..., xₖ, xₖ₊₁, ..., xₙ)` не удовлетворяет ограничениям, то всё поддерево может быть отсечено без потери решений.
+
+Это превращает полный перебор `O(∏|Sᵢ|)` в значительно меньший поиск, хотя worst-case остаётся экспоненциальным.
+
+### Связь с другими парадигмами
+
+| Парадигма | Стратегия поиска | Отличие от Backtracking |
+|-----------|------------------|------------------------|
+| **Brute Force** | Перебирает ВСЕ кандидаты | Нет отсечения — проверяет каждый |
+| **Backtracking** | DFS + pruning | Отсекает невозможные ветви рано |
+| **Branch & Bound** | Backtracking + оценочная функция (bound) | Добавляет оценку "лучшего возможного" для оптимизационных задач |
+| **Dynamic Programming** | Разбивает на подзадачи | Требует оптимальную подструктуру + перекрытие подзадач |
+| **Greedy** | Локально оптимальный выбор | Никогда не возвращается — нет backtrack |
+
+### Constraint Satisfaction Problems (CSP)
+
+Backtracking — основной метод решения **CSP** (задач удовлетворения ограничений):
+
+> **CSP** = тройка `(X, D, C)`, где:
+> - `X = {x₁, ..., xₙ}` — переменные
+> - `D = {D₁, ..., Dₙ}` — домены значений
+> - `C` — множество ограничений
+
+N-Queens, Sudoku, Map Coloring, SAT — все являются CSP. Backtracking решает CSP, последовательно присваивая значения переменным и откатываясь при нарушении ограничений.
+
+**Оптимизации для CSP** (Mackworth, 1977):
+- **Forward Checking** — после присваивания `xₖ` удаляет несовместимые значения из доменов будущих переменных
+- **Arc Consistency (AC-3)** — поддерживает консистентность между всеми парами переменных
+- **Variable/Value Ordering** — MRV (Minimum Remaining Values), LCV (Least Constraining Value)
+
+### Оценка размера дерева поиска (Knuth, 1975)
+
+Кнут предложил метод **стохастической оценки** размера дерева backtracking: случайный путь от корня к листу с подсчётом branching factor на каждом уровне. Это позволяет оценить, сколько узлов посетит алгоритм, до его запуска.
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > **Цель:** понять ИДЕЮ Backtracking до любого кода. Если ты понимаешь эти аналогии — ты уже понимаешь паттерн.
@@ -1747,16 +1822,22 @@ Merge sort           satisfaction           subproblems
 
 ## Источники
 
+### Теоретические основы
+- Golomb, S. & Baumert, L. (1965). "Backtrack Programming" — JACM, формализация метода
+- Knuth, D. (1975). "Estimating the Efficiency of Backtrack Programs" — Mathematics of Computation, стохастическая оценка деревьев
+- Knuth, D. (2011). *TAOCP vol.4A* — §7.2.2: Backtrack programming
+- Mackworth, A. (1977). "Consistency in Networks of Relations" — AIJ, arc consistency (AC-3)
+- Russell, S. & Norvig, P. (2020). *AIMA*, 4th ed. — Ch.6: Constraint Satisfaction Problems
+
+### Практические руководства
 1. [Labuladong - Backtracking Template](https://labuladong.online/algo/en/essential-technique/permutation-combination-subset-all-in-one/) — Comprehensive guide
 2. [AlgoMonster - Backtracking](https://algo.monster/problems/backtracking) — Problems and patterns
 3. [Hello Algo - Backtracking](https://www.hello-algo.com/en/chapter_backtracking/backtracking_algorithm/) — Visualization
 4. [Wikipedia - Backtracking](https://en.wikipedia.org/wiki/Backtracking) — Theory
 5. [LeetCode Discuss - Backtracking Guide](https://leetcode.com/discuss/post/3799395/Exploring-Backtracking:-Your-Path-to-Tackling-Complex-Algorithmic-Challenges/) — Problem list
-6. [Shadecoder - Backtracking 2025](https://www.shadecoder.com/topics/what-is-backtracking-a-practical-guide-for-2025) — Modern relevance
-7. [Hello Interview - Backtracking Overview](https://www.hellointerview.com/learn/code/backtracking/overview) — Interview prep
-8. [GeeksforGeeks - Top 20 Backtracking Questions](https://www.geeksforgeeks.org/dsa/top-20-backtracking-algorithm-interview-questions/) — Interview questions
-9. [DEV.to - Amazon Interview Backtracking](https://dev.to/devcorner/day-19-the-backtracking-pattern-amazon-interview-series-4c97) — Big Tech patterns
-10. [AlgoMap - Recursive Backtracking](https://algomap.io/lessons/recursive-backtracking) — Step-by-step tutorial
+6. [Hello Interview - Backtracking Overview](https://www.hellointerview.com/learn/code/backtracking/overview) — Interview prep
+7. [GeeksforGeeks - Top 20 Backtracking Questions](https://www.geeksforgeeks.org/dsa/top-20-backtracking-algorithm-interview-questions/) — Interview questions
+8. [AlgoMap - Recursive Backtracking](https://algomap.io/lessons/recursive-backtracking) — Step-by-step tutorial
 
 ---
 

@@ -37,6 +37,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### CTO в стартапе: эволюция роли и теоретический контекст
+
+> **Определение:** Startup CTO — технический сооснователь или первый технический лидер стартапа, ответственный за all technical decisions, team building и product delivery. Роль радикально эволюционирует от hands-on engineer (Seed) до strategic executive (Series B+).
+
+Fred Wilson (Union Square Ventures) сформулировал модель CTO ролей в стартапе: на ранней стадии CTO = Chief Technology **Doer** (строит продукт), на средней = Chief Technology **Manager** (строит команду), на поздней = Chief Technology **Officer** (определяет стратегию). Неспособность пройти эти transitions — главная причина замены founding CTO.
+
+| Стадия | CTO роль | Ключевая задача | Частая ошибка |
+|--------|---------|-----------------|---------------|
+| **Pre-Seed/Seed** | Doer (80% код) | MVP, product-market fit | Premature optimization |
+| **Series A** | Manager (40% код) | Hiring, process, architecture | Не отпускает код |
+| **Series B+** | Officer (0% код) | Strategy, board, partnerships | Не нанимает VPE вовремя |
+
+Eric Ries в *"The Lean Startup"* (2011) формализовал подход Build-Measure-Learn, определяющий техническую работу CTO на ранней стадии: MVP — не минимальный продукт, а минимальный **viable эксперимент** для валидации hypothesis. Dan McKinley в *"Choose Boring Technology"* (2015) обосновал принцип innovation tokens: стартап CTO имеет ограниченный бюджет на экзотические технологии.
+
+> «The CTO role is the only C-level role that completely changes its job description as the company scales.» — Matt Clifford, Entrepreneur First
+
+Werner Vogels (CTO Amazon) описал четыре archetype CTO: **Infrastructure**, **Big Thinker**, **External-Facing**, **Internal Manager**. В стартапе CTO обычно начинает как Infrastructure archetype и должен трансформироваться в Big Thinker/External-Facing по мере роста, делегируя internal management [[cto-vs-vpe|VP Engineering]].
+
+---
+
 ## CTO Role Evolution
 
 ```
@@ -359,13 +381,22 @@ COPING:
 
 **[[scaling-from-zero]]** — CTO стартапа проживает все этапы масштабирования с нуля на собственном опыте, и каждый этап требует радикального изменения подхода к работе. Переход от «я пишу весь код» к «я не пишу код вообще» — один из самых сложных emotional transitions в карьере. Понимание этапов роста (0-10, 10-30, 30-100+) позволяет CTO заранее готовиться к необходимым изменениям в стиле лидерства.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Ries E. "The Lean Startup" — Crown Business, 2011 | Книга | Build-Measure-Learn, MVP methodology |
+| 2 | McKinley D. "Choose Boring Technology" — 2015 | Эссе | Innovation tokens, boring technology principle |
+| 3 | Vogels W. "A Day in the Life of a CTO" — различные выступления | Talks | Четыре CTO archetype |
+| 4 | Wilson F. "VP Engineering vs CTO" — AVC Blog, 2011 | Блог | CTO role evolution model |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | CTO decision-making, founder dynamics |
+| 2 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | CTO career path, transition to management |
+| 3 | [The Startup CTO's Handbook](https://github.com/ZachGoldberg/Startup-CTO-Handbook) | Guide | Practical CTO playbook |
 
 
 ## Проверь себя

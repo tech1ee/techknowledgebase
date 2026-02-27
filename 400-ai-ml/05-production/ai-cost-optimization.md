@@ -75,6 +75,38 @@ status: published
 
 ---
 
+## Теоретические основы
+
+> **Cost Optimization** LLM-систем — инженерная дисциплина минимизации совокупной стоимости владения (TCO) AI-приложениями при сохранении целевых метрик качества. Включает оптимизацию на уровнях промптов, моделей, кэширования, инфраструктуры и архитектуры.
+
+Экономика LLM имеет уникальную структуру, отличающуюся от классических SaaS:
+
+| Концепция | Теоретическая база | Применение к LLM |
+|-----------|-------------------|------------------|
+| **Scaling Laws** | Kaplan et al. (2020), arXiv:2001.08361 | Качество растёт как $\log(C)$ от compute; 10x cost → линейное улучшение |
+| **Information Theory** | Shannon (1948) | Минимальное количество битов для передачи информации → нижняя граница сжатия промпта |
+| **Caching Theory** | Belady (1966), оптимальный алгоритм | Prompt caching: 90% экономия на повторяющихся system prompts |
+| **Queueing Theory** | Little's Law: $L = \lambda W$ | Batch processing: оптимальный размер batch для throughput/latency tradeoff |
+| **Make vs Buy** | Williamson (1975), Transaction Cost Economics | Self-hosting vs API: при каком объёме выгоднее собственная инфраструктура |
+
+> **Фундаментальная формула стоимости LLM:** $Cost = \sum_{i=1}^{N} (T_{in}^i \cdot P_{in} + T_{out}^i \cdot P_{out}) \cdot (1 - cache\_hit\_rate)$, где $T$ — токены, $P$ — цена за токен, $N$ — количество вызовов. Каждый множитель в формуле — точка оптимизации.
+
+**Иерархия техник оптимизации (по impact):**
+
+| Уровень | Техника | Теория | Экономия |
+|---------|---------|--------|----------|
+| **Архитектурный** | Model routing | Mixture of Experts (Shazeer, 2017) | 40-70% |
+| **Кэширование** | Prompt + Semantic caching | Cache theory + nearest neighbor search | 30-90% |
+| **Промпт** | Компрессия, сокращение | Information theory, LLMLingua (Jiang et al., 2023) | 20-50% |
+| **Batch** | Batch API, continuous batching | Queueing theory | 50% |
+| **Инфраструктурный** | Self-hosting, spot instances | TCO analysis | 60-95% |
+
+Парадокс: самая дешёвая модель ≠ самое дешёвое решение. **Quality-adjusted cost** учитывает retry rate, error rate и downstream impact ошибок.
+
+См. также: [[ai-api-integration|API Integration]] — pricing моделей, [[agent-cost-optimization|Agent Cost Optimization]] — специфика агентов, [[llm-inference-optimization|Inference Optimization]] — ускорение inference.
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** LLM API стоят дорого при масштабировании. Компания с 10K запросов/день на GPT-4o платит ~$3,000/месяц только за input tokens.
@@ -1963,52 +1995,26 @@ Avg cost/request: ${summary['avg_cost_per_request']:.6f}
 
 ## Источники
 
-### Официальные pricing pages
-- [OpenAI API Pricing](https://platform.openai.com/docs/pricing)
-- [Anthropic Claude Pricing](https://www.anthropic.com/pricing)
-- [Google Gemini Pricing](https://ai.google.dev/gemini-api/docs/pricing)
-- [DeepSeek Pricing](https://api-docs.deepseek.com/quick_start/pricing)
+### Теоретические основы
 
-### Cost Optimization Guides
-- [LLM Cost Optimization: Complete Guide 2025 - Koombea](https://ai.koombea.com/blog/llm-cost-optimization)
-- [LLM Cost Optimization Guide - FutureAGI](https://futureagi.com/blogs/llm-cost-optimization-2025)
-- [10 Ways to Slash Inference Costs - Analytics Vidhya](https://www.analyticsvidhya.com/blog/2025/12/llm-cost-optimization/)
-- [How to Save 90% on LLM API Costs - Prem AI](https://blog.premai.io/how-to-save-90-on-llm-api-costs-without-losing-performance/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Kaplan J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361 | Зависимость качества от compute — основа cost/quality tradeoff |
+| 2 | Shannon C. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal | Теоретический минимум информации → нижняя граница сжатия |
+| 3 | Jiang H. et al. (2023). *LLMLingua: Compressing Prompts for Accelerated Inference*. arXiv:2310.05736 | Prompt compression без потери качества |
+| 4 | Shazeer N. et al. (2017). *Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer*. ICLR | MoE — основа model routing |
+| 5 | Williamson O. (1975). *Markets and Hierarchies: Analysis and Antitrust Implications*. Free Press | Transaction Cost Economics — make vs buy для self-hosting |
 
-### Prompt Caching
-- [Prompt Caching Guide 2025 - PromptBuilder](https://promptbuilder.cc/blog/prompt-caching-token-economics-2025)
-- [Comparing Prompt Caching: OpenAI, Anthropic, Gemini - Medium](https://medium.com/@m_sea_bass/comparing-prompt-caching-openai-anthropic-and-gemini-0eac16541898)
-- [Anthropic Prompt Caching 90% Savings - ByteIota](https://byteiota.com/anthropic-prompt-caching-cuts-ai-api-costs-90/)
+### Практические руководства
 
-### Semantic Caching
-- [GPTCache GitHub](https://github.com/zilliztech/GPTCache)
-- [GPTCache Documentation](https://gptcache.readthedocs.io/en/latest/)
-- [Deep Dive Into GPTCache - Medium](https://medium.com/@raju.samantapudi/rethinking-llm-performance-a-deep-dive-into-gptcache-and-the-future-of-semantic-caching-6f338f1f2fd2)
-
-### Token Compression
-- [LLMLingua - Microsoft Research](https://www.microsoft.com/en-us/research/blog/llmlingua-innovating-llm-efficiency-with-prompt-compression/)
-- [LLMLingua GitHub](https://github.com/microsoft/LLMLingua)
-- [Token Compression 80% Savings - Medium](https://medium.com/@yashpaddalwar/token-compression-how-to-slash-your-llm-costs-by-80-without-sacrificing-quality-bfd79daf7c7c)
-
-### Batch Processing
-- [LLM Batch Inference Guide - ZenML](https://www.zenml.io/blog/the-ultimate-guide-to-llm-batch-inference-with-openai-and-zenml)
-- [Scaling LLMs with Batch Processing - Latitude](https://latitude-blog.ghost.io/blog/scaling-llms-with-batch-processing-ultimate-guide/)
-- [Continuous Batching 23x Throughput - Anyscale](https://www.anyscale.com/blog/continuous-batching-llm-inference)
-
-### Self-Hosting Analysis
-- [API vs Self-Hosting Cost Comparison - DetectX](https://www.detectx.com.au/cost-comparison-api-vs-self-hosting-for-open-weight-llms/)
-- [LLM Total Cost of Ownership 2025 - Ptolemay](https://www.ptolemay.com/post/llm-total-cost-of-ownership)
-- [OpenAI vs Self-Hosted LLMs - Substack](https://tinyml.substack.com/p/openai-vs-self-hosted-llms-a-cost)
-
-### Fine-Tuning
-- [Is Fine-Tuning Still Worth It 2025 - Kadoa](https://www.kadoa.com/blog/is-fine-tuning-still-worth-it)
-- [Prompt Engineering vs Fine-Tuning - DextraLabs](https://dextralabs.com/blog/prompt-engineering-vs-fine-tuning/)
-- [Fine-Tuning vs Prompting Cost Tradeoffs - Medium](https://medium.com/write-a-catalyst/fine-tuning-vs-prompting-when-each-wins-and-cost-tradeoffs-e205522ac10c)
-
-### Case Studies
-- [99.7% Cost Reduction in LLM Deployment - Medium](https://medium.com/@richardhightower/the-economics-of-deploying-large-language-models-costs-value-and-99-7-savings-d1cd9a84fcbe)
-- [LLMs in Financial Services - ScienceSoft](https://www.scnsoft.com/finance/large-language-models)
-- [Enhancing ROI with LLM Technology - A3Logics](https://www.a3logics.com/success-stories/enhancing-roi-and-cost-savings-with-llm-technology/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OpenAI API Pricing](https://platform.openai.com/docs/pricing) | Актуальные цены |
+| 2 | [Anthropic Claude Pricing](https://www.anthropic.com/pricing) | Pricing + prompt caching |
+| 3 | [LLMLingua — Microsoft Research](https://github.com/microsoft/LLMLingua) | Token compression 80% |
+| 4 | [GPTCache](https://github.com/zilliztech/GPTCache) | Semantic caching |
+| 5 | [Continuous Batching — Anyscale](https://www.anyscale.com/blog/continuous-batching-llm-inference) | 23x throughput |
+| 6 | [LLM TCO 2025 — Ptolemay](https://www.ptolemay.com/post/llm-total-cost-of-ownership) | Self-hosting TCO analysis |
 
 ---
 

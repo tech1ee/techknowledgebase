@@ -37,6 +37,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формализация технической стратегии
+
+> **Определение:** Technical Vision — документ, описывающий целевое состояние (target state) технологической платформы организации, обосновывающий выбранное направление бизнес-контекстом и определяющий roadmap перехода из текущего состояния.
+
+Will Larson в *"Staff Engineer"* (2022) формализовал компоненты технической стратегии через три документа: **vision** (куда идём), **strategy** (как идём), **design documents** (конкретные решения). Стратегия при этом описывается через **guiding policies** — принципы принятия решений (например, «boring technology by default», «own your data»).
+
+### Wardley Mapping для технической стратегии
+
+Simon Wardley в *"Wardley Maps"* (2016) предложил инструмент визуализации, ставший стандартом для CTO и технических лидеров:
+
+| Компонент карты | Описание | Пример |
+|----------------|----------|--------|
+| **User needs** | Потребности пользователей | «Быстрый поиск по каталогу» |
+| **Value chain** | Цепочка зависимостей | UI → API → Search Engine → Database |
+| **Evolution axis** | Genesis → Custom → Product → Commodity | «Search: Custom → Elasticsearch (Product)» |
+| **Movement** | Направление развития компонентов | «Auth: Custom → Auth0 (Commodity)» |
+
+Richard Rumelt в *"Good Strategy Bad Strategy"* (2011) определил хорошую стратегию как сочетание трёх элементов: **diagnosis** (что происходит), **guiding policy** (подход к решению) и **coherent actions** (конкретные шаги). Плохая стратегия — список целей без diagnosis или actions.
+
+> **Architecture Decision Records** ([[architecture-decisions|ADR]]) — операционная реализация tech vision: каждое ADR должно быть aligned с vision и двигать организацию к target state.
+
+---
+
 ## Что такое Tech Vision
 
 ```
@@ -207,11 +232,18 @@ FORMATS:
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Staff Engineer](https://staffeng.com/) | Book |
-| [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
-| [CTO Craft](https://ctocraft.com/) | Community |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Rumelt R. "Good Strategy Bad Strategy" — Crown Business, 2011 | Книга | Diagnosis + Guiding Policy + Coherent Actions |
+| 2 | Wardley S. "Wardley Maps" — CC BY-SA, 2016 | Книга/методология | Визуализация технологической стратегии |
+| 3 | Larson W. "Staff Engineer" — самиздат, 2022 | Книга | Vision → Strategy → Design documents |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book | Scaling, tech strategy execution |
+| 2 | [CTO Craft](https://ctocraft.com/) | Community | Practical CTO resources |
 
 ---
 

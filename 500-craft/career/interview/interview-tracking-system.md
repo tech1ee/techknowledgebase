@@ -31,6 +31,36 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **CRM (Customer Relationship Management)** — система управления взаимоотношениями с клиентами через структурированный трекинг контактов, этапов и метрик. В контексте job search кандидат применяет CRM-подход к компаниям-работодателям: каждая компания — "клиент" в pipeline.
+
+**Теоретический фундамент:**
+
+| Концепция | Источник | Суть | Применение к job search |
+|-----------|----------|------|------------------------|
+| Sales Pipeline | CRM theory | Воронка от lead до сделки с конверсией на каждом этапе | Applied → Screen → Onsite → Offer |
+| PDCA Cycle | Deming (1950s) | Plan-Do-Check-Act — цикл непрерывного улучшения | Apply → Interview → Debrief → Adjust |
+| Conversion Rate | Marketing analytics | Метрика эффективности каждого этапа воронки | Response rate, interview-to-offer ratio |
+| Post-Mortem Analysis | Aviation/Engineering | Систематический анализ неудач для предотвращения повторений | Rejection analysis, pattern recognition |
+| Design Thinking | Tim Brown (2009) | Prototype → Test → Iterate | Тестировать стратегию на малых batch, итерировать |
+
+**Аналогия Job Search → Sales Pipeline:**
+
+```
+Sales:     Lead → Qualified → Proposal → Negotiation → Close
+Job Search: Applied → Response → Interview → Offer → Accept
+Metrics:   100%  →   15%    →    40%    →   25%   → 80%
+```
+
+Исследования показывают, что системный подход к job search (с трекингом и анализом) повышает conversion в 2-3 раза по сравнению с хаотичным подходом. Причина: **feedback loop** — данные из трекинга позволяют выявить bottleneck (на каком этапе теряются заявки) и целенаправленно его устранить.
+
+> **PDCA (Deming Cycle):** Plan (определи target companies), Do (подай заявки), Check (проанализируй conversion rates), Act (скорректируй стратегию). Без Check этапа — нет улучшения; трекинг-система обеспечивает данные для Check.
+
+→ Связано: [[interview-process]], [[job-search-strategy]], [[ai-interview-preparation]]
+
+---
+
 ## System Overview
 
 ```
@@ -856,13 +886,19 @@ ZAPIER/MAKE WORKFLOWS:
 
 - [[ai-interview-preparation]] — AI-инструменты интегрируются в tracking system: AI для company research (Phase 1 prep), AI для mock interviews (practice log), AI для post-interview debrief (feedback analysis). Tracking system фиксирует, какие AI-промпты сработали лучше и для каких этапов.
 
-## Источники и дальнейшее чтение
+## Источники
 
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking применима к job search tracking: prototype (подай 5 заявок), test (отследи результаты), iterate (улучши подход). Книга помогает превратить хаотичный поиск в системный эксперимент с метриками.
+### Теоретические основы
 
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Содержит рекомендации по организации подготовки: timeline, checklists, practice schedule. Stage-specific checklists из текущего материала дополняют preparation framework из книги конкретными шаблонами для трекинга.
+- Deming W.E. (1986). *Out of the Crisis*. — PDCA цикл: Plan-Do-Check-Act как основа непрерывного улучшения процесса job search.
 
-- Fournier C. (2017). *The Manager's Path*. — Понимание того, как debrief и решения принимаются внутри компаний, помогает правильно интерпретировать rejection analysis. Книга описывает hiring process с perspective hiring manager, что делает post-mortem анализ более точным.
+- Brown T. (2009). *Change by Design*. — Design thinking: prototype → test → iterate применительно к стратегии поиска работы.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking для job search: превращение хаотичного поиска в системный эксперимент с метриками.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Организация подготовки: timeline, checklists, practice schedule.
+
+- Fournier C. (2017). *The Manager's Path*. — Как debrief и hiring decisions принимаются внутри компаний; контекст для rejection analysis.
 
 ---
 

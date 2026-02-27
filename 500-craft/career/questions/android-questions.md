@@ -30,6 +30,37 @@ Jetpack Compose — must-know для любого интервью в 2025. Life
 
 ---
 
+## Теоретические основы
+
+> **Technical Assessment** — структурированная оценка предметных знаний кандидата через вопросы и задачи. Android-specific assessment проверяет знание платформенных API, lifecycle, concurrency и UI framework.
+
+**Таксономия вопросов по Android (от factual к analytical):**
+
+| Уровень (Bloom) | Тип вопроса | Пример | Ожидаемый уровень |
+|-----------------|-------------|--------|-------------------|
+| Remember | Определение | "Что такое Activity lifecycle?" | Junior |
+| Understand | Объяснение | "Почему onSaveInstanceState вызывается не всегда?" | Mid |
+| Apply | Применение | "Как реализуете offline-first с Room?" | Senior |
+| Analyze | Анализ trade-offs | "Compose vs XML — когда что?" | Senior |
+| Evaluate | Обоснование решения | "Почему выбрали MVI, а не MVVM?" | Staff |
+
+**Три домена Android-знаний на интервью:**
+
+```
+1. Platform Fundamentals:  Activity/Fragment lifecycle, process death,
+                          configuration changes, IPC (50% вопросов Junior)
+2. Modern Stack:          Compose, Coroutines, Flow, Hilt, Room
+                          (70% вопросов Senior)
+3. Architecture & Scale:  MVI, Clean Architecture, modularization,
+                          performance (80% вопросов Staff+)
+```
+
+Глубина ожидаемого ответа зависит от уровня позиции: Junior описывает *что* (API), Senior объясняет *почему* (trade-offs), Staff обосновывает *когда* (context-dependent decisions).
+
+→ Связано: [[kotlin-questions]], [[architecture-questions]], [[technical-interview]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -623,15 +654,17 @@ fun getData(): Flow<Resource<Data>> = flow {
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Фундаментальный справочник по подготовке к техническим интервью. Хотя фокус на алгоритмах, методология подготовки и формат ответов применимы к Android-вопросам. Незаменима для понимания, как думает интервьюер.
-
-- **Xu A. (2020). System Design Interview.** — System Design вопросы всё чаще появляются на Android-интервью: «Design offline-first app», «Design image loading library». Эта книга даёт структурированный подход к таким задачам, адаптируемый под mobile-специфику.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Bloom B.S. (1956). *Taxonomy of Educational Objectives*. — Классификация когнитивных уровней; применяется к структурированию assessment вопросов.
+
+- McDowell G.L. (2015). *Cracking the Coding Interview*. — Методология подготовки к техническим интервью; как думает интервьюер.
+
+- Xu A. (2020). *System Design Interview*. — System Design вопросы на Android-интервью: offline-first, image loading.
+
+### Практические руководства
 
 - [GitHub: Android Interview Questions](https://github.com/amitshekhariitbhu/android-interview-questions)
 - [Medium: Senior Android Lifecycle](https://medium.com/@sandeepkella23/senior-android-developer-interview-questions-and-answers-lifecycle-9dce4f47aace)

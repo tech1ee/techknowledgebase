@@ -36,6 +36,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Историческое происхождение Fragment
+
+> **Fragment** был введён в Android 3.0 (Honeycomb, API 11, 2011) для поддержки планшетов — Dianne Hackborn описала концепцию как *«a modular section of an activity, which has its own lifecycle, receives its own input events, and which you can add or remove while the activity is running»* (Android Developers Blog, 2011).
+
+Fragment реализует паттерн **Composite** (Gamma E. et al., 1994): Activity содержит Fragment'ы, каждый из которых имеет собственный lifecycle, но подчинённый lifecycle родительской Activity.
+
+### Двойной жизненный цикл как архитектурное решение
+
+Ключевая особенность Fragment — **разделение lifecycle объекта и его View**. Это следствие паттерна **Model-View separation** (Fowler M. *Patterns of Enterprise Application Architecture*, 2002):
+
+| Lifecycle | Управляется | Когда уничтожается |
+|-----------|------------|-------------------|
+| Fragment lifecycle | FragmentManager | При remove() или при уничтожении host Activity |
+| View lifecycle | FragmentStateManager | При переходе в back stack (replace), при detach |
+
+Fragment может пережить уничтожение своего View (`onDestroyView()` без `onDestroy()`) — это происходит при добавлении транзакции в back stack. Формально Fragment в back stack находится в состоянии CREATED (без View), а не DESTROYED.
+
+### Формализация состояний
+
+Fragment lifecycle описывается как **иерархический конечный автомат** (Harel D. *«Statecharts: A Visual Formalism for Complex Systems»*, 1987), где состояние Fragment ограничено состоянием родительской Activity:
+
+```
+Инвариант: state(Fragment) ≤ state(Activity)
+Пример: если Activity в STARTED, Fragment не может быть в RESUMED
+```
+
+FragmentManager использует метод `moveToExpectedState()` для приведения всех дочерних Fragment к состоянию, не превышающему текущее состояние Activity.
+
+> **Связь с навигацией:** С появлением [[android-navigation|Navigation Component]] (2018) и [[android-compose|Jetpack Compose]] (2021) роль Fragment как единицы навигации постепенно снижается. Однако в гибридных проектах Fragment остаётся ключевым хостом для Compose-экранов через `ComposeView`.
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: скрытая сложность Fragment
@@ -1964,6 +1998,14 @@ fun MyScreen(viewModel: MyViewModel) {
 
 ## Источники
 
+### Теоретические основы
+
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns: Elements of Reusable Object-Oriented Software* (1994) — паттерн Composite, реализуемый в иерархии Activity → Fragment, и паттерн Mediator (FragmentManager как координатор)
+- **Harel D.** *«Statecharts: A Visual Formalism for Complex Systems»* (1987) — иерархический конечный автомат: состояние Fragment ограничено состоянием родительской Activity (инвариант `state(Fragment) ≤ state(Activity)`)
+- **Fowler M.** *Patterns of Enterprise Application Architecture* (2002) — Model-View separation как основа разделения Fragment lifecycle и View lifecycle
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [Android Developers: Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle) | Документация | Официальное описание состояний и callbacks |
@@ -1983,11 +2025,9 @@ fun MyScreen(viewModel: MyViewModel) {
 | 15 | [Android Developers: ViewCompositionStrategy](https://developer.android.com/reference/kotlin/androidx/compose/ui/platform/ViewCompositionStrategy) | Документация | Стратегии dispose для ComposeView в Fragment |
 | 16 | [Chet Haase, Romain Guy: ADS 2022 - Fragments: Past, Present, and Future](https://www.youtube.com/watch?v=OE-tDh3d1F4) | Видео | Эволюция Fragment API, планы на будущее |
 
-### Книги
-
-- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — подробное пошаговое руководство по Fragment lifecycle, FragmentManager и FragmentTransaction. Лучший вводный материал для понимания Fragment.
-- **Meier R. (2022)** *Professional Android* — глубокое описание Fragment lifecycle, back stack management и интеграции с Navigation Component в production-приложениях.
-- **Moskala M. (2021)** *Effective Kotlin* — рекомендации по использованию viewLifecycleOwner, правильному scoping корутин во Fragment и предотвращению memory leaks.
+- **Phillips B. et al.** *Android Programming: The Big Nerd Ranch Guide* (2022) — подробное пошаговое руководство по Fragment lifecycle, FragmentManager и FragmentTransaction
+- **Meier R.** *Professional Android* (2022) — глубокое описание Fragment lifecycle, back stack management и интеграции с Navigation Component
+- **Moskala M.** *Effective Kotlin* (2021) — рекомендации по использованию viewLifecycleOwner, правильному scoping корутин во Fragment и предотвращению memory leaks
 
 ---
 

@@ -38,6 +38,34 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Tech Lead как роль, а не титул
+
+> **Определение:** Tech Lead — формально не закреплённая в большинстве организаций роль технического лидерства, сочетающая экспертизу Individual Contributor с координационными функциями, не предполагающая прямого управления людьми (people management).
+
+Понятие Tech Lead исторически развивалось параллельно с эволюцией software engineering как дисциплины. В отличие от Engineering Manager, роль Tech Lead не имеет единого академического определения и варьируется между организациями. Pat Kua в *"Talking with Tech Leads"* (2014) собрал эмпирические данные о роли через интервью с десятками практиков и определил три ключевых измерения: technical vision, technical execution, delivery ownership.
+
+### Elastic Leadership и модели лидерства Tech Lead
+
+Roy Osherove в *"Elastic Leadership"* (2016) предложил модель адаптивного лидерства, ключевую для понимания роли Tech Lead:
+
+| Режим команды | Стиль лидерства TL | Описание |
+|--------------|---------------------|----------|
+| **Survival mode** | Командный (directive) | Команда не справляется — TL принимает решения и показывает путь |
+| **Learning mode** | Коучинговый (coaching) | Команда учится — TL обучает и направляет |
+| **Self-organizing** | Фасилитирующий (facilitative) | Команда зрелая — TL устраняет препятствия |
+
+Эта модель перекликается с концепцией **Servant Leadership** (Robert K. Greenleaf, *"The Servant as Leader"*, 1970), где лидер существует для обслуживания потребностей команды, а не наоборот. Tech Lead в режиме servant leader:
+
+> **Servant Leadership** (Greenleaf, 1970) — философия лидерства, при которой главная цель лидера — служение тем, кем он руководит. Лидер сначала служит, а затем сознательно стремится вести за собой.
+
+Will Larson в *"Staff Engineer"* (2022) выделяет четыре архетипа Staff-уровня инженеров: **Tech Lead**, Architect, Solver и Right Hand. Архетип Tech Lead отличается от остальных привязкой к конкретной команде и ответственностью за delivery. Camille Fournier в *"The Manager's Path"* (2017) описывает Tech Lead как **критическую развилку** — именно здесь инженер впервые сталкивается с leadership responsibilities и принимает решение о дальнейшем карьерном треке: [[ic-vs-management|IC или Management]].
+
+Исторически разделение ролей Tech Lead и [[engineering-manager|Engineering Manager]] оформилось в крупных tech-компаниях (Google, Meta) в 2010-х годах, когда стало очевидно, что совмещение технического и people leadership в одном лице снижает качество обоих аспектов.
+
+---
+
 ## Зачем понимать эту роль?
 
 ### Типичная ситуация
@@ -611,6 +639,15 @@ SOFT SKILLS:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Greenleaf R. K. "The Servant as Leader" — Greenleaf Center, 1970 | Эссе | Философия servant leadership |
+| 2 | Osherove R. "Elastic Leadership" — Manning, 2016 | Книга | Адаптивная модель лидерства (survival/learning/self-organizing) |
+| 3 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Tech Lead как карьерная развилка |
+| 4 | Larson W. "Staff Engineer" — самиздат, 2022 | Книга | Четыре архетипа Staff-уровня (Tech Lead, Architect, Solver, Right Hand) |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [10 Attributes of a Great Tech Lead](https://betterprogramming.pub/10-admirable-attributes-of-a-great-technical-lead-251d13a8843b) | Article | Core attributes |
@@ -618,11 +655,7 @@ SOFT SKILLS:
 | 3 | [StaffEng: Tech Lead Archetype](https://staffeng.com/guides/staff-archetypes) | Guide | TL vs Staff |
 | 4 | [The Definition of a Tech Lead](https://www.patkua.com/blog/the-definition-of-a-tech-lead/) (Pat Kua) | Article | Role definition |
 | 5 | [Pragmatic Engineer: Tech Lead](https://newsletter.pragmaticengineer.com/) | Newsletter | Time allocation |
-
-### Дополнительное чтение
-- **The Manager's Path** (Camille Fournier) — глава про Tech Lead
-- **Staff Engineer** (Will Larson) — TL как один из archetypes
-- **Talking with Tech Leads** (Pat Kua) — интервью с TLs
+| 6 | **Talking with Tech Leads** (Pat Kua, 2014) | Книга | Интервью с Tech Leads, эмпирические данные о роли |
 
 *Исследование проведено: 2026-01-18*
 

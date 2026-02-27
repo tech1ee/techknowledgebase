@@ -63,6 +63,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **HTTP Client Library** — программный компонент, абстрагирующий низкоуровневое сетевое взаимодействие (TCP sockets, TLS handshake, HTTP protocol) за высокоуровневым API запросов и ответов (Fielding, 2000, REST Architectural Style).
+
+Ktor — асинхронный HTTP-клиент и сервер от JetBrains, спроектированный как **KMP-first** библиотека.
+
+### Архитектурная модель: Engine abstraction
+
+Ktor реализует паттерн **Strategy** (Gamma et al., 1994): общий API (`HttpClient`) делегирует сетевое взаимодействие платформенному engine:
+
+| Платформа | Engine | Реализация | TLS Stack |
+|-----------|--------|------------|-----------|
+| Android | OkHttp | Square OkHttp library | Platform |
+| iOS | Darwin | NSURLSession | Apple Security |
+| JVM | CIO | Coroutine-based I/O | Java TLS |
+| JS/Wasm | Js | Fetch API | Browser TLS |
+
+### Принцип Plugin Architecture
+
+Ktor использует **Pipeline** архитектуру: запрос проходит через цепочку плагинов (interceptors), каждый из которых может модифицировать request/response:
+
+```
+Request → Auth → Logging → ContentNegotiation → Engine → Response
+```
+
+Это реализация паттерна **Chain of Responsibility** (Gamma et al., 1994) и **Middleware** (OASIS, 2006).
+
+> **Академические источники:** Fielding R. (2000). *Architectural Styles and the Design of Network-based Software Architectures.* PhD Thesis (REST). Gamma E. et al. (1994). *Design Patterns.* (Strategy, Chain of Responsibility).
+
+
 ## Почему Ktor? Теоретические основы
 
 ### HTTP-клиент как абстракция над сетью
@@ -1179,11 +1211,16 @@ class UserApi(private val client: HttpClient) {
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Ktor полностью построен на корутинах: все I/O операции используют suspend-функции, а Flow применяется для WebSocket-стримов. Книга раскрывает механику structured concurrency и cancellation, критичные для понимания поведения Ktor при отмене запросов и таймаутах.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв и инверсии зависимостей напрямую применяются к организации сетевого кода в KMP: Repository pattern, DTO → Domain mapping и абстракция HttpClient через интерфейсы.
+- **Fielding R. (2000).** *Architectural Styles and the Design of Network-based Software Architectures.* — REST как архитектурный стиль, реализуемый через Ktor Client.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Strategy Pattern (HTTP engines) и Chain of Responsibility (plugins) в архитектуре Ktor.
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические паттерны Kotlin, включая правильную обработку ошибок через sealed classes (ApiResult), использование inline-функций (safeApiCall) и работу с nullable типами, что составляет основу robust сетевого слоя.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины как основа Ktor: suspend-функции, Flow для WebSocket.
+- **Moskala M. (2021).** *Effective Kotlin.* — Обработка ошибок через sealed classes, inline-функции для API calls.
+- [Ktor Documentation](https://ktor.io/docs/client-overview.html) — Официальная документация Ktor Client.
 
 ---
 

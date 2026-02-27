@@ -35,6 +35,44 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Уязвимость (vulnerability)** -- слабость в информационной системе, системных процедурах безопасности, внутренних механизмах контроля или реализации, которая может быть эксплуатирована источником угрозы (NIST SP 800-30, 2012).
+
+### OWASP Top 10: история и методология
+
+**OWASP (Open Web Application Security Project)** основан в 2001 году Марком Керфи. OWASP Top 10 публикуется с 2003 года и обновляется каждые 3-4 года на основе анализа данных от сотен организаций:
+
+| Версия | Год | Ключевое изменение |
+|--------|-----|--------------------|
+| OWASP Top 10 v1 | 2003 | Первый выпуск |
+| OWASP Top 10 | 2010 | Фокус на risk-based подход |
+| OWASP Top 10 | 2017 | Добавлены XML External Entities, Insecure Deserialization |
+| OWASP Top 10 | 2021 | A01 Broken Access Control поднялся на 1-е место |
+| OWASP Top 10 | 2025 | Добавлены Supply Chain Failures (A03), Mishandling Exceptions (A10) |
+
+### Связь CWE, CVE и OWASP
+
+| Система | Назначение | Пример |
+|---------|-----------|--------|
+| **CWE** (Common Weakness Enumeration) | Классификация *типов* уязвимостей | CWE-89: SQL Injection |
+| **CVE** (Common Vulnerabilities and Exposures) | Идентификация *конкретных* уязвимостей | CVE-2021-44228 (Log4Shell) |
+| **OWASP Top 10** | Рейтинг *категорий* (агрегирует CWE) | A03:2021 Injection (включает CWE-89) |
+
+CWE -- это таксономия слабостей; CVE -- конкретные экземпляры; OWASP Top 10 -- агрегированный рейтинг категорий по частоте и критичности.
+
+### Жизненный цикл уязвимости
+
+1. **Discovery** -- уязвимость обнаружена (исследователь, автоматический сканер)
+2. **Disclosure** -- ответственное раскрытие вендору (responsible disclosure, 90 дней -- Google Project Zero)
+3. **Patch** -- вендор выпускает исправление
+4. **Exploitation** -- если патч не применён, уязвимость эксплуатируется (zero-day, если патча нет)
+5. **Remediation** -- организации применяют патчи и контрмеры
+
+Связь с [[threat-modeling]]: STRIDE-анализ выявляет угрозы на этапе проектирования; OWASP Top 10 каталогизирует конкретные уязвимости, найденные в production. Связь с [[security-fundamentals]]: каждая категория Top 10 нарушает один или несколько принципов CIA Triad.
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -443,6 +481,16 @@ HTTPS защищает:              HTTPS НЕ защищает:
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- MITRE Corporation. *CWE (Common Weakness Enumeration).* — таксономия типов уязвимостей, на которой строится OWASP Top 10.
+- MITRE Corporation. *CVE (Common Vulnerabilities and Exposures).* — база конкретных уязвимостей с уникальными идентификаторами.
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — практическое руководство по обнаружению и эксплуатации веб-уязвимостей.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — веб-безопасность в контексте проектирования распределённых систем.
+- OWASP Foundation (2021). *OWASP Testing Guide v4.* — систематическое руководство по тестированию безопасности.
+
+### Практические руководства
 
 - [OWASP Top 10:2025 RC1](https://owasp.org/Top10/2025/0x00_2025-Introduction/) — проверено 2025-11-24
 - [OWASP Foundation: Top Ten](https://owasp.org/www-project-top-ten/) — проверено 2025-11-24

@@ -48,6 +48,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Self-Determination Theory (SDT)** — макротеория человеческой мотивации, утверждающая, что устойчивая мотивация и психологическое благополучие требуют удовлетворения трёх базовых психологических потребностей: автономии, компетентности и связи с другими (Deci & Ryan, 1985, 2000).
+
+SDT — одна из наиболее валидированных теорий мотивации (40+ лет исследований, тысячи публикаций):
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Intrinsic Motivation & Self-Determination | Deci & Ryan | 1985 | Основополагающая работа: автономия, компетентность, связь |
+| Cognitive Evaluation Theory | Deci | 1975 | Внешние награды могут подавлять внутреннюю мотивацию (overjustification effect) |
+| Overjustification effect | Lepper, Greene & Nisbett | 1973 | Дети, получавшие награду за рисование, стали рисовать реже после отмены награды |
+| Organismic Integration Theory | Ryan & Deci | 2000 | Спектр мотивации: amotivation → external → introjected → identified → integrated → intrinsic |
+| Drive | Daniel Pink | 2009 | Популяризация SDT для бизнеса: Autonomy, Mastery, Purpose |
+| Flow & intrinsic motivation | Csikszentmihalyi | 1990 | Flow — феноменологическое проявление intrinsic motivation |
+
+> **Deci & Ryan (2000):** «The fullest representations of humanity show people to be curious, vital, and self-motivated. At their best, they are agentic and inspired, striving to learn; extend themselves; master new skills; and apply their talents responsibly.»
+
+Критическое открытие SDT — **undermining effect** (Deci, 1975; Lepper et al., 1973): внешние вознаграждения за деятельность, которая уже мотивирована внутренне, **снижают** внутреннюю мотивацию. Механизм: награда сдвигает perceived locus of causality с «я делаю, потому что мне интересно» на «я делаю ради награды». При отмене награды мотивация падает ниже исходной.
+
+Спектр **Organismic Integration Theory** (Ryan & Deci, 2000): мотивация — не бинарная (внешняя/внутренняя), а континуум от полной амотивации до интегрированной регуляции. Внешнюю мотивацию можно **интернализировать** через удовлетворение трёх потребностей. Это объясняет, почему некоторые разработчики горят на работе (интернализированная мотивация), а другие выгорают ([[burnout-prevention]]): дело не в зарплате, а в автономии и чувстве роста.
+
+---
+
 ## Теория самодетерминации (Self-Determination Theory)
 
 ### Что это
@@ -1001,22 +1024,19 @@ BURNOUT = ХРОНИЧЕСКОЕ НЕУДОВЛЕТВОРЕНИЕ БАЗОВЫХ
 
 ## Источники
 
-### Основополагающие работы SDT
-
-- [Self-Determination Theory Official Site](https://selfdeterminationtheory.org/) — официальный сайт теории, полная библиография
-- [Ryan, R. M., & Deci, E. L. (2000). Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being](https://selfdeterminationtheory.org/SDT/documents/2000_RyanDeci_SDT.pdf) — классическая статья, более 90,000 цитирований
-- [Ryan, R. M., & Deci, E. L. (2017). Self-Determination Theory: Basic Psychological Needs in Motivation, Development, and Wellness](https://www.guilford.com/books/Self-Determination-Theory/Ryan-Deci/9781462538966) — полная книга-монография
-
-### Мета-анализы и обзоры
-
-- [PMC: Intrinsic Motivation and Extrinsic Incentives](https://pmc.ncbi.nlm.nih.gov/articles/PMC5364176/) — мета-анализ эффектов наград
-- [ScienceDirect: Self-Determination Theory in Work Organizations](https://www.sciencedirect.com/science/article/abs/pii/S0149206316300774) — применение SDT в организациях
+### Теоретические основы
+- Deci, E. L. & Ryan, R. M. *Intrinsic Motivation and Self-Determination in Human Behavior*. Plenum, 1985
+- [Ryan, R. M. & Deci, E. L. (2000). Self-determination theory and the facilitation of intrinsic motivation](https://selfdeterminationtheory.org/SDT/documents/2000_RyanDeci_SDT.pdf) — 90,000+ цитирований
+- [Ryan, R. M. & Deci, E. L. (2017). Self-Determination Theory: Basic Psychological Needs](https://www.guilford.com/books/Self-Determination-Theory/Ryan-Deci/9781462538966) — монография
+- Lepper, M. R., Greene, D. & Nisbett, R. E. «Undermining Children's Intrinsic Interest with Extrinsic Reward». Journal of Personality and Social Psychology, 1973
+- [PMC: Intrinsic Motivation and Extrinsic Incentives](https://pmc.ncbi.nlm.nih.gov/articles/PMC5364176/) — мета-анализ
+- [ScienceDirect: Self-Determination Theory in Work Organizations](https://www.sciencedirect.com/science/article/abs/pii/S0149206316300774) — SDT в организациях
 - [PMC: Motivation and Academic Performance](https://pmc.ncbi.nlm.nih.gov/articles/PMC8395561/) — SDT в образовании
 
-### Практические применения
-
-- [Harvard Business Review: What Maslow's Hierarchy Won't Tell You About Motivation](https://hbr.org/2014/11/what-maslows-hierarchy-wont-tell-you-about-motivation) — сравнение теорий мотивации
-- [Daniel Pink: Drive — The Surprising Truth About What Motivates Us](https://www.danpink.com/books/drive/) — популярное изложение SDT
+### Практические руководства
+- Pink, D. *Drive: The Surprising Truth About What Motivates Us*. Riverhead, 2009
+- [Self-Determination Theory Official Site](https://selfdeterminationtheory.org/) — полная библиография
+- [Harvard Business Review: What Maslow's Hierarchy Won't Tell You](https://hbr.org/2014/11/what-maslows-hierarchy-wont-tell-you-about-motivation) — сравнение теорий
 
 ---
 

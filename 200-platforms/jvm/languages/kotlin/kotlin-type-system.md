@@ -95,6 +95,47 @@ status: published
 
 ---
 
+## Теоретические основы: формальный базис системы типов
+
+### Subtyping Theory (Liskov, 1987; Cardelli, 1984)
+
+> **Subtyping** — отношение между типами: `A <: B` означает, что значение типа A можно использовать везде, где ожидается B. Kotlin реализует **nominal subtyping**: `class Dog : Animal()` создаёт `Dog <: Animal`.
+
+**Liskov Substitution Principle** (1987) формализует: если `S <: T`, то объекты типа T можно заменить на объекты типа S без нарушения корректности программы.
+
+### Variance: Covariance и Contravariance
+
+> **Variance** определяет, как subtyping типовых параметров влияет на subtyping параметризованных типов. Формально (Cardelli & Wegner, 1985):
+
+| Variance | Определение | Kotlin | Позиция параметра |
+|----------|-------------|--------|-------------------|
+| **Covariance** | `A <: B ⇒ F<A> <: F<B>` | `out T` | Только в return (output) |
+| **Contravariance** | `A <: B ⇒ F<B> <: F<A>` | `in T` | Только в параметрах (input) |
+| **Invariance** | Ни то, ни другое | `T` (default) | Любая позиция |
+
+Это PECS (Producer Extends, Consumer Super) из Java, формализованное на уровне declaration-site.
+
+### Nothing как Bottom Type
+
+> **Bottom type** (⊥) — тип, являющийся подтипом **всех** типов: `∀T. Nothing <: T`. В теории типов это **initial object** в категории типов.
+
+Kotlin `Nothing`:
+- `throw` имеет тип `Nothing` (функция, которая никогда не возвращает)
+- `emptyList<Nothing>()` можно присвоить `List<любой_тип>` (благодаря covariance `out T`)
+- `Nothing?` содержит единственное значение `null` — это **unit type** для nullable hierarchy
+
+Dual: `Any` — **top type** (⊤): `∀T. T <: Any`.
+
+### Type Erasure и Reification
+
+> **Type erasure** — стирание типовых параметров при компиляции (JVM limitation из Java 5, 2004). Формально: `∀T. List<T>` компилируется в `List` (raw type). Следствие: `is List<String>` невозможно в runtime.
+
+Kotlin `reified` — **partial workaround** через inline functions: компилятор подставляет конкретный тип в call site, сохраняя типовую информацию. Ограничение: работает только в inline functions, т.к. требует доступа к конкретному типу на этапе компиляции.
+
+> **Связь**: Subtyping → [[functional-programming]], Variance → [[kotlin-collections]], Bottom type → [[kotlin-coroutines]] (Nothing в suspend)
+
+---
+
 ## TL;DR
 
 Java стирает generic типы в runtime (type erasure) — `List<String>` и `List<Int>` становятся одинаковыми `List`. Kotlin решает это через `reified` типы в inline функциях: `inline fun <reified T> parse(): T` сохраняет тип T в runtime, позволяя проверки `is T` и получение `T::class.java`.
@@ -1057,6 +1098,14 @@ MutableList читается и пишется → invariant необходим
 [[kotlin-best-practices]] — Best practices для generics включают правила выбора variance (PECS principle), ограничения на использование star projections, рекомендации по reified типам и contracts. Знание type system помогает следовать этим практикам осознанно, а не механически. Рекомендуется как справочник после освоения теории.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Liskov B., Wing J. (1994). *A Behavioral Notion of Subtyping.* ACM TOPLAS. — Формальное определение Liskov Substitution Principle, основа subtyping в Kotlin.
+- Cardelli L., Wegner P. (1985). *On Understanding Types, Data Abstraction, and Polymorphism.* Computing Surveys. — Формальное определение covariance/contravariance, теоретическая основа Kotlin `in`/`out`.
+- Pierce B.C. (2002). *Types and Programming Languages.* MIT Press. — Каноническое введение в теорию типов: subtyping, polymorphism, type inference. Формальный фундамент для понимания любой системы типов.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Главы о generics и variance с подробным объяснением declaration-site vs use-site variance, сравнением с Java wildcards, и практическими примерами PECS.
 - Moskala M. (2021). *Effective Kotlin*. — Best practices для работы с generic-типами, включая правила выбора variance, ограничения reified типов и рекомендации по contracts.

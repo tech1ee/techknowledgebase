@@ -39,6 +39,33 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Фреймворк First 90 Days (Watkins, 2003)
+
+> **Определение:** Transition Acceleration — стратегический подход к первым месяцам в новой роли, направленный на максимально быстрое достижение «точки безубыточности» (breakeven point) — момента, когда лидер начинает приносить организации больше ценности, чем потребляет.
+
+Michael Watkins в книге *"The First 90 Days: Proven Strategies for Getting Up to Speed Faster and Smarter"* (Harvard Business Review Press, 2003, обновлено 2013) формализовал подход к transition acceleration, который стал стандартом в corporate leadership development. Watkins выделяет ключевые принципы:
+
+| Принцип Watkins | Описание | Применение к Engineering Leadership |
+|----------------|----------|-------------------------------------|
+| **Promote yourself** | Ментально принять новую роль | Перестать кодировать как IC, начать думать как лидер |
+| **Accelerate learning** | Структурированное изучение организации | 1-on-1 со всеми stakeholders в первые 30 дней |
+| **Match strategy to situation** | STARS: Startup/Turnaround/Accelerated Growth/Realignment/Sustaining | Определить тип ситуации: строить с нуля или улучшать? |
+| **Secure early wins** | Быстрые победы для credibility | Fix a painful process, remove unnecessary meetings |
+| **Negotiate success** | Согласовать expectations с боссом | Чёткий 90-day plan с metrics |
+| **Build your team** | Оценить и при необходимости перестроить команду | Оценить EM/TL capabilities |
+
+### Контекст организационной социализации
+
+Теория организационной социализации (Van Maanen & Schein, *"Toward a Theory of Organizational Socialization"*, 1977) описывает процесс вхождения в организацию через три стадии: anticipatory socialization (до входа), encounter (первые недели), metamorphosis (адаптация). Lara Hogan адаптировала этот подход для tech-лидеров в своих *First 1-on-1 Questions*, фокусируясь на фазе encounter.
+
+> **Breakeven Point** (Watkins, 2003) — момент в transition, когда новый лидер перестаёт быть net consumer организационных ресурсов и начинает создавать net value. Для EM этот момент наступает в среднем через 3-6 месяцев.
+
+Andrew «Boz» Bosworth (VP Meta) предложил *"Career Cold Start Algorithm"* (2021) — подход к быстрому onboarding через систематические встречи со всеми ключевыми людьми, задавая каждому один вопрос: «Если бы ты был на моём месте, на что бы ты обратил внимание в первую очередь?». Этот метод формализует социальный аспект [[em-fundamentals|transition]], дополняя процессный фреймворк Watkins.
+
+---
+
 ## Зачем структурировать первые 90 дней?
 
 ### Типичная ситуация
@@ -666,13 +693,20 @@ FRIDAY:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Watkins M. "The First 90 Days" — Harvard Business Review Press, 2003 (upd. 2013) | Книга | STARS-модель, transition acceleration, breakeven point |
+| 2 | Van Maanen J., Schein E. H. "Toward a Theory of Organizational Socialization" — Research in Org. Behavior, 1977 | Статья | Три стадии организационной социализации |
+| 3 | Ibarra H. "Working Identity" — Harvard Business Press, 2003 | Книга | Теория identity shift при смене роли |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [First 30 Days in New Role](https://larahogan.me/blog/first-30-days-new-role/) | Article | Lara Hogan framework |
 | 2 | [First 90 Days CTO/VPE](https://lethain.com/first-ninety-days-cto-vpe/) | Article | Senior leader focus |
-| 3 | The First 90 Days (Michael Watkins) | Book | Core framework |
-| 4 | [First Round: 90 Day Plan](https://review.firstround.com) | Articles | Templates, examples |
-| 5 | [A Career Cold Start Algorithm](https://boz.com/articles/career-cold-start) | Article | Meeting everyone approach |
+| 3 | [First Round: 90 Day Plan](https://review.firstround.com) | Articles | Templates, examples |
+| 4 | [A Career Cold Start Algorithm](https://boz.com/articles/career-cold-start) | Article | Meeting everyone approach |
 
 *Исследование проведено: 2026-01-18*
 

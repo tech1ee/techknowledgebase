@@ -40,6 +40,33 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Эволюция роли CTO
+
+> **Определение:** Chief Technology Officer (CTO) — роль уровня C-suite, отвечающая за технологическую стратегию организации. Исторически возникла в 1980-х годах, когда информационные технологии стали критическим фактором конкурентоспособности.
+
+Роль CTO не имела чёткого определения вплоть до конца 1990-х. Werner Vogels (CTO Amazon) в статье *"The Different CTO Roles"* (2007) впервые систематизировал четыре архетипа CTO (Infrastructure, Big Picture, External-facing, Deep-tech), показав, что единого «правильного» определения роли не существует — она определяется потребностями бизнеса.
+
+### Разделение CTO и VP Engineering: организационная теория
+
+Разделение ролей CTO и VP Engineering отражает фундаментальный принцип организационного дизайна — **разделение стратегии и исполнения** (separation of strategy and execution). Henry Mintzberg в *"The Structuring of Organizations"* (1979) описал пять базовых конфигураций организации, где strategic apex (стратегическая верхушка) и operating core (операционное ядро) требуют разных типов лидерства:
+
+| Аспект | CTO (Strategic Apex) | VP Engineering (Operating Core) |
+|--------|---------------------|-------------------------------|
+| **Временной горизонт** | 2-5 лет (стратегический) | 3-12 месяцев (операционный) |
+| **Модель принятия решений** | Deliberate strategy (Mintzberg) | Emergent strategy |
+| **Фокус по Wardley** | Exploration, genesis | Exploitation, commodity |
+| **Ключевой stakeholder** | Board, investors, customers | Инженерная организация |
+
+Simon Wardley в *"Wardley Mapping"* (2016) предложил инструмент визуализации технологической стратегии, ставший основой для работы CTO: карты Wardley позволяют отслеживать эволюцию компонентов технологической системы от genesis (новая идея) до commodity (стандартный сервис), что определяет build vs buy решения.
+
+Fred Wilson (AVC.com, 2011) в влиятельной статье *"VP Engineering vs CTO"* предложил лаконичную формулу различия: **CTO отвечает за «что строить», VP Engineering — за «как строить»**. Mark Suster (Both Sides of the Table, 2012) дополнил эту модель контекстом стадий роста компании, показав, что разделение ролей становится необходимым при 50-100 инженерах.
+
+Исторический контекст: до 2000-х годов роль VP Engineering была более распространена, а CTO часто воспринимался как «главный инженер». Рост стартап-экосистемы и появление модели co-founder/CTO в Кремниевой долине переопределили роль CTO в сторону [[technical-vision|технологической стратегии]] и внешнего представительства.
+
+---
+
 ## Зачем это понимать?
 
 ### Типичная ситуация
@@ -569,6 +596,15 @@ CTO-cofounder при росте до 100 человек всё ещё делае
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Mintzberg H. "The Structuring of Organizations" — Prentice-Hall, 1979 | Книга | Пять конфигураций организации, strategic apex vs operating core |
+| 2 | Vogels W. "The Different CTO Roles" — All Things Distributed, 2007 | Статья | Четыре архетипа CTO |
+| 3 | Wardley S. "Wardley Maps" — CC BY-SA, 2016 | Книга/методология | Визуализация технологической стратегии |
+| 4 | Wilson F. "VP Engineering vs CTO" — AVC.com, 2011 | Статья | Формула разделения ролей |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [VP Engineering vs CTO](https://avc.com/2011/10/vp-engineering-vs-cto/) (Fred Wilson, AVC) | Article | Core framework |
@@ -578,11 +614,9 @@ CTO-cofounder при росте до 100 человек всё ещё делае
 | 5 | [How My Role as CTO Has Changed](https://medium.com/gusto-engineering/how-my-role-as-cto-has-changed-as-weve-grown-to-100-engineers-b16a8a6b1a88) | Article | Growth stages |
 | 6 | [Hiring a VP of Engineering Framework](https://review.firstround.com/hiring-a-vp-of-engineering-use-this-framework-from-shopifys-vpe-to-get-it-right/) | Article | Hiring framework |
 | 7 | [First 90 Days as CTO/VPE](https://lethain.com/first-ninety-days-cto-vpe/) | Article | Onboarding |
-
-### Дополнительное чтение
-- **An Elegant Puzzle** (Will Larson) — глава про org design
-- **The Manager's Path** (Camille Fournier) — глава про senior leadership
-- **High Output Management** (Andy Grove) — classic на executive leadership
+| 8 | **An Elegant Puzzle** (Will Larson, 2019) | Книга | Org design |
+| 9 | **The Manager's Path** (Camille Fournier, 2017) | Книга | Senior leadership |
+| 10 | **High Output Management** (Andy Grove, 1983) | Книга | Executive leadership |
 
 *Исследование проведено: 2026-01-18*
 

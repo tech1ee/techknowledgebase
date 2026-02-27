@@ -60,6 +60,40 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Мультимодальное обучение (Multimodal Learning)** — область машинного обучения, изучающая модели, способные обрабатывать и связывать информацию из нескольких модальностей (текст, изображение, аудио, видео). Формально: задача обучения функции $f: X_1 \times X_2 \times ... \times X_n \rightarrow Y$, где $X_i$ — пространства разных модальностей.
+
+Истоки мультимодального AI восходят к работам по **grounded language understanding** — идее, что понимание языка требует сенсорного опыта (Harnad, 1990). В нейронауке это связано с **мультисенсорной интеграцией** — способностью мозга объединять сигналы от зрения, слуха и осязания в единое восприятие.
+
+| Веха | Год | Авторы | Вклад |
+|------|-----|--------|-------|
+| Multimodal Deep Learning | 2011 | Ngiam et al. | Первое глубокое мультимодальное обучение (аудио + видео) |
+| **CLIP** | 2021 | Radford et al. (OpenAI) | Contrastive learning текст-изображение; общее embedding-пространство |
+| **DALL-E** | 2021 | Ramesh et al. (OpenAI) | Генерация изображений из текста через autoregressive модель |
+| **Whisper** | 2022 | Radford et al. (OpenAI) | Weak supervision на 680K часов — универсальный ASR |
+| **LLaVA** | 2023 | Liu et al. | Visual instruction tuning — vision encoder + LLM |
+| **GPT-4V** | 2023 | OpenAI | Нативная мультимодальность в foundation model |
+| **GPT-4o (Omni)** | 2024 | OpenAI | Единая модель для текста, vision, аудио; native voice |
+| **Gemini 2.0** | 2024 | Google | Нативный мультимодальный контекст 1M+ токенов |
+
+> **Contrastive Learning** (Radford et al., 2021): CLIP обучает текстовый и визуальный энкодеры так, чтобы matching пары (текст, изображение) имели высокую cosine similarity, а mismatched пары — низкую. Это создаёт **общее семантическое пространство**, где можно искать изображения по тексту и наоборот.
+
+**Архитектурные подходы к мультимодальности:**
+
+| Подход | Описание | Примеры |
+|--------|----------|---------|
+| **Dual Encoder** | Отдельные энкодеры для каждой модальности + общее пространство | CLIP, ALIGN |
+| **Fusion Model** | Слияние модальностей внутри единого transformer | GPT-4o, Gemini |
+| **Adapter-based** | Замороженный LLM + обучаемый адаптер для новых модальностей | LLaVA, Flamingo |
+| **Diffusion-based** | Iterative denoising для генерации | Stable Diffusion, DALL-E 3, Sora |
+
+Ключевая теоретическая проблема — **модальный разрыв (modality gap)**: embeddings разных модальностей даже после обучения занимают разные области пространства (Liang et al., 2022). Это ограничивает cross-modal retrieval и требует специальных техник выравнивания.
+
+См. также: [[embeddings-complete-guide|Embeddings]] — векторные представления как основа мультимодальности, [[llm-fundamentals|LLM Fundamentals]] — архитектура Transformer.
+
+---
+
 ## Содержание
 
 1. [Обзор мультимодального AI](#обзор-мультимодального-ai)
@@ -1388,41 +1422,33 @@ def track_call(func):
 
 ## Источники
 
-### Vision & Multimodal
-- [GPT-4 Vision Guide - DataCamp](https://www.datacamp.com/tutorial/gpt-4-vision-comprehensive-guide)
-- [Claude Vision Documentation](https://docs.claude.com/en/docs/build-with-claude/vision)
-- [Gemini Video Understanding](https://ai.google.dev/gemini-api/docs/video-understanding)
-- [LLaVA Project](https://llava-vl.github.io/)
-- [Molmo 2 - Allen AI](https://allenai.org/blog/molmo2)
-- [Anthropic Claude 3.5 Announcement](https://www.anthropic.com/news/claude-3-5-sonnet)
+### Теоретические основы
 
-### Audio & Speech
-- [Introducing Whisper - OpenAI](https://openai.com/index/whisper/)
-- [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime)
-- [Best Speech-to-Text Models 2025](https://nextlevel.ai/best-speech-to-text-models/)
-- [ElevenLabs Documentation](https://elevenlabs.io/docs)
-- [gpt-realtime Introduction](https://openai.com/index/introducing-gpt-realtime/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Radford A. et al. (2021). *Learning Transferable Visual Models From Natural Language Supervision*. ICML. arXiv:2103.00020 | CLIP — contrastive learning текст-изображение |
+| 2 | Ramesh A. et al. (2021). *Zero-Shot Text-to-Image Generation*. ICML. arXiv:2102.12092 | DALL-E — autoregressive генерация изображений |
+| 3 | Radford A. et al. (2022). *Robust Speech Recognition via Large-Scale Weak Supervision*. arXiv:2212.04356 | Whisper — универсальный ASR через weak supervision |
+| 4 | Liu H. et al. (2023). *Visual Instruction Tuning*. NeurIPS. arXiv:2304.08485 | LLaVA — visual instruction tuning |
+| 5 | Rombach R. et al. (2022). *High-Resolution Image Synthesis with Latent Diffusion Models*. CVPR | Stable Diffusion — latent diffusion architecture |
+| 6 | Liang V. et al. (2022). *Mind the Gap: Understanding the Modality Gap in Multi-modal Contrastive Representation Learning*. NeurIPS | Проблема модального разрыва в embedding-пространствах |
+| 7 | Ngiam J. et al. (2011). *Multimodal Deep Learning*. ICML | Первое глубокое мультимодальное обучение |
+| 8 | Harnad S. (1990). *The Symbol Grounding Problem*. Physica D | Grounded language understanding — сенсорная основа |
 
-### Image Generation
-- [DALL-E 3 Cookbook - OpenAI](https://cookbook.openai.com/articles/what_is_new_with_dalle_3)
-- [FLUX.2 - Black Forest Labs](https://bfl.ai/blog/flux-2)
-- [Stable Diffusion 3 - Stability AI](https://stability.ai/news/stable-diffusion-3)
-- [Midjourney vs DALL-E 2025](https://vertu.com/lifestyle/midjourney-vs-dall-e-3-the-ultimate-ai-image-generation-showdown-for-2025/)
+### Практические руководства
 
-### Video Generation
-- [Sora 2 - OpenAI](https://openai.com/index/sora-2/)
-- [Runway Gen-3 Alpha](https://runwayml.com/research/introducing-gen-3-alpha)
-- [Pika Labs Features 2025](https://pikalabs.net/pika-ai-features/)
-
-### Computer Use & Automation
-- [Claude Computer Use Documentation](https://docs.claude.com/en/docs/agents-and-tools/tool-use/computer-use-tool)
-- [Anthropic Computer Use Announcement](https://www.anthropic.com/news/3-5-models-and-computer-use)
-
-### Production & Integration
-- [Top Platforms for Multimodal AI 2025](https://thirdeyedata.ai/top-18-tools-and-platforms-for-multimodal-ai-solutions-development-in-2025-26/)
-- [Best Multimodal Chat APIs - Eden AI](https://www.edenai.co/post/best-multimodal-chat-apis)
-- [Google Cloud Multimodal AI](https://cloud.google.com/use-cases/multimodal-ai)
-- [Gemini Video Understanding Blog](https://developers.googleblog.com/en/gemini-2-5-video-understanding/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [GPT-4 Vision Guide — DataCamp](https://www.datacamp.com/tutorial/gpt-4-vision-comprehensive-guide) | Практика работы с vision |
+| 2 | [Claude Vision Documentation](https://docs.claude.com/en/docs/build-with-claude/vision) | Claude vision API |
+| 3 | [Gemini Video Understanding](https://ai.google.dev/gemini-api/docs/video-understanding) | Видео через Gemini API |
+| 4 | [LLaVA Project](https://llava-vl.github.io/) | Open-source vision-language |
+| 5 | [Introducing Whisper — OpenAI](https://openai.com/index/whisper/) | ASR модель |
+| 6 | [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) | Голосовое взаимодействие |
+| 7 | [DALL-E 3 Cookbook — OpenAI](https://cookbook.openai.com/articles/what_is_new_with_dalle_3) | Генерация изображений |
+| 8 | [FLUX.2 — Black Forest Labs](https://bfl.ai/blog/flux-2) | Передовая генерация изображений |
+| 9 | [Sora 2 — OpenAI](https://openai.com/index/sora-2/) | Генерация видео |
+| 10 | [Claude Computer Use](https://docs.claude.com/en/docs/agents-and-tools/tool-use/computer-use-tool) | GUI automation |
 
 ---
 
@@ -1435,14 +1461,6 @@ def track_call(func):
 **[[models-landscape-2025]]** — Ландшафт моделей описывает те же семейства (GPT-4o, Claude, Gemini, Llama), но с фокусом на текстовые возможности и ценообразование. Данный мультимодальный гайд дополняет ландшафт детальным анализом vision, audio, video и generation capabilities каждого семейства. Вместе эти два материала дают полную картину возможностей современных AI-моделей.
 
 ---
-
-## Источники и дальнейшее чтение
-
-- **Goodfellow, I., Bengio, Y. & Courville, A. (2016). *Deep Learning*. MIT Press.** — Главы о свёрточных сетях (CNN) и рекуррентных сетях (RNN) дают фундамент для понимания vision encoder'ов и audio processing pipeline, которые используются в мультимодальных моделях. Архитектуры, описанные в книге, являются «кирпичиками» современных omni-моделей.
-
-- **Jurafsky, D. & Martin, J. H. (2023). *Speech and Language Processing*, 3rd ed.** — Разделы о speech recognition (ASR), text-to-speech (TTS) и multimodal NLP объясняют теоретическую базу аудио-технологий, описанных в данном гайде: от Whisper до Realtime API и ElevenLabs.
-
-- **Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach*, 4th ed.** — Главы о computer vision и восприятии дают контекст для понимания того, как AI «видит» изображения и видео, включая object detection, scene understanding и spatial reasoning.
 
 ---
 

@@ -37,6 +37,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение сериализации
+
+> **Сериализация** (serialization) — процесс преобразования объекта в последовательность байтов для передачи или хранения, с возможностью обратного восстановления (десериализации). Формальное определение: биективное отображение между пространством объектов и пространством байтовых последовательностей (Herlihy M., Shavit N. *The Art of Multiprocessor Programming*, 2008).
+
+### Parcel как бинарный протокол
+
+Parcel реализует **binary serialization protocol** с прямой записью в нативный буфер (C++ `android::Parcel`). В отличие от Java Serializable, которая использует reflection, Parcel работает через явные вызовы `writeInt()`, `writeString()` — это аналог **Protocol Buffers** (Google, 2008) или **FlatBuffers** (Google, 2014) для IPC:
+
+| Формат | Reflection | Schema | Размер | Скорость |
+|--------|-----------|--------|--------|----------|
+| Java Serializable | Да | Нет | Большой (metadata) | 1x (baseline) |
+| Parcelable | Нет | Code-gen | Компактный | 10-17x быстрее |
+| Protocol Buffers | Нет | .proto | Компактный | ~15x быстрее |
+| JSON | Нет | Нет | Текстовый | ~3x быстрее |
+
+### Ограничение Binder buffer как защита от DoS
+
+Лимит **1 МБ на процесс** для Binder buffer — реализация паттерна **Bounded Buffer** (Dijkstra E.W. *«Co-operating Sequential Processes»*, 1965). Без ограничения вредоносное приложение могло бы исчерпать kernel memory через чрезмерные IPC-вызовы. Ограничение является **per-process**, а не per-transaction — все одновременные Binder-транзакции процесса разделяют один буфер.
+
+> **Связь с lifecycle:** savedInstanceState Bundle проходит через Binder: Activity → ActivityThread → system_server → ActivityRecord. При process death system_server хранит Bundle и возвращает его при пересоздании Activity. Поэтому Bundle ограничен 1 МБ и не должен содержать Bitmap или большие коллекции. Подробнее: [[android-activity-lifecycle]], [[android-viewmodel-internals]].
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: невидимая сериализация повсюду
@@ -1777,12 +1802,13 @@ override fun onSaveInstanceState(
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник Android с подробным разбором Bundle, Parcelable и передачи данных между компонентами
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: Binder IPC, Parcel native implementation, TransactionTooLargeException на уровне ядра
-- Bloch J. (2018). Effective Java, 3rd Edition. — лучшие практики сериализации в Java, Item 85-90 о Serializable vs альтернативах
+### Теоретические основы
 
-**Веб-ресурсы:**
+- **Herlihy M., Shavit N.** *The Art of Multiprocessor Programming* (2008) — формальное определение сериализации: биективное отображение между пространством объектов и пространством байтовых последовательностей
+- **Dijkstra E.W.** *«Co-operating Sequential Processes»* (1965) — Bounded Buffer: лимит 1 МБ на процесс для Binder buffer как защита от исчерпания kernel memory
+- **Google.** *Protocol Buffers* (2008), *FlatBuffers* (2014) — Parcel как бинарный протокол сериализации с явными вызовами вместо reflection, аналогичный по принципу protobuf/flatbuffers для IPC
+
+### Практические руководства
 
 | Источник | Тип | Описание |
 |----------|-----|----------|
@@ -1804,6 +1830,10 @@ override fun onSaveInstanceState(
 | [android_os_Parcel.cpp — AOSP](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/jni/android_os_Parcel.cpp) | AOSP | JNI мост между Java и нативным кодом |
 | [ParcelizeIrTransformerBase.kt — Kotlin](https://github.com/JetBrains/kotlin/blob/master/plugins/parcelize/parcelize-compiler/parcelize.backend/src/org/jetbrains/kotlin/parcelize/ParcelizeIrTransformerBase.kt) | AOSP | Исходный код backend Parcelize plugin |
 | [KEEP: Android Parcelable — Kotlin](https://github.com/Kotlin/KEEP/blob/master/proposals/extensions/android-parcelable.md) | Spec | Спецификация @Parcelize (Kotlin Enhancement Proposal) |
+
+- **Phillips B. et al.** *Android Programming: The Big Nerd Ranch Guide* (2022) — практический учебник с подробным разбором Bundle, Parcelable и передачи данных между компонентами
+- **Vasavada N.** *Android Internals: A Confectioner's Cookbook* (2019) — Binder IPC, Parcel native implementation, TransactionTooLargeException на уровне ядра
+- **Bloch J.** *Effective Java* (2018) — лучшие практики сериализации в Java, Item 85-90 о Serializable vs альтернативах
 
 ---
 

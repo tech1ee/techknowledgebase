@@ -45,6 +45,50 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **State management** — управление данными, определяющими текущее состояние пользовательского интерфейса, включая механизмы обновления, персистентности и синхронизации состояния (Czaplicki, 2012, Elm Architecture).
+
+### Unidirectional Data Flow (UDF)
+
+Обе платформы пришли к **однонаправленному потоку данных** как доминантной модели:
+
+```
+State → UI → Event → Reducer/Handler → New State → UI
+```
+
+| Реализация UDF | Происхождение | iOS | Android |
+|----------------|---------------|-----|---------|
+| **Elm Architecture** | Czaplicki, 2012 | TCA (PointFree) | MVIKotlin |
+| **Redux** | Abramov, 2015 | ReSwift | — |
+| **MVVM + Reactive** | Gossman, 2005 | @Published + Combine | StateFlow + ViewModel |
+| **MVI** | Staltz, 2015 | — | Orbit, MVIKotlin |
+
+### Категории состояния
+
+| Категория | Scope | iOS | Android | KMP |
+|-----------|-------|-----|---------|-----|
+| **UI state** | Компонент | @State | remember {} | Compose state |
+| **Screen state** | Экран | @StateObject | ViewModel | Shared ViewModel |
+| **App state** | Приложение | @EnvironmentObject | Hilt Singleton | Koin single {} |
+| **Persisted state** | Диск | UserDefaults | DataStore | multiplatform-settings |
+
+### Реактивное программирование как основа
+
+И iOS (@Published → Combine), и Android (StateFlow → Coroutines) используют **реактивные примитивы** для state management. Теоретическая основа — Functional Reactive Programming (Elliott & Hudak, 1997):
+
+```
+Behavior a = Time → a  (непрерывное значение во времени)
+Event a = [(Time, a)]   (дискретные события)
+```
+
+StateFlow (Kotlin) ≈ @Published (Swift) ≈ Behavior — значение, доступное в любой момент времени, с уведомлением об изменениях.
+
+> **CS-фундамент:** State management связан с [[cross-architecture]] (роль состояния в архитектуре) и [[kmp-state-management]] (KMP-реализация). Теоретическая база — Elm Architecture (Czaplicki, 2012), FRP (Elliott & Hudak, 1997), Observer Pattern (GoF, 1994).
+
 ## 1. State Wrappers: Локальное состояние
 
 ### SwiftUI: @State
@@ -1301,9 +1345,16 @@ UserCard(
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2021). *Effective Kotlin*.** — Содержит главы по StateFlow, SharedFlow, корутинам и реактивному программированию на Kotlin. Рекомендации по immutable state и thread-safe конструкциям напрямую применяются при проектировании shared state в KMP.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Объясняет property wrappers SwiftUI, Combine framework и паттерны наблюдения за состоянием. Помогает понять, почему SwiftUI-подход к state отличается от Compose и как адаптировать shared state для iOS.
-- **Martin R. (2017). *Clean Architecture*.** — Принципы разделения бизнес-логики от UI-фреймворка критически важны для state management: состояние бизнес-логики должно жить в use cases, а не в @State или mutableStateOf. Это основа для проектирования platform-agnostic state layer.
+### Теоретические основы
+
+- **Czaplicki E. (2012).** *Elm: Concurrent FRP for Functional GUIs.* — Elm Architecture как основа UDF.
+- **Elliott C., Hudak P. (1997).** *Functional Reactive Animation.* — FRP: Behavior и Event как теоретические примитивы.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Observer Pattern.
+
+### Практические руководства
+
+- [StateFlow Guide](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) — StateFlow для Android.
+- [Combine Framework](https://developer.apple.com/documentation/combine) — Reactive framework для iOS.
 
 ---
 

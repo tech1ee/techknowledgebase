@@ -38,6 +38,40 @@ prerequisites:
 - Гибридный подход используют 68% iOS-разработчиков в 2025-2026
 - SwiftUI становится production-ready начиная с iOS 15+ (2021)
 
+## Теоретические основы
+
+> **Определение:** Императивное программирование UI описывает *последовательность шагов* для построения и обновления интерфейса (UIKit), тогда как декларативное описывает *желаемое состояние* интерфейса, оставляя фреймворку определение шагов обновления (SwiftUI). Это фундаментальное различие восходит к дихотомии императивного и декларативного программирования (Backus, 1978 — Turing Award Lecture).
+
+### Теоретические парадигмы UI-фреймворков
+
+| Парадигма | Характеристика | Фреймворки | Теоретическая основа |
+|-----------|---------------|------------|---------------------|
+| Императивная | Явное управление мутациями UI-объектов | UIKit, Android Views, WinForms | Процедурное программирование (von Neumann model) |
+| Декларативная | UI = f(State), автоматическое обновление | SwiftUI, React, Compose, Flutter | FRP (Elliott & Hudak, 1997) |
+| Гибридная | Декларативное описание + императивные escape-hatches | SwiftUI + UIViewRepresentable | Практический компромисс |
+
+### Эволюция UI-фреймворков Apple
+
+| Эпоха | Фреймворк | Парадигма | Ключевые абстракции |
+|-------|-----------|-----------|---------------------|
+| 1989 | AppKit (NeXTSTEP) | Императивная, MVC | NSView, NSResponder, Interface Builder |
+| 2008 | UIKit (iPhone OS 2.0) | Императивная, MVC | UIView, UIViewController, Storyboards |
+| 2019 | SwiftUI (iOS 13) | Декларативная, MVVM | View protocol, property wrappers, ViewBuilder |
+
+> **Закон Conway (1967):** «Организации, проектирующие системы, ограничены дизайном, который воспроизводит коммуникационную структуру этих организаций.» Эволюция от UIKit к SwiftUI отражает переход Apple от команд, ориентированных на компоненты (UIView, UILabel), к командам, ориентированным на user flows и состояния.
+
+### Reconciliation и Virtual DOM
+
+SwiftUI использует механизм *structural diffing* для определения минимальных изменений UI при обновлении состояния — концептуально аналогичный Virtual DOM в React (Abramov, 2015). UIKit не имеет такого механизма: разработчик сам определяет, что и когда обновить.
+
+### Связь с CS-фундаментом
+
+- [[functional-reactive-programming]] — теоретическая база декларативных UI
+- [[ios-swiftui]] — детальное изучение SwiftUI
+- [[ios-uikit-fundamentals]] — детальное изучение UIKit
+
+---
+
 ## Зачем это нужно?
 
 ### Рыночная ситуация (2025-2026)
@@ -1661,9 +1695,15 @@ struct CheckoutWrapper: UIViewControllerRepresentable {
 
 ## Источники и дальнейшее чтение
 
-- **Eidhof C., Willeke F., et al. (2020). *Thinking in SwiftUI.* objc.io.** — Книга полностью посвящена ментальным моделям SwiftUI: как работает layout system, data flow и view lifecycle. Незаменима для разработчиков, переходящих с UIKit, поскольку помогает перестроить мышление с императивного на декларативное.
-- **Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly.** — Охватывает как UIKit, так и SwiftUI, что делает эту книгу идеальной для понимания обоих фреймворков и их взаимодействия через UIHostingController и UIViewRepresentable. Подробно разбирает жизненный цикл view в обоих подходах.
-- **Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* Big Nerd Ranch.** — Классическое руководство по UIKit с глубоким разбором архитектуры, Auto Layout и паттернов делегирования. Критически важно для понимания legacy-кода и принятия обоснованных решений при миграции на SwiftUI.
+### Теоретические основы
+- Backus J. (1978). *Can Programming Be Liberated from the von Neumann Style?* Turing Award Lecture — дихотомия императивного и декларативного подходов
+- Elliott C., Hudak P. (1997). *Functional Reactive Animation.* ICFP — FRP как основа декларативного UI
+- Conway M. E. (1968). *How Do Committees Invent?* Datamation — закон Conway о связи структуры организации и дизайна систем
+
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* objc.io — ментальные модели SwiftUI
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly — UIKit + SwiftUI interop
+- Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* — классическое руководство по UIKit
 
 ---
 

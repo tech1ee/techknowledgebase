@@ -35,6 +35,45 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Декларативная персистентность** — парадигма, при которой разработчик описывает *что* хранить (модель данных), а не *как* хранить (SQL-запросы, миграции, маппинг). SwiftData реализует этот подход через Swift macros, превращая обычные классы в persistent модели.
+
+### Академический контекст
+
+SwiftData представляет конвергенцию нескольких теоретических направлений:
+
+| Концепция | Происхождение | Реализация в SwiftData |
+|-----------|--------------|----------------------|
+| Metaprogramming | Sheard & Jones, 2002 | @Model macro генерирует PersistentModel конформность на этапе компиляции |
+| Reactive Data Binding | Elliott & Hudak, 1997 (FRP) | @Query реактивно обновляет SwiftUI View при изменении данных |
+| Convention over Configuration | DHH / Ruby on Rails, 2004 | Автоматическая схема из типов Swift, минимум boilerplate |
+| Orthogonal Persistence | Atkinson et al., 1983 | Любой Swift-класс может стать персистентным через @Model |
+| Schema Evolution | Roddick, 1995 | VersionedSchema + SchemaMigrationPlan для управления миграциями |
+
+### Эволюция персистентности в Apple-экосистеме
+
+SwiftData — результат 30-летней эволюции объектной персистентности:
+
+| Поколение | Фреймворк | Парадигма | Ограничения |
+|-----------|-----------|-----------|-------------|
+| 1-е (1994) | EOF (NeXTSTEP) | Объектно-реляционный маппинг | Только macOS, тяжёлый |
+| 2-е (2005) | Core Data | Object Graph + XML/SQLite | Objective-C API, boilerplate |
+| 3-е (2019) | Core Data + CloudKit | Object Graph + Cloud Sync | NSManagedObject, .xcdatamodeld |
+| 4-е (2023) | SwiftData | Declarative + Macros + Swift-native | iOS 17+ only |
+
+> **Macro-driven persistence**: SwiftData использует Swift Macros (SE-0382, SE-0389) для генерации кода во время компиляции. Это отличает его от runtime-рефлексии (Java Hibernate) и code generation (Android Room). Макросы обеспечивают type safety на этапе компиляции без overhead в runtime.
+
+### Связь с CS-фундаментом
+
+- [[ios-core-data]] — Core Data как фундамент, на котором построен SwiftData
+- [[ios-swiftui]] — @Query как мост между персистентностью и декларативным UI
+- [[ios-state-management]] — @Model объекты как Observable source of truth
+- [[ios-data-persistence]] — SwiftData в контексте всех механизмов хранения
+- [[ios-repository-pattern]] — абстракция data layer для тестируемости
+
+---
+
 ## Философия и Обзор
 
 ### Аналогия: SwiftData как Современный Архив
@@ -2617,9 +2656,15 @@ final class Photo {
 
 ## Источники и дальнейшее чтение
 
-- **Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly.** — Фундаментальное руководство по Swift и iOS, включающее главы по SwiftData и его взаимодействию с SwiftUI. Полезно для понимания общего контекста фреймворка в экосистеме Apple.
-- **Eidhof C., Airspeed Velocity, et al. (2019). *Advanced Swift.* objc.io.** — Глубокое погружение в Swift, включая макросы, property wrappers и протоколы, на которых построен SwiftData. Помогает понять, как работают @Model, @Query и другие конструкции на уровне языка.
-- **Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* Big Nerd Ranch.** — Практическое руководство по iOS-разработке с акцентом на Core Data и архитектуру данных, что является необходимой базой для понимания концепций SwiftData и миграции с Core Data.
+### Теоретические основы
+- Atkinson M. et al. (1983). *An Approach to Persistent Programming.* — концепция ортогональной персистентности, теоретический идеал, к которому стремится SwiftData
+- Sheard T., Jones S.P. (2002). *Template Meta-programming for Haskell.* — теория метапрограммирования, основа для Swift Macros (SE-0382)
+- Roddick J. (1995). *A Survey of Schema Versioning Issues for Database Systems.* — формализация эволюции схемы, теоретическая база VersionedSchema
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly. — фундаментальное руководство, включающее главы по SwiftData и его взаимодействию с SwiftUI
+- Eidhof C., Airspeed Velocity, et al. (2019). *Advanced Swift.* objc.io. — глубокое погружение в макросы, property wrappers и протоколы, на которых построен SwiftData
+- Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* Big Nerd Ranch. — Core Data и архитектура данных как база для понимания концепций SwiftData
 
 ---
 

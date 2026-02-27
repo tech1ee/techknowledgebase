@@ -33,6 +33,69 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение компьютерной сети
+
+> **Компьютерная сеть** — множество вычислительных устройств (nodes), соединённых каналами связи (links), которые обмениваются данными по определённым протоколам.
+
+> **Протокол** — формальное описание формата сообщений и правил обмена между двумя или более коммуникационными сущностями (RFC 791, Postel 1981).
+
+### Историческая атрибуция
+
+| Событие | Год | Автор/Организация | Значение |
+|---------|-----|-------------------|----------|
+| **Packet switching** | 1961-64 | Kleinrock (теория), Baran (RAND), Davies (NPL) | Основа всех современных сетей |
+| **ARPANET** | 1969 | DARPA (BBN) | Первая packet-switching сеть, 4 узла |
+| **TCP/IP** | 1974-83 | Cerf & Kahn | "A Protocol for Packet Network Intercommunication" — основа Internet |
+| **Ethernet** | 1973-76 | Metcalfe & Boggs (Xerox PARC) | Доминирующая LAN-технология |
+| **OSI Model** | 1984 | ISO 7498 | 7-уровневая эталонная модель |
+| **DNS** | 1983 | Mockapetris (RFC 882/883) | Иерархическая система имён |
+| **WWW** | 1989-91 | Tim Berners-Lee (CERN) | HTTP + HTML + URL |
+
+### Модели сетевого стека: OSI vs TCP/IP
+
+**OSI** (Open Systems Interconnection, ISO 1984) — эталонная 7-уровневая модель. **TCP/IP** — практическая 4-уровневая модель, на которой работает Internet.
+
+```
+     OSI Model              TCP/IP Model          Примеры
+┌─────────────────┐    ┌─────────────────┐
+│  7. Application │    │                 │    HTTP, DNS, SMTP
+│  6. Presentation│    │   Application   │    TLS/SSL, JPEG, JSON
+│  5. Session     │    │                 │    Sockets, RPC
+├─────────────────┤    ├─────────────────┤
+│  4. Transport   │    │   Transport     │    TCP, UDP, QUIC
+├─────────────────┤    ├─────────────────┤
+│  3. Network     │    │   Internet      │    IP, ICMP, ARP
+├─────────────────┤    ├─────────────────┤
+│  2. Data Link   │    │   Network       │    Ethernet, Wi-Fi
+│  1. Physical    │    │   Access        │    Кабель, радио
+└─────────────────┘    └─────────────────┘
+```
+
+### End-to-End Principle (Saltzer, Reed & Clark, 1984)
+
+> **End-to-End Argument:** функции могут быть корректно и полностью реализованы только с участием конечных точек коммуникации. Промежуточные узлы (сеть) не должны брать на себя ответственность за надёжность — это задача приложения.
+
+Этот принцип — архитектурный фундамент Internet:
+- **Сеть** = простой best-effort пересылщик пакетов (IP)
+- **Надёжность** = ответственность конечных точек (TCP)
+- **Следствие:** сеть остаётся простой и масштабируемой
+
+### Packet Switching vs Circuit Switching
+
+| Свойство | Circuit Switching | Packet Switching |
+|----------|------------------|-----------------|
+| **Модель** | Выделенный канал на время соединения | Пакеты маршрутизируются независимо |
+| **Пример** | Телефонная сеть (PSTN) | Internet (IP) |
+| **Гарантии** | Фиксированная пропускная способность | Best effort (нет гарантий) |
+| **Эффективность** | Низкая при паузах (ресурс простаивает) | Высокая (statistical multiplexing) |
+| **Формально** | Резервирование: `capacity = allocated` | Мультиплексирование: `capacity = Σ(actual_usage)` |
+
+**Теорема Клейнрока (1964):** packet switching оптимален для bursty трафика (каким является компьютерный), так как обеспечивает лучшее utilization через statistical multiplexing.
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1494,16 +1557,23 @@ curl: (6) Could not resolve host: api.example.com
 
 ## Источники
 
+### Теоретические основы
+- Cerf, V. & Kahn, R. (1974). "A Protocol for Packet Network Intercommunication" — IEEE Trans. Comm.; TCP/IP
+- Kleinrock, L. (1964). *Communication Nets: Stochastic Message Flow and Delay* — MIT Press; packet switching теория
+- Metcalfe, R. & Boggs, D. (1976). "Ethernet: Distributed Packet Switching for Local Computer Networks" — CACM
+- Saltzer, J.H., Reed, D.P. & Clark, D.D. (1984). "End-to-End Arguments in System Design" — ACM TOCS
+- ISO 7498 (1984). "OSI Reference Model" — 7-уровневая эталонная модель
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [ByteByteGo: What happens when you type a URL](https://bytebytego.com/guides/what-happens-when-you-type-a-url-into-your-browser/) | Guide | Основная структура |
 | 2 | [AWS Blog: URL lifecycle](https://aws.amazon.com/blogs/mobile/what-happens-when-you-type-a-url-into-your-browser/) | Official | Детали DNS, TCP |
 | 3 | [Chrome DevTools: Network](https://developer.chrome.com/docs/devtools/network) | Official | DevTools reference |
 | 4 | [FreeCodeCamp: How DNS Works](https://www.freecodecamp.org/news/how-dns-works-the-internets-address-book/) | Tutorial | DNS объяснение |
-| 5 | [Baeldung: Port vs Socket](https://www.baeldung.com/cs/port-vs-socket) | Technical | Порты и сокеты |
-| 6 | [DEV.to: Networking Protocols](https://dev.to/dev_ojay/a-beginners-guide-to-networking-protocols-tcp-udp-http-and-http3-3pp6) | Tutorial | TCP vs UDP |
-| 7 | [Medium: Network Diagnostics](https://medium.com/@samiashafique/mastering-network-diagnostics-a-simple-guide-to-curl-traceroute-and-ping-8c8f315ebf67) | Guide | CLI инструменты |
-| 8 | [BrowserStack: HTTP Request](https://www.browserstack.com/guide/http-request) | Reference | HTTP lifecycle |
+| 5 | [DEV.to: Networking Protocols](https://dev.to/dev_ojay/a-beginners-guide-to-networking-protocols-tcp-udp-http-and-http3-3pp6) | Tutorial | TCP vs UDP |
+| 6 | [BrowserStack: HTTP Request](https://www.browserstack.com/guide/http-request) | Reference | HTTP lifecycle |
 
 ---
 

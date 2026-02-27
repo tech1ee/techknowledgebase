@@ -51,6 +51,41 @@ Android-приложение не имеет единой точки входа 
 
 ---
 
+## Теоретические основы
+
+### Формальное определение компонентной модели
+
+> **Программный компонент** — это единица композиции с контрактно определёнными интерфейсами и только явными контекстными зависимостями. Компонент может быть развёрнут независимо и подвергнут композиции третьими сторонами (Szyperski C. *Component Software: Beyond Object-Oriented Programming*, 1997, 2nd ed. 2002).
+
+В Android эта концепция реализована через четыре типа компонентов, каждый из которых:
+- Имеет контрактно определённый интерфейс (callback-методы жизненного цикла)
+- Регистрируется декларативно в [[android-manifest|AndroidManifest.xml]]
+- Может быть запущен системой независимо через [[android-intent-internals|Intent]]
+
+### Историческая эволюция компонентных моделей
+
+| Год | Модель | Платформа | Ключевая идея |
+|-----|--------|-----------|---------------|
+| 1993 | COM (Component Object Model) | Windows | Бинарные компоненты с интерфейсами через vtable |
+| 1997 | JavaBeans / EJB | Java | Серверные компоненты с контейнерным управлением lifecycle |
+| 2003 | OSGi | Java | Модульная система с dynamic loading и service registry |
+| 2008 | Android Components | Android | 4 компонента с системным управлением lifecycle и IPC через Binder |
+| 2014 | iOS Extensions | iOS | App Extensions как ограниченные компоненты (Today Widget, Share Extension) |
+
+Android выбрал наиболее агрессивный подход к компонентной модели среди мобильных ОС: система полностью контролирует жизненный цикл каждого компонента и может уничтожить любой из них без предупреждения.
+
+### Теоретическое обоснование
+
+Компонентная модель Android основана на двух ключевых принципах из теории распределённых систем:
+
+1. **Inversion of Control (IoC)** — Hollywood Principle: «Don't call us, we'll call you» (Johnson R., Foote B. *«Designing Reusable Classes»*, 1988). Система вызывает callback-методы компонента, а не компонент управляет своим выполнением.
+
+2. **Loose Coupling через Message Passing** — компоненты взаимодействуют через Intent (сообщения), а не через прямые вызовы. Это соответствует модели Actor (Hewitt C., 1973), где акторы обмениваются сообщениями без разделяемого состояния.
+
+> **Связь с паттернами проектирования:** Android Application Framework реализует паттерны Template Method (lifecycle callbacks), Observer (BroadcastReceiver как подписчик), Mediator (ActivityManagerService координирует компоненты) и Strategy (Intent resolution через IntentFilter matching). См. Gamma E. et al. *Design Patterns* (1994).
+
+---
+
 ## Почему компоненты, а не main()
 
 ### Проблема мобильных устройств
@@ -895,18 +930,24 @@ fun getInstance(context: Context): MySingleton {
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-**Книги:**
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник Android с подробным разбором всех четырёх компонентов приложения
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая компонентную модель и IPC
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android, детальное описание ActivityManagerService и механизма запуска компонентов
+### Теоретические основы
 
-**Веб-ресурсы:**
-- [Introduction to Activities - Android Developers](https://developer.android.com/guide/components/activities/intro-activities) — официальная документация
-- [Services Overview - Android Developers](https://developer.android.com/guide/components/services) — документация по Services
-- [Broadcasts Overview - Android Developers](https://developer.android.com/guide/components/broadcasts) — BroadcastReceiver
-- [Content Providers - Android Developers](https://developer.android.com/guide/topics/providers/content-providers) — ContentProvider
+- Szyperski C. (2002). *Component Software: Beyond Object-Oriented Programming, 2nd Edition*. — формальная теория компонентных моделей
+- Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. — Template Method, Observer, Mediator, Strategy в контексте Android
+- Johnson R., Foote B. (1988). *Designing Reusable Classes*. — Inversion of Control и Hollywood Principle
+- Hewitt C. (1973). *A Universal Modular ACTOR Formalism for Artificial Intelligence*. — модель акторов, теоретическая база message-passing
+
+### Практические руководства
+
+- Phillips B. et al. (2022). *Android Programming: The Big Nerd Ranch Guide, 5th Edition*. — разбор всех четырёх компонентов
+- Meier R. (2022). *Professional Android, 4th Edition*. — компонентная модель и IPC
+- Vasavada N. (2019). *Android Internals: A Confectioner's Cookbook*. — ActivityManagerService и механизм запуска компонентов
+- [Introduction to Activities — Android Developers](https://developer.android.com/guide/components/activities/intro-activities)
+- [Services Overview — Android Developers](https://developer.android.com/guide/components/services)
+- [Broadcasts Overview — Android Developers](https://developer.android.com/guide/components/broadcasts)
+- [Content Providers — Android Developers](https://developer.android.com/guide/topics/providers/content-providers)
 
 ---
 

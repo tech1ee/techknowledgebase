@@ -85,6 +85,36 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Система 1 vs Система 2: когнитивное обоснование
+
+> Даниэль Канеман (2011, *"Thinking, Fast and Slow"*) выделил два режима мышления: **Система 1** (быстрая, интуитивная, автоматическая) и **Система 2** (медленная, аналитическая, осознанная). Стандартные LLM работают по принципу Системы 1 — мгновенная реакция. Reasoning-модели реализуют Систему 2 — deliberate thinking перед ответом.
+
+### Формализация reasoning в LLM
+
+| Подход | Год | Авторы | Механизм |
+|--------|-----|--------|----------|
+| **Chain-of-Thought (CoT)** | 2022 | Wei et al. (Google) | Промежуточные шаги в промпте |
+| **Self-Consistency** | 2022 | Wang et al. (Google) | Голосование по нескольким CoT-путям |
+| **Tree-of-Thought (ToT)** | 2023 | Yao et al. (Princeton) | Поиск с бэктрекингом в дереве рассуждений |
+| **Test-Time Compute** | 2024 | OpenAI (o1) | Выделение compute при inference на «размышления» |
+| **GRPO** | 2025 | DeepSeek | Group Relative Policy Optimization — RL без reward model |
+
+### Test-Time Compute Scaling
+
+> **Test-Time Compute** — новая парадигма масштабирования: вместо увеличения модели при training, увеличивается compute при inference. Модель генерирует «thinking tokens» — внутренний chain-of-thought, который используется для формирования финального ответа. Snell et al. (2024, *"Scaling LLM Test-Time Compute Optimally"*) показали, что точность растёт логарифмически с увеличением thinking budget.
+
+### DeepSeek R1: reasoning через чистый RL
+
+> DeepSeek-R1-Zero (DeepSeek-AI, 2025) продемонстрировал, что reasoning capabilities (self-verification, reflection, long CoT) могут **эмергентно** возникнуть из pure reinforcement learning без supervised fine-tuning на reasoning trajectories. Это фундаментальный результат: способность к рассуждению не требует явного обучения на примерах рассуждений.
+
+### Ограничения reasoning-моделей
+
+Формально: reasoning-модели не «понимают» задачу — они генерируют последовательности токенов с высокой вероятностью быть корректным рассуждением. Huang et al. (2024, *"Large Language Models Cannot Self-Correct Reasoning Yet"*) показали, что self-correction без внешней обратной связи часто ухудшает результат.
+
+---
+
 ## Пролог: Декабрь 2024 - Момент, когда все изменилось
 
 Декабрь 2024 года войдет в историю ИИ как месяц, когда индустрия изменилась навсегда.
@@ -1105,41 +1135,34 @@ Anthropic Research (2024):
 
 ## Источники
 
-### OpenAI
-1. [Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/)
-2. [Introducing o3 and o4-mini](https://openai.com/index/introducing-o3-and-o4-mini/)
-3. [Reasoning Models Guide](https://platform.openai.com/docs/guides/reasoning)
-4. [Reasoning Best Practices](https://platform.openai.com/docs/guides/reasoning-best-practices)
-5. [Improving Mathematical Reasoning with Process Supervision](https://openai.com/index/improving-mathematical-reasoning-with-process-supervision/)
+### Теоретические основы
 
-### Anthropic
-6. [Claude's Extended Thinking](https://www.anthropic.com/news/visible-extended-thinking)
-7. [Claude 3.7 Sonnet and Claude Code](https://www.anthropic.com/news/claude-3-7-sonnet)
-8. [Building with Extended Thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
-9. [Reasoning Models Don't Always Say What They Think](https://www.anthropic.com/research/reasoning-models-dont-say-think)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Kahneman D. (2011). *Thinking, Fast and Slow*. Farrar, Straus and Giroux | Модель System 1 / System 2 — концептуальная основа reasoning-моделей |
+| 2 | Wei J. et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in LLMs*. arXiv:2201.11903 | Формализация CoT-промптинга |
+| 3 | Snell C. et al. (2024). *Scaling LLM Test-Time Compute*. arXiv:2408.03314 | Теоретическое обоснование test-time scaling |
+| 4 | DeepSeek-AI (2025). *DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via RL*. arXiv:2501.12948 | Эмергентное появление reasoning через pure RL (GRPO) |
+| 5 | Shao Z. et al. (2024). *DeepSeekMath: Pushing the Limits of Mathematical Reasoning*. arXiv:2402.03300 | GRPO — Group Relative Policy Optimization |
+| 6 | Huang J. et al. (2024). *Large Language Models Cannot Self-Correct Reasoning Yet*. arXiv:2310.01798 | Ограничения self-correction без внешней обратной связи |
+| 7 | Lightman H. et al. (2023). *Let's Verify Step by Step*. arXiv:2305.20050 | Process reward models (PRM) vs outcome reward models (ORM) |
+| 8 | Russell S., Norvig P. (2020). *Artificial Intelligence: A Modern Approach*. 4th edition. Pearson | Формальная логика и reasoning как фундаментальные задачи AI |
 
-### DeepSeek
-10. [DeepSeek-R1 Paper](https://arxiv.org/abs/2501.12948)
-11. [DeepSeek-R1 GitHub](https://github.com/deepseek-ai/DeepSeek-R1)
-12. [DeepSeek-R1 on HuggingFace](https://huggingface.co/deepseek-ai/DeepSeek-R1)
-13. [DeepSeekMath: GRPO Paper](https://arxiv.org/abs/2402.03300)
+### Практические руководства
 
-### Исследования
-14. [Scaling LLM Test-Time Compute](https://arxiv.org/abs/2408.03314)
-15. [A Comparative Study on Reasoning Patterns of o1](https://arxiv.org/html/2410.13639v1)
-16. [Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)
-17. [Survey on Test-Time Scaling](https://testtimescaling.github.io/)
-18. [RLHF Book by Nathan Lambert](https://rlhfbook.com/)
-19. [The State of LLM Reasoning Model Training](https://magazine.sebastianraschka.com/p/the-state-of-llm-reasoning-model-training)
-
-### Другие модели
-20. [QwQ: Reflect Deeply on the Boundaries of the Unknown](https://qwenlm.github.io/blog/qwq-32b-preview/)
-21. [Gemini Thinking Documentation](https://ai.google.dev/gemini-api/docs/thinking)
-
-### Сравнения и анализ
-22. [Claude 3.7 Sonnet vs OpenAI o1 vs DeepSeek R1](https://www.vellum.ai/blog/claude-3-7-sonnet-vs-openai-o1-vs-deepseek-r1)
-23. [OpenAI o3 Released: Benchmarks and Comparison to o1](https://www.helicone.ai/blog/openai-o3)
-24. [DeepSeek R1 vs OpenAI o1](https://www.analyticsvidhya.com/blog/2025/01/deepseek-r1-vs-openai-o1/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OpenAI — Learning to Reason with LLMs](https://openai.com/index/learning-to-reason-with-llms/) | Введение в o1 |
+| 2 | [OpenAI — Introducing o3 and o4-mini](https://openai.com/index/introducing-o3-and-o4-mini/) | Релиз o3 |
+| 3 | [OpenAI — Reasoning Models Guide](https://platform.openai.com/docs/guides/reasoning) | API-документация reasoning-моделей |
+| 4 | [OpenAI — Reasoning Best Practices](https://platform.openai.com/docs/guides/reasoning-best-practices) | Практические рекомендации |
+| 5 | [Anthropic — Claude's Extended Thinking](https://www.anthropic.com/news/visible-extended-thinking) | Visible thinking tokens |
+| 6 | [Anthropic — Building with Extended Thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking) | API-интеграция extended thinking |
+| 7 | [Anthropic — Reasoning Models Don't Always Say What They Think](https://www.anthropic.com/research/reasoning-models-dont-say-think) | Проблема faithfulness reasoning-токенов |
+| 8 | [DeepSeek-R1 GitHub](https://github.com/deepseek-ai/DeepSeek-R1) | Open-source реализация |
+| 9 | [QwQ: Reflect Deeply on the Boundaries of the Unknown](https://qwenlm.github.io/blog/qwq-32b-preview/) | Qwen reasoning-модель |
+| 10 | [Gemini Thinking Documentation](https://ai.google.dev/gemini-api/docs/thinking) | Google reasoning API |
+| 11 | [RLHF Book — Nathan Lambert](https://rlhfbook.com/) | Систематизация RLHF-подходов |
 
 ---
 
@@ -1156,12 +1179,6 @@ Anthropic Research (2024):
 **[[ai-api-integration]]** — Практическая интеграция reasoning-моделей через API имеет свои особенности: увеличенные таймауты из-за длительного «думания», специальные параметры (reasoning_effort, thinking budget), потоковый вывод reasoning-токенов. Понимание API-паттернов необходимо для эффективного использования reasoning-моделей в продакшене, включая fallback-стратегии и маршрутизацию между моделями.
 
 ---
-
-## Источники и дальнейшее чтение
-
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — классический учебник, покрывающий формальную логику, планирование и reasoning как фундаментальные задачи AI, что даёт теоретический контекст для понимания reasoning-моделей
-- **Goodfellow I., Bengio Y., Courville A. (2016). Deep Learning. MIT Press.** — глубокое изложение оптимизации нейронных сетей и обучения с подкреплением, что важно для понимания RLHF и процесса обучения reasoning-моделей
-- **Jurafsky D., Martin J.H. (2023). Speech and Language Processing. 3rd edition.** — раздел о языковых моделях и генерации текста даёт базу для понимания механизмов chain-of-thought и внутренних монологов reasoning-моделей
 
 ---
 

@@ -36,6 +36,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Пять дисфункций команды (Lencioni, 2002)
+
+> **Определение:** Team Dysfunction — системная проблема в групповой динамике, при которой команда не может достичь потенциальной эффективности из-за нарушения одного или нескольких уровней доверия и взаимодействия.
+
+Patrick Lencioni в *"The Five Dysfunctions of a Team"* (2002) описал пирамиду дисфункций, где каждый уровень строится на предыдущем:
+
+| Уровень (снизу вверх) | Дисфункция | Здоровое состояние |
+|-----------------------|------------|-------------------|
+| 1 (фундамент) | **Absence of Trust** | Vulnerability-based trust |
+| 2 | **Fear of Conflict** | Productive ideological conflict |
+| 3 | **Lack of Commitment** | Clarity and buy-in после debate |
+| 4 | **Avoidance of Accountability** | Peer-to-peer accountability |
+| 5 (вершина) | **Inattention to Results** | Focus on collective outcomes |
+
+### Эффективность команд: от Tuckman к Google Aristotle
+
+Bruce Tuckman (1965) описал стадии **forming → storming → norming → performing**, показав, что конфликт (storming) — нормальная и необходимая фаза развития группы. Google Project Aristotle (2012-2015) расширил это понимание, эмпирически установив, что [[building-engineering-team|psychological safety]] (Amy Edmondson, 1999) — **самый важный предсказатель** эффективности команды.
+
+Meredith Belbin в *"Team Roles at Work"* (1993) показал, что эффективные команды состоят из людей с разными ролевыми предпочтениями (Shaper, Plant, Monitor-Evaluator и др.), а однородные команды менее продуктивны. Это перекликается с findings Google Aristotle: diversity of perspectives усиливает team effectiveness.
+
+> «Не существует идеального командного игрока — существуют идеальные команды с правильной комбинацией ролей.» — Meredith Belbin
+
+---
+
 ## Psychological Safety (Google Aristotle)
 
 ```
@@ -153,11 +179,20 @@ HEALTHY:                        UNHEALTHY:
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Google Project Aristotle](https://rework.withgoogle.com/) | Research |
-| [Five Dysfunctions of a Team](https://www.amazon.com/Five-Dysfunctions-Team-Leadership-Fable/dp/0787960756) | Book |
-| [Tuckman's Stages](https://en.wikipedia.org/wiki/Tuckman%27s_stages_of_group_development) | Model |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Tuckman B. "Developmental Sequence in Small Groups" — Psychological Bulletin, 1965 | Статья | Forming-Storming-Norming-Performing |
+| 2 | Lencioni P. "The Five Dysfunctions of a Team" — Jossey-Bass, 2002 | Книга | Пирамида дисфункций |
+| 3 | Edmondson A. "Psychological Safety and Learning Behavior" — ASQ, 1999 | Статья | Psychological Safety |
+| 4 | Belbin M. "Team Roles at Work" — Butterworth-Heinemann, 1993 | Книга | Командные роли и diversity |
+| 5 | Google "Project Aristotle" — re:Work, 2015 | Исследование | 5 факторов эффективных команд |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Google Project Aristotle](https://rework.withgoogle.com/) | Research | Practical guidelines |
+| 2 | **Creativity, Inc.** (Ed Catmull, 2014) | Книга | Pixar Braintrust, managed conflict |
 
 ---
 

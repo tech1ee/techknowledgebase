@@ -33,6 +33,53 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Database internals** — внутренние механизмы СУБД: хранение данных на диске, управление буферами в памяти, журналирование для восстановления и координация параллельных транзакций. Понимание этих механизмов превращает DBA/разработчика из пользователя чёрного ящика в осознанного инженера.
+
+### Фундаментальные структуры хранения
+
+| Структура | Принцип | Оптимальна для | Время поиска |
+|-----------|---------|----------------|-------------|
+| **B-Tree** (Bayer & McCreight, 1972) | Сбалансированное дерево, данные в leaf nodes | Read-heavy OLTP, range scans | O(log_B N) |
+| **B+Tree** | B-Tree + linked leaf list | Range queries, sequential access | O(log_B N) + O(K) для range |
+| **LSM-Tree** (O'Neil et al., 1996) | Write to memtable → flush sorted runs → compaction | Write-heavy workloads | O(log N × L) worst case |
+| **Hash Index** | Hash(key) → offset | Point lookups (exact match) | O(1) average |
+
+### ACID — формализация (Härder & Reuter, 1983)
+
+| Свойство | Формальное определение | Механизм реализации |
+|----------|----------------------|---------------------|
+| **Atomicity** | Транзакция — неделимая единица: все операции применяются или ни одна | Undo log (откат незавершённых) |
+| **Consistency** | Транзакция переводит БД из одного валидного состояния в другое | Constraints, triggers, application logic |
+| **Isolation** | Параллельные транзакции не влияют друг на друга | MVCC, 2PL, SSI |
+| **Durability** | Закоммиченные данные не теряются даже при сбое | WAL (Write-Ahead Log) |
+
+### WAL — принцип журналирования
+
+> **Write-Ahead Logging** (Mohan et al., 1992 — ARIES): все изменения **сначала** записываются в последовательный журнал, **затем** применяются к data pages. При сбое: redo закоммиченных + undo незакоммиченных транзакций.
+
+### MVCC — многоверсионный контроль
+
+Каждая строка хранит **несколько версий** с метками транзакций. Читатели видят snapshot на момент начала транзакции → **readers never block writers**. Цена: хранение старых версий + garbage collection (VACUUM в PostgreSQL).
+
+### Историческая хронология
+
+| Год | Событие |
+|-----|---------|
+| 1970 | Codd — реляционная модель |
+| 1972 | Bayer & McCreight — B-Tree |
+| 1976 | Gray — формализация транзакций и блокировок |
+| 1981 | Gray — Two-Phase Locking (2PL) |
+| 1983 | Härder & Reuter — ACID как термин |
+| 1992 | Mohan et al. — ARIES (WAL recovery algorithm) |
+| 1996 | O'Neil et al. — LSM-Tree |
+| 2012 | Berenson et al. — Serializable Snapshot Isolation (SSI) |
+
+> **См. также**: [[databases-transactions-acid]] — isolation levels и аномалии, [[os-file-systems]] — I/O и файловые системы
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1194,9 +1241,17 @@ QUERIES:
 
 ## Источники и дальнейшее чтение
 
-- Petrov A. (2019). *Database Internals*. — Основной источник по теме: storage engines (B-Tree, LSM-Tree), buffer management, WAL, distributed transactions. Must-read для глубокого понимания работы СУБД.
-- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage и retrieval, репликации, партиционировании. Связывает internal-механизмы с архитектурными решениями для data-intensive систем.
-- Garcia-Molina H., Ullman J.D., Widom J. (2008). *Database Systems: The Complete Book*. — Академический учебник с формальным описанием query processing, concurrency control (2PL, MVCC), recovery (ARIES). Необходим для глубокого понимания алгоритмов.
+### Теоретические основы
+- Bayer R., McCreight E. (1972). *Organization and Maintenance of Large Ordered Indices*. — B-Tree: фундамент индексирования в СУБД
+- O'Neil P. et al. (1996). *The Log-Structured Merge-Tree (LSM-Tree)*. — Структура для write-heavy workloads (RocksDB, Cassandra, LevelDB)
+- Mohan C. et al. (1992). *ARIES: A Transaction Recovery Method*. — WAL и crash recovery: стандарт де-факто
+- Härder T., Reuter A. (1983). *Principles of Transaction-Oriented Database Recovery*. — Формализация ACID-свойств
+- Gray J. (1978). *Notes on Data Base Operating Systems*. — Формализация транзакций и блокировок
+
+### Практические руководства
+- Petrov A. (2019). *Database Internals*. — Storage engines, buffer management, WAL, distributed transactions
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Storage/retrieval, репликация, партиционирование
+- Garcia-Molina H., Ullman J.D., Widom J. (2008). *Database Systems: The Complete Book*. — Query processing, concurrency control, recovery
 
 ---
 

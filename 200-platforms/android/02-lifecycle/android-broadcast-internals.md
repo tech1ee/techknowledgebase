@@ -38,6 +38,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение Broadcast как паттерна Publish-Subscribe
+
+> **Publish-Subscribe (Pub/Sub)** — паттерн обмена сообщениями, в котором отправители (publishers) не знают о получателях (subscribers). Сообщения классифицируются по темам, и подписчики получают только интересующие их сообщения (Eugster P. et al. *«The Many Faces of Publish/Subscribe»*, ACM Computing Surveys, 2003).
+
+### Сравнение с другими event-системами
+
+| Система | Scope | Доставка | IPC | Гарантия |
+|---------|-------|----------|-----|----------|
+| Android Broadcast | Межпроцессная | Через Binder | Да | At-most-once / ordered |
+| EventBus (greenrobot) | Внутрипроцессная | Прямой вызов | Нет | Синхронная |
+| Kotlin SharedFlow | Внутрипроцессная | Coroutine | Нет | Configurable replay |
+| RabbitMQ / Kafka | Сетевая | TCP/IP | Да | At-least-once |
+
+**Normal Broadcast** реализует **asynchronous multicast**, **Ordered Broadcast** — **chain of responsibility** (Gamma E. et al., 1994): получатели вызываются последовательно по убыванию приоритета, каждый может отменить дальнейшую доставку через `abortBroadcast()`.
+
+> **Связь с ОС:** Broadcast напоминает механизм **signals** в Unix (Stevens W.R. *APUE*, 1992), но с типизированными payload (Intent extras), permission-based filtering и ordered delivery. Формально — **typed event bus** с IPC через [[android-binder-ipc|Binder]].
+
+---
+
 ## Зачем это нужно
 
 ### Проблемы без понимания Broadcast-системы
@@ -2348,12 +2369,13 @@ class LocaleReceiver : BroadcastReceiver() {
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: BroadcastQueue, ActivityManagerService, Binder IPC — механизмы, через которые работает система рассылки событий
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая BroadcastReceiver, Intent filters и security best practices
-- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM: понимание thread safety критично при работе с goAsync() и фоновыми потоками в broadcast receivers
+### Теоретические основы
 
-**Веб-ресурсы:**
+- **Eugster P. et al.** *«The Many Faces of Publish/Subscribe»*, ACM Computing Surveys (2003) — формальная классификация Pub/Sub паттернов; Android Broadcast как topic-based Pub/Sub с IPC
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns* (1994) — Chain of Responsibility (Ordered Broadcast: получатели по приоритету с возможностью прерывания через `abortBroadcast()`)
+- **Stevens W.R.** *Advanced Programming in the UNIX Environment* (1992) — signals в Unix как прообраз Broadcast; типизированные payload через Intent extras
+
+### Практические руководства
 
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
@@ -2371,6 +2393,10 @@ class LocaleReceiver : BroadcastReceiver() {
 | 12 | [ActivityManagerService.java (AOSP)](https://cs.android.com/android/platform/superproject/+/main:frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java) | AOSP | broadcastIntentLocked() |
 | 13 | [LoadedApk.java (AOSP)](https://cs.android.com/android/platform/superproject/+/main:frameworks/base/core/java/android/app/LoadedApk.java) | AOSP | ReceiverDispatcher, InnerReceiver |
 | 14 | [Android 16 behavior changes](https://developer.android.com/about/versions/16/behavior-changes-all) | Docs | Cross-process priority changes |
+
+- **Vasavada N.** *Android Internals: A Confectioner's Cookbook* (2019) — внутреннее устройство BroadcastQueue, ActivityManagerService, Binder IPC
+- **Meier R.** *Professional Android* (2022) — комплексное руководство включая BroadcastReceiver, Intent filters и security best practices
+- **Goetz B.** *Java Concurrency in Practice* (2006) — thread safety при работе с goAsync() и фоновыми потоками в broadcast receivers
 
 ---
 

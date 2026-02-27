@@ -29,6 +29,39 @@ next_review:
 
 # Bluetooth: от гарнитур до IoT mesh
 
+## Теоретические основы
+
+> **Bluetooth** — стандарт беспроводной связи малого радиуса действия в ISM-диапазоне 2.4 GHz. Разработан **Ericsson (1994)**, назван в честь датского короля Харальда Bluetooth (Harald I). С версии 4.0 (2010) разделился на **Classic** (потоковое аудио) и **Low Energy (BLE)** (IoT, датчики).
+
+### Эволюция Bluetooth
+
+| Версия | Год | Ключевое нововведение |
+|--------|-----|----------------------|
+| **1.0** | 1999 | Первый стандарт, 723 Kbps |
+| **2.0 + EDR** | 2004 | Enhanced Data Rate — 3 Mbps |
+| **4.0 (BLE)** | 2010 | Bluetooth Low Energy — IoT революция |
+| **5.0** | 2016 | 2× скорость, 4× дальность, Advertising Extensions |
+| **5.2** | 2020 | LE Audio, LC3 кодек, Auracast broadcast |
+| **5.3** | 2021 | Channel Classification, Connection Subrating |
+| **5.4** | 2023 | PAwR, Encrypted Advertising Data |
+
+### BLE: архитектура GATT
+
+```
+Client ←→ Server
+          ├── Service (UUID)
+          │   ├── Characteristic (Read/Write/Notify)
+          │   │   └── Descriptor
+          │   └── Characteristic
+          └── Service
+```
+
+**GATT** (Generic Attribute Profile) — клиент-серверная модель для обмена данными по BLE. Все данные организованы в **Services** → **Characteristics** → **Descriptors**.
+
+> **См. также**: [[network-wireless-iot]] — IoT-протоколы, [[network-physical-layer]] — физический уровень
+
+---
+
 ## Prerequisites
 
 Прежде чем изучать Bluetooth, рекомендуется понимать:
@@ -2416,16 +2449,17 @@ class BluetoothDebugLogger {
 
 ## Источники
 
+**Теоретические основы:**
+- [Bluetooth SIG - Core Specification 5.4](https://www.bluetooth.com/specifications/specs/core54-html/) — формальная спецификация протокола
+- Haartsen J. (2000). *The Bluetooth Radio System*. — IEEE Personal Communications, обзор физического уровня
+
 **Официальная документация (проверено 2025-12-18):**
-- [Bluetooth SIG - Core Specification 5.4](https://www.bluetooth.com/specifications/specs/core54-html/)
-- [Bluetooth SIG - What's new in Bluetooth 5.4](https://www.bluetooth.com/bluetooth-resources/whats-new-in-bluetooth-core-5-4-an-overview/)
 - [Android Developers - Bluetooth Overview](https://developer.android.com/guide/topics/connectivity/bluetooth)
 - [Android Developers - Bluetooth LE](https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview)
 
 **Технические ресурсы (проверено 2025-12-18):**
 - [Nordic Semiconductor - Bluetooth 5.4 Overview](https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/whats-new-in-bluetooth-v5-4-an-overview)
 - [Silicon Labs - Bluetooth 5.4 Features](https://www.silabs.com/blog/the-new-bluetooth-5-4-what-you-should-know-first)
-- [Ezurio - Bluetooth Classic vs BLE](https://www.ezurio.com/resources/blog/bluetooth-low-energy-vs-bluetooth-classic-what-s-the-difference)
 - [MokoSmart - Bluetooth vs BLE Comparison 2025](https://www.mokosmart.com/bluetooth-vs-bluetooth-low-energy-a-detailed-comparison/)
 
 **Bluetooth Mesh (проверено 2025-12-18):**

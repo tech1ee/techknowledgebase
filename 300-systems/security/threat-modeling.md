@@ -27,6 +27,38 @@ next_review:
 cs-foundations: [STRIDE, DREAD, PASTA, Attack Trees, Data Flow Diagrams, Trust Boundaries]
 ---
 
+## Теоретические основы
+
+> **Моделирование угроз (threat modeling)** -- систематический процесс идентификации, перечисления и приоритизации потенциальных угроз для системы с целью определения контрмер (Shostack, 2014).
+
+### Ключевые методологии и их происхождение
+
+| Методология | Автор(ы) | Год | Фокус |
+|-------------|----------|-----|-------|
+| **Attack Trees** | Bruce Schneier | 1999 | Графовое представление путей атаки |
+| **STRIDE** | Microsoft (Kohnfelder, Garg) | 1999 | Классификация угроз по 6 категориям |
+| **DREAD** | Microsoft | ~2002 | Количественная оценка риска (5 факторов) |
+| **PASTA** | VerSprite (Ucedavélez, Morana) | 2012 | 7-этапная risk-centric методология |
+| **Four Question Framework** | Adam Shostack | 2014 | Универсальный фреймворк для threat modeling |
+
+### Attack Trees: Schneier (1999)
+
+В статье *"Attack Trees"* (Dr. Dobb's Journal, 1999) Брюс Шнайер предложил формальный метод описания атак в виде деревьев с узлами OR (достаточно одного пути) и AND (нужны все условия). Каждый лист аннотируется стоимостью (cost), необходимым уровнем навыка (skill) и вероятностью обнаружения. Ключевая ценность -- нахождение **cheapest attack path** для приоритизации защиты.
+
+### STRIDE и DREAD: эволюция в Microsoft
+
+STRIDE -- мнемоника для систематической классификации угроз, используемая совместно с **Data Flow Diagrams (DFD)** и **Trust Boundaries**. DREAD предлагает количественную оценку: Score = (D+R+E+A+D)/5, но критикуется за субъективность и отказ самой Microsoft от её использования.
+
+### PASTA: Process for Attack Simulation and Threat Analysis
+
+7-этапная методология (Ucedavélez & Morana, 2012), связывающая бизнес-цели с техническим анализом угроз. Включает этап **threat intelligence** и **симуляцию атак**, что делает её предпочтительной для compliance-heavy организаций.
+
+### Формальная связь STRIDE и CIA
+
+Каждая категория STRIDE нарушает конкретное свойство из [[security-fundamentals|CIA Triad]]: Spoofing -- Authenticity, Tampering -- Integrity, Information Disclosure -- Confidentiality, Denial of Service -- Availability. Это позволяет привязать результаты threat modeling к формальным требованиям безопасности.
+
+---
+
 ## Зачем это нужно
 
 Исправление уязвимости на этапе проектирования обходится в 10-100 раз дешевле, чем после релиза. Исследования показывают: устранение дефекта после релиза может быть до 30 раз дороже, чем на этапе дизайна.
@@ -1333,6 +1365,17 @@ Mitigation:
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Schneier B. (1999). *"Attack Trees."* Dr. Dobb's Journal. — формальный метод описания путей атаки в виде деревьев.
+- Kohnfelder L., Garg P. (1999). *"The Threats to Our Products."* Microsoft internal memo. — оригинальное описание STRIDE.
+- Ucedavélez T., Morana M. (2015). *Risk Centric Threat Modeling: Process for Attack Simulation and Threat Analysis.* Wiley. — PASTA: 7-этапная risk-centric методология.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — основополагающая книга, Four Question Framework.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — threat modeling в контексте проектирования надёжных систем.
+- McGraw G. (2006). *Software Security: Building Security In.* Addison-Wesley. — architectural risk analysis как форма threat modeling.
+
+### Практические руководства
 
 - [Adam Shostack's Four Question Framework](https://shostack.org/blog/four-question-frame/)
 - [STRIDE Model - Wikipedia](https://en.wikipedia.org/wiki/STRIDE_model)

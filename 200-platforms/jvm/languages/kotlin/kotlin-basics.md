@@ -55,6 +55,38 @@ related:
 
 ---
 
+## Теоретические основы
+
+Базовые конструкции Kotlin опираются на формальные концепции из теории типов и языков программирования.
+
+### Null safety и система типов
+
+> **Формально:** система типов Kotlin реализует **вариант sum type** на уровне nullability. Тип `T?` эквивалентен `T | Null` — объединению (union) типа `T` и единственного значения `null`. Это подход, восходящий к типу `Option[T]` в ML (Milner, 1978), но без boxing: `T?` не создаёт обёртку в runtime, а вставляет null-check в байткод.
+
+Hoare (2009, *Null References: The Billion Dollar Mistake*) признал, что введение null-ссылок в ALGOL W (1965) было ошибкой проектирования. Kotlin решает эту проблему на уровне компилятора — в отличие от Java `Optional<T>`, который является runtime-обёрткой.
+
+### Type inference
+
+Kotlin использует **локальный вывод типов** (local type inference), основанный на алгоритме Пирса и Тёрнера (Pierce & Turner, *Local Type Inference*, 2000). В отличие от полного Hindley-Milner (1978), используемого в ML/Haskell, Kotlin выводит типы только в пределах одного выражения — для сигнатур public API тип указывается явно.
+
+### Управляющие конструкции как выражения
+
+| Конструкция | Java | Kotlin | Теория |
+|-------------|------|--------|--------|
+| `if/else` | statement | expression | Everything is an expression (ML-традиция) |
+| `when` | switch (limited) | expression + exhaustiveness | Pattern matching (Burstall, 1969) |
+| `try/catch` | statement | expression | Исключения как значения |
+
+> **Ключевой принцип:** в Kotlin `if`, `when`, `try` — выражения, возвращающие значение. Это следствие функциональной традиции (ML, 1973): разделение на statements и expressions порождает больше ошибок, чем решает.
+
+### Smart casts и flow-sensitive typing
+
+Smart casts реализуют **flow-sensitive typing** (Pearce, 2013): компилятор отслеживает проверки типов (`is`, `!= null`) и автоматически сужает тип в соответствующей ветке. K2-компилятор (Kotlin 2.0+) расширяет эту модель: smart casts работают через `&&`, `||`, вложенные условия и mutable `val`.
+
+См. также: [[kotlin-type-system]] — формальная система типов, variance, reified generics.
+
+---
+
 Kotlin — язык для JVM от JetBrains, официальный язык Android-разработки с 2019 года. Null-safety на уровне системы типов: `String` никогда не null, `String?` — может быть, и компилятор заставляет обрабатывать оба случая. NullPointerException ловится при компиляции, не в runtime.
 
 Представьте аптечный склад, где каждое лекарство имеет ячейку. В Java любая ячейка может быть пустой — и вы узнаете об этом, только когда протянете руку и ничего не найдёте. В Kotlin ячейки двух видов: обычные (гарантированно с лекарством) и помеченные знаком «?» (может быть пустой). Прежде чем взять что-то из помеченной ячейки, вы обязаны проверить — иначе система просто не позволит вам протянуть руку. Это и есть null-safety на уровне типов.
@@ -959,6 +991,15 @@ Adoption:
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Pierce B. (2002). *Types and Programming Languages*. — Формальные основы null-safety, type inference и subtyping. Глава о local type inference объясняет алгоритм, используемый в Kotlin.
+- Hoare C.A.R. (2009). *Null References: The Billion Dollar Mistake*. QCon London. — Историческое признание ошибки null-ссылок; мотивация для системы `T` / `T?` в Kotlin.
+- Pierce B., Turner D. (2000). *Local Type Inference*. ACM TOPLAS. — Алгоритм локального вывода типов, на котором основан type inference в Kotlin.
+- Pearce D. (2013). *A Calculus for Constraint-Based Flow Typing*. — Формализация flow-sensitive typing, лежащая в основе smart casts.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — каноническая книга от создателей языка. Подробное объяснение каждой конструкции Kotlin с точки зрения перехода с Java: val/var, null-safety, type inference, control flow.
 - Moskala M. (2024). *Effective Kotlin.* — best practices и идиоматичный код. Объясняет, почему предпочитать val, когда использовать smart casts и как избегать типичных ошибок новичков.

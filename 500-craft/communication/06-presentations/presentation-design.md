@@ -29,6 +29,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Визуальная коммуникация** (Visual Communication) — область, изучающая передачу информации через визуальные средства. В контексте презентаций опирается на **Gestalt-принципы восприятия** (Wertheimer, 1923), **теорию визуальной грамотности** (Dondis, 1973) и **когнитивную теорию мультимедийного обучения** (Mayer, 2001).
+
+### Историческая хронология
+
+| Год | Автор / Событие | Вклад |
+|-----|-----------------|-------|
+| 1923 | Max Wertheimer | Gestalt-принципы: близость, сходство, замкнутость, непрерывность |
+| 1967 | Barbara Minto | Pyramid Principle — структура «вывод → аргументы → доказательства» |
+| 1973 | Donis A. Dondis | «A Primer of Visual Literacy» — грамматика визуального языка |
+| 1983 | Edward Tufte | «The Visual Display of Quantitative Information» — Data-Ink Ratio |
+| 2001 | Richard Mayer | CTML: 12 принципов мультимедийного обучения |
+| 2004 | Michael Alley | Assertion-Evidence framework для научных презентаций |
+| 2006 | Garr Reynolds | «Presentation Zen» — минимализм в слайдах |
+| 2008 | Nancy Duarte | «slide:ology» — дизайн как визуальное мышление |
+
+### Принципы Mayer (2001) в дизайне слайдов
+
+Richard Mayer сформулировал 12 принципов мультимедийного обучения, из которых для презентаций ключевые:
+
+| Принцип | Суть | Применение в слайдах |
+|---------|------|----------------------|
+| **Coherence** | Убери лишнее | Удалить декоративные элементы (3D, тени) |
+| **Signaling** | Выдели главное | Bold, цвет, размер для key message |
+| **Segmenting** | Разбей на части | Progressive disclosure — 1 идея на слайд |
+| **Multimedia** | Слова + картинки | Assertion-Evidence: заголовок + визуал |
+| **Spatial Contiguity** | Текст рядом с визуалом | Подписи прямо на диаграмме, не внизу |
+
+Assertion-Evidence design (Alley, 2004) — научно обоснованная альтернатива bullet-point слайдам. Исследования показали, что аудитория запоминает **на 20% больше** при assertion-evidence формате по сравнению с традиционным (Garner & Alley, 2013).
+
+Data-Ink Ratio Tufte (1983) формализует принцип Coherence: каждый пиксель на слайде должен нести информацию. Gestalt-принцип близости объясняет, почему визуальная иерархия (заголовок > подзаголовок > текст) работает: мозг автоматически группирует элементы по расстоянию и размеру.
+
+> Связь с другими материалами: [[technical-presentations]] использует Minto Pyramid для структуры контента, [[storytelling-tech]] добавляет нарративную структуру к визуальному оформлению, [[cognitive-load-theory]] объясняет научную базу принципов 1-6-6 и progressive disclosure.
+
+---
+
 ## Зачем это нужно
 
 **Статистика:**
@@ -745,16 +782,28 @@ DEMO SAFETY NET:
 
 ## Источники
 
-1. Minto, B. "The Minto Pyramid Principle" (McKinsey classic)
-2. Reynolds, G. "Presentation Zen" (2024 edition)
-3. Duarte, N. "Resonate" и "slide:ology"
-4. Kawasaki, G. "The Art of the Start" (10-20-30 rule)
-5. Tufte, E. "The Visual Display of Quantitative Information"
-6. Prezi State of Presentations Report (2024)
-7. Microsoft Research on attention spans
-8. 3M Corporation visual communication studies
-9. Garr Reynolds Blog (presentationzen.com)
-10. assertion-evidence.com — научный подход к слайдам
+### Теоретические основы
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Mayer, R. E. *Multimedia Learning*. Cambridge University Press, 2001 | Монография |
+| 2 | Tufte, E. *The Visual Display of Quantitative Information*. Graphics Press, 1983 | Монография |
+| 3 | Alley, M. *The Craft of Scientific Presentations*. Springer, 2004 | Монография |
+| 4 | Garner, J. K. & Alley, M. "How the Design of Presentation Slides Affects Audience Comprehension". *Technical Communication*, 60(3), 2013 | Статья |
+| 5 | Wertheimer, M. "Untersuchungen zur Lehre von der Gestalt". *Psychologische Forschung*, 4, 1923 | Статья |
+| 6 | Minto, B. *The Minto Pyramid Principle*. Minto International, 1967/2009 | Монография |
+
+### Практические руководства
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Reynolds, G. *Presentation Zen*. New Riders, 2024 | Книга |
+| 2 | Duarte, N. *Resonate* и *slide:ology*. Wiley, 2008/2010 | Книги |
+| 3 | Kawasaki, G. *The Art of the Start*. Portfolio, 2004 | Книга |
+| 4 | Prezi State of Presentations Report, 2024 | Отчёт |
+| 5 | 3M Corporation visual communication studies | Исследование |
+| 6 | Garr Reynolds Blog (presentationzen.com) | Блог |
+| 7 | assertion-evidence.com — научный подход к слайдам | Ресурс |
 
 ---
 

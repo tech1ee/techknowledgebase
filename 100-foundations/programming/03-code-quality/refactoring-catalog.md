@@ -22,7 +22,42 @@ related:
 
 ---
 
-## Фундаментальное правило
+## Теоретические основы
+
+> **Рефакторинг** — изменение внутренней структуры программы без изменения её наблюдаемого поведения (Fowler, 1999). Формально: трансформация T на программе P, такая что для всех входов I: P(I) = T(P)(I).
+
+### Формальные свойства
+
+| Свойство | Определение | Гарантия |
+|----------|-------------|----------|
+| **Behavior-preserving** | Внешне наблюдаемый результат не меняется | Тесты зелёные до и после |
+| **Mechanical** | Каждый рефакторинг — детерминированная последовательность шагов | Можно автоматизировать (IDE refactoring) |
+| **Composable** | Рефакторинги можно применять последовательно | Extract Method → Move Method → Inline Variable |
+| **Reversible** | Каждый рефакторинг имеет обратный | Extract Method ↔ Inline Method |
+
+### Историческая хронология
+
+| Год | Автор | Вклад |
+|-----|-------|-------|
+| 1984 | Opdyke & Johnson | Первое исследование рефакторинга для ООП |
+| 1992 | Opdyke | PhD диссертация «Refactoring Object-Oriented Frameworks» — первый формальный каталог |
+| 1999 | Fowler | «Refactoring: Improving the Design of Existing Code» — 72 рефакторинга (1-е изд.) |
+| 2004 | Feathers | «Working Effectively with Legacy Code» — рефакторинг без тестов |
+| 2018 | Fowler | «Refactoring» 2-е изд. — 61 + 17 новых, JavaScript вместо Java |
+
+### Три уровня рефакторинга
+
+```
+Code-level:    Extract Method, Rename, Move Field
+Design-level:  Replace Inheritance with Delegation, Introduce Polymorphism
+Architecture:  Strangler Fig, Branch by Abstraction (→ legacy code)
+```
+
+> **См. также**: [[code-smells]] — что рефакторить, [[legacy-code-strategies]] — как рефакторить без тестов, [[clean-code]] — зачем рефакторить
+
+---
+
+
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -908,6 +943,12 @@ Convert to expression body, Convert to data class, Convert Java to Kotlin (Cmd+O
 
 ## Источники
 
+### Теоретические основы
+- **Opdyke W. (1992). Refactoring Object-Oriented Frameworks. PhD Dissertation, UIUC.** — первый формальный каталог рефакторингов с доказательством behavior-preservation
+- **Fowler M. (1999/2018). Refactoring. Addison-Wesley.** — каноническая книга: 72 рефакторинга (1-е изд.), 61+17 (2-е изд.)
+- **Griswold W. (1991). Program Restructuring as an Aid to Software Maintenance. PhD Dissertation, U. of Washington.** — формальная модель program restructuring
+
+### Практические руководства
 - Fowler M. "Refactoring: Improving the Design of Existing Code" (2nd ed., 2018) --- 61 + 17 рефакторингов с примерами
 - [Refactoring Catalog — refactoring.com](https://refactoring.com/catalog/) --- онлайн-каталог с фильтрами
 - [Refactoring Guru](https://refactoring.guru/refactoring/techniques) --- визуальные примеры рефакторингов

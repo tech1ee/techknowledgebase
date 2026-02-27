@@ -34,6 +34,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **kotlin-inject** — compile-time DI framework, использующий **KSP (Kotlin Symbol Processing)** вместо KAPT для генерации кода. Ключевое отличие от Dagger: полная поддержка **Kotlin Multiplatform** и Kotlin-native API (без Java-наследия).
+
+kotlin-inject реализует ту же модель **DAG-based DI**, что и Dagger, но с важным архитектурным отличием: **Component Inheritance** вместо Modules. Зависимости определяются как abstract properties/functions в Component, а не в отдельных Module классах — это более идиоматично для Kotlin.
+
+| Особенность | kotlin-inject | Dagger 2 | Формальная основа |
+|-------------|-------------|----------|-------------------|
+| Component model | Abstract class inheritance | Interface + Module | Inheritance vs Composition |
+| Code generation | KSP (Kotlin-native) | KAPT / KSP | Metaprogramming |
+| KMP support | Полная | Только JVM/Android | Platform abstraction |
+| Lambda injection | `() -> T` нативно | Provider\<T\> (Java) | Factory pattern |
+| Assisted injection | `@Assisted` + factory | `@AssistedInject` + factory | Partial application |
+
+> **KSP (Kotlin Symbol Processing)** — API от Google для метапрограммирования в Kotlin, заменяющий KAPT (Kotlin Annotation Processing Tool). KAPT работает через Java stubs (Kotlin → Java stubs → annotation processor), что удваивает время компиляции. KSP работает напрямую с Kotlin символами, давая до **2x ускорение** (Google, 2021).
+
+kotlin-inject поддерживает **lambda injection** (`() -> T`) — нативная реализация паттерна **Factory** через Kotlin lambdas. В Dagger аналогичная функциональность доступна через `Provider<T>` (Java-интерфейс), что менее идиоматично для Kotlin.
+
+---
+
 ## ПОЧЕМУ: Зачем нужен kotlin-inject
 
 ### Проблема: Dagger не работает в KMP
@@ -1104,19 +1124,21 @@ protected fun provideApi(): Api = ...
 
 ## Источники и дальнейшее чтение
 
-### Официальные
+### Теоретические основы
+
+- **Cormen T.H., Leiserson C.E., Rivest R.L., Stein C.** *Introduction to Algorithms* (2009) — DAG и топологическая сортировка, лежащие в основе compile-time разрешения графа зависимостей kotlin-inject
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns* (1994) — Factory pattern, реализуемый через lambda injection `() -> T`; Abstract Factory через Component inheritance
+- **Google.** *KSP: Kotlin Symbol Processing* (2021) — формальное описание KSP API, заменяющего KAPT для метапрограммирования в Kotlin с 2x ускорением компиляции
+
+### Практические руководства
+
 - [kotlin-inject GitHub](https://github.com/evant/kotlin-inject)
 - [kotlin-inject Documentation](https://github.com/evant/kotlin-inject/tree/main/docs)
 - [kotlin-inject-anvil (Amazon)](https://github.com/amzn/kotlin-inject-anvil)
-
-### Статьи
 - [Koin vs kotlin-inject (Infinum)](https://infinum.com/blog/koin-vs-kotlin-inject-dependency-injection/)
 - [From Dagger to kotlin-inject (droidcon)](https://www.droidcon.com/2023/03/23/from-dagger-hilt-into-the-multiplatform-world-with-kotlin-inject/)
 - [Using kotlin-inject in KMP (John O'Reilly)](https://johnoreilly.dev/posts/kotlin-inject-kmp/)
-
-### Книги
-
-- **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования API, включая паттерны DI и static factory methods, концептуально связанные с @Component/@Provides в kotlin-inject
+- **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования API, включая паттерны DI и static factory methods, концептуально связанные с @Component/@Provides
 - **Moskala M.** *Effective Kotlin* (2021) — Kotlin-специфичные паттерны проектирования и управления зависимостями, актуальные для kotlin-inject с его Kotlin-native API
 - **Meier R.** *Professional Android* (2022) — архитектурные паттерны Android-приложений, включая практику интеграции DI фреймворков в production-проекты
 

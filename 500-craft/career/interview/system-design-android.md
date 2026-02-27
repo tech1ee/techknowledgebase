@@ -30,6 +30,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **System Design Interview** — оценка способности кандидата проектировать масштабируемые системы: от requirements до architecture, с обсуждением trade-offs. Для mobile — это проектирование клиентской архитектуры с учётом offline, battery, sync и ограничений устройства.
+
+**Mobile vs Backend System Design:**
+
+| Аспект | Backend SD | Mobile SD |
+|--------|-----------|-----------|
+| Масштаб | Миллионы RPS, distributed systems | Один device, ограниченные ресурсы |
+| Фокус | CAP theorem, sharding, load balancing | Offline-first, battery, UX responsiveness |
+| Storage | Distributed databases, caching layers | Local DB (Room), disk cache, DataStore |
+| Network | Reliable, high bandwidth | Unreliable, variable bandwidth, metered |
+| Failure | Server redundancy, failover | Graceful degradation, retry, queue |
+
+**Framework RESHADED** (weeeBox/mobile-system-design):
+- **R**equirements — functional + non-functional
+- **E**stimations — data size, bandwidth, storage
+- **S**torage — local vs remote, caching strategy
+- **H**igh-level design — architecture layers
+- **A**PI design — endpoints, data models
+- **D**eep dive — critical path, edge cases
+- **E**rror handling — failure modes, recovery
+- **D**iscussion — trade-offs, alternatives
+
+Подход к mobile system design сформировался из backend-ориентированных frameworks (Xu, 2020) с адаптацией для мобильной специфики. Ключевое отличие: backend SD фокусируется на **throughput и availability** (CAP theorem, Brewer 2000), а mobile SD — на **user experience при ненадёжных условиях** (offline, slow network, low memory).
+
+> **Принцип offline-first (Trello Engineering, 2017):** мобильное приложение должно быть полностью функциональным без сети, синхронизируя данные при появлении connectivity. Это инвертирует backend-парадигму, где network availability — данность.
+
+→ Связано: [[interview-process]], [[architecture-questions]], [[sd-industry-resources]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -623,15 +655,19 @@ Must mention:
 
 - [[architecture-questions]] — Содержит конкретные вопросы по архитектуре Android: MVVM vs MVI trade-offs, Clean Architecture layers, modularization patterns. Текущий материал использует эти архитектурные паттерны как строительные блоки для System Design ответов. Architecture — фундамент, System Design — применение этого фундамента к реальным задачам.
 
-## Источники и дальнейшее чтение
-
-- Xu A. (2020). *System Design Interview*. — Основная книга для подготовки к System Design раундам. Хотя ориентирована на backend, framework (Requirements → Estimations → Design → Deep Dive → Trade-offs) применим к mobile. Адаптируй задачи, добавляя offline-first, battery optimization и caching.
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Глава о System Design даёт базовые концепции: scalability, load balancing, database design. Для mobile System Design эти backend-концепции нужны на уровне understanding, чтобы проектировать клиент-серверное взаимодействие.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff уровне System Design оценивается не только технически, но и с точки зрения leadership: как ты ведёшь discussion, какие trade-offs предлагаешь, как учитываешь бизнес-контекст. Книга помогает понять эти expectations.
-
 ## Источники
+
+### Теоретические основы
+
+- Xu A. (2020). *System Design Interview*. — Backend-ориентированный framework, адаптируемый для mobile: Requirements → Estimations → Design → Deep Dive → Trade-offs.
+
+- Brewer E. (2000). *Towards Robust Distributed Systems* (CAP Theorem). — Теоретическая основа trade-offs между consistency и availability; в mobile SD — offline-first vs data freshness.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Базовые концепции System Design: scalability, load balancing, database design.
+
+- Larson W. (2022). *Staff Engineer*. — Staff-level expectations: leadership в design discussion, бизнес-контекст trade-offs.
+
+### Практические руководства
 
 - [GitHub: weeeBox/mobile-system-design](https://github.com/weeeBox/mobile-system-design)
 - [ProAndroidDev: System Design Questions](https://proandroiddev.com/android-system-design-interview-questions-and-answer-f47ba3ebeb91)

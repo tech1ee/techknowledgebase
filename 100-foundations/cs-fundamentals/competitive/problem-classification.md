@@ -31,6 +31,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Классификация задач** — систематический подход к определению типа алгоритмической задачи на основе её ограничений (constraints), ключевых слов в условии и структуры входных данных. Позволяет сузить пространство поиска решения от тысяч алгоритмов до 2-3 кандидатов.
+
+### Таксономия типов задач
+
+| Тип | Характерные признаки | Типичная сложность | Примеры алгоритмов |
+|-----|---------------------|-------------------|-------------------|
+| **Greedy** | "Minimum cost", "maximum items", optimal substructure без overlapping | O(N log N) | Сортировка + жадный выбор |
+| **DP** | "Number of ways", "minimum/maximum", overlapping subproblems | O(N*K) или O(N²) | Knapsack, LCS, LIS |
+| **Graph** | "Cities and roads", "connections", "reachability" | O(V + E) или O(E log V) | BFS, DFS, Dijkstra |
+| **String** | "Pattern matching", "palindrome", "subsequence" | O(N) - O(N²) | KMP, Z-function, Trie |
+| **Math** | "Divisors", "prime", "modulo", N ≤ 10^18 | O(sqrt N) - O(log N) | Sieve, binary exponentiation |
+| **Data structures** | "Range queries", "updates", Q queries | O(N log N) - O(N sqrt N) | Segment Tree, BIT, Sqrt decomposition |
+| **Brute force / Bitmask** | N ≤ 20, "all subsets" | O(2^N) - O(N * 2^N) | Bitmask DP, meet in the middle |
+
+### Constraints как диагностический инструмент
+
+| Ограничение N | Допустимая сложность | Типичные подходы |
+|--------------|---------------------|-----------------|
+| N ≤ 10 | O(N!) | Полный перебор перестановок |
+| N ≤ 20 | O(2^N * N) | Bitmask DP, meet in the middle |
+| N ≤ 500 | O(N³) | Floyd-Warshall, матричное DP |
+| N ≤ 5000 | O(N²) | Простое DP, два вложенных цикла |
+| N ≤ 10^5 | O(N log N) | Сортировка, Segment Tree, binary search |
+| N ≤ 10^6 | O(N) | Линейные алгоритмы, prefix sums |
+| N ≤ 10^9 | O(log N) или O(sqrt N) | Binary search на ответе, математика |
+| N ≤ 10^18 | O(log N) | Binary exponentiation, matrix power |
+
+> **Правило:** если ваше решение имеет сложность, не вписывающуюся в ограничения — ищите другой подход. Constraints не лгут.
+
+**Связанные темы:** [[big-o-complexity]] (анализ сложности), [[competitive-programming-overview]] (обзор CP), [[patterns-overview]] (паттерны решения задач), [[contest-strategy]] (стратегия на контесте)
+
+---
+
 ## Интуиция
 
 ### Аналогия 1: Constraints как диагноз врача
@@ -823,11 +858,13 @@ N ≤ 10^9    → O(log N), O(√N)
 
 ## Источники и дальнейшее чтение
 
-### Книги
+### Теоретические основы
+- **Cormen, Leiserson, Rivest, Stein (2009). "Introduction to Algorithms" (CLRS).** — Фундаментальный справочник по алгоритмам с доказательствами корректности и анализом сложности каждой категории. Без этой теоретической базы классификация остаётся поверхностной.
+- **Garey, M.R. & Johnson, D.S. (1979). "Computers and Intractability: A Guide to the Theory of NP-Completeness."** — Классификация задач по вычислительной сложности: P, NP, NP-complete. Теоретический фундамент для понимания, почему одни задачи решаются за O(N log N), а другие требуют O(2^N).
 
-- **Halim, Halim (2013). "Competitive Programming 3."** — Содержит наиболее полную классификацию задач по категориям с привязкой к конкретным задачам UVa Online Judge. Каждая глава организована по типу задач (Complete Search, Divide & Conquer, Greedy, DP, Graph и т.д.) с подкатегориями и подсказками по распознаванию.
-- **Laaksonen (2017). "Guide to Competitive Programming."** — Современное руководство на основе CSES problem set, где задачи систематизированы по темам с нарастающей сложностью. Особенно полезна для построения собственной «карты» алгоритмов и понимания, какие техники относятся к какому уровню.
-- **Cormen, Leiserson, Rivest, Stein (2009). "Introduction to Algorithms" (CLRS).** — Фундаментальный справочник по алгоритмам, который даёт глубокое понимание каждой категории: доказательства корректности, анализ сложности, варианты. Без этой теоретической базы классификация остаётся поверхностной — CLRS объясняет, почему каждый алгоритм работает и когда он применим.
+### Практические руководства
+- **Halim, Halim (2013). "Competitive Programming 3."** — Наиболее полная классификация задач по категориям с привязкой к UVa Online Judge. Каждая глава организована по типу задач с подкатегориями и подсказками по распознаванию.
+- **Laaksonen (2017). "Guide to Competitive Programming."** — Современное руководство на основе CSES problem set, задачи систематизированы по темам с нарастающей сложностью.
 
 
 ---

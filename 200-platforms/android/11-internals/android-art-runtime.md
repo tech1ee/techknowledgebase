@@ -47,6 +47,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Виртуальная машина (Virtual Machine)** — программная абстракция, выполняющая код на промежуточном языке (байткоде) с трансляцией в машинные инструкции целевой платформы. Концепция берёт начало от **Smalltalk-80 VM** (Goldberg & Robson, 1983) и формализована в работе Smith & Nair, *Virtual Machines: Versatile Platforms for Systems and Processes* (2005).
+
+### Эволюция виртуальных машин для мобильных устройств
+
+| Поколение | VM | Архитектура | Стратегия исполнения | Период |
+|-----------|-----|------------|---------------------|--------|
+| Прототип | Smalltalk-80 VM | Stack-based | Интерпретатор + примитивный JIT | 1980 |
+| Индустриальный стандарт | JVM (HotSpot) | Stack-based | Interpret → C1 (быстрый JIT) → C2 (оптимизирующий JIT) | 1995–н.в. |
+| Мобильный pioneer | Dalvik VM | **Register-based** | Interpret (1.0) → JIT (2.2 Froyo) | 2008–2014 |
+| Современный runtime | **ART** | Register-based | AOT (5.0) → JIT+AOT+Interpret (7.0+) | 2014–н.в. |
+
+> **Register-based vs Stack-based VM** — Shi et al., *Virtual Machine Showdown: Stack vs. Registers* (2008, VEE). Register-based VM (Dalvik/ART) выполняет на **47% меньше инструкций**, чем stack-based (JVM), за счёт меньшего количества промежуточных push/pop. Однако каждая инструкция длиннее (явные регистры), поэтому размер кода больше на ~25%.
+
+> **Profile-Guided Optimization (PGO)** — техника оптимизации, использующая данные профилирования реальных запусков для принятия решений компилятором. Описана в Chang et al., *Using Profile Information to Assist Classic Code Optimizations* (1991, Software: Practice & Experience). ART использует PGO через три механизма: runtime-профили (автоматические), Baseline Profiles (разработчик), Cloud Profiles (агрегированные Google Play).
+
+### Ключевые теоретические концепции ART
+
+| Концепция | Формальная основа | Реализация в ART |
+|-----------|------------------|-----------------|
+| Just-In-Time компиляция | Aycock, *A Brief History of Just-In-Time* (2003) | Компиляция hot methods во время выполнения; профили определяют «горячесть» |
+| Ahead-Of-Time компиляция | Традиционная модель (GCC, 1987) | dex2oat компилирует DEX → OAT (ELF с native code) |
+| Concurrent GC | Baker, *The Treadmill: Real-Time Garbage Collection Without Motion Sickness* (1992) | CC (Concurrent Copying) GC: копирующий сборщик с паузами ~2ms |
+| Generational Hypothesis | Ungar, *Generation Scavenging* (1984) | TLAB для быстрой аллокации; Generational CC в Android 10+ |
+| On-Stack Replacement (OSR) | Hölzle & Ungar, *Optimizing Dynamically-Dispatched Calls* (1994, OOPSLA) | Замена интерпретируемого фрейма скомпилированным прямо во время выполнения метода |
+| Class Loading | Liang & Bracha, *Dynamic Class Loading in the JVM* (1998, OOPSLA) | PathClassLoader, DelegateLastClassLoader, class verification при установке |
+
+Связанные материалы: [[jvm-basics-history]] (история JVM), [[jvm-gc-tuning]] (алгоритмы GC), [[android-compilation-pipeline]] (build-time часть: kotlinc → D8 → R8), [[android-app-startup-performance]] (влияние JIT/AOT на старт).
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -2365,6 +2397,20 @@ Image Space — boot.art, pre-loaded framework classes (read-only, shared). Regi
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Goldberg A., Robson D. *Smalltalk-80: The Language and its Implementation* (1983) | Первая промышленная VM с байткод-интерпретатором |
+| Shi Y. et al. *Virtual Machine Showdown: Stack vs. Registers* (2008, VEE) | Register-based vs Stack-based VM — обоснование архитектуры Dalvik/ART |
+| Aycock J. *A Brief History of Just-In-Time* (2003, ACM Computing Surveys) | Теория JIT-компиляции |
+| Chang P. et al. *Using Profile Information to Assist Classic Code Optimizations* (1991) | Profile-Guided Optimization |
+| Baker H. *The Treadmill: Real-Time Garbage Collection Without Motion Sickness* (1992) | Concurrent GC, read barriers |
+| Ungar D. *Generation Scavenging: A Non-Disruptive High Performance Storage Reclamation Algorithm* (1984) | Generational Hypothesis |
+| Hölzle U., Ungar D. *Optimizing Dynamically-Dispatched Calls with Run-Time Type Feedback* (1994) | On-Stack Replacement |
+| Liang S., Bracha G. *Dynamic Class Loading in the Java Virtual Machine* (1998) | Class loading model |
+| Jones R. et al. *The Garbage Collection Handbook* (2nd ed., 2023) | Теория GC: copying, concurrent, generational, read barriers |
+| Smith J., Nair R. *Virtual Machines: Versatile Platforms for Systems and Processes* (2005) | Теория виртуальных машин |
 
 ### Официальная документация AOSP
 

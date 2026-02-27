@@ -43,6 +43,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Job Scheduling: от теории операционных систем к Android
+
+> **Job Scheduling** — задача планирования выполнения задач с ограничениями (constraint satisfaction). В теории операционных систем это формализуется как задача оптимизации: минимизировать потребление ресурсов (CPU, батарея, сеть) при выполнении набора задач с constraint-ами (connectivity, charging, idle).
+
+| Подход к фоновой работе | Теоретическая модель | Ограничения |
+|------------------------|---------------------|-------------|
+| `AlarmManager.setExact()` | Deterministic scheduling — задача запускается точно в указанное время | Нет constraint satisfaction, нет batching |
+| `JobScheduler` (API 21) | Constraint-based scheduling — система решает когда выполнить | Только системный API, нет backward compat |
+| `WorkManager` | Constraint-based + persistence + chaining | Рекомендуемый подход: DAG задач с constraints |
+
+### Модель приоритетов процессов и фоновые ограничения
+
+> Android использует модель **multilevel feedback queue** (Corbató et al., MIT, 1962) для приоритизации процессов: foreground → visible → service → cached → empty. Low Memory Killer (lmkd) убивает процессы с наименьшим приоритетом. Каждое ограничение фоновой работы (Doze, App Standby, Background Execution Limits) — это инструмент повышения приоритета foreground-приложений за счёт background.
+
+> Формально, Android Doze Mode реализует **batched deferred execution**: задачи накапливаются и выполняются в maintenance windows. Это оптимизирует energy consumption по закону: `E_total = E_wakeup × N_wakeups + E_processing × T_processing`. Сокращение N_wakeups через batching даёт экспоненциальную экономию батареи.
+
+### WorkManager: Directed Acyclic Graph (DAG) задач
+
+> WorkManager моделирует зависимости между задачами как **DAG** (направленный ациклический граф). `WorkContinuation.then()` и `WorkManager.beginWith().then()` создают рёбра в графе. Topological sort определяет порядок выполнения. Это та же модель, что использует Gradle для task graph и Make для build dependencies.
+
+> **Связь**: Job Scheduling → [[os-scheduling]], Process Priorities → [[android-process-memory]], DAG → [[android-gradle-fundamentals]]
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -1043,12 +1069,19 @@ class SyncWorkerTest {
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Corbató F. et al. *An Experimental Time-Sharing System* (1962, AFIPS) | Multilevel Feedback Queue → приоритеты фоновых процессов |
+| Coffman E. et al. *Computer and Job-Shop Scheduling Theory* (1976) | Job Scheduling — теория планирования задач |
+| Tanenbaum A. *Modern Operating Systems* (1992) | Process priority model, preemptive scheduling |
+
+### Книги
 - Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Services, WorkManager и background execution limits
 - Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их применение для фоновой работы: CoroutineWorker, viewModelScope, structured concurrency
 - Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с разделами по background work и Services
 
-**Веб-ресурсы:**
+### Практические руководства
 - [Android Developers: Optimize for Doze and App Standby](https://developer.android.com/training/monitoring-device-state/doze-standby)
 - [Android Developers: App Standby Buckets](https://developer.android.com/topic/performance/appstandby)
 - [Android Developers: Background Execution Limits](https://developer.android.com/about/versions/oreo/background)

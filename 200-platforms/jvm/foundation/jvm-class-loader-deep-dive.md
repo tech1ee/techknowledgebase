@@ -63,6 +63,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Механизм загрузки классов в JVM опирается на фундаментальные концепции computer science: **позднее связывание** (late binding), **пространства имён** (namespaces) и **принцип делегирования** (delegation principle).
+
+> **Определение (JVM Spec §5.3):** *"The Java Virtual Machine dynamically loads, links and initializes classes and interfaces. Loading is the process of finding the binary representation of a class or interface type with a particular name and creating a class or interface from that binary representation."*
+
+Формально, ClassLoader реализует отображение:
+
+| Концепция | Формальное определение | Значение для JVM |
+|-----------|----------------------|------------------|
+| **Late binding** (Ingalls, 1978) | Связывание имени с реализацией откладывается до момента использования | Классы загружаются лениво — при первом активном обращении, а не при старте |
+| **Namespace isolation** | Каждый ClassLoader определяет собственное пространство имён | Класс уникален парой *(имя, ClassLoader)* — два CL могут загрузить разные версии одного класса |
+| **Delegation model** | Иерархическая передача ответственности от потомка к родителю | Parent Delegation гарантирует, что системные классы загружаются из доверенного источника |
+| **Dynamic linking** (McCarthy, 1960) | Разрешение символических ссылок во время выполнения | Resolution-фаза преобразует строковые имена в прямые указатели |
+
+Теоретическая основа безопасности ClassLoader восходит к работе **Liang & Bracha (1998)** *"Dynamic Class Loading in the Java Virtual Machine"*, где авторы формализовали понятие **loading constraint** — инварианта, гарантирующего type safety при наличии нескольких ClassLoader. Loading constraint утверждает: если два ClassLoader L₁ и L₂ оба «инициируют» загрузку класса C, то результирующий класс должен быть один и тот же. Нарушение этого инварианта приводит к `LinkageError`.
+
+Концепция **верификации байткода** имеет формальную основу в работе **Leroy (2003)** *"Java Bytecode Verification: Algorithms and Formalizations"*, где процесс верификации сведён к задаче проверки типов (type checking) над абстрактным стековым автоматом. Верификатор доказывает, что для каждой инструкции байткода стек операндов и локальные переменные содержат значения корректных типов — это статический анализ, выполняемый до исполнения кода.
+
+> **Ключевой принцип:** ClassLoader — это реализация паттерна **Chain of Responsibility** (Gamma et al., 1994) в контексте загрузки типов. Каждый узел цепочки (ClassLoader) либо обрабатывает запрос сам, либо делегирует родителю, обеспечивая иерархическую изоляцию и контроль доступа.
+
+Связанные темы: [[jvm-virtual-machine-concept]] (архитектура стековой VM), [[jvm-module-system]] (JPMS как эволюция namespace-изоляции), [[jvm-security-model]] (верификация и песочница).
+
+---
+
 ## Историческая справка
 
 ClassLoader — одна из старейших подсистем Java, появившаяся в самой первой версии (Java 1.0, 1996). Первоначальная мотивация была не модульность и не hot reload — это была **безопасность**. Java создавалась для запуска кода из сети (Java Applets), и нужен был механизм, который не позволит скачанному из интернета коду подменить системные классы вроде `java.lang.String` или `java.lang.System`.
@@ -565,11 +590,14 @@ java -Xlog:class+load=info MyApp
 
 ## Источники и дальнейшее чтение
 
-- **Lindholm T. et al. (2014). The Java Virtual Machine Specification, Java SE 8 Edition.** — формальное описание процесса загрузки, связывания и инициализации классов (Chapter 5). Это спецификация, не руководство — полезна как точный reference, когда нужно знать гарантии JVM.
+### Теоретические основы
 
-- **Venners B. (2000). Inside the Java Virtual Machine, 2nd Edition.** — глава про class loading одна из лучших объяснений модели делегирования и custom ClassLoader с примерами. Книга старая, но фундаментальные концепции ClassLoader не менялись.
+- **Liang S., Bracha G. (1998). Dynamic Class Loading in the Java Virtual Machine.** — формальная модель загрузки классов: loading constraints, type safety при нескольких ClassLoader. Авторы — инженеры Sun Microsystems, создавшие спецификацию.
+- **Leroy X. (2003). Java Bytecode Verification: Algorithms and Formalizations.** — формализация верификации байткода как задачи type checking над абстрактным стековым автоматом.
+- **Lindholm T. et al. (2014). The Java Virtual Machine Specification, Java SE 8 Edition.** — формальное описание процесса загрузки, связывания и инициализации классов (Chapter 5).
+- **Venners B. (2000). Inside the Java Virtual Machine, 2nd Edition.** — одно из лучших объяснений модели делегирования и custom ClassLoader с примерами.
 
-- **Liang S., Bracha G. (1998). Dynamic Class Loading in the Java Virtual Machine.** — оригинальная исследовательская работа, описывающая формальную модель загрузки классов в JVM. Авторы — инженеры Sun Microsystems, создавшие спецификацию. Важна для понимания design decisions и trade-offs.
+### Практические руководства
 
 - [JVM Specification: Loading, Linking, Initializing](https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-5.html) — официальная спецификация
 - [ClassLoader javadoc](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ClassLoader.html) — API документация

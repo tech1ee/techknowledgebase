@@ -21,7 +21,40 @@ related:
 
 ---
 
-## Проблема: телескопические конструкторы
+## Теоретические основы
+
+> **Builder** — порождающий паттерн проектирования, отделяющий конструирование сложного объекта от его представления. Формально: Builder инкапсулирует пошаговый процесс создания, позволяя одному и тому же процессу создавать различные представления (GoF, 1994).
+
+### Формальная структура (GoF, 1994)
+
+```
+Director → Builder (interface) → Product
+               ↑
+          ConcreteBuilder
+```
+
+Четыре участника:
+1. **Builder** — абстрактный интерфейс для создания частей продукта
+2. **ConcreteBuilder** — конкретная реализация, собирает и отслеживает представление
+3. **Director** — конструирует объект, используя Builder-интерфейс
+4. **Product** — результат конструирования
+
+### Эволюция Builder в языках
+
+| Этап | Язык/Подход | Механизм |
+|------|------------|----------|
+| GoF (1994) | C++/Smalltalk | Director + abstract Builder |
+| Bloch (2001) | Java | Fluent Builder (без Director) |
+| Kotlin (2016) | Named params + defaults | Языковая конструкция заменяет паттерн |
+| Kotlin DSL | Type-safe builders | `@DslMarker` + лямбды с receiver |
+
+Kotlin — пример того, как языковые фичи (named parameters, default values) **поглощают** паттерны проектирования (ср. Norvig 1996: «16 of 23 GoF patterns are simplified or invisible in dynamic languages»).
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[factory-pattern]] — другой порождающий паттерн, [[dry-kiss-yagni]] — KISS как аргумент против избыточных Builder-ов
+
+---
+
+
 
 Представь, что ты заказываешь кастомный компьютер. У тебя 15 параметров: процессор, видеокарта, RAM, диск, корпус, блок питания, охлаждение... Передавать их все в одну строку --- путь к ошибке.
 
@@ -854,6 +887,12 @@ Receiver lambda --- функция с типом `T.() -> Unit`, где T дос
 
 ## Источники
 
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — оригинальный Builder: Director + abstract Builder для пошагового конструирования
+- **Bloch J. (2001/2018). Effective Java, Item 2.** — Fluent Builder без Director, каноническая Java-формулировка
+- **Norvig P. (1996). Design Patterns in Dynamic Languages.** — Builder как пример паттерна, упрощаемого языковыми фичами
+
+### Практические руководства
 - Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* --- оригинальное описание Builder pattern в GoF каталоге
 - Bloch J. (2018). *Effective Java*, 3rd Edition, Item 2: "Consider a builder when faced with many constructor parameters" --- классическая формулировка Builder для Java
 - Moskala M. (2022). *Effective Kotlin*, Item 34: "Consider a primary constructor with named optional parameters" --- почему в Kotlin Builder обычно не нужен

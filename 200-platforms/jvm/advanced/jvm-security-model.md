@@ -148,6 +148,26 @@ born                                                 @Deprecated  permanently
 
 ---
 
+## Теоретические основы
+
+Модель безопасности JVM основана на концепции **песочницы** (sandbox) и формальных моделях контроля доступа, разработанных в теории компьютерной безопасности.
+
+> **Определение (Saltzer & Schroeder, 1975):** *Principle of Least Privilege — каждый субъект должен иметь минимально необходимый набор привилегий для выполнения своей задачи.*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM |
+|------------------------|-----------------|-----------------|
+| **Principle of Least Privilege** | Saltzer & Schroeder, 1975 | SecurityManager ограничивает код минимальными разрешениями |
+| **Reference Monitor** | Anderson, 1972 | SecurityManager как reference monitor: перехватывает и проверяет каждый доступ к ресурсу |
+| **Sandbox model** | Gong et al., 1997 (Java Security) | Недоверенный код выполняется в изолированной среде с ограниченными привилегиями |
+| **Stack inspection** | Wallach & Felten, 1998 | Проверка привилегий по всему стеку вызовов → `AccessController.doPrivileged()` |
+| **Bytecode verification** | Leroy, 2003 | Type safety на уровне байткода как первый рубеж защиты |
+
+> **Эволюция модели:** Оригинальная sandbox-модель Java (Gong, 1997) была спроектирована для эпохи applets — недоверенного кода из сети. С исчезновением applets и появлением контейнерной изоляции (Docker, K8s) SecurityManager стал obsolete. JEP 411 (Java 17) deprecated его, JEP 486 (Java 24) полностью удалил. Современная модель безопасности JVM опирается на: (1) bytecode verification, (2) type safety, (3) JPMS strong encapsulation, (4) OS-level isolation.
+
+Связанные темы: [[jvm-class-loader-deep-dive]] (верификация байткода при загрузке), [[jvm-module-system]] (strong encapsulation как замена SecurityManager), [[jvm-reflection-api]] (Reflection и setAccessible vs security).
+
+---
+
 ## Проблема: Запуск недоверенного кода
 
 ### Оригинальный use case: Java Applets (1995-2017)
@@ -690,11 +710,19 @@ spec:
 
 ## Источники и дальнейшее чтение
 
-- Oaks S. (2001). *Java Security*, 2nd Edition. — Историческое руководство по Java Security Model: SecurityManager, AccessController, policy files. Ценно для понимания legacy-систем и контекста, в котором создавалась модель безопасности Java.
-- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 85 «Prefer alternatives to Java serialization» и другие items по безопасности показывают современный подход к security в Java без SecurityManager.
-- McLaughlin D. (2018). *Java Security: Writing and Deploying Secure Applications*. — Обзор эволюции Java security от applets до контейнеров, включая практические рекомендации по миграции от SecurityManager к современным альтернативам.
-- OpenJDK (2021). *JEP 411: Deprecate the Security Manager for Removal*. — Официальное обоснование deprecation с анализом причин (низкое использование, overhead, сложность) и рекомендациями по альтернативам.
-- OpenJDK (2024). *JEP 486: Permanently Disable the Security Manager*. — Финальное решение об отключении SecurityManager в Java 24, описание migration path и влияния на существующий код.
+### Теоретические основы
+
+- Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems*. — Формулировка Principle of Least Privilege и других фундаментальных принципов безопасности, на которых построена модель SecurityManager.
+- Anderson J. (1972). *Computer Security Technology Planning Study*. — Введение концепции Reference Monitor — абстракции, которую SecurityManager реализовывал для контроля доступа.
+- Gong L. et al. (1997). *Going Beyond the Sandbox: An Overview of the New Security Architecture in the Java Development Kit 1.2*. — Описание эволюции Java security от простой sandbox-модели к Permission-based access control.
+- Wallach D., Felten E. (1998). *Understanding Java Stack Inspection*. — Формальный анализ алгоритма stack inspection, который SecurityManager использовал для проверки привилегий по всему стеку вызовов.
+- Oaks S. (2001). *Java Security*, 2nd Edition. — Историческое руководство по Java Security Model: SecurityManager, AccessController, policy files.
+
+### Практические руководства
+
+- OpenJDK (2021). *JEP 411: Deprecate the Security Manager for Removal*. — Официальное обоснование deprecation с анализом причин и рекомендациями по альтернативам.
+- OpenJDK (2024). *JEP 486: Permanently Disable the Security Manager*. — Финальное решение об отключении SecurityManager в Java 24, описание migration path.
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Современный подход к security в Java без SecurityManager.
 
 ---
 

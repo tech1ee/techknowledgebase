@@ -85,6 +85,37 @@ Gradle — это build-система, которая управляет сбо
 
 ---
 
+## Теоретические основы
+
+### Build Systems: от Make к Gradle
+
+> **Build system** — программа, автоматизирующая процесс преобразования исходного кода в исполняемый артефакт. История: Make (Feldman, Bell Labs, 1976) → Ant (Apache, 2000) → Maven (Apache, 2004) → Gradle (Gradle Inc., 2012). Каждый переход решал проблемы предшественника.
+
+| Система | Год | Модель | Ключевое нововведение | Недостаток |
+|---------|-----|--------|----------------------|------------|
+| **Make** | 1976 | Rule-based (targets + dependencies) | Инкрементальная сборка по timestamps | Tab-sensitivity, нет dependency management |
+| **Ant** | 2000 | Imperative XML (targets + tasks) | Кросс-платформенность (Java) | Verbose XML, нет conventions |
+| **Maven** | 2004 | Convention-over-configuration + POM | Dependency management, central repository | Негибкость, XML overhead |
+| **Gradle** | 2012 | DAG tasks + Groovy/Kotlin DSL | Инкрементальность, build cache, DSL | Сложность, крутая кривая обучения |
+
+### Directed Acyclic Graph (DAG): модель Gradle
+
+> Gradle моделирует сборку как **DAG** (направленный ациклический граф), где узлы — tasks, а рёбра — зависимости. Topological sort (Kahn, 1962) определяет порядок выполнения. Это позволяет: 1) параллелизм — независимые tasks выполняются одновременно; 2) инкрементальность — перевыполняются только tasks с изменёнными inputs; 3) кэширование — результат task определяется хешем inputs.
+
+```
+compileKotlin ──→ compileJava ──→ mergeResources ──→ packageDebug
+      │                                                    ↑
+      └──→ processDebugResources ──────────────────────────┘
+```
+
+### Incremental Builds и Content-Based Hashing
+
+> Gradle использует **content-based hashing** (а не timestamps как Make) для определения, нужно ли перевыполнять task. Каждый task имеет: inputs (файлы, properties), outputs (файлы), cache key = `hash(inputs)`. Если cache key не изменился — task пропускается (UP-TO-DATE). Это формально гарантирует корректность: результат зависит только от содержимого inputs, не от порядка или времени изменения.
+
+> **Связь**: DAG → [[android-compilation-pipeline]], Build cache → [[android-ci-cd]], History → [[android-build-evolution]]
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -1157,6 +1188,15 @@ android.nonTransitiveRClass=true
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Feldman S. *Make — A Program for Maintaining Computer Programs* (1979) | Build automation — предшественник Gradle |
+| Mokhov A. et al. *Build Systems a la Carte* (2018, ICFP) | Формальная теория build-систем: DAG, минимальность, корректность |
+| Hunt A., Thomas D. *The Pragmatic Programmer* (1999) | Convention over Configuration, DRY principle |
+
+### Практические руководства
 
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|

@@ -26,6 +26,37 @@ next_review:
 
 # Number Theory for Algorithms
 
+## Теоретические основы
+
+> **Теория чисел** (Number Theory) — раздел математики, изучающий свойства целых чисел: делимость, простоту, сравнения (модулярная арифметика). В алгоритмах теория чисел применяется для криптографии, хеширования и комбинаторных вычислений.
+
+### Ключевые теоремы
+
+| Теорема | Автор, год | Формулировка |
+|---------|-----------|--------------|
+| **Алгоритм Евклида** | Евклид, ~300 до н.э. | gcd(a, b) = gcd(b, a mod b); O(log min(a,b)) |
+| **Решето Эратосфена** | Эратосфен, ~200 до н.э. | Нахождение всех простых до n за O(n log log n) |
+| **Малая теорема Ферма** | Ферма, 1640 | Если p простое, то a^(p-1) ≡ 1 (mod p) для gcd(a,p)=1 |
+| **Функция Эйлера** | Эйлер, 1763 | phi(n) = количество чисел от 1 до n, взаимно простых с n |
+| **Теорема Эйлера** | Эйлер, 1763 | a^phi(n) ≡ 1 (mod n) для gcd(a,n)=1; обобщение малой теоремы Ферма |
+| **CRT (Китайская теорема об остатках)** | Сунь-цзы, ~3-5 вв. | Система x ≡ aᵢ (mod mᵢ) имеет единственное решение mod M = ∏mᵢ |
+
+### Модулярная арифметика в CP
+
+> **Стандартные модули:** 10^9 + 7 (простое, fits в int32 при умножении через int64) и 998244353 (простое, 2^23 * 7 * 17 + 1 — удобно для NTT). Модулярный обратный элемент: a^(-1) ≡ a^(p-2) (mod p) по малой теореме Ферма.
+
+### Функция Эйлера
+
+> **phi(n)** вычисляется через разложение на простые множители: phi(n) = n * ∏(1 - 1/p) для всех простых p, делящих n. Мультипликативная функция: phi(a*b) = phi(a)*phi(b) при gcd(a,b)=1.
+
+### Связи
+
+- [[combinatorics]] — модулярная арифметика для C(n,k) mod p
+- [[big-o-complexity]] — анализ сложности теоретико-числовых алгоритмов
+- [[dynamic-programming]] — DP с модулярными вычислениями
+
+---
+
 ## TL;DR
 
 Ключевые алгоритмы: **GCD** (Euclid) — O(log min(a,b)), **Modular Exponentiation** — O(log n), **Prime Check** — O(√n), **Sieve** — O(n log log n). Modular inverse через Fermat: a^(p-1) ≡ 1 (mod p). Extended Euclid для ax + by = gcd. Chinese Remainder Theorem для систем сравнений.
@@ -1149,12 +1180,20 @@ fun modPow(base: Long, exp: Long, mod: Long): Long {
 
 ## Источники
 
+### Теоретические основы
+
+- Euclid (~300 до н.э.). *Elements, Book VII*. — алгоритм нахождения наибольшего общего делителя, один из древнейших алгоритмов
+- Euler L. (1763). *Theoremata arithmetica nova methodo demonstrata*. — функция Эйлера phi(n), теорема Эйлера a^phi(n) ≡ 1 (mod n)
+- Fermat P. (1640). *Малая теорема Ферма*. — a^(p-1) ≡ 1 (mod p); основа модулярной инверсии в competitive programming
+- Hardy G.H., Wright E.M. (2008). *An Introduction to the Theory of Numbers, 6th ed.* — классический учебник по аналитической и алгебраической теории чисел
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Euclidean](https://cp-algorithms.com/algebra/euclid-algorithm.html) | Reference | GCD |
 | 2 | [CP-Algorithms: Sieve](https://cp-algorithms.com/algebra/sieve-of-eratosthenes.html) | Reference | Primes |
 | 3 | [CP-Algorithms: Binary Exp](https://cp-algorithms.com/algebra/binary-exp.html) | Reference | Fast power |
-| 4 | [CLRS] Introduction to Algorithms | Book | Theory |
 
 ---
 

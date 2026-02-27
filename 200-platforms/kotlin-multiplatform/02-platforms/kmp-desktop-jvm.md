@@ -69,6 +69,45 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Desktop Application** — программное обеспечение, исполняемое локально на персональном компьютере с прямым доступом к файловой системе, периферийным устройствам и системным API операционной системы (Tanenbaum, 2014).
+
+KMP Desktop использует JVM как среду исполнения, что исторически обусловлено зрелостью JVM-экосистемы и cross-platform consistency.
+
+### Теория: JVM как универсальная платформа
+
+JVM реализует принцип **Platform Independence** (Lindholm, Yellin, 1997): bytecode исполняется идентично на Windows, macOS и Linux. Для desktop-приложений это критично:
+
+| Характеристика | JVM Desktop | Native Desktop | Electron |
+|---------------|-------------|----------------|----------|
+| Размер runtime | 50-80 MB (jlink) | 0 MB (native) | 80-120 MB (Chromium) |
+| Startup time | 200-500ms (JIT warm-up) | 50-100ms | 1-3s (Chromium init) |
+| Steady-state perf. | Near-native (JIT optimized) | Native | JS engine overhead |
+| Memory overhead | ~30 MB (JVM) | Minimal | ~100 MB (Chromium) |
+
+### Эволюция GUI-фреймворков на JVM
+
+| Год | Фреймворк | Rendering | Статус (2026) |
+|-----|----------|-----------|--------------|
+| 1995 | AWT | Native widgets | Legacy |
+| 1997 | Swing | Custom rendering (Java2D) | Поддерживается |
+| 2008 | JavaFX | Prism renderer | Maintenance mode |
+| 2021 | Compose Desktop | Skia (hardware-accelerated) | Active development |
+
+### Skia как универсальный рендеринг-движок
+
+Compose Desktop использует **Skia** (Google, 2005) — 2D graphics library, применяемый в Chrome, Android, Flutter. Skia обеспечивает:
+
+- **Hardware acceleration** через OpenGL/Vulkan/Metal backend
+- **Pixel-perfect rendering** — одинаковый результат на всех ОС
+- **Canvas-based model** — рисование примитивов, а не манипуляция виджетами
+
+> **CS-фундамент:** JVM bytecode и его исполнение — [[bytecode-virtual-machines]]. Компиляция Kotlin → JVM — [[compilation-pipeline]]. GC в долгоживущих desktop-приложениях — [[garbage-collection-explained]].
+
+
 ## Почему Desktop использует JVM, а не Kotlin/Native
 
 ### Парадокс: Desktop — JVM target
@@ -1094,9 +1133,16 @@ Compose Desktop лучше для Android/Desktop, Electron — для Web/Deskt
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундамент для понимания работы Kotlin на JVM, включая interop с Java, корутины и систему типов. Особенно полезны главы про JVM-специфичные особенности, которые напрямую применяются в desktop-разработке.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Лучшие практики написания Kotlin-кода, которые особенно актуальны для desktop-приложений: управление ресурсами, обработка ошибок и оптимизация производительности на JVM.
-3. **Skeen A. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое введение в Kotlin с акцентом на JVM-платформу. Помогает понять взаимодействие Kotlin с Java-экосистемой, что критически важно для desktop-разработки с использованием Swing interop и системных API.
+### Теоретические основы
+
+- **Gosling J. et al. (2014).** *The Java Language Specification.* — JVM как универсальная платформа для desktop-приложений: bytecode portability, memory model, threading.
+- **Google (Skia Team).** *Skia Graphics Library Architecture.* — Rendering engine, лежащий в основе Compose Desktop (через Skiko wrapper).
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin на JVM для desktop-разработки.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по Kotlin-коду для desktop-приложений.
+- [Compose for Desktop](https://www.jetbrains.com/compose-multiplatform/) — Официальная документация JetBrains.
 
 ---
 

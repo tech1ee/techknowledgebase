@@ -95,6 +95,52 @@ related:
                  90° → similarity = 0.0 (не связаны)
 ```
 
+---
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Embedding** (векторное вложение) — отображение f: X → ℝⁿ, переводящее элементы дискретного множества X (слова, предложения, документы) в непрерывное векторное пространство ℝⁿ, где геометрическая близость отражает семантическую близость (Mikolov et al., 2013).
+
+### Дистрибутивная гипотеза
+
+> «You shall know a word by the company it keeps» — J.R. Firth (1957). Слова, встречающиеся в похожих контекстах, имеют похожие значения. Это фундаментальное допущение, лежащее в основе всех embedding-моделей, от Word2Vec до modern sentence transformers.
+
+Harris (1954) впервые формализовал эту идею как **дистрибутивную гипотезу** в работе *"Distributional Structure"*.
+
+### Эволюция подходов к представлению текста
+
+| Год | Метод | Авторы | Размерность | Контекстуальность |
+|-----|-------|--------|-------------|-------------------|
+| 2003 | Neural LM embeddings | Bengio et al. | ~50 | Нет |
+| 2013 | Word2Vec (CBOW, Skip-gram) | Mikolov et al. (Google) | 100-300 | Нет |
+| 2014 | GloVe | Pennington et al. (Stanford) | 100-300 | Нет |
+| 2017 | ELMo | Peters et al. (AllenNLP) | 1024 | Да |
+| 2018 | BERT embeddings | Devlin et al. (Google) | 768 | Да |
+| 2019 | Sentence-BERT | Reimers & Gurevych | 768 | Да |
+| 2022 | text-embedding-ada-002 | OpenAI | 1536 | Да |
+| 2024 | text-embedding-3-large | OpenAI | 3072 | Да |
+| 2024 | Matryoshka (MRL) | Kusupati et al. | Adaptive | Да |
+
+### Метрики сходства
+
+| Метрика | Формула | Свойства | Применение |
+|---------|---------|----------|------------|
+| **Cosine Similarity** | cos(θ) = (A·B)/(‖A‖·‖B‖) | [-1, 1], инвариантна к масштабу | Semantic search, RAG |
+| **Dot Product** | A·B = Σaᵢbᵢ | (-∞, +∞), учитывает magnitude | Рекомендации, ранжирование |
+| **Euclidean Distance** | ‖A-B‖₂ = √Σ(aᵢ-bᵢ)² | [0, +∞), чувствительна к масштабу | Кластеризация |
+
+### Проклятие размерности
+
+> В высокоразмерных пространствах (d > 100) расстояния между точками становятся почти одинаковыми — феномен, известный как **проклятие размерности** (Bellman, 1957). Для embedding-моделей это означает: увеличение размерности сверх оптимума не улучшает качество поиска, но увеличивает стоимость хранения и вычислений. Подходы Matryoshka Representation Learning (Kusupati et al., 2022) позволяют обрезать вектор до нужной размерности без переобучения.
+
+### Связь с [[vector-databases-guide|векторными базами данных]]
+
+Embeddings хранятся и индексируются в специализированных системах (Pinecone, Qdrant, Weaviate), использующих алгоритмы приближённого поиска ближайших соседей (ANN): HNSW, IVF, PQ. Выбор embedding-модели напрямую влияет на качество [[rag-advanced-techniques|RAG-систем]].
+
+---
+
 **3. Размерность = детализация описания**
 ```
 Описать человека:
@@ -713,23 +759,23 @@ model.fit(
 
 ## Источники
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [OpenAI Embeddings Docs](https://platform.openai.com/docs/guides/embeddings) | Docs | API, MRL, размерности |
-| 2 | [Voyage AI Docs](https://docs.voyageai.com/docs/embeddings) | Docs | voyage-3 API, quantization |
-| 3 | [Voyage-3-Large Announcement](https://blog.voyageai.com/2025/01/07/voyage-3-large/) | Blog | SOTA модель 2025, benchmarks |
-| 4 | [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard) | Benchmark | Актуальный рейтинг моделей |
-| 5 | [BGE-M3 Paper](https://arxiv.org/abs/2402.03216) | Paper | Multi-vector, 170 языков |
-| 6 | [Binary Quantization - HuggingFace](https://huggingface.co/blog/embedding-quantization) | Guide | 32x memory reduction, rescoring |
-| 7 | [Matryoshka RL - HuggingFace](https://huggingface.co/blog/matryoshka) | Guide | MRL training, до 14x compression |
-| 8 | [Late Chunking - Jina AI](https://jina.ai/news/late-chunking-in-long-context-embedding-models/) | Blog | Context preservation, 82-84% similarity |
-| 9 | [Contextual Retrieval - Anthropic](https://www.anthropic.com/news/contextual-retrieval) | Blog | Hybrid search, -49% failed retrieval |
-| 10 | [Sentence Transformers 3.0](https://huggingface.co/blog/train-sentence-transformers) | Guide | Fine-tuning API, losses |
-| 11 | [How to Choose Embedding Model - Weaviate](https://weaviate.io/blog/how-to-choose-an-embedding-model) | Guide | Selection criteria, benchmarks |
-| 12 | [Fine-Tune Embedding Model - Weaviate](https://weaviate.io/blog/fine-tune-embedding-model) | Guide | When to fine-tune, results |
-| 13 | [Cohere Embed v3](https://docs.cohere.com/docs/cohere-embed) | Docs | 100+ языков, multimodal |
-| 14 | [Vector Similarity - Pinecone](https://www.pinecone.io/learn/vector-similarity/) | Guide | Cosine vs dot product |
-| 15 | [Semantic Caching - Redis](https://redis.io/blog/what-is-semantic-caching/) | Blog | 86% cost reduction, latency |
+### Теоретические основы
+- Mikolov, T. et al. (2013). *Efficient Estimation of Word Representations in Vector Space* (Word2Vec). arXiv:1301.3781.
+- Harris, Z. (1954). *Distributional Structure*. Word, 10(2-3), 146-162.
+- Firth, J.R. (1957). *A Synopsis of Linguistic Theory*. Studies in Linguistic Analysis.
+- Pennington, J. et al. (2014). *GloVe: Global Vectors for Word Representation*. EMNLP.
+- Bengio, Y. et al. (2003). *A Neural Probabilistic Language Model*. JMLR.
+- Reimers, N. & Gurevych, I. (2019). *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*. EMNLP.
+- Kusupati, A. et al. (2022). *Matryoshka Representation Learning*. NeurIPS.
+- Bellman, R. (1957). *Dynamic Programming*. Princeton University Press. (проклятие размерности)
+
+### Практические руководства
+- [OpenAI Embeddings Docs](https://platform.openai.com/docs/guides/embeddings)
+- [MTEB Leaderboard](https://huggingface.co/spaces/mteb/leaderboard)
+- [Contextual Retrieval — Anthropic](https://www.anthropic.com/news/contextual-retrieval)
+- [How to Choose Embedding Model — Weaviate](https://weaviate.io/blog/how-to-choose-an-embedding-model)
+- [Late Chunking — Jina AI](https://jina.ai/news/late-chunking-in-long-context-embedding-models/)
+- [Sentence Transformers 3.0 — HuggingFace](https://huggingface.co/blog/train-sentence-transformers)
 
 ---
 

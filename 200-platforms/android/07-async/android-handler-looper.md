@@ -133,6 +133,38 @@ Handler, Looper и MessageQueue образуют фундаментальную 
 ### Runnable
 **Runnable** — функциональный интерфейс с единственным методом `run()`. Может использоваться как альтернатива Message для простых задач. Под капотом Handler оборачивает Runnable в Message.
 
+## Теоретические основы
+
+### Event Loop как универсальный паттерн
+
+> **Event Loop** (цикл обработки событий) — архитектурный паттерн, в котором один поток последовательно извлекает и обрабатывает события из очереди. Формализован как частный случай **Reactor Pattern** (Schmidt D., *"Reactor: An Object Behavioral Pattern for Demultiplexing and Dispatching Handles for Synchronous Events"*, 1995).
+
+Handler/Looper/MessageQueue — это реализация Event Loop, восходящая к ранним GUI-системам:
+
+| Система | Год | Реализация Event Loop | Связь с Android |
+|---------|-----|----------------------|-----------------|
+| Xerox Alto / Smalltalk-76 | 1976 | `EventQueue` + dispatch loop | Первая GUI с event-driven моделью |
+| Windows Message Pump | 1985 | `GetMessage()` → `TranslateMessage()` → `DispatchMessage()` | Прямой прототип Looper.loop() |
+| NeXTSTEP NSRunLoop | 1989 | Run loop с input sources и timers | Влияние на macOS/iOS RunLoop |
+| Java AWT/Swing EDT | 1996 | `EventQueue.dispatchEvent()` в выделенном потоке | JVM-предшественник Android Handler |
+| Node.js libuv | 2009 | Single-threaded event loop + I/O polling | Аналогичная идея в серверном мире |
+
+### Формальная модель: Producer-Consumer Queue
+
+> MessageQueue реализует паттерн **Producer-Consumer** (Dijkstra, 1965): множество потоков-producers отправляют Message через Handler, единственный поток-consumer (Looper) последовательно извлекает и обрабатывает сообщения. Потокобезопасность обеспечивается через `synchronized` на уровне `enqueueMessage()` / `next()`.
+
+Ключевое свойство — **FIFO с приоритетами по времени**: MessageQueue хранит сообщения в отсортированном связном списке, где ключ сортировки — `Message.when` (SystemClock.uptimeMillis). Это позволяет `postDelayed()` вставлять сообщения в корректную позицию без дополнительной структуры данных.
+
+### Thread Confinement через Handler
+
+Паттерн **thread confinement** (Goetz, *Java Concurrency in Practice*, §3.3, 2006) гласит: если объект доступен только из одного потока, синхронизация не требуется. Handler обеспечивает thread confinement программно: вместо прямого вызова метода объекта из произвольного потока, вызывающий отправляет Message, и объект обрабатывает его в своём потоке.
+
+> **Связь с Dispatchers.Main**: `Dispatchers.Main` в kotlinx-coroutines-android реализован как `HandlerDispatcher`, вызывающий `Handler(Looper.getMainLooper()).post()`. Таким образом, корутины на Main — это Handler + ContinuationInterceptor поверх того же event loop.
+
+> **Связь**: Event Loop → [[android-activitythread-internals]], Producer-Consumer → [[os-synchronization]], Thread Confinement → [[android-threading]]
+
+---
+
 ## Как устроен Main Thread
 
 ### ActivityThread.main() — точка входа
@@ -2637,5 +2669,24 @@ Thread с подготовленным Looper. val thread = HandlerThread('bg');
 | Смежная тема | [[ios-gcd-deep-dive]] | GCD в iOS — аналог Handler/Looper |
 | Обзор | [[android-overview]] | Вернуться к карте раздела |
 
+
+---
+
+## Источники
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Thacker C. et al. *Alto: A Personal Computer* (Xerox PARC, 1979) | Event Loop — прообраз Handler/Looper |
+| Schmidt D. *Reactor: An Object Behavioral Pattern* (1995) | Reactor Pattern — формализация event loop |
+| Dijkstra E. *Cooperating Sequential Processes* (1965) | Producer-Consumer Queue → MessageQueue |
+| Goetz B. et al. *Java Concurrency in Practice* (2006) | Thread Confinement через Handler |
+
+### Практические руководства
+- [Handler — Android Developers](https://developer.android.com/reference/android/os/Handler) — официальная документация
+- [Looper — Android Developers](https://developer.android.com/reference/android/os/Looper) — документация Looper
+- [AOSP Looper.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Looper.java) — исходный код
+- [AOSP Handler.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Handler.java) — исходный код
+- [AOSP MessageQueue.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/MessageQueue.java) — исходный код
 
 *Проверено: 2026-01-09 — Педагогический контент проверен*

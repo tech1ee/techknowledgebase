@@ -23,6 +23,46 @@ next_review:
 
 # Mobile App Protection: Защита приложений от атак
 
+## Теоретические основы
+
+> **Определение.** Mobile App Protection — комплекс технологий и практик защиты мобильных приложений от реверс-инжиниринга, тампирования (модификации кода), динамического анализа и эксплуатации в скомпрометированных средах (rooted/jailbroken устройства). Основан на принципе **Defense in Depth**: ни один слой защиты не является достаточным сам по себе.
+
+### Таксономия техник защиты
+
+| Категория | Техника | Когда применяется | Защита от |
+|-----------|---------|-------------------|-----------|
+| **Code Hardening** | Name obfuscation (ProGuard/R8) | Build time | Статический анализ, чтение имён классов/методов |
+| | String encryption | Build time | Извлечение API-ключей, URL, секретов |
+| | Control flow obfuscation | Build time | Понимание логики алгоритмов |
+| | Code virtualization | Build time | Глубокий статический и динамический анализ |
+| **Integrity Verification** | APK/IPA signature check | Launch time | Repackaging, модификация кода |
+| | Checksum verification | Launch time | Тампирование ресурсов и бинарника |
+| | Installer verification | Launch time | Sideloading из неофициальных источников |
+| **Runtime Protection (RASP)** | Root/jailbreak detection | Runtime | Работа в скомпрометированной среде |
+| | Debugger detection (ptrace, TracerPid) | Runtime | Динамический анализ и отладка |
+| | Frida/hooking detection | Runtime | Runtime-инструментация и перехват вызовов |
+| | Emulator detection | Runtime | Автоматизированный анализ и fraud |
+| **Attestation** | Play Integrity API (Android) | Runtime | Модифицированные устройства и приложения |
+| | App Attest / DeviceCheck (iOS) | Runtime | Тампирование, fraud detection |
+| **Architecture** | BFF-паттерн (Backend-for-Frontend) | Design time | Хранение секретов в клиенте |
+| | Certificate pinning | Runtime | MITM-атаки, подменные сертификаты |
+
+### Уровни obfuscation — формальная классификация
+
+| Уровень | Техника | Инструмент (Android) | Стоимость анализа |
+|---------|---------|---------------------|-------------------|
+| L0 | Без obfuscation | — | Минуты |
+| L1 | Name obfuscation | ProGuard / R8 | Часы |
+| L2 | + String encryption | DexGuard, Arxan | Дни |
+| L3 | + Control flow obfuscation | DexGuard, Arxan | Недели |
+| L4 | + Code virtualization (custom VM) | Arxan, V-Guard | Месяцы |
+
+> **Принцип Defense in Depth для мобильных приложений.** Каждый слой защиты повышает стоимость атаки экспоненциально. Bypass obfuscation (L1) тривиален. Bypass obfuscation + integrity checks + RASP + attestation требует экспертных знаний, специализированных инструментов и значительного времени. Цель — не сделать атаку невозможной, а сделать её экономически нецелесообразной.
+
+**См. также:** [[mobile-security-masvs]] — формальные требования MASVS-RESILIENCE к anti-tampering и reverse engineering protection; [[mobile-security-owasp]] — категория M7 (Insufficient Binary Protections).
+
+---
+
 ## Metadata
 - **Тип:** Deep-dive
 - **Технологии:** Android, iOS, RASP, Attestation
@@ -2406,10 +2446,19 @@ Enterprise Solutions:
 
 ## Источники и дальнейшее чтение
 
-- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по защите мобильных приложений, включая reverse engineering, runtime protection и platform-specific mechanisms для Android и iOS.
+### Теоретические основы
+
 - Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — принципы Defense in Depth и инженерии безопасности, применимые к проектированию многослойной защиты мобильных приложений.
-- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — методология определения приоритетов защиты через систематическое моделирование угроз, критична для выбора адекватного уровня mobile app protection.
-- Ferguson N., Schneier B., Kohno T. (2010). *Cryptography Engineering: Design Principles and Practical Applications.* Wiley. — для понимания криптографических основ, на которых строятся integrity verification, secure storage и string encryption.
+- Ferguson N., Schneier B., Kohno T. (2010). *Cryptography Engineering: Design Principles and Practical Applications.* Wiley. — криптографические основы: integrity verification, secure storage и string encryption.
+- Collberg C., Thomborson C., Low D. (1997). "A Taxonomy of Obfuscating Transformations." — формальная классификация техник obfuscation: lexical, control flow, data obfuscation. Академический фундамент для понимания уровней защиты кода.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — методология определения приоритетов защиты через систематическое моделирование угроз.
+
+### Практические руководства
+
+- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по защите мобильных приложений: reverse engineering, runtime protection и platform-specific mechanisms.
+- Google. (2025). Play Integrity API Documentation (developer.android.com/google/play/integrity). — официальная документация: вердикты, интеграция, server-side verification, ограничения.
+- Apple. (2025). App Attest Documentation (developer.apple.com/documentation/devicecheck). — реализация attestation через Secure Enclave, проверка assertion на сервере.
+- Guardsquare. (2024). DexGuard / iXGuard Documentation. — коммерческие инструменты для code hardening: string encryption, control flow obfuscation, RASP для Android и iOS.
 
 ---
 

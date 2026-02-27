@@ -34,6 +34,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Extreme Programming и инженерные практики
+
+> **Определение:** Engineering Practices — систематизированный набор технических и процессных дисциплин, обеспечивающих качество, скорость и устойчивость разработки ПО.
+
+Kent Beck в *"Extreme Programming Explained"* (1999, 2nd ed. 2004) формализовал 12 практик XP, многие из которых стали стандартом индустрии:
+
+| Практика XP (Beck, 1999) | Современное название | Статус в 2020-х |
+|--------------------------|---------------------|-----------------|
+| Pair Programming | Pair/Mob Programming | Распространена |
+| Test-Driven Development | TDD | Selective adoption |
+| Continuous Integration | CI/CD | Стандарт индустрии |
+| Small Releases | Continuous Delivery | Стандарт |
+| Refactoring | Refactoring | Стандарт |
+| Simple Design | YAGNI, KISS | Принципы дизайна |
+
+### Accelerate и DORA Metrics
+
+Nicole Forsgren, Jez Humble и Gene Kim в *"Accelerate: The Science of Lean Software and DevOps"* (2018) провели масштабное исследование (>30,000 респондентов за 4 года) и определили четыре ключевые метрики, предсказывающие organizational performance:
+
+> **DORA Metrics** (Forsgren et al., 2018) — четыре метрики DevOps Research and Assessment: Deployment Frequency, Lead Time for Changes, Mean Time to Recovery (MTTR), Change Failure Rate. Elite performers превосходят low performers по всем четырём метрикам одновременно.
+
+Jez Humble и David Farley в *"Continuous Delivery"* (2010) показали, что speed и stability **не** являются trade-off: команды, deploying чаще, также имеют меньший failure rate. Это контринтуитивное открытие перевернуло представление о [[development-process|процессах разработки]].
+
+---
+
 ## DORA Metrics
 
 ```
@@ -194,11 +221,18 @@ POST-INCIDENT:
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Accelerate](https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339) | Book |
-| [DORA Research](https://dora.dev/) | Research |
-| [Google Engineering Practices](https://google.github.io/eng-practices/) | Guide |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Beck K. "Extreme Programming Explained" — Addison-Wesley, 1999 (2nd ed. 2004) | Книга | 12 практик XP |
+| 2 | Forsgren N. et al. "Accelerate" — IT Revolution, 2018 | Книга | DORA Metrics, scientific evidence |
+| 3 | Humble J., Farley D. "Continuous Delivery" — Addison-Wesley, 2010 | Книга | Speed и stability не trade-off |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [DORA Research](https://dora.dev/) | Research | Annual State of DevOps reports |
+| 2 | [Google Engineering Practices](https://google.github.io/eng-practices/) | Guide | Code review, testing guidelines |
 
 ---
 

@@ -27,6 +27,62 @@ prerequisites:
 
 ---
 
+## Теоретические основы: формальный базис сборки мусора
+
+### GC как задача достижимости на графе
+
+> **Формальное определение:** Garbage Collection — определение множества **недостижимых** (unreachable) узлов в ориентированном графе объектов G = (V, E), где V — объекты в heap, E — ссылки между ними, и R ⊆ V — корневое множество (roots: стек, глобальные переменные, регистры). Объект v **живой** ⟺ ∃ путь из r ∈ R в v.
+
+Это задача **graph reachability** — фундаментальная задача теории графов, решаемая за O(V+E) через BFS/DFS.
+
+### Историческая атрибуция
+
+| Подход | Автор | Год | Ключевая идея |
+|--------|-------|-----|---------------|
+| **Mark-and-Sweep** | John McCarthy | 1960 | Пометить живое от roots, убрать остальное |
+| **Reference Counting** | George E. Collins | 1960 | Счётчик ссылок на каждый объект |
+| **Copying (Semi-Space)** | C.J. Cheney | 1970 | Копировать живое в новое пространство |
+| **Generational** | David Ungar | 1984 | Молодые объекты умирают быстро (infant mortality) |
+| **Tri-color Marking** | Dijkstra et al. | 1978 | Формальная основа для concurrent GC |
+
+### Generational Hypothesis: эмпирический закон
+
+> **Гипотеза (Ungar, 1984):** Большинство объектов умирают молодыми — ~80-90% объектов не переживают первую сборку мусора.
+
+Это **эмпирическое наблюдение**, а не доказанная теорема. Оно верно для типичных приложений (веб-серверы, GUI, бизнес-логика), но может нарушаться для cache-heavy или batch-processing программ.
+
+Следствие: разделяем heap на **Young** (собираем часто и быстро) и **Old** (собираем редко и полно). Это основа **всех** современных generational GC.
+
+### Tracing vs Reference Counting: дуальность
+
+> **Теорема (Bacon, Cheng, Rajan, 2004):** Tracing GC и Reference Counting — **дуальные** подходы. Tracing находит **живые** объекты (optimistic: считает всё мёртвым, пока не доказано обратное). RC отслеживает **мёртвые** объекты (pessimistic: считает всё живым, пока счётчик не обнулится).
+
+| Аспект | Tracing (Mark-and-Sweep) | Reference Counting |
+|--------|--------------------------|-------------------|
+| **Находит** | Живое (от roots) | Мёртвое (count = 0) |
+| **Циклы** | Собирает автоматически | Не видит без cycle detector |
+| **Паузы** | Stop-the-World (или concurrent) | Инкрементальные (но может быть cascade) |
+| **Throughput** | Выше (batch processing) | Ниже (overhead на каждую ссылку) |
+| **Latency** | Менее предсказуемая | Более предсказуемая |
+| **Используется** | JVM, Go, .NET | Swift ARC, Kotlin/Native, Python (+ cycle detector) |
+
+### Tri-color Marking: основа concurrent GC
+
+> **Формализация (Dijkstra, Lamport, et al., 1978):** Три цвета:
+> - **Белый** = не посещён (кандидат на удаление)
+> - **Серый** = посещён, но не все дети обработаны
+> - **Чёрный** = посещён, все дети обработаны
+
+**Инвариант:** Чёрный объект никогда не указывает на белый (tri-color invariant). Это позволяет GC работать **параллельно** с мутатором (приложением) — основа ZGC, Shenandoah, G1.
+
+### Связи
+
+- [[memory-model-fundamentals]] — Stack vs Heap, зачем нужен GC
+- [[reference-counting-arc]] — RC как альтернатива tracing GC
+- [[jvm-memory-model]] — GC в контексте JVM
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -715,16 +771,19 @@ Reference Counting — дуал tracing GC. Если tracing находит жи
 
 ## Источники и дальнейшее чтение
 
-- **Jones, R. & Lins, R. (1996). Garbage Collection: Algorithms for Automatic Dynamic Memory Management.** — каноническая монография по GC. Покрывает все алгоритмы от mark-and-sweep до generational и concurrent. Остаётся наиболее полным академическим источником, несмотря на возраст. Главы 1-4 — обязательное чтение для глубокого понимания.
+### Теоретические основы
 
-- **Wilson, P. (1992). Uniprocessor Garbage Collection Techniques.** — обзорная статья (survey), которая систематизирует все подходы к GC на однопроцессорных системах. Более доступна, чем книга Jones & Lins, и даёт отличный обзор для первого знакомства с академической стороной GC.
+- **McCarthy, J. (1960). "Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I." CACM.** — Оригинальная статья Lisp, где впервые описан mark-and-sweep GC. Термин "garbage collection" появился здесь
+- **Collins, G.E. (1960). "A Method for Overlapping and Erasure of Lists." CACM.** — Оригинальная статья reference counting
+- **Dijkstra, E.W. et al. (1978). "On-the-Fly Garbage Collection: An Exercise in Cooperation." CACM.** — Tri-color marking: формальная основа concurrent GC
+- **Ungar, D. (1984). "Generation Scavenging." ACM SIGPLAN.** — Formalization of generational hypothesis и generational GC
+- **Bacon, D.F., Cheng, P., Rajan, V.T. (2004). "A Unified Theory of Garbage Collection." ACM OOPSLA.** — Доказательство дуальности tracing и reference counting
 
-- **Ungar, D. (1984). Generation Scavenging: A Non-disruptive High Performance Storage Reclamation Algorithm.** — оригинальная статья, формализовавшая generational подход. Содержит эмпирические данные о "infant mortality" объектов, которые обосновывают generational hypothesis.
+### Практические руководства
 
-- [Crafting Interpreters: Garbage Collection](https://craftinginterpreters.com/garbage-collection.html) — лучшее объяснение с аналогиями
-- [Datadog: Java GC Deep Dive](https://www.datadoghq.com/blog/understanding-java-gc/) — сравнение JVM коллекторов
-- [Kotlin/Native Memory Manager](https://kotlinlang.org/docs/native-memory-manager.html) — официальная документация
-- [Holly Cummins: Six Myths of GC](https://hollycummins.com/six-myths-and-paradoxes-of-garbage/) — развенчание мифов
+- **Jones, R. & Lins, R. (1996). Garbage Collection: Algorithms for Automatic Dynamic Memory Management.** — каноническая монография
+- **Wilson, P. (1992). Uniprocessor Garbage Collection Techniques.** — обзорная статья (survey)
+- [Crafting Interpreters: Garbage Collection](https://craftinginterpreters.com/garbage-collection.html) — лучшее объяснение
 - [Cornell CS6120: Unified Theory of GC](https://www.cs.cornell.edu/courses/cs6120/2019fa/blog/unified-theory-gc/) — tracing vs RC как дуалы
 
 ---

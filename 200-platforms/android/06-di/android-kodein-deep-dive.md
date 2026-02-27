@@ -33,6 +33,23 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Kodein** (KOtlin DEpendency INjection) — runtime DI framework с поддержкой **множественных контейнеров**, решающий ключевую проблему Koin: невозможность изоляции DI-контейнера в библиотеках и SDK.
+
+Архитектурно Kodein реализует паттерн **Hierarchical Dependency Injection** — контейнеры организованы в иерархию через `extend()`, где дочерний контейнер наследует bindings родителя и может переопределять их. Это аналог **scope hierarchy** в Dagger Subcomponents, но в runtime.
+
+| Характеристика | Kodein | Koin | Dagger |
+|---------------|--------|------|--------|
+| Контейнеры | Множественные, иерархические | Один глобальный | Component hierarchy |
+| Конфигурация | Type-safe DSL (no reflection) | Kotlin DSL (no reflection) | Annotations + codegen |
+| Проверки | Runtime | Runtime + verify() | Compile-time |
+| Use case | SDK, библиотеки, multi-tenant | Приложения, KMP | Сложные Android-приложения |
+
+> **Модульный DI** — ключевая проблема, которую решает Kodein: в модульной архитектуре каждый модуль может иметь свой DI-контейнер (`DI { }`), который объединяется с основным через `import(libraryDI)`. Это реализация принципа **information hiding** (Parnas, 1972) на уровне DI: модуль инкапсулирует свои зависимости.
+
+---
+
 ## ПОЧЕМУ: Зачем нужен Kodein
 
 ### Проблема глобального контейнера (Koin)
@@ -749,18 +766,20 @@ val di = DI {
 
 ## Источники и дальнейшее чтение
 
-### Официальные
+### Теоретические основы
+
+- **Parnas D.L.** *«On the Criteria To Be Used in Decomposing Systems into Modules»* (1972) — принцип information hiding, реализуемый Kodein через множественные контейнеры: каждый модуль инкапсулирует свои зависимости
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns: Elements of Reusable Object-Oriented Software* (1994) — паттерны Factory, Abstract Factory и Composite, реализуемые в иерархии DI-контейнеров Kodein
+- **Fowler M.** *«Inversion of Control Containers and the Dependency Injection Pattern»* (2004) — формальное различие Service Locator и DI; Kodein сочетает элементы обоих подходов с runtime-разрешением
+
+### Практические руководства
+
 - [Kodein Documentation](https://kosi-libs.org/kodein/)
 - [Kodein GitHub](https://github.com/kosi-libs/Kodein)
 - [Kodein Android Guide](https://kosi-libs.org/kodein/7.22/framework/android.html)
-
-### Статьи
 - [Kodein DI (Baeldung)](https://www.baeldung.com/kotlin/kodein-dependency-injection)
 - [Kotlin DI Frameworks Comparison](https://www.baeldung.com/kotlin/dependency-injection-libraries)
 - [Kodein + ViewModels](https://medium.com/@RedthLight/kodein-viewmodels-4023b7bf4920)
-
-### Книги
-
 - **Moskala M.** *Effective Kotlin* (2021) — лучшие практики Kotlin, включая паттерны DI и управление зависимостями в Kotlin-идиоматичном стиле
 - **Bloch J.** *Effective Java* (2018) — фундаментальные принципы проектирования API и управления зависимостями, применимые к любому DI фреймворку
 - **Meier R.** *Professional Android* (2022) — архитектурные паттерны Android-приложений, включая интеграцию DI фреймворков

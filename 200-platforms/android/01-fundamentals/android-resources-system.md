@@ -51,6 +51,42 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение ресурсной системы
+
+> **Ресурсная абстракция** (resource abstraction) — механизм отделения контента от логики приложения, позволяющий адаптировать представление к контексту выполнения без изменения кода. В теории интернационализации (i18n) этот принцип формализован как **externalisation of locale-sensitive data** (IBM ICU Project, 1999).
+
+Android Resource System реализует этот принцип через тройку: **ресурс + квалификатор + runtime configuration matching**.
+
+### Теоретические основы qualifier matching
+
+Алгоритм выбора ресурса в Android (описан в AOSP: `AssetManager2::FindEntry`) реализует **best-fit matching** — вариант задачи многокритериального выбора:
+
+1. Исключить директории, несовместимые с текущей конфигурацией
+2. Для каждого квалификатора в порядке приоритета — исключить директории, не содержащие лучший match
+3. Последняя оставшаяся директория — результат
+
+Этот алгоритм является разновидностью **lexicographic ordering** (упорядочение по приоритету критериев), описанного в теории принятия решений (Fishburn P. *Utility Theory for Decision Making*, 1970).
+
+### Density-independent единицы измерения
+
+Концепция **density-independent pixel (dp)** основана на принципе *device-independent coordinate system*, впервые формализованном в PostScript (Adobe, 1984) и развитом в CSS (`px` как reference pixel, W3C CSS Values, 2013).
+
+| Единица | Формула | Применение |
+|---------|---------|-----------|
+| dp (density-independent pixel) | `px = dp × (dpi / 160)` | Размеры элементов UI |
+| sp (scale-independent pixel) | `px = sp × (dpi / 160) × fontScale` | Размеры текста (учитывает настройки пользователя) |
+| px (pixel) | Физический пиксель | Не рекомендуется для UI |
+
+### Международализация (i18n) и локализация (l10n)
+
+Android использует стандарт **BCP 47** (Best Current Practice 47, IETF, 2009) для идентификации локалей и библиотеку **ICU** (International Components for Unicode) для форматирования чисел, дат и обработки plurals. Русский язык имеет четыре формы множественного числа (`one`, `few`, `many`, `other`), что учитывается через CLDR (Unicode Common Locale Data Repository).
+
+> **Связь с компиляцией:** AAPT2 (Android Asset Packaging Tool) компилирует XML-ресурсы в бинарный формат Protocol Buffers для быстрого парсинга на устройстве. R class генерируется на этапе компиляции, обеспечивая **compile-time safety** доступа к ресурсам. Подробнее: [[android-compilation-pipeline]].
+
+---
+
 ## Типы ресурсов
 
 ```
@@ -858,19 +894,22 @@ res/
 
 ## Источники
 
-- [App resources overview - Android Developers](https://developer.android.com/guide/topics/resources/providing-resources)
-- [Providing alternative resources - Android Developers](https://developer.android.com/guide/topics/resources/providing-resources#AlternativeResources)
-- [Localize your app - Android Developers](https://developer.android.com/guide/topics/resources/localization)
-- [Vector drawables overview - Android Developers](https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources)
-- [Shrink, obfuscate, and optimize your app - Android Developers](https://developer.android.com/build/shrink-code)
+### Теоретические основы
 
----
+- Fishburn P. (1970). *Utility Theory for Decision Making*. — теория lexicographic ordering, применённая в qualifier matching
+- W3C (2013). *CSS Values and Units Module Level 3*. — reference pixel и device-independent координаты
+- IETF (2009). *BCP 47: Tags for Identifying Languages*. — стандарт идентификации локалей
+- Unicode Consortium. *CLDR (Common Locale Data Repository)*. — правила pluralization для 200+ языков
+- IBM (1999). *ICU (International Components for Unicode)*. — библиотека i18n, используемая в Android
 
-## Источники и дальнейшее чтение
+### Практические руководства
 
-- Meier (2022). *Professional Android*. — полное покрытие ресурсной системы Android: типы ресурсов, qualifier matching algorithm, resource merging в multi-module проектах и оптимизация размера через App Bundle.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — практические примеры работы с ресурсами: локализация, поддержка тёмной темы, адаптивные layouts и Vector Drawable.
-- Vasavada (2019). *Android Internals*. — внутреннее устройство AAPT2, бинарный формат ресурсов в APK, R класс генерация и runtime resource resolution через AssetManager.
+- Meier R. (2022). *Professional Android*. — ресурсная система, qualifier matching, resource merging
+- Phillips B. et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — локализация, тёмная тема, Vector Drawable
+- Vasavada N. (2019). *Android Internals*. — AAPT2, бинарный формат ресурсов, AssetManager
+- [App resources overview — Android Developers](https://developer.android.com/guide/topics/resources/providing-resources)
+- [Localize your app — Android Developers](https://developer.android.com/guide/topics/resources/localization)
+- [Shrink, obfuscate, and optimize your app — Android Developers](https://developer.android.com/build/shrink-code)
 
 ---
 

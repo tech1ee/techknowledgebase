@@ -30,6 +30,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Recruitment** — процесс поиска, оценки и привлечения кандидатов на вакантные позиции. Рекрутер выступает как **intermediary** (посредник) между кандидатом и работодателем, снижая transaction costs и information asymmetry.
+
+**Теоретические концепции:**
+
+| Теория | Автор | Год | Применение к рекрутингу |
+|--------|-------|-----|------------------------|
+| Agency Theory | Jensen & Meckling | 1976 | Рекрутер (agent) действует от имени работодателя (principal); возможен conflict of interest |
+| Bilateral Matching | Roth & Sotomayor | 1990 | Эффективный matching требует информации о preferences обеих сторон |
+| Signaling Theory | Spence | 1973 | Рекрутер интерпретирует сигналы кандидата (resume, LinkedIn, referrals) |
+| Market for Lemons | Akerlof | 1970 | Без trusted intermediary рынок труда страдает от adverse selection |
+
+**Экономика рекрутинга:**
+
+```
+Internal recruiter: salary + bonus per hire ($3,000-5,000)
+Contingency agency: 15-25% от первой годовой зарплаты кандидата
+Retained search:    $30,000-100,000 upfront fee (executive/Staff+)
+```
+
+**Agency Theory (Jensen & Meckling, 1976)** объясняет key tension в рекрутинге: contingency recruiter получает fee только при успешном найме, что создаёт incentive закрыть позицию быстро (не обязательно лучшим кандидатом). Internal recruiter оплачивается salary, поэтому incentive — quality of hire, а не speed.
+
+> **Bilateral Matching (Roth, Nobel 2012):** рекрутер эффективен, когда знает preferences обеих сторон: чего хочет кандидат (compensation, culture, growth) и чего хочет компания (skills, experience, culture fit). Обмен информацией = ключ к successful match.
+
+→ Связано: [[job-search-strategy]], [[networking-tactics]], [[negotiation]]
+
+---
+
 ## Типы рекрутеров
 
 ```
@@ -407,15 +436,19 @@ POST-PROCESS:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Содержит практические советы по работе с рекрутерами и headhunters, включая то, как отличить качественного рекрутера от массового. Особенно полезны главы о скрытом рынке вакансий.
-
-- **Fournier C. (2017). The Manager's Path.** — Полезна для понимания того, как выглядит процесс найма изнутри компании: чего ожидают hiring managers и как рекрутер выстраивает pipeline кандидатов. Помогает перевернуть перспективу и лучше взаимодействовать с рекрутерами.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Jensen M.C., Meckling W.H. (1976). *Theory of the Firm*. — Agency theory: рекрутер как agent работодателя; понимание incentives.
+
+- Roth A.E., Sotomayor M. (1990). *Two-Sided Matching*. — Теория bilateral matching: эффективный найм требует информации о preferences обеих сторон.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Практические советы по работе с рекрутерами и headhunters.
+
+- Fournier C. (2017). *The Manager's Path*. — Процесс найма изнутри компании; perspective hiring manager.
+
+### Практические руководства
 
 - [Index.dev: Software Engineer Recruitment 2025](https://www.index.dev/blog/software-engineer-recruitment)
 - [IQ Talent: Q4 Tech Recruiting Strategy 2025](https://blog.iqtalent.com/q4-tech-recruiting-strategy-2025)

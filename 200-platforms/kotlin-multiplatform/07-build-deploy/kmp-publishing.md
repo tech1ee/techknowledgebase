@@ -59,6 +59,36 @@ next_review:
 | SPM | Swift Package Manager | CocoaPods нового поколения |
 | Sonatype | Оператор Maven Central | Дистрибьютор |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Library Publishing** — процесс подготовки, подписания и распространения скомпилированных артефактов библиотеки через пакетный менеджер, обеспечивающий версионирование, целостность и совместимость (Semantic Versioning, Preston-Werner, 2013).
+
+### KMP Publishing: уникальная сложность
+
+KMP-библиотека публикует **множество артефактов** для каждого target:
+
+| Target | Формат артефакта | Репозиторий |
+|--------|-----------------|-------------|
+| Android | .aar + .module | Maven Central |
+| JVM | .jar + .module | Maven Central |
+| iOS | .klib + .framework | Maven Central + SPM/CocoaPods |
+| JS | .klib + .js | Maven Central + npm (опционально) |
+
+### Semantic Versioning для KMP
+
+Semantic Versioning (SemVer, Preston-Werner, 2013) в KMP осложняется **multi-target ABI**: изменение expect/actual signature — это MAJOR bump для всех consumers.
+
+| Изменение | SemVer | Воздействие |
+|----------|--------|------------|
+| Новый actual для нового target | MINOR | Новый артефакт, обратная совместимость |
+| Изменение expect signature | MAJOR | Все targets перекомпилируются |
+| Bugfix в одном actual | PATCH | Только один target-артефакт |
+
+> **Академические источники:** Preston-Werner T. (2013). *Semantic Versioning 2.0.0.* semver.org. Conway M. (1968). *How Do Committees Invent?* — влияние организационной структуры на архитектуру ПО.
+
 ## Почему publishing в KMP сложнее?
 
 **Multi-Target Artifacts:** KMP библиотека = N артефактов (JVM jar, Android aar, iOS klib × architectures). Все должны быть координированы по версии и подписаны.
@@ -660,11 +690,15 @@ kotlin {
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin-экосистемы и Gradle-интеграции, включая понимание артефактов (jar, aar, klib), repositories и dependency resolution, что составляет фундамент для настройки publishing в KMP.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы компонентного проектирования (Common Closure, Common Reuse, Acyclic Dependencies) определяют, как разбивать KMP-библиотеку на модули для публикации и какие зависимости включать в каждый артефакт.
+- **Preston-Werner T. (2010).** *Semantic Versioning 2.0.0.* — SemVer для версионирования KMP-артефактов с multi-target спецификой.
+- **Martin R. (2017).** *Clean Architecture.* — Stable Dependencies Principle для публикуемых KMP-библиотек.
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по проектированию публичных API: минимальная поверхность API, backward compatibility, правильное использование visibility modifiers — всё это критично при публикации KMP-библиотеки, которую будут использовать другие разработчики.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin для build scripts и publishing configuration.
+- [Publishing KMP Libraries](https://kotlinlang.org/docs/multiplatform-publish-lib.html) — Официальный гайд JetBrains.
 
 ---
 

@@ -64,6 +64,37 @@ Kotlin Coroutines революционизировали асинхронное 
 2. Неправильная обработка CancellationException
 3. Блокирующие вызовы на Main Dispatcher
 
+## Теоретические основы
+
+### Корневые причины ошибок: формальная таксономия
+
+> Большинство ошибок с корутинами сводятся к нарушению трёх фундаментальных принципов, сформулированных в теории конкурентного программирования:
+
+| Принцип | Формулировка | Типичное нарушение в Android |
+|---------|-------------|----------------------------|
+| **Structured Concurrency** (Smith, 2018) | Задача не должна переживать свой scope | GlobalScope, `launch` без привязки к lifecycle |
+| **Cooperative Cancellation** (Lea, *Concurrent Programming in Java*, 2000) | Отмена — кооперативна, задача проверяет `isActive` | Перехват CancellationException, блокирующие вызовы без `ensureActive()` |
+| **Exception Transparency** (Elizarov, 2019) | Исключения Flow должны проходить насквозь, не поглощаясь | `catch {}` без re-throw CancellationException, `emit` в `onCompletion` |
+
+### Fail-fast vs Fail-safe в корутинной иерархии
+
+> В теории конкурентного программирования различают **fail-fast** (Джим Шор, 2004) и **fail-safe** стратегии. Корутины по умолчанию реализуют fail-fast: исключение в child отменяет parent и всех siblings. `supervisorScope` переключает на fail-safe: каждый child обрабатывает ошибки самостоятельно.
+
+```
+launch { }   →  fail-fast:   ошибка в child → отмена parent → отмена siblings
+supervisorScope { } → fail-safe: ошибка в child → только этот child
+```
+
+Неправильный выбор между `coroutineScope` и `supervisorScope` — причина ошибок №4 и №5 в данном руководстве.
+
+### Thread Safety и Kotlin Coroutines
+
+> Корутины **не гарантируют** thread safety автоматически. `MutableStateFlow` использует `atomic` CAS-операции для `.value`, но `.update {}` нужен для read-modify-write (Goetz, *JCIP*, §4.1). `Mutex` из `kotlinx.coroutines` — кооперативный аналог `ReentrantLock`, не блокирующий поток при ожидании.
+
+> **Связь**: Structured concurrency → [[kotlin-coroutines]], Exception propagation → [[android-coroutines-guide]], Thread safety → [[android-threading]]
+
+---
+
 ## Ошибка 1: Использование GlobalScope
 
 ### Проблемный код
@@ -2998,6 +3029,15 @@ result.onSuccess { data -> handleData(data) }
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- **Smith N.J. (2018).** *Notes on structured concurrency, or: Go statement considered harmful.* — Формализация structured concurrency, нарушение которой — корень ошибки №1 (GlobalScope).
+- **Goetz B. (2006).** *Java Concurrency in Practice.* — Thread safety, visibility, happens-before — фундамент для понимания ошибок shared mutable state в корутинах.
+- **Elizarov R. (2019).** *Kotlin Coroutines Design Proposals.* — Exception transparency, cooperative cancellation, SupervisorJob design.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Structured concurrency, CancellationException, SupervisorJob, exception handling.
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

@@ -61,6 +61,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Production debugging опирается на концепции **наблюдаемости** (observability) и **постмортем-анализа**, формализованные в теории надёжных распределённых систем.
+
+> **Определение:** *Observability — свойство системы, позволяющее выводить её внутреннее состояние по наблюдаемым внешним выходам (логи, метрики, трассы, дампы).*
+
+| Теоретическая концепция | Автор / Источник | Применение в Production Debugging |
+|------------------------|-----------------|----------------------------------|
+| **Observability** | Kalman, 1960 (теория управления) | Три столпа: logs, metrics, traces → дополняются thread/heap dumps и JFR |
+| **Snapshot isolation** | Berenson et al., 1995 | Thread dump — consistent snapshot всех потоков в один момент времени |
+| **Dominator tree** | Lengauer & Tarjan, 1979 | Eclipse MAT строит dominator tree для определения retained size объектов |
+| **Reachability analysis** | McCarthy, 1960 (GC theory) | GC roots → reachable objects. Memory leak = объект reachable, но не нужен |
+| **Heisenbug** | Gray, 1986 | Проблема, исчезающая при попытке наблюдения → sampling profilers минимизируют observer effect |
+
+> **Принцип выбора инструмента:** Каждый диагностический инструмент имеет свою «цену»: thread dump (~100 мс, безопасен), JFR (<2% overhead, безопасен), async-profiler (<1%, безопасен), heap dump (Full GC пауза секунды-минуты, рискован), remote debugging (полная остановка JVM, запрещён в production). Выбор инструмента — это trade-off между полнотой информации и impact на работающую систему.
+
+Связанные темы: [[jvm-profiling]] (complementary: profiling для паттернов, debugging для snapshot'ов), [[jvm-gc-tuning]] (GC logs и heap dump для диагностики memory-проблем), [[jvm-memory-model]] (структура heap: Young/Old Generation, TLAB).
+
+---
+
 ## Историческая справка: от println до JFR
 
 В ранние годы Java (конец 1990-х) основным инструментом "диагностики" был `System.out.println`. Разработчики вставляли print-statement'ы в код, перекомпилировали, деплоили, и пытались понять, что происходит по логам. Это было медленно, требовало перезапуска, и часто меняло timing достаточно, чтобы проблема исчезала (Heisenbug --- проблема, которая пропадает при попытке её наблюдать).
@@ -376,10 +396,18 @@ java \
 
 ## Источники и дальнейшее чтение
 
-- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond.* --- Главы о profiling и production debugging, практические рецепты диагностики JVM-проблем с реальными примерами. Обязательное чтение для каждого, кто эксплуатирует Java-приложения.
-- Evans B., Gough J., Newland C. (2018). *Optimizing Java: Practical Techniques for Improving JVM Application Performance.* --- Глубокое покрытие JVM internals, GC diagnostics и production troubleshooting с акцентом на инструменты. Особенно ценны главы об async-profiler и JFR.
-- Haththotuwa I. (2021). *Troubleshooting Java: Read, Debug, and Optimize JVM Applications.* --- Практическое руководство по диагностике Java-проблем в production: от thread dump анализа до heap dump interpretation, с пошаговыми сценариями реальных инцидентов.
-- Goetz B. (2006). *Java Concurrency in Practice.* --- Необходим для понимания thread dump анализа: deadlocks, race conditions, lock contention объясняются с теоретической основой, без которой невозможно интерпретировать thread dump'ы.
+### Теоретические основы
+
+- Lengauer T., Tarjan R. (1979). *A Fast Algorithm for Finding Dominators in a Flowgraph*. -- Алгоритм построения dominator tree, используемый Eclipse MAT для вычисления retained size объектов в heap dump.
+- Kalman R. (1960). *A New Approach to Linear Filtering and Prediction Problems*. -- Формализация observability в теории управления; концепция перенесена в software engineering как три столпа наблюдаемости.
+- Gray J. (1986). *Why Do Computers Stop and What Can Be Done About It?* -- Классификация ошибок (Bohrbugs vs Heisenbugs) и принципы построения надёжных систем.
+
+### Практические руководства
+
+- Oaks S. (2020). *Java Performance*, 2nd ed. -- Profiling и production debugging JVM-приложений с реальными примерами.
+- Haththotuwa I. (2021). *Troubleshooting Java.* -- Пошаговые сценарии диагностики: thread dump анализ, heap dump interpretation, реальные инциденты.
+- Goetz B. (2006). *Java Concurrency in Practice.* -- Теоретическая основа для интерпретации thread dump'ов: deadlocks, race conditions, lock contention.
+- Evans B., Gough J., Newland C. (2018). *Optimizing Java.* -- JVM internals, GC diagnostics, async-profiler и JFR.
 
 ---
 

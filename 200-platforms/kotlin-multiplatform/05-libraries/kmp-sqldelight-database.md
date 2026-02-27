@@ -63,6 +63,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Type-safe SQL** — подход к работе с реляционными базами данных, при котором SQL-запросы верифицируются компилятором на этапе сборки, а результаты автоматически маппятся в типизированные объекты языка программирования (Ceri, Gottlob, Tanca, 1990, Logic Programming and Databases).
+
+SQLDelight инвертирует традиционный ORM-подход: вместо «Kotlin-объекты → SQL» используется «SQL → Kotlin-объекты».
+
+### Сравнение подходов к базам данных в мобильной разработке
+
+| Подход | Примеры | Схема определяется | Type safety | Platform |
+|--------|---------|-------------------|-------------|----------|
+| ORM | Room, Core Data, Realm | Через аннотации/модели | Частичная (runtime) | Platform-specific |
+| SQL-first | SQLDelight | Через .sq файлы (SQL) | Полная (compile-time) | KMP multiplatform |
+| NoSQL | Realm KMP, Firebase | Через модели | Схемалесс | KMP/Platform |
+| Key-Value | DataStore, MMKV | Нет формальной схемы | Ключевая | KMP multiplatform |
+
+### SQL-first vs ORM-first: теоретическое обоснование
+
+ORM создаёт **Object-Relational Impedance Mismatch** (Ireland et al., 2009): несоответствие между объектной моделью (наследование, полиморфизм) и реляционной моделью (таблицы, foreign keys). SQLDelight избегает этой проблемы, делая SQL first-class citizen.
+
+### Platform-specific Drivers: паттерн Abstract Factory
+
+SQLDelight использует паттерн **Abstract Factory** (Gamma et al., 1994) для создания SqlDriver на каждой платформе:
+
+| Платформа | Driver | Backend |
+|-----------|--------|---------|
+| Android | AndroidSqliteDriver | Android SQLite |
+| iOS | NativeSqliteDriver | SQLite C library |
+| JVM | JdbcSqliteDriver | JDBC + SQLite |
+
+> **Академические источники:** Codd E. (1970). *A Relational Model of Data for Large Shared Data Banks.* — формальная теория реляционных БД. Ireland C. et al. (2009). *A Classification of Object-Relational Impedance Mismatch.* DBKDA.
+
+
 ## Почему SQLDelight? Теоретические основы
 
 ### Проблема типобезопасности SQL
@@ -1109,11 +1143,16 @@ JOIN User ON Task.userId = User.id;
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin, включая data classes, extension functions и type system, которые лежат в основе работы с сгенерированными SQLDelight-классами, custom mappers и типобезопасными запросами.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв и Repository pattern, которые определяют, как SQLDelight вписывается в архитектуру приложения: LocalDataSource, маппинг DTO → Domain, инверсия зависимостей через интерфейсы.
+- **Codd E. F. (1970).** *A Relational Model of Data for Large Shared Data Banks.* — Реляционная модель, лежащая в основе SQL-first подхода SQLDelight.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Abstract Factory Pattern для платформенных SQL-драйверов (AndroidSqliteDriver, NativeSqliteDriver).
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Flow extensions SQLDelight (asFlow(), mapToList()) построены на корутинах. Книга объясняет механику Flow, StateFlow и операторы трансформации, без которых невозможна реактивная работа с базой данных в KMP.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin для type-safe SQL-обёрток, генерируемых SQLDelight.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Flow для реактивных запросов в SQLDelight.
+- [SQLDelight Documentation](https://cashapp.github.io/sqldelight/) — Официальная документация.
 
 ---
 

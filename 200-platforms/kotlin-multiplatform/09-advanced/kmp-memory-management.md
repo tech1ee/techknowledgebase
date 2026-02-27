@@ -54,6 +54,46 @@ next_review:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Автоматическое управление памятью** — механизм, освобождающий программиста от ручного управления жизненным циклом объектов. Две основные стратегии: tracing garbage collection (McCarthy, 1960) и reference counting (Collins, 1960).
+
+### Формальное сравнение GC и ARC
+
+| Свойство | Tracing GC (Kotlin/JVM, K/N) | ARC (Swift/ObjC) |
+|----------|-------------------------------|-------------------|
+| **Определение** | Периодический обход графа достижимости от корневых ссылок | Атомарный счётчик ссылок на каждом объекте |
+| **Формализация** | Mark: reach(root) → set of live objects | retain: rc(o) += 1; release: rc(o) -= 1; if rc(o)==0 → dealloc |
+| **Циклические ссылки** | Собираются автоматически | Утечка (требует weak/unowned) |
+| **Детерминизм** | Недетерминистичен (GC решает когда) | Детерминистичен (dealloc при rc=0) |
+| **Latency** | Stop-the-world паузы | Нет пауз, но overhead на каждый retain/release |
+| **Throughput** | Высокий (batch deallocation) | Ниже (individual deallocation) |
+
+### Kotlin/Native Memory Model: эволюция
+
+| Версия | Модель | Характеристика |
+|--------|--------|----------------|
+| K/N ≤ 1.6 | Strict (freeze-based) | Объекты замораживаются для передачи между threads |
+| K/N 1.7.20 | New MM (default) | Tracing GC, объекты свободно разделяются между threads |
+| K/N 2.0+ | Concurrent GC | Stop-the-world mark + concurrent sweep |
+
+### Проблема mixed retain cycles
+
+Когда Kotlin-объект ссылается на ObjC/Swift-объект и наоборот, возникает **cross-runtime retain cycle**:
+
+```
+Kotlin Object (GC) ←→ ObjC Object (ARC)
+GC не видит ARC-ссылку → не может собрать Kotlin-объект
+ARC не видит GC-ссылку → не может освободить ObjC-объект
+```
+
+Формально: пересечение графов достижимости двух runtime-систем создаёт «слепые зоны», невидимые ни для GC, ни для ARC. Решение — явные weak references на границе runtime-систем.
+
+> **CS-фундамент:** Управление памятью в KMP связано с [[kmp-ios-deep-dive]] (ARC на стороне iOS), [[kmp-interop-deep-dive]] (cross-runtime границы) и [[kmp-performance-optimization]] (влияние GC на производительность). Теоретическая база — Tracing GC (McCarthy, 1960), Reference Counting (Collins, 1960), Memory Safety (Lattner, Swift Evolution, 2014).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -840,11 +880,16 @@ object Constants {
 
 ## Источники и дальнейшее чтение
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины тесно связаны с управлением памятью: каждый launch создаёт объекты в heap, Dispatchers определяют, на каком потоке выполняется GC, а structured concurrency влияет на lifetime объектов. Книга объясняет, почему корутинный код может вызывать неожиданные memory spikes и как этого избежать.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по работе с объектами (избегать лишних аллокаций, переиспользовать immutable объекты, правильно использовать lazy) напрямую влияют на memory footprint приложения. Особенно полезны советы по работе с коллекциями и sequences.
+- **McCarthy J. (1960).** *Recursive Functions of Symbolic Expressions.* — Первая реализация tracing garbage collection.
+- **Collins G. (1960).** *A Method for Overlapping and Erasure of Lists.* — Reference counting как альтернатива GC.
+- **Wilson P. (1992).** *Uniprocessor Garbage Collection Techniques.* — Обзор алгоритмов GC, включая mark-and-sweep (Kotlin/Native).
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Базовое понимание Kotlin runtime, type system и null safety необходимо для осознания того, как объекты представлены в памяти и почему nullable типы (boxing) увеличивают потребление памяти. Главы о generics помогают понять overhead type erasure на Native.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Threading и memory model в контексте корутин.
+- [Kotlin/Native Memory Manager](https://kotlinlang.org/docs/native-memory-manager.html) — Официальная документация нового MM.
 
 ---
 

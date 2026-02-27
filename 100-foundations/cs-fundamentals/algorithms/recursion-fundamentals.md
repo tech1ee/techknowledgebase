@@ -41,6 +41,40 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис рекурсии
+
+### Рекурсия: формальное определение
+
+> **Определение:** Рекурсивная функция f — функция, определённая через самое себя: f(n) = g(f(n-1), ..., f(n-k), n), с **базовым случаем** f(0) = c. Формально это **рекуррентное соотношение** (recurrence relation).
+
+### Связь с математической индукцией
+
+> **Фундаментальный факт:** Рекурсия и математическая индукция — **одно и то же**, применённое в разных контекстах:
+> - **Индукция** доказывает свойство: "если верно для n-1, то верно для n"
+> - **Рекурсия** вычисляет значение: "чтобы решить для n, реши для n-1"
+
+Корректность рекурсивного алгоритма доказывается **структурной индукцией**: если базовый случай корректен и рекурсивный шаг корректен при условии корректности рекурсивных вызовов, то алгоритм корректен для всех входов.
+
+### Tail Recursion: оптимизация
+
+> **Определение:** Рекурсивный вызов является **хвостовым** (tail call), если это последняя операция в функции — после него не нужно возвращаться для дальнейших вычислений.
+
+**Tail Call Optimization (TCO):** Компилятор может преобразовать tail recursion в цикл, устраняя overhead на stack frames. Поддержка: Scheme (обязательна по стандарту), Kotlin (`tailrec`), Scala, Haskell. **НЕ поддерживается** в Java, Python, JavaScript (кроме Safari).
+
+### Историческая атрибуция
+
+- **Рекуррентные соотношения:** Леонардо Фибоначчи (1202) — "Liber Abaci", последовательность Фибоначчи F(n) = F(n-1) + F(n-2)
+- **Рекурсивные функции в CS:** Stephen Kleene (1936) — μ-рекурсивные функции, эквивалентные машине Тьюринга
+- **Call stack:** ALGOL 60 (1960) — первый язык с рекурсией и стеком вызовов
+
+### Связи
+
+- [[dynamic-programming]] — мемоизация = кэширование рекурсивных вызовов
+- [[divide-and-conquer]] — D&C = рекурсия на подзадачах
+- [[trees-binary]] — деревья = рекурсивная структура данных
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > Прежде чем писать любой код, давай разберёмся с идеей рекурсии на примерах из реальной жизни.
@@ -1168,26 +1202,22 @@ Stack растёт:                     Stack НЕ растёт:
 
 ## Источники
 
-### Педагогика и методология
-- [PD4CS - Recursion Misconceptions](https://www.pd4cs.org/recursion-misconceptions-and-challenges/) — типичные ошибки студентов
-- [How NOT to Teach Recursion](https://parentheticallyspeaking.org/articles/how-not-to-teach-recursion/) — критика классических примеров
-- [Teaching Recursion - Shashi Krishna](https://xn--wgiaa.ws/3-teaching-recursion) — педагогические подходы
-- [freeCodeCamp - Recursion is not hard](https://www.freecodecamp.org/news/recursion-is-not-hard-858a48830d83/) — step-by-step walkthrough
+### Теоретические основы
 
-### Аналогии и ментальные модели
-- [mathspp - Recursion Analogies](https://mathspp.com/blog/twitter-threads/recursion-analogies) — time-travelling, programming buddy, tunnels
-- [Recursion in Real Life](https://abetterscientist.wordpress.com/2018/10/07/recursion-in-real-life/) — реальные примеры
-- [Byte by Byte - Understanding Recursion](https://www.byte-by-byte.com/understanding-recursion/) — практические примеры
+- **Kleene, S.C. (1936). "General Recursive Functions of Natural Numbers." Mathematische Annalen.** — Формальное определение μ-рекурсивных функций, эквивалентных машине Тьюринга
+- **McCarthy, J. (1960). "Recursive Functions of Symbolic Expressions." CACM.** — Рекурсия как основа Lisp, первый язык с рекурсивными вызовами через call stack
+- **Steele, G.L. (1977). "Debunking the 'Expensive Procedure Call' Myth." MIT AI Memo.** — Доказательство, что tail calls можно оптимизировать до goto
 
 ### Книги
-- **Abelson & Sussman (1996). "Structure and Interpretation of Computer Programs (SICP)."** — рекурсия как фундаментальный строительный блок программирования; книга учит думать рекурсивно через Scheme/Lisp, раскрывая связь рекурсии с математической индукцией и абстракцией
-- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms (CLRS)."** — формальное изложение divide and conquer и рекурсивных алгоритмов; Master Theorem для анализа рекуррентных соотношений; главы по Merge Sort, Quick Sort и рекурсивным структурам данных
-- **Roberts (1986). "Thinking Recursively."** — классическая книга, целиком посвящённая развитию рекурсивного мышления; множество примеров от простых к сложным, включая backtracking и рекурсивные структуры данных
 
-### Технические ресурсы
-- [Tech Interview Handbook - Recursion](https://www.techinterviewhandbook.org/algorithms/recursion/) — cheatsheet для интервью
+- **Abelson & Sussman (1996). "SICP."** — Рекурсия как строительный блок, связь с индукцией
+- **Cormen et al. (2009). CLRS.** — D&C, Master Theorem, рекурсивные алгоритмы
+- **Roberts (1986). "Thinking Recursively."** — Развитие рекурсивного мышления
+
+### Практические ресурсы
+
+- [Tech Interview Handbook - Recursion](https://www.techinterviewhandbook.org/algorithms/recursion/) — cheatsheet
 - [VisuAlgo - Recursion Visualization](https://visualgo.net/en/recursion) — визуализация
-- [Wikipedia - Tail Call](https://en.wikipedia.org/wiki/Tail_call) — TCO
 
 ---
 

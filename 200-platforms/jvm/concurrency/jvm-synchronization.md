@@ -70,6 +70,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Примитивы синхронизации в JVM имеют глубокие теоретические корни в формальных моделях параллельных вычислений.
+
+> **Определение (Hoare, 1974):** *Монитор — конструкция, объединяющая разделяемые данные, процедуры доступа к ним и механизм взаимного исключения, гарантирующий, что в каждый момент времени только один процесс выполняет процедуру монитора.*
+
+| Теоретическая концепция | Автор / Источник | Реализация в JVM |
+|------------------------|-----------------|-----------------|
+| **Mutual exclusion** | Dijkstra, 1965 | Проблема взаимного исключения → `synchronized`, `ReentrantLock` |
+| **Monitors** | Hoare, 1974; Hansen, 1973 | Mutex + condition variable → каждый Java-объект имеет встроенный монитор |
+| **Condition variables** | Hoare, 1974 | Ожидание выполнения условия внутри монитора → `wait()`/`notify()`, `Condition` |
+| **Compare-And-Swap (CAS)** | IBM System/370, 1970-е | Hardware-примитив для lock-free алгоритмов → `AtomicInteger`, `VarHandle` |
+| **Linearizability** | Herlihy & Wing, 1990 | Операции выглядят как мгновенные → критерий корректности `Atomic*`, `ConcurrentHashMap` |
+| **Lock-free progress** | Herlihy, 1991 | Гарантия: хотя бы один поток делает прогресс → `AtomicInteger.incrementAndGet()` |
+
+> **Java Memory Model (Manson, Pugh & Adve, 2005, JSR-133):** *формальная спецификация, определяющая happens-before — частичный порядок на операциях программы, гарантирующий видимость записей между потоками.* Без JMM невозможно определить, является ли результат concurrent-программы корректным. `synchronized` устанавливает happens-before через monitor lock/unlock; `volatile` — через volatile write/read.
+
+Четыре условия **deadlock** формализованы **Coffman et al. (1971)**: mutual exclusion, hold and wait, no preemption, circular wait. Deadlock возможен **только** при одновременном выполнении всех четырёх — разрыв любого предотвращает deadlock. Это фундаментальный результат теории, на котором строятся все стратегии предотвращения.
+
+Связанные темы: [[jvm-concurrency-overview]] (общая карта concurrency), [[jvm-memory-model]] (JMM и happens-before), [[jvm-concurrent-collections]] (concurrent-структуры на основе CAS и lock striping).
+
+---
+
 ## Историческая справка: от Dijkstra до Virtual Threads
 
 Примитивы синхронизации в Java --- не изобретение Sun Microsystems. Они опираются на 60 лет теоретических и инженерных работ. Знание этой истории объясняет, **почему** API спроектировано именно так.
@@ -612,12 +635,20 @@ if (lock1.tryLock(100, MILLISECONDS)) {
 
 ## Источники и дальнейшее чтение
 
-- Goetz B. et al. (2006). *Java Concurrency in Practice*. --- Главы 2--5 (building blocks) и 14--16 (JMM, advanced synchronization) --- каноническое руководство по Java synchronization. Объясняет каждый примитив с теоретическим обоснованием и production-примерами. Обязательное чтение.
-- Herlihy M., Shavit N. (2012). *The Art of Multiprocessor Programming*, Revised Edition. --- Глубокая теория: spin locks, CAS, lock-free structures, linearizability. Для тех, кто хочет понять, почему AtomicInteger работает корректно и что означает lock-free прогресс.
-- Lea D. (2000). *Concurrent Programming in Java: Design Principles and Patterns*, 2nd Edition. --- Дуг Ли --- автор java.util.concurrent. Книга объясняет design rationale пакета: почему ReentrantLock спроектирован именно так, зачем нужна fairness, как работает AbstractQueuedSynchronizer (AQS).
-- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond*, 2nd Edition. --- Главы о synchronization overhead, biased locking, lock coarsening. Объясняет, как HotSpot JVM оптимизирует synchronized и почему его performance в Java 8+ значительно лучше, чем в Java 5.
-- Dijkstra E. W. (1965). *Cooperating Sequential Processes*. --- Историческая работа, заложившая основы синхронизации: семафоры, mutual exclusion, проблема обедающих философов.
-- Hoare C. A. R. (1974). *Monitors: An Operating System Structuring Concept*. --- Статья, описавшая мониторы --- конструкцию, ставшую основой synchronized в Java.
+### Теоретические основы
+
+- **Dijkstra E.W. (1965). Cooperating Sequential Processes.** — семафоры, mutual exclusion, проблема обедающих философов.
+- **Hoare C.A.R. (1974). Monitors: An Operating System Structuring Concept.** — мониторы: mutex + condition variable → основа `synchronized`.
+- **Coffman E.G. et al. (1971). System Deadlocks.** — формализация четырёх необходимых условий deadlock.
+- **Herlihy M., Wing J. (1990). Linearizability.** — формальный критерий корректности concurrent-объектов.
+- **Manson J., Pugh W., Adve S. (2005). The Java Memory Model.** — JSR-133: happens-before, volatile semantics, final field semantics.
+
+### Практические руководства
+
+- **Goetz B. et al. (2006). Java Concurrency in Practice.** — каноническое руководство по всем примитивам синхронизации Java.
+- **Herlihy M., Shavit N. (2012). The Art of Multiprocessor Programming.** — теория CAS, lock-free прогресс, linearizability.
+- **Lea D. (2000). Concurrent Programming in Java, 2nd ed.** — design rationale java.util.concurrent: AQS, ReentrantLock, fairness.
+- **Oaks S. (2020). Java Performance, 2nd ed.** — biased locking, lock coarsening, synchronization overhead в HotSpot.
 
 ---
 

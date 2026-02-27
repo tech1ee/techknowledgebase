@@ -62,6 +62,31 @@ DataStore -- это библиотека из семейства Android Jetpack
 
 ---
 
+## Теоретические основы
+
+### Key-Value Storage: формальная модель
+
+> **Key-Value Store** — простейшая модель хранения, формализуемая как частичная функция `f: Key → Value`. В отличие от реляционной модели (Codd, 1970), key-value store не поддерживает связи между данными, SQL-запросы или индексы. Преимущество — простота и производительность: O(1) для чтения/записи при использовании hash map.
+
+| Свойство | SharedPreferences | Preferences DataStore | Proto DataStore |
+|----------|------------------|----------------------|-----------------|
+| **Потокобезопасность** | Нет (race conditions при `apply()` из разных потоков) | Да (single writer через coroutine) | Да |
+| **Атомарность** | Нет (partial writes при crash) | Да (atomic file swap) | Да |
+| **Типобезопасность** | Нет (`getString` может вернуть `null`) | Частично (Preferences.Key<T>) | Полная (Protobuf schema) |
+| **Реактивность** | Нет (poll-based через `OnSharedPreferenceChangeListener`) | Да (`Flow<Preferences>`) | Да (`Flow<T>`) |
+
+### Atomic File Operations
+
+> DataStore использует паттерн **atomic file replacement**: данные записываются во временный файл, затем `File.renameTo()` атомарно заменяет старый файл новым. Это гарантирует **durability** (данные не теряются при crash) и **atomicity** (запись либо применяется полностью, либо нет). Паттерн восходит к Unix-традиции атомарных обновлений конфигурационных файлов.
+
+### Protocol Buffers: формальная сериализация
+
+> **Protocol Buffers** (Google, 2001, open-sourced 2008) — language-neutral, platform-neutral формат сериализации. Proto DataStore использует Protobuf для типобезопасного хранения. Ключевое преимущество перед JSON/XML: **backward-compatible schema evolution** через правила нумерации полей (новые поля получают новые номера, старые поля никогда не переиспользуются).
+
+> **Связь**: Key-Value Store → [[android-data-persistence]], Atomic Operations → [[os-synchronization]], Protocol Buffers → [[android-networking]]
+
+---
+
 ## Историческая справка
 
 История DataStore начинается с самого рождения Android. В 2008 году, когда Google выпустил Android 1.0, в составе SDK появился класс `SharedPreferences`. Его задача была простой: дать разработчикам способ сохранять небольшие настройки приложения -- тему оформления, имя пользователя, флаг "показывать ли приветственный экран". Под капотом SharedPreferences хранил данные в XML-файле в приватной директории приложения (`/data/data/<package>/shared_prefs/`). API был намеренно простым: `getString()`, `putString()`, `getBoolean()`, `putBoolean()`. Для 2008 года это было элегантное решение -- приложения были однопоточными, настроек было мало, а устройства имели схожую производительность.
@@ -632,15 +657,19 @@ DataStore использует Protocol Buffers и Kotlin Coroutines, котор
 
 ## Источники и дальнейшее чтение
 
-- **Meier, R. (2022).** *Professional Android.* -- Глава о DataStore содержит сравнение с SharedPreferences, примеры миграции и рекомендации по архитектуре слоя данных. Один из немногих печатных источников, покрывающих DataStore на production-уровне с учётом реальных edge cases.
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| DeCandia G. et al. *Dynamo: Amazon's Highly Available Key-value Store* (2007) | Key-Value Store модель |
+| Lampson B., Sturgis H. *Crash Recovery in a Distributed Data Storage System* (1979) | Atomic file operations — write-rename pattern |
+| Google. *Protocol Buffers Language Guide* | Protocol Buffers — формат Proto DataStore |
 
-- **Phillips, B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* -- Пошаговое руководство по переходу с SharedPreferences на DataStore. Хорош для первого знакомства, но менее глубок в части Proto DataStore и internals. Рекомендуется для начинающих.
-
-- **Google.** *Protocol Buffers Documentation.* -- Официальная документация формата protobuf: синтаксис .proto файлов, правила обратной совместимости, best practices. Необходимо для работы с Proto DataStore и понимания ограничений формата.
-
-- **Android Developers.** *DataStore Guide.* -- Официальная документация Google по DataStore: setup, Preferences и Proto варианты, миграция, тестирование. Первый источник при возникновении вопросов по API. Содержит codelabs для практики.
-
-- **Sathyanarayana, R. (2020).** *Prefer Storing Data with Jetpack DataStore* (Android Developers Blog). -- Оригинальный анонс DataStore от инженера Google. Объясняет мотивацию создания библиотеки и ключевые design decisions: почему Flow, почему protobuf, почему не просто починить SharedPreferences.
+### Практические руководства
+- **Meier R. (2022).** *Professional Android.* -- сравнение DataStore с SharedPreferences, миграция, архитектура слоя данных.
+- **Phillips B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* -- переход с SharedPreferences на DataStore.
+- **Google.** *Protocol Buffers Documentation.* -- синтаксис .proto файлов, обратная совместимость.
+- **Android Developers.** *DataStore Guide.* -- setup, Preferences и Proto, миграция, тестирование.
+- **Sathyanarayana R. (2020).** *Prefer Storing Data with Jetpack DataStore* (Android Developers Blog). -- мотивация и design decisions.
 
 ---
 

@@ -37,6 +37,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Масштабирование: от теории роста к практике стартапов
+
+> **Определение:** Scaling from Zero — процесс трансформации стартапа от MVP-стадии до зрелой технической организации, затрагивающий одновременно технологию, процессы, людей и культуру. Каждый этап роста (0-10, 10-30, 30-100, 100+) требует fundamentally разных подходов.
+
+Greiner's Growth Model (*"Evolution and Revolution as Organizations Grow"*, Larry Greiner, 1972, Harvard Business Review) описывает пять фаз роста организации, каждая из которых заканчивается кризисом, требующим revolution в управлении:
+
+| Фаза Greiner | Стартап-стадия | Рост через | Кризис |
+|-------------|---------------|-----------|--------|
+| **Creativity** | 0-10 | Основатели строят | Кризис лидерства (нужен менеджмент) |
+| **Direction** | 10-30 | Формальное управление | Кризис автономии (слишком централизовано) |
+| **Delegation** | 30-100 | Делегирование командам | Кризис контроля (потеря координации) |
+| **Coordination** | 100-300 | Формальные системы | Кризис бюрократии |
+| **Collaboration** | 300+ | Культура и values | Кризис роста / обновления |
+
+Reid Hoffman в *"Blitzscaling"* (2018) описал четыре стадии масштабирования: **Family** (1-9), **Tribe** (10s), **Village** (100s), **City** (1000s). На каждой стадии меняется всё: от hiring подхода до decision-making процесса. Ключевой insight: то, что работало на предыдущей стадии, **ломается** на следующей.
+
+> «What got you here won't get you there.» — Marshall Goldsmith
+
+Martin Fowler предложил **Strangler Fig Pattern** (*"StranglerFigApplication"*, 2004) как основной подход к постепенной миграции legacy систем — критически важный паттерн для технического масштабирования, когда full rewrite невозможен без остановки бизнеса. [[scaling-engineering-org|Conway's Law]] дополняет картину: архитектура системы неизбежно отражает организационную структуру, поэтому технический и организационный масштабирование неразделимы.
+
+---
+
 ## Growth Stages Overview
 
 ```
@@ -501,13 +525,22 @@ LEADERSHIP:
 
 **[[technical-vision]]** — Технический vision определяет архитектурные решения на каждом этапе масштабирования: когда переходить от монолита к сервисам, когда инвестировать в platform team. Без долгосрочного технического видения масштабирование превращается в постоянное тушение пожаров и бесконечные переписывания. Strangler Fig pattern и другие паттерны миграции — практическое применение технической vision при масштабировании.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Greiner L. "Evolution and Revolution as Organizations Grow" — HBR, 1972 | Статья | Пять фаз роста, кризисы transitions |
+| 2 | Hoffman R. "Blitzscaling" — Currency, 2018 | Книга | Family → Tribe → Village → City stages |
+| 3 | Fowler M. "StranglerFigApplication" — martinfowler.com, 2004 | Статья | Strangler Fig pattern для миграции |
+| 4 | Conway M. "How Do Committees Invent?" — Datamation, 1968 | Статья | Conway's Law: org structure = architecture |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Ries E. "The Lean Startup" — Crown Business, 2011 | Книга | MVP approach, Build-Measure-Learn |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Scaling decisions under pressure |
+| 3 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Org growth stages from EM perspective |
 
 
 ## Проверь себя

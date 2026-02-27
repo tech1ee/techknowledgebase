@@ -57,6 +57,43 @@ related:
 
 ---
 
+## Теоретические основы
+
+ООП-модель Kotlin основана на десятилетиях исследований в области объектно-ориентированного проектирования, но с прагматичными отклонениями от классических подходов.
+
+### Final by default и Fragile Base Class Problem
+
+> **Формально:** проблема хрупкого базового класса (Fragile Base Class Problem, Mikhajlov & Sekerinski, 1998) — ситуация, когда изменение базового класса нарушает корректность подклассов, даже если интерфейс не изменился. Kotlin решает её радикально: **все классы `final` по умолчанию**.
+
+Это решение следует рекомендации Bloch (*Effective Java*, Item 17, 2001): «Design and document for inheritance, or else prohibit it». Открытие класса для наследования (`open`) — осознанное архитектурное решение.
+
+### Algebraic Data Types (ADT)
+
+| Конструкция Kotlin | Теория | Происхождение |
+|-------------------|--------|---------------|
+| `data class` | **Product type** — комбинация полей | Record types в ML (1973) |
+| `sealed class/interface` | **Sum type** — один из вариантов | Variant types в ML; ADT в Haskell (1990) |
+| `enum class` | **Enumeration type** — конечное множество | Pascal (Wirth, 1970) |
+| `value class` | **Newtype** — zero-cost обёртка | `newtype` в Haskell; inline class в Scala 3 |
+| `object` | **Singleton pattern** | Gamma et al., *Design Patterns* (1994) |
+
+> **Product + Sum = ADT.** `data class` (product type) описывает «И» — объект содержит поле A *и* поле B. `sealed class` (sum type) описывает «ИЛИ» — значение является *либо* Success *либо* Error. Вместе они формируют алгебраические типы данных — фундамент функционального моделирования (Wadler, 1987).
+
+### Delegation vs Inheritance
+
+Kotlin нативно поддерживает **delegation by** — реализацию принципа «Favor composition over inheritance» (Gamma et al., *Design Patterns*, 1994, Principle 2). Делегирование формально реализует **forwarding** (Lieberman, 1986): объект перенаправляет вызовы другому объекту без создания иерархии наследования.
+
+| Критерий | Наследование | Delegation `by` |
+|----------|-------------|-----------------|
+| Связанность | Tight coupling (жёсткая) | Loose coupling (слабая) |
+| Количество | Single inheritance | Множественное делегирование |
+| Гибкость | Фиксированный базовый класс | Делегат можно заменить в runtime |
+| Проблема | Fragile Base Class | Нет |
+
+См. также: [[solid-principles]] — SOLID и Kotlin ООП, [[kotlin-type-system]] — variance и generics.
+
+---
+
 В Java стандартный POJO с equals, hashCode, toString, getters/setters занимает 50-100 строк. В Kotlin: `data class User(val name: String, val age: Int)` — одна строка, всё генерируется автоматически.
 
 Data class решает проблему boilerplate: equals сравнивает по полям, copy создаёт изменённую копию (immutability), destructuring (`val (name, age) = user`) упрощает работу с данными. Sealed class — закрытая иерархия, где компилятор проверяет обработку всех вариантов в when-выражении: добавили новый подкласс — код не скомпилируется пока не добавите обработку. Value class — type-safe обёртка примитивов (`UserId`, `Email`) без runtime overhead: компилируется в обычный Long или String, но защищает от перепутывания параметров.
@@ -911,6 +948,16 @@ class TimestampPrinter(
 [[solid-principles]] — SOLID-принципы тесно связаны с ООП-конструкциями Kotlin: final by default поддерживает Open/Closed Principle, delegation by реализует композицию вместо наследования, sealed class обеспечивает Liskov Substitution через exhaustive when. Изучение SOLID параллельно с ООП формирует правильные привычки проектирования.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Mikhajlov L., Sekerinski E. (1998). *A Study of the Fragile Base Class Problem*. ECOOP. — Формализация проблемы хрупкого базового класса, мотивация для `final by default` в Kotlin.
+- Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. — Singleton (→ `object`), Delegation (→ `by`), Composition over Inheritance.
+- Wadler P. (1987). *Views: A Way for Pattern Matching to Cohabit with Data Abstraction*. — Теоретическая основа ADT и pattern matching, реализованная через `sealed class` + `when`.
+- Liskov B., Wing J. (1994). *A Behavioral Notion of Subtyping*. ACM TOPLAS. — Формализация подтипирования; мотивация для различия read-only/mutable интерфейсов.
+- Bloch J. (2001/2018). *Effective Java*. Item 17-19. — «Design for inheritance or prohibit it» → `final by default` в Kotlin.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Главы о классах, объектах, data classes и sealed classes. Наиболее полное объяснение ООП-модели Kotlin с точки зрения перехода с Java.
 - Moskala M. (2021). *Effective Kotlin*. — Практические рекомендации по использованию data class, sealed class, value class и delegation в production-коде. Объясняет, когда и почему предпочитать одну конструкцию другой.

@@ -34,6 +34,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Файловая система** — абстракция, организующая данные на блочных устройствах хранения в иерархию именованных объектов (файлов и директорий) с метаданными и гарантиями целостности.
+
+### Формальная модель
+
+Файловая система определяет:
+1. **Namespace** — иерархия имён (path → inode mapping)
+2. **Storage allocation** — отображение файлов на блоки диска
+3. **Metadata** — inode (permissions, timestamps, size, block pointers)
+4. **Consistency** — гарантии при сбоях (journaling, CoW)
+
+### Ключевые структуры данных
+
+| Структура | Назначение | Файловая система |
+|-----------|-----------|-----------------|
+| **inode** | Метаданные файла + указатели на блоки | ext4, UFS |
+| **B-tree** | Индексация директорий и extent-ов | Btrfs, NTFS, APFS |
+| **Journal** | Лог операций для crash recovery | ext4 (JBD2), NTFS |
+| **Copy-on-Write** | Атомарность через копирование при записи | Btrfs, ZFS, APFS |
+
+### Историческая хронология
+
+| Год | Файловая система | Инновация |
+|-----|-----------------|-----------|
+| 1974 | **Unix FS** (Thompson) | Inode, иерархия директорий |
+| 1984 | **FFS** (McKusick, BSD) | Cylinder groups, оптимизация locality |
+| 1993 | **NTFS** | B-tree, journaling, ACL, streams |
+| 2001 | **ext3** | Journaling для Linux |
+| 2006 | **ZFS** (Sun) | Copy-on-Write, checksums, snapshots |
+| 2008 | **ext4** | Extents, delayed allocation, 1 EB max size |
+| 2017 | **APFS** (Apple) | CoW, encryption, snapshots, space sharing |
+
+> **См. также**: [[os-io-devices]] — I/O подсистема, [[os-memory-management]] — swap и виртуальная память, [[databases-overview]] — БД поверх файловой системы
+
+---
+
 ## TL;DR
 
 > **Что:** Файловая система = "библиотечный каталог" для диска. Превращает хаос блоков в файлы и папки.

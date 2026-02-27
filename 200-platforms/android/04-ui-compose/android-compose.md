@@ -41,6 +41,33 @@ Jetpack Compose — современный UI toolkit для Android, замен
 
 ---
 
+## Теоретические основы
+
+> **Декларативное UI** — парадигма, в которой пользовательский интерфейс описывается как **функция от состояния**: `UI = f(state)`. Вместо императивных мутаций (`textView.text = "..."`) разработчик декларирует, каким должен быть UI для данного состояния, а фреймворк вычисляет минимальные изменения (Elliott/Hudak, *Functional Reactive Animation*, ICFP 1997).
+
+Jetpack Compose (2021) — третья волна декларативных UI-фреймворков, вдохновлённая React (Facebook, 2013) и SwiftUI (Apple, 2019). Все три разделяют общую модель: **функциональные компоненты** + **реактивное состояние** + **virtual tree diffing**.
+
+| Характеристика | Compose (2021) | React (2013) | SwiftUI (2019) | Flutter (2018) |
+|---------------|----------------|--------------|----------------|----------------|
+| Язык | Kotlin | JavaScript/TSX | Swift | Dart |
+| Компонент | @Composable function | Function component | View struct | Widget class |
+| Состояние | mutableStateOf + remember | useState + useEffect | @State / @Observable | setState / ValueNotifier |
+| Diffing | Positional memoization | Virtual DOM reconciliation | Attribute Graph | Element tree diff |
+| Renderer | Skia → GL/Vulkan | Browser DOM | Core Animation | Skia → GL/Vulkan |
+
+> **Recomposition** — процесс повторного вызова composable-функций при изменении состояния. Это реализация концепции **мемоизации** (Michie, 1968): Compose запоминает результат вызова функции и пропускает повторный вызов, если входные параметры не изменились (**smart recomposition** / skipping).
+
+Архитектурно Compose состоит из трёх ключевых слоёв:
+1. **Compiler Plugin** — трансформирует @Composable функции, добавляя код для tracking и skipping (аналог React Babel transform)
+2. **Runtime** — управляет composition tree через Slot Table (gap buffer) и Snapshot System (MVCC для состояния)
+3. **UI** — layout и rendering через Skia, заменяя View hierarchy
+
+Паттерн **State Hoisting** в Compose формализует принцип **единственного источника истины** (Single Source of Truth) из теории баз данных (Codd, 1970): состояние поднимается в ближайший общий ancestor, а дочерние компоненты получают его как параметры и сообщают об изменениях через callback-лямбды. Это реализация **Unidirectional Data Flow** (UDF).
+
+**Modifier** реализует паттерн **Decorator** (Gamma et al., 1994) в функциональном стиле: цепочка `Modifier.padding().background().clickable()` последовательно оборачивает composable, добавляя поведение. Порядок в цепочке критичен — это аналог порядка вложенности ViewGroup в XML.
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -981,22 +1008,22 @@ fun AppNavigation() {
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Compose UI и интеграцию с Android ecosystem
-- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin (lambdas, DSL, immutability), являющиеся фундаментом Compose API design
-- Leiva A. (2017). Kotlin for Android Developers. — Kotlin-first Android разработка, базовые языковые конструкции для понимания Compose syntax
+### Теоретические основы
 
-**Официальная документация:**
+- **Elliott C., Hudak P. (1997). Functional Reactive Animation. ICFP.** — Формализация декларативного UI как функции от состояния
+- **Michie D. (1968). Memo Functions and Machine Learning.** — Мемоизация (основа remember и smart recomposition)
+- **Gamma E. et al. (1994). Design Patterns.** — Decorator (Modifier chain), Observer (state tracking)
+- **Codd E. (1970). A Relational Model of Data.** — Single Source of Truth (State Hoisting)
+
+### Практические руководства
+
+- Meier R. (2022). *Professional Android.* — Compose UI и интеграция с Android ecosystem
+- Moskala M. (2021). *Effective Kotlin.* — Lambdas, DSL, immutability — фундамент Compose API
 - [Jetpack Compose Documentation](https://developer.android.com/develop/ui/compose/documentation) — официальная документация
 - [Compose Performance](https://developer.android.com/develop/ui/compose/performance) — оптимизация производительности
 - [Compose Phases](https://developer.android.com/develop/ui/compose/phases) — три фазы рендеринга
-- [Side Effects](https://developer.android.com/develop/ui/compose/side-effects) — LaunchedEffect, DisposableEffect
 - [Stability Explained](https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8) — @Stable, Strong Skipping
-
-**Практические ресурсы:**
-- [Jetpack Compose Basics Codelab](https://developer.android.com/codelabs/jetpack-compose-basics) — практический codelab
 - [Official Compose Samples](https://github.com/android/compose-samples) — примеры от Google
-- [derivedStateOf Usage](https://medium.com/androiddevelopers/jetpack-compose-when-should-i-use-derivedstateof-63ce7954c11b) — когда использовать
 
 ---
 

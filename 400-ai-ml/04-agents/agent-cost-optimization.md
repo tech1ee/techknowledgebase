@@ -74,6 +74,38 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Cost optimization** AI-агентов — задача минимизации совокупной стоимости выполнения задач при сохранении допустимого уровня качества. Формально: $\min_{config} \sum Cost_i(config)$ при $Quality(config) \geq threshold$.
+
+Оптимизация стоимости AI-агентов опирается на несколько теоретических фундаментов:
+
+| Концепция | Теоретическая база | Применение к агентам |
+|-----------|-------------------|---------------------|
+| **Scaling Laws** | Kaplan et al. (2020), Hoffmann et al. (2022) | Соотношение размера модели, данных и качества определяет cost/quality tradeoff |
+| **Token Economics** | Shannon (1948), Information Theory | Каждый токен несёт определённое количество информации; избыточность = переплата |
+| **Model Routing** | Mixture of Experts (Shazeer et al., 2017) | Направление задач на модели оптимального размера |
+| **Caching Theory** | Belady (1966), оптимальный алгоритм замещения | Prompt caching: повторяющийся контекст кэшируется |
+| **Queueing Theory** | Little's Law (1961) | Batch processing: $L = \lambda W$ определяет оптимальный размер batch |
+
+> **Парадокс стоимости агентов**: дешёвая модель на одном шаге может привести к дорогим retry, дополнительным итерациям и каскадным ошибкам. Общая стоимость $C_{total} = \sum_{i=1}^{N} c_i + C_{retry} \cdot P_{error}$, где $P_{error}$ растёт при использовании слабой модели.
+
+**Уровни оптимизации (от быстрого к архитектурному):**
+
+| Уровень | Техника | Потенциальная экономия | Сложность |
+|---------|---------|----------------------|-----------|
+| **Prompt** | Сокращение системного промпта, компрессия контекста | 20-40% | Низкая |
+| **Model** | Routing: дешёвая модель для простых задач | 40-70% | Средняя |
+| **Caching** | Prompt caching, semantic caching | 30-60% | Средняя |
+| **Batch** | Batch API (50% скидка у OpenAI/Anthropic) | 50% | Низкая |
+| **Architecture** | Fewer steps, parallel execution, early stopping | 50-90% | Высокая |
+
+Ключевая метрика — **cost per successful task** (не cost per API call), учитывающая retry и failure rate.
+
+См. также: [[ai-api-integration|API Integration]] — pricing моделей, [[agent-production-deployment|Production Deployment]] — инфраструктурные costs.
+
+---
+
 ## Анатомия стоимости агента
 
 ### Формула стоимости
@@ -1236,11 +1268,26 @@ Savings: $48,000/month (64%)
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- Huyen, C. (2022). *Designing Machine Learning Systems.* O'Reilly Media. — Глава про оптимизацию production ML систем и cost management.
-- Géron, A. (2022). *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow.* 3rd Edition. O'Reilly Media. — Практический подход к построению и оптимизации ML pipeline.
-- Lewis, P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.* arXiv:2005.11401. — Оригинальная работа по RAG, фундамент для понимания стоимости retrieval-augmented агентов.
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Kaplan J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361 | Зависимость качества от размера модели — основа cost/quality tradeoff |
+| 2 | Hoffmann J. et al. (2022). *Training Compute-Optimal Large Language Models*. arXiv:2203.15556 | Chinchilla scaling — оптимальное соотношение параметров и данных |
+| 3 | Shannon C. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal | Теория информации — теоретический минимум токенов |
+| 4 | Belady L. (1966). *A Study of Replacement Algorithms for Virtual-Storage Computers*. IBM Systems Journal | Оптимальное кэширование |
+| 5 | Little J. (1961). *A Proof for the Queuing Formula: L = λW*. Operations Research | Queueing theory для batch optimization |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OpenAI — Pricing](https://openai.com/pricing) | Актуальные цены и batch API |
+| 2 | [Anthropic — Prompt Caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) | Кэширование системных промптов |
+| 3 | [Together AI — Routing](https://www.together.ai/) | Model routing и inference optimization |
+| 4 | [Martian — Model Router](https://withmartian.com/) | Интеллектуальная маршрутизация |
 
 ---
 

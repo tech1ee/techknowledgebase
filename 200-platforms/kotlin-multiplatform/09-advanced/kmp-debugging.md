@@ -53,6 +53,47 @@ next_review:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Отладка (debugging)** — процесс локализации и устранения дефектов в программной системе, включающий наблюдение за состоянием программы во время исполнения (Zeller, 2009, Why Programs Fail).
+
+### Таксономия методов отладки
+
+Andreas Zeller (2009) формализовал debugging как научный метод:
+
+| Метод | Описание | Применение в KMP |
+|-------|----------|-----------------|
+| **Дедукция** | От общего к частному (hypthesis → test) | Crash log → reproduce → fix |
+| **Индукция** | От частного к общему (observations → pattern) | Множество crashes → common cause |
+| **Delta Debugging** | Минимизация failing input | Минимальный KMP проект, воспроизводящий баг |
+| **Binary Search** | Bisect по коммитам | git bisect для регрессий |
+
+### Проблема multi-target debugging
+
+KMP debugging уникален тем, что один исходный код порождает **разные исполняемые артефакты** с разными debug capabilities:
+
+| Target | Debug tool | Символы | Expression eval | Breakpoints |
+|--------|-----------|---------|-----------------|-------------|
+| JVM (Android) | Android Studio Debugger | Full | Да | Да |
+| Native (iOS) | LLDB (Xcode) | Partial (DWARF) | Ограничен | Да (с плагином) |
+| JS (Web) | Chrome DevTools | Source maps | Да | Да |
+| Wasm | Chrome DevTools | DWARF (experimental) | Нет | Ограничены |
+
+### Debug Information Theory
+
+Отладочная информация — это **отображение** (mapping) между машинным кодом и исходным текстом:
+
+```
+φ: Machine_Address → (Source_File, Line, Column, Variable_State)
+```
+
+В KMP это отображение **нетранзитивно**: Kotlin source → IR → LLVM IR → машинный код. Каждый шаг трансформации может потерять часть debug information (особенно при оптимизациях). Формат DWARF (Debugging With Attributed Record Formats) кодирует это отображение, но K/N expression evaluation ограничен из-за потерь на шаге IR → LLVM IR.
+
+> **CS-фундамент:** Debugging связан с [[kmp-testing-strategies]] (предотвращение дефектов), [[kmp-memory-management]] (memory debugging) и [[kmp-troubleshooting]] (систематическое решение проблем). Теоретическая база — Scientific Debugging (Zeller, 2009), Delta Debugging (Zeller, 1999).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -877,11 +918,16 @@ dwarfdump --uuid Shared.framework.dSYM
 
 ## Источники и дальнейшее чтение
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Глубокое понимание корутин критично для отладки асинхронного кода в KMP. Книга объясняет, почему stack traces обрезаются при переключении контекста, как работает structured concurrency и как правильно обрабатывать CancellationException — частая причина крашей при переходе Kotlin→Swift.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по обработке ошибок (Item: Prefer Kotlin Result), которые напрямую применимы к стратегии Result types вместо exceptions на границе Kotlin-Swift. Помогает писать код, который легче отлаживать.
+- **Zeller A. (2009).** *Why Programs Fail: A Guide to Systematic Debugging.* 2nd ed. — Научный подход к отладке: дедукция, индукция, Delta Debugging.
+- **Zeller A. (1999).** *Yesterday, My Program Worked. Today, It Does Not. Why?* — Delta Debugging алгоритм для минимизации failing input.
 
-- Martin R. (2017). *Clean Architecture.* — Принцип разделения ответственности между слоями упрощает отладку: если баг в Repository, вы точно знаете, где ставить breakpoints. Чистая архитектура делает код предсказуемым и диагностируемым.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Отладка корутин и Flow.
+- [xcode-kotlin Plugin](https://github.com/nicklcm/xcode-kotlin) — Плагин для отладки Kotlin в Xcode.
+- [CrashKiOS](https://github.com/nicklcm/CrashKiOS) — Crash reporting для Kotlin/Native на iOS.
 
 ---
 

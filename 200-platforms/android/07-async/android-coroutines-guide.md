@@ -32,6 +32,44 @@ mastery: 0
 
 ---
 
+## Теоретические основы
+
+### Coroutines: от теории к Android-платформе
+
+> **Корутина** (coroutine) — подпрограмма, которая может приостанавливать и возобновлять выполнение в определённых точках. Термин введён Melvin Conway в 1963 году (*"Design of a Separable Transition-Diagram Compiler"*). Kotlin coroutines реализуют **stackless coroutines** через CPS-трансформацию (Continuation-Passing Style) на этапе компиляции.
+
+| Концепция | Формальное определение | Применение в Android |
+|-----------|----------------------|---------------------|
+| **Continuation** | Объект, хранящий состояние приостановленной функции и точку возобновления | Каждая `suspend fun` компилируется в state machine с `Continuation<T>` |
+| **CoroutineScope** | Structured concurrency boundary — область жизни корутин | `viewModelScope` (привязан к `onCleared`), `lifecycleScope` (привязан к `onDestroy`) |
+| **Dispatcher** | Абстракция над исполнителем (executor), определяющая поток выполнения | `Main` = Handler(MainLooper), `IO` = pool 64 threads, `Default` = ForkJoinPool(N cores) |
+| **Job** | Управляемая отменяемая единица работы с иерархическим parent-child отношением | Отмена viewModelScope → отмена всех child Job → cooperative cancellation |
+
+### Structured Concurrency в контексте Android Lifecycle
+
+> Nathaniel J. Smith (2018, *"Notes on structured concurrency"*) формулирует принцип: **задача не должна переживать свой scope**. Roman Elizarov адаптировал эту идею для Kotlin (KotlinConf 2018), создав `CoroutineScope` как механизм автоматической отмены.
+
+В Android lifecycle создаёт естественные границы scope:
+
+```
+Activity created  ─── lifecycleScope.launch { ... } ─── Activity destroyed
+                      ↑ корутина запущена                ↑ корутина отменена
+                                                          (CancellationException)
+
+ViewModel created ─── viewModelScope.launch { ... } ─── ViewModel.onCleared()
+                      ↑ переживает rotation               ↑ отмена при навигации назад
+```
+
+Дизайн `viewModelScope` (Ian Lake, Android Team, 2018) отражает формальное свойство: ViewModel — это **единица удержания данных**, её scope определяется навигацией, а не конфигурационными изменениями. Это решает фундаментальную проблему Android: несовпадение lifecycle Activity (rotation = recreate) и lifecycle данных (rotation = keep).
+
+### Dispatchers: формальная модель
+
+`Dispatchers.Main` на Android реализован через `HandlerDispatcher` — адаптер между `CoroutineDispatcher` и `Handler(Looper.getMainLooper())`. Это обеспечивает happens-before гарантию: результат `withContext(Dispatchers.IO) { ... }` гарантированно виден на Main Thread после возврата.
+
+> **Связь**: CPS-трансформация → [[kotlin-coroutines]], Lifecycle scopes → [[android-activity-lifecycle]], Handler как dispatcher → [[android-handler-looper]]
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: разрыв между теорией и Android-реальностью
@@ -2480,12 +2518,17 @@ Exception в Job D (supervisorScope):
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-### Книги
+### Теоретические основы
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. Kt. Academy. -- Наиболее глубокий источник по корутинам: CPS, Job hierarchy, Dispatchers internals, structured concurrency, Flow internals.
-- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. Manning. -- Главы по корутинам и Flow с акцентом на практическое применение.
+- **Conway M.E. (1963).** *Design of a Separable Transition-Diagram Compiler.* CACM. — Введение термина «корутина» как подпрограммы с множественными точками входа/выхода.
+- **Smith N.J. (2018).** *Notes on structured concurrency, or: Go statement considered harmful.* — Формализация structured concurrency; прямое влияние на дизайн Kotlin CoroutineScope.
+- **Elizarov R. (2018).** *Structured concurrency.* KotlinConf. — Дизайн structured concurrency в Kotlin корутинах.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* Kt. Academy. — CPS, Job hierarchy, Dispatchers internals, structured concurrency, Flow internals.
+- **Jemerov D., Isakova S. (2024).** *Kotlin in Action.* 2nd ed. Manning. — Главы по корутинам и Flow.
+
+### Практические руководства
 
 ### Официальная документация
 

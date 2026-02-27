@@ -32,6 +32,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Agile Manifesto (2001): исторический контекст
+
+> **Определение:** Agile — семейство подходов к разработке ПО, основанных на итеративной инкрементальной доставке, самоорганизующихся командах и адаптации к изменениям. Формализован в Agile Manifesto (2001, Snowbird, Utah, 17 авторов).
+
+Agile Manifesto возник как реакция на «тяжёлые» методологии (Waterfall, RUP), доминировавшие в 1990-х. 17 авторов (Kent Beck, Martin Fowler, Robert Martin, Ken Schwaber и др.) сформулировали 4 ценности и 12 принципов, определивших отрасль на десятилетия.
+
+### Scrum, Kanban, XP: три столпа Agile
+
+| Framework | Авторы, год | Ключевая идея | Ограничения |
+|-----------|------------|---------------|-------------|
+| **Scrum** | Schwaber & Sutherland, 1995 | Итерации (sprints), роли (PO, SM, Dev), церемонии | Rigid structure, overhead для малых команд |
+| **XP** | Kent Beck, 1999 | Инженерные практики: TDD, pair programming, CI | Требует высокой дисциплины |
+| **Kanban** | David Anderson, 2010 | Визуализация flow, WIP limits, pull system | Нет timeboxing, может быть «бесконечный поток» |
+| **SAFe** | Dean Leffingwell, 2011 | Scaled Agile для enterprise | Сложность, overhead, «Agile in name only» |
+
+David Snowden (Cynefin, 2007) показал, что Agile эффективен в **Complex** домене, где причинно-следственные связи видны только ретроспективно. В Simple домене достаточно best practices, в Complicated — экспертизы. Cargo cult agile — применение Agile-церемоний без понимания домена проблемы.
+
+> «We are uncovering better ways of developing software by doing it and helping others do it.» — Agile Manifesto, 2001
+
+Martin Fowler в *"The New Methodology"* (2005) предложил различие между adaptive (Agile) и predictive ([[development-process|Waterfall]]) подходами, показав, что adaptive подход оптимален при high uncertainty и changing requirements — типичных для software engineering.
+
+---
+
 ## Agile Manifesto (напоминание)
 
 ```
@@ -166,11 +191,20 @@ Demo to empty room.
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Agile Manifesto](https://agilemanifesto.org/) | Foundation |
-| [Scrum Guide](https://scrumguides.org/) | Guide |
-| [Kanban Method](https://kanbanize.com/kanban-resources/getting-started/what-is-kanban) | Guide |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Agile Manifesto — agilemanifesto.org, 2001 | Манифест | 4 ценности, 12 принципов |
+| 2 | Schwaber K., Sutherland J. "The Scrum Guide" — 1995 (upd. 2020) | Guide | Scrum framework |
+| 3 | Anderson D. "Kanban" — Blue Hole Press, 2010 | Книга | Kanban для knowledge work |
+| 4 | Snowden D. "A Leader's Framework for Decision Making" — HBR, 2007 | Статья | Cynefin: когда Agile уместен |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Agile Manifesto](https://agilemanifesto.org/) | Foundation | Values and principles |
+| 2 | [Scrum Guide](https://scrumguides.org/) | Guide | Official Scrum framework |
+| 3 | [Kanban Method](https://kanbanize.com/kanban-resources/getting-started/what-is-kanban) | Guide | Kanban practices |
 
 
 ## Проверь себя

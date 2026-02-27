@@ -35,6 +35,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Эволюция теорий мотивации
+
+> **Определение:** Мотивация — совокупность внутренних и внешних движущих сил, побуждающих человека к деятельности, задающих границы и формы деятельности, и придающих этой деятельности направленность на достижение определённых целей.
+
+Теории мотивации прошли несколько стадий развития:
+
+| Год | Теоретик | Теория | Ключевая идея |
+|-----|----------|--------|---------------|
+| 1943 | Abraham Maslow | Hierarchy of Needs | Потребности удовлетворяются послойно: физиология → безопасность → принадлежность → признание → самоактуализация |
+| 1959 | Frederick Herzberg | Two-Factor Theory | **Hygiene factors** (зарплата, условия) предотвращают неудовлетворённость; **Motivators** (achievement, recognition) создают удовлетворённость |
+| 1985 | Edward Deci, Richard Ryan | Self-Determination Theory (SDT) | Три базовые потребности: **Autonomy**, **Competence**, **Relatedness** |
+| 2009 | Daniel Pink | Drive | Autonomy + Mastery + Purpose для knowledge workers |
+
+### Self-Determination Theory (Deci & Ryan, 1985)
+
+> **SDT** (Self-Determination Theory) — макротеория мотивации, утверждающая, что люди имеют три врождённые психологические потребности: автономия (autonomy), компетентность (competence) и связанность (relatedness). Удовлетворение этих потребностей ведёт к intrinsic motivation и well-being.
+
+Daniel Pink в *"Drive: The Surprising Truth About What Motivates Us"* (2009) адаптировал SDT для бизнес-контекста:
+
+> **Autonomy** — желание управлять своей жизнью и работой. Для инженеров: выбор инструментов, подходов, time management.
+> **Mastery** — стремление становиться лучше в чём-то важном. Для инженеров: [[engineering-practices|deep technical skills]], решение сложных задач.
+> **Purpose** — желание делать что-то значимое, большее чем ты сам. Для инженеров: impact на пользователей, mission компании.
+
+Herzberg (1959) показал, что повышение зарплаты не увеличивает мотивацию — оно лишь устраняет демотивацию. Это объясняет, почему tech-компании с высокими зарплатами могут иметь низкий engagement: hygiene factors в порядке, но motivators отсутствуют.
+
+---
+
 ## Intrinsic vs Extrinsic Motivation
 
 ```
@@ -202,11 +231,19 @@ flow на работе? Над чем работал?"
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Drive](https://www.amazon.com/Drive-Surprising-Truth-About-Motivates/dp/1594484805) | Book (Daniel Pink) |
-| [Gallup Q12](https://www.gallup.com/workplace/356063/gallup-q12-employee-engagement-survey.aspx) | Research |
-| [Manager Tools](https://www.manager-tools.com/) | Podcast |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Maslow A. "A Theory of Human Motivation" — Psychological Review, 1943 | Статья | Иерархия потребностей |
+| 2 | Herzberg F. "The Motivation to Work" — Wiley, 1959 | Книга | Two-Factor Theory (hygiene vs motivators) |
+| 3 | Deci E., Ryan R. "Intrinsic Motivation and Self-Determination" — Plenum, 1985 | Книга | Self-Determination Theory (Autonomy, Competence, Relatedness) |
+| 4 | Pink D. "Drive" — Riverhead Books, 2009 | Книга | Autonomy + Mastery + Purpose |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Gallup Q12](https://www.gallup.com/workplace/356063/gallup-q12-employee-engagement-survey.aspx) | Research | Engagement metrics |
+| 2 | [Manager Tools](https://www.manager-tools.com/) | Podcast | Practical recognition tactics |
 
 ---
 

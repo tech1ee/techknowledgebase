@@ -35,6 +35,46 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис анализа сложности
+
+### Big O: формальное определение
+
+> **Определение (Bachmann, 1894; Landau, 1909):** f(n) = O(g(n)) ⟺ ∃ c > 0, n₀ > 0: ∀ n ≥ n₀: f(n) ≤ c · g(n)
+
+Говоря простым языком: f растёт **не быстрее** g с точностью до константы. Нотация введена Паулем Бахманом (1894) и популяризирована Эдмундом Ландау (1909), поэтому называется "символ Ландау".
+
+### Семейство асимптотических нотаций
+
+| Нотация | Определение | Аналогия |
+|---------|-------------|----------|
+| **O(g)** | f ≤ c·g (верхняя граница) | "не хуже чем" |
+| **Ω(g)** | f ≥ c·g (нижняя граница) | "не лучше чем" |
+| **Θ(g)** | c₁·g ≤ f ≤ c₂·g (точная) | "ровно" |
+| **o(g)** | f/g → 0 (строго меньше) | "строго лучше" |
+| **ω(g)** | f/g → ∞ (строго больше) | "строго хуже" |
+
+**Распространённая ошибка:** Говорить "O(n²)" когда имеют в виду "Θ(n²)". O — верхняя граница: алгоритм O(n²) может быть и O(n) в лучшем случае.
+
+### Применение в CS: Donald Knuth
+
+> **Атрибуция:** В computer science асимптотическая нотация популяризирована **Donald Knuth** (1976, "Big Omicron and Big Omega and Big Theta") для анализа алгоритмов. Knuth предложил использовать все три нотации (O, Ω, Θ) для полного описания поведения алгоритма.
+
+### Классы сложности
+
+```
+O(1) ⊂ O(log n) ⊂ O(√n) ⊂ O(n) ⊂ O(n log n) ⊂ O(n²) ⊂ O(n³) ⊂ O(2ⁿ) ⊂ O(n!)
+const  logarithm  square    linear  linearithmic  quadratic cubic    exponential factorial
+                   root
+```
+
+### Связи
+
+- [[sorting-algorithms]] — Ω(n log n) lower bound для comparison sort
+- [[graph-algorithms]] — O(V+E) для BFS/DFS
+- [[dynamic-programming]] — анализ сложности DP через число подзадач × стоимость каждой
+
+---
+
 ## Зачем это нужно (Проблема → Решение)
 
 **Представь ситуацию:** У тебя есть два алгоритма поиска. Оба работают за 1 миллисекунду на 100 элементах. Какой выбрать?
@@ -755,12 +795,17 @@ SPACE COMPLEXITY: O(1)
 
 ## Источники
 
-- [Big O Cheat Sheet](https://www.bigocheatsheet.com/) — визуальная шпаргалка со всеми сложностями
-- [Interview Cake: Big O](https://www.interviewcake.com/article/java/big-o-notation-time-and-space-complexity) — практичное объяснение
-- [freeCodeCamp: Big O Explained](https://www.freecodecamp.org/news/big-o-cheat-sheet-time-complexity-chart/) — chart с примерами
-- [AlgoCademy: Master Big O](https://algocademy.com/blog/how-to-master-big-o-notation-for-coding-interviews/) — tips для интервью
-- [GeeksforGeeks: Big O Analysis](https://www.geeksforgeeks.org/dsa/analysis-algorithms-big-o-analysis/) — академический подход
+### Теоретические основы
+
+- **Bachmann, P. (1894). "Die Analytische Zahlentheorie."** — Первое использование O-нотации в математике
+- **Landau, E. (1909). "Handbuch der Lehre von der Verteilung der Primzahlen."** — Популяризация O-нотации (символ Ландау)
+- **Knuth, D.E. (1976). "Big Omicron and Big Omega and Big Theta." ACM SIGACT News.** — Формализация O, Ω, Θ для computer science
+
+### Практические руководства
+
+- [Big O Cheat Sheet](https://www.bigocheatsheet.com/) — визуальная шпаргалка
 - [MIT Big O Lecture](https://web.mit.edu/16.070/www/lecture/big_o.pdf) — формальные доказательства
+- [Interview Cake: Big O](https://www.interviewcake.com/article/java/big-o-notation-time-and-space-complexity) — практичное объяснение
 
 ---
 

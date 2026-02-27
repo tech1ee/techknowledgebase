@@ -30,6 +30,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **SQL (Structured Query Language)** — декларативный язык для управления данными в реляционных СУБД. Основан на **реляционной алгебре** (Codd, 1970) и **реляционном исчислении** (Codd, 1972).
+
+### Реляционная модель (Codd, 1970)
+
+E.F. Codd в работе «A Relational Model of Data for Large Shared Data Banks» определил:
+- **Relation** = таблица (набор кортежей одной структуры)
+- **Attribute** = столбец (именованный домен значений)
+- **Tuple** = строка (набор значений атрибутов)
+- **Key** = минимальный набор атрибутов, уникально идентифицирующий кортеж
+
+### Реляционная алгебра: 6 базовых операций
+
+| Операция | SQL-аналог | Описание |
+|----------|-----------|----------|
+| **σ (Selection)** | WHERE | Фильтрация строк по условию |
+| **π (Projection)** | SELECT columns | Выбор столбцов |
+| **× (Cartesian product)** | CROSS JOIN | Все комбинации строк |
+| **⋈ (Join)** | JOIN ON | Соединение по условию |
+| **∪ (Union)** | UNION | Объединение множеств строк |
+| **− (Difference)** | EXCEPT | Разность множеств строк |
+
+> **См. также**: [[databases-overview]] — карта раздела, [[database-design-optimization]] — оптимизация запросов
+
+---
+
 ## TL;DR
 
 - **SELECT** — выборка данных, основа всего
@@ -1238,10 +1265,16 @@ ORDER BY category, created_at DESC;
 
 ## Источники
 
+### Теоретические основы
+- Codd E.F. (1970). *A Relational Model of Data for Large Shared Data Banks*. — Фундамент реляционной модели и алгебры
+- Chamberlin D., Boyce R. (1974). *SEQUEL: A Structured English Query Language*. — Первый SQL (IBM)
+- ISO/IEC 9075 (SQL Standard). — Эволюция: SQL-86, SQL-92, SQL:1999, SQL:2003, SQL:2011, SQL:2016, SQL:2023
+
+### Практические руководства
 - [PostgreSQL Documentation: SQL Syntax](https://www.postgresql.org/docs/current/sql.html)
 - [Modern SQL](https://modern-sql.com/) — продвинутые SQL конструкции
 - [Use The Index, Luke](https://use-the-index-luke.com/) — SQL с точки зрения производительности
-- "SQL Performance Explained" by Markus Winand
+- Winand M. *SQL Performance Explained*. — Оптимизация запросов
 
 ---
 

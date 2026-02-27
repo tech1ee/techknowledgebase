@@ -90,6 +90,37 @@ Android — это не просто "Linux с Java". Это глубоко мо
 
 ---
 
+## Теоретические основы
+
+### Формальное определение архитектуры платформы
+
+> **Платформенная архитектура** (platform architecture) — многоуровневая организация программных компонентов, в которой каждый уровень предоставляет абстракции для вышестоящего и использует сервисы нижестоящего (Bass L., Clements P., Kazman R. *Software Architecture in Practice*, 2012).
+
+Android реализует **layered architecture** с пятью уровнями: Linux Kernel → HAL → Native Libraries + ART → Application Framework → Applications. Эта модель соответствует классическому подходу Дейкстры (E.W. Dijkstra, *«The Structure of the "THE"-Multiprogramming System»*, 1968), адаптированному для мобильных ограничений.
+
+### Сравнение с альтернативными мобильными архитектурами
+
+| Аспект | Android | iOS | Windows Phone (†2019) |
+|--------|---------|-----|-----------------------|
+| Ядро | Linux (монолитное) | XNU (гибридное, Mach + BSD) | Windows NT (гибридное) |
+| Runtime | ART (register-based VM) | Native (LLVM/ARC) | CLR (.NET) |
+| IPC | Binder (1 копирование, mmap) | XPC / Mach ports | COM / WinRT |
+| Модель приложения | Компонентная (4 entry points) | Монолитная (UIApplication) | Page-based (XAML) |
+| Управление памятью | GC (Concurrent Copying) + LMK | ARC (compile-time) | GC (.NET) |
+| Модель запуска | Zygote fork (COW) | dyld shared cache | CLR cold start |
+
+### Теоретические основы ключевых механизмов
+
+**Binder IPC** основан на принципе *memory-mapped I/O* (Bovet D., Cesati M. *Understanding the Linux Kernel*, 2005). Использование `mmap()` для отображения kernel buffer в адресное пространство получателя сокращает количество копирований с двух до одного — что критично для мобильных устройств с ограниченной пропускной способностью шины памяти.
+
+**Zygote** реализует паттерн *template process* на основе механизма *Copy-on-Write* (COW), описанного ещё в работах по виртуальной памяти VAX/VMS (Levy H., Lipman P., 1982). Разделяемая память framework-классов (~50 МБ) между всеми приложениями — прямое применение COW для экономии физической RAM.
+
+**Low Memory Killer (LMK)** — расширение стандартного Linux OOM Killer, реализующее *priority-based preemptive resource management* (Silberschatz A., Galvin P. *Operating System Concepts*, 2018). В отличие от OOM Killer, который срабатывает при критической нехватке памяти, LMK работает превентивно на основе пороговых значений (`minfree`), привязанных к приоритетам процессов.
+
+> **Связь с CS:** Архитектура Android формально описана в AOSP-документации *[Platform Architecture](https://source.android.com/docs/core/architecture)*. Теоретическая база IPC-механизмов изложена в Tanenbaum A. *Modern Operating Systems* (2014), глава 2.4 «Interprocess Communication». Концепция виртуальных машин — в Smith J., Nair R. *Virtual Machines* (2005).
+
+---
+
 ## Почему Android выбрал именно такую архитектуру?
 
 Архитектура Android — это **ответ на ограничения мобильных устройств 2007 года**. Понимание этих ограничений объясняет каждое архитектурное решение.
@@ -747,20 +778,25 @@ adb shell dumpsys binder_transactions
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-**Книги:**
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android на уровне ядра: Binder IPC, Zygote, ART runtime, system_server
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая архитектуру платформы и ART
-- Goetz B. (2006). Java Concurrency in Practice. — concurrency на JVM, применимо к пониманию threading model в ART и Android
+### Теоретические основы
 
-**Веб-ресурсы:**
-- [Android Runtime and Dalvik - AOSP](https://source.android.com/docs/core/runtime) — официальная документация ART
-- [Platform Architecture - Android Developers](https://developer.android.com/guide/platform) — архитектура платформы
-- [ART JIT Compiler - AOSP](https://source.android.com/docs/core/runtime/jit-compiler) — JIT компилятор
-- [Configure ART - AOSP](https://source.android.com/docs/core/runtime/configure) — конфигурация ART
-- [Binder IPC - Android Open Source](https://source.android.com/docs/core/architecture/hidl/binder-ipc) — Binder internals
-- [Understanding ViewModel Persistence - droidcon](https://www.droidcon.com/2025/01/13/understanding-viewmodel-persistence-across-configuration-changes-in-android/) — ViewModel и process death
+- Bass L., Clements P., Kazman R. (2012). *Software Architecture in Practice, 3rd Edition*. — формальная теория layered architecture и архитектурных стилей
+- Tanenbaum A. (2014). *Modern Operating Systems, 4th Edition*. — теория IPC, виртуальной памяти и управления процессами
+- Silberschatz A., Galvin P. (2018). *Operating System Concepts, 10th Edition*. — priority-based scheduling и memory management
+- Bovet D., Cesati M. (2005). *Understanding the Linux Kernel, 3rd Edition*. — mmap, Copy-on-Write, OOM Killer в Linux
+- Smith J., Nair R. (2005). *Virtual Machines: Versatile Platforms for Systems and Processes*. — теория виртуальных машин (ART vs JVM)
+- Dijkstra E.W. (1968). *The Structure of the "THE"-Multiprogramming System*. — оригинальная работа по layered architecture
+
+### Практические руководства
+
+- Vasavada N. (2019). *Android Internals: A Confectioner's Cookbook*. — Binder IPC, Zygote, ART runtime, system_server
+- Meier R. (2022). *Professional Android, 4th Edition*. — архитектура платформы и ART
+- Goetz B. (2006). *Java Concurrency in Practice*. — concurrency на JVM, применимо к threading model ART
+- [Android Runtime and Dalvik — AOSP](https://source.android.com/docs/core/runtime) — официальная документация ART
+- [Platform Architecture — Android Developers](https://developer.android.com/guide/platform) — архитектура платформы
+- [Binder IPC — AOSP](https://source.android.com/docs/core/architecture/hidl/binder-ipc) — Binder internals
 
 ---
 

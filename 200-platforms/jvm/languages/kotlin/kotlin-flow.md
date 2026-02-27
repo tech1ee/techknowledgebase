@@ -98,6 +98,37 @@ viewLifecycleOwner.lifecycleScope.launch {
 
 ---
 
+## Теоретические основы: формальный базис Flow
+
+### Reactive Streams и Backpressure
+
+Kotlin Flow реализует **Reactive Streams** семантику через механизм корутин:
+
+| Reactive Streams | Kotlin Flow | Механизм |
+|------------------|-------------|----------|
+| `Publisher<T>` | `Flow<T>` | Interface с единственным методом `collect` |
+| `Subscriber<T>` | `FlowCollector<T>` | SAM interface: `emit(value: T)` |
+| `Subscription.request(n)` | `suspend` | Backpressure через suspension: emit приостанавливается, пока collector не готов |
+| `Processor<T,R>` | Intermediate operators | `map`, `filter`, `transform` |
+
+Ключевое отличие от RxJava/Combine: **backpressure бесплатна**. В RxJava нужно выбирать стратегию (buffer/drop/latest). В Flow — `emit()` является `suspend` функцией и естественно ждёт, пока collector обработает предыдущее значение.
+
+### Cold vs Hot: формальное различие
+
+> **Cold stream** — producer активируется при появлении subscriber и создаёт уникальную последовательность для каждого. Формально: `collect()` запускает coroutine builder `flow {}`.
+>
+> **Hot stream** — producer активен независимо от subscribers. Формально: StateFlow/SharedFlow backed by ConflatedBroadcastChannel/MutableSharedFlow, значения существуют вне lifecycle collector'а.
+
+Это различие восходит к **hot/cold Observables** в ReactiveX (Meijer, 2012). В терминах FRP (Elliott, 1997): Cold Flow ≈ Event (дискретная последовательность по запросу), Hot Flow ≈ Behavior (непрерывное значение во времени).
+
+### Context Preservation Invariant
+
+Flow гарантирует **context preservation**: код внутри `flow {}` builder выполняется в контексте collector'а (если не изменён через `flowOn`). Формально: `flow { emit(x) }.collect { use(x) }` — и emit, и use выполняются в одном CoroutineContext. Нарушение (emit из другого context) приводит к `IllegalStateException`.
+
+> **Связь**: Reactive Streams → [[android-rxjava]], Hot/Cold → [[ios-combine]], Backpressure → [[kotlin-coroutines]]
+
+---
+
 ## Типы Flow
 
 Flow делятся на холодные и горячие:

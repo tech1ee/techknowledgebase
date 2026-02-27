@@ -36,6 +36,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Image Loading Pipeline** — конвейер загрузки, декодирования, трансформации и отображения изображений на мобильном устройстве. Включает управление памятью, многоуровневое кэширование и привязку к lifecycle компонентов UI.
+
+**Ключевые концепции:**
+
+| Концепция | Суть | Проблема на мобильном |
+|-----------|------|-----------------------|
+| Bitmap Memory Management | Изображение в памяти занимает W × H × 4 bytes (ARGB_8888) | 1080×1920 фото = ~8MB; 10 фото = 80MB → OOM |
+| Object Pool Pattern | Переиспользование объектов вместо создания новых | BitmapPool (Glide): recycle decoded bitmaps |
+| Two-Level Cache | Memory cache (fast) + Disk cache (persistent) | Memory: LruCache (~1/8 heap); Disk: DiskLruCache |
+| Lifecycle Awareness | Привязка запросов к lifecycle компонента | Cancel загрузку при onDestroy; avoid memory leaks |
+| Downsampling | Декодирование изображения в меньшем разрешении | BitmapFactory.Options.inSampleSize: decode 4000×3000 → 1000×750 |
+
+**Pipeline этапы:**
+
+```
+URL → Check Memory Cache → Check Disk Cache → Network Fetch
+                                                    ↓
+Display ← Transform ← Decode (downsample) ← Save to Disk Cache
+   ↓
+Save to Memory Cache
+```
+
+Каждый этап — potential failure point. Memory cache miss → disk I/O (10-100ms). Disk cache miss → network request (100ms-5s). Network failure → placeholder/error image.
+
+**BitmapFactory.Options.inSampleSize** — ключевой механизм Android для предотвращения OOM. Если ImageView = 300×300dp, а оригинал = 4000×3000px, загрузка оригинала тратит ~48MB RAM впустую. Downsampling с inSampleSize=4 загружает 1000×750 (~3MB).
+
+> **Object Pool Pattern** в контексте Bitmap: создание и GC крупных Bitmap объектов вызывает GC pressure и jank. BitmapPool (Glide/Coil) переиспользует освобождённые Bitmap, снижая allocations. Это критично для RecyclerView со множеством изображений.
+
+→ Связано: [[system-design-android]], [[caching-strategies]], [[android-memory-leaks]], [[android-recyclerview-internals]]
+
+---
+
 ## Задача -- "Design Image Library"
 
 Формулировка намеренно расплывчатая: **"Design an Image Library"**. Интервьюер ожидает, что ты сам уточнишь требования, сузишь scope и предложишь MVP.
@@ -425,8 +459,13 @@ Image Target delivery -> Main thread (UI update)
 
 ## Источники
 
+### Теоретические основы
+
+- Winters T. et al. (2020). *Software Engineering at Google*. Chapter 21: Dependency Management. — Trade-offs зависимостей в масштабных проектах.
+
+### Практические руководства
+
 - [Mobile System Design: Image Library Exercise](https://github.com/iartr/mobile-system-design/blob/master/exercises/image-library.md) -- оригинальный walkthrough
 - [Android: Caching Bitmaps](https://developer.android.com/topic/performance/graphics/cache-bitmap) -- Google рекомендации по кэшированию
 - [Glide BitmapPool](https://github.com/bumptech/glide/blob/master/library/src/main/java/com/bumptech/glide/load/engine/bitmap_recycle/BitmapPool.java) -- реализация пула Bitmap
 - [Coil Image Loader](https://coil-kt.github.io/coil/) -- современная Kotlin-first библиотека
-- "Software Engineering at Google", Chapter 21: Dependency Management -- trade-offs зависимостей

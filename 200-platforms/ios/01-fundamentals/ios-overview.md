@@ -106,6 +106,49 @@ iOS — мобильная операционная система Apple на б
 
 ---
 
+## Теоретические основы
+
+> **Определение:** iOS (ранее iPhone OS) — проприетарная мобильная операционная система Apple, основанная на открытом ядре Darwin/XNU, впервые представленная 9 января 2007 года Стивом Джобсом на Macworld Conference & Expo.
+
+### Историческая хронология
+
+| Год | Событие | Значение |
+|-----|---------|----------|
+| 2007 | iPhone OS 1.0 | Первый выпуск; без App Store, только встроенные приложения |
+| 2008 | iPhone OS 2.0 + App Store | Открытие платформы для сторонних разработчиков; 500 приложений на старте |
+| 2010 | Переименование в iOS 4 | Многозадачность, папки, FaceTime |
+| 2014 | iOS 8 + Swift 1.0 | Новый язык программирования (Lattner et al., Apple) |
+| 2017 | iOS 11 + ARKit | Дополненная реальность как платформенная функция |
+| 2019 | iOS 13 + SwiftUI | Декларативный UI-фреймворк, scene-based lifecycle |
+| 2024 | iOS 18 + Apple Intelligence | On-device AI/ML модели |
+
+### Архитектурный фундамент
+
+> **XNU (X is Not Unix)** — гибридное ядро, объединяющее микроядро Mach (Carnegie Mellon University, 1985) с монолитным BSD-слоем (FreeBSD) и объектно-ориентированной подсистемой драйверов IOKit. Данная архитектура обеспечивает баланс между изоляцией процессов (Mach) и производительностью системных вызовов (BSD).
+
+Философия «закрытого сада» (walled garden) Apple восходит к работам по безопасности операционных систем Saltzer & Schroeder (1975), сформулировавшим принцип наименьших привилегий (principle of least privilege). В iOS этот принцип реализован через механизм sandbox-изоляции и entitlements.
+
+### Модели управления памятью: ARC vs GC
+
+| Характеристика | ARC (iOS) | GC (Android/JVM) |
+|----------------|-----------|-------------------|
+| Тип | Подсчёт ссылок (reference counting) | Трассировка (tracing, mark-and-sweep) |
+| Время работы | Compile-time (инструментация) | Runtime (фоновые потоки) |
+| Детерминизм | Да — deinit вызывается немедленно | Нет — finalize не гарантирован |
+| Паузы | Отсутствуют | GC-паузы (latency spikes) |
+| Циклические ссылки | Не обнаруживаются автоматически | Обнаруживаются и собираются |
+| Overhead | Низкий (atomic increment/decrement) | Высокий (mark phase, compaction) |
+
+Теоретическое обоснование ARC описано в работах Collins (1960) по reference counting и Baker (1978) по real-time garbage collection. Apple выбрала ARC для обеспечения предсказуемого latency, критичного для 60/120 FPS рендеринга UI.
+
+### Связь с CS-фундаментом
+
+- [[reference-counting-arc]] — теория подсчёта ссылок и сравнение с tracing GC
+- [[os-overview]] — концепции операционных систем, на которых построен Darwin
+- [[mobile-platform-architecture]] — сравнительный анализ мобильных платформ
+
+---
+
 ## Зачем разработчику глубоко понимать iOS
 
 Многие разработчики знают "как написать приложение", но не понимают "почему оно работает именно так". Это приводит к типичным проблемам:
@@ -375,21 +418,21 @@ iOS РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
 
 ## Источники
 
-### Официальные
+### Теоретические основы
+- Collins G. E. (1960). *A Method for Overlapping and Erasure of Lists.* Communications of the ACM — первое описание reference counting
+- Saltzer J. H., Schroeder M. D. (1975). *The Protection of Information in Computer Systems.* Proceedings of the IEEE — принцип наименьших привилегий
+- Baker H. G. (1978). *List Processing in Real Time on a Serial Computer.* Communications of the ACM — real-time reference counting
+- Accetta M. et al. (1986). *Mach: A New Kernel Foundation for UNIX Development.* USENIX — оригинальная статья о микроядре Mach
+- Levin J. (2016). *Mac OS X and iOS Internals: To the Apple's Core.* Wrox — глубокое погружение в XNU kernel
+
+### Практические руководства
 - [Apple Developer Documentation](https://developer.apple.com/documentation/) — официальная документация
 - [Swift.org](https://www.swift.org/documentation/) — язык Swift
 - [WWDC Videos](https://developer.apple.com/videos/) — ежегодные обновления
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) — дизайн гайдлайны
-
-### Roadmaps & Best Practices
 - [roadmap.sh/ios](https://roadmap.sh/ios) — iOS Developer Roadmap
-- [iOS Development Hub 2025](https://www.alimertgulec.com/en/blog/ios-development-hub-2025) — comprehensive guide
-- [Modern iOS Architecture 2025](https://medium.com/@csmax/the-ultimate-guide-to-modern-ios-architecture-in-2025-9f0d5fdc892f)
-
-### Community
 - [Hacking with Swift](https://www.hackingwithswift.com/) — tutorials by Paul Hudson
 - [SwiftLee](https://www.avanderlee.com/) — advanced Swift articles
-- [Swift by Sundell](https://www.swiftbysundell.com/) — Swift patterns
 - [Point-Free](https://www.pointfree.co/) — TCA and functional Swift
 
 ---

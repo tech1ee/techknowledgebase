@@ -71,6 +71,37 @@ status: published
 
 ---
 
+## Теоретические основы
+
+> **RAG (Retrieval-Augmented Generation)** — архитектурный паттерн, где генеративная модель дополняется внешним поиском релевантной информации. Формально: $P(answer|query) = \sum_z P(z|query) \cdot P(answer|z, query)$, где $z$ — retrieved документы (Lewis et al., 2020).
+
+Этот tutorial реализует RAG pipeline, основанный на следующих теоретических компонентах:
+
+| Компонент | Теория | Реализация в tutorial |
+|-----------|--------|----------------------|
+| **Embedding** | Distributional semantics (Harris, 1954; Mikolov, 2013) | OpenAI text-embedding-3-small |
+| **Vector Search** | Approximate Nearest Neighbor (Malkov & Yashunin, 2018) | ChromaDB / Qdrant (HNSW) |
+| **Hybrid Search** | RRF fusion (Cormack et al., 2009) | BM25 + vector с RRF |
+| **Reranking** | Cross-encoder (Nogueira & Cho, 2019) | Cohere Rerank / BGE |
+| **Generation** | Conditional text generation (Vaswani et al., 2017) | OpenAI GPT-4o с контекстом |
+| **Evaluation** | RAGAS (Es et al., 2023) | Faithfulness, relevance, recall |
+
+> **Ключевая идея RAG**: вместо хранения знаний в параметрах модели (что дорого и быстро устаревает), знания хранятся во внешней базе и подаются в контекст на момент запроса. Это решает проблемы: hallucination, устаревание, domain-специфичность.
+
+**Pipeline этого tutorial:**
+
+```
+Documents → Chunking → Embedding → Vector DB
+                                       ↓
+User Query → Embedding → Hybrid Search → Reranking → LLM → Answer
+```
+
+Каждый этап имеет свои параметры и tradeoffs, которые разбираются в соответствующих секциях.
+
+См. также: [[rag-advanced-techniques|RAG Advanced]] — продвинутые паттерны, [[embeddings-complete-guide|Embeddings]] — теория embeddings, [[vector-databases-guide|Vector DBs]] — ANN-алгоритмы.
+
+---
+
 ## Зачем это нужно / Какую проблему решает
 
 **Представьте ситуацию:** у вашей компании 500+ страниц документации, политик, FAQ. Сотрудники тратят часы на поиск информации. Вы хотите чатбот, который мгновенно находит ответы.
@@ -2148,36 +2179,27 @@ chain.invoke(
 
 ---
 
-## Источники и дополнительные материалы
+## Источники
 
-### Tutorials & Guides
-- [LangChain RAG Tutorial](https://docs.langchain.com/oss/python/langchain/rag) - Official LangChain documentation
-- [Botpress: How to Build a RAG Chatbot in 2025](https://botpress.com/blog/build-rag-chatbot)
-- [n8n: Build a Custom Knowledge RAG Chatbot](https://blog.n8n.io/rag-chatbot/)
+### Теоретические основы
 
-### Architecture & Best Practices
-- [Humanloop: 8 RAG Architectures](https://humanloop.com/blog/rag-architectures)
-- [orq.ai: RAG Architecture Explained](https://orq.ai/blog/rag-architecture)
-- [Analytics Vidhya: Enterprise RAG Failures](https://www.analyticsvidhya.com/blog/2025/07/silent-killers-of-production-rag/)
-- [Label Studio: Seven RAG Pitfalls](https://labelstud.io/blog/seven-ways-your-rag-system-could-be-failing-and-how-to-fix-them/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Lewis P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. arXiv:2005.11401 | Формализация RAG |
+| 2 | Malkov Y., Yashunin D. (2018). *Efficient and Robust Approximate Nearest Neighbor using HNSW Graphs*. arXiv:1603.09320 | HNSW — основа vector search |
+| 3 | Cormack G. et al. (2009). *Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods*. SIGIR | RRF для hybrid search |
+| 4 | Es S. et al. (2023). *RAGAS: Automated Evaluation of RAG*. arXiv:2309.15217 | Метрики качества RAG |
+| 5 | Nogueira R., Cho K. (2019). *Passage Re-ranking with BERT*. arXiv:1901.04085 | Cross-encoder reranking |
 
-### Chunking Strategies
-- [Firecrawl: Best Chunking Strategies for RAG in 2025](https://www.firecrawl.dev/blog/best-chunking-strategies-rag-2025)
-- [DataCamp: Chunking Strategies](https://www.datacamp.com/blog/chunking-strategies)
-- [Weaviate: Chunking Strategies](https://weaviate.io/blog/chunking-strategies-for-rag)
+### Практические руководства
 
-### Vector Databases
-- [Firecrawl: Best Vector Databases 2025](https://www.firecrawl.dev/blog/best-vector-databases-2025)
-- [Medium: Vector Database Comparison](https://medium.com/tech-ai-made-easy/vector-database-comparison-pinecone-vs-weaviate-vs-qdrant-vs-faiss-vs-milvus-vs-chroma-2025-15bf152f891d)
-
-### Hybrid Search & Reranking
-- [Superlinked: Optimizing RAG with Hybrid Search & Reranking](https://superlinked.com/vectorhub/articles/optimizing-rag-with-hybrid-search-reranking)
-- [Weaviate: Hybrid Search Explained](https://weaviate.io/blog/hybrid-search-explained)
-- [Cohere Rerank](https://cohere.com/rerank)
-- [Analytics Vidhya: Top Rerankers for RAG](https://www.analyticsvidhya.com/blog/2025/06/top-rerankers-for-rag/)
-
-### Evaluation
-- [RAGAS Documentation](https://docs.ragas.io/en/stable/)
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [LangChain RAG Tutorial](https://docs.langchain.com/oss/python/langchain/rag) | Официальный tutorial |
+| 2 | [Humanloop: 8 RAG Architectures](https://humanloop.com/blog/rag-architectures) | Архитектурные паттерны |
+| 3 | [Weaviate: Chunking Strategies](https://weaviate.io/blog/chunking-strategies-for-rag) | Стратегии chunking |
+| 4 | [Cohere Rerank](https://cohere.com/rerank) | Reranking API |
+| 5 | [RAGAS Documentation](https://docs.ragas.io/en/stable/) | RAG evaluation |
 - [FutureAGI: RAG Evaluation Metrics 2025](https://futureagi.com/blogs/rag-evaluation-metrics-2025)
 - [Cohorte: Evaluating RAG Systems in 2025](https://www.cohorte.co/blog/evaluating-rag-systems-in-2025-ragas-deep-dive-giskard-showdown-and-the-future-of-context)
 

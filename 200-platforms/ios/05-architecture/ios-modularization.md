@@ -31,6 +31,39 @@ prerequisites:
 
 Модульная архитектура iOS-приложений через Swift Package Manager (SPM) позволяет разделить монолитное приложение на независимые модули с явными границами. Это ускоряет сборку (благодаря инкрементальной компиляции), улучшает переиспользование кода, упрощает тестирование и масштабирование команды. Ключевые концепции: feature-модули, interface-модули для абстракций, core-модули для shared-логики, и правильная настройка зависимостей через Package.swift.
 
+## Теоретические основы
+
+> **Определение:** Модуляризация — процесс декомпозиции программной системы на независимые модули с определёнными интерфейсами и скрытой реализацией. Основан на принципе Information Hiding (Parnas, 1972): каждый модуль скрывает design decision за стабильным интерфейсом.
+
+### Теоретический фундамент модуляризации
+
+| Принцип | Автор | Определение | Реализация в iOS |
+|---------|-------|-------------|-----------------|
+| **Information Hiding** | Parnas (1972) | Модуль скрывает решение, которое может измениться | `internal` access level по умолчанию в SPM |
+| **High Cohesion** | Constantine & Yourdon (1979) | Элементы модуля тесно связаны по функции | Feature module = один домен |
+| **Low Coupling** | Constantine & Yourdon (1979) | Минимальные зависимости между модулями | Interface modules (протоколы) |
+| **Acyclic Dependencies** | Martin (2003) | Граф зависимостей не содержит циклов | Package.swift enforces DAG |
+
+> **Закон Conway (1968):** «Организации, проектирующие системы, ограничены дизайном, который воспроизводит коммуникационную структуру этих организаций.» Модуляризация iOS-приложения часто отражает структуру команды: каждая feature-команда владеет своим модулем.
+
+### Типы модулей в iOS
+
+| Тип модуля | Назначение | Зависимости | Пример |
+|-----------|-----------|-------------|--------|
+| **App** | Entry point, composition root | Все feature modules | `MyApp` target |
+| **Feature** | Один user-facing функционал | Interface + Core modules | `ProfileFeature` |
+| **Interface** | Протоколы и DTO | Минимальные | `NetworkInterface` |
+| **Core** | Shared utilities | Только Interface modules | `CoreUI`, `CoreNetwork` |
+| **Testing** | Test helpers и mocks | Interface modules | `TestHelpers` |
+
+### Связь с CS-фундаментом
+
+- [[ios-xcode-fundamentals]] — Xcode targets и project structure
+- [[ios-compilation-pipeline]] — влияние модулей на время компиляции
+- [[android-modularization]] — аналогичная модуляризация с Gradle modules
+
+---
+
 ## Аналогии
 
 **Модули как комнаты в доме**: Монолитное приложение — это студия, где всё в одном пространстве. Модульное — дом с отдельными комнатами (кухня, спальня, ванная). Каждая комната имеет дверь (public API), и вы не можете просто взять что-то из спальни, находясь на кухне — нужно пройти через дверь (импортировать модуль).
@@ -1652,10 +1685,15 @@ DSButton(title: "Login") {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает работу со Swift Package Manager, targets и frameworks, что является технической основой модуляризации iOS-проектов.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры организации проекта с разделением ответственности, которые естественно масштабируются в модульную архитектуру.
-- Eidhof C. et al. (2019). *Advanced Swift.* — объясняет access control, generics и protocol-oriented programming — ключевые языковые механизмы, обеспечивающие правильные границы между модулями.
+### Теоретические основы
+- Parnas D. L. (1972). *On the Criteria To Be Used in Decomposing Systems into Modules.* Communications of the ACM — Information Hiding
+- Constantine L., Yourdon E. (1979). *Structured Design.* Prentice Hall — Cohesion и Coupling
+- Conway M. E. (1968). *How Do Committees Invent?* Datamation — закон Conway
+- Martin R. C. (2003). *Agile Software Development.* — Acyclic Dependencies Principle
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Swift Package Manager
+- Eidhof C. et al. (2019). *Advanced Swift.* — access control, generics, protocol-oriented programming
 
 ---
 

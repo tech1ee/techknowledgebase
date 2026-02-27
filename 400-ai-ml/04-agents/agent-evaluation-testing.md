@@ -79,6 +79,39 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Evaluation (оценка)** AI-агентов — формальный процесс измерения качества автономных систем по множеству критериев: корректность результата, эффективность процесса (trajectory), стоимость и безопасность. В отличие от детерминированного ПО, оценка агентов имеет вероятностную природу.
+
+Тестирование AI-агентов опирается на несколько теоретических фундаментов:
+
+| Область | Ключевой вклад | Применение к агентам |
+|---------|---------------|---------------------|
+| **Теория тестирования ПО** | Myers (1979), *The Art of Software Testing* | Unit/integration/system уровни, regression testing |
+| **Статистический контроль** | Wald (1945), Sequential Analysis | Стохастическая природа — необходимость N прогонов для статистической значимости |
+| **Метрики IR** | Voorhees (2000), TREC | Precision, Recall, nDCG — для оценки retrieval-компонентов |
+| **LLM-as-Judge** | Zheng L. et al. (2023), arXiv:2306.05685 | Автоматическая оценка через отдельную LLM |
+| **Trajectory Evaluation** | Yao S. et al. (2022), ReAct paper | Оценка не только результата, но и пути решения |
+| **Benchmark Design** | Kiela D. et al. (2021), *Dynabench* | Динамические бенчмарки с adversarial примерами |
+
+> **Фундаментальная проблема**: для детерминированного ПО $f(x) = y$ и тест проверяет $y = expected$. Для агентов $f(x) \sim P(Y|x)$ — результат стохастичен, поэтому вместо assert нужны **вероятностные метрики**: pass rate по N прогонам, confidence intervals, статистические тесты.
+
+**Типы метрик для AI-агентов:**
+
+| Категория | Метрики | Что измеряет |
+|-----------|---------|--------------|
+| **Correctness** | Task success rate, factual accuracy | Правильность результата |
+| **Efficiency** | Steps to completion, token usage, latency | Эффективность процесса |
+| **Safety** | Guardrail violation rate, harmful output rate | Безопасность |
+| **Trajectory** | Tool selection accuracy, reasoning quality | Качество рассуждений |
+| **Cost** | $/task, tokens/task | Экономическая эффективность |
+
+Подход **LLM-as-Judge** (Zheng et al., 2023) использует отдельную LLM для оценки ответов. Исследования показывают корреляцию 80-85% с human evaluators, но с известными bias: предпочтение длинных ответов, position bias, self-enhancement bias (модель оценивает свои ответы выше).
+
+См. также: [[agent-debugging-troubleshooting|Agent Debugging]] — диагностика проблем, [[ai-observability-monitoring|Observability]] — мониторинг в production, [[testing-fundamentals|Testing Fundamentals]] — общие принципы тестирования.
+
+---
+
 ## Философия: почему тестирование агентов особенное
 
 ### Классическое тестирование vs Agent testing
@@ -1435,11 +1468,28 @@ Continuous evaluation в production напрямую опирается на obs
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- Huyen, C. (2022). *Designing Machine Learning Systems.* O'Reilly Media. — Главы про evaluation и testing ML моделей, метрики качества и A/B тестирование.
-- Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach.* 4th Edition. Pearson. — Методы оценки интеллектуальных агентов, performance measures и benchmark design.
-- Géron, A. (2022). *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow.* 3rd Edition. O'Reilly Media. — Практические подходы к evaluation, cross-validation и metrics.
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Zheng L. et al. (2023). *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*. arXiv:2306.05685 | Формализация LLM-as-Judge, анализ bias |
+| 2 | Myers G. (1979). *The Art of Software Testing*. Wiley | Классические принципы тестирования ПО |
+| 3 | Kiela D. et al. (2021). *Dynabench: Rethinking Benchmarking in NLP*. NAACL | Динамические бенчмарки с adversarial примерами |
+| 4 | Voorhees E. (2000). *Variations in Relevance Judgments and the Measurement of Retrieval Effectiveness*. Information Processing & Management | Метрики IR: Precision, Recall, nDCG |
+| 5 | Wald A. (1945). *Sequential Tests of Statistical Hypotheses*. Annals of Mathematical Statistics | Статистическая значимость при стохастическом тестировании |
+| 6 | Yao S. et al. (2022). *ReAct: Synergizing Reasoning and Acting in LLMs*. arXiv:2210.03629 | Trajectory evaluation — оценка пути решения |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Braintrustdata — AI Eval Guide](https://www.braintrustdata.com/) | Платформа для eval агентов |
+| 2 | [Arize AI — LLM Evaluation](https://arize.com/) | Observability и evaluation |
+| 3 | [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) | Best practices для оценки |
+| 4 | [OpenAI — Evals Framework](https://github.com/openai/evals) | Open-source eval framework |
+| 5 | [LangSmith](https://smith.langchain.com/) | Testing и мониторинг LangChain/LangGraph |
 
 ---
 

@@ -43,6 +43,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Когнитивная наука обучения (Science of Learning)** — междисциплинарная область, объединяющая когнитивную психологию, нейронауку и педагогику для изучения механизмов приобретения, хранения и применения знаний (Dunlosky et al., 2013).
+
+Раздел Thinking & Learning построен на пересечении нескольких фундаментальных исследовательских традиций:
+
+| Традиция | Ключевые авторы | Вклад |
+|----------|----------------|-------|
+| Когнитивная психология памяти | Ebbinghaus (1885), Bartlett (1932), Miller (1956) | Кривая забывания, schema theory, магическое число 7±2 |
+| Desirable Difficulties | R. Bjork & E. Bjork (1994, 2011) | Spacing, interleaving, testing effect, generation |
+| Deliberate Practice | Ericsson, Krampe & Tesch-Römer (1993) | Качество практики > количество часов |
+| Flow и оптимальный опыт | Csikszentmihalyi (1975, 1990) | Challenge-skill balance, автотелический опыт |
+| Cognitive Load Theory | Sweller (1988, 1994) | Intrinsic, extraneous, germane load |
+| Deep Work и внимание | Newport (2016), Gloria Mark (2004-2023) | Фрагментация внимания, 47-секундный цикл |
+| Self-Determination Theory | Deci & Ryan (1985, 2000) | Автономия, компетентность, связь |
+| Нейропластичность | Hebb (1949), Merzenich (2013) | Нейроны, которые активируются вместе, связываются |
+
+Ключевое мета-исследование — **Dunlosky et al. (2013)**, «Improving Students' Learning With Effective Learning Techniques», Psychological Science in the Public Interest — проанализировало 10 техник обучения и ранжировало их по эффективности. Результат: retrieval practice и distributed practice получили наивысший рейтинг, а перечитывание и подчёркивание — низший.
+
+> **Принцип Бьорка:** «Conditions that make performance improve rapidly often fail to produce durable learning.» Лёгкость обучения в моменте обратно пропорциональна долгосрочному запоминанию.
+
+Архитектура раздела отражает эту научную базу: **Foundation** (нейронаука, когнитивная нагрузка) → **Methods** (доказанные техники) → **Focus** (управление вниманием) → **Tools** (ментальные модели, системное мышление) → **Wellbeing** (устойчивая продуктивность).
+
+---
+
 ## Быстрая навигация
 
 | Проблема | Куда идти |

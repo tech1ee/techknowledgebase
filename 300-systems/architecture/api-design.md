@@ -43,6 +43,79 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Что такое API формально
+
+> **API (Application Programming Interface)** — формальный контракт, определяющий набор операций, их входы, выходы и побочные эффекты, через которые одна программная система взаимодействует с другой.
+
+API — это **абстракция**: клиент знает **что** может сделать, но не знает **как** это реализовано. Это прямое применение принципа **information hiding** (Parnas, 1972).
+
+### Историческая эволюция удалённых API
+
+| Парадигма | Период | Ключевая идея | Автор/Стандарт |
+|-----------|--------|---------------|----------------|
+| **RPC** | 1976-1990s | Удалённый вызов как локальный | Birrell & Nelson, 1984 |
+| **CORBA** | 1991-2000s | Объекты через сеть (IDL) | OMG, 1991 |
+| **SOAP/WSDL** | 1998-2010s | XML-сообщения, строгие контракты | W3C, 1998 |
+| **REST** | 2000-н.в. | Ресурсы + HTTP глаголы + HATEOAS | Fielding, 2000 (PhD thesis) |
+| **GraphQL** | 2015-н.в. | Клиент описывает, что хочет получить | Facebook, 2012 (internal), 2015 (open) |
+| **gRPC** | 2015-н.в. | Binary protocol (protobuf) + HTTP/2 | Google, 2015 |
+| **tRPC** | 2021-н.в. | End-to-end type safety без schema | Colin McDonnell, 2021 |
+
+### REST: архитектурный стиль Fielding
+
+REST (Representational State Transfer) — **не протокол, а архитектурный стиль**, определённый Roy Fielding в его докторской диссертации (2000). Fielding описал 6 ограничений:
+
+| Ограничение | Суть | Зачем |
+|-------------|------|-------|
+| **Client-Server** | Разделение интерфейса и хранения | Независимая эволюция |
+| **Stateless** | Каждый запрос содержит всю информацию | Масштабируемость |
+| **Cacheable** | Ответы помечены как кэшируемые/нет | Производительность |
+| **Layered System** | Клиент не знает, с кем говорит (proxy, LB) | Масштабируемость |
+| **Uniform Interface** | Единый интерфейс: ресурсы, представления, self-descriptive messages, HATEOAS | Простота и decoupling |
+| **Code on Demand** (опц.) | Сервер может отправлять исполняемый код | Расширяемость |
+
+> **HATEOAS** (Hypermedia As The Engine Of Application State) — наименее реализуемое ограничение REST. Fielding неоднократно подчёркивал, что без HATEOAS API не является RESTful, но на практике большинство "REST API" — это HTTP API с JSON, не реализующие HATEOAS.
+
+### Richardson Maturity Model (2008)
+
+Leonard Richardson предложил модель зрелости REST API:
+
+```
+Уровень 3:  Hypermedia Controls (HATEOAS)     ← "настоящий" REST
+Уровень 2:  HTTP Verbs (GET, POST, PUT, DELETE) ← большинство "REST" API
+Уровень 1:  Resources (/users, /orders)
+Уровень 0:  The Swamp of POX (единый endpoint)  ← SOAP, XML-RPC
+```
+
+### GraphQL: теоретические основы
+
+> **GraphQL** — язык запросов для API и среда выполнения. Клиент описывает **форму** нужных данных (типизированный граф), сервер возвращает данные ровно этой формы.
+
+GraphQL основан на **теории графов**: schema — это типизированный ориентированный граф, query — это **подграф** schema, result — изоморфен структуре query.
+
+**Формальная модель:** GraphQL schema = `(Types, Fields, Resolvers)`, где каждый `Field: Type → Type` — ребро в графе типов.
+
+### gRPC: формальная модель
+
+> **gRPC** использует **Interface Definition Language** (Protocol Buffers) для описания контракта, **HTTP/2** для транспорта, и поддерживает 4 паттерна взаимодействия:
+
+| Паттерн | Описание | Формально |
+|---------|----------|-----------|
+| **Unary** | Запрос → Ответ | `f: Request → Response` |
+| **Server Streaming** | Запрос → Поток ответов | `f: Request → Stream<Response>` |
+| **Client Streaming** | Поток запросов → Ответ | `f: Stream<Request> → Response` |
+| **Bidirectional** | Поток ↔ Поток | `f: Stream<Request> → Stream<Response>` |
+
+### Принципы проектирования API (Hyrum's Law)
+
+> **Hyrum's Law** (Hyrum Wright, ~2012): "При достаточном количестве пользователей API, не имеет значения, что вы обещаете в контракте: все наблюдаемые поведения системы будут зависимостью для кого-то."
+
+Следствие: **любое изменение** API потенциально ломает кого-то. Отсюда — необходимость версионирования, deprecation policy, и чётких compatibility guarantees.
+
+---
+
 ## Что нужно знать перед изучением
 
 Прежде чем изучать API дизайн, убедитесь, что понимаете:
@@ -1262,20 +1335,23 @@ components:
 
 ## Источники
 
-| # | Источник | Тип | Достоверность | Вклад |
-|---|----------|-----|---------------|-------|
-| 1 | [Microsoft Azure: API Design Best Practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) | Документация | 0.95 | REST patterns, versioning |
-| 2 | [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/) | Стандарт | 0.95 | Enterprise API standards |
-| 3 | [Auth0: Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) | Документация | 0.95 | OAuth 2.0 flow |
-| 4 | [JWT Best Practices - Curity](https://curity.io/resources/learn/jwt-best-practices/) | Руководство | 0.95 | JWT security |
-| 5 | [JWT Security Best Practices 2025](https://jwt.app/blog/jwt-best-practices/) | Статья | 0.90 | RS256, expiration |
-| 6 | [VAADATA: JWT Vulnerabilities & Attacks](https://www.vaadata.com/blog/jwt-json-web-token-vulnerabilities-common-attacks-and-security-best-practices/) | Статья | 0.90 | Algorithm confusion, none attack |
-| 7 | [Stripe API Documentation](https://stripe.com/docs/api) | Документация | 0.95 | Versioning, error format |
-| 8 | [GitHub API Documentation](https://docs.github.com/en/rest) | Документация | 0.95 | REST + GraphQL hybrid |
-| 9 | [Twilio API Best Practices](https://www.twilio.com/docs/usage/rest-api-best-practices) | Документация | 0.95 | Deprecation policy |
-| 10 | [GraphQL Best Practices](https://graphql.org/learn/best-practices/) | Документация | 0.95 | N+1, depth limiting |
-| 11 | [RFC 8725: JWT Best Current Practices](https://datatracker.ietf.org/doc/html/rfc8725) | RFC | 0.95 | Official JWT security |
-| 12 | [OWASP JWT Testing](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/10-Testing_JSON_Web_Tokens) | Руководство | 0.95 | Security testing |
+### Теоретические основы
+- Fielding, R.T. (2000). *Architectural Styles and the Design of Network-Based Software Architectures* — PhD dissertation, UC Irvine; формализация REST
+- Birrell, A. & Nelson, B. (1984). "Implementing Remote Procedure Calls" — ACM TOCS; формализация RPC
+- Parnas, D.L. (1972). "On the Criteria to be Used in Decomposing Systems into Modules" — CACM; information hiding
+- Richardson, L. (2008). "Justice Will Take Us Millions Of Intricate Moves" — QCon; REST maturity model
+
+### Практические руководства
+
+| # | Источник | Тип | Вклад |
+|---|----------|-----|-------|
+| 1 | [Microsoft Azure: API Design Best Practices](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design) | Документация | REST patterns, versioning |
+| 2 | [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/) | Стандарт | Enterprise API standards |
+| 3 | [Stripe API Documentation](https://stripe.com/docs/api) | Документация | Versioning, error format |
+| 4 | [GitHub API Documentation](https://docs.github.com/en/rest) | Документация | REST + GraphQL hybrid |
+| 5 | [GraphQL Best Practices](https://graphql.org/learn/best-practices/) | Документация | N+1, depth limiting |
+| 6 | [RFC 8725: JWT Best Current Practices](https://datatracker.ietf.org/doc/html/rfc8725) | RFC | Official JWT security |
+| 7 | [OWASP JWT Testing](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/10-Testing_JSON_Web_Tokens) | Руководство | Security testing |
 
 ---
 

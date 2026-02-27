@@ -47,6 +47,46 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Структурированная конкурентность (Structured Concurrency)** — парадигма, в которой жизненный цикл конкурентных задач привязан к лексической области видимости, гарантируя завершение всех дочерних задач перед выходом из родительской (Elizarov, 2018, KotlinConf; Swift Evolution SE-0304, 2021).
+
+### Сравнение моделей
+
+| Свойство | Swift async/await | Kotlin Coroutines |
+|----------|-------------------|-------------------|
+| **Теоретическая основа** | Structured concurrency (Elizarov, 2018) | Continuation-passing (Liskov, 1978) |
+| **Suspension** | `async` marker + `await` call | `suspend` marker (неявное await) |
+| **Task hierarchy** | TaskGroup → Task → child Tasks | CoroutineScope → Job → child Jobs |
+| **Cancellation** | Cooperative (Task.isCancelled) | Cooperative (isActive, CancellationException) |
+| **Thread model** | Actor isolation (@MainActor) | Dispatchers (Main, IO, Default) |
+
+### Историческое развитие
+
+Обе платформы эволюционировали от callback-based concurrency к structured concurrency:
+
+```
+Callbacks → Promises/Futures → Reactive (Rx/Combine) → Structured Concurrency
+```
+
+Kotlin Coroutines (2018) повлияли на дизайн Swift async/await (2021): концепция structured concurrency была впервые реализована в Kotlin, а затем адаптирована для Swift. Roman Elizarov (JetBrains) и Swift Core Team обменивались идеями в публичных обсуждениях.
+
+### Actor Model
+
+Carl Hewitt (1973) предложил Actor Model. Swift и Kotlin реализуют её по-разному:
+
+| Аспект | Swift Actor | Kotlin (ручная реализация) |
+|--------|------------|--------------------------|
+| **Синтаксис** | `actor MyActor { }` | `Mutex` + `Channel` |
+| **Гарантии** | Compiler-enforced isolation | Convention-based |
+| **Main thread** | `@MainActor` | `Dispatchers.Main` |
+| **Data races** | Compile-time prevention (Swift 6) | Runtime detection (kotlinx-coroutines-debug) |
+
+> **CS-фундамент:** Современная конкурентность связана с [[cross-concurrency-legacy]] (предшественники) и [[kmp-state-management]] (concurrency в state management). Теоретическая база — Actor Model (Hewitt, 1973), Structured Concurrency (Elizarov, 2018), CSP (Hoare, 1978).
+
 ## Почему обе платформы пришли к похожему решению?
 
 ### Проблема: Callback Hell и управление потоками

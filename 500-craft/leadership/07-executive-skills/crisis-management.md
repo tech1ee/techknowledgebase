@@ -37,6 +37,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Кризисный менеджмент: от теории к инженерной практике
+
+> **Определение:** Crisis Management — систематический подход к предотвращению, обнаружению, реагированию и восстановлению после событий, угрожающих нормальной работе организации. В engineering контексте включает incident response, organizational crises и business continuity.
+
+Steven Fink в *"Crisis Management: Planning for the Inevitable"* (1986) предложил четырёхфазную модель кризиса: **Prodromal** (предвестники), **Breakout/Acute** (острая фаза), **Chronic** (затяжная), **Resolution** (разрешение). Эта модель объясняет, почему подготовка (runbooks, war games) эффективнее реактивного реагирования.
+
+| Модель/Фреймворк | Автор, год | Ключевая идея | Применение в engineering |
+|------------------|-----------|---------------|------------------------|
+| **Crisis Lifecycle** | Steven Fink, 1986 | 4 фазы: Prodromal → Acute → Chronic → Resolution | Incident response planning |
+| **Incident Command System (ICS)** | FEMA, 1970s | Единый командир, чёткие роли, span of control | Incident Commander role |
+| **Swiss Cheese Model** | James Reason, 1990 | Инциденты = совпадение множественных дефектов в защитных слоях | Blameless postmortems |
+| **Normal Accident Theory** | Charles Perrow, 1984 | В сложных tightly-coupled системах аварии неизбежны | Designing for failure |
+| **High Reliability Organizations** | Weick & Sutcliffe, 2001 | Preoccupation with failure, reluctance to simplify | SRE culture |
+
+James Reason в *"Human Error"* (1990) предложил **Swiss Cheese Model**: инциденты происходят не из-за одной ошибки, а когда «дыры» в нескольких защитных слоях совпадают. Это теоретическая основа **blameless postmortems**: вместо поиска виноватого анализируются системные факторы, позволившие инциденту произойти. Google SRE Book (2016) адаптировал этот подход для software engineering.
+
+> «Every system accident is the result of a chain of events. Remove any link and the accident would not have happened.» — James Reason, *"Human Error"* (1990)
+
+Charles Perrow в *"Normal Accidents"* (1984) показал, что в сложных tightly-coupled системах аварии статистически неизбежны. Karl Weick и Kathleen Sutcliffe в *"Managing the Unexpected"* (2001) исследовали High Reliability Organizations (авиация, атомные станции) и выделили пять принципов надёжности, которые напрямую применимы к [[engineering-practices|SRE и DevOps практикам]].
+
+---
+
 ## Types of Engineering Crises
 
 ```
@@ -376,13 +400,22 @@ This too shall pass.
 
 **[[startup-cto]]** — В стартапе CTO часто является единственным лидером, способным управлять техническим кризисом, и одновременно несёт ответственность за коммуникацию с инвесторами и клиентами. Стартап-контекст добавляет экзистенциальный риск: серьёзный инцидент может поставить под угрозу выживание компании. Опыт кризисного менеджмента — одна из ключевых компетенций, отличающих опытного CTO от начинающего.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fink S. "Crisis Management: Planning for the Inevitable" — AMACOM, 1986 | Книга | Четырёхфазная модель кризиса |
+| 2 | Reason J. "Human Error" — Cambridge University Press, 1990 | Книга | Swiss Cheese Model |
+| 3 | Perrow C. "Normal Accidents" — Princeton University Press, 1984 | Книга | Normal Accident Theory |
+| 4 | Weick K., Sutcliffe K. "Managing the Unexpected" — Jossey-Bass, 2001 | Книга | High Reliability Organizations |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Beyer B. et al. "Site Reliability Engineering" — O'Reilly, 2016 | Книга | Google SRE incident response, blameless postmortems |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Leadership during organizational crisis |
+| 3 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Manager's role in crisis |
 
 
 ## Проверь себя

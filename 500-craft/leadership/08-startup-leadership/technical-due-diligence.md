@@ -37,6 +37,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Due Diligence: от финансового аудита к технической оценке
+
+> **Определение:** Technical Due Diligence (TDD) — систематическая оценка технологических активов, рисков и возможностей компании, проводимая перед инвестицией, приобретением или партнёрством. Включает анализ архитектуры, кодовой базы, команды, безопасности, операционных процессов и данных.
+
+Термин «due diligence» пришёл из юридической практики (Securities Act of 1933, USA) и означал «разумную осмотрительность» при инвестициях. В технологической индустрии TDD стала стандартной практикой после dot-com bubble (2000-2001), когда инвесторы потеряли миллиарды на компаниях с нежизнеспособными технологиями.
+
+| Тип DD | Кто проводит | Фокус | Глубина |
+|--------|-------------|-------|---------|
+| **Investor DD** | VC/PE fund | Scalability, team, tech risk | 1-5 дней |
+| **Acquisition DD** | Acquirer's engineers | Code, architecture, IP ownership | 1-4 недели |
+| **Customer DD** | Enterprise buyer | Security, compliance, reliability | Questionnaire + calls |
+| **Internal DD** | Board/Advisory | Technical health, roadmap | Annual review |
+
+George Akerlof в *"The Market for Lemons"* (1970, Nobel Prize 2001) описал проблему **information asymmetry**: продавец знает о качестве продукта больше, чем покупатель. Technical DD — это механизм снижения information asymmetry между компанией и инвестором/покупателем. Честность во время DD создаёт trust, а сокрытие проблем — deal-breaker при обнаружении.
+
+> «Due diligence is not about finding perfection — it's about understanding risks and pricing them correctly.» — Marc Andreessen
+
+Nicole Forsgren et al. в *"Accelerate"* (2018) предоставили научно валидированные метрики ([[engineering-metrics|DORA Metrics]]), которые стали стандартом для оценки engineering capability при DD: deployment frequency, lead time, MTTR, change failure rate. Эти четыре метрики позволяют быстро оценить зрелость инженерной организации без глубокого code review.
+
+---
+
 ## When DD Happens
 
 ```
@@ -495,13 +518,21 @@ MODERATE (factor into valuation):
 
 **[[startup-cto]]** — CTO стартапа несёт основную ответственность за подготовку к техническому DD и за прохождение самой процедуры. Инвесторы оценивают не только код и архитектуру, но и CTO как лидера: его способность честно оценить tech debt, сформулировать технический roadmap и ответить на глубокие технические вопросы. Подготовка к DD — это не одноразовое событие, а результат постоянной работы CTO над качеством инженерной организации.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Akerlof G. "The Market for Lemons" — Quarterly Journal of Economics, 1970 | Статья | Information asymmetry, quality signaling |
+| 2 | Forsgren N. et al. "Accelerate" — IT Revolution, 2018 | Книга | DORA Metrics как стандарт оценки |
+| 3 | Securities Act of 1933 — US Congress | Закон | Происхождение термина «due diligence» |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | M&A perspective, technology assessment |
+| 2 | Ries E. "The Lean Startup" — Crown Business, 2011 | Книга | Validated learning, MVP assessment |
+| 3 | [DORA Research](https://dora.dev/) | Research | Engineering metrics benchmarks for DD |
 
 
 ## Проверь себя

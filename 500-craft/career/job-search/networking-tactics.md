@@ -29,6 +29,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Professional Networking** — систематическое построение и поддержание деловых отношений для обмена информацией, ресурсами и возможностями. Теоретически обосновано работами по социальному капиталу и сетевой теории.
+
+**Ключевые теоретические концепции:**
+
+| Теория | Автор | Год | Ключевая идея | Практическое применение |
+|--------|-------|-----|---------------|------------------------|
+| Structural Holes | Ronald Burt | 1992 | Люди, связывающие разные кластеры, получают информационное преимущество | Быть bridge между разными сообществами |
+| Strength of Weak Ties | Granovetter | 1973 | Acquaintances дают доступ к новой информации | LinkedIn connections > close friends |
+| Social Capital | Bourdieu | 1986 | Социальные связи — форма капитала, конвертируемая в другие ресурсы | Networking = инвестиция, не трата времени |
+| Reciprocity Principle | Cialdini | 1984 | Люди склонны возвращать услуги | Give-first approach: помоги до того, как попросишь |
+| Dunbar's Number | Robin Dunbar | 1992 | Человек может поддерживать ~150 meaningful relationships | Качество > количество; focus на 20-30 key contacts |
+
+**Burt (1992), Structural Holes Theory:** ценность networking определяется не количеством связей, а **позицией в сети**. Человек, соединяющий два несвязанных кластера (structural hole), получает уникальную информацию и возможности. Для разработчика: быть connected к Android-сообществу И backend-community даёт информацию, недоступную тем, кто только в одном кластере.
+
+> **Cialdini (1984), Principle of Reciprocity:** give-first approach работает, потому что люди чувствуют обязательство ответить на помощь. Practical: помоги кому-то с code review, порекомендуй статью, сделай intro — и когда тебе нужна помощь, люди ответят. **Networking без value-first = spam.**
+
+→ Связано: [[hidden-job-market]], [[job-search-strategy]], [[personal-brand]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -434,15 +456,21 @@ QUALITY METRICS:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Классическое руководство по поиску работы, включая главы о networking и informational interviews. Обновляется ежегодно и остаётся одним из самых практичных гайдов по карьерным переходам.
-
-- **Fournier C. (2017). The Manager's Path.** — Хотя книга ориентирована на менеджеров, главы о построении relationship внутри и вне организации полезны для любого Senior-разработчика, строящего карьерную сеть.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Burt R.S. (1992). *Structural Holes: The Social Structure of Competition*. — Информационное преимущество людей, связывающих разные кластеры.
+
+- Granovetter M. (1973). *The Strength of Weak Ties*. — Acquaintances важнее close friends для доступа к новой информации.
+
+- Cialdini R.B. (1984). *Influence: The Psychology of Persuasion*. — Reciprocity principle: give-first approach в networking.
+
+- Dunbar R.I.M. (1992). *Neocortex Size as a Constraint on Group Size in Primates*. — ~150 meaningful relationships; focus на quality.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Networking и informational interviews.
+
+### Практические руководства
 
 - [Eztrackr: Job Search Networking Tactics](https://www.eztrackr.app/blog/job-search-networking)
 - [Novoresume: Networking for Introverts](https://novoresume.com/career-blog/networking-for-introverts)

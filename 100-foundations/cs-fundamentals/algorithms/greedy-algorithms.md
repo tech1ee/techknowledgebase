@@ -43,6 +43,61 @@ Greedy algorithms build solutions by making locally optimal choices at each step
 
 ---
 
+## Теоретические основы: формальный базис жадных алгоритмов
+
+### Greedy Choice Property: формальное определение
+
+> **Определение:** Алгоритм обладает **greedy choice property**, если глобально оптимальное решение можно получить, делая на каждом шаге **локально оптимальный** выбор, не пересматривая предыдущие решения.
+
+Формально: пусть S* — оптимальное решение. Тогда существует оптимальное решение S**, содержащее жадный выбор g₁, т.е. g₁ ∈ S** и S** так же оптимально, как S*.
+
+Это свойство **не гарантировано** для всех задач оптимизации — его нужно **доказывать** для каждой конкретной задачи.
+
+### Два метода доказательства корректности
+
+**1. Exchange Argument (метод обмена):**
+Предположим, что оптимальное решение OPT отличается от жадного GREEDY. Покажем, что можно заменить элемент OPT на элемент GREEDY, не ухудшив решение. Повторяя, превращаем OPT в GREEDY → GREEDY оптимально.
+
+**2. Greedy-Stays-Ahead (жадный опережает):**
+Покажем, что после каждого шага k жадное частичное решение G_k не хуже любого другого частичного решения O_k той же длины. По индукции: G_n ≥ O_n → GREEDY оптимально.
+
+### Матроидная теория: когда жадный алгоритм гарантированно работает
+
+> **Теорема (Rado, 1957; Edmonds, 1971):** Жадный алгоритм находит оптимальное решение для задачи максимизации взвешенной суммы на **матроиде**.
+
+**Матроид** M = (S, I), где S — конечное множество, I — семейство "независимых" подмножеств, удовлетворяющее:
+1. ∅ ∈ I (пустое множество независимо)
+2. A ∈ I, B ⊆ A → B ∈ I (наследственность)
+3. A, B ∈ I, |A| < |B| → ∃ x ∈ B\A: A ∪ {x} ∈ I (свойство обмена)
+
+| Задача | Матроид? | Жадный оптимален? |
+|--------|----------|-------------------|
+| **MST (Kruskal)** | Да — graphic matroid | Да |
+| **Activity Selection** | Да — interval scheduling matroid | Да |
+| **Huffman Coding** | Специальный случай | Да (доказательство через exchange) |
+| **Fractional Knapsack** | Нет, но continuous relaxation | Да |
+| **0/1 Knapsack** | Нет | **Нет** — нужно DP |
+| **TSP** | Нет | **Нет** — NP-hard |
+
+### Оптимальность Huffman Coding
+
+> **Теорема (Huffman, 1952):** Алгоритм Хаффмана строит **оптимальный** префиксный код — код с минимальной средней длиной кодового слова для заданного распределения частот.
+
+Доказательство через exchange argument:
+1. В оптимальном дереве два наименее частых символа — на самой глубокой глубине (иначе обмен улучшит код)
+2. Они — братья (иначе переставим для улучшения)
+3. Замена этих двух символов на один с суммарной частотой даёт подзадачу → индукция
+
+Это первый доказанно оптимальный алгоритм сжатия данных. На нём основаны DEFLATE (zip, gzip, PNG), JPEG, MP3.
+
+### Связи
+
+- [[dynamic-programming]] — когда greedy не работает, используется DP
+- [[graph-algorithms]] — Dijkstra, MST как жадные алгоритмы
+- [[sorting-algorithms]] — большинство greedy задач требуют предварительной сортировки
+
+---
+
 ## Часть 1: Интуиция без кода
 
 ### Аналогия 1: Жадный едок в буфете
@@ -1704,17 +1759,19 @@ fun coinChangeGreedy(coins: IntArray, amount: Int): Int {
 
 ## Источники
 
+### Теоретические основы
+
+- **Huffman, D.A. (1952). "A Method for the Construction of Minimum-Redundancy Codes." Proceedings of the IRE.** — Оригинальная статья Huffman Coding. Доказательство оптимальности через exchange argument
+- **Rado, R. (1957). "Note on Independence Functions." Proceedings of the London Mathematical Society.** — Матроидная теория: формальное условие, когда жадный алгоритм оптимален
+- **Edmonds, J. (1971). "Matroids and the Greedy Algorithm." Mathematical Programming.** — Связь матроидов с жадными алгоритмами. Полное доказательство
+- **Cormen et al. (2009). CLRS, Chapter 16: Greedy Algorithms.** — Exchange argument, greedy-stays-ahead, Activity Selection proof
+
+### Практические руководства
+
 1. [Stanford CS161 - Guide to Greedy Algorithms](https://web.stanford.edu/class/archive/cs/cs161/cs161.1138/handouts/120%20Guide%20to%20Greedy%20Algorithms.pdf) — Proof techniques
-2. [Interview Cake - Greedy](https://www.interviewcake.com/concept/java/greedy) — Interview tips
-3. [LeetCode The Hard Way - Greedy](https://leetcodethehardway.com/tutorials/basic-topics/greedy) — Patterns
-4. [GeeksforGeeks - Greedy Algorithms](https://www.geeksforgeeks.org/dsa/greedy-algorithms/) — Examples
-5. [LeetCode Discuss - ABCs of Greedy](https://leetcode.com/discuss/general-discussion/1061059/ABCs-of-Greedy) — Problem categorization
-6. [Medium - Greedy Explained](https://medium.com/algorithms-and-leetcode/greedy-algorithm-explained-using-leetcode-problems-80d6fee071c4) — LeetCode walkthrough
-7. [W3Schools - DSA Greedy](https://www.w3schools.com/dsa/dsa_ref_greedy.php) — Quick reference
-8. [Brilliant - Greedy Algorithm](https://brilliant.org/wiki/greedy-algorithm/) — Theory and proofs
-9. [HackerEarth - Basics of Greedy](https://www.hackerearth.com/practice/algorithms/greedy/basics-of-greedy-algorithms/tutorial/) — Tutorial
-10. [DevInterview - Greedy Questions](https://github.com/Devinterview-io/greedy-algorithms-interview-questions) — Interview prep 2025
-11. [Labuladong - Interval Scheduling](https://labuladong.online/algo/en/frequency-interview/interval-scheduling/) — Pattern deep-dive
+2. [Brilliant - Greedy Algorithm](https://brilliant.org/wiki/greedy-algorithm/) — Theory and proofs
+3. [GeeksforGeeks - Greedy Algorithms](https://www.geeksforgeeks.org/dsa/greedy-algorithms/) — Examples
+4. [Labuladong - Interval Scheduling](https://labuladong.online/algo/en/frequency-interview/interval-scheduling/) — Pattern deep-dive
 
 ---
 

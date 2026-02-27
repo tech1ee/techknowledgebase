@@ -30,6 +30,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Swiss Labor Market** — один из наиболее регулируемых и высокооплачиваемых рынков труда в мире. Характеризуется кантональной системой налогообложения, квотами на non-EU workers и высоким порогом компенсации.
+
+**Permit System — теоретическая рамка:**
+
+| Тип | Для кого | Срок | Ключевое ограничение |
+|-----|---------|------|---------------------|
+| **L Permit** | Short-term (до 1 года) | 1 год | Привязка к работодателю, не продлевается |
+| **B Permit** | Regular workers | 1-5 лет | Labour market test + quota |
+| **C Permit** | Permanent residents | Бессрочный | После 5-10 лет B Permit |
+| **EU/EFTA** | Граждане ЕС | Automatic | Bilateral agreements |
+
+**Cantonal tax system** — уникальная швейцарская особенность: каждый кантон устанавливает свои налоговые ставки. Это создаёт **tax competition** между кантонами:
+
+```
+Zug:     ~12% effective tax rate  (crypto hub, low taxes)
+Zurich:  ~20% effective tax rate  (tech hub, moderate taxes)
+Geneva:  ~25% effective tax rate  (international orgs, higher taxes)
+```
+
+Одинаковая gross salary CHF 180K даёт разный net income в зависимости от кантона — разница до CHF 15-20K/год. Это делает выбор локации финансово значимым решением.
+
+> **Labour market test (Inländervorrang):** работодатель должен доказать, что не нашёл подходящего EU-кандидата. Для tech-специалистов с нишевыми навыками (Android + KMP + System Design) тест обычно проходит, но добавляет 4-8 недель к процессу.
+
+→ Связано: [[austria-guide]], [[netherlands-guide]], [[salary-benchmarks]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -361,15 +390,15 @@ High demand:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Для Senior-разработчиков, стремящихся к Staff+ позициям в швейцарских Big Tech компаниях (Google, Meta, Apple). Описывает expectations для уровней, где total comp в Швейцарии достигает CHF 300K+. Понимание Staff-level leadership — ключ к максимальной компенсации.
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Полезна для стратегического планирования переезда в Швейцарию, включая оценку cultural fit и подготовку к визовому процессу. Главы о переговорах помогут максимизировать relocation package.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Larson W. (2022). *Staff Engineer*. — Staff+ позиции в Google/Meta Zurich; TC до CHF 300K+.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Стратегия переезда и визового процесса; relocation package negotiation.
+
+### Практические руководства
 
 - [Levels.fyi: Switzerland](https://www.levels.fyi/t/software-engineer/locations/switzerland)
 - [PayScale: Software Developer CH](https://www.payscale.com/research/CH/Job=Software_Developer/Salary)

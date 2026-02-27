@@ -25,6 +25,22 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Кураторство ресурсов: от information overload к structured knowledge
+
+> **Определение:** Resource Curation — процесс систематического отбора, организации и контекстуализации информационных ресурсов для снижения cognitive overhead при обучении. Awesome Lists — формат community-curated коллекций на GitHub, стандартизированный Sindre Sorhus в 2014 году.
+
+George Miller в *"The Magical Number Seven, Plus or Minus Two"* (Psychological Review, 1956) показал ограничения рабочей памяти. При 400+ ресурсах без категоризации наступает information overload. Этот индекс реализует принцип **chunking** (Miller): ресурсы сгруппированы в 15 тематических категорий, каждая содержит 5-15 элементов — в пределах cognitive bandwidth.
+
+| Принцип | Автор | Как реализован в индексе |
+|---------|-------|------------------------|
+| **Chunking** | Miller, 1956 | 15 категорий по 5-15 ресурсов |
+| **Elaborative Interrogation** | Pressley et al., 1987 | Колонка «Type» для контекста |
+| **Multi-source triangulation** | — | 7 source repositories с разным фокусом |
+
+---
+
 ## Source Repositories
 
 | Repository | Stars | Description |

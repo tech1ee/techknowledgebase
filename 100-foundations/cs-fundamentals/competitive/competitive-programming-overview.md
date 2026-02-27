@@ -29,6 +29,43 @@ Competitive Programming — соревновательное решение ал
 
 ---
 
+## Теоретические основы
+
+> **Competitive Programming (CP)** — дисциплина решения алгоритмических задач в условиях ограниченного времени и автоматической проверки. Участники получают набор задач с формальными спецификациями (input/output format, constraints) и должны написать программу, проходящую все тесты за заданный time limit.
+
+### Ландшафт соревнований
+
+| Соревнование | Формат | Уровень | Особенности |
+|-------------|--------|---------|-------------|
+| **IOI** (International Olympiad in Informatics) | Индивидуальный, 2 дня по 5 часов | Школьники | Partial scoring, интерактивные задачи |
+| **ICPC** (International Collegiate Programming Contest) | Команда из 3, 5 часов, 1 компьютер | Студенты | Teamwork, стратегия распределения задач |
+| **Codeforces** rounds | Индивидуальный, 2-2.5 часа | Все уровни | ELO-рейтинг, Div.1-4, регулярные контесты |
+| **AtCoder** | Индивидуальный, 100-120 мин | Все уровни | ABC/ARC/AGC, цветовой рейтинг |
+| **Google Code Jam / Kick Start** | Индивидуальный, 2.5-3 часа | Все уровни | Крупные раунды, призы |
+
+### Таксономия навыков
+
+| Категория | Навыки | Уровень |
+|-----------|--------|---------|
+| Алгоритмическая база | Сортировка, поиск, графы, DP, деревья | Beginner-Intermediate |
+| Продвинутые структуры | Segment Tree, Fenwick, Sparse Table, Treap | Intermediate-Advanced |
+| Математика | Теория чисел, комбинаторика, теория игр | Intermediate-Advanced |
+| Метанавыки | Pattern recognition, time management, debugging | Все уровни |
+
+### Рейтинговые системы
+
+| Платформа | Диапазон | Ключевые отсечки |
+|-----------|----------|-------------------|
+| Codeforces | 800-3500+ | 1200 Pupil, 1400 Specialist, 1600 Expert, 1900 CM, 2100 Master |
+| AtCoder | 0-4000+ | 400 Brown, 800 Green, 1200 Cyan, 1600 Blue, 2000 Yellow |
+| LeetCode | Contest rating | Не имеет общепринятых отсечек |
+
+> **Рейтинг Codeforces** использует ELO-подобную систему: после каждого контеста рейтинг пересчитывается на основе ожидаемого vs фактического места. Волатильность выше для новых аккаунтов.
+
+**Связанные темы:** [[contest-strategy]] (стратегия контеста), [[problem-classification]] (классификация задач), [[implementation-tips]] (советы по реализации), [[patterns-overview]] (алгоритмические паттерны)
+
+---
+
 ## Интуиция
 
 ### Аналогия 1: CP как спортивные шахматы
@@ -517,12 +554,19 @@ for (i in 0 until n) prefix[i + 1] = prefix[i] + arr[i]
 
 ## Источники
 
+### Теоретические основы
+- **Halim, S. & Halim, F. (2013). "Competitive Programming 3."** — Наиболее полное руководство по CP: алгоритмы, стратегии, классификация задач. Стандарт подготовки к ICPC.
+- **Laaksonen, A. (2017). "Guide to Competitive Programming."** Springer. — Современное руководство на базе CSES problem set, структурированная прогрессия от базовых тем к продвинутым.
+- **Skiena, S. (2020). "The Algorithm Design Manual", 3rd Ed.** — Мост между теорией алгоритмов и практикой CP; "War Stories" демонстрируют реальное применение.
+
+### Практические руководства
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
-| 1 | [Codeforces](https://codeforces.com) | Platform | Contests |
-| 2 | [USACO Guide](https://usaco.guide) | Course | Structured learning |
-| 3 | [CP-Algorithms](https://cp-algorithms.com) | Reference | Algorithms |
-| 4 | [CSES Problem Set](https://cses.fi/problemset/) | Practice | 300 classic problems |
+| 1 | [Codeforces](https://codeforces.com) | Platform | Contests, editorial, рейтинг |
+| 2 | [USACO Guide](https://usaco.guide) | Course | Structured learning path |
+| 3 | [CP-Algorithms](https://cp-algorithms.com) | Reference | Алгоритмы с реализациями |
+| 4 | [CSES Problem Set](https://cses.fi/problemset/) | Practice | 300 классических задач |
+| 5 | [AtCoder](https://atcoder.jp) | Platform | ABC/ARC/AGC contests |
 
 
 ---

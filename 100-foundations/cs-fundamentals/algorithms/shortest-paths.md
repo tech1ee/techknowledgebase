@@ -29,6 +29,42 @@ next_review:
 
 # Shortest Path Algorithms
 
+## Теоретические основы
+
+> **Задача кратчайших путей** — нахождение пути минимального суммарного веса между вершинами взвешенного графа. Одна из фундаментальных задач теории графов и комбинаторной оптимизации.
+
+### Хронология алгоритмов
+
+| Год | Автор | Алгоритм | Сложность | Область применения |
+|-----|-------|----------|-----------|-------------------|
+| **1956** | Форд | Ford's algorithm (прототип Bellman-Ford) | O(V * E) | Отрицательные веса |
+| **1958** | Беллман | Bellman-Ford | O(V * E) | Отрицательные веса + обнаружение отрицательных циклов |
+| **1959** | Дейкстра | Dijkstra's algorithm | O(V^2) / O(E log V) | Один источник, неотрицательные веса |
+| **1962** | Флойд, Уоршолл | Floyd-Warshall | O(V^3) | Все пары вершин |
+| **1977** | Джонсон | Johnson's algorithm | O(V^2 log V + VE) | Все пары, разреженные графы с отрицательными весами |
+
+### Принцип оптимальности подструктуры
+
+> **Лемма Беллмана (1958):** подпуть кратчайшего пути является кратчайшим путём. Это свойство оптимальной подструктуры обосновывает корректность всех алгоритмов кратчайших путей: Dijkstra (жадный), Bellman-Ford (релаксация рёбер), Floyd-Warshall (динамическое программирование).
+
+### Классификация задач
+
+| Задача | Алгоритм | Ограничения |
+|--------|----------|-------------|
+| Single-source, неотрицательные веса | Dijkstra | w(e) >= 0 |
+| Single-source, произвольные веса | Bellman-Ford | Обнаруживает отрицательные циклы |
+| All-pairs | Floyd-Warshall | O(V^3), плотные графы |
+| All-pairs, разреженные | Johnson's | Перевзвешивание через Bellman-Ford |
+| Веса 0/1 | 0-1 BFS | O(V + E), deque вместо heap |
+
+### Связи
+
+- [[graph-algorithms]] — BFS/DFS как невзвешенные кратчайшие пути
+- [[greedy-algorithms]] — Dijkstra как жадный алгоритм
+- [[dynamic-programming]] — Floyd-Warshall как DP на графах
+
+---
+
 ## TL;DR
 
 Shortest path — поиск пути минимального веса между вершинами. **Dijkstra** — O(E log V), только positive weights. **Bellman-Ford** — O(VE), negative weights + cycle detection. **Floyd-Warshall** — O(V³), all-pairs. **0-1 BFS** — O(V+E) для весов 0/1. Выбор зависит от: single/all-pairs, negative weights, sparse/dense.
@@ -1127,13 +1163,21 @@ for (k in 0 until n)
 
 ## Источники
 
+### Теоретические основы
+
+- Dijkstra E.W. (1959). *A Note on Two Problems in Connexion with Graphs*. Numerische Mathematik. — алгоритм кратчайших путей из одного источника, O(V^2)
+- Bellman R. (1958). *On a Routing Problem*. Quarterly of Applied Mathematics. — алгоритм для графов с отрицательными весами, O(V*E)
+- Floyd R.W. (1962). *Algorithm 97: Shortest Path*. Communications of the ACM. — алгоритм кратчайших путей между всеми парами, O(V^3)
+- Johnson D.B. (1977). *Efficient Algorithms for Shortest Paths in Sparse Networks*. Journal of the ACM. — перевзвешивание для разреженных графов с отрицательными весами
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Dijkstra](https://cp-algorithms.com/graph/dijkstra.html) | Reference | Implementation |
 | 2 | [CP-Algorithms: Bellman-Ford](https://cp-algorithms.com/graph/bellman_ford.html) | Reference | Negative cycles |
 | 3 | [CP-Algorithms: Floyd-Warshall](https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html) | Reference | All-pairs |
 | 4 | [CP-Algorithms: 0-1 BFS](https://cp-algorithms.com/graph/01_bfs.html) | Reference | Special case |
-| 5 | [CLRS] Introduction to Algorithms | Book | Theory |
 
 ---
 

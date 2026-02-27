@@ -34,6 +34,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AWS (Amazon Web Services)** — крупнейшая облачная платформа (запуск 2006), предлагающая 200+ сервисов. Архитектура основана на принципе **building blocks**: каждый сервис решает одну задачу и комбинируется с другими через API.
+
+### Иерархия изоляции AWS
+
+```
+Region (us-east-1)
+├── AZ-a (отдельный datacenter)
+│   └── VPC → Subnet → Instance
+├── AZ-b
+└── AZ-c
+```
+
+- **Region** — географически изолированный кластер дата-центров
+- **Availability Zone (AZ)** — один или несколько физически отдельных дата-центров с независимым питанием, сетью и охлаждением
+- **Multi-AZ** — развёртывание через 2+ AZ для высокой доступности (99.99%)
+
+### Shared Responsibility Model
+
+| Уровень | AWS отвечает за | Клиент отвечает за |
+|---------|----------------|-------------------|
+| **Физический** | Hardware, сеть, дата-центры | — |
+| **Инфраструктура** | Hypervisor, managed services | Конфигурация сети, firewall rules |
+| **Платформа** | Patching managed services | OS patching (EC2), приложения |
+| **Данные** | Шифрование at rest (опция) | Шифрование, access control, IAM |
+
+> **См. также**: [[cloud-overview]] — карта раздела, [[cloud-networking-security]] — VPC и IAM
+
+---
+
 ## TL;DR
 
 - **EC2** — виртуальные машины, основа compute
@@ -470,10 +501,14 @@ psql "host=mydb.xxxxx.us-east-1.rds.amazonaws.com \
 
 ## Источники
 
+### Теоретические основы
+- [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/) — Формальная модель разделения ответственности
+- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) — 6 столпов архитектуры
+
+### Практические руководства
 - [AWS Documentation](https://docs.aws.amazon.com/)
-- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 - [AWS Solutions Library](https://aws.amazon.com/solutions/)
-- "AWS Certified Solutions Architect Study Guide"
+- *AWS Certified Solutions Architect Study Guide*
 
 ---
 

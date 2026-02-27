@@ -21,7 +21,42 @@ related:
 
 ---
 
-## Проблема: алгоритм, вшитый намертво
+## Теоретические основы
+
+> **Strategy** — поведенческий паттерн, определяющий семейство алгоритмов, инкапсулирующий каждый из них и делающий их взаимозаменяемыми. Strategy позволяет алгоритму изменяться независимо от клиентов, которые его используют (GoF, 1994).
+
+### Формальная структура
+
+```
+Context → Strategy (interface)
+              ├── ConcreteStrategyA
+              ├── ConcreteStrategyB
+              └── ConcreteStrategyC
+```
+
+Формально: Strategy = **параметризация поведения**. Context делегирует алгоритм объекту Strategy вместо реализации напрямую.
+
+### Strategy и функции высшего порядка
+
+Strategy — объектно-ориентированная реализация **функции высшего порядка** (higher-order function):
+- GoF (1994): `interface Strategy { fun execute(input: Input): Output }`
+- Функциональный подход: `(Input) -> Output` — функциональный тип как Strategy
+
+Norvig (1996): «Strategy is just a function» — в языках с first-class functions паттерн сводится к передаче функции как параметра.
+
+### Связь с принципами
+
+| Принцип | Как Strategy его реализует |
+|---------|------------------------|
+| **OCP** | Новый алгоритм = новая Strategy, Context не меняется |
+| **SRP** | Каждая Strategy — одна ответственность |
+| **DIP** | Context зависит от абстракции Strategy, не от конкретных алгоритмов |
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[state-pattern]] — «близнец» Strategy (одинаковая UML, разная семантика), [[observer-pattern]] — другой поведенческий паттерн
+
+---
+
+
 
 Представь, что ты --- навигатор. Пользователь просит маршрут, а ты всегда строишь по кратчайшему расстоянию. Но один хочет избежать платных дорог, другой --- ехать быстрее, третий --- пешком. Ты вынужден разветвлять логику:
 
@@ -758,6 +793,11 @@ GoF: interface + N классов + Context. Kotlin: `typealias` + N лямбд/
 
 ## Источники
 
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — оригинальный Strategy: Context + abstract Strategy + ConcreteStrategy
+- **Norvig P. (1996). Design Patterns in Dynamic Languages.** — Strategy = first-class function, паттерн «исчезает» в функциональных языках
+
+### Практические руководства
 - Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* --- оригинальное описание Strategy pattern в GoF каталоге
 - Moskala M. (2022). *Effective Kotlin*, Item 46: "Use function types instead of interfaces for functional contracts" --- предпочтение функциональных типов в Kotlin
 - Nystrom R. (2014). *Game Programming Patterns*, Chapter "Strategy" --- отличное объяснение Strategy с примерами из геймдева

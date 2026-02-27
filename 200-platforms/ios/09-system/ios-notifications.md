@@ -33,6 +33,48 @@ prerequisites:
 
 iOS notifications system provides local and remote push notifications through UNUserNotificationCenter. Local notifications are scheduled by the app itself, while remote notifications arrive via Apple Push Notification service (APNs). Supports rich media, custom actions, notification extensions, and modern features like Live Activities and Dynamic Island integration.
 
+## Теоретические основы
+
+> **Push Notification** — механизм доставки сообщений от сервера к клиентскому устройству через постоянное соединение с промежуточным сервисом. APNs (Apple Push Notification service) реализует модель **store-and-forward**: сервер отправляет сообщение в APNs, а APNs доставляет его на устройство, когда оно доступно (best-effort delivery).
+
+### Академический контекст
+
+Система уведомлений iOS основана на нескольких фундаментальных концепциях:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Publish-Subscribe | Birman & Joseph, 1987 | Отправитель публикует, подписчик получает | Сервер → APNs → Устройство (подписка через device token) |
+| Message Queue | IBM MQ, 1993 | Очередь сообщений с гарантией доставки | APNs хранит последнее сообщение для offline-устройства |
+| Observer Pattern | GoF, 1994 | Уведомление подписчиков об изменениях | UNUserNotificationCenter + delegate |
+| Interrupt-driven I/O | Компьютерная архитектура | Прерывание текущей работы для обработки события | Push прерывает пользователя; notification actions как обработчики |
+| Content Negotiation | HTTP/1.1, RFC 2616 | Адаптация контента под получателя | Notification Service Extension модифицирует payload перед показом |
+
+### Архитектура APNs
+
+APNs реализует **двухфазную модель доставки**:
+
+1. **Provider → APNs**: HTTP/2 с TLS, JWT или certificate auth, JSON payload (max 4KB)
+2. **APNs → Device**: постоянное TCP-соединение (одно на всё устройство), мультиплексирование
+
+| Характеристика | APNs | FCM (Android) |
+|---------------|------|---------------|
+| Протокол | HTTP/2 + TLS (provider), proprietary (device) | HTTP + TLS (provider), XMPP/HTTP (device) |
+| Доставка | Best-effort, хранит только последнее | Best-effort, хранит до 100 сообщений |
+| Payload | Max 4KB | Max 4KB (data), without limit (notification) |
+| Обязательность | Единственный способ push в iOS | Рекомендуемый, но не единственный |
+
+> **Best-effort delivery**: APNs не гарантирует доставку каждого сообщения. Если устройство offline и приходит несколько уведомлений, APNs хранит только последнее (coalescing). Это фундаментальное архитектурное решение: уведомления — не надёжная очередь сообщений, а механизм привлечения внимания.
+
+### Связь с CS-фундаментом
+
+- [[ios-background-execution]] — silent push как триггер background fetch
+- [[ios-permissions-security]] — UNAuthorizationOptions и user consent
+- [[ios-networking]] — HTTP/2 для provider-to-APNs коммуникации
+- [[android-notifications]] — FCM vs APNs: сравнение архитектур
+- [[ios-app-components]] — UIApplicationDelegate для обработки remote notifications
+
+---
+
 ## Аналогии
 
 **UNUserNotificationCenter** - это как персональный секретарь, который управляет всеми напоминаниями и сообщениями. Вы даёте ему инструкции (местные уведомления) или он получает срочные сообщения извне (push-уведомления), и он решает, когда и как их показать.
@@ -2424,10 +2466,14 @@ func scheduleReminder() async throws {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает полный цикл работы с UNUserNotificationCenter, настройку APNs и обработку notification actions; базовое руководство для начала работы с уведомлениями.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры local и remote notifications с пошаговой настройкой серверной части и Notification Service Extensions.
-- Apple (2023). *The Swift Programming Language.* — раздел Concurrency помогает понять async/await паттерны для обработки push notification tokens и background fetch.
+### Теоретические основы
+- Birman K., Joseph T. (1987). *Reliable Communication in the Presence of Failures.* — формализация publish-subscribe модели, теоретическая основа push notification систем
+- Eugster P. et al. (2003). *The Many Faces of Publish/Subscribe.* ACM Computing Surveys. — классификация pub/sub систем: topic-based, content-based, type-based
+- GoF (1994). *Design Patterns: Observer.* — паттерн Observer как основа notification center
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — UNUserNotificationCenter, настройка APNs, notification actions
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — local/remote notifications, Notification Service Extensions
 
 ### Документация
 - [Apple Documentation: UserNotifications](https://developer.apple.com/documentation/usernotifications)

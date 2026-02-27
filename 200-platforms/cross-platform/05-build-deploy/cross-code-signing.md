@@ -43,6 +43,46 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Code Signing (подпись кода)** — криптографический механизм, удостоверяющий авторство и целостность исполняемого кода с помощью цифровой подписи на основе инфраструктуры открытых ключей (PKI) (Adams & Lloyd, 2003, Understanding PKI).
+
+### Криптографическая основа
+
+Подпись кода использует **асимметричную криптографию** (Diffie & Hellman, 1976):
+
+```
+Sign:   Hash(binary) → Encrypt(hash, private_key) → Signature
+Verify: Decrypt(signature, public_key) → hash' ; hash' == Hash(binary)?
+```
+
+| Аспект | iOS (Apple) | Android (Google) |
+|--------|-------------|------------------|
+| **Алгоритм** | RSA / ECDSA (CMS) | RSA / ECDSA (APK Signature v2/v3) |
+| **Сертификат** | Apple Developer Certificate | Upload key + App Signing key |
+| **Управление** | Keychain + Xcode provisioning | Play App Signing (Google-managed) |
+| **Provisioning** | .mobileprovision (device-locked) | — (нет аналога) |
+| **Entitlements** | .entitlements (capabilities) | Permissions в Manifest |
+
+### Chain of Trust
+
+Обе платформы реализуют **цепочку доверия** (X.509 certificate chain):
+
+| Уровень | iOS | Android |
+|---------|-----|---------|
+| **Root CA** | Apple Root Certificate | Google Root CA |
+| **Intermediate** | Apple Worldwide Developer Relations | Google Cloud Key Vault |
+| **End-entity** | Developer Certificate | App Signing Key |
+
+### Модель безопасности: iOS vs Android
+
+iOS требует **более строгий** code signing: каждый binary в .app bundle подписан, provisioning profile привязан к конкретным устройствам (development) или App Store (distribution). Android использует **self-signed certificates** для разработчика, Google управляет production key.
+
+> **CS-фундамент:** Code signing связан с [[cross-distribution]] (дистрибуция подписанных артефактов) и [[cross-build-systems]] (подпись как шаг сборки). Теоретическая база — PKI (Adams & Lloyd, 2003), Digital Signatures (Diffie & Hellman, 1976).
+
 ## iOS: Сертификаты + Profiles + Entitlements
 
 ### Архитектура подписи iOS
@@ -738,8 +778,15 @@ security find-identity -v -p codesigning
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Разбирает iOS code signing: сертификаты, provisioning profiles, entitlements и Keychain. Объясняет процесс настройки автоматической подписи в Xcode и типичные ошибки при ручной конфигурации.
-- Meier R. (2022). *Professional Android.* — Описывает Android keystore, APK signing schemes, Play App Signing и подготовку приложения к публикации. Включает best practices по безопасному хранению ключей и автоматизации подписи в CI/CD.
+### Теоретические основы
+
+- **Adams C., Lloyd S. (2003).** *Understanding PKI.* 2nd ed. — Инфраструктура открытых ключей для code signing.
+- **Diffie W., Hellman M. (1976).** *New Directions in Cryptography.* — Асимметричная криптография, лежащая в основе подписи кода.
+
+### Практические руководства
+
+- [Apple Code Signing](https://developer.apple.com/support/code-signing/) — iOS подпись.
+- [Play App Signing](https://developer.android.com/studio/publish/app-signing) — Android подпись.
 
 ---
 

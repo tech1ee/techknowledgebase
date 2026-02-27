@@ -71,6 +71,53 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **WebAssembly (Wasm)** — переносимый бинарный формат инструкций для стековой виртуальной машины, спроектированный как компиляционная цель для языков высокого уровня и обеспечивающий near-native производительность в браузерах (Haas et al., 2017, PLDI).
+
+### Теория: сравнение моделей исполнения в браузере
+
+| Характеристика | JavaScript | WebAssembly |
+|---------------|-----------|-------------|
+| Формат кода | Текстовый (AST) | Бинарный (bytecode) |
+| Типизация | Динамическая | Статическая |
+| Оптимизация | JIT (speculative, deopt) | AOT (предсказуемая) |
+| Memory model | GC движка | Linear memory / WasmGC |
+| Формализация | Ecma-262 (1997) | W3C Wasm Spec (2017) |
+
+### Историческая эволюция компиляции в браузер
+
+| Год | Технология | Подход |
+|-----|-----------|--------|
+| 1995 | JavaScript | Интерпретация текста |
+| 2008 | V8 / JIT | Just-In-Time компиляция JS |
+| 2013 | asm.js | Typed subset of JS (AOT-hint) |
+| 2017 | WebAssembly 1.0 | Бинарный формат + linear memory |
+| 2023 | WasmGC | Встроенный garbage collector |
+| 2024 | Safari WasmGC | 100% modern browser coverage |
+
+### WasmGC: формальное значение
+
+WasmGC (Garbage Collection proposal, W3C 2023) расширяет WebAssembly типами `struct` и `array` с автоматическим управлением памятью. Для Kotlin/Wasm это устраняет необходимость bundling собственного GC:
+
+| Без WasmGC | С WasmGC |
+|-----------|---------|
+| Kotlin GC в бинарнике (+1-5 MB) | Используется GC браузера |
+| Двойной overhead (Kotlin GC + linear memory) | Единый GC runtime |
+| Ограниченная оптимизация | Нативная GC-оптимизация V8/SpiderMonkey |
+
+### Canvas rendering vs DOM rendering
+
+Compose for Web использует **Canvas-based rendering** (Skia → HTML5 Canvas), обходя DOM layout engine. Это реализация паттерна **Immediate Mode GUI** (Casey Muratori, 2005) vs **Retained Mode GUI** (традиционный DOM):
+
+- **Immediate Mode:** перерисовка каждого кадра целиком (Compose, Flutter, game engines)
+- **Retained Mode:** инкрементальное обновление дерева объектов (DOM, UIKit, Android Views)
+
+> **CS-фундамент:** Компиляция в Wasm — [[compilation-pipeline]], [[native-compilation-llvm]]. Сравнение VM — [[bytecode-virtual-machines]].
+
+
 ## Почему WebAssembly — революция для Web
 
 ### Фундаментальная проблема JavaScript
@@ -912,8 +959,16 @@ Kotlin/JS остаётся stable и лучше для sharing business logic wi
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Базовое понимание системы типов Kotlin и корутин необходимо для работы с Kotlin/Wasm. Особенно полезны главы про компиляцию и multiplatform-модули, которые помогают понять, как Kotlin транслируется в различные targets, включая WebAssembly.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Лучшие практики Kotlin-кода помогают писать shared-модули, совместимые с Web target. Советы по управлению памятью и оптимизации особенно актуальны из-за ограничений WasmGC и размера бандла.
+### Теоретические основы
+
+- **Haas A. et al. (2017).** *Bringing the Web up to Speed with WebAssembly.* PLDI '17. — Формальная спецификация WebAssembly: типовая система, модель исполнения, security sandbox.
+- **Scheidecker A. (2023).** *WasmGC Proposal.* W3C. — Расширение WebAssembly для поддержки garbage collection, критичное для Kotlin/Wasm.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундамент Kotlin для понимания компиляции в JS и Wasm targets.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практики написания Kotlin-кода, оптимального для компиляции в browser targets.
+- [Kotlin/Wasm Guide](https://kotlinlang.org/docs/wasm-overview.html) — Официальная документация по Kotlin/Wasm.
 
 ---
 

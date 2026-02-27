@@ -29,6 +29,50 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальные определения
+
+> **Процесс (Process)** — экземпляр выполняемой программы, обладающий собственным изолированным адресным пространством, файловыми дескрипторами и ресурсами ОС. Формально: пара `(program, state)`, где `state = (registers, memory, open files, ...)`.
+
+> **Поток (Thread)** — наименьшая единица исполнения внутри процесса, имеющая собственный стек и регистры, но разделяющая адресное пространство с другими потоками того же процесса.
+
+### Историческая атрибуция
+
+| Концепция | Автор/Система | Год | Вклад |
+|-----------|--------------|-----|-------|
+| **Process concept** | Multics (MIT/GE/Bell Labs) | 1965 | Первая формализация "процесса" как единицы ОС |
+| **Fork** | Thompson, K. (Unix) | 1971 | `fork()` — создание процесса копированием (clone) |
+| **Lightweight Process** | Thoth OS | 1979 | Идея потоков (threads) как "легковесных процессов" |
+| **Pthreads** | IEEE POSIX 1003.1c | 1995 | Стандартизация thread API для Unix |
+| **NPTL** | Drepper, U. & Molnar, I. | 2003 | Native POSIX Thread Library — 1:1 mapping в Linux |
+| **Green threads** | Java 1.0 (Sun) | 1995 | User-space threads, M:N scheduling |
+| **Virtual Threads** | Java 21 (Project Loom) | 2023 | Современные green threads для JVM |
+
+### Модели многопоточности: формальная классификация
+
+| Модель | Mapping | Scheduling | Примеры |
+|--------|---------|-----------|---------|
+| **1:1** | 1 user thread = 1 kernel thread | Ядро ОС | Linux pthreads, Java (NPTL) |
+| **M:1** | M user threads → 1 kernel thread | User-space runtime | Ранний Java green threads |
+| **M:N** | M user threads → N kernel threads | Гибридный | Go goroutines, Kotlin coroutines, Java 21 VT |
+
+### Context Switch: формальная модель
+
+**Context switch** — сохранение состояния текущей задачи и восстановление состояния следующей:
+
+| Компонент switch | Thread → Thread | Process → Process |
+|-----------------|-----------------|-------------------|
+| **Регистры CPU** | Сохранить/восстановить | Сохранить/восстановить |
+| **Stack pointer** | Переключить | Переключить |
+| **TLB (page table)** | Нет (общее addr space) | **Flush** (дорого!) |
+| **CPU cache** | Частично invalidate | Часто полный invalidate |
+| **Стоимость** | ~1-10 мкс | ~10-100 мкс |
+
+> **Следствие:** thread switch в 10-100x дешевле process switch, потому что потоки разделяют адресное пространство (не нужен TLB flush). Coroutine switch ещё дешевле (~100 нс), так как происходит в user-space без системного вызова.
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -567,15 +611,17 @@ launch {
 
 ## Источники и дальнейшее чтение
 
-- **Tanenbaum, A. (2014). Modern Operating Systems.** — Каноническая книга по ОС. Главы 2-3 детально описывают процессы и потоки: от PCB до scheduling алгоритмов. Обязательное чтение для глубокого понимания.
+### Теоретические основы
+- Corbató, F.J. & Vyssotsky, V.A. (1965). "Introduction and Overview of the Multics System" — AFIPS; формализация процесса
+- IEEE POSIX 1003.1c (1995). Pthreads — стандарт thread API
+- Drepper, U. (2003). "Native POSIX Thread Library" — NPTL, 1:1 threading в Linux
 
-- **Silberschatz, A. et al. (2018). Operating System Concepts.** — Альтернативный учебник, хорош для сравнения подходов. Главы 3-4 покрывают процессы и потоки с другого ракурса, включая thread models и thread libraries.
-
-- **Goetz, B. et al. (2006). Java Concurrency in Practice.** — Практическое руководство по concurrent программированию на JVM. Формула размера thread pool и паттерны безопасного использования потоков.
-
-- **Bryant, R. & O'Hallaron, D. (2015). Computer Systems: A Programmer's Perspective.** — Связь между hardware и software: как context switch работает на уровне процессора, TLB, кэша.
-
-- **Love, R. (2010). Linux Kernel Development.** — Как процессы и потоки реализованы в ядре Linux. Task struct, clone(), scheduling policies.
+### Практические руководства
+- Tanenbaum, A. (2014). *Modern Operating Systems* — главы 2-3: процессы и потоки
+- Silberschatz, A. et al. (2018). *Operating System Concepts* — альтернативный подход
+- Goetz, B. et al. (2006). *Java Concurrency in Practice* — concurrent programming на JVM
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — context switch на уровне CPU
+- Love, R. (2010). *Linux Kernel Development* — реализация в ядре Linux
 
 ---
 

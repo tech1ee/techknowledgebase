@@ -50,6 +50,49 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Граф** — математическая структура G = (V, E), где V — конечное множество вершин (vertices), E — множество рёбер (edges), каждое из которых соединяет пару вершин. Граф формализует понятие "связь между объектами".
+
+### Формальное определение и классификация
+
+Для неориентированного графа: E ⊆ {{u, v} | u, v ∈ V, u ≠ v}. Для ориентированного (directed): E ⊆ {(u, v) | u, v ∈ V}. Основные типы:
+
+| Тип графа | Определение | Пример |
+|-----------|------------|--------|
+| Неориентированный | Ребро {u, v} = {v, u} | Социальная сеть (дружба) |
+| Ориентированный (directed) | Ребро (u, v) ≠ (v, u) | Подписки в Twitter |
+| Взвешенный (weighted) | w: E → R, каждому ребру сопоставлен вес | Карта дорог с расстояниями |
+| DAG (directed acyclic) | Ориентированный без циклов | Зависимости сборки, расписание |
+| Двудольный (bipartite) | V = V₁ ∪ V₂, рёбра только между V₁ и V₂ | Задачи о назначениях |
+| Полный (complete) | Ребро между каждой парой вершин, |E| = n(n-1)/2 | Турнирная таблица |
+
+### Представления графа
+
+| Представление | Память | Проверка ребра | Обход соседей | Когда использовать |
+|---------------|--------|---------------|---------------|-------------------|
+| Adjacency list | O(V + E) | O(degree(v)) | O(degree(v)) | Разреженные графы (E << V²) |
+| Adjacency matrix | O(V²) | O(1) | O(V) | Плотные графы, быстрая проверка ребра |
+| Edge list | O(E) | O(E) | O(E) | Алгоритмы Крускала, Беллмана-Форда |
+
+### Фундаментальные обходы
+
+- **BFS (Breadth-First Search)** — обход в ширину, очередь, находит кратчайший путь в невзвешенном графе, O(V + E)
+- **DFS (Depth-First Search)** — обход в глубину, стек/рекурсия, обнаружение циклов, топологическая сортировка, компоненты связности, O(V + E)
+
+### Хронология ключевых результатов
+
+| Год | Результат | Значение |
+|-----|-----------|----------|
+| 1736 | Эйлер, задача о кёнигсбергских мостах | Рождение теории графов |
+| 1956 | Дейкстра, алгоритм кратчайших путей | O((V + E) log V) для неотрицательных весов |
+| 1962 | Форд-Фалкерсон, максимальный поток | Основа сетевых алгоритмов |
+| 1972 | Тарьян, алгоритм SCC | Сильно связные компоненты за O(V + E) |
+
+**Связанные темы:** [[graph-algorithms]] (BFS, DFS, Dijkstra), [[shortest-paths]] (алгоритмы кратчайших путей), [[union-find-pattern]] (компоненты связности), [[topological-sort-pattern]] (топологическая сортировка)
+
+---
+
 ## TL;DR
 
 Граф — структура данных для представления связей между объектами. Состоит из вершин (nodes/vertices) и рёбер (edges). Используй **adjacency list** для большинства задач (O(V+E) память), **adjacency matrix** для плотных графов или быстрой проверки рёбер (O(1)). BFS находит кратчайший путь в невзвешенном графе, DFS — для поиска циклов и топологической сортировки. Сложность обходов: O(V+E).
@@ -1733,14 +1776,18 @@ fun dfsIterative(start: Int): Set<Int> {
 
 ## Источники
 
-1. [GeeksforGeeks — Graph Representations](https://www.geeksforgeeks.org/dsa/graph-and-its-representations/)
-2. [Tech Interview Handbook — Graph](https://www.techinterviewhandbook.org/algorithms/graph/)
-3. [LeetCode Graph Study Guide](https://leetcode.com/discuss/study-guide/1326900/graph-algorithms-problems-to-practice)
-4. [Baeldung — Dijkstra vs Bellman-Ford](https://www.baeldung.com/cs/dijkstra-vs-bellman-ford)
-5. [CP-Algorithms — Disjoint Set Union](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
-6. [USACO Guide — Graph Traversal](https://usaco.guide/silver/graph-traversal)
-7. [Kodeco — Graphs in Kotlin](https://www.kodeco.com/books/data-structures-algorithms-in-kotlin/v1.0/chapters/19-graphs)
-8. Research: [2025-12-29-graphs-data-structure.md](../../docs/research/2025-12-29-graphs-data-structure.md)
+### Теоретические основы
+- **Euler, L. (1736). "Solutio problematis ad geometriam situs pertinentis."** — Задача о кёнигсбергских мостах: рождение теории графов как математической дисциплины.
+- **Cormen, T. et al. (2009). "Introduction to Algorithms (CLRS)."** — Главы 22-26: формальные определения графов, BFS/DFS с доказательствами корректности, алгоритмы кратчайших путей (Dijkstra, Bellman-Ford), MST (Kruskal, Prim), потоки в сетях.
+- **Diestel, R. (2017). "Graph Theory", 5th Ed. Springer.** — Фундаментальный учебник по теории графов: связность, планарность, раскраски, экстремальная теория графов.
+- **Tarjan, R. (1972). "Depth-First Search and Linear Graph Algorithms."** SIAM J. Computing. — Классическая работа: DFS-деревья, классификация рёбер, сильно связные компоненты за O(V + E).
+
+### Практические руководства
+- [Tech Interview Handbook — Graph](https://www.techinterviewhandbook.org/algorithms/graph/) — cheatsheet для интервью
+- [GeeksforGeeks — Graph Representations](https://www.geeksforgeeks.org/dsa/graph-and-its-representations/) — tutorial по представлениям
+- [CP-Algorithms — Disjoint Set Union](https://cp-algorithms.com/data_structures/disjoint_set_union.html) — DSU для компонент связности
+- [USACO Guide — Graph Traversal](https://usaco.guide/silver/graph-traversal) — структурированное обучение
+- [Kodeco — Graphs in Kotlin](https://www.kodeco.com/books/data-structures-algorithms-in-kotlin/v1.0/chapters/19-graphs) — реализация на Kotlin
 
 ---
 

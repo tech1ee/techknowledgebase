@@ -134,6 +134,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+JVM — это реализация абстрактной вычислительной машины, определённой в *The Java Virtual Machine Specification* (Lindholm et al., Oracle, 2023):
+
+> **Определение:** «The Java Virtual Machine is an abstract computing machine. Like a real computing machine, it has an instruction set and manipulates various memory areas at run time.» — JVM Specification §1.2.
+
+Концептуально JVM принадлежит к классу **process virtual machines** (Smith & Nair, *Virtual Machines: Versatile Platforms for Systems and Processes*, 2005) — виртуальных машин, которые абстрагируют отдельный процесс, а не всю аппаратную платформу. В отличие от system VM (VMware, Xen), process VM исполняет программу на виртуальном instruction set architecture (ISA), обеспечивая платформенную независимость через промежуточное представление — байткод.
+
+| Принцип | Формализация | Реализация в JVM |
+|---------|-------------|------------------|
+| **WORA** (Write Once, Run Anywhere) | Platform-independent ISA | Единый формат `.class`-файлов (JVM Spec §4) |
+| **Automatic memory management** | Tracing garbage collection (McCarthy, 1960) | G1, ZGC, Shenandoah |
+| **Late binding** | Dynamic dispatch + lazy class loading | ClassLoader delegation model |
+| **Type safety** | Bytecode verification (Leroy, 2003) | Structural type checking при загрузке класса |
+| **Adaptive optimization** | Profile-guided compilation | Tiered compilation: interpreter → C1 → C2 |
+
+Историческая эволюция JVM как платформы:
+
+| Год | Веха | Значение |
+|-----|------|----------|
+| 1995 | Java 1.0 (Sun Microsystems) | Первая публичная JVM, interpreter only |
+| 1999 | HotSpot VM (Sun, поглощение Anim.) | Adaptive JIT-компиляция |
+| 2006 | OpenJDK (open source) | Открытие исходного кода JVM |
+| 2017 | GraalVM (Oracle Labs) | Полиглотная VM, AOT-компиляция |
+| 2021 | Virtual Threads (Project Loom, JDK 21) | M:N threading на уровне VM |
+| 2024 | Panama, Valhalla (в разработке) | FFI без JNI, value types |
+
+Теоретический фундамент JVM объединяет достижения нескольких областей CS: [[jvm-virtual-machine-concept|концепция виртуальных машин]] (stack-based architecture), [[jvm-gc-tuning|автоматическое управление памятью]] (tracing GC восходит к McCarthy 1960), [[jvm-jit-compiler|адаптивная компиляция]] (profile-guided optimization, Hölzle & Ungar 1994), и [[jvm-memory-model|модель памяти]] (формализация Manson, Pugh & Adve, 2005).
+
+---
+
 ## JVM vs Другие рантаймы
 
 | Аспект | JVM | Node.js | Python | Go |
@@ -181,8 +212,15 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+
+- Lindholm T., Yellin F., Bracha G., Buckley A., Smith D. (2023). *The Java Virtual Machine Specification, Java SE 21 Edition.* — Формальное определение JVM как абстрактной вычислительной машины: instruction set, class file format, verification, execution model.
+- Smith J.E., Nair R. (2005). *Virtual Machines: Versatile Platforms for Systems and Processes.* — Таксономия виртуальных машин (process VM vs system VM), теоретические основы ISA-трансляции и platform independence.
+- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond, 2nd ed.* — Канонический труд о производительности JVM: JIT, GC, memory model, profiling.
+
+### Практические руководства
+
 - [JVM Specification](https://docs.oracle.com/javase/specs/jvms/se21/html/index.html) — официальная спецификация
-- "Java Performance" by Scott Oaks — канонический труд
 - [Inside Java Podcast](https://inside.java/podcast/) — от разработчиков JVM
 - [OpenJDK Project](https://openjdk.org/) — open source реализация
 

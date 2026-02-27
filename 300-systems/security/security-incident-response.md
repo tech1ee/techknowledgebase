@@ -33,6 +33,46 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Инцидент информационной безопасности** -- событие или серия событий, представляющих реальную угрозу конфиденциальности, целостности или доступности информационных активов (NIST SP 800-61r2, 2012).
+
+### NIST SP 800-61: Incident Response Lifecycle
+
+Стандарт NIST SP 800-61 *"Computer Security Incident Handling Guide"* (Cichonski et al., 2012) определяет **4-фазную модель**:
+
+| Фаза | Цель | Ключевые действия |
+|------|------|-------------------|
+| **Preparation** | Готовность к инцидентам | Playbooks, инструменты, обучение команды |
+| **Detection & Analysis** | Обнаружение и оценка | IOC, SIEM, корреляция событий, severity |
+| **Containment, Eradication & Recovery** | Локализация и восстановление | Изоляция, удаление угрозы, восстановление |
+| **Post-Incident Activity** | Извлечение уроков | Post-mortem, обновление playbooks |
+
+### SANS Institute: 6 фаз IR
+
+SANS (Skoudis, 2007) расширяет модель NIST до **6 отдельных фаз**, разделяя третью:
+
+1. **Preparation** -- планы, команда, инструменты
+2. **Identification** -- обнаружение инцидента
+3. **Containment** -- остановка распространения
+4. **Eradication** -- полное удаление угрозы
+5. **Recovery** -- восстановление нормальной работы
+6. **Lessons Learned** -- post-mortem и улучшения
+
+### Модели зрелости IR
+
+| Уровень | Характеристика | Признаки |
+|---------|---------------|----------|
+| **1 -- Ad hoc** | Реактивный | Нет playbooks, ручное реагирование |
+| **2 -- Repeatable** | Базовые процессы | Есть playbooks, определены роли |
+| **3 -- Defined** | Стандартизированный | Метрики TTD/TTR, интеграция с SIEM |
+| **4 -- Managed** | Измеримый | Автоматизация containment, threat intelligence |
+| **5 -- Optimized** | Непрерывное улучшение | AI/ML detection, automated response, purple teaming |
+
+Связь с другими дисциплинами: [[threat-modeling]] определяет, какие playbooks готовить; [[security-secrets-management]] критичен для credential compromise; [[security-fundamentals|Defense in Depth]] снижает blast radius инцидента.
+
+---
+
 ## TL;DR
 
 - **Preparation** — до инцидента: playbooks, tools, team
@@ -427,6 +467,15 @@ Key takeaways for the team.
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Cichonski P. et al. (2012). NIST SP 800-61r2: *"Computer Security Incident Handling Guide."* — 4-фазная модель incident response lifecycle.
+- Skoudis E. (2007). *SANS Incident Handler's Handbook.* — 6-фазная модель IR, расширение NIST.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — глава по incident response и forensics в контексте проектирования устойчивых систем.
+- Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — связь threat modeling и планирования реагирования на инциденты.
+
+### Практические руководства
 
 - [NIST Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
 - [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)

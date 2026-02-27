@@ -53,6 +53,39 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Fine-tuning** — процесс дообучения предобученной (pre-trained) модели на задачно-специфичных данных для адаптации к целевой domain. Формально: обновление параметров $\theta$ модели $f_\theta$ минимизацией функции потерь $\mathcal{L}$ на новом датасете $D_{task}$: $\theta^* = \arg\min_\theta \mathcal{L}(f_\theta, D_{task})$.
+
+Идея fine-tuning восходит к **transfer learning** (Pan & Yang, 2009): знания, полученные на одной задаче, переносятся на другую. Для LLM это означает: модель, обученная на триллионах токенов общего текста, адаптируется к специфичной задаче/домену.
+
+| Метод | Год | Авторы | Суть | Параметры для обучения |
+|-------|-----|--------|------|----------------------|
+| **Full Fine-tuning** | 2018 | — | Обновление всех весов | 100% |
+| **Adapter Tuning** | 2019 | Houlsby et al. | Малые модули между слоями | 2-4% |
+| **Prefix Tuning** | 2021 | Li & Liang | Обучаемые prefix-токены | <1% |
+| **LoRA** | 2021 | Hu E. et al., arXiv:2106.09685 | Low-rank decomposition весовых матриц | ~1% |
+| **QLoRA** | 2023 | Dettmers T. et al., arXiv:2305.14314 | LoRA + 4-bit quantization | ~1%, 3-4x меньше VRAM |
+| **DoRA** | 2024 | Liu S. et al. | Weight-Decomposed Low-Rank | ~1%, лучше quality |
+
+> **LoRA формально**: вместо обновления полной матрицы весов $W \in \mathbb{R}^{d \times k}$, обучаются две low-rank матрицы $A \in \mathbb{R}^{d \times r}$ и $B \in \mathbb{R}^{r \times k}$, где $r \ll \min(d,k)$. Результат: $W' = W + BA$. При $r=16$ и $d=4096$ обучается 0.4% параметров слоя.
+
+**Иерархия подходов к адаптации (от дешёвого к дорогому):**
+
+| Подход | Стоимость | Скорость | Когда использовать |
+|--------|-----------|----------|-------------------|
+| **Prompting** | $0 | Мгновенно | Задача решается инструкцией |
+| **Few-shot** | $0 | Мгновенно | Нужны примеры формата |
+| **RAG** | $-$$ | Часы | Нужны актуальные знания |
+| **LoRA/QLoRA** | $$-$$$ | Часы-дни | Уникальный стиль/формат |
+| **Full Fine-tuning** | $$$$$ | Дни-недели | Фундаментальная адаптация |
+
+Ключевой теоретический результат: **catastrophic forgetting** (McCloskey & Cohen, 1989) — при fine-tuning модель может "забыть" общие знания. LoRA минимизирует этот эффект, оставляя базовые веса замороженными.
+
+См. также: [[prompt-engineering-masterclass|Prompt Engineering]] — альтернатива fine-tuning, [[rag-advanced-techniques|RAG]] — knowledge injection без дообучения.
+
+---
+
 ## Когда нужен Fine-tuning
 
 ```
@@ -610,13 +643,25 @@ model = FastLanguageModel.get_peft_model(
 
 ## Источники
 
-- [LoRA Paper](https://arxiv.org/abs/2106.09685) — оригинальная статья
-- [QLoRA Paper](https://arxiv.org/abs/2305.14314) — quantized LoRA
-- [DPO Paper](https://arxiv.org/abs/2305.18290) — Direct Preference Optimization
-- [ORPO Paper](https://arxiv.org/abs/2403.07691) — Odds Ratio Preference Optimization
-- [Hugging Face TRL](https://huggingface.co/docs/trl) — DPO, ORPO, PPO
-- [Unsloth](https://github.com/unslothai/unsloth) — 2x faster fine-tuning
-- [Sebastian Raschka: Fine-tuning Guide](https://magazine.sebastianraschka.com/)
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Hu E. et al. (2021). *LoRA: Low-Rank Adaptation of Large Language Models*. arXiv:2106.09685 | Оригинальная работа по LoRA |
+| 2 | Dettmers T. et al. (2023). *QLoRA: Efficient Finetuning of Quantized LLMs*. arXiv:2305.14314 | 4-bit quantization + LoRA |
+| 3 | Rafailov R. et al. (2023). *Direct Preference Optimization*. arXiv:2305.18290 | DPO — замена RLHF для alignment |
+| 4 | Pan S., Yang Q. (2009). *A Survey on Transfer Learning*. IEEE TKDE | Теоретическая база transfer learning |
+| 5 | McCloskey M., Cohen N. (1989). *Catastrophic Interference in Connectionist Networks*. Psychology of Learning and Motivation | Проблема catastrophic forgetting |
+| 6 | Houlsby N. et al. (2019). *Parameter-Efficient Transfer Learning for NLP*. ICML | Adapter tuning — предшественник LoRA |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Hugging Face TRL](https://huggingface.co/docs/trl) | DPO, ORPO, PPO frameworks |
+| 2 | [Unsloth](https://github.com/unslothai/unsloth) | 2x faster fine-tuning |
+| 3 | [Sebastian Raschka: Fine-tuning Guide](https://magazine.sebastianraschka.com/) | Практические руководства |
+| 4 | [ORPO Paper](https://arxiv.org/abs/2403.07691) | Odds Ratio Preference Optimization |
 
 ---
 

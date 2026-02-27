@@ -209,6 +209,27 @@ val doubled = numbers.map(_ * 2)  // Одна строка!
 
 ---
 
+## Теоретические основы
+
+Многообразие JVM-языков отражает фундаментальные различия в **парадигмах программирования** и подходах к **системам типов**, исследованных в теории языков программирования.
+
+> **Определение:** *Programming paradigm — фундаментальный стиль программирования, определяющий способ структурирования вычислений: императивный (последовательность команд), объектно-ориентированный (объекты с состоянием), функциональный (чистые функции без побочных эффектов).*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM-языках |
+|------------------------|-----------------|------------------------|
+| **Lambda calculus** | Church, 1936 | Теоретический фундамент FP → Scala, Clojure, Kotlin lambdas |
+| **Type safety** | Milner, 1978 (ML); Pierce, 2002 (TAPL) | Статические типы ловят ошибки до runtime → Java, Kotlin, Scala (static); Clojure, Groovy (dynamic) |
+| **Null reference** | Hoare, 1965 («billion-dollar mistake») | Java допускает null → Kotlin решает на уровне type system (nullable/non-nullable) |
+| **Homoiconicity** | McCarthy, 1960 (Lisp) | Код = данные → макросы Clojure, метапрограммирование Lisp-семейства |
+| **Actor model** | Hewitt et al., 1973 | Concurrency через message-passing → Scala Akka actors |
+| **Structured concurrency** | Elizarov, 2018 (Kotlin) | Иерархия корутин с lifecycle management → Kotlin coroutines |
+
+> **Ключевое наблюдение:** Все JVM-языки компилируются в один и тот же bytecode (JVM Specification, Lindholm et al.), что обеспечивает interoperability. Но bytecode был спроектирован для Java (class-based OOP, nominal typing, type erasure), и каждый альтернативный язык вынужден «обходить» эти ограничения: Scala кодирует higher-kinded types через erasure и type tags, Clojure реализует persistent data structures поверх Java-массивов, Kotlin генерирует null-checks в bytecode.
+
+Связанные темы: [[jvm-basics-history]] (JVM как общая платформа), [[jvm-virtual-machine-concept]] (bytecode как lingua franca), [[kotlin-coroutines]] (structured concurrency), [[kotlin-type-system]] (null-safety через типы).
+
+---
+
 ## История создания языков
 
 ### Timeline: Эволюция JVM-языков
@@ -873,9 +894,17 @@ Clojure  █  1%
 
 ## Источники и дальнейшее чтение
 
-- Bloch J. (2018). *Effective Java, 3rd Edition.* — Каноническая книга по Java, помогает понять, какие проблемы языка мотивировали создание Kotlin и Scala, и почему modern Java перенимает их решения.
-- Urma R.-G., Fusco M., Mycroft A. (2018). *Modern Java in Action.* — Покрывает функциональные фичи Java 8+, позволяет сравнить подходы Java и Scala к streams, lambdas и pattern matching.
-- Subramaniam V. (2014). *Functional Programming in Java.* — Функциональное программирование на JVM через призму Java, даёт базу для понимания FP-подходов Scala и Clojure.
+### Теоретические основы
+
+- Church A. (1936). *An Unsolvable Problem of Elementary Number Theory*. -- Lambda calculus как теоретический фундамент функционального программирования, реализованного в Scala, Clojure и Kotlin.
+- Pierce B. (2002). *Types and Programming Languages (TAPL)*. -- Формальная теория систем типов: nominal vs structural typing, type inference, polymorphism — фундамент для понимания различий между Java, Kotlin, Scala.
+- Hoare C. A. R. (2009). *Null References: The Billion Dollar Mistake* (QCon talk). -- Историческое признание изобретателя null; мотивация null-safety в Kotlin.
+
+### Практические руководства
+
+- Bloch J. (2018). *Effective Java, 3rd Edition.* -- Каноническая книга по Java; проблемы языка, мотивировавшие создание Kotlin и Scala.
+- Urma R.-G., Fusco M., Mycroft A. (2018). *Modern Java in Action.* -- Функциональные фичи Java 8+, сравнение подходов Java и Scala.
+- Subramaniam V. (2014). *Functional Programming in Java.* -- FP на JVM через призму Java, база для понимания подходов Scala и Clojure.
 
 ---
 

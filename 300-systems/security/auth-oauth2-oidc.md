@@ -32,6 +32,47 @@ OAuth решает "password anti-pattern" -- ваше приложение ни
 
 ---
 
+## Теоретические основы
+
+> **OAuth 2.0** -- фреймворк авторизации, позволяющий стороннему приложению получить ограниченный доступ к HTTP-сервису от имени владельца ресурса (RFC 6749, Hardt, 2012).
+
+### Эволюция протоколов делегированной авторизации
+
+| Год | Документ / Событие | Значение |
+|-----|---------------------|----------|
+| 2006 | Twitter + Ma.gnolia | Первая потребность в делегированном доступе без передачи пароля |
+| 2007 | OAuth 1.0 | Первый стандарт (подписи HMAC-SHA1, сложная реализация) |
+| 2012 | RFC 6749 (OAuth 2.0) | Упрощение: bearer tokens вместо подписей, разделение на grant types |
+| 2014 | OpenID Connect Core 1.0 | Identity layer поверх OAuth 2.0 (ID Token, UserInfo) |
+| 2015 | RFC 7636 (PKCE) | Защита public clients от перехвата authorization code |
+| 2016 | Fett, Kusters, Schmitz | Формальная верификация безопасности OAuth 2.0 (ACM CCS 2016) |
+| 2025 | OAuth 2.1 (draft) | Консолидация best practices: PKCE обязателен, удалены Implicit/Password flows |
+
+### Grant Types: формальная классификация
+
+| Grant Type | Участники | Сценарий | Статус в OAuth 2.1 |
+|------------|-----------|----------|---------------------|
+| **Authorization Code** | User + Client + AuthServer | Веб/мобильные приложения | Обязателен с PKCE |
+| **Client Credentials** | Client + AuthServer (без User) | M2M, backend сервисы | Сохранён |
+| **Device Authorization** | User + Device + AuthServer | Smart TV, IoT | Сохранён (RFC 8628) |
+| ~~Implicit~~ | User + Client + AuthServer | SPA (устаревший) | **Удалён** |
+| ~~Password~~ | User + Client + AuthServer | Trusted apps (устаревший) | **Удалён** |
+
+### Жизненный цикл токенов
+
+| Токен | Назначение | Аудитория | TTL | Хранение |
+|-------|-----------|-----------|-----|----------|
+| **Authorization Code** | Обмен на access token | Authorization Server | ~60 сек | Не хранится |
+| **Access Token** | Доступ к ресурсам | Resource Server | 5-60 мин | Memory / secure cookie |
+| **Refresh Token** | Обновление access token | Authorization Server | Дни-месяцы | Secure storage, rotation |
+| **ID Token** (OIDC) | Информация о пользователе | Client | Одноразовый | Верификация при получении |
+
+> **OIDC (OpenID Connect)** -- identity layer поверх OAuth 2.0, добавляющий стандартизированную аутентификацию. OAuth отвечает на "что разрешено?", OIDC -- на "кто это?". Формальная верификация протокола: Fett et al. (2016) обнаружили ранее неизвестные уязвимости, включая 307 redirect attack.
+
+Связь с [[security-https-tls]]: TLS обязателен для всех OAuth flows; [[auth-sessions-jwt-tokens]]: JWT -- формат access/ID token; [[security-cryptography-fundamentals]]: PKCE использует SHA-256, подписи токенов -- RS256/ES256.
+
+---
+
 ## Зачем это знать
 
 До появления OAuth существовала единственная модель интеграции между сервисами: приложение просило у пользователя логин и пароль от другого сервиса и использовало их напрямую. Хотите, чтобы сторонний почтовый клиент читал ваш Gmail? Отдайте ему пароль от Google. Сервис печати фотографий хочет доступ к Flickr? Введите учётные данные Flickr в форму этого сервиса.
@@ -693,15 +734,19 @@ async function verifyGoogleIdToken(idToken: string) {
 
 ## Источники и дальнейшее чтение
 
-**Hardt, D. (2012). RFC 6749: The OAuth 2.0 Authorization Framework.** Оригинальная спецификация OAuth 2.0. Сухой RFC-стиль, но необходима для точного понимания терминологии и flows. Раздел 10 (Security Considerations) -- обязательное чтение для тех, кто реализует OAuth. *Почему читать:* это первоисточник, на который ссылаются все остальные документы; неточности в понимании RFC ведут к уязвимостям в реализации.
+### Теоретические основы
 
-**Sakimura, N., Bradley, J., Jones, M. et al. (2014). OpenID Connect Core 1.0.** Спецификация OIDC -- identity layer поверх OAuth 2.0. Описывает ID Token, UserInfo, discovery, стандартные claims и scopes. *Почему читать:* основной документ для реализации "Login with Google/Apple"; без него OIDC-интеграция основана на догадках и примерах, а не на спецификации.
+- Hardt D. (2012). RFC 6749: *"The OAuth 2.0 Authorization Framework."* — оригинальная спецификация OAuth 2.0. Раздел 10 (Security Considerations) -- обязательное чтение для реализации.
+- Sakimura N., Bradley J., Jones M. et al. (2014). *"OpenID Connect Core 1.0."* — спецификация OIDC: identity layer поверх OAuth 2.0 (ID Token, UserInfo, discovery).
+- Fett D., Kusters R., Schmitz G. (2016). *"A Comprehensive Formal Security Analysis of OAuth 2.0."* ACM CCS 2016. — формальная верификация безопасности, обнаружены ранее неизвестные уязвимости (307 redirect attack).
+- Lodderstedt T., Fett D., Parecki A. et al. (2025). *"The OAuth 2.1 Authorization Framework"* (draft-ietf-oauth-v2-1-14). — консолидация best practices: PKCE обязателен, Implicit/Password удалены.
 
-**Richer, J. & Sanso, A. (2017). OAuth 2 in Action (Manning).** Практическое руководство с реализацией OAuth от начала до конца. Авторы -- активные участники IETF OAuth WG. *Почему читать:* книга объясняет не только "как", но и "почему" каждый элемент протокола спроектирован именно так; лучший переход от теории к практике.
+### Практические руководства
 
-**Lodderstedt, T., Fett, D., Parecki, A. et al. (2025). The OAuth 2.1 Authorization Framework (draft-ietf-oauth-v2-1-14).** Консолидация OAuth 2.0 + security best practices. *Почему читать:* показывает текущее направление развития протокола; если начинаете новый проект, ориентируйтесь на 2.1, а не на 2.0.
-
-**Fett, D., Kusters, R. & Schmitz, G. (2016). "A Comprehensive Formal Security Analysis of OAuth 2.0." ACM CCS 2016.** Академический анализ, в котором авторы формально верифицировали безопасность OAuth 2.0 и обнаружили ранее неизвестные уязвимости (включая 307 redirect attack). *Почему читать:* формально доказывает, при каких условиях протокол безопасен, и объясняет, ПОЧЕМУ определённые меры обязательны, а не просто "рекомендованы".
+- Richer J., Sanso A. (2017). *OAuth 2 in Action.* Manning. — практическое руководство от участников IETF OAuth WG, реализация OAuth от начала до конца.
+- [Auth0: OAuth 2.0 Documentation](https://auth0.com/docs/authenticate/protocols/oauth) — практические примеры интеграции.
+- [OAuth.net](https://oauth.net/) — спецификации, библиотеки, инструменты.
+- [OpenID Foundation](https://openid.net/) — официальные спецификации и сертификация OIDC-реализаций.
 
 ---
 

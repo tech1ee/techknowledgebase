@@ -32,6 +32,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Теория онбординга: Four C's Framework
+
+> **Определение:** Organizational Onboarding (Organizational Socialization) — процесс, через который новые сотрудники приобретают необходимые знания, навыки, поведение и социальные связи для эффективной интеграции в организацию.
+
+Talya Bauer в *"Onboarding New Employees: Maximizing Success"* (SHRM Foundation, 2010) предложила модель **Four C's**, определяющую четыре уровня онбординга:
+
+| Уровень (C) | Описание | Пример для инженера |
+|-------------|----------|---------------------|
+| **Compliance** | Правила, политики, документация | NDA, security training, access setup |
+| **Clarification** | Понимание роли и ожиданий | Job expectations, team goals, [[performance-management\|success criteria]] |
+| **Culture** | Формальные и неформальные нормы | [[team-culture\|Values]], communication style, code review norms |
+| **Connection** | Отношения с коллегами | Buddy system, [[one-on-one-meetings\|1-on-1 с менеджером]], team lunch |
+
+### Time-to-Productivity и метрики онбординга
+
+> **Time-to-Productivity** — время от первого рабочего дня до момента, когда сотрудник начинает вносить полноценный вклад на уровне, ожидаемом для его роли. Для инженеров обычно измеряется первым meaningful PR или самостоятельно закрытой задачей.
+
+Исследования SHRM показывают, что structured onboarding повышает productivity на 62% и retention на 50% по сравнению с «sink or swim» подходом. Aberdeen Group (2013) установила, что 90% сотрудников принимают решение остаться или уйти в первые 6 месяцев, что делает качество [[first-90-days|первых 90 дней]] критическим.
+
+Van Maanen & Schein (*"Toward a Theory of Organizational Socialization"*, 1977) описали шесть тактик социализации (collective vs individual, formal vs informal, sequential vs random), показав, что выбор тактики влияет на то, воспроизводит ли новый сотрудник существующую культуру или привносит инновации.
+
+---
+
 ## 30-60-90 Day Framework
 
 ```
@@ -191,11 +216,19 @@ Structured plan + buddy + small early wins
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [GitLab Onboarding](https://about.gitlab.com/handbook/people-group/general-onboarding/) | Example |
-| [First Round: Onboarding](https://review.firstround.com/) | Articles |
-| [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Bauer T. "Onboarding New Employees" — SHRM Foundation, 2010 | Монография | Four C's framework |
+| 2 | Van Maanen J., Schein E. H. "Toward a Theory of Organizational Socialization" — 1977 | Статья | Шесть тактик социализации |
+| 3 | Aberdeen Group "Onboarding Benchmark Report" — 2013 | Исследование | 90% решений в первые 6 месяцев |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [GitLab Onboarding](https://about.gitlab.com/handbook/people-group/general-onboarding/) | Example | Public onboarding process |
+| 2 | [First Round: Onboarding](https://review.firstround.com/) | Articles | Best practices |
+| 3 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Onboarding from EM perspective |
 
 ## Связь с другими темами
 

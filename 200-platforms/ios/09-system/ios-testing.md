@@ -31,6 +31,43 @@ prerequisites:
 
 iOS testing ecosystem построен на XCTest framework от Apple. Включает unit testing для бизнес-логики, UI testing для автоматизации интерфейса, performance testing для измерения производительности, и snapshot testing для визуальной регрессии. Современные подходы используют async/await для асинхронного кода, dependency injection для мокирования, accessibility identifiers для UI тестов, и CI/CD интеграцию для автоматического запуска тестов.
 
+## Теоретические основы
+
+> **Software Testing** — систематический процесс верификации и валидации программного обеспечения. Верификация отвечает на вопрос «строим ли мы продукт правильно?» (соответствие спецификации), валидация — «строим ли мы правильный продукт?» (соответствие потребностям пользователя) (Boehm, 1984).
+
+### Академический контекст
+
+Тестирование iOS-приложений опирается на общую теорию тестирования ПО:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Testing Pyramid | Cohn, 2009 | Много unit, меньше integration, мало E2E | XCTest unit (70%) → integration (20%) → XCUITest (10%) |
+| Test Doubles | Meszaros, 2007 | Stub, Mock, Fake, Spy, Dummy | Protocol-based mocks в Swift (без runtime reflection) |
+| Dependency Injection | Fowler, 2004 | Внешнее внедрение зависимостей для тестируемости | Constructor injection → protocol mock в тестах |
+| Equivalence Partitioning | Myers, 1979 | Разбиение входных данных на классы эквивалентности | Тестирование граничных значений, nil, пустые коллекции |
+| Test-Driven Development | Beck, 2002 | Red → Green → Refactor цикл | XCTestCase с setUp/tearDown, Swift Testing с @Test |
+
+### Особенности тестирования в iOS-экосистеме
+
+| Аспект | iOS (XCTest) | Android (JUnit) | Следствие |
+|--------|-------------|-----------------|-----------|
+| UI-тесты | XCUITest (отдельный процесс) | Espresso (in-process) | iOS UI-тесты медленнее, но стабильнее |
+| Snapshot testing | Сторонние библиотеки (SnapshotTesting) | Paparazzi, Shot | Нет нативного решения от Apple |
+| Async testing | async/await в XCTest (iOS 15+) | Coroutines + Turbine | Swift Testing улучшает API |
+| Mocking | Протоколы + ручные моки | Mockito (runtime reflection) | Swift type system усложняет автомоки |
+
+> **Тестовая пирамида Кона (2009)**: нижний уровень (unit tests) — быстрые, дешёвые, изолированные; средний уровень (integration) — проверяет взаимодействие компонентов; верхний (E2E/UI) — медленные, хрупкие, но проверяют реальный пользовательский опыт. Инвертирование пирамиды (много UI-тестов, мало unit) — антипаттерн «Ice Cream Cone», ведущий к flaky CI.
+
+### Связь с CS-фундаментом
+
+- [[ios-architecture-patterns]] — тестируемая архитектура (MVVM, TCA) как prerequisite
+- [[ios-dependency-injection]] — DI как основа для подмены зависимостей в тестах
+- [[ios-ci-cd]] — тесты как gate в CI/CD pipeline
+- [[android-testing]] — сравнение XCTest vs JUnit/Espresso
+- [[ios-xcode-fundamentals]] — Test targets, schemes для тестирования
+
+---
+
 ## Аналогии
 
 ### Testing Pyramid как строительство здания
@@ -2308,9 +2345,16 @@ final class FastTests: XCTestCase {
 
 ## Источники и дальнейшее чтение
 
-- **Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* Big Nerd Ranch.** — Содержит практические главы по тестированию iOS-приложений с акцентом на XCTest, dependency injection и организацию тестового кода. Подход BNR к обучению через реальные проекты помогает понять, как тестирование интегрируется в повседневный процесс разработки.
-- **Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly.** — Фундаментальное руководство, покрывающее основы XCTest, настройку test targets в Xcode, и тестирование async/await кода. Особенно полезно для понимания жизненного цикла тестов и интеграции с CI/CD-пайплайнами.
-- **Eidhof C., Airspeed Velocity, et al. (2019). *Advanced Swift.* objc.io.** — Хотя книга не посвящена тестированию напрямую, глубокое понимание протоколов, generics и функционального программирования в Swift критически важно для создания эффективных моков, стабов и тестовых утилит, а также для написания тестируемого кода.
+### Теоретические основы
+- Cohn M. (2009). *Succeeding with Agile.* — Testing Pyramid: unit (70%) → integration (20%) → E2E (10%), антипаттерн «Ice Cream Cone»
+- Meszaros G. (2007). *xUnit Test Patterns.* — систематика Test Doubles: Stub, Mock, Fake, Spy, Dummy
+- Beck K. (2002). *Test-Driven Development: By Example.* — TDD цикл Red → Green → Refactor
+- Myers G. (1979). *The Art of Software Testing.* — классификация техник тестирования: Equivalence Partitioning, Boundary Value Analysis
+
+### Практические руководства
+- Keur A., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* Big Nerd Ranch. — XCTest, dependency injection, организация тестового кода
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* O'Reilly. — XCTest, test targets в Xcode, тестирование async/await кода
+- Eidhof C., Airspeed Velocity, et al. (2019). *Advanced Swift.* objc.io. — протоколы и generics для создания тестируемого кода и моков
 
 ---
 

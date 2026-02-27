@@ -21,6 +21,39 @@ Singleton --- самый простой паттерн GoF и одновреме
 
 ---
 
+## Теоретические основы
+
+> **Singleton** — порождающий паттерн, гарантирующий, что класс имеет только один экземпляр, и предоставляющий глобальную точку доступа к нему (GoF, 1994).
+
+### Формальный инвариант
+
+```
+∀ t₁, t₂ ∈ Thread, ∀ вызов getInstance():
+  getInstance(t₁) === getInstance(t₂)  (одна и та же ссылка)
+```
+
+Три гарантии:
+1. **Единственность**: ровно один экземпляр
+2. **Потокобезопасность**: корректная инициализация при конкурентном доступе
+3. **Ленивость** (опционально): создание при первом обращении, не при загрузке класса
+
+### Почему Singleton спорный
+
+Singleton — **единственный** паттерн GoF, который все 4 автора позже назвали проблемным:
+
+| Критика | Суть | Следствие |
+|---------|------|----------|
+| **Глобальное состояние** | Singleton = глобальная переменная в объектной обёртке | Скрытые зависимости, непредсказуемость |
+| **Тестируемость** | Нельзя подменить mock-ом без инструментов | Затрудняет unit-тестирование |
+| **Concurrency** | Shared mutable state — источник data races | Требует синхронизации |
+| **Lifecycle** | Живёт всё время работы программы | Удерживает ресурсы, утечки в Android |
+
+Gamma (2009): «I'm in favor of dropping Singleton. Its use is almost always a design smell.»
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[factory-pattern]] — альтернатива через DI, [[dependency-injection-fundamentals]] — DI как замена Singleton
+
+---
+
 ## Проблема
 
 Иногда нужен **ровно один экземпляр** объекта на всё приложение:
@@ -724,6 +757,12 @@ object SessionManager {
 
 ## Источники
 
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — оригинальное описание Singleton: мотивация, реализация, потокобезопасность
+- **Gamma E. (2009). Интервью.** — «I'm in favor of dropping Singleton» — один из авторов GoF о проблемах паттерна
+- **Fowler M. (2004). Inversion of Control Containers and the Dependency Injection Pattern.** — DI как альтернатива Singleton для управления lifecycle
+
+### Практические руководства
 - Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* --- оригинальное описание паттерна Singleton
 - Bloch J. (2018). *Effective Java*, 3rd ed. --- Item 3: Enforce the singleton property with a private constructor or an enum type
 - Moskala M. (2021). *Effective Kotlin* --- рекомендации по `object`, `companion object` и factory functions

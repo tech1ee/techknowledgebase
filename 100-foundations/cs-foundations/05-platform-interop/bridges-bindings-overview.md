@@ -47,6 +47,38 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Language Binding** — программный слой, который адаптирует API одного языка для использования из другого, обеспечивая корректный type mapping, memory management и calling convention translation.
+
+> **Bridge** — runtime-компонент, который обеспечивает двунаправленное взаимодействие между двумя языковыми средами (например, JVM ↔ Native).
+
+### Классификация подходов к interop
+
+| Подход | Механизм | Генерация | Примеры |
+|--------|----------|-----------|---------|
+| **Manual bindings** | Ручной FFI код | Нет | JNI headers вручную |
+| **Generated bindings** | Автогенерация из header/IDL | Compile-time | SWIG, cinterop, jextract |
+| **Runtime bridge** | Динамический dispatch через bridge | Runtime | ObjC-Swift bridge, Kotlin-ObjC bridge |
+| **Shared IR** | Общее промежуточное представление | Compile-time | WASM, LLVM bitcode |
+| **Protocol-based** | Сериализация + IPC/RPC | Compile-time + Runtime | gRPC, JSON-RPC, Binder (Android) |
+
+### Проблема M×N и решение через lingua franca
+
+Без общего языка interop между `M` языками требует `M×(M-1)/2` мостов. Решение — lingua franca:
+
+```
+Kotlin ──┐                    Kotlin ── ObjC bridge ──┐
+Swift  ──┤── ? (M×N мостов)   Swift  ── ObjC native ──┤── Objective-C (lingua franca)
+C++    ──┘                    C++    ── ObjC++ ────────┘
+```
+
+В экосистеме Apple **Objective-C runtime** — lingua franca. В экосистеме JVM — **JNI/C ABI**. В Web — **JavaScript/WASM**.
+
+---
+
 ## ПОЧЕМУ нужны binding generators
 
 ### Проблема: ручное написание bindings
@@ -547,9 +579,12 @@ Marshalling — ключевая задача любого binding generator. К
 
 ## Источники и дальнейшее чтение
 
-- Appel A. (1998). *Modern Compiler Implementation in ML*. — глава по runtime-системам и interop между языками с разными моделями памяти
-- Aho A., Lam M., Sethi R., Ullman J. (2006). *Compilers: Principles, Techniques, and Tools* (Dragon Book). — теоретические основы генерации кода и linking, которые лежат в основе binding generators
-- Beazley D. (2003). *Automated Scientific Software Scripting with SWIG*. — paper от автора SWIG, объясняющая принципы автоматической генерации bindings
+### Теоретические основы
+- Beazley, D. (2003). "Automated Scientific Software Scripting with SWIG" — принципы автоматической генерации bindings
+- Appel, A. (1998). *Modern Compiler Implementation in ML* — runtime-системы и interop
+
+### Практические руководства
+- Aho, A. et al. (2006). *Dragon Book* — генерация кода и linking
 - [SWIG](https://www.swig.org/) — official site
 - [Kotlin cinterop](https://kotlinlang.org/docs/native-c-interop.html) — official docs
 - [SKIE](https://skie.touchlab.co/) — Touchlab official

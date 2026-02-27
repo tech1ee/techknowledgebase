@@ -78,6 +78,42 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Отладка (Debugging)** AI-агентов — процесс диагностики и устранения нежелательного поведения в системах с недетерминированным ядром. В отличие от классического debugging, где ошибка локализуется в конкретной строке кода, здесь причина может лежать в промпте, контексте, инструменте, модели или их комбинации.
+
+Теоретическая сложность отладки агентов обусловлена несколькими фундаментальными проблемами:
+
+| Проблема | Теоретическая база | Следствие для debugging |
+|----------|-------------------|------------------------|
+| **Стохастичность** | Sampling из распределения $P(token|context)$ | Один input → разные outputs; невоспроизводимость |
+| **Emergent behavior** | Теория сложных систем (Holland, 1998) | Поведение системы непредсказуемо из поведения компонентов |
+| **Observability problem** | LLM как "чёрный ящик" | Reasoning модели не всегда говорят то, что "думают" |
+| **Cascade failures** | Теория reliability (Laprie, 1992) | Ошибка на шаге N каскадно ухудшает шаги N+1...M |
+| **Context sensitivity** | Pragmatics (Levinson, 1983) | Одинаковый промпт в разном контексте → разный результат |
+
+> **Таксономия failure modes** агентов (по уровням):
+> 1. **Perception failures** — неверная интерпретация входных данных
+> 2. **Reasoning failures** — некорректная логика рассуждений (hallucination, inconsistency)
+> 3. **Action failures** — ошибка при вызове инструмента (wrong tool, wrong parameters)
+> 4. **Planning failures** — неверная декомпозиция задачи
+> 5. **Integration failures** — проблемы на стыке компонентов
+
+**Подходы к диагностике:**
+
+| Подход | Происхождение | Применение к агентам |
+|--------|--------------|---------------------|
+| **Distributed Tracing** | Dapper (Sigelman et al., 2010, Google) | Визуализация цепочки LLM calls + tool calls |
+| **Root Cause Analysis** | Toyota Production System (Ohno, 1988), "5 Whys" | Поиск первопричины через анализ trace |
+| **Replay Debugging** | Record & Replay (O'Callahan et al., 2017) | Повторное воспроизведение с фиксированным seed |
+| **Chaos Engineering** | Netflix (Basiri et al., 2016) | Тестирование resilience: что если API недоступен? |
+
+Ключевой инструмент — **observability** (наблюдаемость): три столпа (логи, метрики, трейсы), адаптированные для AI-систем с добавлением четвёртого — **evaluation** (автоматическая оценка качества на каждом шаге).
+
+См. также: [[ai-observability-monitoring|Observability]] — мониторинг в production, [[agent-evaluation-testing|Agent Testing]] — систематическая оценка качества.
+
+---
+
 ## Философия: почему отладка агентов сложнее обычного debugging
 
 ### Классический debugging vs Agent debugging
@@ -1470,11 +1506,26 @@ Debugging и observability — две стороны одной медали. Ob
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- Huyen, C. (2022). *Designing Machine Learning Systems.* O'Reilly Media. — Главы про monitoring и debugging ML систем в production.
-- Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach.* 4th Edition. Pearson. — Фундаментальные принципы agent design и reasoning, полезные для понимания failure modes.
-- Vaswani, A. et al. (2017). *Attention Is All You Need.* arXiv:1706.03762. — Архитектура Transformer, понимание которой помогает диагностировать проблемы с attention и контекстным окном.
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Sigelman B. et al. (2010). *Dapper, a Large-Scale Distributed Systems Tracing Infrastructure*. Google Technical Report | Distributed tracing — основа observability агентов |
+| 2 | Holland J. (1998). *Emergence: From Chaos to Order*. Perseus Books | Emergent behavior в сложных системах |
+| 3 | Laprie J.-C. (1992). *Dependability: Basic Concepts and Terminology*. Springer | Таксономия failures: fault → error → failure |
+| 4 | Ohno T. (1988). *Toyota Production System: Beyond Large-Scale Production*. Productivity Press | Root Cause Analysis, "5 Whys" |
+| 5 | Basiri A. et al. (2016). *Chaos Engineering*. IEEE Software | Тестирование resilience через injection of failures |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [LangSmith — Tracing & Debugging](https://smith.langchain.com/) | Tracing для LangChain/LangGraph |
+| 2 | [Arize Phoenix](https://docs.arize.com/phoenix) | Open-source LLM observability |
+| 3 | [Anthropic — Debugging Agents](https://www.anthropic.com/engineering/building-effective-agents) | Best practices от Anthropic |
+| 4 | [OpenTelemetry for LLMs](https://opentelemetry.io/) | Стандарт observability |
 
 ---
 

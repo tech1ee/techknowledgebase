@@ -33,6 +33,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Секрет (secret)** -- любая информация, раскрытие которой неавторизованной стороне может привести к компрометации системы: ключи, пароли, токены, сертификаты (OWASP Secrets Management Cheat Sheet).
+
+### Принцип Керкгоффса в управлении секретами
+
+[[security-fundamentals|Принцип Керкгоффса]] (1883) в контексте secrets management означает: алгоритмы и архитектура системы могут быть публичными, но секреты (ключи, credentials) должны быть защищены. Это фундаментальный аргумент против hardcoded secrets -- если код утечёт, секреты не должны утечь вместе с ним.
+
+### Жизненный цикл секрета
+
+Формальная модель lifecycle секрета (NIST SP 800-57, 2020 -- рекомендации по управлению криптографическими ключами):
+
+| Фаза | Описание | Ключевые действия |
+|------|----------|-------------------|
+| **Generation** | Создание секрета | Криптографически безопасный генератор, достаточная энтропия |
+| **Distribution** | Доставка потребителю | Защищённый канал (TLS), never plaintext |
+| **Storage** | Хранение | Encryption at rest, access control, audit |
+| **Usage** | Использование | Минимальный scope, least privilege |
+| **Rotation** | Замена | Автоматическая, dual credentials strategy |
+| **Revocation** | Отзыв | Немедленный при компрометации |
+| **Destruction** | Уничтожение | Безвозвратное удаление из всех хранилищ |
+
+### Модели ротации
+
+| Модель | Описание | Применимость |
+|--------|----------|-------------|
+| **Manual** | Ручная замена по расписанию | Только для некритичных dev-окружений |
+| **Automated static** | Автоматическая замена по расписанию | AWS Secrets Manager, Azure Key Vault |
+| **Dynamic** | Генерация по запросу с коротким TTL | HashiCorp Vault dynamic secrets |
+
+Dynamic secrets (Vault, 2015) минимизируют окно компрометации: каждый потребитель получает уникальные credentials с TTL в минуты/часы. См. также [[security-cryptography-fundamentals]] для понимания криптографических основ шифрования секретов.
+
+---
+
 ## TL;DR
 
 - **Никогда:** Секреты в коде, git, логах
@@ -381,6 +415,15 @@ spec:
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Kerckhoffs A. (1883). *"La cryptographie militaire."* Journal des sciences militaires. — принцип разделения алгоритма и ключа, фундамент secrets management.
+- NIST SP 800-57 (2020). *"Recommendation for Key Management."* — рекомендации по жизненному циклу криптографических ключей.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — принципы управления ключами и секретами в распределённых системах.
+- McGraw G. (2006). *Software Security: Building Security In.* Addison-Wesley. — правила работы с credentials на уровне кода и архитектуры.
+
+### Практические руководства
 
 - [HashiCorp Vault Documentation](https://www.vaultproject.io/docs)
 - [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/)

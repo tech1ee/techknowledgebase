@@ -34,6 +34,50 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Защита API** -- комплекс мер по обеспечению конфиденциальности, целостности и доступности программных интерфейсов, включая аутентификацию, авторизацию, контроль потока запросов и валидацию входных данных.
+
+### OWASP API Security Top 10 (2023)
+
+OWASP API Security Project выделяет 10 критических категорий уязвимостей, специфичных для API:
+
+| # | Категория | Суть |
+|---|-----------|------|
+| API1 | Broken Object Level Authorization | Доступ к чужим объектам (IDOR) |
+| API2 | Broken Authentication | Слабая аутентификация |
+| API3 | Broken Object Property Level Authorization | Массовое присвоение свойств |
+| API4 | Unrestricted Resource Consumption | Отсутствие rate limiting |
+| API5 | Broken Function Level Authorization | Доступ к чужим функциям |
+| API6 | Unrestricted Access to Sensitive Business Flows | Автоматизация бизнес-логики |
+| API7 | Server Side Request Forgery | SSRF через API |
+| API8 | Security Misconfiguration | Неправильная конфигурация |
+| API9 | Improper Inventory Management | Неуправляемые API endpoints |
+| API10 | Unsafe Consumption of APIs | Небезопасное потребление сторонних API |
+
+### Модели Rate Limiting
+
+Формальные модели управления потоком запросов основаны на теории массового обслуживания (queueing theory):
+
+| Алгоритм | Модель | Поведение при burst |
+|----------|--------|---------------------|
+| **Fixed Window** | Счётчик в фиксированном окне | Burst на границе двух окон |
+| **Sliding Window** | Скользящее окно | Плавное ограничение |
+| **Token Bucket** | Ведро с токенами (refill rate) | Контролируемый burst |
+| **Leaky Bucket** | Вытекающее ведро | Сглаживание трафика |
+
+### Таксономия валидации входных данных
+
+Принцип **Complete mediation** из [[security-overview|Saltzer & Schroeder (1975)]] требует проверки каждого запроса. Валидация делится на:
+
+- **Syntactic** -- тип, формат, длина, regex (Pydantic, JSON Schema)
+- **Semantic** -- бизнес-правила, допустимые диапазоны
+- **Contextual** -- SQL/XSS/command injection (parameterized queries, encoding)
+
+Связь с [[web-security-owasp]]: API endpoints -- основная поверхность атаки для уязвимостей OWASP Top 10.
+
+---
+
 ## TL;DR
 
 - **Rate Limiting** — защита от DDoS и abuse
@@ -379,9 +423,17 @@ app.add_middleware(
 
 ## Источники
 
+### Теоретические основы
+
+- Saltzer J., Schroeder M. (1975). *"The Protection of Information in Computer Systems."* Proceedings of the IEEE. — принцип Complete mediation (проверка каждого запроса).
+- OWASP Foundation (2023). *OWASP API Security Top 10.* — систематическая классификация уязвимостей API.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — принципы проектирования безопасных интерфейсов.
+
+### Практические руководства
+
 - [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
 - [Rate Limiting Algorithms](https://konghq.com/blog/how-to-design-a-scalable-rate-limiting-algorithm)
-- [CORS in 100 seconds](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+- [CORS - MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
 ---
 

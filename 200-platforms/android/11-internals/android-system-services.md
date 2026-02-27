@@ -40,6 +40,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Системный сервис (System Service)** — долгоживущий процесс или компонент операционной системы, предоставляющий API для управления ресурсами платформы (окнами, пакетами, процессами, питанием) и доступный другим процессам через механизм IPC.
+
+### Архитектурные паттерны системных сервисов
+
+Архитектура System Server в Android основана на нескольких классических концепциях:
+
+| Концепция | Автор / Источник | Применение в Android |
+|-----------|-----------------|---------------------|
+| Service Locator | Fowler, *Patterns of Enterprise Application Architecture* (2002) | `ServiceManager` — реестр всех Binder-сервисов; `getSystemService()` — поиск по имени |
+| Mediator Pattern | GoF, *Design Patterns* (1994) | AMS координирует взаимодействие между приложениями, WMS, PMS — ни один не знает о другом напрямую |
+| Watchdog Pattern | Kopetz, *Real-Time Systems* (1997) | `Watchdog.java` в System Server: если сервис не отвечает 60 секунд — системная перезагрузка |
+| Resource Manager | Tanenbaum, *Modern Operating Systems* (1992) | Каждый сервис управляет одним типом ресурсов: AMS → процессы, WMS → окна, PMS → пакеты |
+| Phased Startup | — | System Server запускает сервисы в строгом порядке: bootstrap → core → other, соблюдая зависимости |
+
+> **Separation of Concerns** — принцип Дейкстры (Dijkstra, 1974, *On the role of scientific thought*). System Server декомпозирован на ~100 независимых сервисов. Каждый сервис имеет единственную ответственность: `ActivityManagerService` управляет жизненным циклом процессов, `WindowManagerService` — окнами, `PackageManagerService` — установкой и метаданными пакетов.
+
+> **Process Priority Model** — многоуровневая модель приоритетов процессов, реализуемая через `oom_score_adj` (Linux OOM killer) и управляемая `OomAdjuster` в AMS. Напоминает **многоуровневую очередь обратной связи (Multilevel Feedback Queue)** — Corbató et al., *An Experimental Time-Sharing System* (1962, AFIPS). Android определяет 6 уровней: Foreground → Visible → Service → Cached (Recent) → Cached (Empty) → Cached (Last Activity).
+
+| Уровень процесса | oom_score_adj | Пример |
+|-------------------|---------------|--------|
+| FOREGROUND | 0 | Приложение на экране |
+| VISIBLE | 100 | Приложение с видимым компонентом, но не в фокусе |
+| PERCEPTIBLE | 200 | Сервис воспроизведения музыки |
+| CACHED (recent) | 700–900 | Недавно использованное приложение |
+| CACHED (empty) | 999 | Пустой процесс без компонентов |
+
+Связанные материалы: [[android-binder-ipc]] (транспорт для сервисов), [[android-boot-process]] (запуск System Server), [[android-process-memory]] (OOM management), [[android-activitythread-internals]] (клиентская сторона взаимодействия с AMS).
+
+---
+
 ## Зачем это нужно
 
 | Проблема | Как помогает знание System Server |
@@ -1018,6 +1050,16 @@ Thread B: WMS.lock → вызов AMS метода → ждёт AMS.lock
 ---
 
 ## Источники
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Fowler M. *Patterns of Enterprise Application Architecture* (2002) | Service Locator → ServiceManager |
+| GoF. *Design Patterns* (1994) | Mediator Pattern → AMS координация; Watchdog Pattern |
+| Dijkstra E. *On the role of scientific thought* (1974) | Separation of Concerns — декомпозиция на ~100 сервисов |
+| Tanenbaum A. *Modern Operating Systems* (1992) | Resource Management — модель управления ресурсами |
+| Kopetz H. *Real-Time Systems* (1997) | Watchdog — мониторинг жизнеспособности |
+| Corbató F. et al. *An Experimental Time-Sharing System* (1962, AFIPS) | Multilevel Feedback Queue → OomAdjuster |
 
 ### AOSP Source Code
 - [SystemServer.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/java/com/android/server/SystemServer.java) — точка входа system_server

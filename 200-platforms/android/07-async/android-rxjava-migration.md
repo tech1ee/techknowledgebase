@@ -70,6 +70,39 @@ mastery: 0
 
 ---
 
+## Теоретические основы
+
+### Смена парадигмы: от реактивных расширений к структурированной конкурентности
+
+> Миграция RxJava → Coroutines/Flow — это не просто замена API. Это переход между двумя фундаментально разными моделями управления конкурентностью.
+
+| Аспект | RxJava (Reactive Extensions) | Kotlin Coroutines |
+|--------|-----------------------------|--------------------|
+| **Теоретическая основа** | Observable/Iterable дуальность (Meijer, 2012) | Корутины Conway (1963) + structured concurrency (Smith, 2018) |
+| **Управление lifecycle** | Ручное: `CompositeDisposable.clear()` | Автоматическое: scope cancellation через Job hierarchy |
+| **Backpressure** | Явный: `Flowable` + `onBackpressureBuffer/Drop/Latest` | Неявный: `suspend` приостанавливает producer автоматически |
+| **Error model** | Терминальный `onError` — поток умирает | `try/catch` + `catch {}` оператор — возможен recovery |
+| **Threading** | `subscribeOn` / `observeOn` — явные Schedulers | `flowOn` / `withContext` — через Dispatchers |
+
+### Duality Principle: почему миграция возможна
+
+> Erik Meijer (2012) показал, что Observable — **категорный дуал** Iterable. Аналогично, Kotlin Flow — дуал `Sequence<T>`: обе конструкции lazy, но Sequence — pull-based (синхронный), а Flow — push-based (асинхронный с suspend). Это дуальность обеспечивает **1:1 маппинг** операторов: `Observable.map` → `Flow.map`, `Observable.filter` → `Flow.filter`, `Observable.flatMap` → `Flow.flatMapConcat`.
+
+### Formal Equivalence Table
+
+| RxJava тип | Формальная семантика | Kotlin эквивалент | Семантическое отличие |
+|-----------|---------------------|--------------------|-----------------------|
+| `Single<T>` | Ровно 1 элемент или ошибка | `suspend fun(): T` | Нет обёртки — просто возвращаемое значение |
+| `Maybe<T>` | 0 или 1 элемент | `suspend fun(): T?` | Nullable вместо отдельного типа |
+| `Completable` | 0 элементов, только completion | `suspend fun()` | Unit return type |
+| `Observable<T>` | 0..N элементов, без backpressure | `Flow<T>` | Flow имеет backpressure через suspend |
+| `Flowable<T>` | 0..N элементов, с backpressure | `Flow<T>` | Единый тип вместо двух |
+| `BehaviorSubject<T>` | Hot, хранит последнее значение | `MutableStateFlow<T>` | StateFlow требует initial value |
+
+> **Связь**: Дуальность Meijer → [[android-rxjava]], Reactive Streams → [[kotlin-flow]], Structured concurrency → [[kotlin-coroutines]]
+
+---
+
 ## Пререквизиты
 
 Для эффективного использования этого гайда необходимо:
@@ -1502,13 +1535,16 @@ RxJava Observable -- чистый push. Flow -- push-pull гибрид:
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-### Книги
+### Теоретические основы
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. -- детальное сравнение RxJava и Coroutines/Flow, миграционные паттерны, механика корутин и Flow. Главы о Flow operators и structured concurrency -- обязательное чтение при миграции
+- **Meijer E. (2012).** *Your Mouse is a Database.* ACM Queue. — Формализация Observable/Iterable дуальности, на которой основана вся архитектура RxJava.
+- **Reactive Streams Specification (2014).** [reactive-streams.org](https://www.reactive-streams.org/) — Формальный контракт Publisher/Subscriber/Subscription с backpressure, реализованный в RxJava Flowable.
+- **Smith N.J. (2018).** *Notes on structured concurrency.* — Принцип, заменивший Disposable-based lifecycle management на scope-based cancellation.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Сравнение RxJava и Coroutines/Flow, миграционные паттерны, Flow operators, structured concurrency.
 
-### Официальная документация
+### Практические руководства
 
 - Android Developers. *Kotlin flows on Android*. -- https://developer.android.com/kotlin/flow -- официальное руководство по Flow в Android
 - Android Developers. *Best practices for coroutines in Android*. -- https://developer.android.com/kotlin/coroutines/coroutines-best-practices

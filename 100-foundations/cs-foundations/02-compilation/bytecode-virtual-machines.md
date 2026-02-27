@@ -28,6 +28,53 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Виртуальная машина (Process VM)** — программная эмуляция вычислительной машины с собственным набором инструкций (ISA), которая исполняет программы, скомпилированные в промежуточное представление (bytecode).
+
+> **Bytecode** — набор инструкций для виртуальной машины, более высокоуровневый, чем машинный код, но более низкоуровневый, чем исходный язык. Каждая инструкция = opcode (1 байт, отсюда "byte-code") + операнды.
+
+### Историческая атрибуция
+
+| Событие | Автор/Организация | Год | Вклад |
+|---------|-------------------|-----|-------|
+| **p-code machine** | Wirth, N. (ETH Zürich) | 1970 | Первый практический bytecode для Pascal — портируемость |
+| **Smalltalk VM** | Xerox PARC | 1980 | Первая VM с GC и dynamic dispatch |
+| **JVM** | Gosling, J. (Sun) | 1995 | "Write Once, Run Anywhere" — Java bytecode |
+| **CLR** | Microsoft | 2002 | Common Language Runtime — multi-language VM (.NET) |
+| **Dalvik** | Bornstein, D. (Google) | 2007 | Register-based VM для Android |
+| **ART** | Google | 2014 | Замена Dalvik: AOT + JIT гибрид |
+| **WebAssembly** | W3C (Mozilla, Google, MS, Apple) | 2017 | Portable binary для Web — "assembly of the web" |
+
+### Архитектура VM: Stack-based vs Register-based
+
+| Свойство | Stack-based (JVM, WASM) | Register-based (Dalvik, Lua) |
+|----------|------------------------|-------------------------------|
+| **Модель** | Операнды на стеке, `push/pop` | Операнды в виртуальных регистрах |
+| **Инструкция `a + b`** | `load a; load b; add` (3 ops) | `add r1, r2, r3` (1 op) |
+| **Кол-во инструкций** | Больше (+47%, Shi et al. 2008) | Меньше |
+| **Размер инструкции** | 1-3 байта (compact) | 2-6 байт (operands encoded) |
+| **Простота реализации** | Проще (нет register allocation) | Сложнее |
+| **Производительность interp.** | Ниже (больше dispatch) | Выше (меньше dispatch) |
+
+> **Теорема (Shi et al., 2008):** Register-based bytecode требует на 47% меньше инструкций, чем stack-based, но размер bytecode файла на 25% больше. Для интерпретации register-based быстрее; для JIT разница нивелируется.
+
+### Уровни абстракции: от исходника до железа
+
+```
+Source Code    →  Kotlin, Java, Swift, C#
+      ↓ (frontend)
+    AST/IR     →  Kotlin IR, Roslyn IR
+      ↓ (codegen)
+   Bytecode    →  JVM bytecode, DEX, CIL, WASM    ← VM исполняет ЭТО
+      ↓ (VM: interpret/JIT/AOT)
+ Machine Code  →  x86, ARM64, RISC-V               ← CPU исполняет ЭТО
+```
+
+---
+
 ## Зачем это знать
 
 Каждое Android-приложение работает внутри виртуальной машины. Каждая Java-программа на сервере — внутри JVM. Каждая веб-страница, использующая WebAssembly — через WASM-runtime. Виртуальные машины и bytecode — невидимая инфраструктура, на которой держится большая часть современного программного обеспечения.
@@ -563,17 +610,16 @@ IR показывает, как компилятор "понял" ваш код 
 
 ## Источники и дальнейшее чтение
 
-- **Lindholm, T. et al. (2014). The Java Virtual Machine Specification (Java SE 8 Edition).** — Официальная спецификация JVM. Описывает каждую bytecode-инструкцию, class file format, верификацию. Тяжёлое, но незаменимое чтение для тех, кто хочет понять JVM на уровне спецификации.
+### Теоретические основы
+- Wirth, N. (1971). "The Design of a Pascal Compiler" — Software P&E; p-code machine — первый практический bytecode
+- Shi, Y. et al. (2008). "Virtual Machine Showdown: Stack vs. Registers" — VEE; сравнение архитектур (+47% инструкций у stack)
+- Smith, J. & Nair, R. (2005). *Virtual Machines: Versatile Platforms for Systems and Processes* — фундаментальная книга о VM
+- Lindholm, T. et al. (2014). *JVM Specification (Java SE 8)* — официальная спецификация bytecode
 
-- **Smith, J. & Nair, R. (2005). Virtual Machines: Versatile Platforms for Systems and Processes.** — Фундаментальная книга о виртуальных машинах всех видов: от process VM (JVM) до system VM (VMware). Объясняет историю, архитектуру и trade-offs разных подходов. Рекомендуется для глубокого понимания, почему VM устроены именно так.
-
-- **Nystrom, R. (2021). Crafting Interpreters: A Bytecode Virtual Machine.** — Практическое руководство по созданию bytecode VM с нуля. Часть III ("A Bytecode Virtual Machine") проводит через реализацию stack-based VM шаг за шагом. Лучший ресурс для "почувствовать" как VM работает изнутри.
-
-- **Shi, Y. et al. (2008). Virtual Machine Showdown: Stack vs. Registers.** — Академическое сравнение stack-based и register-based подходов. Показывает, что register-based сокращает количество инструкций на 47%, но увеличивает размер bytecode. Полезно для понимания решения Google при создании Dalvik.
-
-- [AOSP: Android Runtime](https://source.android.com/docs/core/runtime) — Официальная документация ART. Объясняет гибридную AOT+JIT модель и profile-guided compilation.
-
-- [JetBrains: Kotlin/Wasm](https://kotlinlang.org/docs/wasm-overview.html) — Документация по Kotlin и WebAssembly. Актуальное состояние WasmGC и Compose Multiplatform на Web.
+### Практические руководства
+- Nystrom, R. (2021). *Crafting Interpreters* — практическое создание bytecode VM с нуля
+- [AOSP: Android Runtime](https://source.android.com/docs/core/runtime) — гибридная AOT+JIT модель ART
+- [JetBrains: Kotlin/Wasm](https://kotlinlang.org/docs/wasm-overview.html) — Kotlin + WebAssembly
 
 ---
 

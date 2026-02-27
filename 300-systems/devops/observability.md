@@ -35,6 +35,35 @@ Logs — "что случилось?". Metrics — "сколько?". Traces —
 
 ---
 
+## Теоретические основы
+
+> **Observability** — свойство системы, позволяющее понять её внутреннее состояние по внешним выходам (логи, метрики, трейсы). Термин из **теории управления** (Kalman, 1960): система наблюдаема, если по выходным данным можно восстановить внутреннее состояние.
+
+### Три столпа наблюдаемости
+
+| Столп | Что даёт | Модель данных | Инструменты |
+|-------|---------|---------------|-------------|
+| **Logs** | «Что произошло» (дискретные события) | Текст/JSON с timestamp | ELK, Loki, CloudWatch |
+| **Metrics** | «Сколько» (агрегированные числа) | Time series: name + labels + value | Prometheus, Datadog, CloudWatch |
+| **Traces** | «Где тормозит» (путь запроса) | DAG of spans с timing | Jaeger, Zipkin, Tempo |
+
+### SLI → SLO → SLA (Google SRE, 2016)
+
+| Концепция | Определение | Пример |
+|-----------|------------|--------|
+| **SLI** (Service Level Indicator) | Количественная метрика качества | Latency p99 < 200ms |
+| **SLO** (Service Level Objective) | Целевое значение SLI | 99.9% запросов < 200ms за 30 дней |
+| **SLA** (Service Level Agreement) | Юридическое обязательство с последствиями | 99.9% uptime, иначе компенсация |
+| **Error Budget** | 100% − SLO = допустимый % ошибок | 0.1% = ~43 мин downtime/месяц |
+
+### OpenTelemetry (CNCF, 2019)
+
+> Vendor-neutral стандарт для сбора всех трёх сигналов (logs, metrics, traces) через единый SDK и протокол (OTLP). Результат слияния OpenTracing и OpenCensus.
+
+> **См. также**: [[devops-overview]] — карта DevOps, [[databases-monitoring-security]] — мониторинг БД
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -508,9 +537,14 @@ Traces: ~500MB/день/сервис
 
 ## Источники
 
+### Теоретические основы
+- Kalman R. (1960). *On the General Theory of Control Systems*. — Формальное определение наблюдаемости в теории управления
+- Beyer B. et al. (2016). *Site Reliability Engineering* (Google). — SLI/SLO/SLA, Error Budgets
+- Sridharan C. (2018). *Distributed Systems Observability*. — Три столпа: logs, metrics, traces
+
+### Практические руководства
 - [OpenTelemetry: Observability Primer](https://opentelemetry.io/docs/concepts/observability-primer/) — проверено 2025-11-24
 - [Better Stack: OpenTelemetry Best Practices](https://betterstack.com/community/guides/observability/opentelemetry-best-practices/) — проверено 2025-11-24
-- [The New Stack: Observability in 2024](https://thenewstack.io/observability-in-2024-more-opentelemetry-less-confusion/) — проверено 2025-11-24
 - [Grafana: OpenTelemetry User Guide](https://grafana.com/blog/2023/12/18/opentelemetry-best-practices-a-users-guide-to-getting-started-with-opentelemetry/) — проверено 2025-11-24
 
 ---

@@ -35,6 +35,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Прокрастинация (Procrastination)** — иррациональная задержка в выполнении намеченных действий, несмотря на осознание негативных последствий; форма дисфункции эмоциональной регуляции (Steel, 2007; Sirois & Pychyl, 2013).
+
+Современное понимание прокрастинации основано на нескольких исследовательских традициях:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Temporal Motivation Theory (TMT) | Piers Steel | 2007 | Формула: Motivation = (Expectancy × Value) / (Impulsiveness × Delay). Объясняет, почему откладываем |
+| Emotion regulation failure | Sirois & Pychyl | 2013 | Прокрастинация — приоритет краткосрочного облегчения эмоций над долгосрочными целями |
+| Implementation Intentions | Peter Gollwitzer | 1999 | «Если X, то Y» — формат планирования, снижающий барьер начала действия |
+| Нейроанатомия прокрастинации | Schluter et al. | 2018 | У хронических прокрастинаторов увеличена миндалина (amygdala) и ослаблена связь с дорсальной ACC |
+| Self-Compassion | Kristin Neff | 2003 | Самосострадание снижает прокрастинацию эффективнее самокритики |
+| Solving the Procrastination Puzzle | Tim Pychyl | 2013 | Практический синтез: прокрастинация — не лень, а проблема эмоциональной регуляции |
+
+> **Steel (2007):** Temporal Motivation Theory — наиболее полная математическая модель прокрастинации. **Motivation = (Expectancy × Value) / (Impulsiveness × Delay)**. Задача с низкой ожидаемой успешностью (Expectancy), малой субъективной ценностью (Value), высокой импульсивностью человека и далёким дедлайном (Delay) — идеальный кандидат на откладывание.
+
+Нейроанатомическое открытие **Schluter et al. (2018)**: у хронических прокрастинаторов увеличена **миндалина** (центр страха и эмоциональной оценки) и ослаблена связь между миндалиной и дорсальной передней цингулярной корой (dorsal ACC — зона контроля действий). Это буквально означает: прокрастинаторы сильнее реагируют на эмоциональный дискомфорт задачи и хуже подавляют этот импульс.
+
+Практический вывод: техники «просто возьми себя в руки» не работают, потому что проблема — не в воле, а в эмоциональной регуляции. Работающие подходы: implementation intentions (Gollwitzer, 1999), самосострадание (Neff, 2003), снижение барьера входа (правило 5 минут). См. также [[motivation-science]] — SDT объясняет, почему задачи без автономии и компетентности провоцируют откладывание.
+
+---
+
 ## Почему это не лень
 
 Если бы прокрастинация была ленью, ленивые люди откладывали бы всё подряд. Но прокрастинатор может часами:
@@ -613,13 +636,18 @@ Code review backlog             Много мелких решений
 
 ## Источники
 
-- [Sirois, F. & Pychyl, T. (2013). Procrastination and the Priority of Short-Term Mood Regulation. Social and Personality Psychology Compass](https://www.sciencedirect.com/science/article/abs/pii/S0191886912005818) -- проверено 2025-12-19
-- [Schluter, C. et al. (2018). The Structural and Functional Signature of Procrastination. Psychological Science](https://www.sciencedirect.com/science/article/pii/S0191886918301521) -- проверено 2025-12-19
-- [Gollwitzer, P.M. (1999). Implementation Intentions: Strong Effects of Simple Plans. American Psychologist](https://www.sciencedirect.com/science/article/abs/pii/S0065260106380021) -- проверено 2025-12-19
+### Теоретические основы
+- Steel, P. «The Nature of Procrastination: A Meta-Analytic and Theoretical Review of Quintessential Self-Regulatory Failure». Psychological Bulletin, 2007
+- [Sirois, F. & Pychyl, T. (2013). Procrastination and the Priority of Short-Term Mood Regulation](https://www.sciencedirect.com/science/article/abs/pii/S0191886912005818) -- проверено 2025-12-19
+- [Schluter, C. et al. (2018). The Structural and Functional Signature of Procrastination](https://www.sciencedirect.com/science/article/pii/S0191886918301521) -- проверено 2025-12-19
+- [Gollwitzer, P.M. (1999). Implementation Intentions: Strong Effects of Simple Plans](https://www.sciencedirect.com/science/article/abs/pii/S0065260106380021) -- проверено 2025-12-19
+- Neff, K. D. «Self-Compassion: An Alternative Conceptualization of a Healthy Attitude Toward Oneself». Self and Identity, 2003
+
+### Практические руководства
+- Pychyl, T. A. *Solving the Procrastination Puzzle*. Penguin, 2013
 - [Harvard Business Review: How to Stop Procrastinating](https://hbr.org/2017/07/how-to-stop-procrastinating) -- проверено 2025-12-19
 - [Princeton McGraw Center: Understanding and Overcoming Procrastination](https://mcgraw.princeton.edu/undergraduates/resources/resource-library/understanding-and-overcoming-procrastination) -- проверено 2025-12-19
 - [BBC Science Focus: The Science of Procrastination](https://www.sciencefocus.com/the-human-body/the-science-of-procrastination) -- проверено 2025-12-19
-- [Pychyl, T.A. (2013). Solving the Procrastination Puzzle. Penguin](https://www.penguinrandomhouse.com/books/310787/solving-the-procrastination-puzzle-by-timothy-a-pychyl-phd/) -- проверено 2025-12-19
 
 ---
 

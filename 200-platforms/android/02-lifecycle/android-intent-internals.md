@@ -43,6 +43,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение Intent как объекта-сообщения
+
+> **Intent** — типизированный объект-сообщение (message object), реализующий паттерн **Message** (Hohpe G., Woolf B. *Enterprise Integration Patterns*, 2003). Intent инкапсулирует: действие (action), данные (URI), категорию, компонент-получатель и дополнительные параметры (extras как Bundle).
+
+### Intent Resolution как Pattern Matching
+
+Механизм Implicit Intent Resolution реализует **pattern matching** — поиск компонента по описанию, а не по имени. Формально это задача **multi-attribute matching** (Guttman A. *«R-Trees: A Dynamic Index Structure for Spatial Searching»*, 1984), где IntentFilter описывает множество допустимых Intent:
+
+| Тест matching | Критерий | Формальная операция |
+|--------------|----------|-------------------|
+| Action test | action ∈ {filter.actions} | Принадлежность множеству |
+| Category test | intent.categories ⊆ filter.categories | Подмножество |
+| Data test | scheme + authority + path + MIME type | Иерархическое сравнение по RFC 3986 |
+
+### PendingIntent как Capability Token
+
+PendingIntent реализует **capability-based security** (Dennis J., Van Horn E. *«Programming Semantics for Multiprogrammed Computations»*, 1966): это Binder-токен, делегирующий право выполнить Intent от имени создателя. Владелец PendingIntent получает capability без необходимости знать identity создателя.
+
+> **Связь с безопасностью:** С Android 12 обязателен `FLAG_IMMUTABLE` или `FLAG_MUTABLE` — это реализация принципа **Principle of Least Authority** (Miller M. *«Robust Composition»*, 2006): получатель PendingIntent по умолчанию не должен иметь возможность модифицировать Intent.
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Intent — ядро Android, которое мало кто понимает глубоко
@@ -2435,6 +2459,14 @@ class SecureActivity : AppCompatActivity() {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- **Hohpe G., Woolf B.** *Enterprise Integration Patterns* (2003) — паттерн Message: Intent как типизированный объект-сообщение, инкапсулирующий action, data, category и extras
+- **Dennis J., Van Horn E.** *«Programming Semantics for Multiprogrammed Computations»* (1966) — capability-based security: PendingIntent как Binder-токен, делегирующий право выполнить Intent от имени создателя
+- **Guttman A.** *«R-Trees: A Dynamic Index Structure for Spatial Searching»* (1984) — multi-attribute matching: IntentFilter resolution как задача поиска по нескольким атрибутам (action, category, data)
+
+### Практические руководства
+
 | Источник | Тип | Описание |
 |----------|-----|----------|
 | [Intents and Intent Filters — Android Developers](https://developer.android.com/guide/components/intents-filters) | Docs | Официальная документация по Intent |
@@ -2448,11 +2480,9 @@ class SecureActivity : AppCompatActivity() {
 | [Deep Links vs App Links — ProAndroidDev](https://proandroiddev.com/deep-links-crash-course-for-android-developers-e1a12d5d5f) | Article | Практическое сравнение Deep Links и App Links |
 | [PendingIntent Security — Google Security Blog](https://security.googleblog.com/2021/10/protecting-android-users-from-malicious.html) | Article | Объяснение FLAG_IMMUTABLE requirement |
 
-### Книги
-
 - **Meier R.** *Professional Android* (2022) — подробное описание Intent resolution, IntentFilter matching, Deep Links и App Links с практическими примерами
 - **Phillips B., Stewart C., Marsicano K.** *Android Programming: The Big Nerd Ranch Guide* (2022) — пошаговое введение в Intent, explicit/implicit Intent, Activity Result API
-- **Vasavada C.** *Android Internals* (2019) — AOSP-уровневый разбор Intent dispatch через ActivityManagerService и Binder
+- **Vasavada N.** *Android Internals* (2019) — AOSP-уровневый разбор Intent dispatch через ActivityManagerService и Binder
 
 ---
 

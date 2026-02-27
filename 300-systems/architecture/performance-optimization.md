@@ -35,7 +35,56 @@ next_review:
 
 ---
 
-## Prerequisites (Что нужно знать заранее)
+## Теоретические основы
+
+> **Оптимизация производительности** — систематический процесс идентификации и устранения узких мест (bottlenecks) в системе, направленный на улучшение метрик латентности, throughput и эффективности использования ресурсов.
+
+### Фундаментальные законы
+
+| Закон | Формула / Формулировка | Следствие для оптимизации |
+|-------|----------------------|--------------------------|
+| **Knuth (1974)** | «Premature optimization is the root of all evil» | Measure first, optimize second |
+| **Amdahl's Law (1967)** | Speedup = 1 / [(1 - P) + P/S], где P — параллелизуемая доля | Если 90% кода параллелизуемо, максимальный speedup при ∞ ядрах = 10× |
+| **Little's Law (1961)** | L = λW (элементы в системе = скорость × время) | Уменьшение latency (W) при постоянном throughput (λ) уменьшает требуемые ресурсы (L) |
+| **Universal Scalability Law** | C(N) = N / [1 + α(N-1) + βN(N-1)] | Contention (α) и coherence (β) ограничивают масштабирование |
+
+### Иерархия латентности (порядки величин)
+
+```
+Операция                           Время        Масштаб
+─────────────────────────────────────────────────────────
+L1 cache reference                 ~1 ns        ████
+L2 cache reference                 ~4 ns        ████
+Main memory reference              ~100 ns      ████████
+SSD random read                    ~16 μs       ████████████
+HDD seek                           ~4 ms        ████████████████████
+Network roundtrip (same DC)        ~500 μs      ████████████████
+Network roundtrip (US→EU)          ~75 ms       ████████████████████████████
+```
+
+Источник: Jeff Dean's "Numbers Everyone Should Know" (Google, 2009).
+
+### Методология оптимизации
+
+Brendan Gregg (Netflix) формализовал **USE Method** (2012):
+- **U**tilization — % времени, когда ресурс занят
+- **S**aturation — длина очереди к ресурсу
+- **E**rrors — количество ошибок
+
+Для каждого ресурса (CPU, RAM, Network, Disk) проверяются все три метрики. Bottleneck — ресурс с Utilization > 80% или Saturation > 0.
+
+### Queueing Theory и performance
+
+Системы под нагрузкой моделируются как **системы массового обслуживания** (Erlang 1909):
+- При Utilization → 100%, latency → ∞ (экспоненциальный рост)
+- Правило 80%: не загружать ресурс выше 80% для предсказуемой латентности
+- **Percentiles** (P50, P95, P99) важнее средних: P99 показывает опыт 1% пользователей
+
+> **См. также**: [[caching-strategies]] — кэширование как основной инструмент, [[observability]] — мониторинг и профилирование, [[architecture-rate-limiting]] — защита от перегрузки
+
+---
+
+
 
 Прежде чем погружаться в оптимизацию, убедись, что понимаешь:
 
@@ -1625,6 +1674,15 @@ jobs:
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Knuth D. (1974). Structured Programming with go to Statements. Computing Surveys.** — «Premature optimization is the root of all evil (97% of the time)» — полная цитата
+- **Amdahl G. (1967). Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities. AFIPS.** — Amdahl's Law: теоретический предел параллельного ускорения
+- **Little J. (1961). A Proof for the Queuing Formula: L = λW. Operations Research.** — фундаментальный закон теории очередей
+- **Gregg B. (2013). Systems Performance: Enterprise and the Cloud. Prentice Hall.** — USE Method, flame graphs, методология анализа производительности
+- **Dean J., Barroso L. (2013). The Tail at Scale. CACM.** — почему P99 важнее P50, tail latency amplification
+
+### Практические руководства
 
 | # | Источник | Тип | Credibility | Ключевой вклад |
 |---|----------|-----|-------------|----------------|

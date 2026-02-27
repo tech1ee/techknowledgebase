@@ -22,7 +22,48 @@ related:
 
 ---
 
-## Терминология
+## Теоретические основы
+
+> **State** — поведенческий паттерн, позволяющий объекту изменять своё поведение при изменении внутреннего состояния. Объект ведёт себя так, будто меняет свой класс (GoF, 1994).
+
+### Формальная модель: Finite State Machine (FSM)
+
+State pattern — объектно-ориентированная реализация **конечного автомата** (Mealy/Moore, 1955-1956):
+
+```
+FSM = (S, Σ, δ, s₀, F)
+  S  — конечное множество состояний
+  Σ  — алфавит входных символов (события)
+  δ  — функция переходов: S × Σ → S
+  s₀ — начальное состояние
+  F  — множество конечных состояний (опционально)
+```
+
+В State pattern:
+- **S** = множество ConcreteState классов (sealed class в Kotlin)
+- **Σ** = методы Context-а (события)
+- **δ** = логика переходов внутри каждого ConcreteState
+- **s₀** = начальное состояние Context
+
+### Связь с теорией автоматов
+
+| Тип автомата | Описание | Kotlin-реализация |
+|-------------|----------|-------------------|
+| **DFA** (детерминированный) | Для каждого (состояние, событие) ровно один переход | `sealed class` + `when` (exhaustive) |
+| **NFA** (недетерминированный) | Для (состояние, событие) возможны несколько переходов | Менее типичен для State pattern |
+| **Statechart** (Harel, 1987) | Иерархические, параллельные состояния | Вложенные sealed class |
+
+### State vs Strategy
+
+State и Strategy имеют **идентичную UML-диаграмму**, но разную семантику:
+- **Strategy**: клиент выбирает алгоритм сознательно (внешний выбор)
+- **State**: переходы происходят автоматически на основе событий (внутренняя логика)
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[strategy-pattern]] — «близнец» State, [[observer-pattern]] — наблюдение за изменениями состояния
+
+---
+
+
 
 | Термин | Значение |
 |--------|----------|
@@ -873,6 +914,12 @@ MVI = Model-View-Intent. State (Model) — sealed class/data class с данны
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Mealy G. (1955). A Method for Synthesizing Sequential Circuits. Bell System Technical Journal.** — формальная модель конечного автомата (Mealy machine)
+- **Moore E. (1956). Gedanken-experiments on Sequential Machines. Automata Studies.** — Moore machine: выход зависит только от состояния
+- **Harel D. (1987). Statecharts: A Visual Formalism for Complex Systems. Science of Computer Programming.** — иерархические автоматы, основа для UML state diagrams
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — OOP-реализация FSM через State pattern
 
 ### Первоисточники
 - Gamma E., Helm R., Johnson R., Vlissides J. *Design Patterns: Elements of Reusable Object-Oriented Software* (1994) — оригинальное описание State (Chapter 5: Behavioral Patterns)

@@ -36,6 +36,48 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Стейкхолдер** (stakeholder) — любое лицо или группа, которые могут повлиять на проект или испытывают его влияние (Freeman, 1984). **Stakeholder negotiation** — процесс достижения соглашения с людьми, обладающими разными интересами, приоритетами и уровнем влияния на решение, часто в условиях отсутствия прямой authority.
+
+### Stakeholder Theory (Freeman, 1984)
+
+R. Edward Freeman в книге «Strategic Management: A Stakeholder Approach» (1984) предложил рассматривать бизнес не как систему, направленную только на акционеров (shareholder theory), а как сеть отношений с множеством заинтересованных сторон:
+
+| Группа стейкхолдеров | Их интерес | Типичный язык |
+|---------------------|-----------|---------------|
+| **Executives** | ROI, risk, strategic alignment | «Какой бизнес-impact?», «Каковы риски?» |
+| **Product Managers** | User value, time-to-market | «Как это влияет на пользователей?», «Когда релиз?» |
+| **Engineering Peers** | Technical quality, DX | «Как это масштабируется?», «Какой tech debt?» |
+| **Clients/Users** | Outcomes, reliability, cost | «Это работает?», «Сколько стоит?» |
+
+### Power/Interest Grid (Mendelow, 1991)
+
+Aubrey Mendelow предложил матрицу для приоритизации стейкхолдеров:
+
+| | Low Interest | High Interest |
+|---|---|---|
+| **High Power** | Keep Satisfied | Manage Closely |
+| **Low Power** | Monitor | Keep Informed |
+
+> В IT-контексте: CTO — high power/high interest (manage closely), end user — low power/high interest (keep informed), HR — high power/low interest (keep satisfied).
+
+### Influence Without Authority (Cohen & Bradford, 1990)
+
+Allan Cohen и David Bradford в книге «Influence Without Authority» (1990, 3rd ed. 2017) описали модель **reciprocity**: влияние строится на обмене «валютами» (currencies), которые ценны для другой стороны:
+
+- **Task-related**: ресурсы, информация, помощь
+- **Position-related**: признание, visibility, career support
+- **Relationship-related**: understanding, inclusion, gratitude
+
+Это объясняет, почему инженер без формальной authority может влиять на решения executives: предоставляя ценную информацию (data-driven proposals) или снижая риски (proofs of concept).
+
+Связь с [[communication-styles]]: адаптация к стейкхолдеру = определение его DISC-стиля + выбор правильной «валюты» влияния.
+
+---
+
 ## Зачем это нужно?
 
 ### Представьте ситуацию
@@ -613,6 +655,16 @@ Team capacity: 6 features quality.
 ---
 
 ## Источники
+
+### Теоретические основы
+
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Freeman R.E. Strategic Management: A Stakeholder Approach. Pitman, 1984 | Монография | Stakeholder theory |
+| 2 | Mendelow A.L. Environmental Scanning: The Impact of the Stakeholder Concept // ICIS Proceedings, 1981 | Статья | Power/Interest Grid |
+| 3 | Cohen A.R., Bradford D.L. Influence Without Authority, 3rd ed. Wiley, 2017 (orig. 1990) | Монография | Reciprocity model, currencies of influence |
+
+### Практические руководства
 
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|

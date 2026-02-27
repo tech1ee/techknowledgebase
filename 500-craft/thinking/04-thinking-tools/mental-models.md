@@ -35,6 +35,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Ментальная модель (Mental Model)** — внутреннее представление о том, как работает внешний мир, используемое для рассуждений, прогнозирования и принятия решений (Johnson-Laird, 1983).
+
+Концепция ментальных моделей развивалась в нескольких традициях:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Mental Models | Philip Johnson-Laird | 1983 | Формализация: люди рассуждают через внутренние модели, а не через формальную логику |
+| Elementary Worldly Wisdom | Charlie Munger | 1994 | «Latticework of mental models» — решётка моделей из разных дисциплин |
+| The Fifth Discipline | Peter Senge | 1990 | Ментальные модели как одна из пяти дисциплин обучающейся организации |
+| First Principles Thinking | Аристотель (formalized) | ~350 BC | Разложение до фундаментальных истин, от которых строится рассуждение |
+| Инверсия | Carl Jacobi | XIX век | «Man muss immer umkehren» — вместо «как добиться успеха?» → «как гарантировать провал?» |
+| Second-Order Thinking | Howard Marks | 2011 | Думать не только о последствиях, но и о последствиях последствий |
+
+> **Munger (1994):** «You've got to have models in your head. And you've got to array your experience — both vicarious and direct — on this latticework of models.» Ключевая идея: одной модели недостаточно — нужен набор моделей из разных дисциплин (психология, экономика, физика, биология).
+
+Johnson-Laird (1983) показал, что люди не используют формальную логику при рассуждениях — они строят **ментальные модели** ситуации и проверяют выводы на них. Ошибки возникают, когда модель неполна или неверна. Отсюда следствие: чем больше моделей в арсенале, тем точнее понимание. Связь с [[cognitive-biases]] — искажения возникают, когда единственная доступная модель применяется к неподходящей ситуации.
+
+---
+
 ## Почему это важно
 
 В 2002 году Elon Musk хотел купить ракету для Mars Oasis. Цена: $65 миллионов за одну б/у ракету. Он спросил: "Из чего состоит ракета?"
@@ -515,9 +536,15 @@ Tesla снизил стоимость батарей на 89% за 10 лет.
 
 ## Источники
 
+### Теоретические основы
+- Johnson-Laird, P. N. *Mental Models: Towards a Cognitive Science of Language, Inference, and Consciousness*. Harvard University Press, 1983
+- Senge, P. *The Fifth Discipline: The Art & Practice of The Learning Organization*. Doubleday, 1990
+- Marks, H. *The Most Important Thing: Uncommon Sense for the Thoughtful Investor*. Columbia Business Press, 2011
+
+### Практические руководства
+- Parrish, S. *The Great Mental Models* (vol. 1-4). Latticework Publishing, 2019-2024
 - [Farnam Street: Mental Models](https://fs.blog/mental-models/) — проверено 2025-11-24
 - [James Clear: Mental Models Guide](https://jamesclear.com/mental-models) — проверено 2025-11-24
-- [Shane Parrish: The Great Mental Models](https://fs.blog/tgmm/) — проверено 2025-11-24
 - [Charlie Munger: Elementary Worldly Wisdom](https://fs.blog/great-talks/a-lesson-on-elementary-worldly-wisdom/) — проверено 2025-11-24
 
 ---

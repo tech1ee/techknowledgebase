@@ -44,6 +44,46 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Build System** — программная система, автоматизирующая трансформацию исходного кода в исполняемый артефакт. Xcode build system реализует модель направленного ациклического графа (DAG) зависимостей между targets, где каждый target — единица сборки с собственными build phases.
+
+### Академический контекст
+
+Системы сборки основаны на нескольких фундаментальных концепциях:
+
+| Концепция | Автор / год | Суть | Проявление в Xcode |
+|-----------|-------------|------|---------------------|
+| DAG-based Build | Make (Feldman, 1979) | Граф зависимостей определяет порядок сборки | Target dependencies, build phase ordering |
+| Separation of Concerns | Dijkstra, 1974 | Разделение ответственности между компонентами | Target = одна ответственность (app, tests, framework) |
+| Configuration Management | IEEE 828-2012 | Управление вариантами конфигурации | Build Configurations (Debug/Release), xcconfig files |
+| Incremental Build | Make (1979), Bazel (2015) | Пересборка только изменившихся частей | Xcode incremental compilation, dependency tracking |
+| Convention over Configuration | Ruby on Rails, 2004 | Разумные defaults вместо явной настройки | Automatic Signing, default build settings |
+
+### Эволюция Xcode
+
+| Год | Версия | Ключевое нововведение |
+|-----|--------|----------------------|
+| 2003 | Xcode 1.0 | Замена Project Builder, GCC компилятор |
+| 2007 | Xcode 3.0 (iPhone SDK) | Interface Builder интегрирован, Simulator |
+| 2014 | Xcode 6 | Swift support, Playgrounds, Size Classes |
+| 2018 | Xcode 10 | New Build System (llbuild), parallel builds |
+| 2019 | Xcode 11 | SwiftUI, SPM интеграция, Xcode Previews |
+| 2022 | Xcode 14 | Mergeable libraries, build timeline |
+| 2023 | Xcode 15 | Xcode Cloud GA, Swift Macros, #Preview |
+
+> **DAG-модель сборки**: каждый Target в Xcode — узел направленного ациклического графа. Рёбра — зависимости между targets. Build system выполняет топологическую сортировку графа и параллельно собирает независимые узлы. Циклические зависимости запрещены — Xcode сообщит об ошибке «Circular dependency detected».
+
+### Связь с CS-фундаментом
+
+- [[ios-compilation-pipeline]] — что происходит внутри каждого build phase
+- [[android-gradle-fundamentals]] — Gradle как альтернативная build system (скриптовой DSL vs GUI)
+- [[cross-build-systems]] — CMake, Bazel, Tuist как альтернативы Xcode project
+- [[ios-code-signing]] — signing как финальный build phase
+- [[ios-modularization]] — targets и SPM packages как единицы модуляризации
+
+---
+
 ## Аналогии из жизни
 
 ### 1. Project = здание с квартирами
@@ -1087,9 +1127,14 @@ struct Config {
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Подробно разбирает структуру Xcode проекта, targets, schemes и build configurations с практическими примерами, объясняя как правильно организовать проект с нуля и настроить CI/CD.
+### Теоретические основы
+- Feldman S. (1979). *Make — A Program for Maintaining Computer Programs.* — оригинальная DAG-модель сборки, теоретическая основа всех build systems
+- Dijkstra E. (1974). *On the Role of Scientific Thought.* — Separation of Concerns как принцип организации проектов
+- IEEE 828-2012. *Standard for Configuration Management in Systems and Software Engineering.* — стандарт управления конфигурациями
 
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* — Пошаговое введение в Xcode с акцентом на практику: создание targets, настройка build phases, работа с xcconfig файлами и отладка build errors через навигатор ошибок.
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — структура Xcode проекта, targets, schemes и build configurations
+- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* — создание targets, настройка build phases, xcconfig файлы
 
 ---
 

@@ -54,6 +54,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Unit Test** — автоматизированный тест, верифицирующий корректность отдельной единицы работы (функции, класса, модуля) в изоляции от внешних зависимостей (Beck, 2002, Test-Driven Development).
+
+### Теоретическая модель: AAA (Arrange-Act-Assert)
+
+Каждый unit-тест следует паттерну AAA (Beck, 2002):
+
+| Фаза | Описание | В kotlin.test |
+|------|----------|--------------|
+| Arrange | Подготовка данных и зависимостей | Setup, создание fakes |
+| Act | Выполнение тестируемого действия | Вызов функции/метода |
+| Assert | Проверка результата | `assertEquals()`, `assertTrue()` |
+
+### Тестирование корутин: формальные требования
+
+Тестирование suspend-функций требует **детерминированного контроля диспетчеризации** (Elizarov, 2020):
+
+- `runTest` — заменяет реальные диспетчеры на TestDispatcher
+- `advanceUntilIdle()` — выполняет все pending корутины
+- `Turbine` — детерминированное тестирование Flow с таймаутами
+
+> **Академические источники:** Beck K. (2002). *Test-Driven Development: By Example.* Addison-Wesley. Meszaros G. (2007). *xUnit Test Patterns.* — таксономия тестовых паттернов.
+
+
 ## Почему unit тесты — основа качества?
 
 ### CS-фундамент: F.I.R.S.T. принципы
@@ -1021,11 +1048,16 @@ fun test() {
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Содержит подробную главу о тестировании корутин: runTest, TestDispatcher, virtual time, а также паттерны тестирования Flow и StateFlow. Без этих знаний невозможно правильно тестировать асинхронный код в KMP.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы тестируемости через инверсию зависимостей и разделение слоёв. Объясняет, почему UseCases и Repositories должны зависеть от интерфейсов, а не реализаций, что позволяет легко подставлять fakes в unit тестах.
+- **Beck K. (2002).** *Test-Driven Development: By Example.* — TDD как методология и AAA (Arrange-Act-Assert) паттерн.
+- **Meszaros G. (2007).** *xUnit Test Patterns.* — Таксономия test doubles: stub, mock, fake, spy.
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию тестируемого Kotlin-кода: использование sealed classes для состояний (UiState), data classes для сравнения в assertions, и extension functions для custom matchers.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Тестирование suspend-функций и Flow с runTest и Turbine.
+- **Moskala M. (2021).** *Effective Kotlin.* — Написание тестируемого Kotlin-кода.
+- [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) — Мультиплатформенная тестовая библиотека.
 
 ---
 

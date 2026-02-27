@@ -28,6 +28,54 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Variance** — описывает, как отношение подтипирования (subtyping) между простыми типами переносится на составные (generic) типы.
+
+Формально, для конструктора типа `F<T>` и отношения подтипирования `A <: B` ("A подтип B"):
+
+| Variance | Условие | Обозначение | Kotlin |
+|----------|---------|-------------|--------|
+| **Covariant** | `A <: B ⟹ F<A> <: F<B>` | Сохраняет направление | `out T` |
+| **Contravariant** | `A <: B ⟹ F<B> <: F<A>` | Инвертирует направление | `in T` |
+| **Invariant** | `F<A>` и `F<B>` не связаны | Без связи | `T` (default) |
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Subtyping для records** | Cardelli, L. | 1984 | Формализация subtyping + variance для записей и функций |
+| **Variance для функций** | — (λ-calculus) | 1980s | Функции контравариантны по аргументу, ковариантны по результату |
+| **Java wildcards** | Igarashi & Viroli | 2002 | `? extends T` / `? super T` — use-site variance |
+| **Scala declaration-site** | Odersky, M. | 2006 | `+T` (covariant), `-T` (contravariant) — inspiration для Kotlin |
+| **Kotlin variance** | JetBrains | 2016 | `out T` / `in T` — declaration-site + use-site (`*` projection) |
+
+### Почему функции контравариантны по аргументу
+
+**Правило подтипирования функций (Liskov Substitution):**
+
+> `(A₁ → B₁) <: (A₂ → B₂)` тогда и только тогда, когда `A₂ <: A₁` (контравариантно) и `B₁ <: B₂` (ковариантно).
+
+Интуиция: если нужна функция `(Cat) → Animal`, можно подставить `(Animal) → Cat`:
+- Принимает **шире** (Animal ⊇ Cat) — безопасно, примет любого Cat
+- Возвращает **уже** (Cat ⊆ Animal) — безопасно, результат всё ещё Animal
+
+### Формальное обоснование: Producer/Consumer
+
+**Почему `out` (covariance) только для "выхода", `in` (contravariance) только для "входа":**
+
+| Позиция `T` | Пример | Допустимая variance | Почему |
+|-------------|--------|-------------------|--------|
+| **Return type** (out) | `fun get(): T` | Covariant (`out`) | Возвращаем `Dog` где ожидается `Animal` — безопасно |
+| **Parameter** (in) | `fun set(t: T)` | Contravariant (`in`) | Принимаем `Animal` где ожидается `Dog` — безопасно |
+| **Both** | `fun process(t: T): T` | Invariant | Нужны оба направления — нельзя ослабить |
+
+> **Правило безопасности:** Ковариантный тип (`out T`) гарантирует, что `T` никогда не появится в позиции аргумента метода. Контравариантный (`in T`) — что `T` не появится в позиции возврата. Это проверяется компилятором.
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -424,10 +472,15 @@ Type erasure влияет на то, как variance работает в runtime
 
 ## Источники и дальнейшее чтение
 
-- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — формальное определение variance через правила subtyping для функциональных типов и generic конструкторов
-- Cardelli L., Wegner P. (1985). *On Understanding Types, Data Abstraction, and Polymorphism*. — классическая систематизация полиморфизма, включая subtype polymorphism, на котором основана variance
-- Bloch J. (2018). *Effective Java*, 3rd ed. — Item 31 "Use bounded wildcards to increase API flexibility" — практическое объяснение PECS и его применения
-- [TypeAlias: Illustrated Guide to Variance](https://typealias.com/guides/illustrated-guide-covariance-contravariance/) — лучшая визуализация
+### Теоретические основы
+- Cardelli, L. (1984). "A Semantics of Multiple Inheritance" — Information and Computation; subtyping и variance для records
+- Igarashi, A. & Viroli, M. (2002). "On Variance-Based Subtyping for Parametric Types" — ECOOP; формализация wildcards
+- Pierce, B. (2002). *TAPL* — §15: subtyping, variance для функциональных типов и generic конструкторов
+- Liskov, B. & Wing, J. (1994). "A Behavioral Notion of Subtyping" — TOPLAS; Liskov Substitution Principle формально
+
+### Практические руководства
+- Bloch, J. (2018). *Effective Java*, 3rd ed. — Item 31: bounded wildcards, PECS
+- [TypeAlias: Illustrated Guide to Variance](https://typealias.com/guides/illustrated-guide-covariance-contravariance/) — визуализация
 - [Kotlin Docs: Generics](https://kotlinlang.org/docs/generics.html) — official reference
 
 ---

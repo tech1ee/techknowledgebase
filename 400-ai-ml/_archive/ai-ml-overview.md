@@ -36,6 +36,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Engineering** — инженерная дисциплина создания production-ready приложений на базе foundation models (Bommasani et al., 2021). В отличие от ML Engineering (обучение моделей) и Data Science (анализ данных), AI Engineering фокусируется на интеграции предобученных LLM в продукты.
+
+### Место AI Engineering в ландшафте дисциплин
+
+| Дисциплина | Фокус | Ключевые задачи | Основатели/Источники |
+|------------|-------|-----------------|---------------------|
+| **Data Science** | Анализ данных | Статистика, визуализация, гипотезы | Tukey (1962), EDA |
+| **ML Engineering** | Обучение моделей | Training, MLOps, feature engineering | Sculley et al. (2015), ML debt |
+| **AI Engineering** | Интеграция LLM | RAG, agents, prompt engineering, API | Huyen (2022), Karpathy (2023) |
+
+### Иерархия подходов к адаптации
+
+> **Правило 90/10:** По оценкам индустрии (Karpathy, 2023; Anthropic, 2024), ~90% задач решаются через prompt engineering + RAG, и только ~10% требуют fine-tuning или pre-training. Это фундаментальный принцип AI Engineering.
+
+```
+PRE-TRAINING → FINE-TUNING → RAG → PROMPT ENGINEERING
+    │               │          │           │
+ Максимум       Средние      Дни       Минуты
+ ресурсов       ресурсы
+ (месяцы)       (часы-дни)
+```
+
+### Ключевые теоретические работы
+
+- **Vaswani et al. (2017)** — архитектура Transformer, основа всех современных LLM
+- **Bommasani et al. (2021)** — концепция foundation models и их влияние на AI
+- **Russell & Norvig (2020)** — AI: A Modern Approach, системный взгляд на AI
+- **Jurafsky & Martin (2023)** — Speech and Language Processing, основа NLP
+
+**Связи:** [[llm-fundamentals]] (как работают LLM), [[ai-engineering-intro]] (введение в AI Engineering), [[models-landscape-2025]] (обзор моделей)
+
+---
+
 ## Быстрая навигация
 
 | Вопрос | Куда идти |
@@ -461,6 +496,17 @@ Reasoning models (o1, o3, DeepSeek R1), Multimodal AI (vision + audio + text), A
 
 ## Источники
 
+### Теоретические основы
+
+- Vaswani A. et al. (2017). *Attention Is All You Need*. NeurIPS
+- Bommasani R. et al. (2021). *On the Opportunities and Risks of Foundation Models*. arXiv:2108.07258
+- Russell S., Norvig P. (2020). *Artificial Intelligence: A Modern Approach*. 4th edition. Pearson
+- Jurafsky D., Martin J.H. (2023). *Speech and Language Processing*. 3rd edition
+- Huyen C. (2022). *Designing Machine Learning Systems*. O'Reilly
+- Sculley D. et al. (2015). *Hidden Technical Debt in Machine Learning Systems*. NeurIPS
+
+### Практические руководства
+
 - [Anthropic Documentation](https://docs.anthropic.com/) — Claude API
 - [OpenAI Documentation](https://platform.openai.com/docs) — GPT API
 - [LangChain Docs](https://python.langchain.com/) — AI orchestration
@@ -480,14 +526,6 @@ Reasoning models (o1, o3, DeepSeek R1), Multimodal AI (vision + audio + text), A
 **[[cloud-overview]]** — Облачные платформы (AWS, GCP, Azure) предоставляют managed AI-сервисы (Bedrock, Vertex AI, Azure OpenAI), GPU-инстансы для инференса и инфраструктуру для ML-пайплайнов. Выбор между managed API и self-hosted решениями — одно из ключевых архитектурных решений в AI Engineering, зависящее от требований к privacy, latency и стоимости.
 
 **[[programming-overview]]** — Фундаментальные принципы программирования (SOLID, паттерны проектирования, тестирование) полностью применимы к AI-коду. Prompt templates, chain-of-thought логика, tool definitions — всё это код, который нуждается в версионировании, тестировании и рефакторинге. AI Engineering — это прежде всего software engineering с дополнительными ML-специфичными паттернами.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — фундаментальный учебник, покрывающий все ключевые области AI от поиска и планирования до машинного обучения и NLP, идеальная стартовая точка для системного понимания AI
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практическое руководство по проектированию ML-систем от data engineering до мониторинга в продакшене, написанное с позиции инженера, а не исследователя
-- **Jurafsky D., Martin J.H. (2023). Speech and Language Processing. 3rd edition.** — подробное изложение NLP и языковых моделей, от классических методов до трансформеров, необходимое для глубокого понимания LLM
 
 ---
 

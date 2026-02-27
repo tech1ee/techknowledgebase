@@ -45,6 +45,40 @@ LLM не знает что было вчера (knowledge cutoff) и не вид
 
 ---
 
+## Теоретические основы
+
+> **RAG** (Retrieval-Augmented Generation) — архитектурный паттерн, формализованный Lewis et al. (2020), при котором генеративная модель дополняется внешним retrieval-компонентом: $P(y|x) = \sum_{z \in \text{top-k}} P(z|x) \cdot P(y|x, z)$, где $z$ — найденные документы, $x$ — запрос, $y$ — ответ.
+
+### Теоретические корни
+
+| Концепция | Автор/Год | Вклад в RAG/Prompt Engineering |
+|-----------|-----------|-------------------------------|
+| Information Retrieval | Salton, 1971 | TF-IDF, векторная модель поиска |
+| Semantic similarity | Deerwester et al., 1990 (LSA) | Латентное семантическое пространство |
+| Attention mechanism | Bahdanau et al., 2014 | Избирательное внимание к контексту |
+| In-context learning | Brown et al., 2020 (GPT-3) | Few-shot через примеры в промпте |
+| **RAG** | Lewis et al., 2020 | Формализация retrieval + generation |
+| Chain-of-Thought | Wei et al., 2022 | Пошаговое рассуждение в промпте |
+
+### Prompt Engineering как дисциплина
+
+> **In-context learning** — способность LLM решать задачи на основе примеров, предоставленных в промпте, без обновления весов. Теоретическое объяснение: transformer неявно реализует gradient descent в forward pass (Akyürek et al., 2022).
+
+Иерархия техник промптинга по сложности:
+
+```
+Zero-shot → Few-shot → Chain-of-Thought → Tree-of-Thought → ReAct
+    │           │              │                  │             │
+ Простой     2-5 примеров   "Думай         Ветвление      Действия
+ запрос      в промпте      пошагово"      рассуждений    + наблюдение
+```
+
+> **Lost in the Middle** (Liu et al., 2023) — эмпирически показано, что LLM хуже обрабатывают информацию в середине длинного контекста, что определяет стратегию размещения чанков в RAG-промпте.
+
+**Связи:** [[rag-advanced-techniques]] (продвинутые RAG-паттерны), [[embeddings-complete-guide]] (теория эмбеддингов), [[prompt-engineering-masterclass]] (практика промптинга)
+
+---
+
 ## Зачем это нужно
 
 У LLM (Large Language Models — больших языковых моделей) есть две фундаментальные проблемы:
@@ -578,10 +612,21 @@ results = collection.query(
 
 ## Источники
 
-- [Prompt Engineering Guide: RAG](https://www.promptingguide.ai/techniques/rag) — проверено 2025-11-24
-- [AWS: What is RAG](https://aws.amazon.com/what-is/retrieval-augmented-generation/) — проверено 2025-11-24
-- [IBM: RAG vs Fine-tuning vs Prompt Engineering](https://www.ibm.com/think/topics/rag-vs-fine-tuning-vs-prompt-engineering) — проверено 2025-11-24
-- [DAIR.AI Prompt Engineering Guide](https://github.com/dair-ai/Prompt-Engineering-Guide) — проверено 2025-11-24
+### Теоретические основы
+
+- Lewis P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. NeurIPS
+- Brown T. et al. (2020). *Language Models are Few-Shot Learners (GPT-3)*. NeurIPS
+- Wei J. et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models*. NeurIPS
+- Liu N.F. et al. (2023). *Lost in the Middle: How Language Models Use Long Contexts*. arXiv:2307.03172
+- Akyürek E. et al. (2022). *What Learning Algorithm is In-Context Learning?*. arXiv:2211.15661
+- Salton G. (1971). *The SMART Retrieval System*. Prentice-Hall
+
+### Практические руководства
+
+- [Prompt Engineering Guide: RAG](https://www.promptingguide.ai/techniques/rag)
+- [AWS: What is RAG](https://aws.amazon.com/what-is/retrieval-augmented-generation/)
+- [IBM: RAG vs Fine-tuning vs Prompt Engineering](https://www.ibm.com/think/topics/rag-vs-fine-tuning-vs-prompt-engineering)
+- [DAIR.AI Prompt Engineering Guide](https://github.com/dair-ai/Prompt-Engineering-Guide)
 
 ---
 

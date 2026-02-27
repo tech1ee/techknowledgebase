@@ -63,6 +63,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Профилирование (profiling) опирается на статистические методы выборки и теорию измерения производительности, формализованные в работах по software performance engineering.
+
+> **Определение:** *Profiling — систематический сбор данных о потреблении ресурсов (CPU, память, блокировки) работающей программой для выявления узких мест (bottlenecks).*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM Profiling |
+|------------------------|-----------------|---------------------------|
+| **Statistical sampling** | Knuth, 1971; gprof (Graham et al., 1982) | async-profiler делает выборку стеков с частотой 100 Hz → статистически точная картина при overhead <1% |
+| **Flame graphs** | Gregg, 2011 | Визуализация call stacks: ширина = % CPU. Стандарт индустрии для анализа hotspots |
+| **USE Method** | Gregg, 2013 | Utilization, Saturation, Errors — методология для системного анализа bottlenecks |
+| **Amdahl's Law** | Amdahl, 1967 | Предельное ускорение определяется долей последовательного кода → профилирование показывает эту долю |
+| **Generational hypothesis** | Ungar, 1984 | Большинство объектов умирают молодыми → allocation profiling выявляет нарушения этого паттерна |
+
+> **Ключевой принцип:** Sampling vs Instrumentation — это trade-off между точностью и overhead. Sampling (статистическая выборка) даёт приемлемую точность при <1% overhead, потому что Центральная Предельная Теорема гарантирует сходимость при достаточном числе samples. Instrumentation (вставка кода в каждый метод) даёт точные числа, но overhead 10-50% искажает поведение программы (observer effect).
+
+Связанные темы: [[jvm-performance-overview]] (USE/RED методологии), [[jvm-gc-tuning]] (allocation profiling и generational hypothesis), [[jvm-jit-compiler]] (safepoint bias и влияние JIT на профиль), [[jvm-instrumentation-agents]] (APM agents используют ClassFileTransformer для instrumentation profiling).
+
+---
+
 ## Зачем это знать
 
 Профилирование -- сбор данных о том, где приложение тратит ресурсы: CPU time, memory allocations, lock contention. async-profiler делает sampling (снимки состояния) с минимальным overhead (<1%) и генерирует flame graphs -- визуализацию, где ширина полосы показывает долю времени метода.
@@ -532,10 +552,17 @@ Fix: ConcurrentHashMap + striped locking
 
 ## Источники и дальнейшее чтение
 
-- Gregg B. (2020). *Systems Performance: Enterprise and the Cloud, 2nd ed.* -- Фундаментальная книга о performance analysis от создателя flame graphs. Глава 6 (CPUs) и глава 13 (Perf Tools) подробно описывают теорию sampling, методологию USE/RED и flame graph визуализацию. Обязательна для понимания, ПОЧЕМУ profiling работает, а не только КАК.
-- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond, 2nd ed.* -- Главы 3 и 4 о CPU и memory profiling JVM-приложений. Практическое руководство с примерами async-profiler, JFR и оптимизации реальных приложений. Лучший источник для JVM-специфичного profiling.
-- Pangin A. (2016-2024). *async-profiler documentation and talks.* -- Документация и доклады автора async-profiler. Объясняют архитектуру инструмента, safepoint bias problem и техники low-overhead sampling через perf_events. Доклады на JPoint и Joker -- лучший первоисточник.
-- Goetz B. (2006). *Java Concurrency in Practice.* -- Необходим для понимания lock contention profiling: объясняет synchronized, ReentrantLock, atomic operations на глубоком уровне. Без этих знаний lock flame graph невозможно интерпретировать корректно.
+### Теоретические основы
+
+- Gregg B. (2020). *Systems Performance: Enterprise and the Cloud, 2nd ed.* -- Фундаментальная книга о performance analysis от создателя flame graphs. Теория sampling, методология USE/RED, flame graph визуализация.
+- Graham S., Kessler P., McKusick M. (1982). *gprof: A Call Graph Execution Profiler*. -- Пионерская работа по статистическому профилированию через sampling: теоретическое обоснование, почему выборка стеков даёт достоверную картину.
+- Knuth D. (1971). *An Empirical Study of FORTRAN Programs*. -- Одно из первых эмпирических исследований распределения времени выполнения, подтвердившее 80/20 правило для hotspots.
+
+### Практические руководства
+
+- Oaks S. (2020). *Java Performance*, 2nd ed. -- CPU и memory profiling JVM-приложений с примерами async-profiler и JFR.
+- Pangin A. (2016-2024). *async-profiler documentation and talks.* -- Архитектура инструмента, safepoint bias, low-overhead sampling через perf_events.
+- Goetz B. (2006). *Java Concurrency in Practice.* -- Необходим для интерпретации lock contention profiling.
 
 ---
 

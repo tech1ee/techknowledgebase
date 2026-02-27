@@ -29,6 +29,45 @@ prerequisites:
 
 iOS использует строгую модель разрешений с обязательными текстовыми описаниями в Info.plist, Privacy Manifest для отслеживания API (iOS 17+), runtime-запросы через системные алерты, и Keychain для безопасного хранения. App Transport Security требует HTTPS, а App Tracking Transparency — явное согласие пользователя на трекинг. Всегда запрашивайте разрешения в контексте использования, обрабатывайте отказы gracefully, и используйте минимально необходимый уровень доступа.
 
+## Теоретические основы
+
+> **Permission Model** — формальная модель контроля доступа, определяющая, какие субъекты (приложения) имеют доступ к каким объектам (камера, геолокация, контакты). iOS реализует **discretionary access control** с согласия пользователя: система запрашивает разрешение в runtime, и пользователь принимает решение.
+
+### Академический контекст
+
+Модель безопасности iOS основана на десятилетиях исследований в области информационной безопасности:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Principle of Least Privilege | Saltzer & Schroeder, 1975 | Минимально необходимые привилегии | Приложение запрашивает только нужные разрешения |
+| Discretionary Access Control | DoD TCSEC, 1985 («Orange Book») | Владелец ресурса решает, кому дать доступ | Пользователь одобряет/отклоняет каждое разрешение |
+| Mandatory Access Control | Bell-LaPadula, 1973 | Системные правила, не зависящие от пользователя | Sandbox ограничивает доступ к файловой системе независимо от разрешений |
+| Privacy by Design | Cavoukian, 2009 | Приватность как default, не опция | Privacy Manifest, ATT, минимальные разрешения |
+| Informed Consent | Bioethics → IT Privacy | Пользователь должен понимать, на что соглашается | Usage Description в Info.plist: обязательное текстовое объяснение |
+
+### Эволюция модели разрешений iOS
+
+| Год | iOS | Нововведение | Значимость |
+|-----|-----|-------------|------------|
+| 2008 | iOS 2 | Нет runtime permissions | Все разрешения при установке (как Android до 6.0) |
+| 2012 | iOS 6 | Runtime permissions для контактов, фото | Первые runtime-запросы |
+| 2014 | iOS 8 | Location «When In Use» vs «Always» | Granular location permissions |
+| 2017 | iOS 11 | «Always» → «When In Use» degradation | Защита от злоупотребления location |
+| 2020 | iOS 14 | Approximate Location, ATT framework | App Tracking Transparency |
+| 2023 | iOS 17 | Privacy Manifest, Required Reason APIs | Декларативная приватность для SDK |
+
+> **Privacy by Design** (Cavoukian, 2009): «Privacy must be the default setting. No action is required on the part of the individual to protect their privacy — it is built into the system, by default.» iOS реализует это через: разрешения по умолчанию отклонены (.notDetermined → .denied при отказе), HTTPS обязателен (ATS), Keychain шифрован по умолчанию.
+
+### Связь с CS-фундаментом
+
+- [[ios-architecture]] — sandbox как Mandatory Access Control
+- [[ios-code-signing]] — entitlements как декларация capabilities
+- [[ios-data-persistence]] — Keychain и File Protection для защиты данных
+- [[security-fundamentals]] — общие модели контроля доступа (DAC, MAC, RBAC)
+- [[android-permissions-security]] — сравнение: iOS runtime permissions vs Android runtime permissions
+
+---
+
 ## Аналогия
 
 Представьте iOS как элитный жилой комплекс с охраной. Info.plist — это регистрационная форма, где вы объясняете, зачем вам нужен доступ в спортзал (камера) или бассейн (геолокация). Privacy Manifest — журнал посещений, который показывает, какие охраняемые зоны вы посещали. Keychain — персональный сейф в вашей квартире. App Transport Security — правило "только защищенные каналы связи". Охранник (система) спрашивает разрешение каждый раз, когда вы хотите войти в новую зону, и жильцы (пользователи) могут отозвать доступ в любой момент через диспетчерскую (Settings).
@@ -2026,10 +2065,14 @@ NotificationCenter.default.addObserver(
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает систему разрешений iOS, Info.plist ключи, Keychain Services и App Transport Security; обязательна для понимания security-модели платформы.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры запроса разрешений камеры, геолокации и фотобиблиотеки с правильной обработкой всех статусов авторизации.
-- Apple (2023). *The Swift Programming Language.* — описывает access control модификаторы (public, internal, private), которые являются частью общей security-модели Swift-приложений.
+### Теоретические основы
+- Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems.* — 8 принципов безопасности, включая Least Privilege и Fail-Safe Defaults
+- Cavoukian A. (2009). *Privacy by Design: The 7 Foundational Principles.* — приватность как default, основа модели разрешений iOS 14+
+- Bell D., LaPadula L. (1973). *Secure Computer Systems: Mathematical Foundations.* — формальная модель контроля доступа (MAC), реализованная в iOS sandbox
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — система разрешений iOS, Info.plist ключи, Keychain Services, ATS
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — запрос разрешений камеры, геолокации, обработка статусов авторизации
 
 ### Документация
 - [Requesting Authorization for Media Capture](https://developer.apple.com/documentation/avfoundation/capture_setup/requesting_authorization_for_media_capture)

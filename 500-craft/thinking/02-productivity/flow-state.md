@@ -34,6 +34,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Flow (поток)** — состояние полного погружения в деятельность, характеризующееся потерей самосознания, искажением восприятия времени и автотелическим опытом (Csikszentmihalyi, 1975, 1990).
+
+Теория потока — одна из наиболее влиятельных концепций позитивной психологии:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Beyond Boredom and Anxiety | Csikszentmihalyi | 1975 | Первое описание flow на основе интервью с альпинистами, хирургами, шахматистами |
+| Flow: Psychology of Optimal Experience | Csikszentmihalyi | 1990 | Систематизация: 8 компонентов потока, challenge-skill balance |
+| Autotelic personality | Csikszentmihalyi | 1997 | Люди, склонные к flow, характеризуются любопытством и настойчивостью |
+| Transient Hypofrontality | Arne Dietrich | 2003 | Нейронаука flow: временное снижение активности префронтальной коры |
+| Flow Genome Project | Kotler & Wheal | 2017 | 17 триггеров потока, нейрохимия (дофамин, норэпинефрин, эндорфины, анандамид, серотонин) |
+| McKinsey 10-year study | McKinsey | 2013 | Топ-менеджеры в flow в 5 раз продуктивнее |
+
+> **Csikszentmihalyi (1990):** Flow возникает при совпадении трёх условий: (1) чёткие цели, (2) немедленная обратная связь, (3) баланс между сложностью задачи и уровнем навыков.
+
+Нейронаучное объяснение — **Transient Hypofrontality** (Dietrich, 2003): в состоянии потока префронтальная кора (отвечающая за самокритику, чувство времени, ощущение границ «я») временно деактивируется. Это объясняет феноменологию flow: исчезновение внутреннего критика, потерю ощущения времени, растворение эго. Одновременно выделяется коктейль нейромедиаторов (дофамин + норэпинефрин + эндорфины), усиливающий концентрацию и мотивацию.
+
+Связь с другими концепциями раздела: Flow — психологическое состояние, [[deep-work]] — практическая методология его достижения, [[attention-crisis]] — главный враг, [[motivation-science]] (SDT) — объяснение автотелического опыта через внутреннюю мотивацию.
+
+---
+
 ## Что такое Flow State
 
 ### Происхождение термина
@@ -907,12 +930,18 @@ Flow обычно возникает в рамках Deep Work.
 
 ## Источники
 
-- [Wikipedia: Flow (psychology)](https://en.wikipedia.org/wiki/Flow_(psychology)) — проверено 2025-12-19
+### Теоретические основы
+- Csikszentmihalyi, M. *Flow: The Psychology of Optimal Experience*. Harper & Row, 1990
+- Csikszentmihalyi, M. *Beyond Boredom and Anxiety*. Jossey-Bass, 1975
+- [Arne Dietrich: Transient Hypofrontality](https://www.sciencedirect.com/science/article/abs/pii/S1053810003000468) — нейронаука flow — проверено 2025-12-19
 - [PMC: The neuroscience of flow](https://pmc.ncbi.nlm.nih.gov/articles/PMC10353296/) — проверено 2025-12-19
-- [Positive Psychology: Flow Theory](https://positivepsychology.com/mihaly-csikszentmihalyi-father-of-flow/) — проверено 2025-12-19
 - [McKinsey: Increasing the meaning quotient of work](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/increasing-the-meaning-quotient-of-work) — проверено 2025-12-19
+
+### Практические руководства
+- Kotler, S. & Wheal, J. *Stealing Fire*. Dey Street Books, 2017
+- [Wikipedia: Flow (psychology)](https://en.wikipedia.org/wiki/Flow_(psychology)) — проверено 2025-12-19
+- [Positive Psychology: Flow Theory](https://positivepsychology.com/mihaly-csikszentmihalyi-father-of-flow/) — проверено 2025-12-19
 - [Harvard Business Review: Create a Work Environment That Fosters Flow](https://hbr.org/2014/05/create-a-work-environment-that-fosters-flow) — проверено 2025-12-19
-- [Arne Dietrich: Transient Hypofrontality](https://www.sciencedirect.com/science/article/abs/pii/S1053810003000468) — проверено 2025-12-19
 
 ---
 

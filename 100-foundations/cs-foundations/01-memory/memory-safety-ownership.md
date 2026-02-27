@@ -30,6 +30,58 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Memory Safety** — свойство программы, гарантирующее отсутствие следующих ошибок: доступ к невыделенной/освобождённой памяти, выход за границы буфера, использование неинициализированных данных, гонки данных при конкурентном доступе.
+
+Формально: программа memory-safe, если каждое обращение к памяти через указатель `p` удовлетворяет: (1) `p` указывает на валидно выделенный блок, (2) этот блок не был освобождён, (3) обращение в пределах границ блока.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **RAII** | Stroustrup | 1984 | Resource Acquisition Is Initialization — связь жизни ресурса с scope объекта |
+| **Linear Types** | Girard | 1987 | Формальная система типов: каждое значение используется ровно один раз |
+| **Affine Types** | — | 1990s | Значение используется **не более** одного раза (основа Rust ownership) |
+| **Region-based memory** | Tofte & Talpin | 1994 | Статическое определение lifetime через регионы |
+| **Ownership Types** | Clarke, Potter, Noble | 1998 | Формализация владения объектами для encapsulation |
+| **Rust Ownership** | Hoare & Rust team | 2010-15 | Практическая реализация affine types + borrowing в системном языке |
+
+### Теоретический базис: линейные и аффинные типы
+
+Ownership в Rust основан на **аффинных типах** (Girard, 1987):
+
+```
+Линейная логика:    каждый ресурс используется РОВНО один раз
+Аффинные типы:      каждый ресурс используется НЕ БОЛЕЕ одного раза
+Ownership (Rust):   каждое значение имеет ОДНОГО владельца; move = передача ownership
+```
+
+> **Ключевая идея:** вместо runtime-управления памятью (GC, RC) — **статические гарантии** через систему типов. Компилятор доказывает корректность на этапе компиляции.
+
+### Спектр подходов к memory safety
+
+| Подход | Механизм | Гарантии | Цена | Примеры |
+|--------|----------|----------|------|---------|
+| **Manual** | Программист вручную | Никаких | Баги: UAF, double-free | C, C++ (без RAII) |
+| **RAII** | Деструктор при выходе из scope | Нет утечек в single-owner | Не решает shared ownership | C++ с smart ptr |
+| **Reference Counting** | Счётчик ссылок | Нет утечек (кроме циклов) | Runtime overhead (+20-30%) | Swift ARC, Python |
+| **Tracing GC** | Reachability analysis | Полная автоматизация | Паузы, overhead памяти | Java, Kotlin/JVM, Go |
+| **Ownership** | Affine types + borrowing | Compile-time safety | Сложность для программиста | Rust |
+
+### Формальные правила Rust Ownership
+
+Три правила, гарантирующие memory safety без GC:
+1. **Каждое значение имеет ровно одного владельца** (unique ownership)
+2. **Когда владелец выходит из scope, значение уничтожается** (RAII)
+3. **Borrowing:** либо `&T` (множество иммутабельных ссылок), либо `&mut T` (одна мутабельная), но не оба одновременно
+
+> **Следствие правила 3:** Data race невозможен на уровне типов. Data race = shared access + mutation + no synchronization. Borrow checker исключает комбинацию shared + mutation.
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -549,17 +601,18 @@ ARC — вторая стратегия, находящаяся между GC и
 
 ## Источники и дальнейшее чтение
 
-- **Pierce, B. (2002). Types and Programming Languages (TAPL).** — фундаментальный учебник по системам типов, который объясняет теоретическую базу ownership. Главы о линейных типах (linear types) и аффинных типах (affine types) — это формальный фундамент, на котором построен borrow checker Rust. Для тех, кто хочет понять ownership не как "набор правил", а как математическую систему.
+### Теоретические основы
+- Girard, J.-Y. (1987). "Linear Logic" — Theoretical Computer Science; формальная основа linear/affine types
+- Tofte, M. & Talpin, J.-P. (1994). "Implementation of the Typed Call-by-Value λ-calculus using a Stack of Regions" — region-based memory management
+- Clarke, D., Potter, J., Noble, J. (1998). "Ownership Types for Flexible Alias Protection" — OOPSLA; формализация ownership types
+- Pierce, B. (2002). *TAPL* — главы о линейных и аффинных типах — формальный фундамент borrow checker
 
-- **Stroustrup, B. (2013). The C++ Programming Language, 4th Edition.** — автор C++ объясняет RAII, move semantics и resource management. Главы 13-14 показывают, как C++ решает (и не решает) проблему memory safety. Полезно для понимания, почему Rust добавил borrow checker к RAII.
-
-- **Klabnik, S. & Nichols, C. (2023). The Rust Programming Language.** — официальная книга по Rust ("The Book"). Главы 4-10 — лучшее объяснение ownership, borrowing, lifetimes. Написана для программистов, а не теоретиков.
-
+### Практические руководства
+- Stroustrup, B. (2013). *The C++ Programming Language*, 4th ed. — RAII, move semantics
+- Klabnik, S. & Nichols, C. (2023). *The Rust Programming Language* — ownership, borrowing, lifetimes
 - [Rust Book: Ownership](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) — официальная документация
 - [Stanford CS242: Rust Memory Safety](https://stanford-cs242.github.io/f18/lectures/05-1-rust-memory-safety.html) — академический взгляд
-- [Kotlin: Immutability in Native](https://kotlinlang.org/docs/native-immutability.html) — freeze модель
 - [Apple WWDC: Swift Actors](https://developer.apple.com/videos/play/wwdc2021/10133/) — actors и Sendable
-- [verdagon: Memory Safety Approaches](https://verdagon.dev/grimoire/grimoire) — сравнение подходов
 
 ---
 

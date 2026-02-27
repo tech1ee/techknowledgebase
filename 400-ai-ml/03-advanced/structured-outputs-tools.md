@@ -69,6 +69,33 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Structured Output** — преобразование неструктурированного выхода языковой модели в формально верифицируемую структуру данных, соответствующую заданной схеме (JSON Schema, Pydantic model, XML DTD). Это частный случай задачи **information extraction** в NLP.
+
+Проблема формализации выхода генеративных моделей имеет глубокие корни в теории формальных языков. Хомский (1956) классифицировал формальные грамматики по иерархии сложности. Естественный язык относится к контекстно-зависимым грамматикам (Type 1), тогда как JSON — к контекстно-свободным (Type 2). **Constrained decoding** ограничивает генерацию модели подмножеством токенов, допустимых грамматикой целевого формата.
+
+| Подход | Год | Механизм | Гарантия формата | Ограничения |
+|--------|-----|----------|------------------|-------------|
+| Prompt engineering | 2022 | Инструкция в промпте | ~35-40% | Модель может игнорировать |
+| JSON Mode | 2023 | Fine-tuning + post-processing | ~90% | Нет гарантии соответствия схеме |
+| Function Calling | 2023 | Специальные токены + training | ~95% | Ограниченные типы данных |
+| **Constrained Decoding** | 2024 | **Маскирование токенов при sampling** | **100%** | Замедление генерации, ограничения грамматики |
+
+> **Constrained Decoding** формально: на шаге $t$ вместо sampling из полного словаря $V$ модель выбирает из подмножества $V_t \subseteq V$, определяемого текущим состоянием конечного автомата, соответствующего целевой грамматике. Willard & Louf (2023), *Efficient Guided Generation for LLMs*. arXiv:2307.09702.
+
+**Ключевые теоретические результаты:**
+
+- **Context-Free Grammar (CFG) Guidance** — Scholak et al. (2021) показали, что constrained decoding с CFG не снижает качество генерации при правильном дизайне грамматики
+- **XGrammar** — Dong et al. (2024) достигли 100x ускорения constrained decoding через предварительную компиляцию грамматик в pushdown automata. arXiv:2411.15100
+- **Format ≠ Correctness** — Boundary ML (2024) продемонстрировали, что 100% JSON compliance не гарантирует семантическую корректность: модель может вернуть валидный JSON с неверными данными
+
+Связь с [[type-systems-theory|теорией типов]]: JSON Schema и Pydantic-модели — это системы типов для runtime-валидации. Structured outputs реализуют принцип **"well-typed programs don't go wrong"** (Milner, 1978) в контексте LLM-генерации: если схема определена корректно, выход модели гарантированно соответствует ожидаемому типу.
+
+См. также: [[ai-api-integration|API интеграция]] — практические аспекты structured outputs в API, [[mcp-model-context-protocol|MCP]] — стандартизация tool use.
+
+---
+
 ## Введение: Почему это важно
 
 Представь, что ты строишь production систему. Твой бэкенд ожидает JSON с полями `name`, `price`, `currency`. Ты отправляешь запрос к LLM: "Извлеки информацию о продукте из текста: iPhone 15 Pro стоит $999".
@@ -2639,23 +2666,32 @@ def test_calculator_rejects_code_execution():
 
 ## Источники
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [OpenAI Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs) | Docs | API, strict mode, 100% compliance |
-| 2 | [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling) | Docs | Tool definitions, parallel calls |
-| 3 | [Anthropic Tool Use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) | Docs | Claude tools API, input_schema |
-| 4 | [Anthropic Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use) | Guide | Computer use, MCP integration |
-| 5 | [Gemini Structured Outputs](https://ai.google.dev/gemini-api/docs/structured-output) | Docs | responseSchema, native support |
-| 6 | [Instructor Docs](https://python.useinstructor.com/) | Library | Multi-provider, retries, streaming |
-| 7 | [Pydantic AI](https://ai.pydantic.dev/) | Library | Type-safe tools, agents |
-| 8 | [Outlines](https://github.com/dottxt-ai/outlines) | Library | Regex, grammar constraints |
-| 9 | [XGrammar Paper](https://arxiv.org/abs/2411.15100) | Paper | 100x faster constrained decoding |
-| 10 | [BAML](https://github.com/BoundaryML/baml) | Library | Schema-first, multi-language |
-| 11 | [LangChain Structured](https://python.langchain.com/docs/concepts/structured_outputs/) | Docs | with_structured_output API |
-| 12 | [Agenta Guide](https://agenta.ai/blog/the-guide-to-structured-outputs-and-function-calling-with-llms) | Guide | Comprehensive comparison |
-| 13 | [Martin Fowler: Function Calling](https://martinfowler.com/articles/function-call-LLM.html) | Article | Architecture patterns |
-| 14 | [Boundary ML: False Confidence](https://boundaryml.com/blog/structured-outputs-create-false-confidence) | Article | Format ≠ correctness |
-| 15 | [vLLM Structured](https://docs.vllm.ai/en/stable/features/structured_outputs.html) | Docs | Server-side enforcement |
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Chomsky N. (1956). *Three Models for the Description of Language*. IRE Transactions | Иерархия формальных грамматик — основа constrained decoding |
+| 2 | Milner R. (1978). *A Theory of Type Polymorphism in Programming*. JCSS | Принцип типовой безопасности, применимый к JSON Schema |
+| 3 | Willard B., Louf R. (2023). *Efficient Guided Generation for LLMs*. arXiv:2307.09702 | Формализация constrained decoding через конечные автоматы |
+| 4 | Dong Y. et al. (2024). *XGrammar: Flexible and Efficient Structured Generation*. arXiv:2411.15100 | 100x ускорение через pushdown automata |
+| 5 | Scholak T. et al. (2021). *PICARD: Parsing Incrementally for Constrained Auto-Regressive Decoding*. EMNLP | CFG-guided decoding без потери качества |
+| 6 | Schick T. et al. (2023). *Toolformer: Language Models Can Teach Themselves to Use Tools*. arXiv:2302.04761 | Self-supervised обучение tool use |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OpenAI Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs) | API, strict mode, 100% compliance |
+| 2 | [OpenAI Function Calling](https://platform.openai.com/docs/guides/function-calling) | Tool definitions, parallel calls |
+| 3 | [Anthropic Tool Use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) | Claude tools API, input_schema |
+| 4 | [Anthropic Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use) | Computer use, MCP integration |
+| 5 | [Gemini Structured Outputs](https://ai.google.dev/gemini-api/docs/structured-output) | responseSchema, native support |
+| 6 | [Instructor Docs](https://python.useinstructor.com/) | Multi-provider, retries, streaming |
+| 7 | [Pydantic AI](https://ai.pydantic.dev/) | Type-safe tools, agents |
+| 8 | [Outlines](https://github.com/dottxt-ai/outlines) | Regex, grammar constraints |
+| 9 | [BAML](https://github.com/BoundaryML/baml) | Schema-first, multi-language |
+| 10 | [Martin Fowler: Function Calling](https://martinfowler.com/articles/function-call-LLM.html) | Architecture patterns |
+| 11 | [Boundary ML: False Confidence](https://boundaryml.com/blog/structured-outputs-create-false-confidence) | Format ≠ correctness |
 
 ---
 
@@ -2676,11 +2712,6 @@ def test_calculator_rejects_code_execution():
 **[[type-systems-theory]]** — Теория систем типов даёт формальную основу для понимания structured outputs. JSON Schema, Pydantic-модели и TypeScript-типы — это практические реализации типовых систем, обеспечивающих валидацию на этапе компиляции и рантайма. Понимание variance, generics и type inference помогает проектировать более точные и безопасные схемы для LLM-ответов.
 
 ---
-
-## Источники и дальнейшее чтение
-
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — разделы о представлении знаний и логическом выводе дают теоретическую базу для понимания формализации LLM-ответов через схемы и типы
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практические паттерны интеграции ML-моделей в продакшен-системы, включая валидацию данных и обработку ошибок, применимые к structured outputs
 
 ---
 

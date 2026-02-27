@@ -34,6 +34,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Graphics API** — интерфейс абстракции между приложением и GPU, определяющий модель программирования графического конвейера. Эволюция этих API отражает переход от **implicit state machine** (OpenGL) к **explicit command model** (Vulkan/Metal/DX12), что соответствует общему тренду в системном программировании: от абстракций, скрывающих сложность, к абстракциям, дающим контроль.
+
+Историческая эволюция Graphics API следует закону увеличения параллелизма GPU. Первые GPU (SGI, 1990-е) были **fixed-function pipeline** — аппаратно реализованные этапы без программирования. Программируемые шейдеры (Lindholm et al., *A User-Programmable Vertex Engine*, SIGGRAPH 2001) превратили GPU в массивно-параллельные процессоры общего назначения (GPGPU).
+
+| Поколение | API | Год | Модель | Абстракция драйвера |
+|-----------|-----|-----|--------|---------------------|
+| I | OpenGL 1.0 | 1992 | Fixed-function pipeline | Максимальная (state machine) |
+| II | OpenGL ES 2.0 | 2007 | Programmable shaders | Высокая (implicit sync) |
+| III | Vulkan 1.0 | 2016 | Explicit command buffers | Минимальная (explicit everything) |
+| — | Metal | 2014 | Explicit (Apple-only) | Минимальная |
+| — | DirectX 12 | 2015 | Explicit (Microsoft) | Минимальная |
+
+> **GPU architecture** основана на парадигме **SIMD** (Single Instruction, Multiple Data) из таксономии Флинна (1966): тысячи простых ядер выполняют одну и ту же инструкцию над разными данными (пикселями, вершинами). Это фундаментально отличается от CPU (MIMD), где несколько сложных ядер выполняют разные инструкции.
+
+**Vulkan** (Khronos Group, 2016) — результат проекта *glNext*, отвечающий на проблему **driver overhead** в OpenGL: валидация состояний, implicit synchronization и single-threaded command submission. Vulkan перекладывает эти задачи на приложение через **command buffers** — реализация паттерна **Command** (Gamma et al., 1994), позволяющая записывать GPU-команды из нескольких потоков параллельно.
+
+Android использует **Skia** как 2D-движок поверх OpenGL ES/Vulkan. С Android 12+ Google перевёл Skia backend на Vulkan (проект **ANGLE** для OpenGL → Vulkan трансляции). Это пример **Bridge** паттерна (Gamma et al., 1994): высокоуровневый API (Canvas/Skia) отделён от низкоуровневой реализации (OpenGL ES или Vulkan).
+
+---
+
 ## Интуиция: 5 аналогий
 
 ### 1. GPU как фабрика
@@ -612,16 +634,23 @@ GPU ограничен не только compute, но и memory bandwidth
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- **Flynn M. (1966). Very High-Speed Computing Systems.** — Таксономия SIMD/MIMD (GPU vs CPU архитектура)
+- **Lindholm E. et al. (2001). A User-Programmable Vertex Engine. SIGGRAPH.** — Программируемые шейдеры
+- **Gamma E. et al. (1994). Design Patterns.** — Command (Vulkan command buffers), Bridge (Skia → GL/Vulkan)
+- **Akenine-Moller T. et al. (2018). Real-Time Rendering.** — GPU pipeline, fill rate, shader model
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [OpenGL ES Android](https://developer.android.com/develop/ui/views/graphics/opengl) | Docs | Android specific |
 | 2 | [Vulkan Tutorial](https://vulkan-tutorial.com/) | Tutorial | Vulkan basics |
 | 3 | [GPU Gems](https://developer.nvidia.com/gpugems/gpugems/contributors) | Book | Advanced techniques |
 
-### Книги
-
-- **Meier R. (2022)** *Professional Android* — введение в SurfaceView, TextureView и использование OpenGL ES для custom rendering в Android приложениях.
-- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практические примеры работы с Canvas и базовым OpenGL ES для создания интерактивных визуализаций.
+- **Meier R. (2022)** *Professional Android* — SurfaceView, TextureView, OpenGL ES
+- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — Canvas и базовый OpenGL ES
 
 ---
 

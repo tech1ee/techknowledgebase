@@ -87,6 +87,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Continuous Integration: от XP к DevOps
+
+> **Continuous Integration (CI)** — практика, формализованная Martin Fowler (2006, *"Continuous Integration"*) на основе идей Extreme Programming (Beck, 1999): разработчики интегрируют код в общую ветку несколько раз в день, каждая интеграция верифицируется автоматической сборкой и тестами.
+
+| Практика | Определение | Метрика |
+|----------|-------------|---------|
+| **CI** | Автоматическая сборка + тесты при каждом push | Build success rate, время сборки |
+| **CD (Delivery)** | Артефакт всегда готов к release | Lead time for changes |
+| **CD (Deployment)** | Автоматический deploy в production | Deployment frequency |
+
+### DORA Metrics: научно обоснованные метрики
+
+> Исследование **DORA** (DevOps Research and Assessment, Forsgren, Humble, Kim, *"Accelerate"*, 2018) — крупнейшее научное исследование эффективности software delivery. Четыре метрики (Deployment Frequency, Lead Time, Change Failure Rate, Time to Restore) статистически коррелируют с организационной производительностью и прибыльностью. Elite teams деплоят в 973x чаще и восстанавливаются в 6570x быстрее, чем low performers.
+
+### Pipeline as Code: Infrastructure as Code для CI/CD
+
+> **Pipeline as Code** — декларативное описание CI/CD pipeline в файле, хранимом в репозитории (`.github/workflows/*.yml`, `Jenkinsfile`). Это применение принципа **Infrastructure as Code** (Morris, *"Infrastructure as Code"*, 2016): конфигурация инфраструктуры версионируется, рецензируется и тестируется наравне с кодом приложения.
+
+> **Связь**: DORA → [[ci-cd-pipelines]], Pipeline as Code → [[android-gradle-fundamentals]], Testing → [[android-testing]]
+
+---
+
 ## Архитектура Android CI/CD Pipeline
 
 ```
@@ -1073,11 +1097,18 @@ MONITORING:
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая testing, build automation и подготовку к публикации
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с разделами по testing strategies и build configuration
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Humble J., Farley D. *Continuous Delivery* (2010, Addison-Wesley) | CI/CD pipeline theory, deployment pipeline |
+| Forsgren N. et al. *Accelerate* (2018) | DORA metrics: Lead Time, Deploy Frequency, MTTR, Change Failure Rate |
+| Fowler M. *Continuous Integration* (2006, martinfowler.com) | CI best practices: commit often, fix fast, automate everything |
 
-**Веб-ресурсы:**
+### Книги
+- Meier R. (2022). Professional Android, 4th Edition. — testing, build automation, публикация.
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide. — testing strategies, build configuration.
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

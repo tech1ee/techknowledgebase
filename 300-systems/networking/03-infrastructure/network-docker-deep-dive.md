@@ -31,6 +31,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Linux bridge** — программный L2-коммутатор в ядре Linux, реализующий функции аппаратного Ethernet-коммутатора (learning MAC-адресов, forwarding кадров, STP). Docker использует bridge `docker0` как default network driver. Формально: bridge — это net_device в ядре с собственной CAM-таблицей.
+
+### Формальная модель контейнерной сети
+
+| Компонент | Абстракция ядра | Функция в Docker | Аналог |
+|-----------|----------------|------------------|--------|
+| Network Namespace | `clone(CLONE_NEWNET)` | Изолированный сетевой стек контейнера | Виртуальная машина |
+| veth pair | Виртуальный Ethernet-кабель | Связь namespace контейнера с bridge | Патч-корд |
+| Linux bridge (`docker0`) | Программный L2-коммутатор | Коммутация трафика между контейнерами | Ethernet-свитч |
+| iptables NAT | Netfilter DNAT/SNAT | Port mapping (`-p`), выход в интернет | Аппаратный NAT-роутер |
+
+### Сетевые драйверы Docker: формальная модель
+
+- **bridge** — Linux bridge + veth + iptables NAT. Контейнеры получают IP из CIDR-диапазона bridge-подсети (по умолчанию 172.17.0.0/16). DNAT обеспечивает port mapping, SNAT (MASQUERADE) — выход в интернет
+- **host** — контейнер использует network namespace хоста напрямую. Нет изоляции, нет NAT overhead. Подходит для latency-sensitive приложений
+- **macvlan** — контейнер получает собственный MAC-адрес в физической сети хоста (802.1Q sub-interface). Нет NAT, контейнер выглядит как физическое устройство
+- **overlay** — VXLAN-инкапсуляция (UDP порт 4789) для multi-host networking в Docker Swarm. Обеспечивает L2-связность контейнеров на разных хостах
+
+### Путь пакета: контейнер -> интернет
+
+1. Приложение вызывает `send()` -> socket в namespace контейнера
+2. Пакет проходит через `eth0` контейнера (veth-пара) -> `vethXXX` на хосте
+3. Bridge `docker0` выполняет L2-forwarding
+4. iptables POSTROUTING: MASQUERADE (SNAT) подменяет source IP на IP хоста
+5. Пакет уходит через физический интерфейс хоста
+
+> **Network Namespace** (Linux, 2006) — механизм изоляции ядра, предоставляющий контейнеру собственный сетевой стек: интерфейсы, routing table, iptables rules, /proc/net. Ключевой системный вызов: `clone()` с флагом `CLONE_NEWNET` или `unshare(CLONE_NEWNET)`.
+
+**См. также:** [[os-networking]] (Linux networking примитивы), [[network-ip-routing]] (NAT и subnetting), [[network-kubernetes-deep-dive]] (CNI поверх Docker networking)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1456,6 +1490,13 @@ ports:
 
 ## Источники
 
+### Теоретические основы
+- Biederman E. (2006). Multiple Instances of the Global Linux Namespaces — Linux Kernel Documentation (основа network namespaces)
+- Kerrisk M. (2013). "Namespaces in operation" — LWN.net (серия статей о Linux namespaces)
+- RFC 7348 (2014). VXLAN: A Framework for Overlaying Virtualized Layer 2 Networks — основа overlay driver
+
+### Практические руководства
+
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
 | 1 | [Docker Network Drivers](https://docs.docker.com/engine/network/drivers/) | Docs | Official drivers reference |
@@ -1488,8 +1529,11 @@ ports:
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Tanenbaum, Wetherall (2011).** *Computer Networks.* — фундаментальное описание сетевых принципов, включая виртуальные сети и изоляцию, что даёт теоретическую базу для понимания container networking.
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — современный учебник с покрытием NAT, DHCP и DNS — всех протоколов, которые Docker использует для создания изолированных сетевых сред.
+
+### Практические руководства
 - **Peterson, Davie (2011).** *Computer Networks: A Systems Approach.* — системный взгляд на сетевую архитектуру, включая виртуализацию и software-defined networking, которые лежат в основе контейнерных сетей.
 
 ---

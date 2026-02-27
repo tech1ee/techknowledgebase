@@ -27,6 +27,33 @@ next_review:
 
 # DP Optimization Techniques
 
+## Теоретические основы
+
+> **Оптимизации DP** — набор техник, снижающих асимптотику динамического программирования путём эксплуатации специальных свойств функции перехода: монотонности оптимальной точки разбиения, линейности по параметру или битовой структуры подмножеств.
+
+### Классификация оптимизаций
+
+| Техника | Год | Авторы | Условие применимости | Сложность |
+|---------|-----|--------|---------------------|-----------|
+| **Knuth Optimization** | 1971 | Кнут (Knuth) | Quadrangle inequality для cost(i,j) | O(n^3) -> O(n^2) |
+| **D&C Optimization** | 1980 | Яо (Yao) | Монотонность opt(i,j) | O(n*m*n) -> O(n*m*log n) |
+| **Convex Hull Trick** | ~1995 | CP-community | dp[i] = min(dp[j] + b[j]*a[i]) | O(n^2) -> O(n log n) |
+| **Li Chao Tree** | ~2000s | Li Chao | Произвольные запросы к CHT | O(n log C) |
+| **SOS DP** | — | — | Сумма по подмножествам bitmask | O(3^n) -> O(n*2^n) |
+| **Matrix Exponentiation** | — | — | Линейная рекуррентность | O(k^3 * n) -> O(k^3 * log n) |
+
+### Историческая справка
+
+> **Knuth (1971):** в статье "Optimum Binary Search Trees" доказал, что для задачи оптимального BST оптимальная точка разбиения монотонна: opt[i][j-1] <= opt[i][j] <= opt[i+1][j]. Это свойство (quadrangle inequality) было обобщено Яо (1980) на широкий класс DP-задач с интервальной структурой.
+
+### Связи
+
+- [[dynamic-programming]] — базовые паттерны DP, на которые накладываются оптимизации
+- [[segment-tree]] — структура данных для некоторых оптимизаций (Li Chao Tree)
+- [[binary-search-pattern]] — бинарный поиск в Convex Hull Trick
+
+---
+
 ## TL;DR
 
 Оптимизации DP: **Convex Hull Trick** — O(n²) → O(n log n) для dp[i] = min(dp[j] + b[j]×a[i]). **D&C Optimization** — когда opt(i,j) монотонен. **SOS DP** — сумма по подмножествам за O(n×2^n). **Matrix Exponentiation** — линейные рекуррентности за O(k³ log n). Ключ: распознать паттерн и применить правильную технику.
@@ -1265,13 +1292,16 @@ fun knuthOptimization(cost: Array<LongArray>): Long {
 
 ## Источники и дальнейшее чтение
 
-- **Knuth, D. (1971). Optimum Binary Search Trees.** -- Оригинальная статья, где Кнут доказал монотонность оптимальной точки разбиения для задачи Optimal BST. Условие quadrangle inequality впоследствии было обобщено на широкий класс задач Яо (1980).
+### Теоретические основы
 
-- **Cormen, T. et al. (2009). Introduction to Algorithms (CLRS), Chapter 15.** -- Глава о динамическом программировании. Задача Optimal BST (section 15.5) -- классический пример, где применима оптимизация Кнута.
+- Knuth D.E. (1971). *Optimum Binary Search Trees*. Acta Informatica. — оригинальная статья, доказавшая монотонность оптимальной точки разбиения для задачи Optimal BST; условие quadrangle inequality обобщено Яо (1980)
+- Yao F.F. (1980). *Efficient Dynamic Programming Using Quadrangle Inequalities*. — обобщение оптимизации Кнута на широкий класс DP-задач с интервальной структурой
+- Cormen T. et al. (2009). *Introduction to Algorithms (CLRS), Chapter 15*. — глава о динамическом программировании; Optimal BST (section 15.5) — классический пример оптимизации Кнута
 
-- **CP-Algorithms (cp-algorithms.com).** -- Разделы Convex Hull Trick, D&C DP optimization, Li Chao Tree. Наиболее полное онлайн-руководство с реализациями и задачами для практики.
+### Практические руководства
 
-- **Halim, S. (2013). Competitive Programming 3.** -- Глава 3 и 9 покрывают продвинутые DP-техники с акцентом на распознавание паттернов и выбор оптимизации.
+- [CP-Algorithms](https://cp-algorithms.com/) — разделы Convex Hull Trick, D&C DP optimization, Li Chao Tree; наиболее полное онлайн-руководство с реализациями
+- Halim S. (2013). *Competitive Programming 3.* — главы 3 и 9: продвинутые DP-техники с акцентом на распознавание паттернов
 
 ---
 

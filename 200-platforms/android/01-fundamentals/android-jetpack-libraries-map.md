@@ -33,6 +33,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение framework-библиотеки
+
+> **Framework library** — набор переиспользуемых программных компонентов, реализующий Inversion of Control: библиотека вызывает код разработчика, а не наоборот. В отличие от utility library, framework определяет архитектурный скелет приложения (Johnson R. *«Frameworks = (Components + Patterns)»*, 1997).
+
+AndroidX (Jetpack) — это **unbundled framework**: библиотеки распространяются отдельно от ОС через Maven Central и обновляются независимо от версии Android на устройстве. Это решает фундаментальную проблему **platform fragmentation** — разработчик получает единый API независимо от версии ОС пользователя.
+
+### Архитектурные принципы Jetpack
+
+Jetpack следует принципам **opinionated framework** (Fowler M. *«InversionOfControl»*, 2005):
+
+| Принцип | Реализация в Jetpack |
+|---------|---------------------|
+| **Convention over Configuration** | `@HiltViewModel`, `@Composable` — аннотации вместо XML-конфигурации |
+| **Separation of Concerns** | Lifecycle, ViewModel, Navigation — каждая библиотека решает одну задачу |
+| **Dependency Inversion** | Интерфейсы в `lifecycle-common`, реализации в `lifecycle-runtime` |
+| **Bill of Materials** | Compose BOM гарантирует совместимость версий (аналог Maven BOM, Apache, 2005) |
+
+### Эволюция Android Support Libraries
+
+| Поколение | Период | Характеристика |
+|-----------|--------|---------------|
+| Support Library v4/v7 | 2011-2018 | Monolithic JAR, backport API для старых устройств |
+| AndroidX (Jetpack) | 2018-настоящее | Модульные артефакты, независимое версионирование, Kotlin-first |
+| Compose | 2021-настоящее | Compiler plugin, декларативный UI, отвязан от View System |
+
+> **Связь с теорией:** Переход от Support Library к AndroidX следует паттерну **modular decomposition** (Parnas D.L. *«On the Criteria to Be Used in Decomposing Systems into Modules»*, 1972). Каждый артефакт AndroidX инкапсулирует одну ответственность и может быть заменён или обновлён независимо — реализация принципа [[android-clean-architecture|Single Responsibility]] на уровне библиотек.
+
+---
+
 ## Архитектура Jetpack: общий обзор
 
 ```
@@ -481,6 +512,14 @@ Back: При `minSdk >= 21` (API 21+). ART runtime нативно поддерж
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Johnson R. (1997). *Frameworks = (Components + Patterns)*. — теория framework-библиотек
+- Parnas D.L. (1972). *On the Criteria to Be Used in Decomposing Systems into Modules*. — модульная декомпозиция
+- Fowler M. (2005). *InversionOfControl*. — IoC как принцип opinionated frameworks
+
+### Практические руководства
 
 - [AndroidX Releases — official version table](https://developer.android.com/jetpack/androidx/versions)
 - [Compose BOM to library version mapping](https://developer.android.com/develop/ui/compose/bom/bom-mapping)

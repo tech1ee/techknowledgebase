@@ -28,6 +28,46 @@ prerequisites:
 
 iOS строго ограничивает фоновое выполнение для экономии батареи. У вас есть ~30 секунд при уходе в фон через `beginBackgroundTask`, или специальные режимы (Background Modes) для долгих задач: фоновая загрузка, локация, аудио, VoIP. Для периодических задач используйте `BGTaskScheduler` с `BGAppRefreshTask` (короткие задачи) или `BGProcessingTask` (длинные задачи при зарядке). Система сама решает, когда запускать ваши задачи, учитывая активность пользователя и заряд батареи.
 
+## Теоретические основы
+
+> **Background Execution** — выполнение кода приложением, когда оно не является foreground-процессом. iOS реализует **кооперативную модель** фонового выполнения: система предоставляет ограниченные временные окна, а приложение обязано завершить работу в рамках бюджета, иначе процесс будет принудительно завершён (SIGKILL).
+
+### Академический контекст
+
+Фоновое выполнение в iOS основано на теории управления ресурсами и энергоэффективности:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Process States (FSM) | Dijkstra, 1968 | Процесс как конечный автомат с состояниями | Not Running → Inactive → Active → Background → Suspended |
+| Resource Budgeting | QoS в реальном времени | Ограниченный бюджет ресурсов для задач | ~30 секунд для beginBackgroundTask, система контролирует BGTaskScheduler |
+| Cooperative Multitasking | Classic Mac OS, 1984 | Процесс сам решает, когда отдать управление | Приложение вызывает endBackgroundTask; система завершает при превышении бюджета |
+| Preemptive Scheduling | Multics, 1960-е | Система принудительно управляет выполнением | Jetsam убивает suspended-приложения при нехватке памяти |
+| Opportunistic Scheduling | Энергосберегающие системы | Отложенное выполнение в оптимальный момент | BGTaskScheduler запускает задачи при зарядке, Wi-Fi, бездействии |
+
+### Модель ограничения фоновой активности
+
+iOS использует **энерго-ориентированную модель**: приоритет — время работы батареи, а не свобода разработчика.
+
+| Механизм | Время | Условия | Типичное применение |
+|----------|-------|---------|---------------------|
+| beginBackgroundTask | ~30 сек | Переход в фон | Завершение сетевого запроса, сохранение данных |
+| BGAppRefreshTask | ~30 сек | Предиктивный scheduling | Обновление контента (новости, погода) |
+| BGProcessingTask | Минуты | Зарядка + Wi-Fi + idle | ML training, backup, тяжёлая обработка |
+| Background URLSession | До завершения | Системный download manager | Загрузка файлов, продолжается после kill |
+| Background Modes | Постоянно | Явная декларация | Аудио, VoIP, навигация, BLE |
+
+> **Компромисс свободы и энергоэффективности**: Android исторически давал приложениям больше свободы в фоне (Services), что привело к «battery drain war» и последующим ограничениям (Doze mode, App Standby Buckets). iOS изначально выбрал строгую модель, обеспечив лучшее время работы батареи ценой ограничений для разработчиков.
+
+### Связь с CS-фундаментом
+
+- [[ios-app-components]] — UIApplication lifecycle как основа для background execution
+- [[ios-threading-fundamentals]] — GCD и потоки в контексте фоновых задач
+- [[ios-process-memory]] — Jetsam как механизм завершения suspended-приложений
+- [[android-background-work]] — сравнение: iOS BGTaskScheduler vs Android WorkManager
+- [[ios-notifications]] — silent push как триггер фонового выполнения
+
+---
+
 ## Аналогии
 
 **Жизненный цикл приложения** — как состояния работника в офисе:
@@ -1546,9 +1586,14 @@ func startDeferredLocationUpdates() {
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает background execution modes, BGTaskScheduler API и ограничения системы с практическими примерами
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — практическое введение в background tasks с объяснением, как правильно сохранять состояние при переходе в фон
-- McConnell S. (2004). *Code Complete, 2nd Edition.* — общие принципы defensive programming, применимые к написанию надёжных background tasks с обработкой edge cases
+### Теоретические основы
+- Dijkstra E. (1968). *The Structure of the "THE"-Multiprogramming System.* — формализация состояний процесса, теоретическая основа application lifecycle
+- Silberschatz A., Galvin P., Gagne G. (2018). *Operating System Concepts.* — планирование процессов, управление ресурсами, preemptive vs cooperative scheduling
+- Apple (2023). *Energy Efficiency Guide for iOS Apps.* — официальная модель энергоэффективности, определяющая ограничения фонового выполнения
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — background execution modes, BGTaskScheduler API, ограничения системы
+- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — background tasks, сохранение состояния при переходе в фон
 
 ---
 

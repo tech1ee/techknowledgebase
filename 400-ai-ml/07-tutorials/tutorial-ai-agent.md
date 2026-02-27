@@ -72,6 +72,37 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **AI Agent** — автономная система на базе LLM, реализующая цикл perception-reasoning-action. Формально: агент — это функция $\pi: State \times History \rightarrow Action$, где actions включают tool calls, генерацию текста и запрос clarification у пользователя.
+
+Этот tutorial реализует агента на основе паттерна **ReAct** (Yao et al., 2022):
+
+| Паттерн | Описание | Реализация в tutorial |
+|---------|----------|----------------------|
+| **ReAct** | Think → Act → Observe → Think... | LangGraph StateGraph с циклическим графом |
+| **Tool Use** | LLM вызывает внешние функции | Function calling через OpenAI/Anthropic API |
+| **Guardrails** | Защита от опасных действий | Input/output validation nodes |
+| **Human-in-the-Loop** | Человек подтверждает критичные действия | LangGraph interrupt_before |
+| **Memory** | Контекст между шагами и сессиями | Short-term (state) + Long-term (persistent) |
+
+> **State Machine формализация**: агент в LangGraph — это конечный автомат $(S, A, \delta, s_0, F)$, где $S$ — множество состояний (nodes), $A$ — множество переходов (edges), $\delta$ — функция перехода (conditional edges), $s_0$ — начальное состояние, $F$ — терминальные состояния.
+
+**Ключевые теоретические решения при проектировании агента:**
+
+| Решение | Варианты | Tradeoff |
+|---------|----------|----------|
+| **Модель** | GPT-4o vs Claude vs Open-source | Quality vs Cost vs Privacy |
+| **Orchestration** | Code-based vs LLM-based routing | Предсказуемость vs Гибкость |
+| **Memory** | Stateless vs Short-term vs Long-term | Простота vs Контекстуальность |
+| **Guardrails** | Rule-based vs LLM-based | Скорость vs Глубина проверки |
+
+Антропик рекомендует (2025): "Начните с простейшей архитектуры. Добавляйте сложность только когда она measurably улучшает результаты." Большинство задач решаются простым augmented LLM без мультиагентной системы.
+
+См. также: [[ai-agents-advanced|AI Agents Advanced]] — теория агентов, [[agent-frameworks-comparison|Agent Frameworks]] — сравнение фреймворков.
+
+---
+
 ## Философия AI-агентов
 
 ### Что такое AI-агент?
@@ -2031,5 +2062,26 @@ Tool failure (retry + fallback), LLM hallucination (output validation), infinite
 | Углубиться | [[ai-agents-advanced]] | Теория и архитектура агентов |
 | Смежная тема | [[agent-frameworks-comparison]] | Сравнение фреймворков для агентов |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Yao S. et al. (2022). *ReAct: Synergizing Reasoning and Acting in LLMs*. arXiv:2210.03629 | ReAct паттерн |
+| 2 | Russell S., Norvig P. (2020). *Artificial Intelligence: A Modern Approach*. 4th ed. Pearson | Формальное определение агента |
+| 3 | Hopcroft J., Ullman J. (1979). *Introduction to Automata Theory*. Addison-Wesley | Теория конечных автоматов — основа StateGraph |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [LangGraph Documentation](https://langchain-ai.github.io/langgraph/) | Основной фреймворк tutorial |
+| 2 | [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) | Best practices |
+| 3 | [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | Альтернативный подход |
+| 4 | [LangChain Academy](https://academy.langchain.com/) | Обучающие материалы |
 
 *Проверено: 2026-01-09*

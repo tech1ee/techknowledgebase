@@ -33,6 +33,47 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Фреймворк переговоров** — структурированная модель, определяющая стратегию и тактику ведения переговорного процесса. Фреймворки различаются по степени кооперативности (integrative vs. distributive) и по фокусу (интересы vs. позиции).
+
+### Harvard Negotiation Project
+
+Harvard Negotiation Project — исследовательский проект Harvard Law School, основанный в 1979 году Роджером Фишером. Проект породил три фундаментальные книги:
+
+| Книга | Авторы | Год | Фокус |
+|-------|--------|-----|-------|
+| «Getting to Yes» | Fisher R., Ury W., Patton B. | 1981 (3rd ed. 2011) | Principled negotiation: 4 принципа |
+| «Getting Past No» | Ury W. | 1991 | 5 барьеров в переговорах, breakthrough strategy |
+| «Difficult Conversations» | Stone D., Patton B., Heen S. | 1999 | Три разговора внутри одного: What Happened, Feelings, Identity |
+
+### Distributive vs. Integrative Bargaining
+
+| Параметр | Distributive (win-lose) | Integrative (win-win) |
+|----------|------------------------|----------------------|
+| **Метафора** | Делим один пирог | Увеличиваем пирог |
+| **Теория** | Zero-sum game (von Neumann, 1944) | Positive-sum game (Nash, 1950) |
+| **Фокус** | Позиции | Интересы |
+| **Тактика** | Anchoring, pressure, ultimatums | Brainstorming, trade-offs, objective criteria |
+| **IT-пример** | «Дедлайн 1 марта, точка» | «Что если сократить scope и выпустить MVP к 1 марта?» |
+
+> **BATNA** (Best Alternative to a Negotiated Agreement) — ключевое понятие Fisher & Ury (1981): твоя сила в переговорах определяется не тем, что ты можешь потребовать, а тем, что ты можешь *сделать без* соглашения. Чем сильнее твоя BATNA, тем свободнее ты за столом.
+
+### Tactical Empathy (Voss, 2016)
+
+Крис Восс, бывший главный переговорщик FBI по захвату заложников, предложил подход **Tactical Empathy** в книге «Never Split the Difference» (2016):
+
+- **Labeling** — называние эмоций собеседника: «Кажется, вы обеспокоены сроками»
+- **Mirroring** — повторение 1–3 ключевых слов собеседника
+- **Calibrated questions** — вопросы «Как?» и «Что?» вместо «Почему?»
+- **Accusation audit** — упредительное озвучивание негативных ожиданий
+
+Связь с [[negotiation-fundamentals]]: данный файл описывает *конкретные фреймворки*, а fundamentals — базовые понятия (BATNA, ZOPA, anchoring).
+
+---
+
 ## Зачем это нужно?
 
 ### Представьте ситуацию
@@ -548,16 +589,24 @@ Team A needs dedicated QA. Team B needs the only QA person full-time.
 
 ## Источники
 
+### Теоретические основы
+
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fisher R., Ury W., Patton B. Getting to Yes, 3rd ed. Penguin, 2011 (orig. 1981) | Монография | 4 принципа principled negotiation, BATNA |
+| 2 | Ury W. Getting Past No. Bantam, 1991 | Монография | 5 барьеров в переговорах |
+| 3 | Stone D., Patton B., Heen S. Difficult Conversations. Penguin, 1999 | Монография | Три разговора внутри одного |
+| 4 | Voss C. Never Split the Difference. Harper Business, 2016 | Монография | Tactical empathy, labeling, mirroring |
+
+### Практические руководства
+
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Harvard PON: Principled Negotiation](https://www.pon.harvard.edu/daily/negotiation-skills-daily/principled-negotiation-focus-interests-create-value/) | Guide | Core principles |
 | 2 | [Getting to Yes Summary](https://www.beyondintractability.org/bksum/fisher-getting) | Book Summary | 4 principles detailed |
-| 3 | [Wikipedia: Getting to Yes](https://en.wikipedia.org/wiki/Getting_to_Yes) | Reference | Background |
-| 4 | [InLoox: Harvard Principle](https://www.inloox.com/company/blog/articles/getting-to-yes-how-to-negotiate-using-the-harvard-principle/) | Guide | Practical application |
-| 5 | [Six Guidelines for Getting to Yes](https://www.pon.harvard.edu/daily/negotiation-skills-daily/six-guidelines-for-getting-to-yes/) | Guide | Extended guidelines |
-| 6 | Fisher, Ury, Patton: "Getting to Yes" | Book | Original source |
-| 7 | [ReadingGraphics: Book Summary](https://readingraphics.com/book-summary-getting-to-yes/) | Summary | Visual summary |
-| 8 | [Triple Session: Harvard Principles](https://triplesession.com/session/the-harvard-principles-of-negotiation-from-the-erich-pommer-institut) | Course | Training perspective |
+| 3 | [InLoox: Harvard Principle](https://www.inloox.com/company/blog/articles/getting-to-yes-how-to-negotiate-using-the-harvard-principle/) | Guide | Practical application |
+| 4 | [Six Guidelines for Getting to Yes](https://www.pon.harvard.edu/daily/negotiation-skills-daily/six-guidelines-for-getting-to-yes/) | Guide | Extended guidelines |
+| 5 | [Triple Session: Harvard Principles](https://triplesession.com/session/the-harvard-principles-of-negotiation-from-the-erich-pommer-institut) | Course | Training perspective |
 
 *Исследование проведено: 2026-01-18*
 

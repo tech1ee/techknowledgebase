@@ -45,6 +45,38 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Жизненный цикл компонента (Component Lifecycle)** — конечный автомат, определяющий допустимые состояния компонента и переходы между ними в ответ на системные события (Meyer, 1997, Object-Oriented Software Construction).
+
+### Lifecycle как Finite State Machine
+
+Формально lifecycle = (S, Σ, δ, s₀, F):
+
+| Элемент FSM | iOS (UIViewController) | Android (Activity) |
+|-------------|----------------------|-------------------|
+| **S (состояния)** | appearing, appeared, disappearing, disappeared | created, started, resumed, paused, stopped, destroyed |
+| **Σ (события)** | viewWillAppear, viewDidAppear... | onCreate, onStart, onResume... |
+| **δ (переходы)** | Детерминированные, предсказуемые | Могут быть вызваны системой |
+| **s₀ (начальное)** | init | created |
+| **F (конечное)** | dealloc (ARC) | destroyed (GC) |
+
+### Фундаментальное различие: кто контролирует lifecycle?
+
+| Аспект | iOS | Android |
+|--------|-----|---------|
+| **Контроль** | Разработчик (push/pop, present/dismiss) | Система (configuration change, process death) |
+| **Process death** | Редкий (iOS управляет памятью через Jetsam) | Частый (система убивает background processes) |
+| **State restoration** | Опциональна (NSCoder) | Обязательна (SavedStateHandle) |
+| **Причина различий** | Single-vendor hardware, оптимизация | Multi-vendor, фрагментация, ограниченные ресурсы |
+
+Это различие восходит к **философии платформ**: iOS оптимизирована для конкретного hardware (Apple Silicon), Android должен работать на тысячах конфигураций с разным объёмом RAM.
+
+> **CS-фундамент:** Lifecycle связан с [[cross-state-management]] (сохранение состояния) и [[cross-navigation]] (навигация управляет lifecycle). Теоретическая база — Finite State Machines (Hopcroft & Ullman, 1979), Component Lifecycle (Meyer, 1997).
+
 ## Почему платформы выбрали разные подходы?
 
 ### iOS: View-driven Lifecycle
@@ -2482,9 +2514,15 @@ class LocationLifecycleObserver : DefaultLifecycleObserver {
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Подробно описывает Activity/Fragment lifecycle, process death, configuration changes и SavedStateHandle с практическими примерами. Книга объясняет архитектурные решения Android и причины пересоздания компонентов.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает UIViewController lifecycle, view loading, memory warnings и SceneDelegate. Даёт фундаментальное понимание view-driven подхода Apple к управлению жизненным циклом.
-- **Martin R. (2017). *Clean Architecture*.** — Принципы независимости от фреймворков и UI помогают проектировать архитектуру, устойчивую к различиям в lifecycle между платформами. Особенно актуально при разработке shared-кода в KMP.
+### Теоретические основы
+
+- **Hopcroft J., Ullman J. (1979).** *Introduction to Automata Theory.* — FSM как формальная модель lifecycle.
+- **Meyer B. (1997).** *Object-Oriented Software Construction.* 2nd ed. — Component lifecycle в OO-системах.
+
+### Практические руководства
+
+- [Android Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) — Официальный гайд.
+- [UIViewController Lifecycle](https://developer.apple.com/documentation/uikit/uiviewcontroller) — Apple документация.
 
 ---
 

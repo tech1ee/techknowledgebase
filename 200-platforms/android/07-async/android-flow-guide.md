@@ -77,6 +77,41 @@ Google полностью перешёл на Flow как рекомендуем
 
 ---
 
+## Теоретические основы
+
+### Reactive Streams: от формальной спецификации к Android
+
+> **Reactive Streams** — межъязыковая спецификация (2013–2014), определяющая минимальный контракт для асинхронных потоков с non-blocking backpressure. Четыре интерфейса: `Publisher`, `Subscriber`, `Subscription`, `Processor`. Kotlin Flow **не реализует** Reactive Streams напрямую, но следует тем же принципам: cold stream семантика, backpressure через `suspend` (вместо `request(n)`), cancellation через structured concurrency.
+
+| Концепция | Reactive Streams (2014) | Kotlin Flow (2019) | Отличие |
+|-----------|------------------------|--------------------|---------|
+| Backpressure | `Subscription.request(n)` — явный pull | `suspend` — неявный pull через приостановку | Flow проще: нет ручного управления demand |
+| Cancellation | `Subscription.cancel()` | `Job.cancel()` через structured concurrency | Flow автоматически отменяется при отмене scope |
+| Error handling | `onError(Throwable)` — терминальный | `catch { }` оператор — перехват + recovery | Flow позволяет emit() после catch |
+| Hot streams | Нет в спецификации | `StateFlow`, `SharedFlow` | Kotlin добавил hot streams как first-class |
+
+### Наблюдатели и реактивность: исторический контекст
+
+> Паттерн **Observer** (GoF, 1994) — фундамент реактивного программирования. LiveData (Android 2017) — lifecycle-aware Observer. Flow — следующая эволюция: Observer + backpressure + structured concurrency + coroutines.
+
+Эволюция реактивных примитивов в Android:
+
+| Год | Технология | Паттерн | Ограничение |
+|-----|-----------|---------|-------------|
+| 2008 | `ContentObserver` | Observer | Привязан к ContentProvider |
+| 2012 | `RxJava Observable` | Reactive Streams (неформально) | Нет lifecycle-awareness |
+| 2017 | `LiveData` | Observer + Lifecycle | Нет backpressure, Main Thread only, нет операторов |
+| 2019 | `Flow` | Reactive Streams + Coroutines | Cold по умолчанию — нужен `stateIn` для hot |
+| 2020 | `StateFlow` / `SharedFlow` | Hot Reactive Streams | Заменяет LiveData + ConflatedBroadcastChannel |
+
+### Flow Fusion и оптимизация
+
+> Kotlin Flow реализует **operator fusion**: цепочка `flowOn(Dispatchers.IO).flowOn(Dispatchers.Default)` не создаёт два переключения контекста — только последний `flowOn` определяет dispatcher для upstream. Это аналог **stream fusion** из функционального программирования (Coutts et al., 2007, *"Stream Fusion: From Lists to Streams to Nothing at All"*).
+
+> **Связь**: Reactive Streams → [[android-rxjava]], Observer Pattern → [[design-patterns-behavioral]], LiveData → [[android-state-management]], Flow API → [[kotlin-flow]]
+
+---
+
 ## Пререквизиты
 
 | Тема | Зачем нужно | Где изучить |
@@ -2028,14 +2063,16 @@ fun `stateIn test with backgroundScope`() = runTest {
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-### Книги
+### Теоретические основы
 
-- **Moskala M. (2022). _Kotlin Coroutines: Deep Dive_** -- Ch. 25-29: Flow fundamentals, lifecycle, StateFlow/SharedFlow, testing Flow. Наиболее глубокое и систематическое изложение
-- **Skeen S., Greenhalgh D. (2022). _Kotlin Coroutines by Tutorials_ (Kodeco)** -- практические примеры Flow в Android-приложениях
+- **Reactive Streams Specification (2014).** [reactive-streams.org](https://www.reactive-streams.org/) — формальная спецификация non-blocking backpressure для асинхронных потоков, фундамент RxJava и концептуальный предшественник Flow.
+- **Coutts D., Leshchinskiy R., Stewart D. (2007).** *Stream Fusion: From Lists to Streams to Nothing at All.* ICFP. — Теория operator fusion, применённая в Kotlin Flow `flowOn`.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Observer Pattern (глава 5) — фундамент всех реактивных примитивов от LiveData до Flow.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* Ch. 25-29. — Flow fundamentals, lifecycle, StateFlow/SharedFlow, testing Flow.
 
-### Официальная документация
+### Практические руководства
 
 - [Kotlin flows on Android](https://developer.android.com/kotlin/flow) -- Google developer guide, основные паттерны Flow в Android
 - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) -- официальное руководство по hot flows

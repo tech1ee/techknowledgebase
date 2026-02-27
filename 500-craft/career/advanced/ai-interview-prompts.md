@@ -31,6 +31,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Prompt Engineering** — дисциплина проектирования входных инструкций (промптов) для языковых моделей с целью получения предсказуемых, качественных и релевантных ответов. В контексте подготовки к интервью — это структурирование запросов так, чтобы AI-модель выступала как эффективный тренер.
+
+Теория prompt engineering опирается на несколько ключевых концепций:
+
+| Концепция | Автор/Источник | Суть | Применение к интервью |
+|-----------|---------------|------|----------------------|
+| Chain-of-Thought Prompting | Wei et al. (2022) | Пошаговое рассуждение повышает качество ответов LLM | Промпты для System Design с поэтапным разбором |
+| Few-Shot Learning | Brown et al. (2020), GPT-3 paper | Примеры в промпте направляют формат и стиль ответа | Шаблоны STAR-историй как примеры для AI |
+| Role Prompting | — | Назначение роли модели повышает релевантность | "Act as a Senior Android interviewer at Google" |
+| Scaffolding (Vygotsky, 1978) | Выготский Л.С. | Поддержка обучаемого в зоне ближайшего развития | AI как тренер, дающий hints вместо решений |
+
+**Четыре компонента эффективного промпта (CTFC-framework):**
+1. **Context** — фон ситуации (роль, компания, уровень)
+2. **Task** — конкретная задача (что сделать)
+3. **Format** — желаемая структура ответа (список, таблица, STAR)
+4. **Constraints** — ограничения (длина, стиль, что НЕ делать)
+
+Исследования показывают, что структурированные промпты с явным контекстом и ограничениями дают на 40-60% более релевантные ответы по сравнению с open-ended запросами (Zamfirescu-Pereira et al., 2023). В контексте interview preparation это означает разницу между generic советом и персонализированной обратной связью.
+
+> **Принцип специфичности:** чем конкретнее промпт (компания, роль, уровень, технология), тем выше качество ответа. "Prepare me for an interview" vs "Act as a Senior Android interviewer at Uber, ask me about Compose state management, probe when I give surface-level answers" — разница в полезности кратная.
+
+→ Связано: [[ai-interview-preparation]], [[ai-era-job-search]], [[se-interview-foundation]]
+
+---
+
 ## Quick Index
 
 | Category | Prompts | Jump |
@@ -832,13 +859,26 @@ Good examples of desired output.
 
 - [[se-interview-foundation]] — Фундамент знаний, который промпты помогают осваивать эффективнее. Промпты для DSA, System Design и Behavioral из текущего материала рассчитаны на человека, который уже понимает базовые концепции. Foundation даёт структуру знаний, промпты — способ углубить и проверить понимание.
 
-## Источники и дальнейшее чтение
+## Источники
 
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Задачи и паттерны из этой книги идеально подходят для практики с AI-промптами: загрузи задачу, попробуй решить, затем используй промпт для анализа решения и изучения альтернативных подходов.
+### Теоретические основы
 
-- Xu A. (2020). *System Design Interview*. — Промпты для System Design из текущего материала дополняют framework из книги Xu. Используй книгу для изучения компонентов, а промпты — для практики и получения обратной связи от AI.
+- Wei J. et al. (2022). *Chain-of-Thought Prompting Elicits Reasoning in Large Language Models*. — Фундаментальная работа, показавшая, что пошаговые инструкции в промпте улучшают качество рассуждений LLM. Основа для промптов System Design и DSA с поэтапным разбором.
 
-- Fournier C. (2017). *The Manager's Path*. — Для behavioral-промптов важно понимать, что ищут компании на каждом уровне. Книга Fournier помогает сформулировать STAR-истории, которые показывают правильный scope и leadership для целевого уровня.
+- Brown T. et al. (2020). *Language Models are Few-Shot Learners (GPT-3)*. — Демонстрация few-shot learning: примеры в промпте направляют формат ответа. Применяется в промптах с STAR-шаблонами и образцами желаемого output.
+
+- Zamfirescu-Pereira J.D. et al. (2023). *Why Johnny Can't Prompt: Non-Expert Interaction with LLMs*. — Исследование показало, что структурированные промпты дают на 40-60% более релевантные ответы. Обоснование CTFC-framework.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — Задачи и паттерны для практики с AI-промптами: загрузи задачу, попробуй решить, затем используй промпт для анализа.
+
+- Xu A. (2020). *System Design Interview*. — Framework для System Design промптов. Книга для изучения компонентов, промпты — для практики.
+
+- Fournier C. (2017). *The Manager's Path*. — Понимание ожиданий на каждом уровне для behavioral-промптов и STAR-историй.
+
+### Практические руководства
+
+- [OpenAI Prompt Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering) — Официальные рекомендации по эффективному prompt engineering
+- [Anthropic Prompt Engineering](https://docs.anthropic.com/claude/docs/prompt-engineering) — Гайд по промптам для Claude
 
 ## Проверь себя
 

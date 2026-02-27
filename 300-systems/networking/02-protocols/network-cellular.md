@@ -28,6 +28,34 @@ next_review:
 
 # Сотовые сети: от GSM до 5G
 
+## Теоретические основы
+
+> **Сотовая сеть** — телекоммуникационная сеть, покрывающая территорию **сотами** (cells) — зонами обслуживания базовых станций. Принцип пространственного переиспользования частот позволяет обслуживать миллионы абонентов ограниченным спектром.
+
+### Эволюция поколений
+
+| Поколение | Год | Технология | Пиковая скорость | Ключевое нововведение |
+|-----------|-----|-----------|------------------|----------------------|
+| **1G** | 1979 | AMPS (аналоговый) | 2.4 Kbps | Первая мобильная связь |
+| **2G** | 1991 | GSM (цифровой) | 14.4 Kbps (GPRS: 171) | SMS, цифровое шифрование |
+| **3G** | 2001 | UMTS/CDMA2000 | 2 Mbps (HSPA: 42) | Мобильный интернет |
+| **4G LTE** | 2009 | OFDMA | 100 Mbps (LTE-A: 1 Gbps) | Полностью IP-сеть, VoLTE |
+| **5G** | 2019 | NR (OFDMA + mmWave) | 10 Gbps (теория) | URLLC, mMTC, network slicing |
+
+### Три сценария 5G (ITU IMT-2020)
+
+| Сценарий | Фокус | Пример |
+|----------|-------|--------|
+| **eMBB** (Enhanced Mobile Broadband) | Скорость | 4K видео, VR/AR |
+| **URLLC** (Ultra-Reliable Low-Latency) | Задержка < 1 мс | Автономные автомобили, удалённая хирургия |
+| **mMTC** (massive Machine-Type Communications) | 1M устройств/км² | IoT, smart city |
+
+> **Network Slicing** — виртуальное разделение физической 5G-сети на изолированные логические сети, каждая оптимизированная под свой сценарий (eMBB/URLLC/mMTC).
+
+> **См. также**: [[network-wireless-iot]] — IoT-протоколы (NB-IoT, LTE-M), [[network-physical-layer]] — физический уровень
+
+---
+
 ## Prerequisites
 
 Прежде чем изучать сотовые сети, рекомендуется понимать:
@@ -1886,6 +1914,10 @@ Battery Life (days) = Battery Capacity (mAh) /
 ---
 
 ## Источники
+
+**Теоретические основы:**
+- ITU-R M.2083 (2015). *IMT Vision — Framework and Overall Objectives of the Future Development of IMT for 2020 and Beyond*. — Формальное определение 5G сценариев (eMBB, URLLC, mMTC)
+- Shannon C.E. (1948). *A Mathematical Theory of Communication*. — Теоретический предел пропускной способности канала
 
 **5G и mmWave (проверено 2025-12-18)**:
 - [5G mmWave vs Sub-6GHz | Cavli Wireless](https://www.cavliwireless.com/blog/not-mini/5g-mmwave-vs-sub-6ghz)

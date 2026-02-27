@@ -31,6 +31,43 @@ prerequisites:
 
 iOS CI/CD автоматизирует сборку, тестирование, подписание и дистрибуцию приложений. Главные сложности: требование macOS для сборки, управление сертификатами и provisioning profiles. Основные инструменты: Xcode Cloud (нативное решение Apple), Fastlane (набор Ruby-скриптов), GitHub Actions (универсальная CI/CD платформа с macOS runners).
 
+## Теоретические основы
+
+> **Continuous Integration / Continuous Delivery** (CI/CD) — практика автоматизации сборки, тестирования и доставки программного обеспечения. CI обеспечивает раннее обнаружение интеграционных ошибок через частые слияния в общую ветку; CD автоматизирует путь от коммита до production-готового артефакта (Humble & Farley, 2010).
+
+### Академический контекст
+
+CI/CD для iOS опирается на общие принципы DevOps и специфику Apple-экосистемы:
+
+| Концепция | Автор / год | Суть | Проявление в iOS CI/CD |
+|-----------|-------------|------|------------------------|
+| Continuous Integration | Fowler, 2000 | Частая интеграция кода с автоматическими проверками | GitHub Actions / Xcode Cloud запускают build + tests на каждый PR |
+| Deployment Pipeline | Humble & Farley, 2010 | Автоматический конвейер: build → test → deploy | Build → Unit Tests → UI Tests → Archive → TestFlight → App Store |
+| Infrastructure as Code | Puppet (2005), Terraform (2014) | Конфигурация инфраструктуры как версионируемый код | Fastfile (Ruby DSL), xcconfig, Xcode Cloud workflows |
+| Reproducible Builds | Debian initiative, 2013 | Одинаковый результат при одинаковых входных данных | SPM.resolved, Podfile.lock, pinned Xcode version |
+| Shift Left Testing | Larry Smith, 2001 | Раннее тестирование в жизненном цикле | Pre-commit hooks, SwiftLint, unit tests на каждый push |
+
+### Уникальные ограничения iOS CI/CD
+
+В отличие от серверной и Android-разработки, iOS CI/CD имеет фундаментальные ограничения:
+
+1. **macOS-only build** — Swift compiler и Xcode SDK работают только на macOS (Apple EULA)
+2. **Code signing complexity** — сертификаты + provisioning profiles = состояние вне репозитория
+3. **Simulator overhead** — UI-тесты требуют iOS Simulator, который потребляет значительные ресурсы
+4. **Apple ID authentication** — upload в App Store Connect требует аутентификации
+
+> **Humble & Farley (2010)**: «The goal of continuous delivery is to make deployments — whether of a large-scale distributed system, a complex production environment, an embedded system, or an app — predictable, routine affairs that can be performed on demand.» Для iOS это означает: один `fastlane release` или Xcode Cloud trigger должен довести код от коммита до TestFlight.
+
+### Связь с CS-фундаментом
+
+- [[ci-cd-pipelines]] — общая теория CI/CD, применимая к любой платформе
+- [[ios-code-signing]] — signing как критический этап pipeline
+- [[ios-testing]] — тесты как gate в deployment pipeline
+- [[ios-app-distribution]] — доставка артефакта до пользователя
+- [[android-ci-cd]] — сравнение: iOS (macOS-only) vs Android (Linux-friendly)
+
+---
+
 ## Зачем это нужно?
 
 ### Проблемы ручной сборки iOS
@@ -2179,9 +2216,14 @@ end
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает процесс сборки и подписания iOS-приложений, что необходимо для настройки CI/CD pipeline
-- Humble J., Farley D. (2010). *Continuous Delivery: Reliable Software Releases through Build, Test, and Deploy Automation.* — фундаментальные принципы CI/CD, deployment pipeline и infrastructure as code, применимые к iOS-разработке
-- McConnell S. (2004). *Code Complete, 2nd Edition.* — принципы автоматизации сборки, качества кода и defensive programming, формирующие основу для CI/CD практик
+### Теоретические основы
+- Humble J., Farley D. (2010). *Continuous Delivery: Reliable Software Releases through Build, Test, and Deploy Automation.* — каноническая книга по CI/CD: deployment pipeline, infrastructure as code, конфигурация как код
+- Fowler M. (2000). *Continuous Integration.* — оригинальная статья, определившая практику CI
+- Kim G. et al. (2016). *The DevOps Handbook.* — Three Ways of DevOps: flow, feedback, continuous learning
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — процесс сборки и подписания iOS-приложений для CI/CD pipeline
+- McConnell S. (2004). *Code Complete, 2nd Edition.* — принципы автоматизации сборки и defensive programming
 
 ---
 

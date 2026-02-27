@@ -26,6 +26,37 @@ next_review:
 
 # Computational Geometry
 
+## Теоретические основы
+
+> **Вычислительная геометрия** (Computational Geometry) — раздел информатики, изучающий алгоритмы для решения геометрических задач: построение выпуклых оболочек, пересечение отрезков, триангуляция многоугольников, диаграммы Вороного.
+
+### Основоположники и ключевые результаты
+
+| Год | Автор | Результат | Сложность |
+|-----|-------|-----------|-----------|
+| **1926** | Отто Штольц | Формула площади через cross product | O(n) |
+| **1972** | Рональд Грэхем | Graham Scan — выпуклая оболочка | O(n log n) |
+| **1975** | Майкл Шамос | Основание дисциплины; PhD "Computational Geometry" | — |
+| **1977** | Эндрю | Monotone Chain — альтернативный convex hull | O(n log n) |
+| **1979** | Шамос, Хоуи | Closest pair of points (divide and conquer) | O(n log n) |
+| **1985** | Препарата, Шамос | "Computational Geometry: An Introduction" — первый учебник | — |
+
+### Парадигма Sweep Line
+
+> **Sweep Line** (заметающая прямая) — фундаментальная парадигма вычислительной геометрии (Шамос, 1975): вертикальная прямая "заметает" плоскость слева направо, обрабатывая события (начало/конец отрезка, точка пересечения) в порядке x-координаты. Позволяет свести двумерные задачи к последовательности одномерных.
+
+### Числовая точность
+
+Центральная проблема вычислительной геометрии — ошибки floating-point арифметики. Решения: целочисленная арифметика (cross product через умножение координат), epsilon-сравнения, точная арифметика (CGAL). В competitive programming предпочтительна целочисленная арифметика с `long long`.
+
+### Связи
+
+- [[sorting-algorithms]] — сортировка точек как preprocessing для convex hull
+- [[divide-and-conquer]] — парадигма для closest pair, Voronoi diagram
+- [[binary-search-pattern]] — бинарный поиск по углу, по площади
+
+---
+
 ## 1. Обзор и Мотивация
 
 ### Что такое вычислительная геометрия
@@ -2409,16 +2440,17 @@ private fun circumcircle(a: Point, b: Point, c: Point): Circle {
 
 ## Источники и дальнейшее чтение
 
-### Книги
+### Теоретические основы
 
-- **de Berg, Cheong, van Kreveld & Overmars (2008). "Computational Geometry: Algorithms and Applications."** --- каноническая книга по вычислительной геометрии: convex hull, line segment intersection, polygon triangulation, Voronoi diagrams с доказательствами и анализом
-- **O'Rourke (1998). "Computational Geometry in C."** --- практическая реализация геометрических алгоритмов на C с детальным разбором edge cases и numerical precision
-- **Preparata & Shamos (1985). "Computational Geometry: An Introduction."** --- классическое введение в область, охватывающее divide-and-conquer подходы, lower bounds и теоретические основы
+- Preparata F.P., Shamos M.I. (1985). *Computational Geometry: An Introduction*. — классическое введение в область: divide-and-conquer подходы, lower bounds, Voronoi diagrams; Шамос считается основателем дисциплины (PhD thesis, 1975)
+- de Berg M., Cheong O., van Kreveld M., Overmars M. (2008). *Computational Geometry: Algorithms and Applications, 3rd ed.* — каноническая книга: convex hull, line segment intersection, polygon triangulation с доказательствами и анализом
+- Graham R.L. (1972). *An Efficient Algorithm for Determining the Convex Hull of a Finite Planar Set*. Information Processing Letters. — алгоритм Graham Scan, O(n log n)
 
-### Онлайн-ресурсы
+### Практические руководства
 
-- [CP-Algorithms: Geometry](https://cp-algorithms.com/) --- реализации с объяснениями на C++ для соревновательного программирования
-- **Halim (2013). "Competitive Programming 3."** --- глава по геометрии для соревнований: типичные задачи, подводные камни precision, шаблонный код
+- O'Rourke J. (1998). *Computational Geometry in C, 2nd ed.* — практическая реализация с разбором edge cases и numerical precision
+- [CP-Algorithms: Geometry](https://cp-algorithms.com/) — реализации с объяснениями на C++ для соревновательного программирования
+- Halim S. (2013). *Competitive Programming 3.* — глава по геометрии для соревнований: типичные задачи, подводные камни precision
 
 ---
 

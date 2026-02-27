@@ -45,6 +45,56 @@ Touch interaction в iOS реализуется через две парадиг
 - Возможность создания custom gestures
 - Разрешение конфликтов между жестами
 
+## Теоретические основы
+
+> **Определение:** Обработка касаний (touch handling) — подсистема UI-фреймворка, ответственная за преобразование аппаратных сигналов сенсорного экрана в семантические события (tap, swipe, pinch), маршрутизируемые к соответствующим UI-компонентам через цепочку ответственности.
+
+### Паттерн Chain of Responsibility
+
+> **Chain of Responsibility (GoF, 1994):** «Позволить нескольким объектам обработать запрос, избавив отправителя от необходимости знать конкретного получателя. Объекты связываются в цепочку, и запрос передаётся по цепочке, пока один из объектов не обработает его.»
+
+Responder Chain в iOS — каноническая реализация этого паттерна:
+
+| Звено цепочки | Роль | Пример |
+|--------------|------|--------|
+| First Responder (UIView) | Первый получатель события | Кнопка, на которую нажали |
+| Superview | Родительский view | UIStackView, содержащий кнопку |
+| UIViewController | Контроллер, управляющий view | SettingsViewController |
+| UIWindow | Окно приложения | Main window |
+| UIApplication | Синглтон приложения | Последняя инстанция |
+
+### Hit Testing: алгоритм поиска в дереве
+
+Hit testing реализует **обратный обход дерева** (reverse pre-order traversal) view hierarchy:
+
+1. Проверка `point(inside:with:)` для корневого view
+2. Итерация subviews в обратном порядке (от последнего к первому — Z-order)
+3. Рекурсивный вызов `hitTest(_:with:)` для каждого subview
+4. Первый найденный view — получатель события
+
+Сложность: O(n), где n — количество view в иерархии. Оптимизации: `isUserInteractionEnabled = false`, `isHidden = true`, `alpha < 0.01` — пропускают view.
+
+### UIGestureRecognizer: паттерн State Machine
+
+UIGestureRecognizer реализует конечный автомат (Hopcroft & Ullman, 1979) с состояниями:
+
+| Состояние | Значение | Переходы |
+|-----------|----------|----------|
+| `.possible` | Начальное, ожидание событий | → recognized / began / failed |
+| `.began` | Continuous gesture начался | → changed / ended / cancelled |
+| `.changed` | Gesture продолжается | → changed / ended / cancelled |
+| `.ended` | Gesture завершён успешно | → possible |
+| `.cancelled` | Gesture прерван системой | → possible |
+| `.failed` | Gesture не распознан | → possible |
+
+### Связь с CS-фундаментом
+
+- [[ios-uikit-fundamentals]] — UIView hierarchy, на которой строится responder chain
+- [[ios-custom-views]] — custom hit testing в подклассах UIView
+- [[android-touch-handling]] — аналогичная система в Android (onTouchEvent, onInterceptTouchEvent)
+
+---
+
 ## Жизненные аналогии
 
 ### 1. Responder Chain как почтовая система

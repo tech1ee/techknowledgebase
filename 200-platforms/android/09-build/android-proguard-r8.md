@@ -46,6 +46,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Dead Code Elimination: формальная основа Tree Shaking
+
+> **Dead Code Elimination (DCE)** — классическая оптимизация компилятора (Allen et al., *"A Catalogue of Optimizing Transformations"*, 1971): удаление кода, который никогда не выполняется. R8 расширяет DCE до **Tree Shaking** — анализ графа вызовов (call graph) от entry points, удаление всех недостижимых классов, методов и полей.
+
+| Техника | Формальная модель | Что удаляет R8 |
+|---------|------------------|----------------|
+| **Reachability Analysis** | Обход графа от root set (BFS/DFS) | Классы и методы, недостижимые от entry points |
+| **Constant Propagation** | Замена переменных их известными значениями | `if (DEBUG)` → удаление мёртвой ветки |
+| **Method Inlining** | Замена вызова метода телом метода | Short methods, getters/setters |
+| **Class Merging** | Объединение иерархий классов | Interface с одной реализацией → merge |
+| **Devirtualization** | Замена виртуального вызова прямым | `final` class → direct call |
+
+### Obfuscation: Name Mangling
+
+> **Obfuscation** (запутывание) — переименование идентификаторов в короткие нечитаемые имена. Формально это **bijection** (взаимно-однозначное отображение): `f: OriginalName → ObfuscatedName`, сохраняемое в mapping file. R8 использует алфавитный перебор: `a`, `b`, ..., `z`, `aa`, `ab`, ... Это одновременно уменьшает размер DEX (короткие строки в string pool) и затрудняет reverse engineering.
+
+### Reflection как враг статического анализа
+
+> **Reflection** (позднее связывание, Java Core Reflection API, JSR-000, 1997) позволяет обращаться к классам и методам по имени в runtime. Это делает статический анализ R8 неполным: `Class.forName("com.example.MyClass")` не видим при compile-time. Keep rules — механизм ручного расширения root set для случаев, неопределимых статически.
+
+> **Связь**: DCE → [[android-compilation-pipeline]], Obfuscation → [[android-apk-aab]], Reflection → [[jvm-basics-history]]
+
+---
+
 ## Эволюция: ProGuard → R8
 
 ```
@@ -1255,21 +1281,24 @@ android.enableR8.fullMode=false
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Aho A. et al. *Compilers: Principles, Techniques, and Tools* (1986/2006) | Dead Code Elimination — теоретическая основа shrinking |
+| Tip F. *A Survey of Program Slicing Techniques* (1995) | Reachability analysis для определения используемого кода |
+| Collberg C. et al. *A Taxonomy of Obfuscating Transformations* (1997) | Name Mangling, Control Flow Obfuscation |
+
+### Практические руководства
 1. [R8 Official Documentation](https://developer.android.com/studio/build/shrink-code)
 2. [ProGuard Manual](https://www.guardsquare.com/manual/home)
 3. [R8 FAQ](https://r8.googlesource.com/r8/+/refs/heads/main/compatibility-faq.md)
-4. [Shrinking Your App](https://developer.android.com/build/shrink-code)
-5. [Disney+ Performance](https://medium.com/disney-streaming/how-disney-uses-android-app-performance-tuning-cb0f9c8b60d0)
-6. [Jake Wharton on R8](https://jakewharton.com/r8-optimization-staticization/)
-7. [Android Developers Blog: R8 Full Mode](https://android-developers.googleblog.com/2021/02/r8-full-mode-enabled-by-default.html)
+4. [Jake Wharton on R8](https://jakewharton.com/r8-optimization-staticization/)
+5. [Android Developers Blog: R8 Full Mode](https://android-developers.googleblog.com/2021/02/r8-full-mode-enabled-by-default.html)
 
----
-
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — практическое руководство по настройке R8, написанию keep rules, обработке Reflection и диагностике проблем obfuscation в production Android-приложениях.
-- Bloch (2018). *Effective Java*. — понимание Reflection API (Item 65), Serialization (Item 85-90) и их взаимодействия с obfuscation критично для правильного написания keep rules и предотвращения runtime crashes.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговая настройка code shrinking и obfuscation для release builds, включая тестирование ProGuard/R8 конфигурации и анализ mapping файлов.
+### Книги
+- Meier (2022). *Professional Android*. — настройка R8, keep rules, Reflection.
+- Bloch (2018). *Effective Java*. — Reflection API, Serialization и obfuscation.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — code shrinking и obfuscation.
 
 ---
 

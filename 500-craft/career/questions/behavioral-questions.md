@@ -30,6 +30,34 @@ FAANG оценивают по 8 dimensions: Motivation, Proactivity, Perseveranc
 
 ---
 
+## Теоретические основы
+
+> **Behavioral Assessment** — оценка прошлого поведения кандидата как предиктора будущей эффективности. Основан на принципе Janz (1982): **"The best predictor of future behavior is past behavior in similar circumstances."**
+
+**Dimensions оценки (типичная FAANG rubric):**
+
+| Dimension | Что оценивают | Пример вопроса |
+|-----------|---------------|----------------|
+| Motivation | Почему эта роль/компания | "Why do you want to work here?" |
+| Proactivity | Инициатива без указаний | "Tell me about something you did without being asked" |
+| Perseverance | Стойкость при неудачах | "Tell me about a time you failed" |
+| Conflict Resolution | Управление разногласиями | "Describe a disagreement with a teammate" |
+| Empathy | Понимание других perspectives | "How did you handle a struggling team member?" |
+| Growth | Способность учиться | "What's the biggest lesson from your career?" |
+| Communication | Ясность и структура | Оценивается через HOW кандидат отвечает |
+| Unstructured | Работа в неопределённости | "How do you handle ambiguous requirements?" |
+
+**Company-specific frameworks:**
+- **Amazon:** 16 Leadership Principles — каждый вопрос привязан к конкретному LP
+- **Google:** Googleyness — intellectual humility, collaborative, comfortable with ambiguity
+- **Meta:** Core Values — Move Fast, Be Bold, Build Social Value
+
+> **Janz (1982)** доказал: behavioral вопросы (validity 0.48-0.61) предсказывают job performance лучше, чем hypothetical ("Что бы вы сделали?", validity 0.39). Причина: реальный опыт сложнее приукрасить, и ответ демонстрирует actual behavior, не desired behavior.
+
+→ Связано: [[behavioral-interview]], [[interview-process]], [[negotiation]]
+
+---
+
 ## STAR Formula Reminder
 
 ```
@@ -688,15 +716,19 @@ COMPANY-SPECIFIC:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Fournier C. (2017). The Manager's Path.** — Незаменима для подготовки behavioral-историй о leadership, mentoring, и conflict resolution. Главы о transition to management и team dynamics дают vocabulary и frameworks для STAR-ответов на Senior+ позиции.
-
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит главу о behavioral интервью с конкретными примерами STAR-ответов и типичными ошибками. Помогает понять, как интервьюер оценивает ответы и что отличает сильный ответ от слабого.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Janz T. (1982). *Initial Comparisons of Patterned Behavior Description Interviews versus Unstructured Interviews*. — Predictive validity behavioral вопросов (0.48-0.61).
+
+- McClelland D. (1973). *Testing for Competence Rather Than Intelligence*. — Компетенции > IQ для предсказания job performance.
+
+- Fournier C. (2017). *The Manager's Path*. — Leadership, mentoring, conflict resolution vocabulary для STAR-ответов.
+
+- McDowell G.L. (2015). *Cracking the Coding Interview*. — Глава о behavioral: примеры STAR-ответов и типичные ошибки.
+
+### Практические руководства
 
 - [Tech Interview Handbook: Behavioral Rubrics](https://www.techinterviewhandbook.org/behavioral-interview-rubrics/)
 - [interviewing.io: How Meta Evaluates Behavioral](https://interviewing.io/blog/how-software-engineering-behavioral-interviews-are-evaluated-meta)

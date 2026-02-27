@@ -33,6 +33,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Когнитивное искажение (Cognitive Bias)** — систематическое отклонение от рациональности в суждениях, при котором выводы о людях и ситуациях формируются нелогичным образом (Tversky & Kahneman, 1974).
+
+Исследование когнитивных искажений — одно из крупнейших направлений когнитивной психологии XX-XXI века:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Heuristics and Biases | Tversky & Kahneman | 1974 | Три эвристики (representativeness, availability, anchoring) как источник искажений |
+| Prospect Theory | Kahneman & Tversky | 1979 | Люди оценивают потери в ~2 раза сильнее равных выигрышей (loss aversion) |
+| Thinking, Fast and Slow | Daniel Kahneman | 2011 | Система 1 (быстрая, интуитивная) vs Система 2 (медленная, аналитическая) |
+| Bias Blind Spot | Pronin, Lin & Ross | 2002 | Люди видят искажения у других, но не у себя |
+| Debiasing | Fischhoff | 1982 | Техники снижения влияния искажений: consider-the-opposite, pre-mortem |
+| Мета-анализ debiasing | Kenyon & Beaulac | 2014 | Обзор стратегий: формализация, checklists, adversarial collaboration |
+
+> **Kahneman (2011):** Система 1 — быстрая, автоматическая, интуитивная; Система 2 — медленная, осознанная, аналитическая. Большинство когнитивных искажений — побочный продукт Системы 1: она выдаёт быстрый ответ, а Система 2 недостаточно критична, чтобы его проверить.
+
+Ключевой парадокс: **bias blind spot** (Pronin et al., 2002) — знание об искажениях не защищает от них. Более того, люди, знающие о bias'ах, считают себя менее подверженными им (мета-bias). Единственная работающая стратегия — **процедурная защита**: checklists, pre-mortem analysis, adversarial reviews, формализованные decision frameworks. См. [[metacognition]] — метакогниция как инструмент мониторинга собственных искажений в реальном времени.
+
+---
+
 ## Они повсюду и у каждого
 
 Ты опытный разработчик, опустим субъективность понятия "опытный". Ты принял тысячи решений и обычно прав. Но именно эта уверенность делает тебя уязвимым.
@@ -350,9 +371,16 @@ Confirmation bias                 Активирует критическое
 
 ## Источники
 
+### Теоретические основы
+- Tversky, A. & Kahneman, D. «Judgment under Uncertainty: Heuristics and Biases». Science, 1974
+- Kahneman, D. & Tversky, A. «Prospect Theory: An Analysis of Decision under Risk». Econometrica, 1979
+- Kahneman, D. *Thinking, Fast and Slow*. Farrar, Straus and Giroux, 2011
+- Pronin, E., Lin, D. Y. & Ross, L. «The Bias Blind Spot». Self and Identity, 2002
 - [Mitigating Cognitive Bias: Integrative Review (2025)](https://journals.sagepub.com/doi/10.1177/01492063241287188) — проверено 2025-11-24
-- [Cognitive Biases in Strategic Decision Making Review (2025)](https://www.sciencedirect.com/science/article/abs/pii/S0024630125000329) — проверено 2025-11-24
 - [The Impact of Cognitive Biases on Professionals (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC8763848/) — проверено 2025-11-24
+
+### Практические руководства
+- [Cognitive Biases in Strategic Decision Making Review (2025)](https://www.sciencedirect.com/science/article/abs/pii/S0024630125000329) — проверено 2025-11-24
 - [Cognitive Biases in Digital Decision Making (2025)](https://acr-journal.com/article/cognitive-biases-in-digital-decision-making-how-consumers-navigate-information-overload-consumer-behavior--889/) — проверено 2025-11-24
 
 ---

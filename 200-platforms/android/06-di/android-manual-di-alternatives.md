@@ -33,6 +33,24 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Manual DI** — реализация Dependency Injection без фреймворков, используя **Composition Root** — единственное место в приложении, где собирается граф зависимостей (Seemann, *Dependency Injection: Principles, Practices, and Patterns*, 2019). На Android Composition Root — это `Application.onCreate()`.
+
+Manual DI реализует паттерны **Factory** и **Abstract Factory** (Gamma et al., 1994) вручную: `AppContainer` создаёт все зависимости и управляет их lifecycle. Это самая прозрачная реализация IoC — нет «магии» annotation processing или runtime reflection.
+
+| Подход | Плюсы | Минусы | Когда использовать |
+|--------|-------|--------|-------------------|
+| Manual DI (Container) | Прозрачность, нет зависимостей | Boilerplate растёт O(n) | Малые проекты, обучение |
+| Manual DI (Factory) | Гибкость, тестируемость | Нет compile-time валидации графа | Средние проекты |
+| Framework DI | Автоматизация, scoping | Сложность, learning curve | Крупные проекты |
+
+> **Composition Root** (Seemann, 2019) — архитектурный принцип: зависимости должны собираться в одном месте, максимально близком к точке входа приложения. Рассеивание сборки зависимостей по всему коду (Service Locator anti-pattern) создаёт скрытые зависимости и затрудняет тестирование.
+
+Google рекомендует Manual DI для простых приложений в [Guide to App Architecture](https://developer.android.com/training/dependency-injection/manual) — это подтверждает принцип YAGNI (You Ain't Gonna Need It): не добавляйте DI-фреймворк, пока Manual DI не станет узким местом.
+
+---
+
 ## ЧАСТЬ 1: Manual DI
 
 ### Почему Manual DI
@@ -567,16 +585,19 @@ class UserRepositoryFactory(
 
 ## Источники
 
-### Manual DI
+### Теоретические основы
+
+- **Seemann M.** *Dependency Injection: Principles, Practices, and Patterns* (2019) — Composition Root как единственное место сборки графа зависимостей; формальное обоснование Manual DI vs фреймворки
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns* (1994) — Factory, Abstract Factory и Builder, реализуемые вручную в Manual DI containers
+- **Fowler M.** *«Inversion of Control Containers and the Dependency Injection Pattern»* (2004) — формальное определение IoC и DI; различие Service Locator и DI, объясняющее антипаттерны Manual DI
+
+### Практические руководства
+
 - [Android Developers - Manual DI](https://developer.android.com/training/dependency-injection/manual)
 - [DI without Framework](https://blog.kotlin-academy.com/dependency-injection-the-pattern-without-the-framework-33cfa9d5f312)
-
-### Anvil
 - [Anvil GitHub](https://github.com/square/anvil)
 - [Introducing Anvil-KSP](https://www.zacsweers.dev/introducing-anvil-ksp/)
 - [Anvil Maintenance Mode](https://github.com/square/anvil/issues/1149)
-
-### Toothpick
 - [Toothpick GitHub](https://github.com/stephanenicolas/toothpick)
 
 ---
@@ -591,11 +612,11 @@ class UserRepositoryFactory(
 
 ---
 
-## Источники и дальнейшее чтение
+## Дополнительное чтение
 
-- Leiva (2017). *Kotlin for Android Developers*. — практическое введение в Kotlin-паттерны, включая подходы к организации зависимостей без фреймворков, полезно для понимания Manual DI в Kotlin-стиле.
-- Moskala (2021). *Effective Kotlin*. — best practices Kotlin, включая паттерны создания объектов, lazy initialization и организацию кода, которые напрямую применяются при реализации Manual DI containers.
-- Bloch (2018). *Effective Java*. — классические паттерны Factory, Builder и принципы API-дизайна, на которых основан Manual DI подход с containers и factories.
+- **Leiva A.** *Kotlin for Android Developers* (2017) — практическое введение в Kotlin-паттерны, включая подходы к организации зависимостей без фреймворков, полезно для понимания Manual DI в Kotlin-стиле
+- **Moskala M.** *Effective Kotlin* (2021) — best practices Kotlin, включая паттерны создания объектов, lazy initialization и организацию кода, которые напрямую применяются при реализации Manual DI containers
+- **Bloch J.** *Effective Java* (2018) — классические паттерны Factory, Builder и принципы API-дизайна, на которых основан Manual DI подход с containers и factories
 
 ---
 

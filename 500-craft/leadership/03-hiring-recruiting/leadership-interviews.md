@@ -39,6 +39,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Оценка лидерских компетенций
+
+> **Определение:** Leadership Assessment — систематическая оценка способностей кандидата к лидерству через анализ прошлого поведения, ситуационные упражнения и структурированные интервью. Отличается от оценки IC фокусом на people development, strategic thinking и organizational impact.
+
+Модель компетенций для leadership ролей восходит к работам David McClelland (*"Testing for Competence Rather Than for Intelligence"*, American Psychologist, 1973), который предложил оценивать не IQ или credentials, а конкретные компетенции, проявленные в поведении:
+
+| Компетенция (McClelland) | Проявление в Engineering Leadership | Как оценивать |
+|--------------------------|--------------------------------------|---------------|
+| **Achievement orientation** | Delivery track record, metrics-driven | «Расскажите о проекте, где вы значительно улучшили delivery» |
+| **Influence** | Stakeholder management, cross-team alignment | «Как вы убедили команду принять непопулярное решение?» |
+| **Developing others** | Mentoring, career growth of reports | «Кто из ваших подчинённых получил promotion? Как вы помогли?» |
+| **Teamwork** | Building teams, psychological safety | «Как вы построили культуру в своей команде?» |
+
+### Competency-Based Interviews (CBI)
+
+> **CBI** (Competency-Based Interview) — метод интервью, при котором вопросы фокусируются на конкретных компетенциях, а ответы оцениваются по шкале с behavioral anchors. Развитие STAR-метода для leadership ролей.
+
+Geoff Smart в *"Who: The A Method for Hiring"* (2008) предложил метод **Topgrading** — глубокое хронологическое интервью, проходящее через всю карьеру кандидата с вопросами о каждой роли: что было задачей, что сделал, каков результат, что сказал бы boss. Для leadership ролей Smart дополняет Topgrading техникой **TORC** (Threat of Reference Check) — предупреждение кандидата, что его ответы будут проверены через reference calls, что повышает честность.
+
+Claudio Fernandez-Araoz (*"Great People Decisions"*, Wiley, 2007) показал, что при executive hiring наиболее предсказательны четыре качества: curiosity, insight, engagement и determination — а не функциональные навыки или опыт в конкретной индустрии.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -698,13 +723,20 @@ ADDITIONAL:
 
 ## Источники
 
+### Теоретические основы
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | [Who: The A Method](https://www.amazon.com/Who-Method-Hiring-Geoff-Smart/dp/0345504194) | Book | Topgrading, TORC |
-| 2 | [Topgrading](https://www.amazon.com/Topgrading-Hiring-Coaching-Keeping-Players/dp/1591845262) | Book | Chronological interview |
-| 3 | [HBR: Executive Hiring](https://hbr.org/topic/subject/hiring) | Research | Failure rates |
-| 4 | [First Round: Hiring Leaders](https://review.firstround.com/) | Articles | Practical tips |
-| 5 | [ghSmart Research](https://ghsmart.com/) | Research | Reference importance |
+| 1 | McClelland D. C. "Testing for Competence Rather Than for Intelligence" — American Psychologist, 1973 | Статья | Компетентностный подход к оценке |
+| 2 | Smart G. "Who: The A Method for Hiring" — Ballantine, 2008 | Книга | Topgrading, TORC method |
+| 3 | Fernandez-Araoz C. "Great People Decisions" — Wiley, 2007 | Книга | 4 предсказательных качества для executive hiring |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Topgrading](https://www.amazon.com/Topgrading-Hiring-Coaching-Keeping-Players/dp/1591845262) | Book | Chronological interview |
+| 2 | [HBR: Executive Hiring](https://hbr.org/topic/subject/hiring) | Research | Failure rates |
+| 3 | [First Round: Hiring Leaders](https://review.firstround.com/) | Articles | Practical tips |
+| 4 | [ghSmart Research](https://ghsmart.com/) | Research | Reference importance |
 
 ---
 

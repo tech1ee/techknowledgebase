@@ -52,6 +52,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Cold Start как цепочка зависимостей
+
+> Запуск приложения — это **критический путь** (Critical Path Method, Kelley & Walker, 1959): последовательность зависимых операций, определяющая минимальное время выполнения. Оптимизация не на критическом пути не ускоряет запуск.
+
+```
+Критический путь cold start:
+  fork(2ms) → classLoading(50ms) → ContentProviders(100ms) →
+  → Application.onCreate(50ms) → Activity.onCreate(30ms) →
+  → inflate(40ms) → measure/layout/draw(20ms) = ~292ms TTID
+```
+
+### Zygote: паттерн Prototype для процессов
+
+> **Zygote** (от греч. "оплодотворённая клетка") реализует паттерн **Prototype** (GoF, 1994) на уровне процессов: preload common classes и resources один раз, затем `fork()` создаёт копию процесса за O(1) благодаря Copy-on-Write (CoW). Без Zygote каждый процесс загружал бы ~8000 framework-классов с нуля (~3 секунды).
+
+| Этап | Без Zygote | С Zygote | Экономия |
+|------|-----------|----------|----------|
+| Class loading | ~3000 ms (загрузка 8000+ классов) | ~2 ms (fork + CoW) | ~1500x |
+| Heap setup | ~500 ms | ~0 ms (shared preloaded heap) | ∞ |
+| Framework init | ~1000 ms | ~0 ms (уже инициализирован) | ∞ |
+
+### Profile-Guided Optimization (PGO)
+
+> **PGO** (профильно-направленная оптимизация) — техника компиляции, при которой runtime-профиль выполнения направляет оптимизатор. Формализована в контексте JIT-компиляции (Hölzle & Ungar, *"Optimizing Dynamically-Dispatched Calls with Run-Time Type Feedback"*, 1994). ART использует PGO через Baseline Profiles: разработчик указывает «горячие» методы, `dex2oat` компилирует их AOT при установке.
+
+> **Связь**: Critical Path → [[android-boot-process]], Zygote → [[android-activitythread-internals]], PGO → [[android-art-runtime]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужна | Где изучить |
@@ -2206,12 +2237,19 @@ COMPREHENSIVE STARTUP CHECKLIST:
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая профилирование и оптимизацию производительности
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: Zygote, ActivityManagerService, процесс запуска приложения на уровне ядра
-- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin для написания эффективного кода, влияющего на скорость инициализации
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Kelley J., Walker M. *Critical-Path Planning and Scheduling* (1959) | Critical Path Method — определение bottleneck в цепочке запуска |
+| GoF. *Design Patterns* (1994) | Prototype Pattern → Zygote fork; Lazy Initialization |
+| Chang P. et al. *Using Profile Information to Assist Classic Code Optimizations* (1991) | Profile-Guided Optimization → Baseline Profiles |
 
-**Веб-ресурсы:**
+### Книги
+- Meier R. (2022). Professional Android, 4th Edition. — профилирование и оптимизация производительности.
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — Zygote, AMS, процесс запуска.
+- Moskala M. (2021). Effective Kotlin. — эффективный код для скорости инициализации.
+
+### Практические руководства
 1. **[Android Developers — App Startup Time](https://developer.android.com/topic/performance/vitals/launch-time)** — docs — Официальное руководство по типам запуска и метрикам
 2. **[Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/overview)** — docs — Официальная документация Baseline Profiles
 3. **[Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)** — docs — Руководство по Macrobenchmark

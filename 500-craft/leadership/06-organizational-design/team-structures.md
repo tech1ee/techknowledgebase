@@ -35,6 +35,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Conway's Law (1968) и организационный дизайн
+
+> **Определение:** Conway's Law — наблюдение Melvin Conway (1968): «Организации, проектирующие системы, неизбежно производят дизайн, повторяющий коммуникационные структуры этих организаций.»
+
+Conway's Law, впервые опубликованный в *"How Do Committees Invent?"* (Datamation, 1968), стал фундаментальным принципом организационного дизайна в software engineering. **Inverse Conway Maneuver** — стратегический подход, при котором организационная структура намеренно проектируется для получения желаемой архитектуры.
+
+### Team Topologies (Skelton & Pais, 2019)
+
+Matthew Skelton и Manuel Pais в *"Team Topologies: Organizing Business and Technology Teams for Fast Flow"* (2019) формализовали четыре типа команд и три модели взаимодействия:
+
+| Тип команды | Доля | Назначение | Аналогия |
+|-------------|------|-----------|----------|
+| **Stream-aligned** | ~80% | Доставка ценности по business stream | Product team |
+| **Platform** | ~10% | Internal services, self-service API | Internal infrastructure |
+| **Enabling** | ~5% | Помощь другим командам adopt capabilities | Consulting team |
+| **Complicated-subsystem** | ~5% | Глубокая специализация (ML, crypto) | Expert team |
+
+Три модели взаимодействия: **Collaboration** (работаем вместе), **X-as-a-Service** (используем как сервис), **Facilitating** (помогаем learn). Центральная метрика — **cognitive load**: каждая команда должна иметь управляемый cognitive load, что определяет границы ownership.
+
+James D. Thompson (*"Organizations in Action"*, 1967) описал три типа зависимостей между организационными единицами: **pooled** (общие ресурсы), **sequential** (конвейер), **reciprocal** (взаимная). Team Topologies минимизирует reciprocal dependencies, переводя их в X-as-a-Service (sequential).
+
+---
+
 ## Team Topologies
 
 ```
@@ -165,13 +190,20 @@ RULE OF THUMB:
 
 **[[engineering-metrics]]** — Эффективность выбранной структуры команд можно и нужно измерять через инженерные метрики. DORA metrics (deployment frequency, lead time) показывают, насколько хорошо структура команд поддерживает быструю доставку. Если метрики ухудшаются при росте — это сигнал к пересмотру team topology и организационного дизайна.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Conway M. "How Do Committees Invent?" — Datamation, 1968 | Статья | Conway's Law |
+| 2 | Thompson J. D. "Organizations in Action" — McGraw-Hill, 1967 | Книга | Три типа организационных зависимостей |
+| 3 | Skelton M., Pais M. "Team Topologies" — IT Revolution, 2019 | Книга | 4 типа команд, 3 модели взаимодействия, cognitive load |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Team management at scale |
+| 2 | Larson W. "An Elegant Puzzle" — Stripe Press, 2019 | Книга | Org design patterns |
 
 
 ## Проверь себя

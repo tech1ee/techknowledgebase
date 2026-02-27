@@ -54,6 +54,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Executor Framework и модели асинхронного выполнения опираются на фундаментальные концепции теории параллельных вычислений и систем массового обслуживания.
+
+> **Закон Little (1961):** *L = λW* — среднее число задач в системе (L) равно произведению скорости поступления задач (λ) на среднее время обработки (W). Для thread pool: оптимальный размер пула = throughput × latency.
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM |
+|------------------------|-----------------|-----------------|
+| **Закон Little** | Little, 1961 | Формула размера thread pool: N_threads = N_cpu × (1 + W/C), где W — время ожидания I/O, C — время вычислений |
+| **Закон Амдала** | Amdahl, 1967 | Предел ускорения при параллелизме: последовательная доля ограничивает рост throughput |
+| **Work stealing** | Blumofe & Leiserson, 1999 (Cilk) | Свободный поток «крадёт» задачи у занятого → `ForkJoinPool` |
+| **Future / Promise** | Baker & Hewitt, 1977 | Абстракция отложенного результата → `Future`, `CompletableFuture` |
+| **Continuation-passing** | Fischer, 1972 | Стиль программирования, где продолжение передаётся явно → `thenApply`, `thenCompose` |
+| **Green threads / M:N** | 1960-е (multiprogramming) | Множество лёгких потоков на несколько OS-потоков → Virtual Threads (Java 21) |
+
+> **Work stealing (Blumofe & Leiserson, 1999):** *Алгоритм, при котором каждый поток имеет собственную двустороннюю очередь (deque). Поток берёт задачи из головы своей очереди; когда очередь пуста, он «крадёт» задачу из хвоста очереди другого потока.* Это обеспечивает автоматическую балансировку нагрузки с O(1) amortized overhead.
+
+Формула **оптимального размера пула** (Goetz, 2006) для смешанных задач: `N_threads = N_cpu × U_cpu × (1 + W/C)`, где N_cpu — число ядер, U_cpu — целевая утилизация CPU (обычно 0.5--0.8), W — среднее время ожидания I/O, C — среднее время вычислений. Для чисто CPU-bound задач (W = 0): N_threads = N_cpu. Для I/O-bound (W >> C): пул может быть значительно больше числа ядер.
+
+Связанные темы: [[jvm-synchronization]] (ReentrantLock и BlockingQueue внутри executor), [[jvm-concurrency-overview]] (общая карта concurrency), [[java-modern-features]] (Virtual Threads как эволюция executor model).
+
+---
+
 ## Историческая справка: от Thread к Virtual Threads
 
 История управления потоками в Java — это история постепенного повышения уровня абстракции. Каждый шаг решал проблемы предыдущего подхода.
@@ -505,9 +528,17 @@ catch (ExecutionException e) { log.error("Task failed", e.getCause()); }
 
 ## Источники и дальнейшее чтение
 
-- Goetz B. et al. (2006). *Java Concurrency in Practice*. — Каноническое руководство по concurrency на JVM. Главы 6 «Task Execution» и 8 «Applying Thread Pools» детально разбирают executors: выбор типа пула, настройка ThreadPoolExecutor, thread pool sizing формулы, rejection и saturation policies. Обязательна к прочтению.
-- Lea D. (2000). *Concurrent Programming in Java: Design Principles and Patterns*, 2nd Edition. — Книга от создателя java.util.concurrent и Fork/Join Framework. Описывает теоретические основы work stealing, design decisions behind ExecutorService, и эволюцию от голых потоков к высокоуровневым абстракциям.
-- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond*, 2nd Edition. — Главы о threading и ForkJoinPool описывают performance characteristics разных типов пулов, sizing strategies, влияние на GC, и практические бенчмарки для выбора оптимальной конфигурации.
+### Теоретические основы
+
+- **Little J.D.C. (1961). A Proof for the Queuing Formula: L = λW.** — фундаментальная связь throughput и latency; основа формулы размера thread pool.
+- **Baker H., Hewitt C. (1977). The Incremental Garbage Collection of Processes.** — концепция Future/Promise как абстракции отложенного результата.
+- **Blumofe R., Leiserson C. (1999). Scheduling Multithreaded Computations by Work Stealing.** — алгоритм work stealing; основа ForkJoinPool.
+
+### Практические руководства
+
+- **Goetz B. et al. (2006). Java Concurrency in Practice.** — главы 6 и 8: executors, thread pool sizing, rejection policies.
+- **Lea D. (2000). Concurrent Programming in Java, 2nd ed.** — теоретические основы work stealing, design decisions ExecutorService.
+- **Oaks S. (2020). Java Performance, 2nd ed.** — performance characteristics разных типов пулов, sizing strategies.
 
 ---
 

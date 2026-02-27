@@ -112,6 +112,44 @@ Flow -- это абстракция для потоков данных от од
 
 ---
 
+## Теоретические основы
+
+Kotlin Channels реализуют формальную модель коммуникации между параллельными процессами, восходящую к работам 1970-х годов.
+
+### CSP vs Actor Model: две парадигмы
+
+> **CSP** (Communicating Sequential Processes, Hoare, 1978) — формальная модель, в которой **процессы анонимны**, а **каналы именованы**. Процессы общаются исключительно через каналы; синхронизация происходит в точке рандеву (send ждёт receive и наоборот).
+
+> **Actor Model** (Hewitt, Agha, 1973) — модель, в которой **акторы именованы** (имеют адрес), а каналы анонимны (mailbox). Отправка сообщения асинхронна — отправитель не ждёт обработки.
+
+| Критерий | CSP (Hoare, 1978) | Actor Model (Hewitt, 1973) | Kotlin Channels |
+|----------|-------------------|---------------------------|-----------------|
+| Именование | Каналы именованы | Акторы именованы | Каналы именованы |
+| Синхронизация | Синхронная (рандеву) | Асинхронная (mailbox) | Rendezvous по умолчанию; Buffered опционально |
+| Идентичность | Процессы анонимны | Акторы имеют адреса | Корутины анонимны |
+| Реализации | Go channels, Occam | Erlang, Akka | kotlinx.coroutines Channels |
+
+Kotlin Channels следуют модели CSP: каналы именованы, корутины (процессы) анонимны, Rendezvous-канал (capacity=0) обеспечивает синхронную передачу. Buffered channel добавляет элемент асинхронности, сближаясь с Actor Model.
+
+### Формальная семантика типов каналов
+
+| Тип | Capacity | Формальная модель | Свойство |
+|-----|----------|-------------------|----------|
+| **Rendezvous** | 0 | Synchronous communication (Hoare, 1978) | send блокируется до receive — полная синхронизация |
+| **Buffered** | N | Bounded buffer (Dijkstra, 1965) | Классическая задача producer-consumer с ограниченным буфером |
+| **Unlimited** | ∞ | Unbounded queue | Отсутствие backpressure; риск OOM |
+| **Conflated** | 1 (overwrite) | Lossy channel | Только последнее значение; моделирует «текущее состояние» |
+
+> **Backpressure** — механизм обратного давления, при котором producer замедляется, если consumer не успевает обрабатывать данные. Bounded buffer — классическое решение, формализованное Dijkstra (1965) через семафоры. В Kotlin: `send()` suspend-ится при полном буфере — это cooperative backpressure без блокировки потока.
+
+### Select и недетерминированный выбор
+
+`select {}` реализует **guarded command** (Dijkstra, 1975, *Guarded Commands, Nondeterminacy and Formal Derivation of Programs*) и **альтернативу** из CSP (Hoare, 1978): выбор первого готового канала из множества. В теории это **недетерминированный выбор** (nondeterministic choice) — если несколько каналов готовы одновременно, результат зависит от порядка объявления clause'ов (biased select).
+
+См. также: [[kotlin-coroutines]] — базовый API корутин, [[kotlin-coroutines-internals]] — state machine и CPS, [[jvm-concurrent-collections]] — BlockingQueue как Java-аналог.
+
+---
+
 ## Основы Channel
 
 ### Теория: Communicating Sequential Processes (CSP)
@@ -1817,18 +1855,24 @@ channel.trySend(42) // Успешно, если буфер не полон
 
 ## Источники и дальнейшее чтение
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. Ch.17-21 -- единственная книга с глубоким разбором Channel API, produce, select, actor и практических паттернов. Обязательна для серьёзного изучения.
-- Hoare C.A.R. (1978). *Communicating Sequential Processes*. Communications of the ACM. -- Фундаментальная работа, заложившая теоретическую базу CSP. Описывает формальную модель, на которой построены Go channels и Kotlin Channels.
-- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. -- Обновлённое издание от разработчиков JetBrains. Глава о корутинах покрывает channels и flow на уровне, необходимом для production-разработки.
+### Теоретические основы
+
+- Hoare C.A.R. (1978). *Communicating Sequential Processes*. Communications of the ACM. -- Фундаментальная работа, заложившая теоретическую базу CSP. Формальная модель, на которой построены Go channels и Kotlin Channels.
+- Hewitt C., Bishop P., Steiger R. (1973). *A Universal Modular ACTOR Formalism for Artificial Intelligence*. IJCAI. -- Оригинальное описание Actor Model; сравнение с CSP для понимания design decisions Kotlin Channels.
+- Dijkstra E. (1965). *Cooperating Sequential Processes*. — Формализация bounded buffer (producer-consumer), семафоров; теоретическая основа buffered channels.
+- Dijkstra E. (1975). *Guarded Commands, Nondeterminacy and Formal Derivation of Programs*. CACM. -- Guarded commands: теоретическая основа `select {}` expression.
+
+### Практические руководства
+
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. Ch.17-21. -- Глубокий разбор Channel API, produce, select, actor и практических паттернов.
+- Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition*. -- Глава о корутинах покрывает channels и flow для production-разработки.
 - Kotlin Documentation: [Channels](https://kotlinlang.org/docs/channels.html) -- официальная документация с примерами produce, fan-out, fan-in и pipeline.
-- Kotlin Documentation: [Select expression (experimental)](https://kotlinlang.org/docs/select-expression.html) -- документация по select: onReceive, onSend, onAwait с примерами.
-- Elizarov R. (2019). *Structured Concurrency*. KotlinConf talk. -- Доклад автора Kotlin Coroutines о том, как structured concurrency влияет на дизайн Channel API и lifecycle каналов.
-- Elizarov R. (2018). *Kotlin Coroutines in Practice*. KotlinConf talk. -- Практические паттерны использования корутин и каналов от создателя библиотеки.
-- kotlinx.coroutines GitHub: [CHANGES.md](https://github.com/Kotlin/kotlinx.coroutines/blob/master/CHANGES.md) -- changelog библиотеки. Важно для отслеживания изменений в Channel API (новый алгоритм в 1.9, deprecation BroadcastChannel).
-- kotlinx.coroutines GitHub: [Issue #3621 -- Fast and scalable channels algorithm](https://github.com/Kotlin/kotlinx.coroutines/issues/3621) -- описание нового алгоритма каналов, обеспечившего 10-25% ускорение.
-- Patil S. (2023). [Exploring "select" expression of Kotlin coroutines](https://medium.com/@patilshreyas/exploring-select-expression-of-kotlin-coroutines-8b777e5a23da). -- Практическое руководство по select с примерами мультиплексирования.
-- Anifantakis I. (2025). [Mastering Kotlin Coroutine Channels in Android](https://www.droidcon.com/2025/01/30/mastering-kotlin-coroutine-channels-in-android-from-basics-to-advanced-patterns/). -- Подробный разбор паттернов Channel в Android: от основ до advanced patterns.
-- Kakkar K. (2025). [SharedFlow vs Channel in Kotlin Coroutines](https://kamaldeepkakkar.medium.com/sharedflow-vs-channel-in-kotlin-coroutines-when-to-use-which-in-android-c7c3bc8da90d). -- Сравнение SharedFlow и Channel для событий в Android MVVM.
+- Kotlin Documentation: [Select expression (experimental)](https://kotlinlang.org/docs/select-expression.html) -- документация по select: onReceive, onSend, onAwait.
+- Elizarov R. (2019). *Structured Concurrency*. KotlinConf. -- Влияние structured concurrency на дизайн Channel API и lifecycle каналов.
+- Elizarov R. (2018). *Kotlin Coroutines in Practice*. KotlinConf. -- Практические паттерны использования корутин и каналов.
+- kotlinx.coroutines GitHub: [Issue #3621](https://github.com/Kotlin/kotlinx.coroutines/issues/3621) -- новый алгоритм каналов, 10-25% ускорение.
+- Anifantakis I. (2025). [Mastering Kotlin Coroutine Channels in Android](https://www.droidcon.com/2025/01/30/mastering-kotlin-coroutine-channels-in-android-from-basics-to-advanced-patterns/). -- Паттерны Channel в Android.
+- Kakkar K. (2025). [SharedFlow vs Channel in Kotlin Coroutines](https://kamaldeepkakkar.medium.com/sharedflow-vs-channel-in-kotlin-coroutines-when-to-use-which-in-android-c7c3bc8da90d). -- Сравнение SharedFlow и Channel для событий в Android.
 
 ---
 

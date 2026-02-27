@@ -38,6 +38,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Object Pool** — паттерн управления ресурсами, при котором набор инициализированных объектов хранится в пуле для повторного использования вместо создания и уничтожения (Kircher/Jain, *Pattern-Oriented Software Architecture*, Vol. 3, 2004). RecyclerView — каноническая реализация этого паттерна в мобильной разработке.
+
+Четырёхуровневая система кэширования RecyclerView соответствует принципу **иерархии памяти** (memory hierarchy) из архитектуры вычислительных систем (Hennessy/Patterson, 2011). Каждый уровень кэша балансирует между скоростью доступа и объёмом хранения:
+
+| Уровень кэша | Аналог в CPU | Стоимость доступа | Требуется rebind? | Ёмкость |
+|-------------|-------------|-------------------|-------------------|---------|
+| Scrap (attached) | L1 cache | ~0 ms (без detach) | Нет | Текущий экран |
+| Cache (по позиции) | L2 cache | ~0.01 ms | Нет | 2 (default) |
+| ViewCacheExtension | L3 cache | Custom | Custom | Custom |
+| RecycledViewPool (по type) | RAM | ~0.1 ms (rebind) | Да | 5 per type |
+| Создание нового | Disk | ~5-10 ms (inflate) | Да (create+bind) | ∞ |
+
+**DiffUtil** реализует алгоритм **Eugene Myers** (*An O(ND) Difference Algorithm and Its Variations*, 1986) — тот же алгоритм, что используется в Unix `diff` и Git. Сложность O(N + D²), где N — суммарный размер списков, D — количество различий (edit distance). Для типичных UI-обновлений D << N, что делает алгоритм практически линейным.
+
+> **ViewHolder** реализует паттерн **Flyweight** (Gamma et al., 1994) в сочетании с **Adapter** (GoF): тяжёлый объект View создаётся один раз (inflation), а лёгкая операция привязки данных (bind) выполняется многократно. Это разделение **intrinsic state** (структура View) и **extrinsic state** (данные элемента списка).
+
+**GapWorker prefetch** (Android 7.0+) — реализация принципа **speculative execution** из архитектуры процессоров (Smith, 1998): система предсказывает, какие ViewHolder понадобятся при скролле, и создаёт/привязывает их в idle time между VSYNC-кадрами. Предсказание основано на направлении и скорости скролла — аналог **branch prediction** в CPU.
+
+Модель **LayoutManager** как абстракция расположения элементов реализует паттерн **Strategy** (Gamma et al., 1994): алгоритм layout (линейный, grid, staggered) инкапсулирован в отдельный объект и может быть заменён без изменения RecyclerView.
+
+---
+
 ## Зачем это нужно
 
 | Симптом | Причина | Последствия |
@@ -1948,26 +1972,27 @@ override fun onBindViewHolder(holder: VH, position: Int, payloads: List<Any>) {
 
 ## Источники
 
+### Теоретические основы
+
+- **Myers E. (1986). An O(ND) Difference Algorithm and Its Variations.** — Алгоритм, реализованный в DiffUtil
+- **Kircher M., Jain P. (2004). Pattern-Oriented Software Architecture, Vol. 3.** — Object Pool pattern
+- **Gamma E. et al. (1994). Design Patterns.** — Flyweight (ViewHolder), Adapter, Strategy (LayoutManager)
+- **Hennessy J., Patterson D. (2011). Computer Architecture.** — Иерархия памяти / кэшей (4 уровня кэша RecyclerView)
+- **Smith J. (1998). The Architecture of Virtual Machines.** — Speculative execution (GapWorker prefetch)
+- **Bloch J. (2018). Effective Java.** — Object Pool (Item 6), кэширование
+
+### Практические руководства
+
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
 | 1 | [RecyclerView Docs](https://developer.android.com/develop/ui/views/layout/recyclerview) | Docs | Официальная документация |
 | 2 | [AOSP: RecyclerView.java](https://cs.android.com/androidx/platform/frameworks/support/+/master:recyclerview/recyclerview/src/main/java/androidx/recyclerview/widget/RecyclerView.java) | AOSP | Исходный код (~13,000 строк) |
 | 3 | [DiffUtil Docs](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil) | Docs | API с бенчмарками |
-| 4 | [Anatomy of RecyclerView: Search for ViewHolder](https://android.jlelse.eu/anatomy-of-recyclerview-part-1-a-search-for-a-viewholder-404ba3453714) | Article | tryGetViewHolderForPositionByDeadline |
-| 5 | [RecyclerView Caching](https://medium.com/@nicholasnielson/recyclerview-caching-9e7d6b27c0fe) | Article | 4 уровня кэша |
-| 6 | [Eugene Myers Diff Algorithm](http://www.xmailserver.org/diff2.pdf) | Paper | Оригинальная статья 1986 |
-| 7 | [RecyclerView Prefetch](https://medium.com/google-developers/recyclerview-prefetch-c2f269075710) | Article | GapWorker, Chris Craik |
-| 8 | [ListAdapter Docs](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter) | Docs | AsyncListDiffer wrapper |
-| 9 | [ConcatAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ConcatAdapter) | Docs | Merge adapters |
-| 10 | [ItemTouchHelper](https://developer.android.com/reference/androidx/recyclerview/widget/ItemTouchHelper) | Docs | Drag & swipe |
-| 11 | [RecyclerView Performance](https://developer.android.com/topic/performance/vitals/render) | Docs | Performance best practices |
-| 12 | [Shared RecycledViewPool](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.RecycledViewPool) | Docs | Nested RV optimization |
+| 4 | [Eugene Myers Diff Algorithm](http://www.xmailserver.org/diff2.pdf) | Paper | Оригинальная статья 1986 |
+| 5 | [RecyclerView Prefetch](https://medium.com/google-developers/recyclerview-prefetch-c2f269075710) | Article | GapWorker, Chris Craik |
 
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — практическое руководство по RecyclerView, включая Adapter patterns, DiffUtil, ItemAnimator и performance best practices для production-приложений.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое построение списков с RecyclerView, ViewHolder pattern и обработка кликов, идеально для понимания основ перед погружением в internals.
-- Bloch (2018). *Effective Java*. — паттерны Object Pool (Item 6), Flyweight и кэширования, которые лежат в основе четырёхуровневой системы кэширования RecyclerView.
+- Meier (2022). *Professional Android*. — RecyclerView, Adapter patterns, DiffUtil, performance
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — списки, ViewHolder pattern
 
 ---
 

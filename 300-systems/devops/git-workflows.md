@@ -34,6 +34,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Git** — распределённая система контроля версий, созданная **Linus Torvalds (2005)** для разработки ядра Linux. **Git workflow** — формализованная стратегия ветвления и слияния, определяющая процесс поставки кода.
+
+### Эволюция branching-моделей
+
+| Год | Модель | Автор | Ключевая идея |
+|-----|--------|-------|---------------|
+| 2005 | **Centralized** | (SVN-стиль) | Одна ветка, все коммитят туда |
+| 2010 | **GitFlow** | Vincent Driessen | 5 типов веток (main, develop, feature, release, hotfix) |
+| 2011 | **GitHub Flow** | Scott Chacon | 1 main + feature branches + PR |
+| 2015 | **Trunk-Based Development** | Paul Hammant | 1 trunk, ветки < 1 дня, feature flags |
+| 2020 | **Ship/Show/Ask** | Rouan Wilsenach | Классификация PR по риску |
+
+### Фундаментальный trade-off
+
+```
+Длина жизни ветки ──────────────────────────► Боль при merge
+      │                                            │
+      │  Trunk-Based: часы                         │  Минимальные конфликты
+      │  GitHub Flow: дни                          │  Управляемые конфликты
+      │  GitFlow: недели                           │  Сложные merge
+      ▼                                            ▼
+```
+
+> **Исследование DORA**: команды с trunk-based development имеют **в 2× выше** deployment frequency и **в 3× ниже** change failure rate.
+
+> **См. также**: [[ci-cd-pipelines]] — CI/CD автоматизация, [[gitops-argocd-flux]] — GitOps
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -540,6 +571,10 @@ git checkout -b recovered-branch <commit-hash>
 ---
 
 ## Источники
+
+### Теоретические основы
+- Driessen V. (2010). *A Successful Git Branching Model* (GitFlow). — Оригинальная модель 5 типов веток
+- Hammant P. (2017). *Trunk-Based Development*. — Формализация TBD с кейсами Google, Facebook
 
 ### Официальные ресурсы и исследования
 - [Trunk Based Development Official](https://trunkbaseddevelopment.com/) — проверено 2025-01-03

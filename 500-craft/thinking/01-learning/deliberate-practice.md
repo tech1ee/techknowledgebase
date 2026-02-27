@@ -56,6 +56,28 @@ DELIBERATE PRACTICE:
 
 ---
 
+## Теоретические основы
+
+> **Deliberate Practice (намеренная практика)** — структурированная деятельность, специально разработанная для улучшения конкретных аспектов производительности, требующая полной концентрации и выходящая за пределы текущего уровня компетенции (Ericsson, Krampe & Tesch-Römer, 1993).
+
+Концепция deliberate practice выросла из исследований экспертизы, начатых ещё в 1960-х:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Шахматная экспертиза | de Groot | 1965 | Эксперты видят паттерны, а не отдельные фигуры |
+| Chunking в шахматах | Chase & Simon | 1973 | Рабочая память экспертов не больше — они группируют информацию |
+| Deliberate Practice | Ericsson, Krampe & Tesch-Römer | 1993 | Оригинальное исследование скрипачей: качество > количество |
+| Мета-анализ | Macnamara, Hambrick & Oswald | 2014 | DP объясняет ~26% дисперсии в играх, ~21% в музыке, ~18% в спорте |
+| Peak | Ericsson & Pool | 2016 | Синтез: mental representations как ключ к экспертизе |
+
+> **Ericsson (1993):** «The differences between expert performers and normal adults reflect a life-long period of deliberate effort to improve performance in a specific domain.»
+
+Критически важно: мета-анализ **Macnamara et al. (2014)** показал, что deliberate practice объясняет значительную, но не всю дисперсию в уровне мастерства. Другие факторы: генетические предрасположенности (Hambrick et al., 2014), качество наставничества, стартовый возраст. Это не умаляет значения DP — но означает, что «10,000 часов = мастерство» — грубое упрощение.
+
+Концепция **mental representations** (Ericsson & Pool, 2016) — внутренние модели, которые эксперты строят через годы deliberate practice — связывает DP с теорией chunking (Chase & Simon, 1973) и schema theory (Bartlett, 1932): эксперт не запоминает больше, а организует знания эффективнее. См. также [[desirable-difficulties]] — deliberate practice по определению создаёт «желательные трудности».
+
+---
+
 ## Разоблачение мифа о 10,000 часах
 
 ### Как родился миф
@@ -823,27 +845,21 @@ Vs. Признаки непродуктивного дискомфорта (зо
 
 ## Источники
 
-### Первоисточники (работы Эрикссона)
+### Теоретические основы
+- [Ericsson, K.A., Krampe, R.T., & Tesch-Romer, C. (1993). The Role of Deliberate Practice in the Acquisition of Expert Performance](https://psycnet.apa.org/record/1993-40718-001) — оригинальное исследование — проверено 2025-12-19
+- Ericsson, K. A. & Pool, R. *Peak: Secrets from the New Science of Expertise*. Houghton Mifflin, 2016
+- [Ericsson, K.A. (2020). Towards a Science of the Acquisition of Expert Performance](https://www.sciencedirect.com/science/article/abs/pii/S0079742120300037) — последние работы — проверено 2025-12-19
+- [Macnamara, B.N., Hambrick, D.Z., & Oswald, F.L. (2014). Deliberate Practice and Performance: A Meta-Analysis](https://journals.sagepub.com/doi/10.1177/0956797614535810) — мета-анализ — проверено 2025-12-19
+- [PMC: Is the Deliberate Practice View Defensible?](https://pmc.ncbi.nlm.nih.gov/articles/PMC7461852/) — критический анализ концепции — проверено 2025-12-19
+- [Ericsson, A. (2014). The Danger of Delegating Education to Journalists](https://www.frontiersin.org/articles/10.3389/fpsyg.2014.00556/full) — ответ на искажения — проверено 2025-12-19
+- de Groot, A. D. *Thought and Choice in Chess*. Mouton, 1965
+- Chase, W. G. & Simon, H. A. «Perception in Chess». Cognitive Psychology, 1973
 
-- [Ericsson, K.A. (2016). Peak: Secrets from the New Science of Expertise](https://www.amazon.com/Peak-Secrets-New-Science-Expertise/dp/0544456238) - книга Эрикссона, опровергающая миф 10,000 часов - проверено 2025-12-19
-- [Ericsson, K.A., Krampe, R.T., & Tesch-Romer, C. (1993). The Role of Deliberate Practice in the Acquisition of Expert Performance](https://psycnet.apa.org/record/1993-40718-001) - оригинальное исследование - проверено 2025-12-19
-- [Ericsson, K.A. (2020). Towards a Science of the Acquisition of Expert Performance](https://www.sciencedirect.com/science/article/abs/pii/S0079742120300037) - последние работы - проверено 2025-12-19
-
-### Исследования и мета-анализы
-
-- [Macnamara, B.N., Hambrick, D.Z., & Oswald, F.L. (2014). Deliberate Practice and Performance in Music, Games, Sports, Education, and Professions: A Meta-Analysis](https://journals.sagepub.com/doi/10.1177/0956797614535810) - мета-анализ deliberate practice - проверено 2025-12-19
-- [PMC: Is the Deliberate Practice View Defensible?](https://pmc.ncbi.nlm.nih.gov/articles/PMC7461852/) - критический анализ концепции - проверено 2025-12-19
-
-### Критика мифа 10,000 часов
-
-- [Ericsson, A. (2012). The Danger of Delegating Education to Journalists: Why the APS Observer Needs Peer Review When Summarizing New Scientific Developments](https://www.frontiersin.org/articles/10.3389/fpsyg.2014.00556/full) - ответ Эрикссона на искажения его работы - проверено 2025-12-19
-- [Business Insider: 10,000 Hour Rule Is Wrong](https://www.businessinsider.com/anders-ericsson-how-to-become-an-expert-at-anything-2016-6) - интервью с Эрикссоном - проверено 2025-12-19
-
-### Практическое применение
-
-- [James Clear: The Myth of the 10,000 Hour Rule](https://jamesclear.com/deliberate-practice-myth) - популярное объяснение - проверено 2025-12-19
-- [Cal Newport: The Deliberate Practice Trap](https://calnewport.com/the-deliberate-practice-trap/) - deliberate practice для knowledge workers - проверено 2025-12-19
-- [Farnam Street: The Difference Between Amateurs and Experts](https://fs.blog/amateurs-vs-professionals/) - разница между любителями и профессионалами - проверено 2025-12-19
+### Практические руководства
+- [Business Insider: 10,000 Hour Rule Is Wrong](https://www.businessinsider.com/anders-ericsson-how-to-become-an-expert-at-anything-2016-6) — интервью с Эрикссоном — проверено 2025-12-19
+- [James Clear: The Myth of the 10,000 Hour Rule](https://jamesclear.com/deliberate-practice-myth) — популярное объяснение — проверено 2025-12-19
+- [Cal Newport: The Deliberate Practice Trap](https://calnewport.com/the-deliberate-practice-trap/) — deliberate practice для knowledge workers — проверено 2025-12-19
+- [Farnam Street: The Difference Between Amateurs and Experts](https://fs.blog/amateurs-vs-professionals/) — разница между любителями и профессионалами — проверено 2025-12-19
 
 ---
 

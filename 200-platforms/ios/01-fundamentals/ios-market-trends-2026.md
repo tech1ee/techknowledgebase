@@ -38,6 +38,50 @@ tags:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Технологический рынок труда — это экономическая система, в которой спрос на специалистов определяется инновационными циклами (Kondratiev waves), adoption curves технологий (Rogers, 1962) и конкурентной динамикой платформ.
+
+### Теория диффузии инноваций и iOS
+
+Модель диффузии инноваций Эверетта Роджерса (1962) объясняет adoption-кривые ключевых iOS-технологий:
+
+| Технология | Фаза (Rogers, 2026) | Adoption | Характеристика |
+|------------|---------------------|----------|----------------|
+| Swift | Late Majority → Laggards | ~95% | Практически полное вытеснение Objective-C |
+| SwiftUI | Early Majority | ~70% новых проектов | Переход от early adopters к mainstream |
+| async/await | Early Majority | ~60% | Замещение GCD в новом коде |
+| KMP (Kotlin Multiplatform) | Early Adopters | ~23% | Рост от innovators к early adopters |
+| visionOS | Innovators | ~3% | Экспериментальная фаза |
+| On-device AI (Core ML) | Early Adopters → Early Majority | ~35% | Быстрый рост после Apple Intelligence |
+
+### Экономика платформенных экосистем
+
+> **Сетевой эффект (Katz & Shapiro, 1985):** Ценность платформы растёт нелинейно с увеличением числа пользователей и разработчиков. iOS App Store демонстрирует двусторонний сетевой эффект — больше пользователей привлекает разработчиков, больше приложений привлекает пользователей.
+
+Экономические показатели экосистемы:
+- **1.5 млрд** активных Apple-устройств (2026)
+- **$1.1 трлн** — оценка App Store ecosystem economy
+- **2+ млн** приложений в App Store
+- **BLS прогноз:** +17% рост вакансий software developers к 2033 (выше среднего)
+
+### Теория человеческого капитала и навыки
+
+Согласно теории человеческого капитала (Becker, 1964), инвестиции в специфические навыки (firm-specific skills) приносят бoльшую отдачу при лояльности к платформе, тогда как общие навыки (general skills) увеличивают мобильность на рынке:
+
+| Тип навыка | Примеры iOS | Переносимость | ROI |
+|------------|-------------|---------------|-----|
+| Platform-specific | UIKit, Core Data, Xcode | Низкая (только iOS) | Высокий при стабильности |
+| Cross-platform | KMP, архитектурные паттерны | Высокая | Средний, но стабильный |
+| General engineering | Алгоритмы, System Design | Максимальная | Растёт с опытом |
+
+### Связь с другими разделами
+
+- [[career-market-analysis]] — методологии анализа рынка труда в IT
+- [[kmp-overview]] — Kotlin Multiplatform как фактор трансформации мобильного рынка
+
+---
+
 ## Состояние рынка iOS 2026
 
 ### Demand vs Supply
@@ -1006,36 +1050,18 @@ tags:
 
 ## Источники
 
-### Job Market Reports
+### Теоретические основы
+- Rogers E. M. (1962). *Diffusion of Innovations.* Free Press — модель adoption-кривых технологий
+- Katz M. L., Shapiro C. (1985). *Network Externalities, Competition, and Compatibility.* American Economic Review — теория сетевых эффектов
+- Becker G. S. (1964). *Human Capital: A Theoretical and Empirical Analysis.* University of Chicago Press — теория человеческого капитала
+- [BLS Software Developer Outlook 2023-2033](https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm) — статистика Bureau of Labor Statistics
+
+### Практические руководства
 - [Glassdoor iOS Developer Salary 2026](https://www.glassdoor.com/Salaries/ios-developer-salary-SRCH_KO0,13.htm)
-- [BLS Software Developer Outlook 2023-2033](https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm)
-- [Arc Remote iOS Developer Salaries](https://arc.dev/salaries/ios-developers)
-- [PayScale iOS Developer Germany](https://www.payscale.com/research/DE/Job=iOS_Developer/Salary)
-
-### Technology Trends
 - [Swift.org - What's New December 2025](https://www.swift.org/blog/whats-new-in-swift-december-2025/)
-- [SwiftLee - Swift 6.2 Concurrency Changes](https://www.avanderlee.com/concurrency/swift-6-2-concurrency-changes/)
 - [Apple Developer - Adopting Swift 6](https://developer.apple.com/documentation/swift/adoptingswift6)
-- [WWDC 2025 - Embracing Swift Concurrency](https://developer.apple.com/videos/play/wwdc2025/268/)
-
-### KMP & Cross-Platform
 - [JetBrains - KMP Roadmap August 2025](https://blog.jetbrains.com/kotlin/2025/08/kmp-roadmap-aug-2025/)
-- [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform/multiplatform-reasons-to-try.html)
-- [Medium - KMP Guide for 2026](https://applaunchershub.medium.com/kotlin-multiplatform-mobile-guide-for-native-apps-for-2026-d6d756185929)
-
-### AI/ML
 - [Apple ML Research - Foundation Models 2025](https://machinelearning.apple.com/research/apple-foundation-models-2025-updates)
-- [Apple Developer - Machine Learning](https://developer.apple.com/machine-learning/)
-- [Medium - On-Device AI in iOS 2025](https://medium.com/@tausifaliaghariya/why-on-device-ai-is-ios-2025s-game-changer-core-ml-create-ml-cc7f19a05da5)
-
-### SwiftUI Adoption
-- [Medium - SwiftUI vs UIKit 2025](https://medium.com/@AshAsoyan/swiftui-vs-uikit-in-2025-which-one-will-get-you-hired-9906a9237bf5)
-- [Hacking with Swift - SwiftUI vs UIKit](https://www.hackingwithswift.com/quick-start/swiftui/answering-the-big-question-should-you-learn-swiftui-uikit-or-both)
-- [Fatbobman's Swift Weekly](https://fatbobman.com/en/weekly/issue-116)
-
-### Interview Preparation
-- [Medium - FAANG iOS Interview 2025](https://medium.com/@avula.koti.realpage/this-is-what-happens-when-you-interview-at-a-faang-level-company-as-an-ios-dev-in-2025-fe8f39d0d86a)
-- [interviewing.io - Senior Engineer's Guide to FAANG](https://interviewing.io/guides/hiring-process)
 - [Tech Interview Handbook](https://www.techinterviewhandbook.org/software-engineering-interview-guide/)
 
 ---

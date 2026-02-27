@@ -60,6 +60,49 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Source Set** — именованная единица организации кода в системе сборки, определяющая набор исходных файлов, зависимостей и параметров компилятора, привязанных к одному или нескольким целевым платформам (JetBrains, Kotlin Language Specification, 2023).
+
+Source Set является реализацией концепции **compilation unit** с расширением на множество целевых платформ.
+
+### Теория: иерархия видимости как решётка (lattice)
+
+Иерархия source sets формирует **полурешётку** (join-semilattice), где:
+
+- **Наибольший элемент** — commonMain (виден всем)
+- **Наименьшие элементы** — leaf source sets (iosArm64Main, androidMain)
+- **Операция join** — ближайший общий предок (intermediate source set)
+
+| Свойство | Формализация | Пример в KMP |
+|----------|-------------|--------------|
+| Верхняя граница | commonMain видит только stdlib | `kotlin.String`, `kotlin.collections.List` |
+| Нижняя граница | Leaf видит все ancestors | iosArm64Main видит iosMain, nativeMain, commonMain |
+| Join | Intermediate = shared subset | iosMain = join(iosArm64Main, iosSimulatorArm64Main) |
+
+### Принцип минимальных привилегий в source sets
+
+Source sets реализуют **Principle of Least Privilege** (Saltzer, Schroeder, 1975) на уровне компиляции:
+
+- commonMain имеет доступ **только** к Kotlin stdlib — минимальный необходимый набор API
+- Platform source sets получают ровно те API, которые доступны на целевой платформе
+- Intermediate source sets (appleMain) получают пересечение API целевых платформ
+
+### Сравнение подходов к организации платформенного кода
+
+| Подход | Технология | Механизм | Проверка |
+|--------|-----------|----------|----------|
+| Conditional compilation | C/C++ (#ifdef) | Препроцессор | Compile-time, но нет type safety |
+| Platform interfaces | Xamarin | PCL + Platform Projects | Runtime (DI) |
+| Source sets + dependsOn | KMP | Иерархия compilation units | Compile-time, type-safe |
+| Platform channels | Flutter | Async message passing | Runtime, loosely typed |
+
+> **CS-фундамент:** Формальные основы модульных систем — [[module-systems]], теория типов и platform-specific constraints — [[type-systems-theory]], механизм разрешения зависимостей — [[dependency-resolution]].
+
+---
+
 ## Почему Source Sets устроены именно так
 
 ### Фундаментальная проблема: разные API на разных платформах
@@ -906,11 +949,18 @@ macosMain.get().dependsOn(appleMain)
 
 ## Источники и дальнейшее чтение
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Понимание модульной системы Kotlin (packages, visibility, dependencies) необходимо для работы с source sets. Книга объясняет, как internal модификатор ограничивает видимость на уровне модуля — ключевая концепция при разделении кода между commonMain и platform source sets.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по управлению зависимостями (implementation vs api scope), минимизации публичного API и организации кода в модули напрямую применимы к конфигурации source sets. Совет «зависимости должны быть implementation, а не api, если они не часть публичного API» критичен для multi-module KMP проектов.
+- **Saltzer J., Schroeder M. (1975).** *The Protection of Information in Computer Systems.* Proceedings of the IEEE. — Principle of Least Privilege, реализованный в ограничении видимости source sets.
+- **Martin R. (2017).** *Clean Architecture.* Prentice Hall. — Common Closure Principle и Common Reuse Principle для группировки кода в source sets.
+- **JetBrains (2023).** *Kotlin Language Specification: Multiplatform Projects.* — Формальное определение source sets и dependsOn-отношения.
 
-- Martin R. (2017). *Clean Architecture.* — Принципы модульности (Common Closure Principle, Common Reuse Principle) объясняют, как правильно группировать код в source sets. Понимание cohesion и coupling помогает решить, что поместить в commonMain, а что — в platform source sets или intermediate source sets.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* Manning. — Модульная система Kotlin: packages, visibility, internal модификатор.
+- **Moskala M. (2021).** *Effective Kotlin.* — Управление зависимостями (implementation vs api scope) в multi-module KMP.
+- [Adding Dependencies](https://kotlinlang.org/docs/multiplatform/multiplatform-add-dependencies.html) — Полный гайд по dependencies.
+- [Hierarchical Structure](https://kotlinlang.org/docs/multiplatform/multiplatform-hierarchy.html) — Default template и кастомные иерархии.
 
 ---
 

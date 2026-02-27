@@ -32,6 +32,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Negotiation** — процесс достижения соглашения между сторонами с различающимися интересами. В контексте salary negotiation — это структурированный диалог между кандидатом и работодателем о компенсации и условиях работы.
+
+**Ключевые теоретические концепции:**
+
+| Концепция | Автор | Год | Суть | Применение к salary negotiation |
+|-----------|-------|-----|------|---------------------------------|
+| Principled Negotiation | Fisher & Ury | 1981 | Разделяй людей и проблему; фокус на интересах, не позициях | Не "я хочу больше", а "market data показывает..." |
+| BATNA | Fisher & Ury | 1981 | Best Alternative To Negotiated Agreement | Competing offer = сильный BATNA |
+| ZOPA | Raiffa | 1982 | Zone Of Possible Agreement — пересечение acceptable ranges | Между minimum кандидата и budget компании |
+| Anchoring Effect | Tversky & Kahneman | 1974 | Первое число влияет на финальный результат | Кто первый называет число — устанавливает якорь |
+| Information Asymmetry | Akerlof | 1970 | Сторона с большей информацией имеет преимущество | Levels.fyi / salary data снижает асимметрию |
+
+**Fisher & Ury (1981), *Getting to Yes*:** четыре принципа:
+1. **Separate people from the problem** — recruiter не враг, а партнёр в сделке
+2. **Focus on interests, not positions** — "Я хочу $200K" → "Я хочу compensation, соответствующую моему impact"
+3. **Invent options for mutual gain** — не только base; signing bonus, equity, remote, PTO
+4. **Insist on objective criteria** — Levels.fyi data, competing offers, market benchmarks
+
+> **BATNA (Best Alternative To Negotiated Agreement)** — самый сильный инструмент negotiation. Если у тебя есть competing offer на $180K, ты не примешь $150K. Компания знает это. BATNA определяет **walk-away point** — минимум, ниже которого сделка не имеет смысла. Без BATNA позиция кандидата слаба.
+
+→ Связано: [[interview-process]], [[salary-benchmarks]], [[behavioral-interview]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -646,19 +672,22 @@ AFTER:
 
 - [[behavioral-interview]] — Soft skills, продемонстрированные на behavioral раунде, напрямую влияют на negotiation. Кандидат, показавший leadership, communication и confidence в behavioral, воспринимается как более ценный. Recruiter видит feedback от behavioral interviewers и калибрует flexibility в negotiation.
 
-## Источники и дальнейшее чтение
-
-- Fournier C. (2017). *The Manager's Path*. — Понимание perspective hiring manager помогает в negotiation: как бюджет устроен, какие компоненты flexible, почему компании делают exploding offers. Книга объясняет внутреннюю механику compensation decisions.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff+ уровне compensation резко растёт ($300K-$600K TC), и negotiation становится критически важным. Книга описывает, как Staff+ engineers позиционируют себя и какой leverage имеют при internal promotion vs external hire.
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Помогает принять финальное решение по офферу: не только compensation, но и fit с жизненными целями, growth trajectory и work-life balance. Важно не оптимизировать только зарплату, а выбрать правильную роль.
-
 ## Источники
 
-Исследование: 22 источника
+### Теоретические основы
 
-Ключевые:
+- Fisher R., Ury W. (1981). *Getting to Yes: Negotiating Agreement Without Giving In*. — Principled negotiation: интересы > позиции, BATNA, объективные критерии.
+
+- Tversky A., Kahneman D. (1974). *Judgment under Uncertainty: Heuristics and Biases*. — Anchoring effect: первое число определяет рамку переговоров.
+
+- Raiffa H. (1982). *The Art and Science of Negotiation*. — ZOPA (Zone Of Possible Agreement) и двусторонний анализ negotiation.
+
+- Fournier C. (2017). *The Manager's Path*. — Perspective hiring manager: бюджет, flexible компоненты, exploding offers.
+
+- Larson W. (2022). *Staff Engineer*. — Staff+ compensation ($300K-$600K TC), leverage при internal vs external hire.
+
+### Практические руководства
+
 - [Candor: Salary Negotiation Strategies](https://candor.co/guides/salary-negotiation)
 - [Levels.fyi: Ultimate Negotiation Guide](https://www.levels.fyi/blog/ultimate-negotiation-guide.html)
 - [Tech Interview Handbook: Compensation](https://www.techinterviewhandbook.org/understanding-compensation/)

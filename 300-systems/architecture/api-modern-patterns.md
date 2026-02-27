@@ -43,7 +43,54 @@ REST, GraphQL, gRPC — три столпа API-мира. Но в 2024 году 
 
 ---
 
-## Prerequisites
+## Теоретические основы
+
+> **API паттерн** — повторяемое архитектурное решение для типовой проблемы взаимодействия между компонентами распределённой системы. Каждый паттерн формализует конкретный trade-off между связанностью, производительностью и сложностью.
+
+### Теоретическая классификация паттернов
+
+| Паттерн | Теоретическая основа | Ключевой trade-off |
+|---------|---------------------|-------------------|
+| **tRPC** | Type-level integration (Cardelli 1985) — типы как контракт | Full type safety ↔ привязка к одному языку |
+| **Webhooks** | Inversion of Control (Johnson & Foote 1988) — сервер инициирует коммуникацию | Реальное время ↔ ненадёжная доставка |
+| **API Gateway** | Facade pattern (GoF 1994) — единая точка входа | Упрощение клиента ↔ single point of failure |
+| **BFF** | Separation of Concerns (Dijkstra 1974) — backend per frontend | Оптимальный UX ↔ дублирование логики |
+
+### Эволюция API-паттернов
+
+```
+1984  RPC (Birrell & Nelson)        — "вызови удалённо как локально"
+  │
+2000  REST (Fielding)                — "всё — ресурс с представлением"
+  │
+2012  GraphQL (Facebook)             — "запроси только то, что нужно"
+  │
+2015  gRPC (Google)                  — "бинарный контракт + streaming"
+  │
+2018  BFF (Newman)                   — "отдельный backend на тип клиента"
+  │
+2020  tRPC (Colin McDonnell)         — "типы как единственный контракт"
+```
+
+### Формальные модели коммуникации
+
+- **Pull model** (REST, GraphQL, gRPC): клиент инициирует запрос → сервер отвечает
+- **Push model** (Webhooks, SSE): сервер инициирует доставку → клиент принимает
+- **Bidirectional** (WebSocket, gRPC streaming): обе стороны инициируют сообщения
+
+Webhooks реализуют **Hollywood Principle** («Don't call us, we'll call you») — вариант IoC для межсервисного взаимодействия.
+
+### Проблема N+1 интеграций
+
+При M фронтендов × N бэкенд-сервисов без API Gateway:
+- Каждый фронтенд знает о каждом сервисе → **M×N** связей
+- API Gateway сводит к **M+N** → аналогия с [[bridges-bindings-overview|lingua franca pattern]]
+
+> **См. также**: [[api-design]] — обзор парадигм, [[event-driven-architecture]] — событийная коммуникация, [[microservices-vs-monolith]] — контекст для Gateway и BFF
+
+---
+
+
 
 | Тема | Зачем нужна | Где изучить |
 |------|-------------|-------------|
@@ -717,6 +764,13 @@ Event-driven архитектура (foundation для Webhooks):
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Newman S. (2015). BFF — Backend for Frontend pattern.** — оригинальное описание BFF как архитектурного паттерна для микросервисов
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — Facade pattern как теоретическая основа API Gateway
+- **Johnson R., Foote B. (1988). Designing Reusable Classes. JOOP.** — Inversion of Control как основа Webhook-модели
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

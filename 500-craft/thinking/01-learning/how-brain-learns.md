@@ -48,6 +48,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Нейропластичность (Neuroplasticity)** — способность нервной системы изменять свою структуру и функции в ответ на опыт, обучение и повреждения (Kolb & Whishaw, 1998).
+
+Понимание того, как мозг учится, основано на нескольких фундаментальных открытиях нейронауки и когнитивной психологии:
+
+| Открытие | Автор | Год | Суть |
+|----------|-------|-----|------|
+| Правило Хебба | Donald Hebb | 1949 | «Neurons that fire together wire together» — совместная активация нейронов усиливает связь между ними |
+| Магическое число | George Miller | 1956 | Рабочая память ограничена 7±2 элементами (уточнено до 4±1 Cowan, 2001) |
+| Кривая забывания | Hermann Ebbinghaus | 1885 | Без повторения ~50% информации теряется за 1 день, ~70% за неделю |
+| Нейрогенез у взрослых | Eriksson et al. | 1998 | Новые нейроны образуются в гиппокампе на протяжении всей жизни (~700/день) |
+| BDNF и обучение | Cotman & Berchtold | 2002 | Brain-Derived Neurotrophic Factor — «удобрение для нейронов», стимулируемое физической активностью |
+| Консолидация во сне | Walker & Stickgold | 2004 | Медленноволновой сон переносит информацию из гиппокампа в неокортекс |
+
+> **Закон Хебба (1949):** «When an axon of cell A is near enough to excite cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A's efficiency, as one of the cells firing B, is increased.»
+
+Ключевая книга, объединившая нейронауку обучения для широкой аудитории — **Matthew Walker, *Why We Sleep*** (2017), показавшая критическую роль сна в консолидации памяти. Для практического применения — **John Ratey, *Spark: The Revolutionary New Science of Exercise and the Brain*** (2008), связавший физическую активность с BDNF и когнитивными функциями.
+
+Современная нейронаука обучения стоит на двух принципах: (1) мозг пластичен в любом возрасте — структурные изменения возможны при правильных условиях; (2) обучение — это физический процесс формирования и укрепления синаптических связей, который требует активного извлечения ([[desirable-difficulties]]), сна ([[sleep-and-learning]]) и физической активности ([[exercise-and-brain]]).
+
+---
+
 ## Нейропластичность: мозг меняется всю жизнь
 
 Десятилетиями учёные считали, что взрослый мозг — фиксированная структура. Новые нейроны? Невозможно. Изменить нейронные связи после детства? Нереально.
@@ -1344,25 +1367,24 @@ B: ██████░░░░ 60%  (на 50% лучше!)
 
 ## Источники
 
-### Нейропластичность и нейрогенез
+### Теоретические основы
+- Hebb, D. O. *The Organization of Behavior*. Wiley, 1949 — правило Хебба, синаптическая пластичность
+- Ebbinghaus, H. *Über das Gedächtnis*. 1885 — кривая забывания
+- Miller, G. A. «The Magical Number Seven, Plus or Minus Two». Psychological Review, 1956
 - [Nature: Adult hippocampal neurogenesis](https://www.nature.com/articles/s41593-018-0172-5) — исследование нейрогенеза у взрослых, проверено 2025-12-19
 - [Frontiers in Neuroscience: Neuroplasticity and learning](https://www.frontiersin.org/articles/10.3389/fnins.2019.00696/full) — обзор нейропластичности, проверено 2025-12-19
-
-### Память и консолидация
 - [PMC: Sleep and memory consolidation](https://pmc.ncbi.nlm.nih.gov/articles/PMC3768102/) — роль сна в консолидации памяти, проверено 2025-12-19
 - [Nature Reviews Neuroscience: Memory consolidation](https://www.nature.com/articles/nrn3000) — механизмы консолидации, проверено 2025-12-19
-
-### BDNF и упражнения
 - [PMC: BDNF and exercise](https://pmc.ncbi.nlm.nih.gov/articles/PMC3575139/) — влияние упражнений на BDNF, проверено 2025-12-19
-- [Frontiers: Physical activity and cognitive function](https://www.frontiersin.org/articles/10.3389/fpsyg.2020.01164/full) — связь физической активности и когнитивных функций, проверено 2025-12-19
-
-### Chunking и экспертиза
 - [PMC: Chunking and expert memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC4158991/) — исследование chunking у экспертов, проверено 2025-12-19
 - [Chase & Simon (1973): Chess expertise study](https://www.sciencedirect.com/science/article/pii/0010028573900042) — классическое исследование шахматистов
-
-### Desirable Difficulties
 - [Bjork Learning Lab: Desirable difficulties](https://bjorklab.psych.ucla.edu/research/) — исследования Robert Bjork, проверено 2025-12-19
 - [PMC: Testing effect in learning](https://pmc.ncbi.nlm.nih.gov/articles/PMC4031794/) — эффект тестирования, проверено 2025-12-19
+
+### Практические руководства
+- Walker, M. *Why We Sleep: Unlocking the Power of Sleep and Dreams*. Scribner, 2017
+- Ratey, J. *Spark: The Revolutionary New Science of Exercise and the Brain*. Little, Brown, 2008
+- [Frontiers: Physical activity and cognitive function](https://www.frontiersin.org/articles/10.3389/fpsyg.2020.01164/full) — связь физической активности и когнитивных функций, проверено 2025-12-19
 
 ---
 

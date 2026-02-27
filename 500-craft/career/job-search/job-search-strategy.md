@@ -29,6 +29,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Job Search** — структурированный процесс поиска профессиональных возможностей. Теория job search основана на работах экономистов и социологов, изучающих рынки труда, социальные сети и информационную асимметрию.
+
+**Ключевые теоретические концепции:**
+
+| Теория | Автор | Год | Ключевая идея | Применение |
+|--------|-------|-----|---------------|------------|
+| Strength of Weak Ties | Mark Granovetter | 1973 | Слабые связи (знакомые знакомых) дают доступ к новой информации | Networking > close friends для поиска работы |
+| Job Search Theory | George Stigler | 1962 | Поиск информации имеет стоимость; оптимальная стратегия — поиск до reservation wage | Не хватай первый оффер; ищи до target |
+| Information Asymmetry | George Akerlof | 1970 | Работодатель знает меньше о кандидате, чем кандидат сам | Signaling (portfolio, referrals) снижает асимметрию |
+| Social Capital | James Coleman | 1988 | Социальные связи как ресурс | Networking создаёт карьерный капитал |
+
+**Granovetter (1973)** показал, что 84% людей нашли работу через **слабые связи** (acquaintances), а не через близких друзей. Причина: close ties имеют одинаковую информацию; weak ties — доступ к другим кластерам. Это обосновывает networking-first стратегию: расширение сети > углубление существующих связей.
+
+> **Referral Economics:** 1 referral = 40 cold applications по conversion rate. Причина: referral снижает **information asymmetry** — работодатель доверяет рекомендации сотрудника больше, чем резюме незнакомца. Экономически: стоимость найма через referral $1,000-3,000 vs $15,000-25,000 через agency.
+
+→ Связано: [[hidden-job-market]], [[networking-tactics]], [[remote-first-companies]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -365,15 +386,19 @@ and learn how it's going for your team."
 
 - [[remote-first-companies]] — Список целевых компаний для remote работы, который используется в Step 2 (Build Target List). Для кандидатов, ищущих remote позиции, этот список заменяет ручной поиск на RemoteOK и We Work Remotely. Target list — основа стратегии, и remote-first companies даёт готовый пул для начала.
 
-## Источники и дальнейшее чтение
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking framework идеально ложится на 5-Step Framework из текущего материала: Define (Step 1) → Ideate (Step 2) → Prototype (Step 3-4) → Test (Step 5). Книга помогает структурировать поиск работы как design challenge, а не как лотерею.
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Стратегия поиска работы бесполезна без technical preparation. Книга покрывает coding rounds, которые следуют за успешным networking и referral. Глава о job search process дополняет текущий материал perspective кандидата FAANG.
-
-- Fournier C. (2017). *The Manager's Path*. — Понимание того, как hiring managers думают о кандидатах, помогает в value-forward communication: какие pain points у engineering teams, почему нанимают, какие сигналы ищут. Книга даёт perspective "с другой стороны стола".
-
 ## Источники
+
+### Теоретические основы
+
+- Granovetter M. (1973). *The Strength of Weak Ties*. American Journal of Sociology. — 84% нашли работу через acquaintances, не close friends; обоснование networking-first.
+
+- Stigler G. (1962). *Information in the Labor Market*. Journal of Political Economy. — Теория оптимального поиска работы и reservation wage.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking для job search: prototype → test → iterate.
+
+- Fournier C. (2017). *The Manager's Path*. — Perspective hiring manager: pain points, expectations, сигналы.
+
+### Практические руководства
 
 - [HackerNoon: 2025 Job Market Reality Check](https://hackernoon.com/the-2025-job-market-reality-check-why-old-school-job-search-tactics-are-dead)
 - [Interview Guys: State of Job Search 2025](https://blog.theinterviewguys.com/state-of-job-search-2025-research-report/)

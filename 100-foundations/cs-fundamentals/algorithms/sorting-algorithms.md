@@ -44,6 +44,88 @@ Sorting algorithms arrange elements in a specific order (ascending/descending). 
 
 ---
 
+## Теоретические основы: формальный базис сортировки
+
+### Нижняя граница Ω(n log n): почему быстрее нельзя
+
+> **Теорема (Information-Theoretic Lower Bound):** Любой алгоритм сортировки, основанный на сравнениях, требует Ω(n log n) сравнений в худшем случае.
+
+**Доказательство через модель дерева решений (Decision Tree Model):**
+
+Каждый comparison-based алгоритм можно представить как бинарное дерево, где каждый внутренний узел — сравнение `a[i] ≤ a[j]`, а каждый лист — одна из n! возможных перестановок. Дерево должно иметь ≥ n! листьев. Высота бинарного дерева с L листьями ≥ log₂(L). Следовательно:
+
+```
+h ≥ log₂(n!) = Σ log₂(k) для k=1..n ≥ n·log₂(n) - n·log₂(e) = Ω(n log n)
+                                        (по формуле Стирлинга: n! ≈ (n/e)^n · √(2πn))
+```
+
+Это означает, что **MergeSort и HeapSort асимптотически оптимальны** — они достигают нижней границы.
+
+**Non-comparison sorts обходят эту границу**, потому что используют дополнительную информацию о данных (диапазон значений, разрядность), а не только результаты попарных сравнений. Counting Sort за O(n+k) — не противоречие, а другая вычислительная модель.
+
+### Стабильность: формальное определение
+
+> **Определение:** Алгоритм сортировки **стабилен** (stable), если для любых двух элементов a[i] = a[j], где i < j в исходном массиве, выполняется i' < j' в отсортированном массиве, где i' и j' — новые позиции этих элементов.
+
+| Алгоритм | Стабильный? | Почему |
+|----------|-------------|--------|
+| **MergeSort** | Да | При слиянии равных берёт из левой половины |
+| **InsertionSort** | Да | Вставляет после равных элементов |
+| **TimSort** | Да | Основан на MergeSort + InsertionSort |
+| **QuickSort** | Нет | Partition переставляет равные элементы |
+| **HeapSort** | Нет | Heap нарушает относительный порядок |
+
+Стабильность критична для **multi-key sorting**: сортировка по имени, затем по возрасту — стабильный sort сохраняет алфавитный порядок внутри одного возраста.
+
+### Корректность: loop invariant
+
+Корректность сортировки доказывается через **инвариант цикла** (loop invariant) — утверждение, истинное перед каждой итерацией:
+
+- **InsertionSort:** "Подмассив a[0..i-1] отсортирован и содержит те же элементы, что исходный a[0..i-1]"
+- **MergeSort:** "Merge(A, B) → C, где C содержит все элементы A∪B в отсортированном порядке" (доказывается индукцией по |A|+|B|)
+- **QuickSort:** "После Partition: все элементы левее pivot ≤ pivot, все правее ≥ pivot"
+
+Это метод Флойда (Robert Floyd, 1967) — формальная верификация через предусловия и постусловия, развитие идей Хоара (C.A.R. Hoare, 1969, "An Axiomatic Basis for Computer Programming").
+
+### Таксономия алгоритмов сортировки
+
+```
+                        SORTING ALGORITHMS
+                              │
+              ┌───────────────┴───────────────┐
+        Comparison-based                Non-comparison
+        Ω(n log n) lower bound          O(n+k) / O(n·d)
+              │                               │
+    ┌─────────┼──────────┐           ┌────────┼────────┐
+    │         │          │           │        │        │
+ Simple    Divide &   Selection   Counting  Radix   Bucket
+ O(n²)    Conquer    from heap
+    │      O(n log n)  O(n log n)
+    │         │          │
+ Insertion  Merge     HeapSort
+ Bubble    Quick
+ Selection  (avg)
+```
+
+### Историческая атрибуция
+
+| Алгоритм | Автор | Год | Контекст |
+|----------|-------|-----|----------|
+| **MergeSort** | John von Neumann | 1945 | Одна из первых программ для EDVAC |
+| **InsertionSort** | — | древность | Так сортируют карты в руке |
+| **QuickSort** | C.A.R. Hoare | 1961 | Статья "Algorithm 64" в CACM |
+| **HeapSort** | J.W.J. Williams | 1964 | Одновременно с изобретением heap |
+| **Counting Sort** | Harold Seward | 1954 | MIT Master's thesis |
+| **Radix Sort** | Herman Hollerith | 1887 | Перфокарточные машины для переписи |
+| **TimSort** | Tim Peters | 2002 | Для CPython, адаптивный гибрид |
+| **IntroSort** | David Musser | 1997 | QuickSort + HeapSort fallback |
+
+> **Knuth, "The Art of Computer Programming", Vol. 3 (1973)** — фундаментальная монография по сортировке и поиску, содержит математический анализ среднего числа сравнений для каждого алгоритма.
+
+**Связи:** [[big-o-complexity]] (анализ сложности), [[heaps-priority-queues]] (HeapSort), [[divide-and-conquer]] (MergeSort, QuickSort)
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > **Цель:** понять ИДЕЮ сортировки до любого кода. Если ты понимаешь эти аналогии — ты уже понимаешь сортировку.
@@ -1976,19 +2058,22 @@ fun quickSort(arr: IntArray, low: Int, high: Int) {
 
 ## Источники
 
-1. [Wikipedia - Sorting Algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm) — Overview
-2. [Tech Interview Handbook - Sorting](https://www.techinterviewhandbook.org/algorithms/sorting-searching/) — Interview tips
-3. [GeeksforGeeks - QuickSort](https://www.geeksforgeeks.org/dsa/quick-sort-algorithm/) — Implementation
-4. [Wikipedia - TimSort](https://en.wikipedia.org/wiki/Timsort) — Hybrid algorithm
-5. [Baeldung - Quicksort vs Heapsort](https://www.baeldung.com/cs/quicksort-vs-heapsort) — Comparison
-6. [Princeton - MergeSort](https://algs4.cs.princeton.edu/22mergesort/) — Academic reference
-7. [OpenJDK - DualPivotQuicksort.java](https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/util/DualPivotQuicksort.java) — Production code
-8. [Kotlin - Ordering](https://kotlinlang.org/docs/collection-ordering.html) — Language docs
-9. [VisuAlgo - Sorting](https://visualgo.net/en/sorting) — Interactive visualization
-10. [Toptal - Sorting Algorithms Animations](https://www.toptal.com/developers/sorting-algorithms) — Visual comparison
-11. [interviewing.io - Sorting Interview Questions](https://interviewing.io/sorting-interview-questions) — Interview tips
-12. [AlgoCademy - Mastering Sorting](https://algocademy.com/blog/mastering-sorting-algorithms-for-your-coding-interview/) — Interview prep
-13. [Baeldung - Counting vs Bucket vs Radix](https://www.baeldung.com/cs/radix-vs-counting-vs-bucket-sort) — Non-comparison sorts
+### Теоретические основы
+
+- **Knuth, D.E. (1973). "The Art of Computer Programming, Vol. 3: Sorting and Searching."** — Фундаментальная монография. Математический анализ среднего числа сравнений, доказательство нижней границы Ω(n log n), история алгоритмов сортировки
+- **Hoare, C.A.R. (1962). "Quicksort." The Computer Journal, 5(1).** — Оригинальная статья QuickSort. Анализ среднего случая O(n log n), worst case O(n²)
+- **Williams, J.W.J. (1964). "Algorithm 232: Heapsort." CACM, 7(6).** — Изобретение heap и HeapSort
+- **Peters, T. (2002). "Timsort description."** — Описание TimSort для CPython, адаптивный гибрид MergeSort + InsertionSort
+- **Floyd, R.W. (1967). "Assigning Meanings to Programs."** — Метод доказательства корректности алгоритмов через loop invariants
+
+### Практические руководства
+
+1. [Princeton - MergeSort](https://algs4.cs.princeton.edu/22mergesort/) — Academic reference
+2. [Wikipedia - Sorting Algorithm](https://en.wikipedia.org/wiki/Sorting_algorithm) — Overview
+3. [VisuAlgo - Sorting](https://visualgo.net/en/sorting) — Interactive visualization
+4. [Tech Interview Handbook - Sorting](https://www.techinterviewhandbook.org/algorithms/sorting-searching/) — Interview tips
+5. [OpenJDK - DualPivotQuicksort.java](https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/util/DualPivotQuicksort.java) — Production code
+6. [Baeldung - Counting vs Bucket vs Radix](https://www.baeldung.com/cs/radix-vs-counting-vs-bucket-sort) — Non-comparison sorts
 
 ---
 

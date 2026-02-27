@@ -44,6 +44,26 @@ Navigation Component — официальная библиотека Google дл
 
 ---
 
+## Теоретические основы
+
+> **Navigation** в теории GUI-систем — задача управления **стеком экранов** (back stack) и маршрутизации пользователя между ними. Формально: навигация — это **ориентированный граф** G = (V, E), где V — множество экранов (destinations), E — множество допустимых переходов (actions).
+
+Back stack реализует структуру данных **LIFO Stack** (Knuth, 1968): каждый переход `navigate()` выполняет `push`, кнопка «назад» — `pop`. Модификаторы `popUpTo` и `launchSingleTop` реализуют операции над стеком: удаление до определённого элемента и предотвращение дубликатов на вершине.
+
+| Концепция | Формальная модель | Реализация в Navigation Component |
+|-----------|------------------|------------------------------------|
+| Граф экранов | Ориентированный граф | `NavGraph` (XML или Kotlin DSL) |
+| Back stack | LIFO Stack | `NavController.backQueue` |
+| Deep link | URI → Destination mapping | `<deepLink>` + `NavDeepLinkRequest` |
+| State restoration | Serialization (Memento) | `SavedStateHandle` + `Bundle` |
+| Type-safe args | Parametric polymorphism | Safe Args plugin / Kotlin Serialization |
+
+> **Deep linking** формализуется через **URI routing** (RFC 3986): URI `app://profile/{userId}` сопоставляется с destination через **pattern matching**. Это тот же механизм, что в веб-маршрутизации (Express.js, Flask) — отображение URI template на обработчик.
+
+Navigation Component (2018) решает фундаментальную проблему Android: **FragmentTransaction не является декларативным API**. Прямое управление транзакциями приводит к `IllegalStateException` (commit after `onSaveInstanceState`), потере back stack и несогласованному состоянию. Navigation Component инкапсулирует транзакции, предоставляя декларативный граф — реализация паттерна **Facade** (Gamma et al., 1994).
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -1895,34 +1915,21 @@ class MyViewModel(
 
 ## Источники
 
-**Official Documentation:**
+### Теоретические основы
+
+- **Knuth D. (1968). The Art of Computer Programming, Vol. 1.** — Stack (LIFO) как структура данных
+- **Gamma E. et al. (1994). Design Patterns.** — Facade (Navigation Component), Memento (state restoration)
+- **Berners-Lee T. et al. (1998). RFC 2396 / RFC 3986.** — URI syntax и routing
+
+### Практические руководства
+
 - [Navigation - Android Developers](https://developer.android.com/guide/navigation) — Navigation Component
-- [Navigate with Safe Args](https://developer.android.com/guide/navigation/use-graph/safe-args) — Safe Args
 - [Deep Links](https://developer.android.com/guide/navigation/design/deep-link) — Deep Links
-- [Navigation and the Back Stack](https://developer.android.com/guide/navigation/backstack) — Back Stack
-- [Get a result from an activity](https://developer.android.com/training/basics/intents/result) — Activity Result API
+- [Navigation 3 at Google I/O 2025](https://developer.android.com/develop/ui/compose/navigation) — Navigation 3
+- [Type-safe Navigation (2.8+)](https://developer.android.com/guide/navigation/design/type-safety) — Kotlin Serialization
 - [Tasks and back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack) — Task management
-- [Intents and intent filters](https://developer.android.com/guide/components/intents-filters) — Intent types
-- [Activity lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle) — Lifecycle
-- [Fragments](https://developer.android.com/guide/fragments) — Fragment basics
-- [Saving state](https://developer.android.com/topic/libraries/architecture/saving-states) — Process death
-
-**Google I/O & Announcements:**
-- [Navigation 3 at Google I/O 2025](https://developer.android.com/develop/ui/compose/navigation) — Navigation 3 preview
-- [Type-safe Navigation in Compose (2.8+)](https://developer.android.com/guide/navigation/design/type-safety) — Kotlin Serialization
-
-**Community & Guides:**
-- [Tech Interview Handbook - Navigation](https://www.techinterviewhandbook.org/) — Patterns
-- [CodePath Android Cliffnotes](https://guides.codepath.com/android) — Task stacks, transitions
-- [Understand Activity launchMode](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en) — Launch modes visual guide
-
----
-
-## Источники и дальнейшее чтение
-
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — подробное пошаговое руководство по Navigation Component, Fragment transactions, back stack management и Safe Args с практическими примерами.
-- Meier (2022). *Professional Android*. — глубокое покрытие Activity lifecycle, Intent system, deep links и task management, что даёт системное понимание навигационной модели Android.
-- Leiva (2017). *Kotlin for Android Developers*. — практические паттерны Kotlin для организации навигационной логики, включая sealed classes для type-safe routes и extension functions для NavController.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — Navigation Component, back stack
+- Meier (2022). *Professional Android*. — Activity lifecycle, Intent system, deep links
 
 ---
 

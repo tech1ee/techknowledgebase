@@ -36,6 +36,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Научные основы отбора персонала
+
+> **Определение:** Personnel Selection — область организационной психологии, изучающая методы прогнозирования будущей эффективности кандидатов на основе оценки их характеристик в процессе отбора.
+
+Frank Schmidt и John Hunter в мета-анализе *"The Validity and Utility of Selection Methods in Personnel Psychology"* (Psychological Bulletin, 1998) проанализировали 85 лет исследований и установили предсказательную валидность различных методов отбора:
+
+| Метод отбора | Predictive Validity (r) | Применение в tech |
+|-------------|------------------------|-------------------|
+| **Work sample tests** | 0.54 | Live coding, system design, take-home projects |
+| **Structured interviews** | 0.51 | Behavioral questions по scorecard |
+| **GMA (General Mental Ability)** | 0.51 | Algorithmic задачи (с оговорками) |
+| **Unstructured interviews** | 0.38 | «Gut feel» подход — значительно слабее |
+| **Years of experience** | 0.18 | Почти не предсказывает performance |
+| **Reference checks** | 0.26 | Полезны как дополнение, не основа |
+
+### Bias в процессе найма
+
+Daniel Kahneman в *"Thinking, Fast and Slow"* (2011) описал когнитивные искажения, критичные для hiring:
+
+> **Confirmation Bias** — тенденция интервьюера искать подтверждение первому впечатлению. Решение: structured scorecard, independent scoring.
+
+> **Halo Effect** — перенос положительного впечатления от одного аспекта на все остальные. Решение: оценка по отдельным компетенциям.
+
+Iris Bohnet в *"What Works: Gender Equality by Design"* (Harvard University Press, 2016) показала, что structured interviews с predetermined criteria значительно снижают bias по полу, расе и возрасту. Google (re:Work, 2015) подтвердил это на собственных данных: переход к structured interviews повысил quality of hire на 25%.
+
+Work sample tests — предложение Lazlo Bock (*"Work Rules!"*, 2015) — дают кандидату выполнить задачу, максимально приближённую к реальной работе, что одновременно повышает validity и снижает bias.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -752,6 +783,15 @@ Great credentials, poor interview
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Schmidt F. L., Hunter J. E. "The Validity and Utility of Selection Methods" — Psychological Bulletin, 1998 | Мета-анализ | Предсказательная валидность методов отбора |
+| 2 | Kahneman D. "Thinking, Fast and Slow" — Farrar, Straus and Giroux, 2011 | Книга | Cognitive biases в hiring |
+| 3 | Bohnet I. "What Works: Gender Equality by Design" — Harvard University Press, 2016 | Книга | Снижение bias через structured process |
+| 4 | Bock L. "Work Rules!" — Twelve, 2015 | Книга | Google hiring science, work sample tests |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Who: The A Method](https://www.amazon.com/Who-Method-Hiring-Geoff-Smart/dp/0345504194) | Book | Scorecard, process |
@@ -759,13 +799,7 @@ Great credentials, poor interview
 | 3 | [Joel Spolsky: Guerrilla Guide](https://www.joelonsoftware.com/2006/10/25/the-guerrilla-guide-to-interviewing-version-30/) | Article | Smart and Gets Things Done |
 | 4 | [First Round: Hiring](https://review.firstround.com/hiring) | Articles | Startup hiring practices |
 | 5 | [SHRM: Cost of Bad Hire](https://www.shrm.org/) | Research | Statistics |
-| 6 | [Patrick McKenzie: Salary Negotiation](https://www.kalzumeus.com/2012/01/23/salary-negotiation/) | Article | Candidate perspective |
-
-### Дополнительное чтение
-
-- "Work Rules!" by Laszlo Bock — Google hiring
-- "The Talent Delusion" by Tomas Chamorro-Premuzic — science of hiring
-- "Hiring Engineers" newsletter by The Pragmatic Engineer
+| 6 | **The Talent Delusion** (Tomas Chamorro-Premuzic, 2017) | Книга | Science of hiring |
 
 ---
 

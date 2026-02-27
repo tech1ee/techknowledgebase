@@ -52,6 +52,47 @@ next_review:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Production Readiness** — состояние программной системы, при котором она удовлетворяет критериям качества, надёжности, наблюдаемости и безопасности, необходимым для обслуживания пользователей в промышленном окружении (Limoncelli et al., 2014, The Practice of Cloud System Administration).
+
+### Quality Gates Model
+
+Production readiness формализуется как последовательность **quality gates** (Humphrey, 1989, Managing the Software Process):
+
+| Gate | Критерии | KMP-специфика |
+|------|----------|---------------|
+| **G1: Build** | Компилируется на всех targets | Android + iOS (arm64, simulator) |
+| **G2: Test** | Тесты проходят | commonTest + platform-specific tests |
+| **G3: Integration** | Компоненты работают вместе | Shared module + native apps |
+| **G4: Performance** | Метрики в пределах SLA | Build time, binary size, runtime |
+| **G5: Observability** | Мониторинг и crash reporting | Crashlytics + dSYM + unified logging |
+| **G6: Security** | Безопасность и подпись | Code signing (iOS + Android) |
+| **G7: Release** | Готовность к дистрибуции | App Store + Play Store requirements |
+
+### Observability Theory
+
+Термин из теории управления (Kalman, 1960): система наблюдаема, если по выходным данным можно восстановить внутреннее состояние. В контексте KMP production:
+
+```
+Observability = Logs + Metrics + Traces + Crash Reports
+```
+
+Уникальная проблема KMP: один и тот же shared-код порождает **разные observable signals** на Android (Logcat, Crashlytics) и iOS (OSLog, dSYM symbolication). Unified observability требует нормализации signals с обоих платформ.
+
+### Release Engineering
+
+Humble & Farley (2010), *Continuous Delivery*: каждый коммит — потенциальный релиз. Для KMP это означает:
+
+- **Dual pipeline**: Android AAB + iOS Archive из одного коммита
+- **Atomic release**: обе платформы должны быть release-ready одновременно
+- **Версионирование**: shared module version ≠ app version
+
+> **CS-фундамент:** Production readiness связана с [[kmp-ci-cd]] (автоматизация pipeline), [[kmp-debugging]] (crash reporting) и [[kmp-testing-strategies]] (quality gates). Теоретическая база — Quality Gates (Humphrey, 1989), Observability (Kalman, 1960), Continuous Delivery (Humble & Farley, 2010).
+
 ## Почему KMP в production требует особого внимания?
 
 **Dual-Platform Complexity:** Релиз = Android (Play Store) + iOS (App Store). Разные signing, разные review processes, разные crash reporting stacks.
@@ -640,11 +681,16 @@ android {
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture.* — Принципы архитектуры, заложенные в первый пункт чеклиста: правильная структура модулей, separation of concerns, dependency rule. Чистая архитектура — необходимое условие для прохождения всех остальных пунктов чеклиста, от тестирования до релиза.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по написанию production-ready кода: обработка ошибок, работа с null safety, API design. Каждый пункт security checklist (нет секретов в коде, HTTPS, шифрование) требует качественной реализации на Kotlin, и книга помогает избежать типичных ошибок.
+- **Humphrey W. (1989).** *Managing the Software Process.* — Quality Gates как формальная модель production readiness.
+- **Kalman R. (1960).** *A New Approach to Linear Filtering and Prediction Problems.* — Observability theory: восстановление внутреннего состояния системы по выходным данным.
+- **Humble J., Farley D. (2010).** *Continuous Delivery.* — Deployment pipeline как автоматизированный quality gate.
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины используются в shared-модуле для сетевых запросов, работы с БД и асинхронных операций. Неправильная работа с корутинами — частая причина крашей в production (утечки scope, неперехваченные исключения, blocking calls на main thread). Книга помогает написать надёжный асинхронный код.
+### Практические руководства
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Kotlin-практики для production-quality кода.
+- [KMP Production Guide](https://kotlinlang.org/docs/multiplatform-expect-actual.html) — Официальные best practices.
 
 ---
 

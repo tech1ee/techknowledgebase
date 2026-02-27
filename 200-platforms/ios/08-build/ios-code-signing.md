@@ -63,6 +63,43 @@ iOS использует **закрытую экосистему** с много
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## Теоретические основы
+
+> **Code Signing** — криптографический механизм подтверждения авторства и целостности программного кода. Основан на инфраструктуре открытых ключей (PKI): разработчик подписывает код приватным ключом, а система верифицирует подпись публичным ключом через цепочку доверия (Apple Root CA → Intermediate CA → Developer Certificate).
+
+### Академический контекст
+
+Code signing в iOS построен на криптографических примитивах:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| PKI (Public Key Infrastructure) | Diffie & Hellman, 1976 | Асимметричная криптография для аутентификации | Apple Root CA → Developer Certificate (X.509) |
+| Digital Signature | Rivest, Shamir, Adleman (RSA), 1977 | Подпись = шифрование хеша приватным ключом | CMS (Cryptographic Message Syntax) в _CodeSignature |
+| Hash Chain | Merkle, 1979 | Хеш-дерево для проверки целостности | CodeResources — хеш каждого файла в bundle |
+| Chain of Trust | X.509, ITU-T, 1988 | Иерархическая верификация сертификатов | Apple Root CA → WWDR CA → Developer Certificate |
+| Capability-based Security | Dennis & Van Horn, 1966 | Доступ через явные разрешения (capabilities) | Entitlements — декларативные capabilities приложения |
+
+### Модель доверия Apple
+
+Code signing в iOS реализует **замкнутую модель доверия** (closed trust model):
+
+1. **Идентификация** — Developer Certificate подтверждает личность разработчика
+2. **Целостность** — хеш каждого файла в bundle гарантирует отсутствие модификаций
+3. **Авторизация** — Provisioning Profile определяет, где и как код может исполняться
+4. **Capabilities** — Entitlements определяют, к каким системным API код имеет доступ
+
+> **Принцип наименьших привилегий** (Saltzer & Schroeder, 1975): entitlements реализуют этот принцип — приложение получает доступ только к явно запрошенным capabilities (push notifications, iCloud, HealthKit). Отсутствие entitlement = отказ в доступе даже при наличии кода вызова API.
+
+### Связь с CS-фундаментом
+
+- [[security-cryptography-fundamentals]] — RSA, хеширование, PKI как основа code signing
+- [[ios-architecture]] — sandbox enforcement через проверку подписи и entitlements
+- [[ios-app-distribution]] — code signing как prerequisite для любого метода дистрибуции
+- [[ios-ci-cd]] — автоматизация signing в CI/CD (Fastlane match, Xcode Cloud)
+- [[ios-permissions-security]] — entitlements как часть общей модели безопасности iOS
+
+---
+
 ## Аналогии из жизни
 
 ### 1. Certificate = Паспорт разработчика
@@ -1298,9 +1335,14 @@ Certificate (1 год)
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает процесс code signing, включая создание сертификатов, provisioning profiles и настройку Xcode signing capabilities
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — практическое руководство по подготовке приложения к распространению, включая пошаговую настройку signing
-- Apple (2023). *The Swift Programming Language.* — официальная документация, необходимая для понимания языковых конструкций, используемых в entitlements и capability configuration
+### Теоретические основы
+- Diffie W., Hellman M. (1976). *New Directions in Cryptography.* — основы асимметричной криптографии, теоретическая база PKI и цифровых подписей
+- Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems.* — принцип наименьших привилегий, реализованный в entitlements
+- Adams C., Lloyd S. (2002). *Understanding PKI.* — инфраструктура открытых ключей, цепочки доверия, X.509 сертификаты
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — процесс code signing, создание сертификатов, provisioning profiles
+- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — подготовка приложения к распространению, настройка signing
 
 ---
 

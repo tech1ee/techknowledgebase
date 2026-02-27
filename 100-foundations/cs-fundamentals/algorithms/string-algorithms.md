@@ -33,6 +33,55 @@ String matching: **KMP** — O(n+m) с prefix function, **Rabin-Karp** — O(n+m
 
 ---
 
+## Теоретические основы: формальный базис строковых алгоритмов
+
+### Pattern Matching: формальная задача
+
+> **Определение:** Дан текст T[1..n] и паттерн P[1..m]. Найти все позиции i, где T[i..i+m-1] = P[1..m]. Наивное решение — O(nm), оптимальное — O(n+m).
+
+### KMP: формальное обоснование
+
+> **Теорема (Knuth, Morris, Pratt, 1977):** Алгоритм KMP находит все вхождения паттерна P в текст T за O(n+m) времени и O(m) дополнительной памяти.
+
+**Ключевая идея — prefix function** π[i]: длина наибольшего собственного префикса P[1..i], который совпадает с суффиксом P[1..i].
+
+**Формальный инвариант KMP:** При несовпадении на позиции j паттерна, мы знаем, что P[1..j-1] совпал с T[i-j+1..i-1]. Prefix function говорит: P[1..π[j-1]] = P[j-π[j-1]..j-1]. Поэтому можно продолжить сравнение с позиции π[j-1], не возвращая указатель текста. Каждый символ текста сравнивается не более 2 раз → O(n).
+
+### Rabin-Karp: вероятностный подход
+
+> **Алгоритм (Rabin & Karp, 1987):** Использует **rolling hash** — хеш-функцию, вычисляемую за O(1) при сдвиге окна на 1 символ.
+
+Hash(T[i+1..i+m]) = (Hash(T[i..i+m-1]) - T[i] · d^(m-1)) · d + T[i+m]  (mod q)
+
+**Вероятностная корректность:** При совпадении хешей проверяем символы (исключаем коллизии). Ожидаемое время O(n+m), worst case O(nm) при множестве коллизий. Выбор простого q = 10^9+7 минимизирует коллизии.
+
+**Преимущество:** Эффективен для **множественного** поиска (k паттернов) — O(n·k) без повторного хеширования текста.
+
+### Z-функция: альтернативный подход
+
+> **Определение:** Z[i] = длина наибольшей подстроки, начинающейся с позиции i, совпадающей с префиксом строки. Z[0] не определена (или равна n).
+
+Z-функция вычисляется за O(n) с помощью **Z-box** — текущего самого правого совпадения с префиксом. Алгоритм использует уже вычисленные Z-значения для ускорения.
+
+### Историческая атрибуция
+
+| Алгоритм | Авторы | Год | Сложность |
+|----------|--------|-----|-----------|
+| **Наивный** | — | — | O(nm) |
+| **KMP** | Knuth, Morris, Pratt | 1977 (разработан 1970) | O(n+m) |
+| **Rabin-Karp** | Rabin, Karp | 1987 | O(n+m) expected |
+| **Boyer-Moore** | Boyer, Moore | 1977 | O(n/m) best, O(nm) worst |
+| **Aho-Corasick** | Aho, Corasick | 1975 | O(n + m + z) multi-pattern |
+| **Suffix Array** | Manber, Myers | 1993 | O(n log n) build, O(m log n) query |
+
+### Связи
+
+- [[arrays-strings]] — основы работы со строками
+- [[hash-tables]] — хеш-функции, используемые в Rabin-Karp
+- [[dynamic-programming]] — longest common subsequence как DP на строках
+
+---
+
 ## Часть 1: Интуиция без кода
 
 ### Аналогия 1: Поиск слова в книге
@@ -1134,12 +1183,21 @@ if (windowHash == patternHash && text.substring(i, i+m) == pattern) {
 
 ## Источники
 
+### Теоретические основы
+
+- **Knuth, D.E., Morris, J.H., Pratt, V.R. (1977). "Fast Pattern Matching in Strings." SIAM Journal on Computing.** — Оригинальная статья KMP. Доказательство O(n+m) через амортизированный анализ
+- **Rabin, M.O. & Karp, R.M. (1987). "Efficient Randomized Pattern-Matching Algorithms." IBM Journal of R&D.** — Rolling hash для вероятностного pattern matching
+- **Boyer, R.S. & Moore, J.S. (1977). "A Fast String Searching Algorithm." CACM.** — Boyer-Moore: sublinear O(n/m) в лучшем случае
+- **Aho, A.V. & Corasick, M.J. (1975). "Efficient String Matching." CACM.** — Multi-pattern matching за O(n + m + z)
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Prefix Function](https://cp-algorithms.com/string/prefix-function.html) | Reference | KMP |
 | 2 | [CP-Algorithms: Z-Function](https://cp-algorithms.com/string/z-function.html) | Reference | Z-function |
 | 3 | [CP-Algorithms: Rabin-Karp](https://cp-algorithms.com/string/rabin-karp.html) | Reference | Hashing |
-| 4 | [CLRS] Introduction to Algorithms | Book | Theory |
+| 4 | **Cormen et al. (2009). CLRS, Chapter 32: String Matching.** | Book | Theory |
 
 ---
 

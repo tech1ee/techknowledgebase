@@ -35,6 +35,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Context Switching (переключение контекста)** — когнитивный процесс смены фокуса внимания с одной задачи на другую, сопровождающийся потерей производительности из-за остаточного внимания к предыдущей задаче (Monsell, 2003).
+
+Исследования переключения контекста пришли из двух традиций: когнитивной психологии внимания и организационного поведения:
+
+| Работа | Автор | Год | Ключевой вывод |
+|--------|-------|-----|----------------|
+| Task-set reconfiguration | Monsell | 2003 | Переключение между задачами имеет фиксированную «стоимость» — switch cost |
+| Attention Residue | Sophie Leroy | 2009 | Часть внимания остаётся на предыдущей задаче; незавершённые задачи усиливают эффект |
+| Cost of Interrupted Work | Gloria Mark et al. | 2008 | 23 минуты 15 секунд для возврата к полной концентрации |
+| Multitasking: Switching Costs | APA | 2001 | Многозадачность снижает продуктивность на 40% |
+| Attention Span | Gloria Mark | 2023 | Фрагментация внимания: среднее время на одном экране — 47 секунд |
+
+> **Monsell (2003):** «The time cost of switching between tasks reflects, at least in part, the need to reconfigure the cognitive system — to adjust parameters of perception, attention, memory, and response.»
+
+Ключевое понятие — **Attention Residue** (Leroy, 2009): при переключении с задачи A на задачу B мозг не «отпускает» A мгновенно. Часть когнитивных ресурсов продолжает обрабатывать A, особенно если задача не завершена (эффект Зейгарник, 1927). Это объясняет, почему разработчик, ответивший в Slack на «минутный» вопрос, теряет 23 минуты: не потому что вопрос сложный, а потому что attention residue от кода мешает ответу, а потом — наоборот.
+
+Для разработчиков context switching особенно разрушителен из-за высокой **cognitive load** ([[cognitive-load-theory]]): код требует удержания множества взаимосвязанных элементов в рабочей памяти. См. также [[deep-work]] — стратегии минимизации переключений.
+
+---
+
 ## Почему это важно для разработчиков
 
 Типичный день программиста:
@@ -262,11 +284,15 @@ ROI: x30-x46
 
 ## Источники
 
-- Gloria Mark, "Attention Span" (2023) — 47 секунд, 23 минуты
-- Sophie Leroy, "Why is it so hard to do my work?" (2009) — attention residue
-- APA, "Multitasking: Switching costs" — 40% потери
-- Cal Newport, "Deep Work" (2016) — time blocking
-- UC Irvine study (2005) — context switching cost
+### Теоретические основы
+- Monsell, S. «Task Switching». Trends in Cognitive Sciences, 2003
+- Leroy, S. «Why Is It So Hard to Do My Work? The Challenge of Attention Residue». Organizational Behavior and Human Decision Processes, 2009
+- Mark, G., Gudith, D. & Klocke, U. «The Cost of Interrupted Work: More Speed and Stress». CHI 2008
+- Mark, G. *Attention Span*. Hanover Square Press, 2023
+- APA. «Multitasking: Switching Costs». 2001
+
+### Практические руководства
+- Newport, C. *Deep Work*. Grand Central, 2016 — time blocking
 
 ---
 

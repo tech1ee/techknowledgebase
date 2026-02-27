@@ -29,6 +29,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Кросс-культурная психология** (Cross-Cultural Psychology) — область, изучающая влияние культуры на поведение и коммуникацию. Три фундаментальные теории: **модель культурных измерений Hofstede** (1980), **модель контекста Hall** (1976) и **Lewis Model** (2006).
+
+### Историческая хронология
+
+| Год | Автор / Событие | Вклад |
+|-----|-----------------|-------|
+| 1959 | Edward T. Hall | *The Silent Language* — концепция High/Low context communication |
+| 1976 | Edward T. Hall | *Beyond Culture* — формализация High-context vs Low-context модели |
+| 1980 | Geert Hofstede | *Culture's Consequences* — 4 измерения (PDI, IDV, MAS, UAI) из исследования 116,000 сотрудников IBM в 40 странах |
+| 1991 | Hofstede | Добавлено 5-е измерение: Long-Term Orientation (на основе Chinese Value Survey, Bond, 1987) |
+| 2004 | GLOBE Study | 9 измерений, 62 культуры — расширение и критика Hofstede (House et al.) |
+| 2006 | Richard Lewis | *When Cultures Collide* — треугольная модель Linear-Active / Multi-Active / Reactive |
+| 2010 | Hofstede | 6-е измерение: Indulgence vs Restraint (на основе World Values Survey, Minkov) |
+| 2014 | Erin Meyer | *The Culture Map* — 8 шкал для бизнес-контекста |
+
+### Методология Hofstede
+
+Hofstede провёл крупнейшее (на тот момент) эмпирическое исследование культурных различий: **116,000 анкет** сотрудников IBM в **40 странах** (позднее расширено до 76). Каждое измерение — это **статистическое среднее** (не предписание), полученное методом факторного анализа.
+
+| Критика | Автор | Суть |
+|---------|-------|------|
+| Методологическая | McSweeney (2002) | Одна компания (IBM) не репрезентативна для всей культуры |
+| Временная | Бриттон (2013) | Данные 1960-70-х устарели; культуры эволюционируют |
+| Ecological fallacy | Brewer & Venaik (2012) | Средние по стране не применимы к индивидам |
+
+GLOBE Study (House et al., 2004) попытался исправить ограничения Hofstede: 9 измерений, 62 культуры, разделение «как есть» (practices) и «как должно быть» (values). Однако Hofstede остаётся стандартом де-факто благодаря простоте и доступности данных.
+
+Hall (1976) предложил ортогональную модель: не измерения «сколько», а бинарное разделение на **High-context** (смысл в контексте, невербальном, общей истории) и **Low-context** (смысл в явном тексте сообщения). Эта модель особенно полезна для понимания miscommunication между культурами в code review и email.
+
+> Связь с другими материалами: [[communication-barriers]] описывает культурные барьеры как подтип, [[communication-models]] объясняет, как культурный контекст влияет на кодирование/декодирование, [[remote-team-communication]] применяет культурные фреймворки к distributed teams.
+
+---
+
 ## Зачем это нужно
 
 **Статистика:**
@@ -825,16 +860,26 @@ Please fix before merge."
 
 ## Источники
 
-1. Hofstede, G. "Cultures and Organizations" (3rd ed., 2010)
-2. Meyer, E. "The Culture Map" (2014)
-3. Lewis, R. "When Cultures Collide" (4th ed., 2018)
-4. Hall, E.T. "Beyond Culture" (1976)
-5. Hofstede Insights Country Comparison Tool
-6. GLOBE Study (Global Leadership and Organizational Behavior Effectiveness)
-7. World Values Survey
-8. PwC Global Culture Survey (2024)
-9. Harvard Business Review — Cross-cultural management articles
-10. MIT Sloan Management Review — Global teams research
+### Теоретические основы
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Hofstede, G. *Cultures and Organizations: Software of the Mind*. 3rd ed., McGraw-Hill, 2010 | Монография |
+| 2 | Hall, E. T. *Beyond Culture*. Anchor Books, 1976 | Монография |
+| 3 | House, R. J. et al. *Culture, Leadership, and Organizations: The GLOBE Study*. Sage, 2004 | Монография |
+| 4 | Meyer, E. *The Culture Map*. PublicAffairs, 2014 | Монография |
+| 5 | McSweeney, B. "Hofstede's Model of National Cultural Differences". *Human Relations*, 55(1), 2002 | Статья |
+
+### Практические руководства
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Lewis, R. *When Cultures Collide*. 4th ed., Nicholas Brealey, 2018 | Книга |
+| 2 | Hofstede Insights Country Comparison Tool | Ресурс |
+| 3 | World Values Survey | Данные |
+| 4 | PwC Global Culture Survey, 2024 | Отчёт |
+| 5 | Harvard Business Review — Cross-cultural management articles | Статьи |
+| 6 | MIT Sloan Management Review — Global teams research | Статьи |
 
 ---
 

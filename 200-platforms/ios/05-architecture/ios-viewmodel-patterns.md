@@ -32,6 +32,42 @@ prerequisites:
 
 ViewModels в SwiftUI служат посредниками между View и бизнес-логикой, управляя состоянием и обрабатывая пользовательский ввод. Основные подходы: ObservableObject с @Published (iOS 13+), новый @Observable macro (iOS 17+), Input-Output pattern для четкого разделения событий и состояния, async/await для асинхронных операций, и protocol-based ViewModels для тестируемости. Правильный выбор паттерна зависит от версии iOS, сложности состояния и требований к тестированию.
 
+## Теоретические основы
+
+> **Определение:** ViewModel — компонент архитектуры MVVM (Gossman, 2005), ответственный за подготовку данных модели для отображения во View и обработку пользовательских действий. ViewModel не знает о конкретном View (принцип Dependency Inversion).
+
+### Происхождение и эволюция MVVM
+
+| Год | Событие | Значение для iOS |
+|-----|---------|-----------------|
+| 2005 | MVVM создан John Gossman (Microsoft WPF) | Паттерн для data-binding фреймворков |
+| 2013 | ReactiveCocoa для iOS | Первая реализация MVVM + reactive binding |
+| 2019 | SwiftUI + Combine | Нативная поддержка MVVM через ObservableObject |
+| 2023 | @Observable macro (iOS 17) | Упрощение observation без @Published boilerplate |
+
+> **Presentation Model (Fowler, 2004):** ViewModel является вариацией Presentation Model — «объект, который представляет состояние и поведение presentation, но не зависит от конкретных GUI-контролов». Fowler описал этот паттерн за год до формализации MVVM.
+
+### ViewModel vs Presenter vs Controller
+
+| Аспект | Controller (MVC) | Presenter (MVP) | ViewModel (MVVM) |
+|--------|-----------------|-----------------|------------------|
+| Знает о View | Да (strong ref) | Да (через protocol) | Нет (data binding) |
+| Обновление UI | Явное (set properties) | Явное (через protocol) | Реактивное (observation) |
+| Тестируемость | Низкая | Высокая | Высокая |
+| Связь с фреймворком | UIKit-зависим | UIKit-зависим | Platform-agnostic |
+
+### Input-Output Pattern
+
+> **Input-Output Pattern** — формализация ViewModel как чистой функции: Input (user actions, lifecycle events) → Processing → Output (state for View). Это приближает ViewModel к функциональному стилю и упрощает тестирование.
+
+### Связь с CS-фундаментом
+
+- [[ios-state-management]] — управление состоянием через property wrappers
+- [[ios-architecture-patterns]] — MVVM в контексте других архитектурных паттернов
+- [[android-viewmodel-internals]] — Android ViewModel с lifecycle-awareness
+
+---
+
 ## Аналогии
 
 **ViewModel как диспетчер светофора**: View (водители) видят только сигналы (состояние), а ViewModel (диспетчер) получает данные о трафике (бизнес-логика) и решает, какой свет включить. Водители не знают о камерах и датчиках, они просто реагируют на цвет.
@@ -2833,11 +2869,15 @@ struct ProductRow: View {
 
 ## Источники и дальнейшее чтение
 
-- Eidhof C., Javier N., Willeke F. (2020). *Thinking in SwiftUI.* — Объясняет декларативную модель SwiftUI и как ViewModel взаимодействует с View через @ObservedObject, @StateObject и @EnvironmentObject, помогая выбрать правильный паттерн для каждого сценария.
+### Теоретические основы
+- Gossman J. (2005). *Introduction to Model/View/ViewModel.* Microsoft — оригинальное описание MVVM
+- Fowler M. (2004). *Presentation Model.* — предшественник MVVM, Presentation Model pattern
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Observer pattern (основа ObservableObject)
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Покрывает основы Swift и UIKit, необходимые для понимания ObservableObject, property wrappers и Combine publishers, которые являются строительными блоками ViewModel в iOS.
-
-- Eidhof C., Airspeed Velocity, Javier N. (2019). *Advanced Swift.* — Глубокое погружение в протоколы, generics и value types Swift, что критично для создания protocol-based ViewModels, правильного использования dependency injection и типобезопасных абстракций над состоянием.
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — ViewModel + @ObservedObject, @StateObject, @EnvironmentObject
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — ObservableObject, property wrappers
+- Eidhof C. et al. (2019). *Advanced Swift.* — протоколы, generics, value types для ViewModel
 
 ---
 

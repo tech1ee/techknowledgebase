@@ -37,6 +37,70 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Rate Limiting** — механизм контроля скорости поступления запросов в систему, ограничивающий число операций, которые сущность (пользователь, IP, API-ключ) может выполнить за единицу времени.
+
+Rate limiting — частный случай более общей концепции **flow control** (управление потоком), которая изучается в теории массового обслуживания (queueing theory) и теории управления.
+
+### Теоретические корни
+
+| Теория | Вклад в Rate Limiting | Автор/Год |
+|--------|----------------------|-----------|
+| **Queueing Theory** | Модели M/M/1, M/M/c — анализ очередей, throughput, latency | Erlang, 1909; Kendall, 1953 |
+| **Token Bucket** | Формальная модель контроля скорости в сетях | Turner, 1986 (Bell Labs) |
+| **Leaky Bucket** | Регулирование трафика с постоянной скоростью выхода | Turner, 1986 |
+| **Little's Law** | `L = λW` (среднее число в системе = rate × среднее время) | Little, 1961 |
+| **Congestion Control** | Additive Increase / Multiplicative Decrease (AIMD) | Chiu & Jain, 1989 |
+
+### Формальная модель Token Bucket
+
+**Token Bucket** — наиболее распространённый алгоритм rate limiting. Формально:
+
+> **Определение:** Token Bucket — тройка `(r, b, tokens(t))`, где:
+> - `r` — rate (скорость пополнения токенов, tokens/sec)
+> - `b` — burst size (ёмкость корзины)
+> - `tokens(t) = min(b, tokens(t₀) + r·(t - t₀))` — количество токенов в момент `t`
+
+**Свойства:**
+- Долгосрочная средняя скорость ≤ `r` запросов/сек
+- Допускает **burst** до `b` запросов мгновенно
+- Сглаживает трафик: `lim(t→∞) throughput(t) = r`
+
+### Leaky Bucket vs Token Bucket
+
+| Свойство | Token Bucket | Leaky Bucket |
+|----------|-------------|--------------|
+| **Модель** | Ведро с токенами, пополняемое с rate `r` | Ведро с дырой, вытекающее с rate `r` |
+| **Burst** | Разрешён (до `b` мгновенно) | Запрещён (выход строго `r` req/sec) |
+| **Аналогия** | Билетная касса: копишь билеты, тратишь пачкой | Капельница: постоянная скорость |
+| **Формула** | `tokens = min(b, tokens + r·Δt)` | `water = max(0, water - r·Δt) + 1` |
+| **Применение** | API rate limiting (Stripe, GitHub) | Traffic shaping в сетях |
+
+### Sliding Window — комбинаторная модель
+
+**Sliding Window Log** хранит timestamp каждого запроса и подсчитывает попадающие в окно `[t - W, t]`:
+
+> `count(t) = |{tᵢ : tᵢ ∈ [t - W, t]}|`
+
+**Sliding Window Counter** (Redis-оптимизированный) аппроксимирует точный подсчёт через взвешенную сумму двух смежных фиксированных окон:
+
+> `count ≈ count_prev × (1 - elapsed/W) + count_curr`
+
+Cloudflare показала, что эта аппроксимация даёт ошибку ≤ `max(count_prev, count_curr) × elapsed/W` — на практике <0.003% при нормальном трафике.
+
+### Distributed Rate Limiting: теоретические ограничения
+
+В распределённой системе **точный** глобальный rate limit невозможен без синхронизации (следствие CAP-теоремы):
+
+- **Strict consistency** (Redis + Lua): точный лимит, но latency синхронизации
+- **Eventual consistency** (local counters + sync): минимальная latency, но возможен кратковременный overshoot
+- **Практический компромисс**: допустить ~5-10% overshoot ради latency (подход Stripe, Lyft)
+
+---
+
 ## Прежде чем читать
 
 Для понимания этого материала полезно знать:
@@ -1659,21 +1723,18 @@ except redis.RedisError:
 
 ## Источники
 
-### Официальные блоги компаний
-- [Stripe: Scaling your API with rate limiters](https://stripe.com/blog/rate-limiters) — как Stripe делает rate limiting в production
-- [GitHub Gist: Stripe Rate Limiters Code](https://gist.github.com/ptarjan/e38f45f2dfe601419ca3af937fff574d) — реальный код из Stripe
+### Теоретические основы
+- Erlang, A.K. (1909). "The Theory of Probabilities and Telephone Conversations" — основа queueing theory
+- Little, J.D.C. (1961). "A Proof for the Queuing Formula: L = λW" — Operations Research
+- Turner, J.S. (1986). "New Directions in Communications (or Which Way to the Information Age?)" — IEEE, Token/Leaky Bucket
+- Chiu, D.-M. & Jain, R. (1989). "Analysis of the Increase and Decrease Algorithms for Congestion Avoidance" — AIMD
 
-### Технические статьи
-- [AlgoMaster: Rate Limiting Algorithms Explained with Code](https://blog.algomaster.io/p/rate-limiting-algorithms-explained-with-code) — подробный разбор всех алгоритмов
+### Практические руководства
+- [Stripe: Scaling your API with rate limiters](https://stripe.com/blog/rate-limiters) — как Stripe делает rate limiting
+- [AlgoMaster: Rate Limiting Algorithms Explained with Code](https://blog.algomaster.io/p/rate-limiting-algorithms-explained-with-code) — разбор всех алгоритмов
 - [Arpit Bhayani: Sliding Window Rate Limiter](https://arpitbhayani.me/blogs/sliding-window-ratelimiter/) — глубокий разбор формул
 - [freeCodeCamp: Distributed Rate Limiting with Redis](https://www.freecodecamp.org/news/build-rate-limiting-system-using-redis-and-lua/) — Redis + Lua tutorial
-- [Callr Tech: Rate limiting for distributed systems](https://blog.callr.tech/rate-limiting-for-distributed-systems-with-redis-and-lua/) — практический опыт
-
-### Академические источники
 - [Wikipedia: Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) — формальное определение
-- [LUC.edu: Token Bucket Rate Limiting](https://intronetworks.cs.luc.edu/current/html/tokenbucket.html) — математика алгоритма
-
-### System Design
 - [Hello Interview: Design a Distributed Rate Limiter](https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-rate-limiter) — разбор для интервью
 - System Design Interview by Alex Xu, Chapter 4 — книга
 

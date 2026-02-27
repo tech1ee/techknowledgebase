@@ -31,6 +31,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Personal Branding** — осознанное формирование профессиональной идентичности и её трансляция целевой аудитории. Термин введён Томом Питерсом в статье *"The Brand Called You"* (Fast Company, 1997): каждый профессионал — это бренд, и управление этим брендом — ключевой карьерный навык.
+
+| Теория | Автор | Год | Ключевая идея | Применение для разработчика |
+|--------|-------|-----|---------------|-----------------------------|
+| The Brand Called You | Tom Peters | 1997 | Каждый профессионал — CEO собственного бренда | Осознанный выбор ниши и каналов visibility |
+| Signaling Theory | Michael Spence | 1973 | Сигналы (образование, артефакты) снижают информационную асимметрию | GitHub, блог, доклады — сигналы компетенции |
+| Social Capital | Pierre Bourdieu | 1986 | Социальные связи как форма капитала | Networking, community presence |
+| Strength of Weak Ties | Mark Granovetter | 1973 | Слабые связи дают доступ к новой информации | LinkedIn connections, conference contacts |
+| Professional Identity | Herminia Ibarra | 2003 | Идентичность формируется через эксперименты, не планирование | Пробовать разные ниши контента |
+
+**Три уровня personal brand (модель Питерса):**
+1. **Компетенция** — что ты реально умеешь (hard skills, portfolio)
+2. **Visibility** — кто об этом знает (контент, нетворк, выступления)
+3. **Reputation** — что о тебе говорят, когда тебя нет в комнате
+
+Питерс подчеркивает: бренд — это не self-promotion, а **consistency между тем, что ты делаешь, и тем, что о тебе знают**. Для разработчика это означает: код (GitHub) должен подтверждать экспертизу (LinkedIn), а экспертиза — подтверждаться результатами (резюме).
+
+> **Закон специализации:** чем уже ниша, тем сильнее бренд. "Android Developer" — generic. "Compose migration expert" или "KMP architecture specialist" — memorable и searchable. В маркетинге это называется **positioning** (Al Ries, Jack Trout, 1981).
+
+→ Связано: [[standing-out]], [[portfolio-strategy]], [[linkedin-optimization]]
+
+---
+
 ## Что такое personal brand для developer
 
 ```
@@ -387,15 +412,25 @@ Patience is the key differentiator.
 
 - [[linkedin-optimization]] — LinkedIn — основная платформа visibility для разработчиков. Оптимизация профиля, контент-стратегия 70/20/10 и регулярные комментарии из текущего материала реализуются на LinkedIn. Это самый быстрый канал для построения personal brand с минимальными вложениями: 15 минут в день достаточно.
 
-## Источники и дальнейшее чтение
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking помогает определить свою нишу для personal brand: не пытаться быть "Android Developer", а найти специфический угол — "Compose migration expert" или "KMP architecture specialist".
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Staff+ уровне personal brand становится частью работы: RFCs, tech talks, open source. Книга описывает, как visibility и influence работают в контексте карьерного роста выше Senior.
-
-- Fournier C. (2017). *The Manager's Path*. — Понимание того, как компании оценивают инженеров на разных уровнях, помогает позиционировать свой бренд правильно: какие сигналы посылать hiring managers и как демонстрировать leadership через контент.
-
 ## Источники
+
+### Теоретические основы
+
+- Peters T. (1997). *The Brand Called You*. Fast Company. — Основополагающая статья о personal branding: каждый профессионал — CEO собственного бренда.
+
+- Spence M. (1973). *Job Market Signaling*. Quarterly Journal of Economics. — Теория сигналов: как артефакты (GitHub, блог) снижают информационную асимметрию.
+
+- Ibarra H. (2003). *Working Identity: Unconventional Strategies for Reinventing Your Career*. — Профессиональная идентичность формируется через эксперименты, не планирование.
+
+- Ries A., Trout J. (1981). *Positioning: The Battle for Your Mind*. — Теория позиционирования: узкая ниша = сильный бренд.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking для определения ниши personal brand.
+
+- Larson W. (2022). *Staff Engineer*. — Visibility и influence на Staff+ уровне.
+
+- Fournier C. (2017). *The Manager's Path*. — Как компании оценивают инженеров на разных уровнях.
+
+### Практические руководства
 
 - [DEV: From GitHub to LinkedIn Brand](https://dev.to/bearconnectio/from-github-to-linkedin-expanding-your-developer-brand-beyond-code-j99)
 - [Dev Tech Insights: Personal Brand 2025](https://devtechinsights.com/career-development-personal-brand-as-developer-2025/)

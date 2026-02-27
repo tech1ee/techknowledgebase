@@ -49,6 +49,53 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Операционная система (ОС)** — системное программное обеспечение, управляющее аппаратными ресурсами и предоставляющее абстракции (процессы, файлы, виртуальная память) пользовательским программам через системные вызовы.
+
+### Историческая атрибуция
+
+| Событие | Автор/Система | Год | Вклад |
+|---------|--------------|-----|-------|
+| **Batch processing** | GM-NAA I/O (GM/IBM) | 1956 | Первая ОС: автоматизация загрузки программ |
+| **Multiprogramming** | Atlas (Manchester) | 1961 | Virtual memory, paging — первые реализации |
+| **Time-sharing** | CTSS (MIT) | 1961 | Несколько пользователей одновременно, первые пароли |
+| **Multics** | MIT/GE/Bell Labs | 1965 | Процессы, иерархическая FS, кольца защиты |
+| **Unix** | Thompson & Ritchie | 1969 | "Everything is a file", pipes, fork/exec, C |
+| **Virtual Memory** | Kilburn et al. (Atlas) | 1962 | Page-based virtual memory с demand paging |
+| **Mach microkernel** | CMU | 1985 | Microkernel: минимальное ядро, сервисы в user-space |
+| **Linux** | Torvalds, L. | 1991 | Monolithic kernel, open source, доминирует серверы/мобильные |
+
+### Ключевые абстракции ОС
+
+| Абстракция | Аппаратный ресурс | Что скрывает |
+|------------|-------------------|--------------|
+| **Process** | CPU | Scheduling, time-sharing |
+| **Thread** | CPU core | Parallel execution |
+| **Virtual Memory** | Physical RAM | Изоляция, фрагментацию |
+| **File** | Disk sectors | Физическое расположение, I/O |
+| **Socket** | Network interface | Пакеты, маршрутизацию |
+
+### Kernel mode vs User mode
+
+```
+Ring 0 (Kernel)          Ring 3 (User)
+├── Full hardware access ├── Limited access
+├── System calls impl    ├── Calls kernel via syscall
+├── Device drivers       ├── Applications
+├── Memory management    ├── Libraries
+└── Scheduler            └── Compilers, shells
+         │                       │
+         └── syscall boundary ───┘
+              (mode switch: ~100-1000 ns)
+```
+
+> **Принцип наименьших привилегий:** пользовательский код работает в Ring 3 с минимальными правами. Доступ к hardware — только через контролируемый syscall interface. Это защищает ОС от buggy/malicious user code.
+
+---
+
 ## Зачем это знать
 
 Операционная система — невидимый посредник между твоим кодом и hardware. Каждый раз, когда ты открываешь файл, создаёшь поток, выделяешь память, отправляешь сетевой запрос — ты обращаешься к ОС. И каждое такое обращение имеет цену: от 100 наносекунд для простого syscall до 10 микросекунд для context switch.
@@ -571,10 +618,17 @@ fun main() {
 
 ## Источники и дальнейшее чтение
 
-- Tanenbaum, A. (2014). *Modern Operating Systems* (4th edition). — Стандартный учебник по операционным системам. Главы о процессах, виртуальной памяти и файловых системах написаны исключительно понятно, с историческим контекстом и примерами из реальных ОС (Linux, Windows). Лучшая книга для первого знакомства.
-- Love, R. (2010). *Linux Kernel Development* (3rd edition). — Практическая книга о внутренностях Linux kernel. Главы о scheduling, system calls и memory management объясняют, как теоретические концепции из учебника Tanenbaum реализованы в реальной ОС. Отличное дополнение к теории.
-- Silberschatz, A. et al. (2018). *Operating System Concepts* (10th edition). — Альтернативный учебник, хорош для сравнения подходов. Особенно сильны главы о синхронизации и deadlock.
-- Bryant, R. & O'Hallaron, D. (2015). *Computer Systems: A Programmer's Perspective*. — Главы 8 (Exceptional Control Flow) и 9 (Virtual Memory) объясняют syscalls и виртуальную память с позиции программиста, не системного администратора. Практичный подход с примерами на C.
+### Теоретические основы
+- Corbató, F.J. et al. (1962). "An Experimental Time-Sharing System" — AFIPS; CTSS, первая time-sharing ОС
+- Ritchie, D.M. & Thompson, K. (1974). "The UNIX Time-Sharing System" — CACM; Unix philosophy
+- Kilburn, T. et al. (1962). "One-Level Storage System" — IRE Trans.; virtual memory (Atlas)
+- Saltzer, J.H. & Schroeder, M.D. (1975). "The Protection of Information in Computer Systems" — кольца защиты
+
+### Практические руководства
+- Tanenbaum, A. (2014). *Modern Operating Systems*, 4th ed. — стандартный учебник
+- Love, R. (2010). *Linux Kernel Development*, 3rd ed. — внутренности Linux kernel
+- Silberschatz, A. et al. (2018). *Operating System Concepts*, 10th ed. — альтернативный подход
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — гл.8 (syscalls), гл.9 (virtual memory)
 
 ---
 

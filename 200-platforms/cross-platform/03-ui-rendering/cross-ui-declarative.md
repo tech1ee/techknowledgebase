@@ -49,6 +49,48 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Декларативный UI** — парадигма построения пользовательского интерфейса, при которой разработчик описывает *что* должно отображаться (в зависимости от состояния), а фреймворк определяет *как* обновить экран (Elliott & Hudak, 1997, Functional Reactive Animation).
+
+### Декларативный vs Императивный: формализация
+
+| Аспект | Императивный | Декларативный |
+|--------|-------------|---------------|
+| **Формула** | UI = f(commands) | UI = f(state) |
+| **Обновление** | Мутация DOM/View tree | Пересоздание описания (recomposition) |
+| **Состояние** | Разбросано по обработчикам | Единый источник истины |
+| **Ошибки** | Несоответствие UI и данных | Невозможны (by design) |
+
+### Конвергенция платформ
+
+iOS (SwiftUI, 2019) и Android (Jetpack Compose, 2021) независимо пришли к декларативному UI под влиянием **React** (Facebook, 2013):
+
+| Аспект | React (2013) | SwiftUI (2019) | Compose (2021) |
+|--------|-------------|----------------|-----------------|
+| **Виртуальный DOM** | Virtual DOM | AttributeGraph (hidden) | Slot Table |
+| **Recomposition** | render() | body (computed) | @Composable |
+| **Diffing** | Reconciliation | Structural identity | Positional memoization |
+| **Side effects** | useEffect | .task, .onChange | LaunchedEffect, SideEffect |
+
+### Recomposition: теоретическая модель
+
+Recomposition — частный случай **incremental computation** (Acar, 2005):
+
+```
+f(state₁) → UI₁
+state₁ → state₂ (изменение)
+f(state₂) → UI₂
+Diff(UI₁, UI₂) → minimal updates
+```
+
+Оптимизация: пропуск recomposition для поддеревьев, где state не изменился (Compose: `@Stable`, SwiftUI: `Equatable`).
+
+> **CS-фундамент:** Декларативный UI связан с [[cross-ui-imperative]] (предшественник) и [[cross-state-management]] (state как основа UI). Теоретическая база — FRP (Elliott & Hudak, 1997), Incremental Computation (Acar, 2005), React Virtual DOM (Facebook, 2013).
+
 ## Почему обе платформы перешли на Declarative UI (2019-2021)?
 
 ### Проблема: Imperative UI Hell

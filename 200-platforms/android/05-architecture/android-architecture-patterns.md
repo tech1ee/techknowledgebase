@@ -46,6 +46,25 @@ mastery: 0
 
 ---
 
+## Теоретические основы
+
+> **Архитектурный паттерн** — фундаментальная структурная организация программной системы, определяющая набор компонентов, их ответственности и правила взаимодействия (Bass/Clements/Kazman, *Software Architecture in Practice*, 2012). Отличается от **design pattern** масштабом: архитектурный паттерн определяет структуру всего приложения, design pattern — отдельного взаимодействия.
+
+Все GUI-архитектурные паттерны (MVC, MVP, MVVM, MVI) решают одну фундаментальную задачу: **разделение presentation logic и domain logic**. Это формализовано в принципе **Separated Presentation** (Fowler, 2006): UI-код не должен содержать бизнес-логику, и наоборот.
+
+| Паттерн | Формальная модель | Ключевой принцип | Происхождение |
+|---------|-------------------|------------------|---------------|
+| MVC | Observer + Strategy + Composite | Model уведомляет View напрямую | Reenskaug, Smalltalk (1979) |
+| MVP | Mediator | Presenter — посредник между View и Model | Taligent (1996) |
+| MVVM | Observer + Data Binding | ViewModel не знает о View | Gossman, WPF (2005) |
+| MVI | State Machine + Command | `State = reduce(State, Intent)` | Elm Architecture (2012) |
+
+> **Dependency Rule** (Martin, 2012): зависимости в коде должны указывать только **внутрь** — от внешних слоёв (UI, infrastructure) к внутренним (domain, use cases). Это формализация принципа **Dependency Inversion** (Martin, 1996) на архитектурном уровне.
+
+Выбор между паттернами — это trade-off между **простотой** и **предсказуемостью**: MVP прост, но не масштабируется; MVI предсказуем, но verbose. Google рекомендует MVVM с UDF как оптимальный баланс для большинства Android-приложений.
+
+---
+
 ## Зачем нужна архитектура?
 
 Без архитектуры весь код живёт в Activity: сеть, база, UI-логика, навигация. Результат -- "God Activity" на тысячи строк. Это не абстрактная проблема: любое Android-приложение сталкивается с configuration changes (поворот экрана), process death (система убивает фоновый процесс) и конкурентными запросами.
@@ -508,26 +527,22 @@ Android-архитектура отличается от generic software archit
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. -- комплексное руководство по Android-разработке, включая архитектурные паттерны и ViewModel
-- Moskala M. (2021). Effective Kotlin. -- лучшие практики Kotlin, применяемые в архитектурных паттернах (sealed classes для state, coroutines для async)
-- Bloch J. (2018). Effective Java, 3rd Edition. -- лучшие практики Java/JVM, принципы проектирования интерфейсов и классов
-- Moskala M. (2022). Kotlin Coroutines: Deep Dive. -- корутины и Flow, основа reactive state management в MVVM/MVI
-- Martin R. (2017). Clean Architecture. -- оригинальный источник Clean Architecture, Dependency Rule, SOLID
+### Теоретические основы
 
-**Официальная документация:**
-- [Guide to App Architecture](https://developer.android.com/topic/architecture) -- официальное руководство
-- [Recommendations for Android Architecture](https://developer.android.com/topic/architecture/recommendations) -- best practices
-- [UI Layer](https://developer.android.com/topic/architecture/ui-layer) -- ViewModel, UI State
-- [Data Layer](https://developer.android.com/topic/architecture/data-layer) -- Repository pattern
-- [Domain Layer](https://developer.android.com/topic/architecture/domain-layer) -- Use Cases (optional)
+- **Bass L., Clements P., Kazman R. (2012). Software Architecture in Practice.** — Определение архитектурного паттерна
+- **Fowler M. (2006). Separated Presentation.** — Принцип разделения UI и бизнес-логики
+- **Martin R. (2017). Clean Architecture.** — Dependency Rule, SOLID
+- **Gamma E. et al. (1994). Design Patterns.** — Observer, Mediator, Strategy (основа MVC/MVP/MVVM)
+- **Reenskaug T. (1979). Models-Views-Controllers.** — Оригинальный MVC
 
-**Практические ресурсы:**
-- [Now in Android](https://github.com/android/nowinandroid) -- официальный sample с MVVM + Clean Architecture
-- [Architecture Samples](https://github.com/android/architecture-samples) -- варианты реализации
-- [Orbit MVI](https://github.com/orbit-mvi/orbit-mvi) -- MVI фреймворк для Android
-- [Circuit](https://github.com/slackhq/circuit) -- Compose-native архитектура от Slack
-- [Decompose](https://github.com/arkivanov/Decompose) -- KMP lifecycle-aware business logic
+### Практические руководства
+
+- [Guide to App Architecture](https://developer.android.com/topic/architecture) — официальное руководство
+- [UI Layer](https://developer.android.com/topic/architecture/ui-layer) — ViewModel, UI State
+- [Data Layer](https://developer.android.com/topic/architecture/data-layer) — Repository pattern
+- [Now in Android](https://github.com/android/nowinandroid) — референсная реализация от Google
+- Meier R. (2022). *Professional Android.* — Архитектурные паттерны и ViewModel
+- Martin R. (2017). *Clean Architecture.* — Dependency Rule, SOLID
 
 ---
 

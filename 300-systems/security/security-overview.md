@@ -34,6 +34,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Информационная безопасность** -- дисциплина, направленная на защиту информационных активов от несанкционированного доступа, использования, раскрытия, нарушения целостности, модификации или уничтожения (NIST SP 800-12, 1995).
+
+### CIA Triad -- фундаментальная модель
+
+Триада **Confidentiality -- Integrity -- Availability** формализована в стандарте DoD 5200.28-STD (Orange Book, 1985) и остаётся основой всех современных фреймворков безопасности: ISO 27001, NIST CSF 2.0, SOC 2.
+
+| Свойство | Определение | Нарушение |
+|----------|-------------|-----------|
+| **Confidentiality** | Данные доступны только авторизованным субъектам | Утечка, перехват |
+| **Integrity** | Данные не изменены несанкционированно | Подмена, tampering |
+| **Availability** | Системы доступны в нужный момент | DoS, отказ оборудования |
+
+### Defense in Depth -- стратегия эшелонированной обороны
+
+Концепция заимствована из военной доктрины и адаптирована для ИБ в работах NSA (2000-е). Каждый слой защиты (сеть, хост, приложение, данные, человек) работает независимо -- компрометация одного не приводит к полному взлому.
+
+### Принципы Saltzer & Schroeder (1975)
+
+В статье *"The Protection of Information in Computer Systems"* (Proceedings of the IEEE, 1975) Джером Зальцер и Майкл Шрёдер сформулировали **8 принципов** проектирования безопасных систем:
+
+| # | Принцип | Суть |
+|---|---------|------|
+| 1 | **Economy of mechanism** | Простота механизма защиты |
+| 2 | **Fail-safe defaults** | Запрет по умолчанию (deny by default) |
+| 3 | **Complete mediation** | Проверка каждого доступа |
+| 4 | **Open design** | Безопасность не зависит от секретности механизма |
+| 5 | **Separation of privilege** | Разделение привилегий |
+| 6 | **Least privilege** | Минимально необходимые права |
+| 7 | **Least common mechanism** | Минимум общих механизмов |
+| 8 | **Psychological acceptability** | Простота использования |
+
+Эти принципы предвосхитили [[security-fundamentals|Kerckhoffs' principle]] (Open design), [[security-secrets-management|Least Privilege]] и [[security-api-protection|Complete mediation]] в современных системах.
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -281,9 +318,18 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+
+- Saltzer J., Schroeder M. (1975). *"The Protection of Information in Computer Systems."* Proceedings of the IEEE, 63(9). — 8 принципов проектирования безопасных систем, актуальных по сей день.
+- DoD 5200.28-STD (1985). *"Trusted Computer System Evaluation Criteria (Orange Book)."* — формализация CIA Triad и уровней доверия.
+- NIST SP 800-12 (1995). *"An Introduction to Computer Security: The NIST Handbook."* — базовое определение информационной безопасности.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley.
+
+### Практические руководства
+
 - [OWASP](https://owasp.org/) — Open Web Application Security Project
-- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
-- "The Web Application Hacker's Handbook" by Dafydd Stuttard
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley.
 - [CWE/SANS Top 25](https://cwe.mitre.org/top25/)
 
 ---

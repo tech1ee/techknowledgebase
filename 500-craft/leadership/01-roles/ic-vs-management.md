@@ -38,6 +38,34 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Модель двойной карьерной лестницы (Dual Career Ladder)
+
+> **Определение:** Dual Career Ladder — организационная модель, предоставляющая параллельные пути карьерного роста для технических специалистов и управленцев, впервые формализованная в исследованиях промышленных организаций середины XX века.
+
+Концепция двойной карьерной лестницы возникла в 1950-60-х годах в крупных инженерных и научных организациях (Bell Labs, DuPont, General Electric), когда стало очевидно, что принуждение лучших инженеров к управленческим ролям приводит к потере технической экспертизы без гарантии управленческих успехов. James D. Thompson в работе *"Organizations in Action"* (1967) описал фундаментальное различие между техническим ядром организации и управленческой надстройкой.
+
+Robert L. Katz в классической статье *"Skills of an Effective Administrator"* (Harvard Business Review, 1955) выделил три категории навыков руководителя:
+
+| Категория навыков (Katz, 1955) | IC Track | Management Track |
+|-------------------------------|----------|------------------|
+| **Technical skills** — владение методами и инструментами | Основной фокус (углубление) | Снижается по мере роста |
+| **Human skills** — работа с людьми и через людей | Influence без authority | Прямое управление |
+| **Conceptual skills** — системное мышление | Архитектурный scope | Организационный scope |
+
+### Компетентностные модели IC и Management
+
+Edgar Schein в *"Career Anchors"* (1978, обновлено 2006) определил восемь карьерных якорей — глубинных ценностей, определяющих профессиональный выбор. Для выбора между IC и Management ключевыми являются:
+
+> **Technical/Functional Competence** (карьерный якорь) — стремление к экспертизе и мастерству в конкретной предметной области. Характерен для IC-трека.
+
+> **General Managerial Competence** (карьерный якорь) — стремление интегрировать работу других, нести ответственность за результат группы. Характерен для Management-трека.
+
+Charity Majors в концепции *Engineer/Manager Pendulum* (2017) предложила альтернативу жёсткому выбору: осознанное переключение между треками каждые 3-5 лет, что перекликается с теорией [[motivation|самодетерминации]] Deci & Ryan (потребность в autonomy и competence удовлетворяется по-разному на каждом треке). Исследования Google (Project Oxygen, 2008) эмпирически подтвердили, что эффективное управление — это отдельный набор поведений, не сводимый к техническому мастерству.
+
+---
+
 ## Зачем это понимать?
 
 ### Типичная ситуация
@@ -573,6 +601,15 @@ Strategic thinking: ~1 hour (10%)
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Katz R. L. "Skills of an Effective Administrator" — Harvard Business Review, 1955 | Статья | Трёхуровневая модель навыков руководителя |
+| 2 | Thompson J. D. "Organizations in Action" — McGraw-Hill, 1967 | Книга | Разделение технического ядра и управленческой надстройки |
+| 3 | Schein E. H. "Career Anchors: Discovering Your Real Values" — Pfeiffer, 1990 (orig. 1978) | Книга | Карьерные якоря Technical vs Managerial Competence |
+| 4 | Google "Project Oxygen" — re:Work, 2008 | Исследование | Эмпирическое подтверждение управления как отдельного навыка |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [The Engineer/Manager Pendulum](https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/) | Article | Core framework |
@@ -581,11 +618,9 @@ Strategic thinking: ~1 hour (10%)
 | 4 | [levels.fyi](https://levels.fyi) | Data | Compensation comparison |
 | 5 | [If Management Isn't a Promotion](https://charity.wtf/2020/09/06/if-management-isnt-a-promotion-then-engineering-isnt-a-demotion/) | Article | Mindset shift |
 | 6 | [Engineering Career Paths](https://newsletter.pragmaticengineer.com/p/engineering-career-paths) | Newsletter | Big Tech comparison |
-
-### Дополнительное чтение
-- **The Manager's Path** (Camille Fournier) — полный путь обоих треков
-- **Staff Engineer** (Will Larson) — глубокий dive в IC track
-- **An Elegant Puzzle** (Will Larson) — management perspective
+| 7 | **The Manager's Path** (Camille Fournier, 2017) | Книга | Полный путь обоих треков |
+| 8 | **Staff Engineer** (Will Larson, 2022) | Книга | Глубокий dive в IC track |
+| 9 | **An Elegant Puzzle** (Will Larson, 2019) | Книга | Management perspective |
 
 *Исследование проведено: 2026-01-18*
 

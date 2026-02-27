@@ -28,6 +28,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Метод Полья (1945)** — четырёхшаговая модель решения математических и алгоритмических задач, изложенная в книге *«How to Solve It»*. Является фундаментом для всех современных фреймворков решения задач, включая UMPIRE.
+
+### Четыре шага Полья
+
+| Шаг | Действие | Ключевые вопросы |
+|-----|----------|-----------------|
+| 1. **Понять задачу** | Разобрать условие, найти неизвестное, данные, ограничения | «Что нужно найти? Достаточно ли данных?» |
+| 2. **Составить план** | Связать данные с неизвестным, выбрать стратегию | «Знаешь ли ты родственную задачу? Можно ли переформулировать?» |
+| 3. **Выполнить план** | Реализовать решение, проверяя каждый шаг | «Можешь ли доказать корректность каждого шага?» |
+| 4. **Оглянуться** | Проверить результат, обобщить метод | «Можно ли решить другим способом? Можно ли обобщить?» |
+
+### UMPIRE как расширение Полья
+
+UMPIRE (Understand-Match-Plan-Implement-Review-Evaluate) расширяет метод Полья для контекста coding-интервью: добавляет шаг **Match** (сопоставление с паттернами — см. [[patterns-overview]]) и разделяет «оглянуться» на **Review** (ручная трассировка) и **Evaluate** (анализ сложности).
+
+### BTTC — нижняя граница
+
+**Best Theoretical Time Complexity** — минимально возможная сложность для данной задачи. Например, поиск в неотсортированных данных не может быть быстрее `O(n)`, сортировка сравнениями — `O(n log n)`. Знание BTTC помогает понять, насколько близко к оптимуму текущее решение — см. [[big-o-complexity]].
+
+---
+
 ## Терминология
 
 | Термин | Определение |
@@ -806,13 +829,18 @@ TIMING:
 
 ## Источники
 
+### Теоретические основы
+
+- Polya (1945). *How to Solve It.* — оригинальная книга: четырёхшаговый метод решения задач, эвристики для математического мышления
+- [How to Solve It (Wikipedia)](https://en.wikipedia.org/wiki/How_to_Solve_It) — метод Полья: краткое изложение
+- [Polya's Problem Solving Techniques](https://sass.queensu.ca/sites/sasswww/files/uploaded_files/Resource%20PDFs/polya.pdf) — оригинальный PDF
+
+### Практические руководства
+
 - [CodePath UMPIRE Guide](https://guides.codepath.com/compsci/UMPIRE-Interview-Strategy) — официальный источник UMPIRE
 - [Tech Interview Handbook](https://www.techinterviewhandbook.org/coding-interview-techniques/) — техники решения
-- [How to Solve It (Wikipedia)](https://en.wikipedia.org/wiki/How_to_Solve_It) — метод Полья
-- [Polya's Problem Solving Techniques](https://sass.queensu.ca/sites/sasswww/files/uploaded_files/Resource%20PDFs/polya.pdf) — оригинальный PDF
 - [Interview Cake Tips](https://www.interviewcake.com/coding-interview-tips) — практические советы
 - [Codeforces Practice Guide](https://codeforces.com/blog/entry/116371) — стратегия для competitive
-- [Research: Problem-Solving Framework](../docs/research/2025-12-29-problem-solving-framework.md) — полное исследование
 
 ---
 

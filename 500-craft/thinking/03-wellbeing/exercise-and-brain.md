@@ -36,6 +36,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Exercise-Induced Neuroplasticity** — способность физической активности вызывать структурные и функциональные изменения в мозге через повышение нейротрофических факторов, нейрогенез и ангиогенез (Cotman & Berchtold, 2002).
+
+Связь физической активности и когнитивных функций — одна из наиболее воспроизводимых находок в нейронауке:
+
+| Работа | Автор | Год | Ключевой вывод |
+|--------|-------|-----|----------------|
+| BDNF и упражнения | Cotman & Berchtold | 2002 | Аэробная активность повышает BDNF — ключевой белок нейропластичности |
+| Spark | John Ratey | 2008 | Синтез: упражнения — «удобрение для мозга», улучшающее обучение и память |
+| Hippocampal volume | Erickson et al. | 2011 | 1 год аэробных упражнений увеличивает гиппокамп на 2% у пожилых (vs -1.4% у контрольной группы) |
+| Acute exercise & cognition | Lambourne & Tomporowski | 2010 | Одна тренировка улучшает когнитивные функции на 30-120 минут |
+| Exercise as «strong gene modulator» | Fernandes et al. | 2017 | Физическая активность модифицирует экспрессию генов, связанных с нейропротекцией |
+| WHO guidelines | WHO | 2020 | 150-300 мин умеренной или 75-150 мин интенсивной активности в неделю |
+
+> **Ratey (2008):** «Exercise is the single best thing you can do for your brain in terms of mood, memory, and learning.» BDNF (Brain-Derived Neurotrophic Factor) — белок, критичный для выживания нейронов, роста новых синапсов и долговременной потенциации (LTP) — основы обучения.
+
+Механизмы: (1) **BDNF** — повышается на 20-30% после аэробной тренировки, создавая окно повышенной нейропластичности; (2) **нейрогенез** — рождение новых нейронов в гиппокампе (Erickson et al., 2011); (3) **ангиогенез** — рост новых кровеносных сосудов, улучшающий кровоснабжение мозга; (4) **снижение кортизола** — хронический стресс убивает нейроны гиппокампа, упражнения снижают кортизол.
+
+Для работников умственного труда: **прогулка перед сложной задачей** — не прокрастинация, а нейробиологическая подготовка мозга к обучению ([[how-brain-learns]]). Регулярная активность также улучшает качество сна ([[sleep-and-learning]]) и снижает риск burnout ([[burnout-prevention]]).
+
+---
+
 ## Содержание
 
 1. [Наука: почему движение меняет мозг](#наука-почему-движение-меняет-мозг)
@@ -961,27 +984,20 @@ npm install      →  растяжка пока ставятся пакеты
 
 ## Источники
 
-### Научные статьи
+### Теоретические основы
+- Cotman, C. W. & Berchtold, N. C. «Exercise: A Behavioral Intervention to Enhance Brain Health and Plasticity». Trends in Neurosciences, 2002
+- Erickson, K. I. et al. «Exercise Training Increases Size of Hippocampus and Improves Memory». PNAS, 2011
+- Lambourne, K. & Tomporowski, P. «The Effect of Exercise-Induced Arousal on Cognitive Task Performance». Brain Research, 2010
+- [Nature Reviews Neuroscience: Exercise and the brain](https://www.nature.com/articles/nrn3916) — механизмы
+- [Frontiers in Neuroscience: The Influence of Exercise on Cognitive Abilities](https://www.frontiersin.org/articles/10.3389/fnins.2020.00034/full) — обзор
+- [PMC: Exercise effects on brain and cognition](https://pmc.ncbi.nlm.nih.gov/articles/PMC3951958/) — мета-анализ
+- [PMC: BDNF and exercise](https://pmc.ncbi.nlm.nih.gov/articles/PMC3575139/) — роль BDNF
 
-1. **Frontiers in Neuroscience**: [The Influence of Exercise on Cognitive Abilities](https://www.frontiersin.org/articles/10.3389/fnins.2020.00034/full)
-   - Комплексный обзор влияния упражнений на когнитивные функции
-
-2. **Nature Reviews Neuroscience**: [Exercise and the brain: from neurons to networks](https://www.nature.com/articles/nrn3916)
-   - Механизмы влияния упражнений на мозг
-
-3. **PMC/NIH**: [Exercise effects on brain and cognition](https://pmc.ncbi.nlm.nih.gov/articles/PMC3951958/)
-   - Мета-анализ исследований физической активности и когнитивных функций
-
-4. **PMC/NIH**: [BDNF and exercise](https://pmc.ncbi.nlm.nih.gov/articles/PMC3575139/)
-   - Роль BDNF в нейропластичности
-
-5. **UC Santa Barbara**: [Brief bursts of exercise can improve cognitive function](https://news.ucsb.edu/2020/020124/working-out-ways-boost-your-brain)
-   - Немедленные эффекты упражнений на обучение
-
-### Дополнительные ресурсы
-
-- ВОЗ: [Рекомендации по физической активности](https://www.who.int/news-room/fact-sheets/detail/physical-activity)
-- Harvard Health: [Exercise and the brain](https://www.health.harvard.edu/mind-and-mood/how-exercise-helps-the-brain)
+### Практические руководства
+- Ratey, J. *Spark: The Revolutionary New Science of Exercise and the Brain*. Little, Brown, 2008
+- [UC Santa Barbara: Brief bursts of exercise can improve cognitive function](https://news.ucsb.edu/2020/020124/working-out-ways-boost-your-brain) — немедленные эффекты
+- [ВОЗ: Рекомендации по физической активности](https://www.who.int/news-room/fact-sheets/detail/physical-activity)
+- [Harvard Health: Exercise and the brain](https://www.health.harvard.edu/mind-and-mood/how-exercise-helps-the-brain)
 
 ---
 

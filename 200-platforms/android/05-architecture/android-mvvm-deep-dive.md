@@ -44,6 +44,25 @@ mastery: 0
 
 ---
 
+## Теоретические основы
+
+> **MVVM (Model-View-ViewModel)** — архитектурный паттерн, где ViewModel выступает **абстракцией View**: предоставляет данные и команды, на которые View подписывается через **data binding** или **reactive streams**. ViewModel не имеет ссылки на View — это ключевое отличие от MVP. Паттерн формализован John Gossman (Microsoft, 2005) для WPF/XAML.
+
+Теоретически MVVM — это специализация паттерна **Presentation Model** (Fowler, 2004): объект, моделирующий состояние и поведение UI без зависимости от конкретного UI-фреймворка. ViewModel = Presentation Model + reactive binding.
+
+| Свойство | Формальное определение | Реализация на Android |
+|----------|----------------------|----------------------|
+| View-agnostic | ViewModel не импортирует `android.view.*` | Тестируемость без Robolectric |
+| Observable state | View подписывается на изменения | `LiveData.observe()` → `StateFlow.collect()` |
+| Command binding | View делегирует действия ViewModel | `onClick → viewModel.onAction()` |
+| Lifecycle survival | State переживает configuration change | `ViewModelStore` + `NonConfigurationInstance` |
+
+> **Observer pattern** (Gamma et al., 1994) — ядро MVVM: ViewModel (subject) уведомляет View (observer) об изменениях состояния. На Android это эволюционировало от `Observable` (Data Binding, 2015) через `LiveData` (Architecture Components, 2017) к `StateFlow` (Kotlin Coroutines, 2021).
+
+Эволюция MVVM на Android демонстрирует переход от **imperative binding** (`setText()`, `setVisibility()`) к **declarative rendering** (Compose `collectAsStateWithLifecycle()`). К 2023-2025 годам граница между MVVM и MVI стёрлась: MVVM с единым `data class UiState` + `sealed class UiAction` — это де-факто MVI без явного reducer.
+
+---
+
 ## Пререквизиты
 
 | Тема | Зачем нужно | Где изучить |
@@ -1242,18 +1261,22 @@ class ProfileViewModel(
 
 ## Источники
 
+### Теоретические основы
+
+- **Fowler M. (2004). Presentation Model.** — Оригинальный паттерн, из которого вырос MVVM
+- **Gossman J. (2005). Introduction to MVVM for WPF.** — Формализация MVVM для WPF/XAML
+- **Gamma E. et al. (1994). Design Patterns.** — Observer pattern (основа data binding)
+- **WPF Apps with MVVM (Microsoft, 2009).** — MVVM в контексте WPF
+
+### Практические руководства
+
 | Источник | Тип | Описание |
 |----------|-----|----------|
-| [Guide to App Architecture --- Android Developers](https://developer.android.com/topic/architecture) | Документация | Официальный гайд Google: UI Layer, Data Layer, Domain Layer |
-| [UI Layer --- Android Developers](https://developer.android.com/topic/architecture/ui-layer) | Документация | UiState, state holders, ViewModel scoping |
-| [UI Events --- Android Developers](https://developer.android.com/topic/architecture/ui-layer/events) | Документация | Обработка user events и ViewModel events |
-| [ViewModel One-off Event Antipatterns --- Manuel Vivo](https://medium.com/androiddevelopers/viewmodel-one-off-event-antipatterns-16a1da869b95) | Статья (2023) | Почему Channel и SharedFlow для events --- антипаттерн. "Reduce to state" |
-| [Turbine --- Cash App](https://github.com/cashapp/turbine) | Библиотека | Тестирование Flow/StateFlow: awaitItem(), test {} |
-| [Migrate from LiveData to StateFlow --- Jose Alcérreca](https://medium.com/androiddevelopers/migrating-from-livedata-to-kotlins-flow-379292f419fb) | Статья | Практический гайд миграции LiveData → StateFlow/SharedFlow |
-| [Now in Android (NiA) --- GitHub](https://github.com/android/nowinandroid) | Reference app | Официальный пример Google: MVVM + Compose + Hilt + StateFlow |
-| [Martin Fowler --- Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html) | Статья (2004) | Оригинальный паттерн, из которого вырос MVVM |
-| [WPF Apps with MVVM --- Microsoft](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-design-pattern) | Статья (2009) | MVVM в контексте WPF: как задумывался паттерн |
-| [SavedStateHandle --- Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) | Документация | getStateFlow(), process death survival |
+| [Guide to App Architecture](https://developer.android.com/topic/architecture) | Документация | Официальный гайд Google |
+| [UI Layer](https://developer.android.com/topic/architecture/ui-layer) | Документация | UiState, state holders |
+| [ViewModel One-off Events --- Vivo](https://medium.com/androiddevelopers/viewmodel-one-off-event-antipatterns-16a1da869b95) | Статья | "Reduce to state" подход |
+| [Now in Android](https://github.com/android/nowinandroid) | Reference app | MVVM + Compose + Hilt |
+| [Turbine](https://github.com/cashapp/turbine) | Библиотека | Тестирование Flow/StateFlow |
 
 ---
 

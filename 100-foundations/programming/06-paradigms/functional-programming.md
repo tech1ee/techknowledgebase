@@ -34,7 +34,38 @@ next_review:
 
 ---
 
-## Исторический контекст
+## Теоретические основы
+
+> **Функциональное программирование (FP)** — парадигма, в которой программа представляет собой композицию чистых функций, применяемых к неизменяемым данным. Математическая основа: **λ-исчисление** (Alonzo Church, 1936) — формальная система для описания вычислений через абстракцию и аппликацию функций.
+
+### Формальные определения
+
+| Концепция | Формальное определение | Следствие |
+|-----------|----------------------|----------|
+| **Чистая функция** | f: A → B, где результат зависит только от аргументов и нет побочных эффектов | Referential transparency: f(x) можно заменить результатом |
+| **Immutability** | Значение не изменяется после создания | Thread-safety бесплатно, нет shared mutable state |
+| **Higher-order function** | Функция, принимающая или возвращающая другие функции | map, filter, reduce, compose |
+| **Referential transparency** | Выражение можно заменить его значением без изменения программы | Основа для оптимизации и рассуждений |
+
+### Церковно-Тьюрингов тезис
+
+Church (1936) и Turing (1936) независимо доказали, что λ-исчисление и машина Тьюринга **эквивалентны по вычислительной мощности**:
+- Машина Тьюринга → императивное программирование (шаги, состояние)
+- λ-исчисление → функциональное программирование (функции, композиция)
+
+### Ключевые формальные конструкции
+
+| Конструкция | Определение | Пример в Kotlin |
+|-------------|-------------|-----------------|
+| **Functor** | Тип F с операцией map: F<A> → (A → B) → F<B> | `List<A>.map { f(it) }` |
+| **Monad** | Functor + flatMap: F<A> → (A → F<B>) → F<B> | `list.flatMap { ... }`, `Result.flatMap { ... }` |
+| **Pattern matching** | Деструктуризация по структуре типа | `when (sealed) { is A -> ..., is B -> ... }` |
+
+> **См. также**: [[type-systems-fundamentals]] — типы в FP, [[solid-principles]] — FP vs OOP принципы, [[design-patterns-overview]] — паттерны в FP
+
+---
+
+
 
 Функциональное программирование уходит корнями в лямбда-исчисление Алонзо Чёрча (1936) --- формальную систему для описания вычислений через функции. Первым практическим языком стал **Lisp** (John McCarthy, 1958), созданный для задач искусственного интеллекта в MIT. Lisp ввёл концепции first-class functions, рекурсии как основного механизма управления, и garbage collection.
 
@@ -46,8 +77,178 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис FP
+
+### Лямбда-исчисление
+
+> **Лямбда-исчисление** (λ-calculus) --- формальная система для описания вычислений через абстракцию и применение функций. Предложена Alonzo Church в 1936 году.
+
+Лямбда-исчисление --- фундамент, на котором стоит всё функциональное программирование. Вся система строится на трёх элементах:
+
+| Элемент | Синтаксис | Пример | Смысл |
+|---------|-----------|--------|-------|
+| Переменная | `x` | `x` | Имя значения |
+| Абстракция | `λx.M` | `λx.x+1` | Определение функции |
+| Применение | `M N` | `(λx.x+1) 5` | Вызов функции |
+
+Три правила редукции определяют вычисление:
+
+- **α-конверсия** (переименование): `λx.x` = `λy.y` --- имя параметра не важно
+- **β-редукция** (вычисление): `(λx.M) N → M[x:=N]` --- подставить аргумент в тело
+- **η-редукция** (упрощение): `λx.f x → f` (если `x` не свободна в `f`) --- убрать лишнюю обёртку
+
+**Church-Turing thesis** (1936): λ-исчисление эквивалентно машине Тьюринга по вычислительной мощности --- всё, что можно вычислить, можно выразить через λ-функции.
+
+**Типизированное λ-исчисление** (Church, 1940, *"A Formulation of the Simple Theory of Types"*): добавляет систему типов для предотвращения парадоксов. Базовые типы (`ι` --- значения, `o` --- истинность) и функциональные типы `(α → β)` --- предшественник `(A) -> B` в Kotlin.
+
+### Pure function и referential transparency
+
+> **Referential transparency** --- свойство выражения, при котором его можно заменить на результат вычисления без изменения поведения программы (Quine, *"Word and Object"*, 1960; Strachey, *"Fundamental Concepts in Programming Languages"*, 1967).
+
+Формально, выражение `e` referentially transparent, если для любого контекста `C[·]`:
+
+```
+C[e] ≡ C[v]   где v = eval(e)
+```
+
+Это свойство делает возможным **equational reasoning** --- рассуждение о программе через подстановку равных выражений, как в алгебре. Компилятор может свободно переупорядочивать, кэшировать и параллелизировать вычисления.
+
+**Pure function** --- функция, удовлетворяющая двум условиям:
+
+1. **Детерминизм**: `∀x: f(x) = f(x)` --- одинаковый вход всегда даёт одинаковый выход
+2. **Отсутствие side effects**: функция не наблюдает и не изменяет внешнее состояние
+
+Связь: все вызовы pure function referentially transparent. Язык, в котором все выражения referentially transparent, называется **чисто функциональным** (Haskell).
+
+### Functor
+
+> **Functor** --- отображение между категориями, сохраняющее структуру (идентичность и композицию). В программировании --- тип с операцией `map`, подчиняющейся двум законам.
+
+Формальное определение (теория категорий): функтор `F: C → D` состоит из:
+
+- Отображения объектов: `F₀: Obj(C) → Obj(D)` (конструктор типа)
+- Отображения морфизмов: `F(f): F(A) → F(B)` для каждого `f: A → B` (функция `map`)
+
+**Два закона функтора:**
+
+| Закон | Формально | Kotlin |
+|-------|-----------|--------|
+| Identity | `F(id) = id` | `list.map { it } == list` |
+| Composition | `F(g ∘ f) = F(g) ∘ F(f)` | `list.map(f).map(g) == list.map { g(f(it)) }` |
+
+В Kotlin: `List<T>`, `Sequence<T>`, `Result<T>`, `Flow<T>` --- все функторы (имеют `map`, подчиняющийся законам).
+
+### Monad
+
+> **Monad** --- абстракция для последовательной композиции вычислений с эффектами. Формально: эндофунктор с двумя операциями (unit и bind), удовлетворяющий трём законам.
+
+Концепцию привнёс в CS **Eugenio Moggi** (1989, *"Computational Lambda-Calculus and Monads"*; 1991, *"Notions of Computation and Monads"*). **Philip Wadler** (1992, *"The Essence of Functional Programming"*, POPL) сделал монады практическим инструментом программирования.
+
+**Монада** --- это тип `M<T>` с двумя операциями:
+
+- **return** (unit / of / pure): `T → M<T>` --- обернуть значение
+- **bind** (flatMap / >>=): `M<T> × (T → M<U>) → M<U>` --- цепочка вычислений
+
+**Три закона монады:**
+
+| Закон | Формально (Haskell) | Смысл |
+|-------|---------------------|-------|
+| Left identity | `return a >>= f ≡ f a` | `return` --- нейтральный элемент слева |
+| Right identity | `m >>= return ≡ m` | `return` --- нейтральный элемент справа |
+| Associativity | `(m >>= f) >>= g ≡ m >>= (λx → f x >>= g)` | Порядок группировки не важен |
+
+В Kotlin: `flatMap` у `List`, `Result`, `Flow`, `Either` (Arrow) --- это монадический `bind`. Nullable `T?` с `?.let {}` --- Maybe-монада.
+
+### Algebraic Data Types (ADT)
+
+> **Algebraic Data Type** --- составной тип, построенный из **sum types** (варианты: "или") и **product types** (поля: "и"). Название отражает алгебраическую структуру: типы образуют полукольцо.
+
+| Операция | Алгебра | Типы | Kotlin |
+|----------|---------|------|--------|
+| Сложение | `a + b` | Sum type (tagged union) | `sealed class` / `sealed interface` |
+| Умножение | `a × b` | Product type (record) | `data class` |
+| Единица (+) | `0` | Пустой тип (bottom) | `Nothing` |
+| Единица (×) | `1` | Unit type | `Unit` |
+
+Почему "алгебраические"? Количество возможных значений типа подчиняется арифметике:
+
+- `data class Pair(val a: Boolean, val b: Boolean)` --- `2 × 2 = 4` значения
+- `sealed class Either<A, B>` --- `|A| + |B|` значений
+- `List<T>` --- `1 + T + T² + T³ + ...` (рекурсивный ADT)
+
+### Type classes
+
+> **Type class** --- механизм ad-hoc полиморфизма: определение интерфейса операций, реализуемого для типов независимо от их определения (Wadler & Blott, 1989, *"How to Make Ad-hoc Polymorphism Less Ad Hoc"*).
+
+Type class решает проблему: как добавить поведение (сравнение, сериализацию) к типу, не изменяя сам тип? В отличие от наследования (OOP), type classes позволяют **ретроактивно** добавлять реализации.
+
+| Язык | Механизм | Пример |
+|------|----------|--------|
+| Haskell | `class Eq a where (==) :: a -> a -> Bool` | Нативные type classes |
+| Scala | `given`/`using` (implicit) | Type classes через implicits |
+| Kotlin | `interface` + extension functions | Эмулируются, не нативные |
+| Rust | `trait` + `impl` | `impl Display for MyType` |
+| Swift | `protocol` + extension | `extension Int: MyProtocol` |
+
+Внутренний механизм: компилятор транслирует type classes в **dictionary passing** --- для каждого использования передаётся таблица операций.
+
+### Curry-Howard correspondence
+
+> **Curry-Howard correspondence** (Curry, 1934; Howard, 1969) --- изоморфизм между типами в программировании и утверждениями в логике. Программа --- это доказательство; тип --- это теорема.
+
+| Логика | Программирование |
+|--------|-----------------|
+| Утверждение (proposition) | Тип (type) |
+| Доказательство (proof) | Программа (term) |
+| Импликация `A → B` | Функция `(A) -> B` |
+| Конъюнкция `A ∧ B` | Product type `Pair<A, B>` |
+| Дизъюнкция `A ∨ B` | Sum type `Either<A, B>` |
+| Истина `⊤` | `Unit` |
+| Ложь `⊥` | `Nothing` |
+
+Практическое следствие: если тип "обитаем" (существует значение этого типа), соответствующая теорема истинна. `Nothing` необитаем → соответствует ложному утверждению.
+
+### Purity и управление эффектами
+
+Чисто функциональные языки сталкиваются с проблемой: реальные программы *должны* иметь side effects (I/O, состояние, исключения). Три подхода:
+
+| Подход | Идея | Примеры |
+|--------|------|---------|
+| **IO Monad** | Эффекты описываются как значения в монаде IO; выполняются только runtime | Haskell (Peyton Jones & Wadler, 1993) |
+| **Algebraic Effects** | Эффекты --- набор операций (get, set, raise), обрабатываемых handler'ами | Eff, Koka, OCaml 5 (Plotkin & Power, 2003) |
+| **Мультипарадигменность** | Side effects разрешены, но минимизируются конвенцией (pure core / impure shell) | Kotlin, Scala, F# |
+
+Kotlin следует третьему подходу: `suspend` маркирует функции с эффектами (аналогично `IO` в Haskell), а разделение pure/impure --- конвенция разработчика.
+
+### Карта концепций
+
+```
+                    Curry-Howard
+                    correspondence
+                        |
+    λ-исчисление -----> Типы (ADT, Type Classes)
+    (Church 1936)       |        |
+         |              |        |
+         v              v        v
+    Pure Functions --> Referential --> Equational
+    (детерминизм,      Transparency    Reasoning
+     no side effects)      |
+         |                 |
+         v                 v
+    Functor ---------> Monad ---------> Управление
+    (map + 2 закона)   (flatMap +        эффектами
+                        3 закона)        (IO, Algebraic
+                            |             Effects)
+                            v
+                    Композиция вычислений
+                    с эффектами
+```
+
+---
+
 ## TL;DR
 
+- **Теоретическая база** --- λ-исчисление (Church, 1936), referential transparency (Strachey, 1967), монады (Moggi, 1991; Wadler, 1992)
 - **Pure functions** --- нет side effects, всегда одинаковый результат для одинаковых аргументов
 - **Immutability** --- данные не изменяются после создания
 - **Composition** --- сложные функции из простых
@@ -59,21 +260,23 @@ next_review:
 
 ## Терминология
 
-| Термин | Значение |
-|--------|----------|
-| **Pure function** | Нет side effects, deterministic |
-| **Side effect** | Изменение внешнего state, I/O |
-| **Immutable** | Не изменяемый после создания |
-| **Higher-order function** | Принимает или возвращает функцию |
-| **First-class function** | Функция как значение |
-| **Closure** | Функция + captured environment |
-| **Referential transparency** | Можно заменить вызов на результат |
-| **Monad** | Контейнер для последовательных вычислений |
-| **Inline function** | Функция, тело которой подставляется в место вызова компилятором |
-| **Reified generic** | Доступ к информации о типе в runtime через inline |
-| **Sequence** | Ленивая коллекция --- элементы вычисляются по требованию |
-| **Scope function** | `let`, `run`, `with`, `apply`, `also` --- функции контекста |
-| **Either** | Контейнер "или ошибка, или результат" (Arrow library) |
+| Термин | Формально | Простыми словами |
+|--------|-----------|-----------------|
+| **Pure function** | `∀x: f(x) = f(x)` ∧ no observable effects | Нет side effects, deterministic |
+| **Side effect** | Наблюдаемое изменение состояния вне функции | Изменение внешнего state, I/O |
+| **Immutable** | Значение, не допускающее мутации после конструирования | Не изменяемый после создания |
+| **Higher-order function** | `(A → B) → C` или `A → (B → C)` | Принимает или возвращает функцию |
+| **First-class function** | Функция как объект в домене значений языка | Функция как значение |
+| **Closure** | λ-замыкание: функция + лексическое окружение | Функция + captured environment |
+| **Referential transparency** | `C[e] ≡ C[eval(e)]` (Quine 1960, Strachey 1967) | Можно заменить вызов на результат |
+| **Functor** | `F: C → D`, законы identity и composition | Тип с `map`, сохраняющим структуру |
+| **Monad** | Эндофунктор + return + bind, 3 закона (Moggi 1991) | Контейнер для последовательных вычислений |
+| **ADT** | Sum types (∐) + Product types (×), полукольцо | `sealed class` + `data class` |
+| **Inline function** | Compile-time подстановка тела в call-site | Тело подставляется компилятором в место вызова |
+| **Reified generic** | Материализация type parameter через inline | Доступ к типу в runtime |
+| **Sequence** | Lazy evaluation через thunk chain | Ленивая коллекция --- элементы по требованию |
+| **Scope function** | Receiver/parameter + return value pattern | `let`, `run`, `with`, `apply`, `also` |
+| **Either** | Sum type: `Left ∐ Right` (disjoint union) | "Или ошибка, или результат" (Arrow) |
 
 ---
 
@@ -1287,15 +1490,33 @@ inline fun transformInline(list: List<Int>, f: (Int) -> Int): List<Int> = list.m
 
 ## Источники
 
-Abelson H., Sussman G.J. (1996). *"Structure and Interpretation of Computer Programs."* --- Фундаментальный учебник MIT по программированию через призму Lisp. Учит думать о вычислениях как о композиции абстракций; формирует "функциональное мышление" с нуля.
+### Теоретические основы
 
-Hughes J. (1989). *"Why Functional Programming Matters."* --- Классический paper, объясняющий почему FP важен для модульности. Higher-order functions и lazy evaluation как инструменты композиции.
+Church A. (1936). *"An Unsolvable Problem of Elementary Number Theory."* American Journal of Mathematics, 58(2), 345--363. --- Оригинальная статья, вводящая λ-исчисление как формальную модель вычислений.
 
-Chiusano P., Bjarnason R. (2014). *"Functional Programming in Scala."* --- "Red Book", практическое введение в FP. Пошагово строит абстракции от pure functions до монад; отлично подходит для разработчиков с OOP-фоном.
+Church A. (1940). *"A Formulation of the Simple Theory of Types."* Journal of Symbolic Logic, 5(2), 56--68. --- Типизированное λ-исчисление: добавление системы типов для предотвращения парадоксов.
 
-Normand E. (2021). *"Grokking Simplicity."* --- Практическое руководство по применению FP-принципов в повседневной разработке. Фокус на разделение actions, calculations и data.
+Wadler P., Blott S. (1989). *"How to Make Ad-hoc Polymorphism Less Ad Hoc."* POPL '89. --- Введение type classes как механизма ad-hoc полиморфизма.
 
-Vermeulen M. et al. (2024). *"Functional Programming in Kotlin."* --- Адаптация "Red Book" для Kotlin. Охватывает Arrow, Either, IO и typed FP в контексте Kotlin-экосистемы.
+Moggi E. (1991). *"Notions of Computation and Monads."* Information and Computation, 93(1), 55--92. --- Формализация монад как категорной модели вычислительных эффектов.
+
+Wadler P. (1992). *"The Essence of Functional Programming."* POPL '92. --- Монады как практический инструмент программирования; таблица монадических трансформаций.
+
+Wadler P. (1995). *"Monads for Functional Programming."* Advanced Functional Programming, Springer LNCS 925. --- Доступное введение в монады для программистов.
+
+Plotkin G., Power J. (2003). *"Algebraic Operations and Generic Effects."* Applied Categorical Structures, 11(1), 69--94. --- Алгебраический подход к вычислительным эффектам.
+
+### Практические руководства
+
+Abelson H., Sussman G.J. (1996). *"Structure and Interpretation of Computer Programs."* --- Фундаментальный учебник MIT по программированию через призму Lisp.
+
+Hughes J. (1989). *"Why Functional Programming Matters."* --- Классический paper: higher-order functions и lazy evaluation как инструменты модульности и композиции.
+
+Chiusano P., Bjarnason R. (2014). *"Functional Programming in Scala."* --- "Red Book": от pure functions до монад, пошагово.
+
+Normand E. (2021). *"Grokking Simplicity."* --- Практическое FP: разделение actions, calculations и data.
+
+Vermeulen M. et al. (2024). *"Functional Programming in Kotlin."* --- Адаптация "Red Book" для Kotlin: Arrow, Either, IO.
 
 - [Kotlin Lambdas and Higher-Order Functions](https://kotlinlang.org/docs/lambdas.html) --- официальная документация по лямбдам и higher-order functions
 - [Kotlin Sequences](https://kotlinlang.org/docs/sequences.html) --- ленивые коллекции, API, когда использовать

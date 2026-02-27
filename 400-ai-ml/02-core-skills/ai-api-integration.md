@@ -91,6 +91,46 @@ related:
 
 ---
 
+## Теоретические основы
+
+### API как интерфейс к Foundation Models
+
+> **LLM API** — программный интерфейс, предоставляющий доступ к inference предобученных языковых моделей по модели «модель как сервис» (MaaS — Model as a Service). Клиент отправляет текстовый запрос (prompt), сервер возвращает сгенерированный ответ. Тарификация основана на количестве обработанных токенов.
+
+### Теоретические основы паттернов интеграции
+
+| Паттерн | Теоретическое основание | Применение |
+|---------|------------------------|------------|
+| **Exponential Backoff** | Теория очередей (Kleinrock, 1975): при перегрузке повторные попытки с экспоненциальным интервалом минимизируют collision | Rate limit handling |
+| **Circuit Breaker** | Паттерн Nygard (2007, *"Release It!"*): предотвращение каскадных отказов через размыкание цепи при достижении порога ошибок | Fault tolerance |
+| **Token Economics** | Микроэкономическая модель: стоимость API-вызова пропорциональна input + output токенам. Оптимизация через prompt compression, caching, model routing | [[ai-cost-optimization\|Cost control]] |
+| **Streaming (SSE)** | Server-Sent Events (W3C): однонаправленный поток данных от сервера к клиенту. Снижает perceived latency за счёт прогрессивного отображения | UX improvement |
+
+### Стандартизация API-интерфейсов
+
+Де-факто стандартом стал формат OpenAI Chat Completions API:
+```
+POST /v1/chat/completions
+{
+  "model": "...",
+  "messages": [{"role": "system"|"user"|"assistant", "content": "..."}],
+  "temperature": 0.0-2.0,
+  "max_tokens": int
+}
+```
+
+Все основные провайдеры (Anthropic, Google, DeepSeek) предоставляют OpenAI-совместимые эндпоинты или SDK. Инструменты унификации (LiteLLM, OpenRouter) абстрагируют различия между провайдерами.
+
+### Модель ценообразования LLM API
+
+> Стоимость запроса = (input_tokens * input_price) + (output_tokens * output_price). Cached tokens тарифицируются со скидкой 50-90%. Batch API предоставляет 50% скидку за асинхронную обработку. Reasoning tokens (o1, o3) тарифицируются как output tokens, что делает reasoning-модели в 4-10x дороже стандартных.
+
+### Связь с [[structured-outputs-tools|Structured Outputs]]
+
+Function calling и tool use — расширения базового API, позволяющие модели генерировать структурированные JSON-вызовы. Constrained decoding на стороне провайдера гарантирует валидность JSON-схемы (OpenAI: 100% schema compliance).
+
+---
+
 ## Зачем это нужно
 
 ```
@@ -1210,3 +1250,19 @@ Batch API позволяет отправить до сотен запросов
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте раздела AI Engineering |
 
 *Проверено: 2026-01-09*
+
+---
+
+## Источники
+
+### Теоретические основы
+- Kleinrock, L. (1975). *Queueing Systems, Volume 1: Theory*. Wiley. (теория очередей, backoff)
+- Nygard, M. (2007). *Release It! Design and Deploy Production-Ready Software*. Pragmatic Bookshelf. (Circuit Breaker)
+- Fielding, R. (2000). *Architectural Styles and the Design of Network-based Software Architectures*. PhD Thesis, UC Irvine. (REST)
+
+### Практические руководства
+- [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
+- [Anthropic API Docs](https://docs.anthropic.com/en/api)
+- [Google Gemini API](https://ai.google.dev/gemini-api/docs)
+- [LiteLLM Documentation](https://docs.litellm.ai/)
+- [OpenAI Prompt Caching](https://platform.openai.com/docs/guides/prompt-caching)

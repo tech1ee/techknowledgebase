@@ -26,6 +26,37 @@ next_review:
 cs-foundations: [CIA Triad, Defense in Depth, Principle of Least Privilege, Risk Management, AAA Framework]
 ---
 
+## Теоретические основы
+
+> **Угроза (threat)** -- потенциальное событие или действие, способное нанести ущерб информационному активу через эксплуатацию уязвимости (ISO 27000:2018).
+
+### Таксономия угроз: STRIDE
+
+Методология **STRIDE** разработана в Microsoft (Loren Kohnfelder, Praerit Garg, 1999) для систематической классификации угроз. Каждая категория нарушает конкретное свойство безопасности:
+
+| Категория | Нарушаемое свойство | Пример |
+|-----------|---------------------|--------|
+| **S**poofing | Authenticity | Подмена identity |
+| **T**ampering | Integrity | Модификация данных |
+| **R**epudiation | Non-repudiation | Отрицание действий |
+| **I**nformation Disclosure | Confidentiality | Утечка данных |
+| **D**enial of Service | Availability | Отказ сервиса |
+| **E**levation of Privilege | Authorization | Эскалация прав |
+
+Подробный разбор STRIDE как методологии моделирования -- см. [[threat-modeling]].
+
+### Поверхность атаки (Attack Surface)
+
+Формализована Manadhata & Wing (2011) в работе *"An Attack Surface Metric"* (IEEE TSE). Поверхность атаки -- совокупность точек, через которые злоумышленник может взаимодействовать с системой. Минимизация attack surface -- один из ключевых принципов [[security-overview|Saltzer & Schroeder (1975)]].
+
+### Принцип Керкгоффса (1883)
+
+> **Принцип Керкгоффса:** безопасность криптосистемы должна зависеть только от секретности ключа, а не от секретности алгоритма.
+
+Сформулирован Огюстом Керкгоффсом в статье *"La cryptographie militaire"* (Journal des sciences militaires, 1883). Позже переформулирован Клодом Шенноном как **максима Шеннона**: "противник знает систему" (*Communication Theory of Secrecy Systems*, 1949). Этот принцип -- основа всей современной [[security-cryptography-fundamentals|криптографии]] и антитезис подхода "security through obscurity".
+
+---
+
 ## Зачем это нужно
 
 В 2024 году глобальные затраты от киберпреступлений достигли $9.2 триллиона. 75% организаций столкнулись с атаками ransomware. APT-активность против США выросла на 136% только в Q1 2025. Это не абстрактные угрозы — это реальность, в которой работает каждый разработчик.
@@ -1438,6 +1469,17 @@ MFA снижает риск компрометации на 99.9% (Microsoft).
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Kerckhoffs A. (1883). *"La cryptographie militaire."* Journal des sciences militaires. — принцип, что безопасность системы должна зависеть только от секретности ключа.
+- Shannon C. (1949). *"Communication Theory of Secrecy Systems."* Bell System Technical Journal. — математический фундамент криптографии, максима Шеннона.
+- Saltzer J., Schroeder M. (1975). *"The Protection of Information in Computer Systems."* Proceedings of the IEEE. — 8 принципов проектирования безопасных систем.
+- Kohnfelder L., Garg P. (1999). *"The Threats to Our Products."* Microsoft internal memo. — STRIDE как методология классификации угроз.
+- Manadhata P., Wing J. (2011). *"An Attack Surface Metric."* IEEE Transactions on Software Engineering. — формализация понятия attack surface.
+- Anderson R. (2020). *Security Engineering.* 3rd Edition. Wiley. — фундаментальный труд по инженерии безопасности.
+
+### Практические руководства
 
 - [CIA Triad - Fortinet](https://www.fortinet.com/resources/cyberglossary/cia-triad)
 - [CIA Triad in 2025 - IT Governance UK](https://www.itgovernance.co.uk/blog/what-is-the-cia-triad-and-why-is-it-important)

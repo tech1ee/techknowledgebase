@@ -43,6 +43,44 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Графический рендеринг** — процесс преобразования описания сцены (scene graph) в растровое изображение на экране устройства, включающий layout, paint и compositing (Foley et al., 1990, Computer Graphics: Principles and Practice).
+
+### Rendering Pipeline мобильных платформ
+
+| Этап | iOS (Core Animation) | Android (RenderThread) |
+|------|---------------------|----------------------|
+| **Layout** | Auto Layout (Cassowary) | Measure → Layout (View tree) |
+| **Paint** | Core Graphics (Quartz 2D) | Canvas (Skia) |
+| **Compositing** | Core Animation (GPU) | RenderThread (GPU) |
+| **Display** | CADisplayLink (ProMotion) | Choreographer (VSYNC) |
+
+### GPU Compositing Model
+
+Обе платформы используют **GPU-accelerated compositing**:
+
+```
+UI Thread: Layout + Paint → Layers
+GPU Thread: Composite Layers → Frame Buffer → Display
+```
+
+Ключевой принцип — **layer isolation**: изменение одного слоя не требует перерисовки остальных. iOS Core Animation и Android RenderThread оптимизируют это по-разному.
+
+### Кросс-платформенные rendering engine'ы
+
+| Engine | Используется в | Модель | Плюсы | Минусы |
+|--------|---------------|--------|-------|--------|
+| **Skia** | Flutter, Android, Chrome | Canvas-based | Единый рендеринг | Не нативный look |
+| **Impeller** | Flutter (iOS) | Metal-first | Нет shader compilation jank | Новый, менее зрелый |
+| **Skiko** | Compose MP | Skia wrapper for Kotlin | Compose API | Binary size overhead |
+| **Native** | KMP + native UI | Platform renderer | Нативный look & feel | Разный код для UI |
+
+> **CS-фундамент:** Рендеринг связан с [[cross-ui-declarative]] (что рендерим) и [[cross-performance-profiling]] (как измеряем). Теоретическая база — Computer Graphics (Foley et al., 1990), GPU Pipeline (Akenine-Möller et al., 2018).
+
 ## Архитектура Rendering Pipeline
 
 ### iOS: Core Animation Pipeline
@@ -818,8 +856,15 @@ Thread.sleep(500)  // Блокируем UI Thread
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Разбирает Core Animation, CALayer properties, UIView drawing cycle и оптимизацию рендеринга. Включает практические примеры работы с transform, shadow, masking и custom drawing через Core Graphics.
-- Meier R. (2022). *Professional Android.* — Описывает Android rendering pipeline, Hardware Acceleration, RenderThread, Custom Views с Canvas и Paint, а также профилирование с GPU Profiler. Необходима для понимания Android-стороны графического сравнения.
+### Теоретические основы
+
+- **Foley J. et al. (1990).** *Computer Graphics: Principles and Practice.* 2nd ed. — Теория rendering pipeline: layout, paint, compositing.
+- **Akenine-Möller T. et al. (2018).** *Real-Time Rendering.* 4th ed. — GPU pipeline и compositing model.
+
+### Практические руководства
+
+- [Core Animation Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/) — iOS rendering.
+- [Android Hardware Acceleration](https://developer.android.com/topic/performance/hardware-accel) — Android rendering.
 
 ---
 

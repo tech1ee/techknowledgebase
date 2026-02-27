@@ -70,6 +70,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Platform Integration** — процесс подключения кросс-платформенного модуля к платформенной среде исполнения с обеспечением бесшовного взаимодействия через общий runtime или interop-слой (Jemerov, Isakova, 2017).
+
+Android является «native home» для KMP: оба используют JVM bytecode как целевой формат, что обеспечивает **zero impedance mismatch** — отсутствие дополнительных слоёв трансляции.
+
+### Теория: уровни интеграции платформенных SDK
+
+| Уровень | Описание | KMP на Android | KMP на iOS |
+|---------|----------|---------------|------------|
+| Runtime | Совместимость среды исполнения | Идентичный (JVM/ART) | Различный (GC vs ARC) |
+| ABI | Совместимость бинарного интерфейса | Полная (JVM bytecode) | Через ObjC bridge |
+| API | Доступ к платформенным библиотекам | Прямой (Jetpack) | Через cinterop/SKIE |
+| Tooling | Интеграция в IDE и build | Нативная (Android Studio) | Xcode + плагины |
+
+### Историческая эволюция Android + кросс-платформа
+
+| Год | Технология | Подход к Android-интеграции |
+|-----|-----------|---------------------------|
+| 2011 | Xamarin | Mono runtime поверх Android (overhead ~15 MB) |
+| 2015 | React Native | JS bridge → Android Views (latency на bridge) |
+| 2018 | Flutter | Dart VM + custom rendering (обход Android Views) |
+| 2023 | KMP Stable | Kotlin → JVM bytecode → ART (нативное исполнение) |
+| 2024 | Jetpack KMP | Room, ViewModel, Paging — нативная поддержка KMP |
+
+### Принцип: Shared Module как Library
+
+KMP shared-модуль интегрируется в Android как обычная **Gradle library dependency** (`implementation(project(":shared"))`). Это реализация паттерна **Library-Oriented Architecture** (Fowler, 2014): shared-модуль — переиспользуемая библиотека, а не framework, навязывающий структуру.
+
+> **CS-фундамент:** Идентичность runtime объясняется общей основой — [[bytecode-virtual-machines]] (JVM bytecode → ART). Процесс компиляции — [[compilation-pipeline]]. Управление памятью — [[garbage-collection-explained]].
+
+
 ## Почему Android — идеальный target для KMP
 
 ### Фундаментальное преимущество: общий runtime
@@ -1184,9 +1218,16 @@ benchmark {
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Глубокое понимание Kotlin необходимо для работы с KMP на Android: корутины, sealed classes, delegation и extension functions используются повсеместно в Android-интеграции.
-2. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Детальное руководство по корутинам, которые являются основой асинхронного программирования в KMP. Особенно важны главы про Flow, StateFlow и интеграцию с Android Lifecycle.
-3. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения ответственности и dependency inversion, которые определяют границу между shared KMP-модулем и Android-платформенным кодом. Помогает правильно спроектировать слой интеграции с Jetpack.
+### Теоретические основы
+
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения ответственности и dependency inversion, определяющие границу между shared KMP-модулем и Android-платформенным кодом.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Library-Oriented Architecture как применение паттернов Facade и Adapter для интеграции shared-модуля в существующее Android-приложение.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Глубокое понимание Kotlin для работы с KMP на Android: корутины, sealed classes, delegation и extension functions.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины как основа асинхронного программирования в KMP. Flow, StateFlow и интеграция с Android Lifecycle.
+- [Add KMP to existing Android project](https://developer.android.com/kotlin/multiplatform/migrate) — Официальный Google гайд по интеграции.
 
 ---
 

@@ -45,6 +45,46 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Навигация в мобильном приложении** — механизм управления переходами между экранами (destinations), формализуемый как ориентированный граф, где вершины — экраны, рёбра — переходы (Google, Navigation Architecture Component, 2018).
+
+### Navigation как State Machine
+
+| Свойство | iOS (NavigationStack) | Android (Navigation Component) |
+|----------|----------------------|-------------------------------|
+| **Модель** | Stack-based (push/pop) | Graph-based (destinations) |
+| **Back navigation** | Автоматическая (iOS gesture) | System back button + up button |
+| **Deep links** | URL-based routing | NavDeepLink + intent filters |
+| **Type safety** | NavigationPath (iOS 16+) | Safe Args plugin / KSP |
+| **State preservation** | Автоматическая | SavedStateHandle |
+
+### Формальная модель навигационного графа
+
+```
+G = (V, E, s₀)
+V = {Screen₁, Screen₂, ..., Screenₙ}  — множество экранов
+E ⊆ V × V × Args                       — переходы с аргументами
+s₀ ∈ V                                  — начальный экран
+```
+
+Навигационный стек — это **последовательность** (stack) вершин графа: [s₀, s₁, ..., sₖ], где каждый переход (sᵢ, sᵢ₊₁) ∈ E.
+
+### Координация навигации в кросс-платформенном контексте
+
+Кросс-платформенная навигация должна абстрагировать **платформенную специфику** (iOS gestures, Android system back) при сохранении нативного UX. Три подхода:
+
+| Подход | Shared navigation | Platform UX | Пример |
+|--------|-------------------|-------------|--------|
+| Platform-only | 0% | 100% | NavigationStack + NavComponent |
+| Shared graph + platform impl | 50% | 90% | Decompose |
+| Fully shared | 90%+ | 70% | Voyager, Compose Navigation MP |
+
+> **CS-фундамент:** Навигация связана с [[cross-lifecycle]] (lifecycle при переходах) и [[kmp-navigation]] (KMP-специфичные решения). Теоретическая база — Graph Theory, Finite State Machines (Hopcroft & Ullman, 1979).
+
 ## Философия навигации
 
 ### iOS: Стековая модель
@@ -1365,9 +1405,15 @@ struct GoodView: View {
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Детально описывает Navigation Component, deep linking, SafeArgs и multi-module navigation. Помогает понять графовую модель навигации Android и её интеграцию с lifecycle.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает UINavigationController, segues, storyboards и программную навигацию в UIKit. Даёт фундамент для понимания стековой модели, на которой построен NavigationStack в SwiftUI.
-- **Martin R. (2017). *Clean Architecture*.** — Принцип инверсии зависимостей применяется к навигации: бизнес-логика не должна зависеть от конкретного навигационного фреймворка. Это особенно актуально при разработке shared navigation в KMP.
+### Теоретические основы
+
+- **Hopcroft J., Ullman J. (1979).** *Introduction to Automata Theory.* — Конечные автоматы как формальная модель навигации.
+
+### Практические руководства
+
+- [Android Navigation Component](https://developer.android.com/guide/navigation) — Официальный гайд.
+- [SwiftUI NavigationStack](https://developer.apple.com/documentation/swiftui/navigationstack) — Apple документация.
+- [Decompose](https://arkivanov.github.io/Decompose/) — KMP-навигация.
 
 ---
 

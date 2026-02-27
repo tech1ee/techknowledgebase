@@ -64,6 +64,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Консолидация памяти во сне (Sleep-Dependent Memory Consolidation)** — процесс, при котором во время сна нестабильные следы памяти из гиппокампа переносятся в неокортекс для долгосрочного хранения, при этом происходит реорганизация, интеграция и усиление этих следов (Diekelmann & Born, 2010).
+
+Связь сна и обучения — одна из наиболее хорошо документированных в нейронауке:
+
+| Работа | Автор | Год | Ключевой вывод |
+|--------|-------|-----|----------------|
+| Active System Consolidation | Born & Wilhelm | 2012 | Медленноволновой сон (SWS) реактивирует воспоминания гиппокампа для переноса в кортекс |
+| Sleep spindles & memory | Mednick et al. | 2013 | Сонные веретёна (12-15 Hz) коррелируют с успешностью консолидации |
+| Sleep deprivation & learning | Yoo et al. | 2007 | Одна ночь без сна снижает способность к формированию новых воспоминаний на ~40% |
+| Dreaming & learning | Wamsley et al. | 2010 | Испытуемые, видевшие лабиринт во сне, улучшили результат в 10 раз |
+| Why We Sleep | Matthew Walker | 2017 | Популяризация: 7-9 часов сна — биологическая необходимость, не роскошь |
+| Procedural memory & sleep | Walker et al. | 2002 | Моторные навыки улучшаются на 20-30% после ночи сна без дополнительной практики |
+
+> **Diekelmann & Born (2010):** «Sleep is not merely a passive state of reduced brain activity; instead, it is a highly active state during which memories are selectively processed, strengthened, and integrated into existing knowledge networks.»
+
+Механизм: во время **медленноволнового сна (NREM Stage 3)** гиппокамп «воспроизводит» дневные паттерны активации (memory replay), передавая информацию в неокортекс. **REM-сон** интегрирует новые знания с существующими, что объясняет «утренние инсайты» и креативные решения. Процедурная память (навыки кодирования, игра на инструменте) консолидируется преимущественно в Stage 2 через **сонные веретёна**.
+
+Критический вывод: **первая ночь после обучения незаменима** — её нельзя «отоспать» позже (Walker et al., 2002). Для разработчиков: all-nighter перед дедлайном уничтожает способность запоминать код, написанный накануне. См. [[how-brain-learns]] — нейропластичность требует сна, [[exercise-and-brain]] — физическая активность улучшает качество сна.
+
+---
+
 ## Почему это важно
 
 Культура технологических компаний часто героизирует недосып:
@@ -1171,25 +1194,22 @@ ROI СНА (Return on Investment):
 
 ## Источники
 
-### Научные публикации
-
-- [Harvard Medical School: Sleep, Learning, and Memory](https://sleep.hms.harvard.edu/education-training/public-education/sleep-and-health-education-program/sleep-health-education-702) — обзор механизмов консолидации памяти
-- [PMC: Sleep and Memory Consolidation](https://pmc.ncbi.nlm.nih.gov/articles/PMC3768102/) — метаанализ исследований сна и памяти
-- [Nature: Sleep-dependent Memory Processing](https://www.nature.com/articles/nrn2762) — нейробиология консолидации во сне
-- [PMC: Sleep Spindles and Memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC2824214/) — роль веретён сна в переносе памяти
-- [Nature: Dreaming and Memory Consolidation](https://www.nature.com/articles/s41598-020-60284-5) — связь сновидений с улучшением памяти
-
-### Эксперименты и обзоры
-
-- [Stickgold R. (2010): Learning in Sleep](https://pubmed.ncbi.nlm.nih.gov/21075238/) — исследование с лабиринтом и снами
-- [Walker M. & Stickgold R.: Sleep and Memory](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3413705/) — обзор критической роли сна
+### Теоретические основы
+- Diekelmann, S. & Born, J. «The Memory Function of Sleep». Nature Reviews Neuroscience, 2010
+- Walker, M. P. et al. «Practice with Sleep Makes Perfect». Neuron, 2002
+- Yoo, S. et al. «A Deficit in the Ability to Form New Human Memories Without Sleep». Nature Neuroscience, 2007
 - [Tononi G. & Cirelli C.: Synaptic Homeostasis](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4099167/) — теория синаптического гомеостаза
+- [PMC: Sleep and Memory Consolidation](https://pmc.ncbi.nlm.nih.gov/articles/PMC3768102/) — метаанализ
+- [Nature: Sleep-dependent Memory Processing](https://www.nature.com/articles/nrn2762) — нейробиология консолидации
+- [PMC: Sleep Spindles and Memory](https://pmc.ncbi.nlm.nih.gov/articles/PMC2824214/) — роль веретён сна
+- [Nature: Dreaming and Memory Consolidation](https://www.nature.com/articles/s41598-020-60284-5) — связь сновидений с памятью
+- [Stickgold R. (2010): Learning in Sleep](https://pubmed.ncbi.nlm.nih.gov/21075238/) — исследование с лабиринтом
+- [Walker M. & Stickgold R.: Sleep and Memory](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3413705/) — обзор
 
 ### Практические руководства
-
-- [Matthew Walker: Why We Sleep](https://www.sleepdiplomat.com/) — популяризация науки о сне
-- [Sleep Foundation: Sleep Hygiene](https://www.sleepfoundation.org/sleep-hygiene) — рекомендации по гигиене сна
-- [Harvard: Twelve Simple Tips](https://sleep.hms.harvard.edu/education-training/public-education/sleep-and-health-education-program/sleep-health-education-702) — базовые правила здорового сна
+- Walker, M. *Why We Sleep: Unlocking the Power of Sleep and Dreams*. Scribner, 2017
+- [Harvard Medical School: Sleep, Learning, and Memory](https://sleep.hms.harvard.edu/education-training/public-education/sleep-and-health-education-program/sleep-health-education-702) — обзор
+- [Sleep Foundation: Sleep Hygiene](https://www.sleepfoundation.org/sleep-hygiene) — рекомендации
 
 ---
 

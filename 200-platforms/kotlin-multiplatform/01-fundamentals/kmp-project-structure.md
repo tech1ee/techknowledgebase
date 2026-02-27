@@ -63,6 +63,47 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Модульная структура проекта** — декомпозиция программной системы на связанные компоненты (модули) с определёнными интерфейсами и зависимостями, обеспечивающая высокую связность (cohesion) внутри модулей и слабую связанность (coupling) между ними (Parnas, 1972).
+
+В KMP модульная структура расширена **измерением платформ**: помимо функциональной декомпозиции (feature modules) добавляется платформенная декомпозиция (source sets).
+
+### Теоретический фундамент: принципы модульности
+
+| Принцип | Автор | Применение в KMP |
+|---------|-------|-----------------|
+| Information Hiding | Parnas, 1972 | commonMain скрывает platform-детали за expect/actual |
+| Common Closure Principle | Martin, 2017 | Классы, изменяемые по одной причине, группируются в один source set |
+| Common Reuse Principle | Martin, 2017 | Зависимости source set'а используются всеми его файлами |
+| Dependency Inversion | Martin, 2003 | Platform source sets зависят от common, не наоборот |
+| Acyclic Dependencies | Martin, 2017 | dependsOn-граф — ациклический (DAG) |
+
+### Эволюция структуры мультиплатформенных проектов
+
+| Эпоха | Структура | Проблема |
+|-------|----------|---------|
+| 2011 — Xamarin | Shared PCL + Platform Projects | Ограниченное API в Portable Class Libraries |
+| 2015 — React Native | JS bundle + Native modules | Мост между JS и Native — bottleneck |
+| 2017 — KMP Alpha | expect/actual + manual source sets | Ручная конфигурация dependsOn |
+| 2023 — KMP Stable | Default Hierarchy Template | Автоматическая иерархия intermediate source sets |
+
+### Формальная модель Source Set Hierarchy
+
+Source Set Hierarchy в KMP — это **частично упорядоченное множество** (poset) с отношением dependsOn:
+
+- **Рефлексивность:** каждый source set видит свой собственный код
+- **Антисимметричность:** если A dependsOn B, то B не dependsOn A
+- **Транзитивность:** если iosMain dependsOn commonMain и iosArm64Main dependsOn iosMain, то iosArm64Main видит commonMain
+
+Это свойство формально гарантирует отсутствие циклических зависимостей — см. [[module-systems]] и [[dependency-resolution]].
+
+> **Связь с Clean Architecture (Martin, 2017):** commonMain — это inner circle (бизнес-правила), platform source sets — outer circle (frameworks, drivers). Зависимости направлены внутрь — классическая реализация Dependency Rule.
+
+---
+
 ## Почему структура KMP проекта такая
 
 ### Проблема, которую решает структура
@@ -874,11 +915,18 @@ kotlin {
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture.* — Принципы модульности (cohesion, coupling, dependency rule) определяют, как структурировать KMP-проект: когда переходить на multi-module, как организовать feature-модули, зачем нужен umbrella module. Книга объясняет архитектурные принципы, которые масштабируют проект от одного shared-модуля до enterprise-уровня.
+### Теоретические основы
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Понимание Kotlin packages, visibility modifiers (internal, public) и модульной системы необходимо для работы со структурой KMP-проекта. Книга объясняет, как Kotlin организует код в модули и как visibility модификаторы контролируют API shared-модуля.
+- **Parnas D. (1972).** *On the Criteria To Be Used in Decomposing Systems into Modules.* Communications of the ACM. — Классическая работа об Information Hiding, определяющая принципы декомпозиции KMP-проекта на source sets.
+- **Martin R. (2017).** *Clean Architecture.* Prentice Hall. — Принципы модульности (CCP, CRP, Dependency Rule), масштабирующие KMP-проект до enterprise-уровня.
+- **Martin R. (2003).** *Agile Software Development: Principles, Patterns, and Practices.* Pearson. — Формализация Dependency Inversion Principle, реализованного в dependsOn-иерархии.
 
-- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по организации кода (минимизация видимости, API design, модульность) напрямую применимы к структуре KMP-проекта. Совет «ограничивай видимость API» особенно важен для shared-модуля, где каждый public class = ObjC adapter в iOS binary.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* Manning. — Kotlin packages, visibility modifiers и модульная система.
+- **Moskala M. (2021).** *Effective Kotlin.* — Минимизация видимости API, критичная для shared-модуля.
+- [KMP Project Structure Basics](https://kotlinlang.org/docs/multiplatform/multiplatform-discover-project.html) — Официальная документация структуры.
+- [Touchlab Multi-module Guide](https://touchlab.co/optimizing-gradle-builds-in-Multi-module-projects) — Оптимизация билдов в multi-module проектах.
 
 ---
 

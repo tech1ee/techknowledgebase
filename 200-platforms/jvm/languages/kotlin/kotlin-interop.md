@@ -70,6 +70,42 @@ Platform types (`String!`) — главная опасность: Java код в
 
 ---
 
+## Теоретические основы
+
+Interoperability между Kotlin и Java опирается на формальные свойства JVM-платформы и теорию систем типов.
+
+### Bytecode compatibility и бинарная совместимость
+
+> **Формально:** Kotlin компилируется в тот же **JVM bytecode** (Lindholm et al., *JVM Specification*, 2014), что и Java. На уровне `.class`-файлов различий нет — JVM не знает, что класс написан на Kotlin. Это обеспечивает **бинарную совместимость** (binary compatibility, Gosling et al., 1996): Kotlin-класс вызывает Java-класс без промежуточного слоя, adapter'а или FFI.
+
+Это отличает Kotlin/JVM от FFI-подходов (Foreign Function Interface, JNI) и от кросс-языковых мостов (Objective-C/Swift bridge в iOS) — см. [[jvm-jni-deep-dive]], [[ios-swift-objc-interop]].
+
+### Platform Types и gradual typing
+
+| Система типов | Подход к null | Пример |
+|---------------|--------------|--------|
+| Java | Любая ссылка nullable | `String` — может быть null |
+| Kotlin | Explicit nullability | `String` (non-null) / `String?` (nullable) |
+| Kotlin при вызове Java | **Platform type** `String!` | Ни non-null, ни nullable — неизвестно |
+
+> **Platform types** — это элемент **gradual typing** (Siek & Taha, 2006, *Gradual Typing for Functional Languages*): граница между строго типизированным Kotlin и «нетипизированным» (в отношении nullability) Java. Platform type `T!` означает: «Kotlin не может определить nullability — ответственность на разработчике». Это компромисс: строгая проверка всех Java API сделала бы interop непрактичным из-за обилия `!!` и `?.`.
+
+### Type Erasure и reification
+
+Type erasure (стирание типов, Bracha et al., *GJ Specification*, 1998) — механизм, при котором параметры generic-типов удаляются в runtime. `List<String>` и `List<Int>` — один и тот же класс в JVM. Это создаёт проблемы для interop:
+
+- Java `List<String>` в Kotlin — это `(Mutable)List<String!>!` (platform type + platform nullability)
+- `@JvmName` разрешает конфликты: две функции с разными generic-типами, но одинаковой erasure signature
+- Kotlin `reified` обходит erasure через inline — тип встраивается в место вызова, но работает только для inline-функций
+
+### SAM conversion и lambda calculus
+
+SAM (Single Abstract Method) conversion — автоматическое преобразование Kotlin-лямбды в Java functional interface. Формально это **eta-expansion** (η-расширение) в лямбда-исчислении: `f` преобразуется в `{ x -> f(x) }`, где `f` — метод интерфейса. Kotlin 1.4+ поддерживает SAM conversion и для Kotlin `fun interface`, расширяя эту возможность за пределы Java interop.
+
+См. также: [[kotlin-type-system]] — generics, variance и reified, [[jvm-jni-deep-dive]] — альтернативный механизм interop (native), [[cross-interop]] — кросс-платформенный interop.
+
+---
+
 ## Вызов Java из Kotlin
 
 ### Java классы в Kotlin
@@ -1286,6 +1322,15 @@ val bytes = Files.readAllBytes(path)  // Нет предупреждения о 
 [[kotlin-type-system]] — Система типов Kotlin (generics, variance, reified) напрямую влияет на поведение interop: type erasure создаёт проблемы при вызове из Java, а variance (in/out) транслируется в Java wildcards. Понимание type system необходимо для написания корректных generic API, доступных из обоих языков.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Lindholm T. et al. (2014). *The Java Virtual Machine Specification, Java SE 8 Edition*. — Спецификация JVM bytecode: основа бинарной совместимости Kotlin и Java.
+- Siek J., Taha W. (2006). *Gradual Typing for Functional Languages*. — Формализация gradual typing; теоретическая основа platform types (`T!`) в Kotlin.
+- Bracha G. et al. (1998). *Making the Future Safe for the Past: Adding Genericity to the Java Programming Language (GJ)*. — Type erasure: причина проблем с generic interop.
+- Gosling J. et al. (1996). *The Java Language Specification*. — Binary compatibility rules, обеспечивающие бесшовный interop.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2017). *Kotlin in Action*. — Глава о Java interop с детальным разбором аннотаций @JvmStatic, @JvmOverloads, platform types. Лучшее введение в тему.
 - Greenhalgh J., Skeen A., Bresler D. (2021). *Kotlin Programming: The Big Nerd Ranch Guide* (2nd ed.). — Практические примеры взаимодействия Kotlin и Java, включая коллекции и nullability.

@@ -28,6 +28,37 @@ next_review:
 
 # Advanced Graph Algorithms
 
+## Теоретические основы
+
+> **Теория графов** — раздел дискретной математики, изучающий свойства и алгоритмы на структурах, состоящих из вершин и рёбер. Основана Леонардом Эйлером в 1736 году при решении задачи о Кёнигсбергских мостах.
+
+### Ключевые результаты и авторы
+
+| Год | Автор | Результат | Значение |
+|-----|-------|-----------|----------|
+| **1736** | Эйлер | Задача о Кёнигсбергских мостах | Рождение теории графов; критерий существования Эйлерова пути |
+| **1930** | Куратовский | Теорема о планарности | Критерий: граф планарен iff нет подграфа K₅ или K₃,₃ |
+| **1956** | Форд, Фалкерсон | Max-flow min-cut теорема | Связь потоков и разрезов |
+| **1962** | Уэлш, Пауэлл | Раскраска графов | Жадная раскраска, хроматическое число |
+| **1972** | Тарьян | Алгоритм SCC (компоненты сильной связности) | Линейный DFS с low-link values |
+| **1973** | Хопкрофт, Карп | Максимальное паросочетание в двудольном графе | O(E * sqrt(V)) |
+
+### Эйлеровы и гамильтоновы пути
+
+> **Теорема Эйлера (1736):** связный граф содержит Эйлеров цикл (проходящий по каждому ребру ровно один раз) тогда и только тогда, когда степень каждой вершины чётна. Эйлеров путь существует iff ровно 0 или 2 вершины нечётной степени. Нахождение Эйлерова пути — P; нахождение гамильтонова пути — NP-полная задача.
+
+### Компоненты сильной связности (SCC)
+
+> **Алгоритм Тарьяна (1972):** находит все SCC ориентированного графа за один проход DFS, используя стек и массив low-link values. Вершина v — корень SCC iff low[v] == disc[v]. Все вершины на стеке до v образуют одну SCC.
+
+### Связи
+
+- [[graph-algorithms]] — базовые алгоритмы BFS/DFS, на которых строятся продвинутые
+- [[shortest-paths]] — алгоритмы кратчайших путей (Dijkstra, Bellman-Ford, Floyd-Warshall)
+- [[network-flow]] — потоки в сетях, связанные с паросочетаниями и разрезами
+
+---
+
 ## TL;DR
 
 Продвинутые алгоритмы графов: **Floyd-Warshall** — все пары за O(V³), **Bellman-Ford** — negative weights за O(VE), **Johnson's** — sparse graphs с negative weights за O(V² log V + VE), **A*** — эвристический поиск с гарантией оптимальности. **Bidirectional Search** — сокращает поиск в 2^(d/2) раз. В 2024 году побит 40-летний "sorting barrier" в shortest path.
@@ -1660,14 +1691,21 @@ class BidirectionalBFS(private val n: Int) {
 
 ## Источники
 
+### Теоретические основы
+
+- Tarjan R.E. (1972). *Depth-First Search and Linear Graph Algorithms*. SIAM Journal on Computing. — алгоритм нахождения SCC и мостов за O(V+E) с использованием DFS
+- Euler L. (1736). *Solutio problematis ad geometriam situs pertinentis*. — задача о Кёнигсбергских мостах, рождение теории графов
+- Hopcroft J.E., Karp R.M. (1973). *An n^(5/2) Algorithm for Maximum Matchings in Bipartite Graphs*. SIAM Journal on Computing. — алгоритм Хопкрофта–Карпа для двудольного паросочетания
+- Cormen T. et al. (2009). *Introduction to Algorithms (CLRS), Chapters 22–26*. — графовые алгоритмы: DFS, SCC, потоки, паросочетания
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Floyd-Warshall](https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html) | Reference | Implementation |
 | 2 | [CP-Algorithms: Bellman-Ford](https://cp-algorithms.com/graph/bellman_ford.html) | Reference | Negative cycles |
 | 3 | [Stanford: A* Heuristics](http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html) | Tutorial | Heuristic design |
 | 4 | [Brilliant: Johnson's Algorithm](https://brilliant.org/wiki/johnsons-algorithm/) | Wiki | Reweighting |
-| 5 | [Wikipedia: Bidirectional Search](https://en.wikipedia.org/wiki/Bidirectional_search) | Reference | Theory |
-| 6 | [Quanta Magazine 2024](https://www.quantamagazine.org/) | News | Sorting barrier breakthrough |
 
 ---
 

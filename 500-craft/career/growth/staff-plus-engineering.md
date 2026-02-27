@@ -35,6 +35,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Staff+ Engineering** — уровни инженерной карьеры выше Senior (Staff → Sr Staff → Principal → Distinguished), где основной вклад смещается от личного кода к **leverage** — влиянию через других, архитектурные решения и организационные изменения.
+
+**Теоретический фундамент:**
+
+| Концепция | Автор | Год | Ключевая идея |
+|-----------|-------|-----|---------------|
+| Staff Engineer Archetypes | Will Larson | 2022 | 4 архетипа: Tech Lead, Architect, Solver, Right Hand |
+| Dreyfus Skill Model | Dreyfus & Dreyfus | 1980 | 5 уровней мастерства: Novice → Advanced Beginner → Competent → Proficient → **Expert** |
+| Influence Without Authority | Cohen & Bradford | 1990 | Влияние через reciprocity, не через иерархию |
+| Leverage | Andy Grove | 1983 | Output = Activity × Leverage; Staff+ максимизирует leverage |
+| T-shaped Engineer | David Guest | 1991 | Глубокая экспертиза + широкий кругозор |
+
+**Larson (2022)** определяет Staff Engineer как роль, где **scope** (область влияния) выходит за пределы одной команды. В модели Dreyfus это соответствует переходу от Proficient (Senior) к Expert: решения принимаются на основе интуиции, сформированной опытом, а не по правилам.
+
+> **Концепция leverage (Grove, 1983):** Менеджер (или Staff IC) оценивается не по личному output, а по тому, как он **мультиплицирует output организации**. Staff Engineer пишет RFC, который определяет архитектуру для 5 команд — leverage 50x по сравнению с написанием feature в одиночку.
+
+**Модель Charity Majors (2017) — Engineer/Manager Pendulum:** карьера не обязана быть линейной IC или Management лестницей. Переключение между IC и EM каждые 3-5 лет расширяет perspective и делает более эффективным в обеих ролях. На Staff+ уровне это особенно актуально.
+
+→ Связано: [[ic-vs-management]]
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Senior — потолок для многих
@@ -858,17 +882,23 @@ PROCESS:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Основополагающая книга по теме Staff+ engineering. Описывает 4 архетипа (Tech Lead, Architect, Solver, Right Hand), стратегии получения promotion, day-to-day работу и challenges на Staff уровне. Обязательна к прочтению для любого, кто планирует карьеру выше Senior.
-
-- Fournier C. (2017). *The Manager's Path*. — Хотя книга ориентирована на management track, она отлично описывает IC/Management pendulum, ожидания на каждом уровне и как работать с engineering managers. Для Staff+ IC важно понимать management perspective, чтобы эффективно влиять без authority.
-
-- Xu A. (2020). *System Design Interview*. — System Design — решающий раунд для Staff+ интервью. Слабый design = downlevel к Senior. Книга даёт структурированный framework для проектирования систем, который необходимо дополнить mobile-specific знаниями для Android Staff ролей.
-
 ## Источники
 
-### General Staff+ Engineering
+### Теоретические основы
+
+- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Основополагающая книга: 4 архетипа, стратегии promotion, day-to-day работа на Staff уровне.
+
+- Dreyfus S.E., Dreyfus H.L. (1980). *A Five-Stage Model of the Mental Activities Involved in Directed Skill Acquisition*. — Модель мастерства от Novice до Expert; теоретическая основа уровней инженерной карьеры.
+
+- Grove A. (1983). *High Output Management*. — Концепция leverage: оценка по мультиплицированию output организации, не личному вкладу.
+
+- Cohen A.R., Bradford D.L. (1990). *Influence Without Authority*. — Влияние через reciprocity — ключевой навык Staff+ IC без прямых подчинённых.
+
+- Fournier C. (2017). *The Manager's Path*. — IC/Management pendulum, ожидания на каждом уровне.
+
+- Xu A. (2020). *System Design Interview*. — Framework для System Design — решающего раунда Staff+ интервью.
+
+### Практические руководства — General Staff+ Engineering
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

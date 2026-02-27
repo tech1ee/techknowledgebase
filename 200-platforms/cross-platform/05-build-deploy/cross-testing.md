@@ -44,6 +44,44 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Тестирование программного обеспечения** — процесс верификации и валидации программной системы с целью обнаружения дефектов и подтверждения соответствия требованиям (IEEE 829-2008, Standard for Software Test Documentation).
+
+### Test Pyramid в кросс-платформенном контексте
+
+Mike Cohn (2009) предложил Test Pyramid. Для кросс-платформенной разработки она адаптируется:
+
+| Уровень | iOS (XCTest) | Android (JUnit/Espresso) | KMP (commonTest) |
+|---------|-------------|-------------------------|-------------------|
+| **Unit** | XCTestCase | JUnit / kotlinx-test | kotlin.test (shared!) |
+| **Integration** | — | — | commonTest + platform |
+| **UI** | XCUITest | Espresso / Compose Testing | Platform-specific |
+| **E2E** | XCUITest + XCTest Plan | UI Automator | Platform-specific |
+
+### Кросс-платформенное тестирование: уникальные задачи
+
+| Задача | Описание | Решение |
+|--------|----------|---------|
+| **Shared tests** | Один тест на N платформ | commonTest (kotlin.test) |
+| **Platform parity** | Одинаковое поведение на обеих платформах | Integration tests per platform |
+| **UI testing** | Разный UI → разные тесты | Platform-specific UI tests |
+| **Flaky tests** | Нестабильные из-за платформенных различий | Retry policies, test isolation |
+
+### Test Double Taxonomy (Meszaros, 2007)
+
+| Тип | Определение | Применение в KMP |
+|-----|-------------|-----------------|
+| **Stub** | Возвращает фиксированные значения | Stub для expect/actual |
+| **Mock** | Верифицирует вызовы | MockK (JVM), Mockative (KMP) |
+| **Fake** | Упрощённая реализация | In-memory database вместо SQLDelight |
+| **Spy** | Оборачивает реальный объект | Logging wrapper |
+
+> **CS-фундамент:** Тестирование связано с [[kmp-testing-strategies]] (KMP-стратегии) и [[cross-build-systems]] (CI для тестов). Теоретическая база — Test Pyramid (Cohn, 2009), xUnit Patterns (Meszaros, 2007), TDD (Beck, 2002).
+
 ## 1. Unit Testing: XCTest vs JUnit/JUnit5
 
 ### Базовая структура теста
@@ -1119,9 +1157,17 @@ Unit-тесты быстрые, дешёвые и стабильные — их 
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Описывает тестирование Android-приложений: JUnit, Espresso, Robolectric, Test-Driven Development и CI/CD-интеграцию. Помогает освоить практики тестирования, специфичные для Android-платформы.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает XCTest, unit-тестирование в Xcode, UI-тесты и debugging-инструменты. Даёт фундамент для понимания iOS-подхода к тестированию и его отличий от Android.
-- **Gamma E. et al. (1994). *Design Patterns*.** — Паттерны Strategy, Observer и Template Method лежат в основе testable-архитектуры: они позволяют подменять зависимости в тестах через protocol/interface-based design. Это фундамент для написания тестируемого кросс-платформенного кода.
+### Теоретические основы
+
+- **Cohn M. (2009).** *Succeeding with Agile.* — Test Pyramid: unit > integration > UI.
+- **Meszaros G. (2007).** *xUnit Test Patterns.* — Таксономия test doubles и паттерны тестирования.
+- **Beck K. (2002).** *Test-Driven Development: By Example.* — TDD методология.
+
+### Практические руководства
+
+- [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) — KMP тестовая библиотека.
+- [XCTest](https://developer.apple.com/documentation/xctest) — iOS тестирование.
+- [Android Testing](https://developer.android.com/training/testing) — Android тестирование.
 
 ---
 

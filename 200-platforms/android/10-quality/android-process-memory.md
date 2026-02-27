@@ -60,6 +60,32 @@ Android работает на устройствах с ограниченным
 
 ---
 
+## Теоретические основы
+
+### Управление памятью: от теории ОС к Android
+
+> **Виртуальная память** (Kilburn et al., Atlas Computer, 1962) — абстракция, дающая каждому процессу иллюзию непрерывного адресного пространства. Android Linux kernel использует **demand paging**: физическая память выделяется только при первом обращении к странице. **Copy-on-Write** (CoW) позволяет Zygote fork разделять память между процессами до момента первой записи.
+
+| Концепция | Определение | Применение в Android |
+|-----------|------------|---------------------|
+| **Virtual Memory** | Адресное пространство ≠ физическая RAM | Каждый процесс имеет 4 GB / 256 TB виртуальной памяти |
+| **Demand Paging** | Физическая страница выделяется при первом доступе | Heap растёт по мере аллокации объектов |
+| **Copy-on-Write** | fork() разделяет страницы; копия — только при записи | Zygote fork: preloaded classes shared между всеми apps |
+| **mmap** | Отображение файла в виртуальную память | DEX-файлы, shared libraries, Binder buffer |
+| **OOM Killer** | Ядро убивает процессы при критической нехватке RAM | Android lmkd — усовершенствованная версия для мобильных |
+
+### Low Memory Killer: стратегия Android
+
+> Стандартный Linux OOM Killer реагирует **после** исчерпания памяти. Android **lmkd** (Low Memory Killer Daemon) действует проактивно: использует **PSI** (Pressure Stall Information, Facebook, 2018) для определения момента, когда система начинает испытывать давление на память, и убивает процессы **до** наступления OOM. Приоритет определяется `oom_score_adj` (-1000..1000), который AMS обновляет на каждое изменение lifecycle.
+
+### Закон Парето в потреблении памяти
+
+> Наблюдение: 80% памяти приложения обычно занимают 20% объектов (Bitmap, коллекции, кэши). Профилирование с Memory Profiler подтверждает: оптимизация крупнейших аллокаций даёт непропорционально большой эффект. `dumpsys meminfo <package>` показывает PSS по категориям: Java Heap, Native Heap, Graphics, Stack, Code.
+
+> **Связь**: Virtual Memory → [[os-memory-management]], OOM Killer → [[android-kernel-extensions]], GC → [[jvm-gc-tuning]]
+
+---
+
 ## Один процесс — одно приложение
 
 Каждое Android-приложение выполняется в отдельном Linux-процессе:
@@ -858,17 +884,22 @@ class MyFragment : Fragment() {
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Denning P. *Virtual Memory* (1970, ACM Computing Surveys) | Виртуальная память — фундамент процессной модели |
+| Smith J., Nair R. *Virtual Machines* (2005) | Copy-on-Write, memory-mapped I/O |
+| Rashid R. et al. *Mach: A New Kernel Foundation* (1987) | CoW формализация, используемая в Zygote fork |
+
+### Практические руководства
 - [Android Runtime and Dalvik - AOSP](https://source.android.com/docs/core/runtime) — управление памятью в ART
-- [Manage Your App's Memory - Android Developers](https://developer.android.com/topic/performance/memory) — официальный гайд по памяти
-- [Overview of Memory Management - Android Developers](https://developer.android.com/topic/performance/memory-overview) — обзор управления памятью
+- [Manage Your App's Memory](https://developer.android.com/topic/performance/memory) — официальный гайд
+- [Overview of Memory Management](https://developer.android.com/topic/performance/memory-overview) — обзор
 
----
-
-## Источники и дальнейшее чтение
-
-- Vasavada (2019). *Android Internals*. — наиболее глубокое покрытие процессной модели Android: Zygote fork, ART heap management, LMK tuning, native memory allocation и Copy-on-Write оптимизации.
-- Goetz (2006). *Java Concurrency in Practice*. — понимание Java Memory Model, heap sharing между потоками и visibility guarantees, что критично для корректной работы с shared state в Android-процессе.
-- Meier (2022). *Professional Android*. — практическое руководство по управлению памятью приложения: trim memory callbacks, memory-efficient patterns, process death handling и onSaveInstanceState.
+### Книги
+- Vasavada (2019). *Android Internals*. — Zygote fork, ART heap, LMK, CoW.
+- Goetz (2006). *Java Concurrency in Practice*. — Java Memory Model, heap sharing.
+- Meier (2022). *Professional Android*. — trim memory callbacks, process death handling.
 
 ---
 

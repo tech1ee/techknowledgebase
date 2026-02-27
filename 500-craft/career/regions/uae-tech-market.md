@@ -30,6 +30,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Free Zone Economy** — модель экономического развития, в которой специальные зоны предлагают льготные условия (0% налогов, 100% иностранное владение, упрощённая регистрация) для привлечения бизнеса и talent.
+
+**Экономическая модель ОАЭ для tech:**
+
+| Аспект | Модель | Преимущество | Trade-off |
+|--------|--------|-------------|-----------|
+| **Income Tax** | 0% personal income tax | Net = Gross; максимум savings | Нет social safety net |
+| **Free Zones** | DIFC, DMCC, JAFZA | 100% foreign ownership, repatriation | Привязка к конкретной зоне |
+| **Golden Visa** | 10 лет, без спонсора | Свобода менять работодателя | Требует salary threshold |
+| **Currency** | AED pegged to USD | Стабильность для USD-earners | Нет выгоды от FX |
+
+**Free Zone концепция** появилась в 1985 году (JAFZA) как инструмент экономической диверсификации от нефти. Tech-oriented зоны (DIFC, Dubai Internet City) привлекли Google, Meta, Amazon, и создали спрос на mobile-разработчиков.
+
+**Golden Visa — game changer (2019):**
+
+```
+До Golden Visa:  Work visa 2-3 года, привязка к работодателю
+                 Потеря визы при увольнении (30 дней на выезд)
+
+С Golden Visa:   10 лет ВНЖ, не привязан к работодателю
+                 Можно менять работу свободно
+                 Можно основать компанию
+                 Требования: salary ~AED 30,000/month ($8,200)
+```
+
+> **Geographic Arbitrage:** Senior Android developer в Dubai ($70K gross = $70K net) может иметь savings, сопоставимые с $130K gross в SF ($130K × 0.65 tax × 0.7 after CoL ≈ $60K savings). Tax-free + moderate CoL = competitive net position.
+
+→ Связано: [[salary-benchmarks]], [[netherlands-guide]], [[remote-first-companies]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -319,15 +352,15 @@ Premium packages добавляют:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Практические инструменты для оценки соответствия между кандидатом и страной. Полезна для принятия решения о переезде в ОАЭ: стоит ли tax-free преимущество компромиссов по качеству жизни и карьерным перспективам.
-
-- **Fournier C. (2017). The Manager's Path.** — Для Senior-разработчиков, планирующих карьерный рост в ОАЭ. Понимание management culture в международных командах (Careem, Noon) помогает адаптироваться к hierarchy-heavy культуре локальных компаний.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Оценка cultural fit и trade-offs переезда.
+
+- Fournier C. (2017). *The Manager's Path*. — Management culture в международных командах; hierarchy-heavy vs flat organizations.
+
+### Практические руководства
 
 - [UAE Golden Visa Official](https://u.ae/en/information-and-services/visa-and-emirates-id/residence-visas/golden-visa)
 - [ImmigrantInvest: UAE Golden Visa for IT](https://immigrantinvest.com/blog/uae-golden-visa-for-it/)

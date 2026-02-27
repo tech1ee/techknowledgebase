@@ -36,6 +36,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Метафора технического долга (Cunningham, 1992)
+
+> **Определение:** Technical Debt — метафора, описывающая последствия компромиссов в качестве кода или архитектуры, принятых ради краткосрочной выгоды. Как и финансовый долг, требует «процентных платежей» (замедление разработки) и может быть «выплачен» (рефакторинг).
+
+Ward Cunningham ввёл метафору технического долга на OOPSLA 1992 (*"The WyCash Portfolio Management System"*), проведя аналогию между компромиссами в коде и финансовым долгом. Martin Fowler в *"TechnicalDebtQuadrant"* (2009) расширил классификацию:
+
+| | **Reckless** (безрассудный) | **Prudent** (благоразумный) |
+|---|---------------------------|---------------------------|
+| **Deliberate** (намеренный) | «Нет времени на дизайн» — осознанный отказ от качества | «Знаем trade-off, delivery сейчас, refactor позже» — стратегический выбор |
+| **Inadvertent** (ненамеренный) | «Что такое layering?» — нехватка компетенций | «Теперь знаем, как надо было» — обучение через опыт |
+
+### Фреймворки приоритизации
+
+Steve McConnell (*"Managing Technical Debt"*, 2013, SEI talk) предложил классификацию по intentionality и impact, а также формулу расчёта cost of carry: если cost of carry > cost of fix, долг нужно выплачивать.
+
+> **Cost of Carry** — «процент» по техническому долгу: дополнительное время, затрачиваемое на каждую задачу из-за наличия долга. Если team тратит 25-40% velocity на обслуживание долга, это сигнал к приоритизации выплаты.
+
+Исследования Stripe Developer Coefficient (2018) показали, что разработчики тратят **~33% рабочего времени** на управление техническим долгом. При средней зарплате $150K это $50K/год/инженер, что делает tech debt management [[engineering-metrics|измеримой]] бизнес-проблемой.
+
+---
+
 ## Что такое Tech Debt
 
 ```
@@ -192,10 +215,18 @@ Regular reporting
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Martin Fowler: Tech Debt](https://martinfowler.com/bliki/TechnicalDebt.html) | Article |
-| [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Cunningham W. "The WyCash Portfolio Management System" — OOPSLA, 1992 | Статья | Метафора технического долга |
+| 2 | Fowler M. "TechnicalDebtQuadrant" — martinfowler.com, 2009 | Статья | Quadrant: Reckless/Prudent × Deliberate/Inadvertent |
+| 3 | Stripe "Developer Coefficient" — 2018 | Исследование | 33% времени на tech debt (~$50K/год/инженер) |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Martin Fowler: Tech Debt](https://martinfowler.com/bliki/TechnicalDebt.html) | Article | Taxonomy, quadrant |
+| 2 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book | Systematic management |
 
 ---
 

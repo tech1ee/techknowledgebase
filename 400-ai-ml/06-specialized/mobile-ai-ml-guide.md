@@ -68,6 +68,39 @@ Comprehensive guide covering SDKs, hardware acceleration, mobile-optimized model
 
 ---
 
+## Теоретические основы
+
+> **On-Device AI (Edge AI)** — выполнение inference моделей машинного обучения непосредственно на конечном устройстве (смартфон, IoT) без обращения к облачным сервисам. Обеспечивает низкую латентность, работу оффлайн и privacy-by-design.
+
+On-device AI решает фундаментальный tradeoff между качеством модели и ресурсными ограничениями устройства:
+
+| Ограничение | Мобильное устройство | Сервер | Разница |
+|-------------|---------------------|--------|---------|
+| **RAM** | 6-12 GB (shared) | 256-1024 GB | 20-100x |
+| **Compute** | 10-40 TOPS (NPU) | 300+ TFLOPS (GPU) | 10-30x |
+| **Power** | 3-5 Wh (батарея) | Неограниченно | Критично |
+| **Storage** | 2-5 GB для модели | Терабайты | 10-100x |
+
+> **Model compression** — совокупность техник уменьшения размера и compute-requirements модели. Три основных подхода:
+> 1. **Quantization** (Dettmers et al., 2022): уменьшение precision весов (FP32 → INT4). Потеря: <1-3%
+> 2. **Pruning** (LeCun et al., 1989): удаление незначимых весов. Потеря: 1-5% при 50-80% сжатии
+> 3. **Distillation** (Hinton et al., 2015): обучение маленькой модели имитировать большую. Потеря: 5-15%
+
+**Эволюция мобильных AI-ускорителей:**
+
+| Поколение | Период | Подход | TOPS | Пример |
+|-----------|--------|--------|------|--------|
+| 1-е | 2017-2019 | CPU + DSP | 1-5 | Snapdragon 845 |
+| 2-е | 2019-2022 | Dedicated NPU | 5-15 | A13 Bionic, Snapdragon 888 |
+| 3-е | 2022-2024 | Enhanced NPU + GPU | 15-40 | A17 Pro, Snapdragon 8 Gen 3 |
+| 4-е | 2025+ | LLM-optimized NPU | 40-75 | A18 Pro, Snapdragon 8 Elite |
+
+Теоретический предел: модели 1-3B параметров при INT4 quantization (2-6 GB) комфортно работают на современных флагманах с 10-20 tok/s. Модели 7B+ требуют компромиссов по качеству или offloading на облако.
+
+См. также: [[local-llms-self-hosting|Self-Hosting]] — серверный self-hosting, [[llm-inference-optimization|Inference Optimization]] — серверная оптимизация.
+
+---
+
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
@@ -747,13 +780,27 @@ Model type?
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- **Huyen, C. (2022). *Designing Machine Learning Systems*. O'Reilly.** — Разделы об edge deployment, model compression и оптимизации inference напрямую применимы к мобильному AI. Книга объясняет принципы квантизации, pruning и knowledge distillation с системной точки зрения.
+### Теоретические основы
 
-- **Goodfellow, I., Bengio, Y. & Courville, A. (2016). *Deep Learning*. MIT Press.** — Математические основы нейронных сетей, необходимые для понимания того, почему квантизация работает (или не работает) и какие архитектурные решения позволяют запускать модели на устройствах с ограниченными ресурсами.
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Hinton G. et al. (2015). *Distilling the Knowledge in a Neural Network*. arXiv:1503.02531 | Knowledge distillation |
+| 2 | LeCun Y. et al. (1989). *Optimal Brain Damage*. NeurIPS | Pruning — удаление несущественных весов |
+| 3 | Dettmers T. et al. (2022). *GPT3.int8(): 8-bit Matrix Multiplication for Transformers*. NeurIPS | Quantization для трансформеров |
+| 4 | Howard A. et al. (2017). *MobileNets: Efficient CNNs for Mobile Vision Applications*. arXiv:1704.04861 | Архитектура для мобильных |
+| 5 | Jacob B. et al. (2018). *Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference*. CVPR | Теория quantization-aware training |
 
-- **Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.** — Теоретическая база для понимания trade-offs между точностью и вычислительной сложностью моделей, что критично при выборе формата квантизации (Q4_K_M vs Q8_0) для мобильных устройств.
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [MediaPipe — Google](https://ai.google.dev/edge/mediapipe/) | On-device ML framework |
+| 2 | [ExecuTorch — Meta](https://pytorch.org/executorch/) | PyTorch для мобильных |
+| 3 | [Core ML — Apple](https://developer.apple.com/documentation/coreml) | iOS ML framework |
+| 4 | [MLX — Apple](https://github.com/ml-explore/mlx) | ML на Apple Silicon |
+| 5 | [llama.cpp](https://github.com/ggerganov/llama.cpp) | LLM inference на мобильных |
 
 ---
 

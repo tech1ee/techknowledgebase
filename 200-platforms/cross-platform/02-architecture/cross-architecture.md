@@ -44,6 +44,41 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Архитектурный паттерн** — фундаментальная структурная организация программной системы, определяющая набор подсистем, их ответственности и взаимосвязи (Buschmann et al., 1996, POSA).
+
+### Сравнительная генеалогия паттернов
+
+| Паттерн | Происхождение | iOS-воплощение | Android-воплощение |
+|---------|---------------|----------------|-------------------|
+| **MVC** | Trygve Reenskaug, 1979 (Smalltalk) | UIKit ViewController (Massive VC) | Activity (устарело) |
+| **MVP** | Taligent, 1996 | Редко | Был популярен (2015-2017) |
+| **MVVM** | John Gossman, 2005 (WPF) | ObservableObject + SwiftUI | ViewModel + Flow |
+| **MVI** | André Staltz, 2015 (Cycle.js) | TCA (The Composable Architecture) | Orbit, MVIKotlin |
+| **Clean Architecture** | Robert Martin, 2012 | VIPER (частично) | Google official guide |
+
+### Принцип Dependency Inversion в контексте платформ
+
+Martin (2003): «Модули верхнего уровня не должны зависеть от модулей нижнего уровня. Оба должны зависеть от абстракций.»
+
+В кросс-платформенной архитектуре это означает:
+
+```
+Shared Domain Logic (верхний уровень)
+        ↓ зависит от
+    Interfaces/Protocols (абстракции)
+        ↑ реализуют
+Platform Implementations (нижний уровень: iOS, Android)
+```
+
+Обе платформы пришли к **MVVM** как доминантному паттерну (iOS: 2019 с SwiftUI, Android: 2017 с AAC), потому что MVVM естественно поддерживает **reactive data binding** — ключевое требование декларативных UI-фреймворков.
+
+> **CS-фундамент:** Архитектурные паттерны связаны с [[kmp-architecture-patterns]] (KMP-специфичные паттерны) и [[cross-state-management]] (управление состоянием). Теоретическая база — MVC (Reenskaug, 1979), MVVM (Gossman, 2005), Clean Architecture (Martin, 2012).
+
 ## 1. MVVM: Сравнение подходов
 
 ### iOS: ObservableObject + @Published
@@ -823,9 +858,17 @@ class IOSUserViewModel: ObservableObject {
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design.* — Фундаментальная книга о принципах архитектуры: границы, зависимости, слои. Напрямую применима к mobile-архитектуре и разделению shared/platform кода.
-- Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software.* — Классический справочник паттернов проектирования (Observer, Strategy, Factory), которые лежат в основе архитектурных решений на обеих платформах.
-- Moskala M. (2021). *Effective Kotlin: Best Practices.* — Практические рекомендации по Kotlin, включая архитектурные решения для ViewModel, UseCase и Repository, актуальные для Android и KMP.
+### Теоретические основы
+
+- **Reenskaug T. (1979).** *Models-Views-Controllers.* Xerox PARC. — Оригинальная MVC для Smalltalk.
+- **Gossman J. (2005).** *Introduction to Model/View/ViewModel Pattern.* — MVVM для WPF, адаптированный обеими платформами.
+- **Martin R. (2012).** *Clean Architecture.* — Dependency Rule и разделение на слои.
+- **Buschmann F. et al. (1996).** *Pattern-Oriented Software Architecture (POSA).* — Каталог архитектурных паттернов.
+
+### Практические руководства
+
+- [Android Architecture Guide](https://developer.android.com/topic/architecture) — Официальный гайд Google.
+- [SwiftUI App Architecture](https://developer.apple.com/documentation/swiftui/model-data) — Apple документация по архитектуре.
 
 ---
 

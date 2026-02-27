@@ -48,6 +48,40 @@ AndroidManifest.xml — это декларативный файл, описыв
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Deployment descriptor** — декларативный метаданный файл, описывающий конфигурацию, зависимости и контракты программного компонента для среды выполнения. Термин введён в спецификации Java EE (Sun Microsystems, *J2EE Specification*, 1999) для файлов `web.xml` и `ejb-jar.xml`.
+
+AndroidManifest.xml является deployment descriptor Android-приложения. Он выполняет три ключевые функции, определённые в спецификации компонентных моделей (Szyperski, 2002):
+
+1. **Регистрация компонентов** — декларация всех Activity, Service, BroadcastReceiver, ContentProvider
+2. **Декларация контрактов** — Intent Filters описывают, какие сообщения принимает компонент
+3. **Декларация требований** — permissions, hardware features, SDK versions
+
+### Историческая параллель
+
+| Платформа | Descriptor | Формат | Год |
+|-----------|-----------|--------|-----|
+| Java EE | `web.xml`, `ejb-jar.xml` | XML | 1999 |
+| OSGi | `MANIFEST.MF` + `bundle.xml` | Text/XML | 2000 |
+| Android | `AndroidManifest.xml` | XML | 2008 |
+| iOS | `Info.plist` | Binary Plist / XML | 2008 |
+| UWP (Windows) | `Package.appxmanifest` | XML | 2012 |
+
+### Декларативность vs императивность
+
+AndroidManifest.xml следует принципу **декларативного программирования** (Lloyd J.W. *Practical Advantages of Declarative Programming*, 1994): файл описывает *что* приложение делает и *что* ему нужно, но не *как* это реализуется. Система интерпретирует декларации для:
+
+- **PackageManagerService** — парсит манифест при установке, строит индекс IntentFilter для resolution
+- **ActivityManagerService** — использует манифест для запуска компонентов и проверки permissions
+- **Google Play Store** — фильтрует приложения по uses-feature и uses-sdk
+
+> **URI-схемы в Deep Links** следуют стандарту RFC 3986 (Berners-Lee T. et al., 2005, *Uniform Resource Identifier: Generic Syntax*), что обеспечивает совместимость с веб-стандартами. **App Links** добавляют уровень верификации через Digital Asset Links — протокол PKI-based ownership verification (Google, 2015).
+
+---
+
 ## Базовая структура
 
 ```xml
@@ -888,11 +922,20 @@ android {
 
 ## Источники
 
-- [App manifest overview - Android Developers](https://developer.android.com/guide/topics/manifest/manifest-intro)
-- [Manifest element reference - Android Developers](https://developer.android.com/guide/topics/manifest/manifest-element)
-- [Manage manifest files - Android Developers](https://developer.android.com/build/manage-manifests)
-- [App Links - Android Developers](https://developer.android.com/training/app-links)
-- [Foreground services - Android Developers](https://developer.android.com/develop/background-work/services/foreground-services)
+### Теоретические основы
+
+- Szyperski C. (2002). *Component Software*, 2nd Edition. — теория декларативной регистрации компонентов
+- Lloyd J.W. (1994). *Practical Advantages of Declarative Programming*. — принципы декларативного подхода
+- Berners-Lee T. et al. (2005). *RFC 3986: Uniform Resource Identifier (URI): Generic Syntax*. — стандарт URI-схем для Deep Links
+- Sun Microsystems (1999). *Java 2 Platform Enterprise Edition Specification*. — исторический прецедент deployment descriptors
+
+### Практические руководства
+
+- [App manifest overview — Android Developers](https://developer.android.com/guide/topics/manifest/manifest-intro)
+- [Manifest element reference — Android Developers](https://developer.android.com/guide/topics/manifest/manifest-element)
+- [Manage manifest files — Android Developers](https://developer.android.com/build/manage-manifests)
+- [App Links — Android Developers](https://developer.android.com/training/app-links)
+- [Foreground services — Android Developers](https://developer.android.com/develop/background-work/services/foreground-services)
 
 ---
 

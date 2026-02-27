@@ -34,6 +34,48 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Backup & Recovery** — подсистема СУБД и операционных процедур, обеспечивающая **durability** за пределами одного сервера: защита от аппаратных сбоев, человеческих ошибок, катастроф и кибератак.
+
+### Формальные определения RPO/RTO
+
+| Метрика | Определение | Единица | Определяет |
+|---------|------------|---------|-----------|
+| **RPO** (Recovery Point Objective) | Максимально допустимый объём потерянных данных | Время (секунды → часы) | Частоту бэкапов / WAL archiving |
+| **RTO** (Recovery Time Objective) | Максимально допустимое время простоя | Время (секунды → часы) | Тип recovery (hot standby vs cold restore) |
+
+```
+Потеря данных (RPO)        Время простоя (RTO)
+◄──────────────────►       ◄──────────────────►
+                    │       │
+────────────────────┼───────┼──────────────────► время
+        последний   │сбой   │восстановление
+        бэкап       │       │завершено
+```
+
+### Типы бэкапов
+
+| Тип | Что копируется | Скорость создания | Скорость восстановления | PITR |
+|-----|---------------|-------------------|------------------------|------|
+| **Full (logical)** | SQL-дамп всех данных | Медленно (scan всех таблиц) | Медленно (replay SQL) | Нет |
+| **Full (physical)** | Файлы БД целиком | Быстро (копирование файлов) | Быстро | Да (с WAL) |
+| **Incremental** | Только изменённые блоки | Очень быстро | Средне (base + increments) | Да |
+| **Continuous (WAL)** | Поток журнальных записей | Непрерывно | Зависит от объёма WAL | Да |
+
+### Правило 3-2-1 (формализация)
+
+Три инварианта надёжного бэкапа:
+1. **3 копии** данных (оригинал + 2 бэкапа) → защита от единичного сбоя
+2. **2 типа носителей** (disk + tape/cloud) → защита от системного сбоя носителя
+3. **1 копия off-site** (другая география) → защита от катастроф
+
+> **Расширение 3-2-1-1-0**: +1 offline/immutable копия (защита от ransomware) + 0 ошибок при тестировании restore.
+
+> **См. также**: [[databases-replication-sharding]] — репликация vs бэкапы, [[cloud-disaster-recovery]] — DR в облаке
+
+---
+
 ## TL;DR
 
 - **RTO** — Recovery Time Objective: сколько времени на восстановление
@@ -865,10 +907,15 @@ fi
 
 ## Источники
 
+### Теоретические основы
+- Mohan C. et al. (1992). *ARIES: A Transaction Recovery Method*. — WAL-based recovery: redo + undo + checkpoints
+- Gray J., Reuter A. (1993). *Transaction Processing: Concepts and Techniques*. — Формальные модели recovery и backup
+
+### Практические руководства
 - [PostgreSQL Backup and Restore](https://www.postgresql.org/docs/current/backup.html)
 - [pgBackRest Documentation](https://pgbackrest.org/)
 - [Barman Documentation](https://www.pgbarman.org/)
-- "PostgreSQL 16 Administration Cookbook" — Chapter on Backup
+- *PostgreSQL 16 Administration Cookbook*. — Chapter on Backup
 
 ---
 

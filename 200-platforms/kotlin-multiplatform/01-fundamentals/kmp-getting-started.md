@@ -70,6 +70,48 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Toolchain** — совокупность инструментов компиляции, линковки и упаковки, необходимых для преобразования исходного кода в исполняемый артефакт целевой платформы (Aho et al., 2006).
+
+В контексте KMP каждый target требует собственного toolchain: Android SDK для JVM bytecode, Xcode/LLVM для iOS native binary, Node.js для JavaScript.
+
+### Теоретическая модель: Build System как DAG
+
+Создание KMP-проекта инициализирует **направленный ациклический граф задач** (Directed Acyclic Graph), где каждая вершина — задача компиляции, а рёбра — зависимости между ними (Feldman, 1979):
+
+```
+:shared:compileCommonMainKotlin → :shared:compileAndroidMainKotlin → :composeApp:assembleDebug
+                                → :shared:compileIosMainKotlin → embedAndSignAppleFramework
+                                → :shared:compileJsMainKotlin → jsBrowserProductionWebpack
+```
+
+Gradle реализует этот граф через механизм **task avoidance** и **incremental compilation** — см. [[build-systems-theory]].
+
+### Историческая справка: эволюция IDE для мультиплатформенной разработки
+
+| Год | IDE / Инструмент | Целевые платформы | Подход к настройке |
+|-----|-----------------|-------------------|-------------------|
+| 2003 | Eclipse + Android ADT | Android | Ручная конфигурация SDK |
+| 2013 | Android Studio (IntelliJ) | Android | Gradle + SDK Manager |
+| 2014 | Xcode 6 + Swift | iOS | Xcode-integrated toolchain |
+| 2017 | IntelliJ + KMP plugin | Android + JVM | Experimental, ручная настройка |
+| 2023 | Fleet / AS + KMP | Android + iOS + Desktop + Web | Preflight Checks, KMP Wizard |
+
+### Концепция Preflight Verification
+
+Preflight Checks в KMP IDE — реализация паттерна **Environment Validation** из теории непрерывной интеграции (Humble, Farley, 2010). Система проверяет выполнимость инвариантов:
+
+- **JAVA_HOME** → JDK доступен для Kotlin/JVM компиляции
+- **ANDROID_HOME** → Android SDK доступен для AGP
+- **Xcode** → LLVM toolchain доступен для Kotlin/Native → iOS
+
+> **Связь с CS-фундаментом:** Каждый toolchain соответствует определённому этапу [[compilation-pipeline]]: frontend (K2) общий, backend — платформо-зависимый. [[build-systems-theory]] объясняет, как Gradle координирует параллельное выполнение задач для разных targets.
+
+---
+
 ## Почему настройка KMP требует понимания compilation pipeline
 
 ### Что происходит при создании проекта
@@ -667,11 +709,19 @@ app/                            shared/
 
 ## Источники и дальнейшее чтение
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Лучшая книга для изучения Kotlin с нуля или систематизации имеющихся знаний. Охватывает всё, что нужно для начала работы с KMP: от базового синтаксиса до продвинутых фич (generics, delegated properties, DSL). Обязательна к прочтению перед серьёзной работой с shared-кодом.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — После освоения основ Kotlin эта книга поможет писать идиоматичный код в shared-модуле. Советы по работе с коллекциями, null safety и проектированию API особенно актуальны, поскольку код в commonMain должен быть качественным — он используется на всех платформах.
+- **Aho A., Lam M., Sethi R., Ullman J. (2006).** *Compilers: Principles, Techniques, and Tools.* 2nd ed. Addison-Wesley. — Теория компиляторов, объясняющая frontend/backend разделение, лежащее в основе multi-target архитектуры KMP.
+- **Feldman S. (1979).** *Make — A Program for Maintaining Computer Programs.* Bell Labs. — Формализация концепции DAG для систем сборки, реализованной в Gradle.
+- **Humble J., Farley D. (2010).** *Continuous Delivery.* Addison-Wesley. — Принципы Environment Validation, реализованные в Preflight Checks KMP IDE.
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины — основа асинхронного программирования в KMP (сетевые запросы, работа с БД, UI-обновления). Книга объясняет suspend-функции, Flow, structured concurrency и dispatcher — всё то, что составляет ядро shared business logic.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* Manning. — Полное руководство по Kotlin для начала работы с KMP.
+- **Moskala M. (2021).** *Effective Kotlin.* — Идиоматичный Kotlin-код в shared-модуле.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Асинхронное программирование в KMP.
+- [KMP Quickstart](https://kotlinlang.org/docs/multiplatform/quickstart.html) — Официальный гайд от JetBrains.
+- [Android Developers Codelab](https://developer.android.com/codelabs/kmp-get-started) — Интерактивный курс от Google.
 
 ---
 

@@ -37,6 +37,46 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Performance conversation** — структурированный диалог между руководителем и сотрудником, направленный на оценку результатов работы, определение зон развития и согласование ожиданий. В отличие от informal feedback, performance conversation документируется и влияет на карьерные решения (повышение, компенсация, PIP).
+
+### Теория ожиданий (Vroom, 1964)
+
+Victor Vroom предложил **Expectancy Theory of Motivation**, объясняющую, почему performance conversations критичны для мотивации:
+
+| Компонент | Описание | Роль performance conversation |
+|-----------|----------|------------------------------|
+| **Expectancy** (E) | «Если я приложу усилие, получу ли результат?» | Чёткие criteria = человек знает ЧТО делать |
+| **Instrumentality** (I) | «Если получу результат, будет ли вознаграждение?» | Прозрачная связь performance → promotion/raise |
+| **Valence** (V) | «Ценно ли для меня это вознаграждение?» | Индивидуальный подход к мотивации |
+
+> **Мотивация = E × I × V**. Если любой множитель = 0, мотивация = 0. Performance conversation, где критерии размыты (E = 0) или связь с вознаграждением неочевидна (I = 0), убивает мотивацию.
+
+### Recency Bias и Performance Reviews
+
+Daniel Kahneman (2011, «Thinking, Fast and Slow») описал **recency bias** — когнитивное искажение, при котором последние события непропорционально влияют на оценку. В контексте annual review:
+
+> Менеджер оценивает весь год, но помнит последние 2–3 месяца. Решение: continuous feedback + documentation, чтобы annual review был *summary*, а не *surprise*.
+
+### Goal-Setting Theory (Locke & Latham, 1990)
+
+Edwin Locke и Gary Latham показали, что **SMART-цели** повышают performance на 10–25% по сравнению с «do your best»:
+
+| Принцип | Применение к performance conversation |
+|---------|--------------------------------------|
+| **Specific** | «Сократить время review на 30%» vs. «Быстрее делать review» |
+| **Measurable** | Метрики, observable behaviors |
+| **Achievable** | Stretch, но не impossible |
+| **Relevant** | Связь с бизнес-целями и личным ростом |
+| **Time-bound** | «К концу Q2» vs. «когда-нибудь» |
+
+Связь с [[giving-feedback]]: performance conversation — это *систематическое* применение feedback frameworks (SBI, STAR) для оценки и развития сотрудника на определённом временном горизонте.
+
+---
+
 ## Зачем это нужно?
 
 ### Представьте ситуацию
@@ -650,6 +690,17 @@ Employee пропускает дедлайны третий раз подряд.
 ---
 
 ## Источники
+
+### Теоретические основы
+
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Vroom V.H. Work and Motivation. John Wiley & Sons, 1964 | Монография | Expectancy Theory: E × I × V |
+| 2 | Locke E.A., Latham G.P. A Theory of Goal Setting & Task Performance. Prentice-Hall, 1990 | Монография | Goal-Setting Theory, SMART-цели |
+| 3 | Kahneman D. Thinking, Fast and Slow. Farrar, Straus and Giroux, 2011 | Монография | Recency bias, когнитивные искажения в оценке |
+| 4 | DeNisi A.S., Murphy K.R. Performance Appraisal and Performance Management // Journal of Applied Psychology, 2017 | Обзорная статья | 100 лет исследований performance appraisal |
+
+### Практические руководства
 
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|

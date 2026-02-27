@@ -65,6 +65,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Integration Test** — тест, верифицирующий корректное взаимодействие двух или более компонентов системы через их реальные (или приближённые к реальным) интерфейсы (Meszaros, 2007, xUnit Test Patterns).
+
+### Отличие от unit-тестов: формальная модель
+
+| Характеристика | Unit test | Integration test |
+|---------------|-----------|-----------------|
+| Scope | Одна функция/класс | Несколько компонентов |
+| Зависимости | Mocked/faked | Реальные (in-memory DB, MockEngine) |
+| Скорость | Миллисекунды | Секунды |
+| Детерминизм | Полный (нет I/O) | Высокий (in-memory replacements) |
+| Что обнаруживает | Логические ошибки | Ошибки взаимодействия, контрактов |
+
+### Test Doubles: таксономия (Meszaros, 2007)
+
+| Тип | Описание | Пример в KMP |
+|-----|----------|-------------|
+| Dummy | Заглушка, не используется | Пустой Logger |
+| Stub | Возвращает фиксированные данные | `FakeRepository` |
+| Mock | Проверяет вызовы | MockEngine (Ktor) |
+| Fake | Упрощённая реализация | In-memory SQLDelight driver |
+| Spy | Обёртка с записью вызовов | Custom wrapper |
+
+> **Академические источники:** Meszaros G. (2007). *xUnit Test Patterns: Refactoring Test Code.* Addison-Wesley. Freeman S., Pryce N. (2009). *Growing Object-Oriented Software, Guided by Tests.* Addison-Wesley.
+
+
 ## Почему интеграционные тесты отличаются от unit?
 
 ### CS-фундамент: Contract Testing и Seams
@@ -1293,11 +1322,15 @@ jobs:
 
 ## Источники и дальнейшее чтение
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы Boundary interfaces и Dependency Inversion определяют, где проходят seams для integration тестирования: constructor injection для Repository, Engine injection для Ktor, Driver injection для SQLDelight. Книга объясняет архитектурные решения, которые делают код тестируемым.
+### Теоретические основы
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Integration тесты в KMP активно используют runTest, Flow testing с Turbine и virtual time. Книга раскрывает механику корутин, необходимую для правильного тестирования асинхронных взаимодействий между Repository, DataSource и Database.
+- **Meszaros G. (2007).** *xUnit Test Patterns.* — Формальная классификация integration tests и test doubles.
+- **Cohn M. (2009).** *Succeeding with Agile.* — Место integration tests в Test Pyramid.
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin, включая интерфейсы, generics и extension functions, которые используются для создания expect/actual test drivers, typed fakes и custom assertions в integration тестах.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Интеграционное тестирование асинхронного кода.
+- [Ktor Testing](https://ktor.io/docs/testing.html) — Тестирование HTTP-клиента в KMP.
 
 ---
 

@@ -33,6 +33,60 @@ Persistent Data Structures — структуры, сохраняющие **вс
 
 ---
 
+## Теоретические основы: формальный базис персистентности
+
+### Персистентность: формальная таксономия
+
+> **Определение (Driscoll, Sarnak, Sleator, Tarjan, 1989):** Структура данных **персистентна**, если при модификации сохраняет доступ ко всем предыдущим версиям.
+
+| Уровень | Определение | Пример |
+|---------|-------------|--------|
+| **Ephemeral** | Старые версии уничтожаются | Обычный ArrayList |
+| **Partially Persistent** | Старые версии доступны для чтения, но не для записи | Git history (read-only commits) |
+| **Fully Persistent** | Любая версия может быть прочитана и модифицирована, создавая новую ветку | Git branches |
+| **Confluently Persistent** | Версии могут быть слиты (merged) | Git merge |
+
+### Path Copying: фундаментальная техника
+
+> **Теорема (DSST, 1989):** Любое pointer-based BST можно сделать fully persistent с помощью **path copying** за O(log n) дополнительной памяти на update.
+
+**Доказательство сложности:** При изменении узла на глубине d копируется путь от этого узла до корня = d узлов. Для сбалансированного дерева d = O(log n). Все остальные узлы **разделяются** (structural sharing) между версиями.
+
+```
+Structural Sharing:
+
+Version 1:       A                   Version 2:       A'
+                / \                                   / \
+               B   C                                 B   C'
+              / \   \                               / \   \
+             D   E   F                             D   E   F'
+
+Изменили F → F': скопировали путь F→C→A (3 узла).
+D, E, B — разделяются между версиями.
+Память на update: O(log n), а не O(n).
+```
+
+### Fat Node: альтернативная техника
+
+> **Определение (DSST, 1989):** Fat Node хранит **историю изменений** каждого поля в узле. Вместо копирования узлов, добавляем (timestamp, value) к каждому полю.
+
+- Преимущество: O(1) дополнительной памяти на update
+- Недостаток: O(log v) на access, где v — число версий (бинарный поиск по timestamp)
+
+### Связь с функциональным программированием
+
+> **Фундаментальное наблюдение (Okasaki, 1998):** В чистом функциональном программировании **все** структуры данных персистентны по определению — mutation запрещена, каждая "модификация" создаёт новую версию.
+
+Clojure использует **persistent hash array mapped trie** (HAMT, Bagwell 2001) — 32-way trie с path copying. Амортизированное O(1) для lookup/update (глубина ≤ 7 для 32^7 ≈ 35 млрд элементов).
+
+### Связи
+
+- [[functional-programming]] — иммутабельность и persistent collections
+- [[trees-binary]] — BST как основа для persistent trees
+- [[segment-tree]] — persistent segment tree для offline queries
+
+---
+
 ## Интуиция
 
 ### Аналогия 1: Git как persistent структура
@@ -1202,13 +1256,16 @@ fun toList(version: Int): List<Int> {
 
 ## Источники и дальнейшее чтение
 
-- **Driscoll, J., Sarnak, N., Sleator, D., Tarjan, R. (1989). Making Data Structures Persistent.** -- Оригинальная статья, формализовавшая понятие персистентности и предложившая Fat Node и Path Copying. Классика алгоритмической теории.
+### Теоретические основы
 
-- **Okasaki, C. (1998). Purely Functional Data Structures.** -- Книга о персистентных структурах данных в контексте функционального программирования. Показывает, как достичь амортизированной эффективности без мутаций. Обязательна для понимания связи FP и persistence.
+- **Driscoll, J., Sarnak, N., Sleator, D., Tarjan, R. (1989). "Making Data Structures Persistent." JCSS.** — Оригинальная статья: формальная таксономия персистентности (partial/full/confluent), Fat Node и Path Copying
+- **Okasaki, C. (1998). "Purely Functional Data Structures."** — Персистентные структуры в FP. Amortized efficiency без мутаций. Банкирский метод и метод физика
+- **Bagwell, P. (2001). "Ideal Hash Trees."** — Hash Array Mapped Trie (HAMT): основа persistent collections в Clojure и Scala
 
-- **Cormen, T. et al. (2009). Introduction to Algorithms (CLRS), Chapter 13 (Problem 13-1).** -- Задача на persistent Red-Black tree. Показывает, как path copying применяется к сбалансированным деревьям.
+### Практические руководства
 
-- **Hickey, R. (2009). Are We There Yet? (talk).** -- Создатель Clojure объясняет, почему персистентные структуры данных фундаментальны для правильного моделирования состояния и времени в программировании.
+- **Cormen, T. et al. (2009). CLRS, Chapter 13 (Problem 13-1).** — Persistent Red-Black tree через path copying
+- **Hickey, R. (2009). "Are We There Yet?" (talk).** — Создатель Clojure о персистентных структурах для моделирования состояния и времени
 
 ---
 

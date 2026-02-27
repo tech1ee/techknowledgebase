@@ -36,6 +36,45 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальные определения
+
+> **Монолит** — deployment unit, в котором все компоненты системы компилируются и развёртываются как единый артефакт (один процесс, одна кодовая база).
+
+> **Микросервисы** — архитектурный стиль, при котором система состоит из набора независимо развёртываемых сервисов, каждый из которых реализует одну бизнес-возможность (business capability) и общается с другими через сетевые протоколы.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Modular programming** | Parnas, D.L. | 1972 | "On the Criteria to be Used in Decomposing Systems into Modules" — information hiding |
+| **SOA** | Gartner | 1996 | Service-Oriented Architecture — предшественник микросервисов |
+| **Microservices term** | James Lewis & Fred George | 2011 | Впервые использован на workshop |
+| **Microservices article** | Lewis & Fowler | 2014 | Каноническое определение: "independently deployable services organized around business capabilities" |
+| **Conway's Law** | Conway, M. | 1967 | "Organizations design systems that mirror their communication structures" |
+
+### Conway's Law и архитектура
+
+> **Conway's Law (1967):** "Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure."
+
+**Следствие (Inverse Conway Maneuver):** чтобы получить нужную архитектуру (микросервисы), нужно сначала реорганизовать команды. Монолит с 3 разработчиками — правильно. Микросервисы с 3 разработчиками — антипаттерн.
+
+### Формальные trade-offs
+
+| Свойство | Монолит | Микросервисы |
+|----------|---------|--------------|
+| **Coupling** | In-process (method call, ~ns) | Network (HTTP/gRPC, ~ms) |
+| **Consistency** | ACID (одна БД) | Eventual (saga, compensating tx) |
+| **Deployment** | Atomic (всё или ничего) | Independent (per service) |
+| **Debugging** | Stack trace | Distributed tracing |
+| **Сложность** | Code complexity | Operational complexity |
+| **Team scaling** | Merge conflicts при >15 devs | Independent team ownership |
+
+> **Закон Мартина Фаулера:** "Don't even consider microservices unless you have a system that's too complex to manage as a monolith." (MonolithFirst pattern)
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Cargo Cult Architecture
@@ -500,6 +539,13 @@ app/
 ---
 
 ## Источники
+
+### Теоретические основы
+- Parnas, D.L. (1972). "On the Criteria to be Used in Decomposing Systems into Modules" — CACM; information hiding
+- Conway, M. (1968). "How Do Committees Invent?" — Datamation; Conway's Law
+- Lewis, J. & Fowler, M. (2014). "Microservices" — martinfowler.com; каноническое определение
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

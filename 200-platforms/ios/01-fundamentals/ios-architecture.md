@@ -51,6 +51,50 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Архитектура операционной системы — это совокупность принципов организации аппаратной абстракции, управления ресурсами и изоляции процессов, определяющая границы между ядром, системными сервисами и пользовательскими приложениями (Tanenbaum, 2014).
+
+### Эволюция ядра XNU
+
+XNU берёт начало от проекта NeXTSTEP (1989), основанного на микроядре Mach 2.5, разработанном в Carnegie Mellon University (Accetta et al., 1986). При переходе к macOS/iOS архитектура эволюционировала:
+
+| Этап | Ядро | Происхождение | Ключевые решения |
+|------|------|---------------|------------------|
+| Mach (1985) | Микроядро | CMU, Accetta, Baron et al. | IPC через порты, виртуальная память, задачи как единицы изоляции |
+| NeXTSTEP (1989) | Mach 2.5 + BSD 4.3 | NeXT Computer, Steve Jobs | Объектно-ориентированная среда, Objective-C runtime |
+| Darwin (2000) | XNU (Mach 3.0 + FreeBSD 5) | Apple Open Source | Гибридное ядро: Mach IPC + BSD POSIX API + IOKit драйверы |
+| iOS (2007) | XNU ARM | Apple | Sandbox, code signing, Jetsam — адаптация для мобильных ограничений |
+
+> **Гибридное ядро (hybrid kernel)** — архитектурный компромисс между чистым микроядром (Mach, L4) и монолитным ядром (Linux). В XNU критические для производительности подсистемы (файловая система, сетевой стек) выполняются в пространстве ядра (BSD layer), а IPC и управление памятью реализованы через микроядро Mach (Liedtke, 1995).
+
+### Теория sandbox-изоляции
+
+Модель безопасности iOS основана на принципах:
+
+1. **Principle of Least Privilege** (Saltzer & Schroeder, 1975) — каждое приложение получает минимальные необходимые привилегии через entitlements
+2. **Mandatory Access Control (MAC)** — ядро контролирует доступ к ресурсам независимо от желания процесса (Bell-LaPadula model, 1973)
+3. **Defence in Depth** — многоуровневая защита: sandbox + code signing + ASLR + Secure Enclave
+
+### Слоёная архитектура (Layered Architecture)
+
+Организация iOS в 4 слоя (Core OS → Core Services → Media → Cocoa Touch) соответствует паттерну Layered Architecture, описанному Dijkstra (1968) в проекте THE Operating System. Каждый слой предоставляет абстракции поверх нижнего и скрывает детали реализации.
+
+| Слой | Уровень абстракции | Типичное API | Пример Dijkstra-аналога |
+|------|-------------------|-------------|------------------------|
+| Core OS | Hardware + Kernel | Security, Accelerate | Level 0-1 (процессор, память) |
+| Core Services | Системные сервисы | Foundation, Core Data | Level 2-3 (ввод-вывод, коммуникация) |
+| Media | Мультимедиа | Core Animation, AVFoundation | Level 4 (пользовательские программы) |
+| Cocoa Touch | UI Framework | UIKit, SwiftUI | Level 5 (оператор системы) |
+
+### Связь с CS-фундаментом
+
+- [[os-overview]] — общая теория операционных систем и архитектуры ядер
+- [[os-processes-threads]] — модели процессов Mach tasks и BSD processes
+- [[ffi-foreign-function-interface]] — взаимодействие Swift ↔ C ↔ Objective-C через Darwin APIs
+
+---
+
 ## Интуиция: 5 аналогий из жизни
 
 ### 1. Слои как этажи небоскрёба
@@ -517,16 +561,21 @@ iOS архитектура — security-first:
 
 ## Источники
 
+### Теоретические основы
+- Accetta M. et al. (1986). *Mach: A New Kernel Foundation for UNIX Development.* USENIX — оригинальная статья о микроядре Mach из Carnegie Mellon
+- Dijkstra E. W. (1968). *The Structure of the "THE" Multiprogramming System.* Communications of the ACM — основа слоёной архитектуры ОС
+- Saltzer J. H., Schroeder M. D. (1975). *The Protection of Information in Computer Systems.* Proceedings of the IEEE — принципы безопасности ОС
+- Liedtke J. (1995). *On Micro-Kernel Construction.* SOSP — анализ производительности микроядер, повлиявший на архитектуру XNU
+- Bell D. E., LaPadula L. J. (1973). *Secure Computer Systems: Mathematical Foundations.* MITRE — формальная модель контроля доступа
+- Tanenbaum A. S. (2014). *Modern Operating Systems, 4th ed.* Pearson — учебник по архитектуре ОС
+- Levin J. (2016). *Mac OS X and iOS Internals: To the Apple's Core.* Wrox — глубокое погружение в XNU kernel, Mach, BSD и IOKit
+
+### Практические руководства
 - [Apple's Darwin OS and XNU Kernel Deep Dive](https://tansanrao.com/blog/2025/04/xnu-kernel-and-darwin-evolution-and-architecture/)
-- [iOS: The System Architecture - DEV Community](https://dev.to/hmcodes/ios-the-system-architecture-3hmm)
 - [Apple Open Source - XNU](https://github.com/apple-oss-distributions/xnu)
 - [Apple Developer Documentation - System Architecture](https://developer.apple.com/documentation/technologies)
-
-## Источники и дальнейшее чтение
-
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает архитектуру iOS с точки зрения разработчика, включая слои системы и роль каждого фреймворка
-- Levin J. (2016). *Mac OS X and iOS Internals: To the Apple's Core.* — глубокое погружение в XNU kernel, Mach subsystem, BSD layer и IOKit, необходимое для системного понимания платформы
-- Apple (2023). *The Swift Programming Language.* — официальная документация языка, на котором построены все верхние слои iOS-архитектуры
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — архитектура iOS с точки зрения разработчика
+- Apple (2023). *The Swift Programming Language.* — официальная документация языка
 
 ---
 

@@ -27,6 +27,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Mobile Database** — встраиваемая СУБД, работающая в процессе мобильного приложения без отдельного сервера. Основной движок — **SQLite** (D. Richard Hipp, 2000): самая распространённая БД в мире (триллионы экземпляров на устройствах).
+
+### SQLite: уникальная архитектура
+
+| Аспект | Серверная СУБД (PostgreSQL) | Встраиваемая (SQLite) |
+|--------|---------------------------|----------------------|
+| Модель | Client-server (TCP/IP) | In-process (library) |
+| Concurrency | Тысячи параллельных транзакций | Single-writer, multiple readers (WAL) |
+| Хранилище | Множество файлов, tablespaces | Один файл (`.db`) |
+| Размер | ~100MB+ binary | ~600KB library |
+| ACID | Полный | Полный (через journaling) |
+
+### Ключевые паттерны мобильных БД
+
+| Паттерн | Проблема | Решение |
+|---------|----------|---------|
+| **Offline-first** | Нет сети → приложение не работает | Локальная БД + sync при подключении |
+| **Optimistic UI** | Ожидание ответа сервера → лагает UI | Запись в локальную БД → async sync |
+| **CRDT** (Conflict-free Replicated Data Types) | Конфликты при offline sync | Математически бесконфликтные структуры |
+| **Event Sourcing** | Потеря данных при sync | Хранение событий вместо состояния |
+
+> **См. также**: [[databases-sql-fundamentals]] — основы SQL, [[android-data-persistence]] — Android-специфика
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1466,9 +1493,14 @@ try db.execute(sql: "PRAGMA optimize")
 
 ## Источники и дальнейшее чтение
 
-- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о storage engines и репликации дают понимание внутренних механизмов SQLite (B-Tree, WAL), которые лежат в основе всех мобильных баз данных.
-- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор различных моделей данных помогает понять, почему SQLite (реляционная модель) доминирует на мобильных платформах, и когда стоит рассмотреть альтернативы (Realm/ObjectBox).
-- Date C.J. (2003). *An Introduction to Database Systems*. — Фундаментальная теория реляционных баз данных, включая нормализацию и SQL, которая применима к проектированию схем мобильных БД (Room entities, SQLDelight tables).
+### Теоретические основы
+- Shapiro M. et al. (2011). *Conflict-free Replicated Data Types*. — CRDT: математически бесконфликтная синхронизация для offline-first
+- Hipp D.R. (2000). *SQLite*. — Самая распространённая БД в мире, основа всех мобильных платформ
+
+### Практические руководства
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Storage engines, репликация, механизмы SQLite (B-Tree, WAL)
+- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор моделей данных для выбора мобильной БД
+- Date C.J. (2003). *An Introduction to Database Systems*. — Теория реляционных БД для проектирования мобильных схем
 
 ---
 

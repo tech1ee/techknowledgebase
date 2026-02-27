@@ -48,6 +48,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### HTTP как протокол: формальная модель
+
+> **HTTP** (Hypertext Transfer Protocol) — прикладной протокол, стандартизированный в RFC 2616 (HTTP/1.1, Fielding et al., 1999) и обновлённый в RFC 7230–7235 (2014). HTTP следует модели **request-response**: клиент отправляет запрос с методом (GET, POST, PUT, DELETE), сервер возвращает ответ со статус-кодом и телом.
+
+| Абстракция | Формальный базис | Реализация в Android |
+|-----------|-----------------|---------------------|
+| **REST** | Architectural style (Fielding, *REST dissertation*, 2000) | Retrofit interface с `@GET`, `@POST` |
+| **Connection Pooling** | Object Pool pattern (GoF, 1994) | OkHttp `ConnectionPool` — переиспользование TCP/TLS |
+| **Interceptor Chain** | Chain of Responsibility (GoF, 1994) | OkHttp `Interceptor` — logging, auth, retry |
+| **Content Negotiation** | RFC 7231 §5.3 — Accept / Content-Type headers | Retrofit `Converter.Factory` — JSON, Protobuf |
+| **Type-safe API** | Code generation from interface | Retrofit `Proxy.newProxyInstance()` — dynamic proxy |
+
+### Сериализация: от JSON к Protobuf
+
+> Сериализация — преобразование объекта в байтовый поток для передачи по сети. В Android-экосистеме три основных формата:
+
+| Формат | Спецификация | Библиотека Android | Размер | Скорость |
+|--------|-------------|--------------------|---------|---------|
+| **JSON** | RFC 8259 (2017) | kotlinx.serialization, Moshi, Gson | Базовый (1x) | Базовая (1x) |
+| **Protocol Buffers** | Google (2001) | protobuf-kotlin | 3-10x меньше JSON | 20-100x быстрее |
+| **FlatBuffers** | Google (2014) | flatbuffers | Компактный | Zero-copy десериализация |
+
+### Connection Pooling и HTTP/2 Multiplexing
+
+> OkHttp реализует **connection pooling**: TCP+TLS handshake (1-3 RTT) выполняется один раз, затем соединение переиспользуется. HTTP/2 добавляет **multiplexing**: множество запросов передаются по одному соединению параллельно через streams. Это снижает latency с `N × RTT` до `1 × RTT + N × (request + response)`.
+
+> **Связь**: HTTP → [[network-http-evolution]], REST → [[networking-overview]], Serialization → [[android-room-deep-dive]]
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -924,18 +956,21 @@ class UserPagingSource(
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Fielding R. *Architectural Styles and the Design of Network-based Software Architectures* (2000) | REST — формальное определение |
+| Berners-Lee T. et al. *RFC 2616: HTTP/1.1* (1999); Belshe M. et al. *RFC 7540: HTTP/2* (2015) | HTTP-протокол |
+| Srisuresh P. *RFC 2663: NAT* (1999); Rescorla E. *RFC 8446: TLS 1.3* (2018) | Сетевая безопасность |
+| GoF. *Design Patterns* (1994) | Chain of Responsibility → OkHttp Interceptors; Proxy → Retrofit |
+
+### Практические руководства
 - [Retrofit Official Documentation - Square](https://square.github.io/retrofit/) — официальная документация Retrofit
 - [OkHttp - Square](https://square.github.io/okhttp/) — официальная документация OkHttp
 - [Ktor Client - Kotlin](https://ktor.io/docs/client.html) — документация Ktor Client
-- [Android Networking Tutorial - Daily.dev](https://daily.dev/blog/retrofit-tutorial-for-android-beginners) — практический tutorial
-
----
-
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — охватывает сетевое взаимодействие в Android, включая Retrofit, OkHttp interceptors, Network Security Config и best practices работы с API в production.
-- Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальный разбор suspend-функций и Flow, которые являются основой асинхронных сетевых запросов в современном Android с Retrofit и Ktor.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговые примеры интеграции Retrofit с MVVM, обработки ошибок сети и отображения данных из API на экране.
+- Meier (2022). *Professional Android*. — Retrofit, OkHttp interceptors, Network Security Config.
+- Moskala (2022). *Kotlin Coroutines Deep Dive*. — suspend-функции и Flow для сетевых запросов.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — интеграция Retrofit с MVVM.
 
 ---
 

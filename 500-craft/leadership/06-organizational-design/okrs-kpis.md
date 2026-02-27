@@ -35,6 +35,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### OKR: от MBO Drucker к Google
+
+> **Определение:** OKR (Objectives and Key Results) — система целеполагания, при которой Objective (амбициозная качественная цель) измеряется через 2-5 Key Results (количественных показателей). Развитие Management by Objectives (MBO) Drucker через Andy Grove (Intel) к John Doerr (Google).
+
+Хронология эволюции OKR:
+
+| Год | Событие | Автор | Ключевая идея |
+|-----|---------|-------|---------------|
+| 1954 | **MBO** (Management by Objectives) | Peter Drucker | Цели согласуются сверху вниз |
+| ~1975 | **OKR** в Intel | Andy Grove | MBO + measurable results, stretch goals |
+| 1999 | OKR в Google | John Doerr (инвестор) | Привнёс OKR из Intel в Google |
+| 2018 | *"Measure What Matters"* | John Doerr | Популяризация OKR globally |
+
+### Balanced Scorecard (Kaplan & Norton, 1992)
+
+Robert Kaplan и David Norton в *"The Balanced Scorecard"* (Harvard Business Review, 1992) предложили рассматривать организацию через четыре перспективы:
+
+> **Balanced Scorecard** — framework стратегического управления, балансирующий **Financial** (revenue, costs), **Customer** (satisfaction, retention), **Internal Process** (efficiency, quality), **Learning & Growth** (innovation, skills).
+
+Для engineering организации Balanced Scorecard трансформируется: Financial = cost of engineering, Customer = internal customers + end users, Internal Process = [[engineering-metrics|DORA metrics]], Learning & Growth = developer satisfaction, tech debt ratio.
+
+Различие OKR и KPI теоретически формализовано: OKR задают **direction** (stretch goals, 70% = success), KPI отслеживают **health** (operational metrics, 100% = target). Andy Grove подчеркивал: «OKRs are not a to-do list. They are a way to think about what really matters.»
+
+---
+
 ## OKRs vs KPIs
 
 ```
@@ -187,13 +214,21 @@ TEAM HEALTH:
 
 **[[strategic-thinking]]** — OKR являются инструментом трансляции стратегии в конкретные измеримые цели для команд. Стратегическое мышление определяет направление (куда идём), а OKR превращают это направление в квартальные цели с конкретными результатами. Без стратегического контекста OKR превращаются в бессмысленный список задач, оторванный от бизнес-целей компании.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Drucker P. "The Practice of Management" — Harper, 1954 | Книга | Management by Objectives (MBO) |
+| 2 | Grove A. "High Output Management" — Random House, 1983 | Книга | OKR в Intel, output менеджера |
+| 3 | Kaplan R., Norton D. "The Balanced Scorecard" — HBR, 1992 | Статья | Четыре перспективы стратегического управления |
+| 4 | Doerr J. "Measure What Matters" — Portfolio/Penguin, 2018 | Книга | OKR methodology, Google examples |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Google re:Work OKRs](https://rework.withgoogle.com/guides/set-goals-with-okrs/) | Guide | Google OKR practices |
+| 2 | **Radical Focus** (Christina Wodtke, 2016) | Книга | OKR implementation guide |
 
 
 ## Проверь себя

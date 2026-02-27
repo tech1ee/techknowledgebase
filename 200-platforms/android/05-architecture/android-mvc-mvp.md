@@ -36,6 +36,25 @@ MVP умирал на Android трижды. Первый раз --- когда G
 
 ---
 
+## Теоретические основы
+
+> **MVC (Model-View-Controller)** — первый формализованный GUI-паттерн, созданный Trygve Reenskaug для Smalltalk-80 (1979). Оригинальная модель: Model хранит данные и уведомляет наблюдателей, View отображает Model, Controller обрабатывает ввод. Ключевой принцип: **Observer** связывает Model и View.
+
+> **MVP (Model-View-Presenter)** — эволюция MVC для event-driven GUI-систем, формализованная в IBM/Taligent (1996) и позднее уточнённая Fowler (2004) как два варианта: **Passive View** (View полностью управляется Presenter) и **Supervising Controller** (View может самостоятельно биндить простые данные из Model).
+
+| Характеристика | MVC (Smalltalk) | MVP (Passive View) | MVP (Supervising Controller) |
+|---------------|-----------------|-------------------|------------------------------|
+| View знает Model? | Да (Observer) | Нет | Да (для simple binding) |
+| Кто обновляет View? | View сам (через Observer) | Только Presenter | Presenter + data binding |
+| Тестируемость View | Сложно | Тривиально (mock View) | Частично |
+| Связь View-Presenter | — | Один-к-одному (Contract) | Один-к-одному |
+
+Исторически MVC на Android **не существовал** в классическом виде: Activity одновременно выполняла роль Controller и View, нарушая принцип **Separation of Concerns** (Dijkstra, 1974). Это привело к «God Activity» — антипаттерну, где один класс содержит UI-логику, сетевые вызовы, работу с БД и навигацию.
+
+**Contract pattern** в MVP — реализация принципа **Programming to Interface** (Gamma et al., 1994): View и Presenter взаимодействуют через интерфейсы (Contract), что позволяет тестировать Presenter с mock-реализацией View и наоборот. Google использовал этот подход в **Architecture Blueprints** (2016).
+
+---
+
 ## Пререквизиты
 
 | Тема | Зачем нужно | Где изучить |

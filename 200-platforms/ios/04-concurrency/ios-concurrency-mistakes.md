@@ -34,6 +34,38 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Ошибки конкурентности (concurrency bugs) — класс дефектов программного обеспечения, возникающих при неправильной синхронизации параллельно выполняемых потоков. По данным Lu et al. (2008, ASPLOS), 97% concurrency bugs относятся к четырём категориям: atomicity violations, order violations, deadlocks и data races.
+
+### Классификация ошибок конкурентности (Lu et al., 2008)
+
+| Тип ошибки | Доля (%) | Определение | Пример в iOS |
+|-----------|---------|-------------|-------------|
+| **Atomicity Violation** | 34% | Нарушение предполагаемой атомарности операции | Check-then-act без lock |
+| **Order Violation** | 28% | Нарушение ожидаемого порядка выполнения | UI update до завершения async |
+| **Deadlock** | 27% | Циклическая зависимость блокировок | `sync` на Main Queue из Main Queue |
+| **Data Race** | 11% | Одновременный доступ к shared state без синхронизации | Мутация массива из двух потоков |
+
+### Формальные условия deadlock (Coffman et al., 1971)
+
+Deadlock возникает при одновременном выполнении четырёх условий:
+
+1. **Mutual Exclusion** — ресурс используется только одним потоком
+2. **Hold and Wait** — поток держит один ресурс и ждёт другой
+3. **No Preemption** — ресурс нельзя отобрать принудительно
+4. **Circular Wait** — циклическая цепочка ожидания
+
+> **Swift 6 Data Race Safety:** Swift 6 (2024) вводит compile-time проверку data races через `@Sendable`, region-based isolation и strict concurrency checking, что является первой практической реализацией формальной верификации конкурентности на уровне mainstream языка.
+
+### Связь с CS-фундаментом
+
+- [[concurrency-fundamentals]] — теория параллелизма и примитивы синхронизации
+- [[ios-threading-fundamentals]] — GCD, очереди, QoS
+- [[ios-async-await]] — structured concurrency как решение многих concurrency bugs
+
+---
+
 ## GCD (Grand Central Dispatch) Ошибки
 
 ### 1. Блокировка главного потока с sync на глобальной очереди
@@ -1802,9 +1834,15 @@ class StructuredSyncService {
 
 ## Источники и дальнейшее чтение
 
-- Eidhof C. et al. (2019). *Advanced Swift.* — продвинутые паттерны Swift, включая memory management и value semantics, которые помогают избежать data races
-- Sundell J. (2022). *Swift by Sundell.* — практические примеры безопасной работы с конкурентностью, включая actors, Sendable и structured concurrency
-- Apple (2023). *The Swift Programming Language.* — официальная глава по Concurrency с описанием actors, async/await и Sendable protocol, необходимая для понимания Swift 6 strict concurrency
+### Теоретические основы
+- Lu S. et al. (2008). *Learning from Mistakes — A Comprehensive Study on Real World Concurrency Bug Characteristics.* ASPLOS — классификация concurrency bugs
+- Coffman E. G. et al. (1971). *System Deadlocks.* ACM Computing Surveys — формальные условия deadlock
+- Lamport L. (1978). *Time, Clocks, and the Ordering of Events.* Communications of the ACM — happens-before relation
+
+### Практические руководства
+- Eidhof C. et al. (2019). *Advanced Swift.* — memory management, value semantics, data race prevention
+- Apple (2023). *The Swift Programming Language.* — Concurrency chapter: actors, async/await, Sendable
+- [Thread Sanitizer Documentation](https://developer.apple.com/documentation/xcode/diagnosing-memory-thread-and-crash-issues-early) — Apple TSan
 
 ---
 

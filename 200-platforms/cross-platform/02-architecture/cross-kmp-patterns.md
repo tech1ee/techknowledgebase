@@ -40,6 +40,51 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **KMP Pattern** — архитектурный или проектный паттерн, специфичный для Kotlin Multiplatform, решающий задачу разделения кода между платформами при сохранении платформенной идиоматичности (Breslav, 2020, KotlinConf).
+
+### Принцип максимального разделения
+
+KMP-паттерны основаны на **принципе общности** (commonality-variability analysis, Coplien, 1999):
+
+| Слой | Общность (common) | Вариативность (platform) |
+|------|-------------------|-------------------------|
+| **Domain** | Бизнес-правила, entities | — |
+| **Data** | Repository interfaces, DTOs | Storage, networking engines |
+| **Presentation** | State, events | ViewModel lifecycle |
+| **UI** | Compose MP (опционально) | SwiftUI / Jetpack Compose |
+
+### Формализация expect/actual как паттерна
+
+expect/actual реализует паттерн **Abstract Factory** (GoF, 1994), где expect — абстрактная фабрика, а actual — конкретная реализация для платформы:
+
+```
+expect class PlatformModule {     // Abstract Factory
+    fun createDatabase(): Database
+    fun createHttpEngine(): HttpClientEngine
+}
+
+actual class PlatformModule {     // Concrete Factory (iOS)
+    actual fun createDatabase() = NativeSqliteDriver(...)
+    actual fun createHttpEngine() = Darwin
+}
+```
+
+### Shared ViewModel: trade-off analysis
+
+| Подход | Code sharing | Платформенная идиоматичность | Сложность |
+|--------|-------------|------------------------------|-----------|
+| Platform-specific VM | 0% | Максимальная | Низкая |
+| Shared logic + platform VM | 60-70% | Высокая | Средняя |
+| Shared ViewModel (KMP VM) | 90%+ | Средняя | Высокая |
+| Compose MP (shared UI) | 95%+ | Ограниченная | Высокая |
+
+> **CS-фундамент:** KMP-паттерны связаны с [[kmp-expect-actual]] (механизм платформенного полиморфизма) и [[kmp-architecture-patterns]] (архитектурные решения). Теоретическая база — Commonality-Variability Analysis (Coplien, 1999), Abstract Factory (GoF, 1994).
+
 ## 1. expect/actual: Механизм платформенной абстракции
 
 ```kotlin
@@ -431,9 +476,15 @@ Dispatchers.IO не существует на iOS! Используйте expect
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2021). *Effective Kotlin*.** — Содержит лучшие практики написания идиоматичного Kotlin-кода, что критически важно для проектирования API в commonMain. Паттерны из книги (sealed class hierarchies, extension functions, DSL builders) напрямую применяются при создании кросс-платформенных абстракций.
-- **Martin R. (2017). *Clean Architecture*.** — Принципы разделения ответственности и инверсии зависимостей лежат в основе выбора между expect/actual и interface + DI. Книга объясняет, почему бизнес-логика должна быть в commonMain, а платформенные детали — за абстракцией.
-- **Gamma E. et al. (1994). *Design Patterns*.** — Bridge, Adapter и Factory Method — это именно те паттерны, которые реализуются через expect/actual и interface + impl в KMP. Книга даёт теоретический фундамент для понимания, когда какой паттерн применять.
+### Теоретические основы
+
+- **Coplien J. (1999).** *Multi-Paradigm Design for C++.* — Commonality-Variability Analysis.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Abstract Factory как формальная модель expect/actual.
+
+### Практические руководства
+
+- [KMP Architecture Patterns](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html) — Официальные паттерны.
+- [Decompose](https://arkivanov.github.io/Decompose/) — Архитектурный фреймворк для KMP.
 
 ---
 

@@ -34,6 +34,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Kotlin воплощает несколько десятилетий исследований в области языков программирования:
+
+| Концепция | Теоретический фундамент | Реализация в Kotlin |
+|-----------|------------------------|---------------------|
+| **Null safety** | Hoare (1965) назвал null-ссылки «billion-dollar mistake»; Option type из ML (Milner, 1978) | Система типов `T` / `T?` — null-safety без обёрток, zero overhead |
+| **Type inference** | Hindley-Milner (1978) — алгоритм вывода типов для ML | Локальный вывод типов: `val x = 42` → `Int`; глобальный не поддерживается |
+| **Coroutines** | Conway (1963) — первое описание coroutines; CPS (Fischer, Reynolds 1972) | Stackless coroutines через CPS-трансформацию в state machine |
+| **Extension functions** | Multimethods (CLOS, 1986); C# extension methods (2007) | Static dispatch: компилируются в static-методы, не виртуальные |
+| **Sealed classes** | Algebraic Data Types — ML (1973), Haskell (1990) | `sealed class` + `when` exhaustiveness → pattern matching |
+| **Immutability by default** | Referential transparency (Church, 1936); `val` vs `var` | `val` рекомендуется по умолчанию; read-only коллекции |
+| **Smart casts** | Flow-sensitive typing (Pearce, 2013) | Компилятор отслеживает проверки типов и автоматически приводит тип |
+
+> **Позиционирование Kotlin.** В классификации Пирса (Pierce, *TAPL*, 2002) Kotlin — **мультипарадигмальный язык с номинальной типизацией, подтипированием (subtyping), ограниченной формой declaration-site variance и CPS-трансформированными корутинами**. Он прагматично заимствует лучшие идеи из ML, Scala, C#, Groovy — но намеренно избегает академической сложности (HKT, implicit conversions, macro systems).
+
+См. также: [[jvm-languages-ecosystem]] — сравнение Kotlin с другими JVM-языками, [[kotlin-type-system]] — формальные основы системы типов.
+
+---
+
 ## Быстрая навигация
 
 | Вопрос | Куда идти |
@@ -180,6 +200,15 @@ next_review:
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — Формальные основы систем типов: subtyping, polymorphism, type inference. Фундамент для понимания дизайна Kotlin.
+- Hoare C.A.R. (2009). *Null References: The Billion Dollar Mistake*. QCon London keynote. — Автор null-ссылок признаёт ошибку; мотивация для null-safety в Kotlin.
+- Milner R. (1978). *A Theory of Type Polymorphism in Programming*. — Hindley-Milner type inference: теоретическая база для вывода типов.
+- Church A. (1936). *An Unsolvable Problem of Elementary Number Theory*. — Лямбда-исчисление: основа функциональных возможностей Kotlin.
+
+### Практические руководства
 
 - [Kotlin Official Documentation](https://kotlinlang.org/docs/) — официальная документация
 - [Kotlin Koans](https://play.kotlinlang.org/koans/) — интерактивный туториал

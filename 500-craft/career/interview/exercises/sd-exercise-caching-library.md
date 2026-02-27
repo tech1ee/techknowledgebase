@@ -35,6 +35,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cache** — промежуточное хранилище данных, обеспечивающее быстрый доступ к часто используемой информации. Кэширование — фундаментальная концепция CS, формализованная в работах **Belady (1966)** по оптимальным алгоритмам замещения.
+
+**Алгоритмы замещения кэша (Cache Replacement Policies):**
+
+| Алгоритм | Автор/Год | Принцип | Trade-off |
+|----------|-----------|---------|-----------|
+| **OPT (Belady's)** | Belady, 1966 | Замещай элемент, который не понадобится дольше всех | Теоретический оптимум; невозможен на практике |
+| **LRU** | — | Замещай наименее недавно использованный | Хорош для temporal locality; overhead на tracking |
+| **LFU** | — | Замещай наименее часто используемый | Хорош для frequency patterns; проблема cold start |
+| **FIFO** | — | Замещай самый старый элемент | Простейшая реализация; игнорирует access pattern |
+| **ARC** | Megiddo & Modha, 2003 | Адаптивный: балансирует LRU и LFU | Лучшая hit rate; сложная реализация |
+
+**Belady's Anomaly (1969):** увеличение размера кэша не всегда улучшает hit rate при FIFO. Это контринтуитивный результат, демонстрирующий, что выбор eviction policy критичен.
+
+**Иерархия кэширования на мобильном устройстве:**
+
+```
+L1: Memory cache (HashMap/LruCache)     — ~1-10ms, ограничен RAM
+L2: Disk cache (файловая система)       — ~10-100ms, ограничен storage
+L3: Network (сервер)                    — ~100ms-5s, зависит от connectivity
+```
+
+Каждый уровень — trade-off между **скоростью** и **объёмом**. Mobile-specific: L1 ограничен ~1/8 heap (Android рекомендация), L2 ограничен disk quota, L3 может быть недоступен (offline).
+
+> **Принцип locality (Denning, 1968):** программы обращаются к ограниченному подмножеству данных за короткий период. Temporal locality (недавно использованное будет использовано снова) обосновывает LRU. Spatial locality (соседние данные будут нужны) обосновывает prefetching.
+
+→ Связано: [[system-design-android]], [[caching-strategies]], [[android-data-persistence]]
+
+---
+
 ## Задача -- "Design a Caching Library"
 
 Интервьюер ставит задачу максимально размыто:
@@ -595,6 +627,16 @@ Journal хранит **метаданные**: размер, счётчик об
 
 ## Источники
 
-- [Mobile System Design Exercises -- Caching Library](https://github.com/iartr/mobile-system-design/blob/master/exercises/caching-library.md) -- исходное упражнение (адаптировано и дополнено)
+### Теоретические основы
+
+- Belady L.A. (1966). *A Study of Replacement Algorithms for a Virtual-Storage Computer*. IBM Systems Journal. — Оптимальный алгоритм замещения кэша (теоретический benchmark).
+
+- Denning P.J. (1968). *The Working Set Model for Program Behavior*. — Принцип locality: обоснование LRU и prefetching.
+
+- Megiddo N., Modha D.S. (2003). *ARC: A Self-Tuning, Low Overhead Replacement Cache*. — Адаптивный алгоритм, балансирующий LRU и LFU.
+
+### Практические руководства
+
+- [Mobile System Design Exercises -- Caching Library](https://github.com/iartr/mobile-system-design/blob/master/exercises/caching-library.md) -- исходное упражнение
 - [Android Developers -- Data and file storage overview](https://developer.android.com/training/data-storage)
 - [SQLite Documentation -- BLOB](https://www.sqlite.org/datatype3.html)

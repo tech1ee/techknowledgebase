@@ -33,6 +33,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Senior Engineer** — уровень инженерной карьеры, на котором специалист самостоятельно решает задачи любой сложности в своём домене, менторит других и влияет на техническое направление команды. В модели Dreyfus это уровень **Proficient** (4 из 5).
+
+**Dreyfus Model of Skill Acquisition (1980):**
+
+| Уровень | Dreyfus | Инженерный уровень | Характеристика |
+|---------|---------|-------------------|----------------|
+| 1 | Novice | Junior | Следует правилам, нужен supervision |
+| 2 | Advanced Beginner | Mid | Распознаёт ситуации, работает самостоятельно |
+| 3 | Competent | Senior (entry) | Планирует, приоритизирует, видит контекст |
+| 4 | **Proficient** | **Senior (strong)** | **Интуиция + аналитика, видит систему целиком** |
+| 5 | Expert | Staff+ | Действует из глубокого понимания, создаёт правила |
+
+На Senior-интервью оценивается переход от Competent к Proficient: кандидат должен показать не просто "знаю технологии", а **"понимаю trade-offs и принимаю обоснованные решения"**.
+
+**Компетентностная модель Senior Android 2026:**
+
+```
+Technical Depth (25%):  Kotlin advanced, Compose internals, Coroutines
+System Design (30%):    Mobile architecture, offline-first, scalability
+AI Proficiency (15%):   AI tools, AI-assisted development
+Behavioral (20%):       Leadership, mentoring, cross-team influence
+Domain (10%):           Android-specific: lifecycle, performance, testing
+```
+
+Сдвиг в 2026: entry-level hiring упал на 73% (IEEE Spectrum, 2025), конкуренция сместилась на Senior+. Это означает, что Senior-позиция стала **de facto entry point** в FAANG для опытных инженеров, а требования к этому уровню выросли.
+
+> **Terminal Level Concept:** Senior (L5/E5) — это **terminal level** в большинстве компаний: повышение до Staff не ожидается по умолчанию. Это означает, что на интервью оценивается **sustainability** — может ли кандидат быть strong Senior долгосрочно, а не только potential для роста.
+
+→ Связано: [[android-questions]], [[system-design-android]], [[staff-plus-engineering]], [[se-interview-foundation]]
+
+---
+
 ## Ландшафт 2026
 
 ```
@@ -818,15 +852,19 @@ WEEK 12: POLISH
 
 - [[se-interview-foundation]] — Универсальная база для всех SE интервью: DSA паттерны, System Design компоненты, STAR method, AI-enabled формат. Текущий материал специализирован для Android, а foundation даёт кросс-платформенный фундамент, который нужен для coding rounds и general system design.
 
-## Источники и дальнейшее чтение
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Покрывает DSA-подготовку, которая составляет 25% веса на Senior Android интервью. 189 задач с разбором, паттерны решения, стратегии для каждого типа coding round.
-
-- Xu A. (2020). *System Design Interview*. — System Design = 30% веса. Книга даёт backend-ориентированный framework, который нужно адаптировать для mobile: добавить offline-first, caching, sync и battery considerations из текущего материала.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для behavioral раунда (20% веса) важно показать leadership potential. Книга объясняет разницу между Senior execution и Staff influence, что помогает правильно позиционировать STAR-истории на интервью.
-
 ## Источники
+
+### Теоретические основы
+
+- Dreyfus S.E., Dreyfus H.L. (1980). *A Five-Stage Model of the Mental Activities Involved in Directed Skill Acquisition*. — Модель мастерства: Senior = Proficient (level 4), оценка перехода от Competent к Proficient.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — DSA-подготовка (25% веса на Senior Android интервью).
+
+- Xu A. (2020). *System Design Interview*. — System Design (30% веса), backend framework с mobile-адаптацией.
+
+- Larson W. (2022). *Staff Engineer*. — Разница между Senior execution и Staff influence для behavioral раунда.
+
+### Практические руководства
 
 - [Built In: Android Developer Salary 2026](https://builtin.com/salaries/us/remote/android-developer)
 - [Levels.fyi: Compensation Data](https://levels.fyi)

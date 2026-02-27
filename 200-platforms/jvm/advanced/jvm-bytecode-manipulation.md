@@ -67,6 +67,28 @@ related:
 
 ---
 
+## Теоретические основы
+
+Bytecode manipulation опирается на концепции **метапрограммирования**, **программной трансформации** и **аспектно-ориентированного программирования**.
+
+> **Определение:** *Bytecode manipulation — модификация промежуточного представления программы (байткода JVM) для изменения её поведения без изменения исходного кода.*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM |
+|------------------------|-----------------|-----------------|
+| **Program transformation** | Partsch & Steinbrüggen, 1983 | Систематическое преобразование программ → ASM ClassVisitor pipeline |
+| **Visitor pattern** | Gamma et al. (GoF), 1994 | Обход структуры без её модификации → ASM ClassReader/ClassVisitor/ClassWriter |
+| **Aspect-Oriented Programming (AOP)** | Kiczales et al., 1997 | Внедрение cross-cutting concerns → AspectJ, Spring AOP через ByteBuddy |
+| **Instrumentation** | JVM Spec, java.lang.instrument | Добавление измерительного кода через ClassFileTransformer |
+| **Bytecode verification** | Leroy, 2003 | Верификатор JVM проверяет корректность модифицированного байткода → `VerifyError` при ошибках |
+
+> **Ключевой принцип:** Байткод JVM — это **стековая машина** с фиксированным набором инструкций (~200 опкодов). Каждая инструкция имеет предсказуемый эффект на стек операндов и локальные переменные. Верификатор JVM (JVM Spec §4.10) доказывает type safety модифицированного байткода перед выполнением — это гарантирует, что некорректная трансформация будет отвергнута.
+
+Три уровня абстракции для работы с байткодом отражают фундаментальный trade-off «контроль vs удобство»: ASM (event-based, низкоуровневый, максимальная производительность), Javassist (source-level, средний уровень), ByteBuddy (fluent API, type-safe, высокий уровень).
+
+Связанные темы: [[jvm-virtual-machine-concept]] (стековая архитектура JVM), [[jvm-class-loader-deep-dive]] (ClassFileTransformer перехватывает загрузку), [[jvm-instrumentation-agents]] (Java Agent как точка входа для instrumentation).
+
+---
+
 ## Историческая справка
 
 Потребность в манипуляции байткодом возникла практически одновременно с появлением Java. С самого начала разработчики осознали, что промежуточное представление кода (байткод) — это не просто этап компиляции, а точка, в которой можно вмешиваться в поведение программы.
@@ -405,15 +427,18 @@ public Class<?> getProxy(Class<?> target) {
 
 ## Источники и дальнейшее чтение
 
-- Bruneton, E. et al. (2002). *ASM: a Code Manipulation Tool to Implement Adaptable Systems*. INRIA Research Report. — Оригинальная статья создателя ASM, объясняющая мотивацию visitor pattern и сравнение с BCEL. Обязательна для понимания архитектуры ASM.
+### Теоретические основы
 
-- Lindholm, T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition. — Главы 4 и 6 описывают формат class-файлов и набор инструкций JVM — фундамент, без которого невозможно понять bytecode manipulation на уровне ASM.
+- **Bruneton E. et al. (2002). ASM: a Code Manipulation Tool to Implement Adaptable Systems.** — оригинальная статья создателя ASM: мотивация visitor pattern, сравнение с BCEL.
+- **Kiczales G. et al. (1997). Aspect-Oriented Programming.** — формализация AOP: cross-cutting concerns, join points, advice.
+- **Leroy X. (2003). Java Bytecode Verification: Algorithms and Formalizations.** — верификация байткода: почему некорректная трансформация вызывает VerifyError.
+- **Lindholm T. et al. (2014). JVM Specification.** — главы 4 и 6: формат class-файлов и набор инструкций JVM.
 
-- Venners, B. (2000). *Inside the Java Virtual Machine*, 2nd Edition. — Доступное объяснение работы JVM stack machine, constant pool и верификации байткода, необходимое для понимания того, почему некорректно сгенерированный байткод вызывает VerifyError.
+### Практические руководства
 
-- Oaks, S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond*, 2nd Edition. — Главы о JIT-компиляции объясняют, как JVM оптимизирует сгенерированный байткод и почему runtime-генерация может быть не медленнее статически скомпилированного кода.
-
-- Winterhalter, R. (2014-2025). *ByteBuddy Tutorial and Documentation*. bytebuddy.net. — Официальная документация ByteBuddy с подробными примерами Advice API, AgentBuilder и type matchers. Лучший стартовый ресурс для практического использования.
+- **Venners B. (2000). Inside the Java Virtual Machine, 2nd ed.** — stack machine, constant pool, верификация байткода.
+- **Winterhalter R. (2014--2025). ByteBuddy Tutorial and Documentation.** — Advice API, AgentBuilder, type matchers.
+- **Oaks S. (2020). Java Performance, 2nd ed.** — JIT-оптимизация сгенерированного байткода.
 
 ---
 

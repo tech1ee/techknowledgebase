@@ -34,6 +34,57 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **BPF (Berkeley Packet Filter)** — виртуальная машина в ядре для фильтрации пакетов, разработанная McCanne и Jacobson (1993) в Lawrence Berkeley Laboratory. BPF позволяет пользовательским программам задавать фильтры, которые выполняются в ядре, минимизируя количество пакетов, копируемых в userspace. Формально: BPF — это регистровая машина с двумя регистрами (A, X) и набором инструкций для проверки полей пакета.
+
+### Теория захвата пакетов
+
+| Концепция | Определение | Значение |
+|-----------|-------------|----------|
+| **Promiscuous mode** | NIC принимает все кадры, не только адресованные ему | Необходим для захвата чужого трафика в shared medium |
+| **Monitor mode** (WiFi) | NIC захватывает все 802.11 кадры, включая management | Для анализа WiFi-проблем (deauth, beacon) |
+| **pcap format** | Стандарт файла захвата (libpcap) | Совместимость tcpdump, Wireshark, tshark |
+| **pcapng** | Расширенный формат (multiple interfaces, annotations) | Дефолт в Wireshark с 2015 |
+| **BPF bytecode** | Скомпилированный фильтр в ядре | O(n) по длине фильтра, O(1) на пакет |
+
+### Архитектура захвата
+
+```
+Приложение (Wireshark/tcpdump)
+        ↑ read()
+    libpcap API
+        ↑ mmap ring buffer
+    BPF filter (ядро)
+        ↑
+    NIC driver (promiscuous mode)
+        ↑
+    Физическая среда (кабель / WiFi)
+```
+
+### Capture filter vs Display filter
+
+| Характеристика | Capture filter (BPF) | Display filter (Wireshark) |
+|---------------|---------------------|---------------------------|
+| Синтаксис | BPF: `port 80`, `host 10.0.0.1` | Wireshark: `tcp.port == 80` |
+| Момент применения | При захвате (ядро) | После захвата (userspace) |
+| Пропущенные пакеты | Потеряны навсегда | Скрыты, но сохранены |
+| Производительность | Высокая (kernel-level) | Зависит от объёма данных |
+| Применение | Ограничение объёма на production | Анализ сохранённого дампа |
+
+### Историческая справка
+
+- **1988** — tcpdump 1.0 (Van Jacobson, Craig Leres, Steven McCanne) — первый сетевой анализатор для Unix
+- **1993** — McCanne, Jacobson. "The BSD Packet Filter: A New Architecture for User-level Packet Capture" — USENIX Winter Conference. Описание BPF-архитектуры
+- **1998** — Gerald Combs создаёт Ethereal (переименован в Wireshark в 2006)
+- **2014** — eBPF в Linux — расширение BPF для программируемой обработки пакетов в ядре
+
+> **Закон Парето в packet analysis:** 80% сетевых проблем диагностируются по первым 20 пакетам TCP-сессии (SYN, SYN-ACK, handshake, первые data-пакеты). Умение "читать" TCP-handshake и первые обмены — ключевой навык.
+
+**См. также:** [[network-debugging-basics]] (когда применять packet analysis), [[network-transport-layer]] (структура TCP/UDP пакетов), [[network-troubleshooting-advanced]] (сложные сценарии с tcpdump)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1567,8 +1618,12 @@ contains matches
 
 ## Источники и дальнейшее чтение
 
-- **Sanders (2017).** *Practical Packet Analysis with Wireshark.* — лучшее практическое руководство по работе с Wireshark: от основ захвата до анализа сложных сценариев; написано для практиков, не требует глубоких теоретических знаний.
+### Теоретические основы
+- McCanne S., Jacobson V. (1993). "The BSD Packet Filter: A New Architecture for User-level Packet Capture" — USENIX Winter Conference (описание BPF-архитектуры)
 - **Fall, Stevens (2011).** *TCP/IP Illustrated, Vol. 1 (2nd ed).* — все примеры в книге сопровождаются реальными дампами пакетов, что делает её идеальным компаньоном для изучения packet analysis; учит «читать» TCP-сессии по пакетам.
+
+### Практические руководства
+- **Sanders (2017).** *Practical Packet Analysis with Wireshark.* — лучшее практическое руководство по работе с Wireshark: от основ захвата до анализа сложных сценариев; написано для практиков, не требует глубоких теоретических знаний.
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — лабораторные работы с Wireshark входят в комплект учебника; отлично подходит для первого знакомства с packet analysis в учебном контексте.
 
 ---

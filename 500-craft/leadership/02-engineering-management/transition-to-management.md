@@ -38,6 +38,33 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Теория identity shift при смене роли
+
+> **Определение:** Identity Shift — процесс трансформации профессиональной самоидентификации, происходящий при фундаментальной смене роли. В контексте перехода IC -> Manager включает переход от «я тот, кто делает» к «я тот, кто помогает другим делать».
+
+Herminia Ibarra в *"Working Identity: Unconventional Strategies for Reinventing Your Career"* (2003) показала, что смена профессиональной идентичности — не мгновенное событие, а длительный процесс экспериментирования с «possible selves». Для перехода из IC в менеджера это означает:
+
+| Фаза Ibarra | Проявление при transition | Типичное переживание |
+|-------------|--------------------------|---------------------|
+| **Exploring** | Пробуешь management-задачи ещё как IC | «А может, мне понравится?» |
+| **Crafting experiments** | Берёшь Tech Lead роль, менторишь junior | «Это интересно, но я скучаю по коду» |
+| **Shifting connections** | Начинаешь общаться больше с EM, чем IC | «Мои проблемы стали другими» |
+| **Making sense** | Принимаешь новую identity | «Я менеджер, и это нормально» |
+
+### Management vs Leadership (Kotter, 1996)
+
+John Kotter в *"Leading Change"* (1996) провёл фундаментальное различие между management и leadership:
+
+> **Management** — обеспечение порядка и предсказуемости: планирование, бюджетирование, организация, контроль. **Leadership** — создание изменений: определение направления, вдохновение людей, мотивация. Новый EM должен освоить management, не утратив способности к leadership.
+
+Camille Fournier в *"The Manager's Path"* (2017) описала переход из IC в менеджера как одну из самых critical career transitions, подчеркнув, что это **career change, не promotion**. Её модель «the new manager death spiral» (рекурсивное возвращение к IC-работе под давлением) стала классическим описанием основной ловушки перехода.
+
+Дополнительный теоретический контекст: Peter Principle (Laurence Peter, 1969) — тенденция организаций повышать людей до уровня их некомпетентности. Для инженерного мира это означает, что продвижение лучшего IC в менеджера без подготовки — системная ошибка, а не личный провал. Понимание этого снимает стигму с [[ic-vs-management|возврата на IC-трек]].
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -584,21 +611,25 @@ DAYS 60-90: Deliver
 
 ## Источники
 
+### Теоретические основы
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Transition framework |
-| 2 | [Charity Majors: Engineer/Manager Pendulum](https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/) | Article | Pendulum concept |
-| 3 | [First Round: New Manager Guide](https://review.firstround.com/) | Article | 90-day framework |
-| 4 | [Rands: New Manager Death Spiral](https://randsinrepose.com/archives/new-manager-death-spiral/) | Article | Common failures |
-| 5 | [DDI Research](https://www.ddiworld.com/) | Research | Failure statistics |
-| 6 | [Will Larson: Staff Engineer](https://staffeng.com/) | Book | IC alternative |
-| 7 | [Lara Hogan: Resilient Management](https://resilient-management.com/) | Book | First 1-on-1 questions |
+| 1 | Ibarra H. "Working Identity" — Harvard Business Press, 2003 | Книга | Теория identity shift, «possible selves» |
+| 2 | Kotter J. P. "Leading Change" — Harvard Business Review Press, 1996 | Книга | Management vs Leadership различие |
+| 3 | Peter L. J., Hull R. "The Peter Principle" — William Morrow, 1969 | Книга | Повышение до уровня некомпетентности |
+| 4 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | «New manager death spiral», career change model |
 
-### Дополнительное чтение
-
-- "Resilient Management" by Lara Hogan — первые 90 дней
-- "The Making of a Manager" by Julie Zhuo — FB perspective
-- "Become an Effective Software Engineering Manager" by James Stanier — practical guide
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Charity Majors: Engineer/Manager Pendulum](https://charity.wtf/2017/05/11/the-engineer-manager-pendulum/) | Article | Pendulum concept |
+| 2 | [First Round: New Manager Guide](https://review.firstround.com/) | Article | 90-day framework |
+| 3 | [Rands: New Manager Death Spiral](https://randsinrepose.com/archives/new-manager-death-spiral/) | Article | Common failures |
+| 4 | [DDI Research](https://www.ddiworld.com/) | Research | Failure statistics |
+| 5 | [Will Larson: Staff Engineer](https://staffeng.com/) | Book | IC alternative |
+| 6 | **Resilient Management** (Lara Hogan, 2019) | Книга | Первые 90 дней |
+| 7 | **The Making of a Manager** (Julie Zhuo, 2019) | Книга | FB perspective |
+| 8 | **Become an Effective Software Engineering Manager** (James Stanier, 2020) | Книга | Practical guide |
 
 ---
 

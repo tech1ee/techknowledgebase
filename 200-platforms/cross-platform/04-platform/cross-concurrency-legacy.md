@@ -44,6 +44,40 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Конкурентное программирование (Concurrent Programming)** — парадигма, в которой несколько вычислительных процессов выполняются в перекрывающихся временных интервалах, разделяя ресурсы (Dijkstra, 1965, Cooperating Sequential Processes).
+
+### Эволюция моделей конкурентности
+
+| Поколение | Период | iOS | Android | Проблемы |
+|-----------|--------|-----|---------|----------|
+| **Threads** | 2008-2012 | NSThread, pthread | java.lang.Thread | Race conditions, deadlocks |
+| **Thread pools** | 2009-2015 | NSOperationQueue | ExecutorService | Callback hell |
+| **GCD/AsyncTask** | 2009-2020 | Grand Central Dispatch | AsyncTask (deprecated) | Не структурировано |
+| **Reactive** | 2015-2020 | RxSwift, Combine | RxJava, LiveData | Steep learning curve |
+| **Structured** | 2018-now | Swift async/await | Kotlin Coroutines | Текущий стандарт |
+
+### Фундаментальные проблемы конкурентности
+
+Все legacy-подходы решают одни и те же проблемы (Herlihy & Shavit, 2008, The Art of Multiprocessor Programming):
+
+| Проблема | Определение | iOS legacy | Android legacy |
+|----------|-------------|------------|----------------|
+| **Race condition** | Результат зависит от порядка выполнения | NSLock, @synchronized | synchronized, volatile |
+| **Deadlock** | Взаимная блокировка потоков | Порядок lock'ов | Порядок lock'ов |
+| **Priority inversion** | Низкоприоритетный поток блокирует высокоприоритетный | QoS (GCD) | Thread priority |
+| **Callback hell** | Вложенные callbacks | Completion handlers | Callbacks, Listeners |
+
+### Thread Safety: формальное определение
+
+> Операция **thread-safe**, если при одновременном вызове из нескольких потоков она корректно работает без дополнительной синхронизации (Goetz et al., 2006, Java Concurrency in Practice).
+
+> **CS-фундамент:** Legacy-конкурентность связана с [[cross-concurrency-modern]] (современные решения) и [[cross-memory-management]] (потокобезопасность и память). Теоретическая база — Cooperating Sequential Processes (Dijkstra, 1965), Monitor Concept (Hoare, 1974).
+
 ## 1. Архитектурное сравнение
 
 ### iOS: Grand Central Dispatch (GCD)
@@ -1313,8 +1347,16 @@ lock.unlock()
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Подробно разбирает GCD, OperationQueue, Thread, а также переход к Swift Concurrency. Объясняет, почему Apple создала structured concurrency для замены GCD-паттернов.
-- Meier R. (2022). *Professional Android.* — Освещает Handler/Looper, AsyncTask (deprecated), Executors и переход к Kotlin Coroutines. Даёт полную картину эволюции конкурентности на Android от ранних версий до современных API.
+### Теоретические основы
+
+- **Dijkstra E. (1965).** *Cooperating Sequential Processes.* — Формализация конкурентности: race conditions, deadlocks, mutual exclusion.
+- **Hoare C. A. R. (1974).** *Monitors: An Operating System Structuring Concept.* — Monitor concept для синхронизации.
+- **Herlihy M., Shavit N. (2008).** *The Art of Multiprocessor Programming.* — Фундаментальные проблемы многопоточности.
+
+### Практические руководства
+
+- [Grand Central Dispatch](https://developer.apple.com/documentation/dispatch) — iOS concurrency.
+- [Java Concurrency](https://docs.oracle.com/javase/tutorial/essential/concurrency/) — Android threading.
 
 ---
 

@@ -28,6 +28,50 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cloud Database (DBaaS)** — управляемый сервис базы данных, где облачный провайдер берёт на себя инфраструктуру (provisioning, patching, backup, HA, scaling), а пользователь управляет данными и запросами.
+
+### Модели ответственности
+
+| Уровень | Self-hosted | Managed (RDS) | Serverless (Aurora SL) |
+|---------|-------------|---------------|----------------------|
+| Hardware | Вы | Провайдер | Провайдер |
+| OS / Patching | Вы | Провайдер | Провайдер |
+| DB Installation | Вы | Провайдер | Провайдер |
+| HA / Replication | Вы | Полуавтоматически | Автоматически |
+| Backup | Вы | Автоматически | Автоматически |
+| Scaling | Вы | Ручное / полуавто | Автоматически |
+| Schema design | Вы | Вы | Вы |
+| Query optimization | Вы | Вы | Вы |
+
+### Классификация cloud databases
+
+| Тип | AWS | GCP | Azure | Модель данных |
+|-----|-----|-----|-------|--------------|
+| **Relational (managed)** | RDS, Aurora | Cloud SQL | Azure SQL DB | SQL, ACID |
+| **Relational (global)** | Aurora Global | Cloud Spanner | Cosmos DB (SQL) | SQL, strong consistency |
+| **Document** | DocumentDB | Firestore | Cosmos DB | JSON/BSON |
+| **Key-Value** | DynamoDB | Bigtable | Table Storage | Key → Value |
+| **In-Memory** | ElastiCache | Memorystore | Cache for Redis | Key → Value (RAM) |
+| **Graph** | Neptune | — | Cosmos DB (Gremlin) | Nodes + Edges |
+| **Time-series** | Timestream | — | ADX | Time + Value |
+| **Serverless** | Aurora Serverless, DynamoDB | Firestore, Spanner | Cosmos DB (serverless) | Varies |
+
+### Ключевые trade-offs
+
+| Фактор | Self-hosted | Managed |
+|--------|------------|---------|
+| **Стоимость при стабильной нагрузке** | Ниже (reserved instances) | Выше (managed premium) |
+| **Стоимость при переменной нагрузке** | Выше (overprovisioning) | Ниже (auto-scaling) |
+| **Ops-нагрузка** | Высокая (вы — DBA) | Низкая (провайдер) |
+| **Контроль** | Полный (superuser) | Ограниченный |
+| **Vendor lock-in** | Нет | Высокий (proprietary APIs) |
+
+> **См. также**: [[cloud-platforms-essentials]] — основы облачных платформ, [[databases-replication-sharding]] — масштабирование
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -2301,9 +2345,15 @@ neon connection-string
 
 ## Источники и дальнейшее чтение
 
-- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о репликации, партиционировании и распределённых транзакциях объясняют внутренние механизмы Aurora, Spanner и Cosmos DB. Незаменимая книга для понимания trade-offs cloud databases.
-- Petrov A. (2019). *Database Internals*. — Разделы о distributed storage и consensus-протоколах (Paxos, Raft) помогают понять, как работают globally distributed databases (Spanner, CockroachDB) и почему они обеспечивают strong consistency.
-- Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Классический учебник, который даёт академическое понимание concurrency control, recovery и query processing — фундамент для оценки возможностей managed database сервисов.
+### Теоретические основы
+- Corbett J. et al. (2012). *Spanner: Google's Globally-Distributed Database*. — TrueTime, globally consistent reads, externally consistent transactions
+- Verbitski A. et al. (2017). *Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases*. — Разделение compute/storage, 6-way replication
+- Brewer E. (2012). *CAP Twelve Years Later*. — CAP в контексте cloud databases
+
+### Практические руководства
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Trade-offs репликации и партиционирования в Aurora, Spanner, Cosmos DB
+- Petrov A. (2019). *Database Internals*. — Distributed storage, consensus (Paxos, Raft) для globally distributed databases
+- Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Фундамент concurrency control, recovery, query processing
 
 ---
 

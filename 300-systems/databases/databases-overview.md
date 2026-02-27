@@ -34,6 +34,34 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **База данных** — организованная коллекция данных с контролируемым доступом, обеспечивающая целостность, параллельность и устойчивость к сбоям. **СУБД (DBMS)** — системное ПО, управляющее базой данных через стандартизированный язык запросов.
+
+### Фундаментальные модели данных
+
+| Модель | Автор | Год | Принцип |
+|--------|-------|-----|---------|
+| **Реляционная** | E.F. Codd (IBM) | 1970 | Данные = таблицы (relations), запросы = реляционная алгебра |
+| **Иерархическая** | IMS (IBM) | 1966 | Дерево записей (parent-child) |
+| **Сетевая** | CODASYL | 1969 | Граф записей (many-to-many) |
+| **Документная** | — | 2000-е | Полуструктурированные документы (JSON/BSON) |
+| **Key-Value** | — | 2000-е | Хеш-таблица: key → value |
+| **Графовая** | — | 2000-е | Узлы + рёбра + свойства |
+
+### CAP-теорема (Brewer, 2000)
+
+В распределённой системе невозможно одновременно гарантировать все три:
+- **C**onsistency — все узлы видят одни и те же данные
+- **A**vailability — каждый запрос получает ответ
+- **P**artition tolerance — система работает при потере сообщений между узлами
+
+При network partition выбор: **CP** (PostgreSQL, HBase) или **AP** (Cassandra, DynamoDB).
+
+> **См. также**: [[databases-sql-fundamentals]] — SQL, [[databases-nosql-comparison]] — NoSQL, [[databases-replication-sharding]] — масштабирование
+
+---
+
 ## TL;DR
 
 - **SQL (PostgreSQL, MySQL)** — транзакции, связи, сложные запросы, ACID
@@ -841,9 +869,16 @@ SELECT * FROM users WHERE phone = '79001234567';
 
 ## Источники
 
+### Теоретические основы
+- Codd E.F. (1970). *A Relational Model of Data for Large Shared Data Banks*. — Основополагающая работа реляционной модели
+- Brewer E. (2000). *Towards Robust Distributed Systems* (CAP theorem). — Keynote PODC 2000
+- Abadi D. (2012). *Consistency Tradeoffs in Modern Distributed Database System Design* (PACELC). — IEEE Computer
+- Date C.J. (2003). *An Introduction to Database Systems*. — Классический учебник по теории БД
+
+### Практические руководства
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/) — официальная документация
 - [Use The Index, Luke](https://use-the-index-luke.com/) — индексы от А до Я
-- "Designing Data-Intensive Applications" by Martin Kleppmann — библия распределённых систем
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — библия распределённых систем
 - [High Performance MySQL](https://www.oreilly.com/library/view/high-performance-mysql/9781492080503/) — O'Reilly
 
 ---

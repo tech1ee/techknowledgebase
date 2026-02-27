@@ -58,6 +58,30 @@ next_review:
 | Cache | Сохраненные данные между билдами | Заготовки на кухне |
 | Secret | Зашифрованные данные | Сейф с ключами |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Continuous Integration / Continuous Delivery (CI/CD)** — практика автоматической сборки, тестирования и доставки ПО при каждом изменении кода, обеспечивающая быструю обратную связь и стабильные релизы (Humble, Farley, 2010, Continuous Delivery).
+
+### CI/CD для KMP: уникальные вызовы
+
+KMP-проект требует **multi-platform CI pipeline**: одна сборка должна произвести артефакты для Android (JVM), iOS (Native), Desktop (JVM), Web (JS/Wasm):
+
+| Target | Требования CI runner | Build time | Артефакт |
+|--------|---------------------|-----------|----------|
+| Android | Linux/macOS + JDK + Android SDK | 3-5 min | .aar/.apk |
+| iOS | **macOS only** + Xcode | 5-15 min | .framework/.xcframework |
+| Desktop | Каждая целевая ОС | 3-5 min | .dmg/.msi/.deb |
+| Web | Linux/macOS + JDK | 2-4 min | .js/.wasm |
+
+### Принцип: «Build on target platform»
+
+Кросс-компиляция для iOS невозможна — macOS + Xcode обязательны. Это следствие **закрытости Apple toolchain**: LLVM для Apple targets включён только в Xcode.
+
+> **Академические источники:** Humble J., Farley D. (2010). *Continuous Delivery.* Addison-Wesley. Kim G. et al. (2016). *The DevOps Handbook.* IT Revolution Press.
+
 ## Почему CI/CD для KMP особенный?
 
 **Dual-Platform Cost Problem:** iOS билды требуют macOS runner ($0.08/min) — **10x дороже** Linux ($0.008/min). Решение: запускать iOS тесты только после успешных JVM тестов (`needs: test-jvm`).
@@ -799,11 +823,15 @@ jobs:
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации Kotlin-проектов, включая Gradle conventions и модульность, которые напрямую влияют на структуру CI/CD: convention plugins упрощают конфигурацию, а правильная модуляризация позволяет параллельно билдить независимые модули.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения ответственности и boundary interfaces применяются к организации CI/CD pipeline: отдельные jobs для lint, test, build, deploy с чёткими зависимостями образуют DAG, аналогичный архитектурным слоям приложения.
+- **Humble J., Farley D. (2010).** *Continuous Delivery.* — Принципы CI/CD: каждый коммит — потенциальный релиз.
+- **Fowler M. (2006).** *Continuous Integration.* — Практики интеграции, адаптированные для multi-target KMP pipeline.
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin-экосистемы и Gradle-интеграции, необходимые для понимания KMP-билд процесса: targets, source sets, expect/actual — всё это определяет, какие Gradle tasks генерируются и как их организовать в CI workflow.
+### Практические руководства
+
+- **Moskala M. (2021).** *Effective Kotlin.* — Kotlin для CI/CD скриптов и Gradle tasks.
+- [GitHub Actions for KMP](https://github.com/nicklcm/kotlin-multiplatform-github-actions) — CI/CD шаблоны для KMP.
 
 ---
 

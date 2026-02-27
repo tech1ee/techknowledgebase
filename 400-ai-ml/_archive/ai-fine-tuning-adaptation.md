@@ -53,6 +53,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Fine-tuning** — процесс адаптации предобученной модели $M_{\theta}$ к целевому распределению данных $D_{target}$ путём обновления параметров $\theta' = \theta + \Delta\theta$, минимизируя $\mathcal{L}(\theta'; D_{target})$ при сохранении обобщающих способностей (Pan & Yang, 2009).
+
+### Математическая основа LoRA
+
+**LoRA** (Hu et al., 2021) предлагает low-rank decomposition обновления весов:
+
+$$W' = W + \Delta W = W + BA$$
+
+где $B \in \mathbb{R}^{d \times r}$, $A \in \mathbb{R}^{r \times k}$, ранг $r \ll \min(d, k)$.
+
+| Метод | Обучаемые параметры | Память (7B модель) | Теоретическая основа |
+|-------|--------------------|--------------------|---------------------|
+| Full Fine-tuning | 100% | ~60 GB | Классическая оптимизация |
+| **LoRA** | ~0.1-1% | ~16 GB | Low-rank matrix approximation |
+| **QLoRA** | ~0.1-1% | ~6 GB | LoRA + NF4 quantization |
+| Prefix Tuning | ~0.1% | ~16 GB | Soft prompt optimization |
+| Adapter | ~3-5% | ~18 GB | Bottleneck neural modules |
+
+### Эволюция подходов к адаптации
+
+| Год | Метод | Авторы | Ключевая идея |
+|-----|-------|--------|---------------|
+| 2018 | ULMFiT | Howard & Ruder | Discriminative fine-tuning + gradual unfreezing |
+| 2019 | Adapter | Houlsby et al. | Bottleneck модули между слоями transformer |
+| 2021 | **LoRA** | Hu et al. | Low-rank обновление attention матриц |
+| 2021 | Prefix Tuning | Li & Liang | Обучаемые виртуальные токены |
+| 2023 | **QLoRA** | Dettmers et al. | LoRA + 4-bit NormalFloat quantization |
+| 2024 | DoRA | Liu et al. | Weight-Decomposed LoRA |
+
+> **Catastrophic forgetting** (McCloskey & Cohen, 1989) — фундаментальная проблема fine-tuning: модель забывает ранее изученное при обучении на новых данных. PEFT-методы (LoRA, QLoRA) частично решают эту проблему, обновляя лишь малую часть параметров.
+
+**Связи:** [[llm-fundamentals]] (архитектура Transformer), [[ai-evaluation-metrics]] (оценка fine-tuned моделей), [[ai-data-preparation]] (подготовка данных для обучения)
+
+---
+
 ## Когда нужен Fine-tuning
 
 ```
@@ -578,11 +615,22 @@ Fine-tuning в первую очередь меняет КАК модель от
 
 ## Источники
 
-- [LoRA Paper](https://arxiv.org/abs/2106.09685) — оригинальная статья
-- [QLoRA Paper](https://arxiv.org/abs/2305.14314) — quantized LoRA
-- [Hugging Face PEFT](https://huggingface.co/docs/peft) — библиотека
-- [OpenAI Fine-tuning Guide](https://platform.openai.com/docs/guides/fine-tuning)
-- [Sebastian Raschka: Fine-tuning Guide](https://magazine.sebastianraschka.com/)
+### Теоретические основы
+
+- Hu E. et al. (2021). *LoRA: Low-Rank Adaptation of Large Language Models*. arXiv:2106.09685
+- Dettmers T. et al. (2023). *QLoRA: Efficient Finetuning of Quantized Large Language Models*. arXiv:2305.14314
+- Pan S.J., Yang Q. (2009). *A Survey on Transfer Learning*. IEEE TKDE
+- Howard J., Ruder S. (2018). *Universal Language Model Fine-tuning for Text Classification (ULMFiT)*. ACL
+- Houlsby N. et al. (2019). *Parameter-Efficient Transfer Learning for NLP*. ICML
+- Li X.L., Liang P. (2021). *Prefix-Tuning: Optimizing Continuous Prompts for Generation*. ACL
+- Liu S. et al. (2024). *DoRA: Weight-Decomposed Low-Rank Adaptation*. arXiv:2402.09353
+- McCloskey M., Cohen N.J. (1989). *Catastrophic Interference in Connectionist Networks*. Psychology of Learning and Motivation
+
+### Практические руководства
+
+- [Hugging Face PEFT](https://huggingface.co/docs/peft) — библиотека для parameter-efficient fine-tuning
+- [OpenAI Fine-tuning Guide](https://platform.openai.com/docs/guides/fine-tuning) — fine-tuning через API
+- [Sebastian Raschka: Fine-tuning Guide](https://magazine.sebastianraschka.com/) — практические советы
 
 ---
 
@@ -597,14 +645,6 @@ Fine-tuning в первую очередь меняет КАК модель от
 **[[rag-and-prompt-engineering]]** — RAG и prompt engineering являются основными альтернативами fine-tuning. В большинстве случаев качественный промпт с few-shot примерами или RAG-пайплайн решает задачу без дообучения модели. Понимание возможностей и ограничений этих подходов — ключевой фактор при принятии решения о fine-tuning: если RAG обеспечивает нужное качество, дообучение избыточно.
 
 **[[ai-evaluation-metrics]]** — Метрики оценки критически важны для fine-tuning: без объективных метрик невозможно определить, улучшило ли дообучение модель или привело к catastrophic forgetting. Evaluation pipeline должен включать как специфичные метрики для целевой задачи, так и общие бенчмарки для проверки сохранения базовых способностей модели после fine-tuning.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Goodfellow I., Bengio Y., Courville A. (2016). Deep Learning. MIT Press.** — фундаментальные главы об оптимизации, регуляризации и transfer learning, которые являются теоретической основой LoRA, QLoRA и других методов эффективного дообучения
-- **Bishop C.M. (2006). Pattern Recognition and Machine Learning. Springer.** — математические основы байесовского подхода к обучению и регуляризации, важные для понимания low-rank approximation в LoRA
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — практические паттерны подготовки данных, обучения и оценки ML-моделей, включая стратегии обнаружения data drift и model degradation после fine-tuning
 
 ---
 

@@ -34,6 +34,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Founding Engineer: роль, мотивация и экономика
+
+> **Определение:** Founding Engineer — первые 1-5 инженеров, нанятых основателями стартапа. Не является сооснователем (cofounder), но получает значительный equity stake и оказывает непропорционально большое влияние на техническую культуру, архитектуру и процессы компании.
+
+Edgar Schein в *"Organizational Culture and Leadership"* (1985) показал, что культура организации формируется в первые месяцы существования и определяется действиями ранних участников. Founding engineer, наряду с основателями, является одним из ключевых **culture setters**: его рабочие привычки, стандарты качества и принципы коммуникации становятся нормами для всех последующих нанятых инженеров.
+
+| Аспект | Теоретическая основа | Применение к founding engineer |
+|--------|---------------------|-------------------------------|
+| **Культура** | Schein, Organizational Culture (1985) | Founding engineer = culture setter |
+| **Мотивация** | Deci & Ryan, Self-Determination Theory (1985) | Autonomy + Mastery + Purpose максимальны |
+| **Equity** | Jensen & Meckling, Agency Theory (1976) | Equity alignment reduces principal-agent problem |
+| **Risk/Reward** | Knight, Risk/Uncertainty (1921) | Startup equity = Knightian uncertainty, не calculable risk |
+
+Frank Knight в *"Risk, Uncertainty and Profit"* (1921) различал **risk** (вероятность известна) и **uncertainty** (вероятность неизвестна). Equity founding engineer — это Knightian uncertainty: невозможно рассчитать expected value, поскольку outcome зависит от множества unknowable факторов. Это объясняет, почему рациональная оценка startup equity невозможна — это fundamentally решение о trust в founders и belief в vision.
+
+> «The first employees define the culture. They are the DNA of the company.» — Sam Altman, Y Combinator
+
+Noam Wasserman в *"The Founder's Dilemmas"* (2012) исследовал equity distribution в стартапах и показал, что ранние сотрудники часто недооценивают dilution и overvalue nominal equity percentage, что приводит к misaligned expectations при exit.
+
+---
+
 ## What is a Founding Engineer?
 
 ```
@@ -405,13 +428,22 @@ ALTERNATIVES:
 
 **[[startup-cto]]** — Founding engineer и CTO стартапа — тесно связанные, но различные роли. Founding engineer часто становится первым кандидатом на роль VP Engineering или Tech Lead по мере роста компании, если CTO — основатель. Понимание эволюции роли CTO помогает founding engineer планировать свою карьерную траекторию и выстраивать правильные отношения с техническим сооснователем.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Ries E. (2011) *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Schein E. "Organizational Culture and Leadership" — Jossey-Bass, 1985 | Книга | Ранние участники = culture setters |
+| 2 | Knight F. "Risk, Uncertainty and Profit" — Houghton Mifflin, 1921 | Книга | Knightian uncertainty vs risk |
+| 3 | Wasserman N. "The Founder's Dilemmas" — Princeton University Press, 2012 | Книга | Equity distribution, dilution expectations |
+| 4 | Jensen M., Meckling W. "Theory of the Firm" — Journal of Financial Economics, 1976 | Статья | Agency theory, equity alignment |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Startup challenges, early team dynamics |
+| 2 | [Holloway Guide to Equity Compensation](https://www.holloway.com/g/equity-compensation) | Guide | Equity mechanics, negotiation |
+| 3 | Ries E. "The Lean Startup" — Crown Business, 2011 | Книга | MVP mindset for early engineers |
 
 
 ## Проверь себя

@@ -26,6 +26,68 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Что такое паттерн формально
+
+> **Design Pattern** — повторяемое решение часто возникающей проблемы в определённом контексте проектирования. Формально: тройка **(Context, Problem, Solution)** с описанием последствий (forces и trade-offs).
+
+Кристофер Александр (архитектор, 1977) дал первое определение:
+
+> *"Each pattern describes a problem which occurs over and over again in our environment, and then describes the core of the solution to that problem, in such a way that you can use this solution a million times over, without ever doing it the same way twice."* — Alexander, 1977
+
+### Историческая атрибуция
+
+| Событие | Год | Автор(ы) | Значение |
+|---------|-----|----------|----------|
+| **A Pattern Language** | 1977 | Christopher Alexander | Идея паттернов в архитектуре зданий (253 паттерна) |
+| **OOPSLA '87** | 1987 | Beck & Cunningham | Первое применение паттернов к ПО (5 паттернов для Smalltalk UI) |
+| **GoF Book** | 1994 | Gamma, Helm, Johnson, Vlissides | 23 паттерна ООП — каноническая книга |
+| **POSA** | 1996 | Buschmann et al. | Pattern-Oriented Software Architecture — архитектурные паттерны |
+| **Refactoring** | 1999 | Fowler | Связь между паттернами и рефакторингом |
+| **Dynamic Languages** | 1996 | Norvig | 16 из 23 GoF паттернов упрощаются/исчезают с first-class функциями |
+| **Effective Java** | 2001 | Bloch | Паттерны как идиомы Java (Static Factory, Builder) |
+
+### Формальная структура паттерна (GoF format)
+
+GoF описывают каждый паттерн по 13 пунктам, но ядро — 4 элемента:
+
+1. **Name** — словарь для коммуникации ("используй Strategy здесь")
+2. **Problem** — когда применять (context + forces)
+3. **Solution** — структура классов и объектов (UML)
+4. **Consequences** — trade-offs, что получаем и чем платим
+
+### Паттерны и принципы: формальная связь
+
+Каждый GoF-паттерн реализует один или несколько **SOLID**-принципов и принципов ООП:
+
+| Принцип | Какие паттерны реализуют |
+|---------|------------------------|
+| **Open/Closed (OCP)** | Strategy, Decorator, Observer — расширение без модификации |
+| **Dependency Inversion (DIP)** | Factory, Abstract Factory, Strategy — зависимость от абстракций |
+| **Single Responsibility (SRP)** | Facade, Mediator — разделение ответственности |
+| **Liskov Substitution (LSP)** | Template Method, Strategy — подтипы заменяемы |
+| **Program to interface** | Почти все GoF-паттерны |
+| **Favor composition** | Decorator, Strategy, Composite — вместо наследования |
+
+### Антипаттерны и критика (2000-е — н.в.)
+
+> **Критика Norvig (1996):** "Design patterns are bug reports against your programming language." — 16 из 23 GoF-паттернов тривиализируются в языках с first-class функциями, closures и метапрограммированием.
+
+| GoF-паттерн | В Kotlin/современных языках |
+|-------------|----------------------------|
+| **Strategy** | `(T) -> R` (функция как параметр) |
+| **Observer** | `Flow`, `LiveData`, reactive streams |
+| **Singleton** | `object` keyword |
+| **Iterator** | `Iterable`/`Sequence` (встроено в язык) |
+| **Builder** | Named arguments + default values |
+| **Command** | Lambda / function reference |
+| **Template Method** | Higher-order function |
+
+**Вывод:** паттерны не устарели — они **мигрировали** из явного кода в языковые конструкции. Понимание паттернов важно для архитектурных решений; знание языковых идиом — для реализации.
+
+---
+
 ## Три категории GoF
 
 Все 23 паттерна GoF делятся на три группы по типу задачи, которую они решают:
@@ -373,16 +435,19 @@ Singleton -> `object`, Builder -> named/default params, Strategy -> лямбды
 
 ## Источники
 
-- Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* --- оригинальная книга GoF, описавшая 23 паттерна
-- Alexander C. (1977). *A Pattern Language: Towns, Buildings, Construction* --- архитектурная книга, вдохновившая GoF
-- Moskala M. (2021). *Effective Kotlin* --- Item 30-32: почему в Kotlin factory functions лучше конструкторов и когда паттерны не нужны
-- Bloch J. (2018). *Effective Java*, 3rd ed. --- Item 1: Static factory methods; Item 2: Builder pattern
-- Nystrom R. (2014). *Game Programming Patterns* --- прагматичный подход к паттернам без dogma
-- [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns) --- лучший визуальный справочник
-- [Norvig P. (1996). Design Patterns in Dynamic Languages](https://norvig.com/design-patterns/) --- 16 из 23 паттернов упрощаются в языках с first-class функциями
-- [Have Software Design Patterns Become Obsolete?](https://leakka.com/2024/04/11/have-software-design-patterns-become-obsolete/) --- современная перспектива (2024)
-- [GoF Patterns: Still Relevant in 2025?](https://medium.com/@freddy.dordoni/the-gang-of-four-gave-us-23-design-patterns-are-they-still-relevant-in-2025-f2e999c384c0) --- обзор актуальности
-- [Kotlin Design Patterns](https://reflectoring.io/kotlin-design-patterns/) --- паттерны в идиоматичном Kotlin
+### Теоретические основы
+- Alexander, C. (1977). *A Pattern Language: Towns, Buildings, Construction* — архитектурная книга, вдохновившая GoF (253 паттерна)
+- Gamma, E., Helm, R., Johnson, R., Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software* — GoF, 23 паттерна
+- Beck, K. & Cunningham, W. (1987). "Using Pattern Languages for Object-Oriented Programs" — OOPSLA; первое применение к ПО
+- Norvig, P. (1996). "Design Patterns in Dynamic Languages" — 16 из 23 упрощаются с first-class функциями
+- Buschmann, F. et al. (1996). *Pattern-Oriented Software Architecture (POSA)* — архитектурные паттерны
+
+### Практические руководства
+- Moskala, M. (2021). *Effective Kotlin* — Item 30-32: factory functions и когда паттерны не нужны
+- Bloch, J. (2018). *Effective Java*, 3rd ed. — Item 1: Static factory methods; Item 2: Builder
+- Nystrom, R. (2014). *Game Programming Patterns* — прагматичный подход без dogma
+- [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns) — лучший визуальный справочник
+- [Kotlin Design Patterns](https://reflectoring.io/kotlin-design-patterns/) — паттерны в идиоматичном Kotlin
 
 ---
 

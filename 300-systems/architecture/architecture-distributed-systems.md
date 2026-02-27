@@ -43,6 +43,69 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис распределённых систем
+
+### FLP Impossibility (Fischer, Lynch, Paterson, 1985)
+
+> **Теорема (FLP, 1985):** В асинхронной системе с хотя бы одним отказавшим процессом **невозможно** гарантированно достичь консенсуса за конечное время.
+
+Это самый важный результат теории распределённых систем. Он означает: **нет идеального алгоритма консенсуса** — всегда компромисс между safety (корректностью) и liveness (завершением). Paxos и Raft жертвуют liveness: при network partition они могут "зависнуть", но никогда не дадут неправильный ответ.
+
+### CAP Theorem: формальная формулировка
+
+> **Теорема (Brewer, 2000 — гипотеза; Gilbert & Lynch, 2002 — формальное доказательство):** Для распределённой системы хранения данных невозможно одновременно гарантировать все три свойства:
+> - **Consistency:** Каждое чтение возвращает результат последней записи (linearizability)
+> - **Availability:** Каждый запрос к работающему узлу получает ответ (не ошибку)
+> - **Partition tolerance:** Система продолжает работать при произвольных потерях сообщений
+
+**Критические уточнения:**
+1. P неизбежен в реальной сети → выбор между C и A **при partition**
+2. В отсутствие partition можно иметь и C, и A
+3. **PACELC** (Abadi, 2010): даже без Partition, есть trade-off Latency vs Consistency
+
+### Консенсус: Paxos и Raft
+
+| Алгоритм | Автор | Год | Ключевая идея |
+|----------|-------|-----|---------------|
+| **Paxos** | Leslie Lamport | 1998 (написан 1989) | Proposer/Acceptor/Learner; majority quorum |
+| **Multi-Paxos** | Lamport | 2001 | Стабильный leader для серии решений |
+| **Raft** | Ongaro & Ousterhout | 2014 | "Understandable Paxos": leader election + log replication |
+| **PBFT** | Castro & Liskov | 1999 | Byzantine fault tolerance (3f+1 узлов) |
+
+Raft создан именно потому, что Paxos "notoriously difficult to understand" (Ongaro). Raft разделяет консенсус на 3 подзадачи: leader election, log replication, safety.
+
+### Saga Pattern: формальная атрибуция
+
+> **Определение (Garcia-Molina & Salem, 1987):** **Saga** — последовательность локальных транзакций T₁, T₂, ..., Tₙ, где каждая Tᵢ имеет компенсирующую транзакцию Cᵢ. При сбое на шаге k выполняются Cₖ₋₁, ..., C₁.
+
+Saga — альтернатива 2PC для **long-lived transactions**, где удержание блокировок неприемлемо. Trade-off: atomicity → eventual consistency + compensation.
+
+### Модели согласованности: формальная иерархия
+
+```
+Linearizability (самая строгая)
+    ↓  ослабление
+Sequential Consistency
+    ↓
+Causal Consistency
+    ↓
+Eventual Consistency (самая слабая)
+```
+
+- **Linearizability** (Herlihy & Wing, 1990): операции упорядочены глобально, каждая "происходит мгновенно"
+- **Sequential** (Lamport, 1979): операции каждого процесса упорядочены, но нет глобальных часов
+- **Causal** (Ahamad et al., 1995): причинно-связанные операции упорядочены
+- **Eventual** (Vogels, 2009): "в конечном итоге все реплики сойдутся к одному значению"
+
+### Связи
+
+- [[databases-transactions-acid]] — ACID как локальные транзакции vs распределённые
+- [[nosql-databases-complete]] — CAP на практике в NoSQL
+- [[architecture-resilience-patterns]] — паттерны устойчивости для распределённых систем
+- [[synchronization-primitives]] — консенсус на уровне процессов
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -496,8 +559,19 @@ assert node1.value() == node2.value() == 8  # Always converges
 
 ## Источники
 
-- "Designing Data-Intensive Applications" by Martin Kleppmann — Chapter 5, 7, 9
-- [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem)
+### Теоретические основы
+
+- **Fischer, M.J., Lynch, N.A., Paterson, M.S. (1985). "Impossibility of Distributed Consensus with One Faulty Process." JACM.** — FLP impossibility: фундаментальная теорема о невозможности консенсуса в асинхронных системах
+- **Gilbert, S. & Lynch, N. (2002). "Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services." ACM SIGACT News.** — Формальное доказательство CAP-теоремы
+- **Lamport, L. (1998). "The Part-Time Parliament." ACM TOCS.** — Paxos: первый практический алгоритм консенсуса
+- **Ongaro, D. & Ousterhout, J. (2014). "In Search of an Understandable Consensus Algorithm." USENIX ATC.** — Raft: "понятный Paxos"
+- **Garcia-Molina, H. & Salem, K. (1987). "Sagas." SIGMOD.** — Оригинальная статья Saga pattern для long-lived transactions
+- **Herlihy, M. & Wing, J. (1990). "Linearizability." ACM TOPLAS.** — Формальное определение линеаризуемости
+- **Abadi, D. (2010). "Consistency Tradeoffs in Modern Distributed Database System Design."** — PACELC: расширение CAP
+
+### Практические руководства
+
+- **Kleppmann, M. (2017). "Designing Data-Intensive Applications."** — Chapter 5, 7, 9
 - [Saga Pattern](https://microservices.io/patterns/data/saga.html)
 - [Jepsen](https://jepsen.io/) — distributed systems testing
 - [Google Spanner Paper](https://research.google/pubs/pub39966/)

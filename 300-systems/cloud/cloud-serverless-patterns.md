@@ -34,6 +34,45 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Serverless Computing** — модель облачных вычислений, где провайдер динамически управляет выделением ресурсов, а пользователь платит только за фактическое время выполнения (pay-per-invocation). Термин введён в широкое использование AWS Lambda (2014).
+
+### Два типа serverless
+
+| Тип | Описание | Примеры |
+|-----|----------|---------|
+| **FaaS** (Function as a Service) | Исполнение отдельных функций по событиям | Lambda, Cloud Functions, Azure Functions |
+| **BaaS** (Backend as a Service) | Managed backend-сервисы без управления серверами | Firebase, DynamoDB, S3, Auth0 |
+
+### Формальная модель FaaS
+
+```
+Event Source → Trigger → Function Instance → Response
+                         │
+                    ┌─────┴─────┐
+                    │ Cold Start │ (загрузка runtime, init кода)
+                    └───────────┘
+```
+
+- **Stateless**: каждый вызов независим, состояние хранится внешне (DB, S3, cache)
+- **Event-driven**: функция вызывается только при наступлении события
+- **Auto-scaling**: от 0 до тысяч параллельных экземпляров автоматически
+- **Time-limited**: максимальное время выполнения ограничено (Lambda: 15 min)
+
+### Trade-offs serverless
+
+| Преимущество | Ограничение |
+|-------------|-------------|
+| Zero ops (нет серверов) | Cold start latency (100-500ms) |
+| Pay-per-use ($0 при idle) | Vendor lock-in (event model, SDK) |
+| Auto-scaling от 0 | Stateless → внешнее хранение состояния |
+| Быстрый time-to-market | Сложная отладка и мониторинг |
+
+> **См. также**: [[cloud-aws-core-services]] — AWS Lambda, [[architecture-event-driven]] — event-driven architecture
+
+---
+
 ## TL;DR
 
 - **Cold start** — 100-500ms задержка при первом вызове
@@ -405,9 +444,14 @@ functions:
 
 ## Источники
 
+### Теоретические основы
+- Jonas E. et al. (2019). *Cloud Programming Simplified: A Berkeley View on Serverless Computing*. — Академический взгляд на serverless, trade-offs, будущее
+- Baldini I. et al. (2017). *Serverless Computing: Current Trends and Open Problems*. — Обзор ограничений и исследовательских задач
+
+### Практические руководства
 - [AWS Lambda Best Practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
 - [AWS Step Functions](https://docs.aws.amazon.com/step-functions/)
-- "Serverless Architectures on AWS" by Peter Sbarski
+- Sbarski P. *Serverless Architectures on AWS*. — Паттерны и антипаттерны
 
 ---
 

@@ -35,6 +35,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **GitOps** — операционная модель, где **Git-репозиторий** является единственным источником правды (single source of truth) для декларативного описания инфраструктуры и приложений. Термин введён **Alexis Richardson (Weaveworks, 2017)**.
+
+### 4 принципа GitOps (OpenGitOps, CNCF)
+
+| Принцип | Описание |
+|---------|----------|
+| **Declarative** | Desired state описан декларативно (YAML/HCL) |
+| **Versioned & Immutable** | Все изменения через Git commits (полная история, audit trail) |
+| **Pulled Automatically** | Agent в кластере **pull**-ит изменения из Git (не CI push-ит) |
+| **Continuously Reconciled** | Agent непрерывно сверяет actual ↔ desired state |
+
+### Push vs Pull модель
+
+| Аспект | Push-based (традиционный CI/CD) | Pull-based (GitOps) |
+|--------|--------------------------------|---------------------|
+| Кто деплоит | CI server push-ит в кластер | Agent в кластере pull-ит из Git |
+| Credentials | CI нужен доступ к кластеру | Agent уже внутри кластера |
+| Drift detection | Нет (только при следующем деплое) | Непрерывно (reconciliation loop) |
+| Security | CI = attack surface | Cluster credentials не покидают кластер |
+
+> **См. также**: [[kubernetes-basics]] — основы K8s, [[ci-cd-pipelines]] — CI/CD, [[infrastructure-as-code]] — IaC
+
+---
+
 ## TL;DR
 
 - **GitOps** — Git является единственным источником правды для desired state
@@ -528,11 +554,14 @@ spec:
 
 ## Источники
 
+### Теоретические основы
+- Richardson A. (2017). *GitOps — Operations by Pull Request* (Weaveworks). — Оригинальное описание GitOps-модели
+- [OpenGitOps Principles](https://opengitops.dev/) — CNCF формализация 4 принципов
+
+### Практические руководства
 - [ArgoCD Documentation](https://argo-cd.readthedocs.io/)
 - [Flux Documentation](https://fluxcd.io/docs/)
-- [GitOps Principles](https://opengitops.dev/)
-- [Weave GitOps](https://www.weave.works/product/gitops/)
-- "GitOps and Kubernetes" by Billy Yuen
+- Yuen B. et al. *GitOps and Kubernetes*. — Практическое руководство
 
 ---
 

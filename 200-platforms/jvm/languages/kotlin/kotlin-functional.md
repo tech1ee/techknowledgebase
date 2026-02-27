@@ -58,6 +58,39 @@ related:
 
 ---
 
+## Теоретические основы
+
+Функциональное программирование в Kotlin основано на формальных концепциях, восходящих к лямбда-исчислению и теории типов.
+
+### Лямбда-исчисление и first-class functions
+
+> **Формально:** лямбда-исчисление (Church, 1936) — формальная система, в которой функции являются единственными примитивами. Kotlin реализует **first-class functions**: функции передаются как аргументы, возвращаются из функций и хранятся в переменных — это свойство, формализованное Strachey (1967) в работе *Fundamental Concepts in Programming Languages*.
+
+Тип `(A) -> B` в Kotlin — это **function type**, эквивалент типа `A → B` в typed lambda calculus (Church, 1940). Kotlin поддерживает функции как значения, но **не** поддерживает полный Hindley-Milner полиморфизм — generic-лямбды требуют явных типовых параметров.
+
+### Замыкания (Closures)
+
+Замыкание — функция, захватывающая свободные переменные из окружающей области видимости. Формально определены Landin (1964, *The Mechanical Evaluation of Expressions*). В Kotlin замыкания захватывают переменные **по ссылке** (в отличие от Java, где лямбды захватывают только effectively final переменные) — компилятор оборачивает мутируемые переменные в `Ref<T>`.
+
+### Higher-Order Functions и inline оптимизация
+
+| Концепция | Определение | Реализация в Kotlin |
+|-----------|------------|---------------------|
+| **Higher-order function** | Функция, принимающая или возвращающая другие функции (McCarthy, LISP, 1960) | `fun <T> List<T>.map(f: (T) -> R): List<R>` |
+| **Partial application** | Фиксация части аргументов функции (Schonfinkel, 1924; Curry, 1958) | Нативно не поддерживается; эмулируется через лямбды |
+| **Inline** | Подстановка тела функции в место вызова | `inline fun`: устраняет overhead аллокации анонимного класса для лямбды |
+| **Reified generics** | Сохранение типового параметра в runtime | `inline fun <reified T>`: type erasure обходится через inlining |
+
+> **Inline как компиляторная оптимизация.** Без `inline` каждая лямбда компилируется в анонимный класс (`Function1<T, R>`), создавая аллокацию в heap. `inline` выполняет **beta-reduction** (подстановку) на уровне байткода — лямбда вставляется непосредственно в место вызова. Это формально эквивалентно beta-редукции в лямбда-исчислении: `(λx.M) N → M[x := N]`.
+
+### Scope functions как комбинаторы
+
+Пять scope functions Kotlin (`let`, `apply`, `run`, `also`, `with`) — это **комбинаторы** (combinators) в духе комбинаторной логики (Schonfinkel, 1924; Curry, 1930). Каждый комбинатор определяется двумя осями: **receiver** (`this` vs `it`) и **return value** (результат лямбды vs сам объект).
+
+См. также: [[kotlin-collections]] — функциональные операции над коллекциями, [[kotlin-coroutines]] — suspend и CPS как функциональные концепции.
+
+---
+
 Функции в Kotlin — first-class citizens: передаются как параметры, возвращаются из функций, хранятся в переменных. Лямбды с замыканиями `{ x -> x * 2 }`, trailing lambda синтаксис делает DSL естественным. Scope functions (let, apply, run, also, with) — пять способов работать с объектом в разном контексте.
 
 Представьте кулинарию. **Higher-order function** — это шеф-повар, который не готовит сам, а даёт инструкции помощникам (лямбдам): «возьми каждый овощ и нарежь» (`map`), «оставь только спелые» (`filter`), «сложи всё в одну кастрюлю» (`fold`). Шеф-повар работает с любыми помощниками — главное, чтобы они умели выполнять инструкцию. **Scope functions** — это разные способы обратиться к одному ингредиенту: `let` — «передай его дальше и получи результат», `apply` — «приправь его и верни обратно», `also` — «запиши, что ты с ним сделал, и верни как есть».
@@ -1187,6 +1220,16 @@ beans {
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Church A. (1936). *An Unsolvable Problem of Elementary Number Theory*. — Лямбда-исчисление: формальная основа first-class functions и лямбда-выражений.
+- Strachey C. (1967). *Fundamental Concepts in Programming Languages*. — Формализация first-class values, parametric polymorphism, L-values и R-values.
+- Landin P.J. (1964). *The Mechanical Evaluation of Expressions*. — Первое формальное определение замыканий (closures) как пар <код, среда>.
+- Schonfinkel M. (1924). *Uber die Bausteine der mathematischen Logik*. — Комбинаторная логика: теоретическая основа для scope functions как комбинаторов.
+- Hutton G. (1999). *A tutorial on the universality and expressiveness of fold*. JFP. — Доказательство универсальности fold для списков.
+
+### Практические руководства
 
 - Jemerov D., Isakova S. (2024). *Kotlin in Action, 2nd Edition.* — глава о функциональном программировании подробно объясняет лямбды, higher-order functions, inline оптимизацию и scope functions с примерами из реальных проектов.
 - Moskala M. (2024). *Effective Kotlin.* — best practices для лямбд и scope functions: когда использовать let vs run, как избегать вложенных scope functions и правильно применять inline.

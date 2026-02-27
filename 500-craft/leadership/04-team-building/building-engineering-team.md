@@ -37,6 +37,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Стадии развития группы (Tuckman, 1965)
+
+> **Определение:** Group Development — процесс формирования команды из группы индивидов, проходящий через предсказуемые стадии с различной динамикой, продуктивностью и потребностью в лидерстве.
+
+Bruce Tuckman в статье *"Developmental Sequence in Small Groups"* (Psychological Bulletin, 1965) описал четыре стадии развития группы (пятая — adjourning — добавлена в 1977):
+
+| Стадия | Характеристика | Роль EM |
+|--------|---------------|---------|
+| **Forming** | Вежливость, неопределённость, зависимость от лидера | Задать direction, чёткие роли, [[onboarding]] |
+| **Storming** | Конфликты, борьба за влияние, вызов authority | Facilitate конфликты, не подавлять, нормализовать |
+| **Norming** | Согласие, нормы работы, cohesion | Закрепить нормы, [[team-culture]], документировать |
+| **Performing** | Высокая продуктивность, autonomy, self-organizing | Delegate, убирать препятствия, stretch challenges |
+
+### Psychological Safety (Edmondson, 1999)
+
+Amy Edmondson в *"Psychological Safety and Learning Behavior in Work Teams"* (Administrative Science Quarterly, 1999) ввела понятие psychological safety:
+
+> **Psychological Safety** — общее убеждение членов команды, что команда безопасна для interpersonal risk-taking: можно задавать вопросы, признавать ошибки, предлагать идеи без страха наказания или унижения.
+
+Google Project Aristotle (2012-2015) эмпирически подтвердил, что psychological safety — **фактор #1** эффективности команды, важнее технических навыков, структуры или индивидуальных качеств. Пять факторов эффективных команд по Google:
+
+1. **Psychological Safety** — «Могу ли я рискнуть?»
+2. **Dependability** — «Могу ли я положиться на коллег?»
+3. **Structure & Clarity** — «Понятны ли роли и цели?»
+4. **Meaning** — «Значима ли работа лично для меня?»
+5. **Impact** — «Влияет ли наша работа на что-то?»
+
+Richard Hackman (*"Leading Teams"*, Harvard Business Press, 2002) дополнил эту модель, определив, что **60% эффективности команды** определяется ещё до начала работы — через правильный design (состав, размер, нормы), а не через coaching уже работающей команды.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -693,13 +726,21 @@ ADD:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Tuckman B. "Developmental Sequence in Small Groups" — Psychological Bulletin, 1965 | Статья | Четыре стадии развития группы |
+| 2 | Edmondson A. "Psychological Safety and Learning Behavior in Work Teams" — ASQ, 1999 | Статья | Psychological Safety |
+| 3 | Hackman J. R. "Leading Teams" — Harvard Business Press, 2002 | Книга | 60% эффективности определяется design команды |
+| 4 | Google "Project Aristotle" — re:Work, 2015 | Исследование | 5 факторов эффективных команд |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Team Topologies](https://teamtopologies.com/) | Book | Team types |
-| 2 | [Google's Project Aristotle](https://rework.withgoogle.com/guides/understanding-team-effectiveness/) | Research | Psychological safety |
-| 3 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Team building stages |
-| 4 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book | Scaling teams |
-| 5 | [First Round Review](https://review.firstround.com/) | Articles | First hires |
+| 2 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Team building stages |
+| 3 | [An Elegant Puzzle](https://www.amazon.com/Elegant-Puzzle-Systems-Engineering-Management/dp/1732265186) | Book | Scaling teams |
+| 4 | [First Round Review](https://review.firstround.com/) | Articles | First hires |
 
 ---
 

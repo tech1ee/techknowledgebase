@@ -32,6 +32,25 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Repository pattern** (Fowler, *Patterns of Enterprise Application Architecture*, 2002) — объект-посредник между domain layer и data mapping layer, действующий как «in-memory коллекция» доменных объектов. Repository инкапсулирует логику доступа к данным, предоставляя domain layer интерфейс, не зависящий от источника данных.
+
+На Android Repository решает специфичную задачу: координацию между **множественными источниками данных** (Remote API, Local DB, In-Memory Cache) с учётом lifecycle и connectivity.
+
+| Концепция | Формальное определение | Применение на Android |
+|-----------|----------------------|----------------------|
+| Single Source of Truth (SSOT) | Один авторитетный источник данных | Room DB = SSOT, API только обновляет DB |
+| Cache-Aside | Кэш заполняется лениво при промахе | In-memory cache перед Room |
+| Write-Through | Запись в кэш и основное хранилище одновременно | Room + API синхронно |
+| Stale-While-Revalidate | Показать кэш, обновить фоново | UI видит DB данные, API обновляет DB |
+
+> **Single Source of Truth** (SSOT) — принцип из теории баз данных (Codd, 1970), согласно которому каждый элемент данных хранится и модифицируется ровно в одном месте. На Android Google рекомендует **Room как SSOT**: UI подписывается на Room через Flow, API-ответы записываются в Room, Room уведомляет UI об изменениях. Это устраняет рассинхронизацию между API-ответом в памяти и устаревшими данными в базе.
+
+**Offline-First Architecture** — архитектурный подход, при котором приложение проектируется для работы **без сети** как основной сценарий, а синхронизация с сервером — как оптимизация. Формализован в концепции **Conflict-Free Replicated Data Types** (CRDTs, Shapiro et al., 2011), хотя на практике Android-приложения чаще используют **last-write-wins** стратегию.
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** В типичном Android приложении данные приходят из нескольких источников — API, локальная база данных, кэш в памяти. Без правильной абстракции:
@@ -1127,18 +1146,19 @@ class FakeUserDao : UserDao {
 
 ## Источники
 
-1. [Guide to App Architecture](https://developer.android.com/topic/architecture)
-2. [Repository Pattern in Android](https://developer.android.com/topic/architecture/data-layer)
-3. [Offline-First](https://developer.android.com/topic/architecture/data-layer/offline-first)
-4. [Room with Flow](https://developer.android.com/training/data-storage/room/async-queries#kotlin)
+### Теоретические основы
 
----
+- **Fowler M. (2002). Patterns of Enterprise Application Architecture.** — Repository pattern, Data Mapper, Unit of Work
+- **Codd E. (1970). A Relational Model of Data.** — Single Source of Truth
+- **Shapiro M. et al. (2011). Conflict-Free Replicated Data Types.** — CRDT для offline sync
 
-## Источники и дальнейшее чтение
+### Практические руководства
 
-- Meier (2022). *Professional Android*. — практическая реализация Repository pattern с Room, Retrofit и offline-first стратегиями, включая sync, conflict resolution и тестирование data layer.
-- Moskala (2022). *Kotlin Coroutines Deep Dive*. — детальный разбор Flow и Channel, которые являются основой реактивного API Repository: Flow для наблюдения за данными из Room, suspend functions для сетевых запросов.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое построение Repository layer с Room и Retrofit, включая кэширование, error handling и интеграцию с ViewModel.
+- [Guide to App Architecture](https://developer.android.com/topic/architecture)
+- [Repository Pattern in Android](https://developer.android.com/topic/architecture/data-layer)
+- [Offline-First](https://developer.android.com/topic/architecture/data-layer/offline-first)
+- Meier (2022). *Professional Android*. — Repository с Room, Retrofit, offline-first
+- Moskala (2022). *Kotlin Coroutines Deep Dive*. — Flow и Channel для реактивного API
 
 ---
 

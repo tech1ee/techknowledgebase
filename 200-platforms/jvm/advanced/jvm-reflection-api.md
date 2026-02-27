@@ -65,6 +65,29 @@ related:
 
 ---
 
+## Теоретические основы
+
+Reflection опирается на концепцию **вычислительной рефлексии** (computational reflection) — способности программы наблюдать и модифицировать собственную структуру и поведение во время выполнения.
+
+> **Определение (Smith, 1982):** *Computational reflection — процесс, посредством которого система рассуждает о своей собственной структуре и поведении, и потенциально действует на основе этих рассуждений.*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM |
+|------------------------|-----------------|-----------------|
+| **Computational reflection** | Smith, 1982 | Программа анализирует свои классы, методы, поля через `java.lang.reflect` |
+| **Introspection** | Maes, 1987 | Чтение метаинформации без модификации → `Class.getMethods()`, `Field.get()` |
+| **Intercession** | Maes, 1987 | Модификация поведения → `setAccessible(true)`, Dynamic Proxy |
+| **Structural reflection** | Ferber, 1989 | Доступ к структуре программы (классы, иерархия) → `Class.getSuperclass()`, `getInterfaces()` |
+| **Behavioral reflection** | Ferber, 1989 | Модификация поведения → `Method.invoke()`, `InvocationHandler` |
+| **Meta-object protocol** | Kiczales et al., 1991 (CLOS) | Объекты, описывающие другие объекты → `Class` как meta-object для экземпляров |
+
+> **Ключевой trade-off (Bloch, 2018):** *«Prefer interfaces to reflection»* — Reflection даёт максимальную гибкость, но разрушает type safety, инкапсуляцию и производительность (7--100x overhead). Интерфейсы обеспечивают ту же полиморфную гибкость без потерь.
+
+В JVM Reflection реализована через **meta-object protocol**: объект `java.lang.Class` является метаобъектом, описывающим структуру класса. Каждый загруженный класс имеет ровно один объект `Class`, создаваемый ClassLoader при загрузке. Этот объект хранит полную метаинформацию: поля, методы, конструкторы, аннотации, иерархию наследования.
+
+Связанные темы: [[jvm-class-loader-deep-dive]] (ClassLoader создаёт объекты Class), [[jvm-bytecode-manipulation]] (альтернатива Reflection через генерацию байткода), [[jvm-annotations-processing]] (compile-time альтернатива runtime Reflection).
+
+---
+
 ## Что такое Reflection?
 
 ### Концепция
@@ -1106,9 +1129,17 @@ UserService proxy = new ByteBuddy()
 
 ## Источники и дальнейшее чтение
 
-- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 65 «Prefer interfaces to reflection» объясняет, почему Reflection следует использовать минимально и как интерфейсы обеспечивают ту же гибкость без потери type safety.
-- Forman I., Forman N. (2004). *Java Reflection in Action*. — Единственная книга, полностью посвящённая Java Reflection: от базовых API до паттернов проектирования с Reflection, включая Dynamic Proxy и annotation processing.
-- Goetz B. et al. (2006). *Java Concurrency in Practice*. — Раздел о publication и visibility объясняет, почему setAccessible() и модификация полей через Reflection может нарушить thread safety, особенно для final полей.
+### Теоретические основы
+
+- **Smith B.C. (1982). Procedural Reflection in Programming Languages.** — формализация computational reflection: introspection и intercession.
+- **Maes P. (1987). Concepts and Experiments in Computational Reflection.** — классификация: introspection (наблюдение) vs intercession (модификация).
+- **Kiczales G. et al. (1991). The Art of the Metaobject Protocol.** — meta-object protocol в CLOS; концептуальная основа Java Reflection API.
+
+### Практические руководства
+
+- **Bloch J. (2018). Effective Java, 3rd ed.** — Item 65: «Prefer interfaces to reflection»; trade-offs Reflection.
+- **Forman I., Forman N. (2004). Java Reflection in Action.** — полное руководство по Java Reflection: API, паттерны, Dynamic Proxy.
+- **Goetz B. et al. (2006). Java Concurrency in Practice.** — Reflection и thread safety: `setAccessible()`, модификация `final` полей.
 
 ---
 

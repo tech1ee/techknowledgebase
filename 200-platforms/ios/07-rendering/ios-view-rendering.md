@@ -40,6 +40,42 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Render Loop** — циклический конвейер обработки визуальных изменений, синхронизированный с частотой обновления дисплея (VSync). Формально: конечный автомат с тремя фазами (Layout → Display → Commit), каждая из которых должна уложиться в бюджет кадра (1/refresh_rate секунд).
+
+### Академический контекст
+
+Рендеринг в iOS опирается на фундаментальные принципы реального времени и компьютерной графики:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Double Buffering | Техника 1980-х | Два буфера: рисование в один, отображение другого | Core Animation triple buffering: app → render server → display |
+| VSync | CRT-эра, формализация в LCD | Синхронизация обновления буфера с развёрткой дисплея | CADisplayLink, ProMotion adaptive refresh |
+| Dirty Rectangles | Оптимизация GUI, 1980-е | Перерисовка только изменившихся областей | setNeedsDisplay(in:), setNeedsLayout() |
+| Compositor Architecture | Compiz (2006), Quartz Compositor | Отдельный процесс для композиции окон | Render Server (backboardd) — внепроцессная GPU-композиция |
+| Pipeline Parallelism | Hennessy & Patterson, 1990 | Параллельное выполнение фаз конвейера | CPU (layout/display) параллельно GPU (compositing предыдущего кадра) |
+
+### Формальная модель Render Loop
+
+Три фазы конвейера выполняются последовательно в рамках одного кадра:
+
+1. **Layout Phase** — вычисление геометрии (Cassowary constraint solver для Auto Layout)
+2. **Display Phase** — растеризация содержимого (Core Graphics → backing store bitmap)
+3. **Commit Phase** — CATransaction упаковывает layer tree и отправляет в Render Server через IPC
+
+> **Закон Амдала применительно к рендерингу**: если одна фаза (например, layout) занимает >16.67ms, параллелизация других фаз не поможет — кадр будет пропущен. Именно поэтому оптимизация bottleneck-фазы критичнее, чем общая оптимизация.
+
+### Связь с CS-фундаментом
+
+- [[ios-graphics-fundamentals]] — Core Graphics, Core Animation, Metal как уровни графического стека
+- [[ios-scroll-performance]] — практическое применение: off-screen rendering, cell reuse
+- [[ios-custom-views]] — Cassowary solver для Auto Layout constraints
+- [[ios-threading-fundamentals]] — main thread как единственная точка обновления UI
+- [[ios-performance-profiling]] — Instruments для диагностики render bottlenecks
+
+---
+
 ## Зачем это нужно?
 
 **Проблема:** Пользователи ожидают butter-smooth 60fps UI. Каждый пропущенный кадр (frame drop) = визуальный "заикание" (jank). Один кадр при 60fps = 16.67ms на всё: обработку событий, layout, отрисовку, GPU композицию. Превысил бюджет - потерял кадр.
@@ -1732,11 +1768,15 @@ class GoodProgressView: UIView {
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — Подробно объясняет иерархию UIView/CALayer, backing store, implicit и explicit анимации через CATransaction, что является основой для понимания render loop и оптимизации отрисовки.
+### Теоретические основы
+- Hennessy J., Patterson D. (1990). *Computer Architecture: A Quantitative Approach.* — pipeline parallelism как фундаментальная концепция, применимая к render loop
+- Badros G., Borning A., Stuckey P. (2001). *The Cassowary Linear Arithmetic Constraint Solving Algorithm.* — алгоритм, реализованный в Auto Layout engine
+- Lockwood N. (2014). *iOS Core Animation: Advanced Techniques.* — теория и практика layer compositing, off-screen rendering, backing store
 
-- Eidhof C., Airspeed Velocity, Javier N. (2019). *Advanced Swift.* — Углублённое понимание Swift performance, включая работу с памятью и value/reference types, что напрямую влияет на эффективность layout pass и backing store allocation.
-
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* — Практические примеры работы с Auto Layout, Core Animation и профилированием через Instruments, с пошаговыми упражнениями по оптимизации rendering performance.
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — иерархия UIView/CALayer, backing store, CATransaction
+- Eidhof C., Airspeed Velocity, Javier N. (2019). *Advanced Swift.* — Swift performance: value/reference types, влияние на layout pass
+- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide.* — Auto Layout, Core Animation, профилирование через Instruments
 
 ---
 

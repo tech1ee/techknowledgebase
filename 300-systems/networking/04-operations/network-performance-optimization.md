@@ -34,6 +34,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Bandwidth-Delay Product (BDP)** — фундаментальная величина в теории сетевой производительности: BDP = Bandwidth * RTT. Показывает объём данных "в полёте" между отправителем и получателем. TCP-буферы должны быть >= BDP для полного использования канала. Пример: 1 Gbps * 50 ms = 6.25 MB.
+
+### TCP Congestion Control: историческая эволюция
+
+| Алгоритм | Автор, год | Принцип | Реакция на потерю |
+|----------|-----------|---------|-------------------|
+| TCP Tahoe | Jacobson, 1988 | Slow Start + Congestion Avoidance | cwnd = 1 MSS (полный сброс) |
+| TCP Reno | Jacobson, 1990 | Fast Retransmit + Fast Recovery | cwnd = cwnd/2 (быстрое восстановление) |
+| TCP NewReno | Floyd, Henderson, 1999 | Улучшенный Fast Recovery | Корректная обработка множественных потерь |
+| CUBIC | Ha, Rhee, Xu, 2008 | Кубическая функция роста cwnd | Дефолт в Linux с 2.6.19 |
+| BBR | Cardwell et al. (Google), 2016 | Модель bottleneck bandwidth + RTT | Не реагирует на потерю напрямую |
+| BBRv2 | Google, 2019+ | Улучшенная fairness | Учитывает ECN и потери |
+
+### Работа Jacobson (1988)
+
+> Van Jacobson. "Congestion Avoidance and Control" (1988, ACM SIGCOMM) — одна из наиболее влиятельных работ в сетевых технологиях. Описывает механизмы **Slow Start** и **Congestion Avoidance**, которые предотвратили "congestion collapse" интернета в октябре 1986 года. Все современные TCP-реализации основаны на принципах, изложенных в этой работе.
+
+### Bufferbloat
+
+- **Bufferbloat** (Gettys, Nichols, 2011) — чрезмерная буферизация в сетевых устройствах, вызывающая высокую latency без видимой потери пакетов. Маршрутизаторы с большими буферами поглощают пакеты вместо того, чтобы сигнализировать о перегрузке (через drop или ECN)
+- **Решения:** Active Queue Management (AQM): CoDel (Nichols, Jacobson, 2012), FQ-CoDel (RFC 8290), PIE (RFC 8033)
+- **Диагностика:** `ping` показывает высокую latency под нагрузкой, но 0% packet loss
+
+### Window Scaling (RFC 7323)
+
+TCP Window Scaling (RFC 7323, Borman et al., 2014) расширяет максимальное значение TCP Receive Window с 65535 байт (16 бит) до 1 ГБ (30-бит значение через shift). Необходим для эффективного использования высокоскоростных каналов с большим RTT (без scaling: max throughput на 100ms RTT = 65535/0.1 = 5.2 Mbps).
+
+> **Формула пропускной способности TCP:** Throughput <= Window Size / RTT. Без Window Scaling и оптимизации буферов пропускная способность TCP ограничена размером окна, а не физической полосой канала.
+
+**См. также:** [[network-transport-layer]] (TCP congestion control подробно), [[network-latency-optimization]] (latency-специфичная оптимизация), [[network-observability]] (метрики для оценки эффекта оптимизации)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1500,7 +1535,15 @@ sysctl -w net.core.somaxconn=4096
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+- Jacobson V. (1988). "Congestion Avoidance and Control" — ACM SIGCOMM (фундаментальная работа по TCP congestion control)
+- Ha S., Rhee I., Xu L. (2008). "CUBIC: A New TCP-Friendly High-Speed TCP Variant" — ACM SIGOPS Operating Systems Review
+- Cardwell N. et al. (2016). "BBR: Congestion-Based Congestion Control" — ACM Queue (Google)
+- Gettys J., Nichols K. (2011). "Bufferbloat: Dark Buffers in the Internet" — ACM Queue
+- RFC 7323 (2014). TCP Extensions for High Performance — Window Scaling, Timestamps
 - **Fall, Stevens (2011).** *TCP/IP Illustrated, Vol. 1 (2nd ed).* — наиболее детальное описание TCP-механизмов (congestion control, window scaling, timers), которые являются основным объектом performance optimization; обязательная настольная книга.
+
+### Практические руководства
 - **Grigorik (2013).** *High Performance Browser Networking.* — практические рекомендации по оптимизации TCP, TLS и HTTP с конкретными числами и benchmarks; особенно полезна глава о TCP tuning и mobile networking.
 - **Comer (2015).** *Internetworking with TCP/IP.* — системное описание TCP/IP с акцентом на производительность; полезен для понимания bandwidth-delay product и настройки буферов.
 

@@ -35,6 +35,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Stakeholder Theory и организационная политика
+
+> **Определение:** Stakeholder Management — систематический процесс идентификации, анализа и управления отношениями с людьми и группами, которые влияют на или подвержены влиянию решений лидера. Включает mapping, prioritization, communication и influence.
+
+R. Edward Freeman в *"Strategic Management: A Stakeholder Approach"* (1984) впервые формализовал Stakeholder Theory, определив stakeholder как «любую группу или индивида, который может повлиять на достижение целей организации или на которого организация влияет». До Freeman стратегический менеджмент был сфокусирован исключительно на shareholders (акционерах).
+
+| Модель | Автор, год | Ключевая идея | Применение для EM/Director |
+|--------|-----------|---------------|---------------------------|
+| **Stakeholder Theory** | Freeman, 1984 | Организация = сеть stakeholders | Mapping всех заинтересованных сторон |
+| **Power/Interest Grid** | Mendelow, 1991 | Матрица 2x2: power × interest | Приоритизация усилий по stakeholders |
+| **Salience Model** | Mitchell, Agle & Wood, 1997 | Power + Legitimacy + Urgency | Определение «кто сейчас важнее» |
+| **Influence Without Authority** | Cohen & Bradford, 1989 | Reciprocity и exchange currencies | Cross-functional влияние без формальной власти |
+
+Allan Cohen и David Bradford в *"Influence Without Authority"* (1989, обновлено 2005) предложили модель influence через **exchange currencies**: inspiration-related (vision, excellence), task-related (resources, information), position-related (recognition, visibility), relationship-related (inclusion, support). Для engineering leaders это критически важно, поскольку большинство решений требуют support от людей вне прямого подчинения.
+
+> «A stakeholder in an organization is any group or individual who can affect or is affected by the achievement of the organization's objectives.» — R. Edward Freeman, *"Strategic Management: A Stakeholder Approach"* (1984)
+
+John Kotter в *"Power and Influence"* (1985) показал, что effectiveness менеджера на 70%+ определяется умением управлять lateral и upward relationships, а не только прямыми подчинёнными. Это подтверждает данные [[em-fundamentals|Google Project Oxygen]]: communication и stakeholder management — в топ-5 навыков эффективных менеджеров.
+
+---
+
 ## Stakeholder Mapping
 
 ```
@@ -177,13 +200,22 @@ ABSENT:
 
 **[[executive-communication]]** — Управление стейкхолдерами и коммуникация с руководством — две стороны одной медали: stakeholder mapping определяет «с кем» общаться, а executive communication — «как» общаться. BLUF формат, Pyramid Principle и умение говорить на бизнес-языке — конкретные инструменты, которые делают управление стейкхолдерами эффективным. Без навыков executive communication даже правильно идентифицированные стейкхолдеры останутся без необходимого влияния.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Freeman R.E. "Strategic Management: A Stakeholder Approach" — Pitman, 1984 | Книга | Stakeholder Theory, определение stakeholder |
+| 2 | Cohen A., Bradford D. "Influence Without Authority" — Wiley, 1989 (upd. 2005) | Книга | Exchange currencies, reciprocity model |
+| 3 | Kotter J. "Power and Influence" — Free Press, 1985 | Книга | Lateral и upward influence |
+| 4 | Mitchell R., Agle B., Wood D. "Toward a Theory of Stakeholder Identification and Salience" — AMR, 1997 | Статья | Power + Legitimacy + Urgency model |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Managing up, peer relationships |
+| 2 | Drucker P. "The Effective Executive" — Harper Business, 2006 | Книга | Effectiveness через relationships |
+| 3 | Lencioni P. "The Five Dysfunctions of a Team" — Jossey-Bass, 2002 | Книга | Trust и conflict в stakeholder relationships |
 
 
 ## Проверь себя

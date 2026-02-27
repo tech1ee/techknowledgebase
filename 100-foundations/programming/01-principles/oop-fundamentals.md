@@ -30,7 +30,50 @@ related:
 
 ---
 
-## Краткая история ООП
+## Теоретические основы
+
+> **Объектно-ориентированное программирование (ООП)** — парадигма, основанная на концепции «объектов», инкапсулирующих данные (состояние) и поведение (методы), взаимодействующих через обмен сообщениями. Формализована через **абстрактные типы данных** (Liskov & Zilles, 1974) и **подтиповой полиморфизм** (Cardelli & Wegner, 1985).
+
+### Формальные определения четырёх столпов
+
+| Столп | Формальное определение | CS-основа |
+|-------|----------------------|-----------|
+| **Инкапсуляция** | Объединение данных и операций в одну единицу с контролем доступа (information hiding) | ADT — Abstract Data Type (Liskov & Zilles, 1974) |
+| **Наследование** | Механизм определения нового типа как расширения существующего (is-a relationship) | Подтиповое отношение S <: T (Cardelli, 1984) |
+| **Полиморфизм** | Единый интерфейс для сущностей различных типов | Subtype polymorphism (Cardelli & Wegner, 1985) |
+| **Абстракция** | Выделение существенных характеристик объекта, отличающих его от всех других | Моделирование: domain → type hierarchy |
+
+### Две школы ООП
+
+| Аспект | Simula-школа (1967) | Smalltalk-школа (1972) |
+|--------|--------------------|-----------------------|
+| Основатели | Даль, Нюгорд (Норвегия) | Алан Кей (Xerox PARC) |
+| Ключевая идея | Классы как моделирование реальных сущностей | Объекты как акторы, обменивающиеся сообщениями |
+| Наследование | Центральный механизм | Вторичен; главное — messages |
+| Наследники | C++, Java, C#, Kotlin | Objective-C, Ruby, Erlang (actor model) |
+| Цитата | «Классы моделируют объекты реального мира» | Кей: «OOP для меня — это сообщения, а не объекты» |
+
+### Формальная таксономия полиморфизма (Cardelli & Wegner, 1985)
+
+```
+Полиморфизм
+├── Универсальный (Universal)
+│   ├── Параметрический    — generics: List<T>
+│   └── Inclusion (подтиповой) — override / interface
+└── Ad-hoc
+    ├── Overloading        — перегрузка fun sort(List<Int>) / fun sort(List<String>)
+    └── Coercion           — неявное приведение типов (Int → Long)
+```
+
+### Принципы Парнаса (1972) как основа инкапсуляции
+
+Дэвид Парнас в работе "On the Criteria To Be Used in Decomposing Systems into Modules" определил **information hiding**: каждый модуль скрывает «design decision», которое может измениться. ООП-инкапсуляция — прямая реализация этого принципа.
+
+> **См. также**: [[solid-principles]] — принципы проектирования, [[composition-vs-inheritance]] — когда наследование вредит, [[type-systems-fundamentals]] — типы как основа ООП
+
+---
+
+
 
 ```
 1967  Simula        — Даль, Нюгорд. Классы, наследование, виртуальные методы
@@ -937,6 +980,14 @@ val client: HttpClient = LoggingHttpClient(
 
 ## Источники
 
+### Теоретические основы
+- **Dahl O.-J., Nygaard K. (1966). SIMULA — an ALGOL-Based Simulation Language. CACM.** — первый язык с классами и наследованием
+- **Kay A. (1993). The Early History of Smalltalk. ACM SIGPLAN.** — авторское определение ООП: «messaging, local retention and protection and hiding of state-process, and extreme late-binding»
+- **Liskov B., Zilles S. (1974). Programming with Abstract Data Types. ACM SIGPLAN.** — формализация ADT как основы инкапсуляции
+- **Cardelli L., Wegner P. (1985). On Understanding Types, Data Abstraction, and Polymorphism. Computing Surveys.** — каноническая таксономия типов полиморфизма
+- **Parnas D. (1972). On the Criteria To Be Used in Decomposing Systems into Modules. CACM.** — information hiding как основа инкапсуляции
+
+### Практические руководства
 - Jemerov D., Isakova S. (2017). *Kotlin in Action*. Manning. — Главы 2, 4: классы, интерфейсы, data classes, object declarations. Лучшее объяснение ООП-модели Kotlin.
 - Moskala M. (2021). *Effective Kotlin*. Kt. Academy. — Items о предпочтении composition over inheritance, правильном использовании data class и sealed class.
 - Bloch J. (2018). *Effective Java*, 3rd ed. Addison-Wesley. — Item 17-19: design for inheritance, prefer interfaces, minimize mutability. Принципы, которым Kotlin следует на уровне языка.

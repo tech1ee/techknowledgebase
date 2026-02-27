@@ -1078,6 +1078,25 @@ CREATE TABLE enrollments (
 
 ## ACID свойства
 
+### Формальные основы транзакционной модели
+
+> **ACID** --- набор свойств, гарантирующих корректность транзакций в базах данных. Термин введён **Theo Härder и Andreas Reuter** (1983, *"Principles of Transaction-Oriented Database Recovery"*), но сами свойства формализованы **Jim Gray** (1981, *"The Transaction Concept: Virtues and Limitations"*).
+
+**Формальные определения:**
+
+| Свойство | Формально | Простыми словами |
+|----------|-----------|-----------------|
+| **Atomicity** | Транзакция --- неделимая единица: `commit` (все эффекты применены) или `abort` (ни один) | "Всё или ничего" |
+| **Consistency** | Транзакция переводит БД из одного валидного состояния в другое: `∀ invariants I: I(S) → I(T(S))` | "Из корректного в корректное" |
+| **Isolation** | Эффект параллельных транзакций эквивалентен некоторому последовательному выполнению (**serializability**) | "Транзакции не мешают друг другу" |
+| **Durability** | После `commit` данные переживают любой сбой (реализация: **WAL** --- Write-Ahead Logging, алгоритм ARIES, Mohan et al., 1992) | "Закоммиченное не пропадёт" |
+
+**Важные нюансы:**
+
+- **Consistency** --- единственное свойство, зависящее от приложения, а не СУБД. СУБД может гарантировать constraints, но бизнес-инварианты ("сумма балансов постоянна") --- ответственность приложения.
+- **Isolation** формально = serializability, но это дорого. Поэтому существуют **уровни изоляции** (read uncommitted → serializable), ослабляющие эту гарантию ради производительности.
+- **Durability** реализуется через **WAL** (Write-Ahead Logging): сначала запись в журнал, потом в данные. При сбое --- восстановление из журнала. Алгоритм **ARIES** (Mohan et al., 1992) --- стандарт реализации WAL.
+
 ### Что такое ACID
 
 ```
@@ -1617,6 +1636,25 @@ JOIN products p ON oi.product_id = p.id;
 
 ## CAP теорема
 
+### Формальные основы CAP
+
+> **CAP теорема** --- в распределённой системе невозможно одновременно гарантировать Consistency, Availability и Partition Tolerance. Гипотеза: Eric Brewer (2000, доклад PODC). Формальное доказательство: **Seth Gilbert и Nancy Lynch** (2002, *"Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services"*).
+
+**Формальные определения (Gilbert & Lynch, 2002):**
+
+| Свойство | Формально | Следствие |
+|----------|-----------|-----------|
+| **Consistency** | Linearizability: каждая операция чтения возвращает результат последней завершённой записи | Все узлы видят одинаковые данные |
+| **Availability** | Каждый запрос к не-упавшему узлу получает ответ за конечное время | Система всегда отвечает |
+| **Partition Tolerance** | Система продолжает работать при произвольной потере сообщений между узлами | Устойчивость к сетевым сбоям |
+
+**Важные уточнения (Brewer, 2012, *"CAP Twelve Years Later"*):**
+
+- "Выбери 2 из 3" --- **упрощение**. Partition --- не постоянное свойство, а событие. Система должна выбирать C или A *только во время partition*.
+- В нормальном режиме (без partition) можно иметь и C, и A.
+- **Eventual consistency** (Vogels, 2009, *"Eventually Consistent"*) --- формально: если нет новых обновлений, все реплики со временем сойдутся к одному значению. Это не "данные потеряны", а "данные задержаны".
+- Более точная модель --- **PACELC** (Abadi, 2010): если Partition → выбор A/C; иначе → выбор Latency/Consistency.
+
 ### Что такое CAP
 
 ```
@@ -1972,6 +2010,17 @@ ORDER BY month;
 [[database-design-optimization]] — Практическая оптимизация запросов и проектирование схем строится на фундаменте из этого документа: индексы ускоряют WHERE и JOIN, нормализация устраняет аномалии, EXPLAIN ANALYZE показывает план выполнения. Рекомендуется как следующий шаг после освоения основ для перехода к production-уровню работы с БД.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Codd E.F. (1970). *A Relational Model of Data for Large Shared Data Banks.* Communications of the ACM. — Основополагающая работа, определяющая реляционную модель: отношения, кортежи, реляционная алгебра. Вся реляционная теория начинается здесь.
+- Gray J. (1981). *The Transaction Concept: Virtues and Limitations.* VLDB. — Формализация транзакционной модели и ACID-свойств. Jim Gray — отец транзакционных систем.
+- Härder T., Reuter A. (1983). *Principles of Transaction-Oriented Database Recovery.* ACM Computing Surveys. — Работа, в которой впервые введён акроним ACID. Формальные определения каждого свойства.
+- Gilbert S., Lynch N. (2002). *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services.* — Формальное доказательство CAP-теоремы с точными определениями Consistency, Availability, Partition Tolerance.
+- Brewer E. (2012). *CAP Twelve Years Later: How the "Rules" Have Changed.* IEEE Computer. — Авторское уточнение: CAP — не "выбери 2 из 3", а спектр компромиссов во время partition.
+- Vogels W. (2009). *Eventually Consistent.* Communications of the ACM. — Формальное определение eventual consistency и таксономия моделей консистентности в распределённых системах.
+
+### Практические руководства
 
 - Date C.J. (2003). *An Introduction to Database Systems*. — Классический учебник по реляционной теории: нормальные формы, реляционная алгебра, целостность данных. Лучшее академическое введение в фундамент баз данных.
 - Ramakrishnan R., Gehrke J. (2002). *Database Management Systems*. — Полный университетский курс: от ER-моделирования и SQL до индексов, транзакций и query processing. Идеален для систематического изучения.

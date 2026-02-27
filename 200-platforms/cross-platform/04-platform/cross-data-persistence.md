@@ -44,6 +44,44 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Персистентность данных (Data Persistence)** — способность данных сохраняться за пределами жизненного цикла создавшего их процесса (Date, 2003, An Introduction to Database Systems).
+
+### Иерархия хранения данных
+
+| Уровень | Скорость | Объём | iOS | Android |
+|---------|----------|-------|-----|---------|
+| **In-memory** | Наносекунды | КБ-МБ | Dictionary, NSCache | HashMap, LruCache |
+| **Key-Value** | Микросекунды | КБ | UserDefaults | SharedPreferences/DataStore |
+| **File system** | Миллисекунды | МБ-ГБ | FileManager | File API, SAF |
+| **SQL database** | Миллисекунды | МБ-ГБ | Core Data, SQLite | Room, SQLite |
+| **Cloud sync** | Секунды | Unlimited | CloudKit | Firebase, DataStore |
+
+### Сравнение подходов к ORM
+
+| Подход | iOS | Android | KMP |
+|--------|-----|---------|-----|
+| **ORM (полный)** | Core Data (NSManagedObject) | Room (@Entity, @Dao) | — |
+| **SQL-first** | GRDB (Swift) | SQLDelight | SQLDelight |
+| **Key-Value typed** | SwiftData (macro-based) | DataStore (proto/preferences) | multiplatform-settings |
+| **NoSQL** | — | Realm | — |
+
+### CAP-теорема в локальном контексте
+
+Brewer (2000): в распределённой системе нельзя одновременно гарантировать Consistency, Availability, Partition tolerance. В мобильном контексте (offline-first):
+
+- **Consistency**: локальная БД может расходиться с сервером
+- **Availability**: приложение должно работать offline
+- **Partition tolerance**: сеть может быть недоступна
+
+Обе платформы решают это через **eventual consistency** — паттерн «local first, sync when possible».
+
+> **CS-фундамент:** Data persistence связана с [[cross-networking]] (синхронизация с сервером) и [[kmp-sqldelight-database]] (KMP-решение для БД). Теоретическая база — Database Systems (Date, 2003), CAP Theorem (Brewer, 2000).
+
 ## 1. Архитектура: Core Data vs Room
 
 ### Core Data (iOS)

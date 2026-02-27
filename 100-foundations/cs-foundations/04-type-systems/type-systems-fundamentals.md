@@ -28,6 +28,63 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Система типов (Type System)** — tractable syntactic method for proving the absence of certain program behaviors by classifying phrases according to the kinds of values they compute (Pierce, 2002).
+
+Проще: набор правил, которые присваивают **типы** конструкциям языка и проверяют **совместимость** типов, предотвращая определённые классы ошибок.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Typed λ-calculus** | Church, A. | 1940 | Simply Typed Lambda Calculus — первая формальная система типов |
+| **Hindley-Milner** | Hindley / Milner | 1969/1978 | Type inference: автоматическое выведение типов (Algorithm W) |
+| **System F** | Girard / Reynolds | 1972 | Параметрический полиморфизм (generics) — формальная основа |
+| **Таксономия типизации** | Cardelli & Wegner | 1985 | "On Understanding Types..." — классификация полиморфизма |
+| **TAPL** | Pierce, B. | 2002 | "Types and Programming Languages" — каноническая книга |
+| **Gradual Typing** | Siek & Taha | 2006 | Смесь static и dynamic typing в одном языке |
+
+### Формальная классификация систем типов
+
+**По времени проверки:**
+
+| Свойство | Static (Kotlin, Java) | Dynamic (Python, JS) |
+|----------|----------------------|---------------------|
+| **Когда проверка** | Compile-time | Runtime |
+| **Что проверяется** | Все пути исполнения | Только исполняемый путь |
+| **Ошибки** | До запуска | При исполнении (TypeError) |
+| **Формально** | `Γ ⊢ e : T` (judgment) | `eval(e) : T` (tag check) |
+
+**По строгости:**
+
+| Свойство | Strong (Kotlin, Python) | Weak (C, JS) |
+|----------|------------------------|--------------|
+| **Implicit coercion** | Минимальная | Агрессивная (`"5" - 3 = 2` в JS) |
+| **Type safety** | Высокая | Низкая |
+
+### Soundness и Completeness
+
+> **Type Soundness (корректность):** Если программа прошла type checking (`Γ ⊢ e : T`), то при выполнении `e` вычислит значение типа `T` или не завершится. "Well-typed programs cannot go wrong" (Milner, 1978).
+
+**На практике:** Абсолютная soundness редка. Java не sound (raw types, array covariance). Kotlin ближе к soundness (null safety, declaration-site variance), но unchecked casts нарушают гарантии.
+
+### Curry-Howard Correspondence
+
+> **Изоморфизм Карри-Говарда:** типы соответствуют логическим утверждениям (propositions), программы — доказательствам (proofs), type checking — проверке доказательства.
+
+| Программирование | Логика |
+|-----------------|--------|
+| Тип `A → B` | Импликация A ⟹ B |
+| Функция `f: A → B` | Доказательство A ⟹ B |
+| `Pair<A, B>` | Конъюнкция A ∧ B |
+| `Either<A, B>` | Дизъюнкция A ∨ B |
+| `Nothing` (⊥) | Ложь (absurdity) |
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -448,15 +505,16 @@ val items: List<Number> = listOf(1, 2.0, 3)
 
 ## Источники и дальнейшее чтение
 
-- **Pierce, B. (2002). Types and Programming Languages (TAPL).** — Библия систем типов. От simply typed lambda calculus до System F и dependent types. Академична, но фундаментальна. Главы 1-3 доступны без математической подготовки.
+### Теоретические основы
+- Church, A. (1940). "A Formulation of the Simple Theory of Types" — JSL; simply typed λ-calculus
+- Milner, R. (1978). "A Theory of Type Polymorphism in Programming" — JCSS; Algorithm W, type inference
+- Cardelli, L. & Wegner, P. (1985). "On Understanding Types, Data Abstraction, and Polymorphism" — Computing Surveys; таксономия типизации
+- Pierce, B. (2002). *Types and Programming Languages (TAPL)* — каноническая книга по теории типов
+- Siek, J. & Taha, W. (2006). "Gradual Typing for Functional Languages" — Scheme Workshop; gradual typing
 
-- **Cardelli, L. & Wegner, P. (1985). On Understanding Types, Data Abstraction, and Polymorphism.** — Фундаментальная статья, систематизировавшая виды полиморфизма и типизации. Ввела терминологию, которой мы пользуемся до сих пор.
-
-- **Milner, R. (1978). A Theory of Type Polymorphism in Programming.** — Оригинальная статья об Algorithm W для type inference. Заложила основы для ML, Haskell и всех языков с inference.
-
-- **Kotlin Language Specification: Type System.** — Формальная спецификация системы типов Kotlin. Для тех, кто хочет точных определений, а не интуиции.
-
-- **Hanenberg, S. et al. (2014). An empirical study of the impact of static typing on software maintainability.** — Эмпирическое исследование: static typing vs dynamic typing в реальных проектах.
+### Практические руководства
+- Kotlin Language Specification: Type System — формальная спецификация
+- Hanenberg, S. et al. (2014). "An Empirical Study of the Impact of Static Typing on Software Maintainability"
 
 ---
 

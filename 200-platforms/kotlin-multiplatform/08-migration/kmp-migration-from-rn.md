@@ -46,6 +46,45 @@ next_review:
 | React Native/JS | Понимать откуда мигрируем | RN docs |
 | **CS: Bridge Architecture** | Почему RN медленнее | [[cs-bridge-patterns]] |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Bridge Architecture** — архитектурный паттерн, в котором два runtime-окружения (JavaScript и Native) взаимодействуют через асинхронный канал передачи сообщений с сериализацией данных (Facebook, 2015).
+
+### Эволюция bridge-архитектуры React Native
+
+| Поколение | Период | Механизм | Latency | Ограничения |
+|-----------|--------|----------|---------|-------------|
+| **Bridge (Classic)** | 2015-2022 | JSON serialization через async queue | ~5ms per call | Batching, no synchronous calls |
+| **JSI (JavaScript Interface)** | 2022-2024 | C++ host objects, synchronous | ~0.1ms | Требует C++ bindings |
+| **New Architecture (Fabric + TurboModules)** | 2024+ | JSI + codegen | ~0.1ms | Всё ещё JS runtime overhead |
+
+### Формальное сравнение моделей исполнения
+
+React Native и KMP представляют два фундаментально разных подхода к кросс-платформенной разработке:
+
+| Характеристика | React Native | KMP |
+|----------------|-------------|-----|
+| **Модель исполнения** | Interpreted (JS engine) | Compiled (JVM/Native) |
+| **Типовая система** | Dynamic (JS) / Structural (TS) | Static, nominal |
+| **Concurrency** | Event loop (single-threaded) | Coroutines (multi-threaded) |
+| **Memory model** | GC (V8/Hermes) | GC (JVM) + Tracing GC (K/N) |
+| **FFI overhead** | Bridge/JSI serialization | Direct call (JVM) / ObjC bridge (iOS) |
+
+### Уникальность RN → KMP: инкрементальный путь
+
+В отличие от Flutter → KMP (полная перезапись), RN → KMP имеет теоретически обоснованный инкрементальный путь через **Kotlin/JS backend**:
+
+```
+Kotlin Source → Kotlin/JS compiler → JavaScript module → React Native import
+```
+
+Это возможно благодаря тому, что обе системы (RN и Kotlin/JS) работают в JavaScript runtime. Формально: ∃ трансформация T: Kotlin_AST → JS_AST, сохраняющая семантику (Kotlin/JS IR compiler).
+
+> **CS-фундамент:** Bridge architecture связана с [[cross-interop]] (FFI и межъязыковое взаимодействие) и [[kmp-web-wasm]] (Kotlin/JS как компиляционный target). Теоретическая база — Message Passing (Hoare, CSP, 1978) и Foreign Function Interface.
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -527,11 +566,16 @@ fun getUser(id: Long): User? =
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Ключевое руководство для JavaScript/TypeScript-разработчиков, переходящих на Kotlin. Kotlin синтаксически похож на TypeScript, но имеет существенные отличия: строгая null safety без escape hatches, sealed classes вместо union types, coroutines вместо Promises. Книга покрывает все эти аспекты.
+### Теоретические основы
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — При миграции с Redux/MobX/Zustand на ViewModel + StateFlow необходимо понимание корутин и Flow. Книга объясняет, как Kotlin Coroutines заменяют JavaScript async/await и Promises, обеспечивая structured concurrency и cancellation, которых нет в JS-экосистеме.
+- **Hoare C. A. R. (1978).** *Communicating Sequential Processes.* — CSP как теоретическая основа message passing в bridge-архитектуре React Native.
+- **Finne S. et al. (1999).** *Calling Hell: A New Approach to Inter-language Communication.* — FFI проблемы, актуальные для RN bridge и KMP interop.
 
-- **Skeen J. et al. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое руководство по Kotlin для разработчиков, приходящих из других языков. Особенно полезно для JS/TS-разработчиков: покрывает типовую систему, функциональные возможности и инструменты Kotlin-экосистемы пошагово, с упражнениями.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin для JS/TS-разработчиков: null safety, sealed classes, coroutines.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Замена Redux/MobX/Zustand на ViewModel + StateFlow.
+- **Skeen J. et al. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое руководство для разработчиков из других языков.
 
 ---
 

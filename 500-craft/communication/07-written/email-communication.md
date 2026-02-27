@@ -31,6 +31,42 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **BLUF** (Bottom Line Up Front) — коммуникационный стандарт Вооружённых сил США (US Army Field Manual 5-0, 2005), требующий размещения ключевой информации в первом предложении сообщения. Теоретическая основа — **Primacy Effect** (Murdock, 1962) и **Media Richness Theory** (Daft & Lengel, 1986).
+
+### Историческая хронология
+
+| Год | Автор / Событие | Вклад |
+|-----|-----------------|-------|
+| 1962 | Bennet Murdock | Serial Position Effect — первая и последняя информация запоминается лучше |
+| 1986 | Daft & Lengel | Media Richness Theory — иерархия каналов по «богатству» информации |
+| 1990-е | US Military | BLUF формализован как стандарт военной коммуникации |
+| 2004 | Radicati Group | Первое масштабное исследование email-перегрузки |
+| 2012 | Kruger et al. | Исследование egocentrism bias: 50% email'ов неправильно интерпретируются |
+| 2014 | Harvard Business Review | Subject Line Prefix system (ACTION/INFO/DECISION) |
+
+### Media Richness Theory и email
+
+Daft & Lengel (1986) ранжировали каналы коммуникации по «информационному богатству»:
+
+| Канал | Richness | Когда использовать |
+|-------|----------|-------------------|
+| Face-to-face | Максимальная | Конфликт, sensitive feedback |
+| Video call | Высокая | Сложные обсуждения, brainstorm |
+| Phone | Средне-высокая | Срочные вопросы |
+| **Email** | **Средняя** | **Формальные запросы, документирование** |
+| Slack/chat | Средне-низкая | Быстрая координация |
+| Документ | Низкая (но persistent) | Reference, RFC, ADR |
+
+Email занимает среднюю позицию: достаточно rich для передачи структурированной информации, но лишён тональных нюансов (отсюда 50% misinterpretation по Kruger et al., 2005). BLUF компенсирует этот deficit: вынося ключевое в начало, автор минимизирует риск неправильной интерпретации при неполном прочтении.
+
+5Cs Framework (Clear, Concise, Complete, Correct, Courteous) восходит к принципам делового письма XIX века, формализованным в работах Francis W. Weeks (1950-е). Каждый C компенсирует конкретный deficit email как канала: Clear — отсутствие невербальных подсказок, Courteous — отсутствие тона голоса.
+
+> Связь с другими материалами: [[communication-models]] объясняет модель кодирования-декодирования, которая лежит в основе email-miscommunication, [[async-communication]] расширяет email-практики на Slack и remote-коммуникацию, [[technical-writing]] применяет BLUF-принцип в RFC и ADR.
+
+---
+
 ## Зачем это нужно?
 
 ### Представьте ситуацию
@@ -741,16 +777,26 @@ Concerns:
 
 ## Источники
 
+### Теоретические основы
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Daft, R. L. & Lengel, R. H. "Organizational Information Requirements, Media Richness and Structural Design". *Management Science*, 32(5), 1986 | Статья |
+| 2 | Murdock, B. B. "The Serial Position Effect of Free Recall". *Journal of Experimental Psychology*, 64(5), 1962 | Статья |
+| 3 | Kruger, J. et al. "Egocentrism Over E-Mail". *Journal of Personality and Social Psychology*, 89(6), 2005 | Статья |
+| 4 | US Army Field Manual 5-0: The Operations Process. 2005 | Стандарт |
+
+### Практические руководства
+
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | [BLUF: The Military Standard - Animalz](https://www.animalz.co/blog/bottom-line-up-front) | Article | BLUF framework, military origin |
-| 2 | [5 Cs of Communication - Prezent.ai](https://www.prezent.ai/blog/5-cs-of-communication) | Article | 5Cs framework explained |
-| 3 | [Email Etiquette Rules - Indeed](https://www.indeed.com/career-advice/career-development/email-etiquette) | Guide | Best practices, 24h response rule |
-| 4 | [Email Mistakes - CNBC](https://www.cnbc.com/2024/04/10/the-biggest-mistakes-people-make-over-email-and-how-to-avoid-them.html) | Research | Common mistakes, proofreading stats |
-| 5 | [Slack vs Email - Gmelius](https://gmelius.com/blog/email-vs-slack) | Comparison | When to use each channel |
-| 6 | [Async Communication - Slack Blog](https://slack.com/blog/collaboration/asynchronous-communication-best-practices) | Guide | Async-first principles |
-| 7 | [Email Statistics - Radicati Group](https://www.radicati.com/) | Research | 121 emails/day statistic |
-| 8 | [Subject Line Prefixes - HBR](https://hbr.org/) | Research | ACTION/INFO/DECISION system |
+| 1 | [BLUF: The Military Standard - Animalz](https://www.animalz.co/blog/bottom-line-up-front) | Article | BLUF framework |
+| 2 | [5 Cs of Communication - Prezent.ai](https://www.prezent.ai/blog/5-cs-of-communication) | Article | 5Cs framework |
+| 3 | [Email Etiquette Rules - Indeed](https://www.indeed.com/career-advice/career-development/email-etiquette) | Guide | Best practices |
+| 4 | [Email Mistakes - CNBC](https://www.cnbc.com/2024/04/10/the-biggest-mistakes-people-make-over-email-and-how-to-avoid-them.html) | Research | Common mistakes |
+| 5 | [Slack vs Email - Gmelius](https://gmelius.com/blog/email-vs-slack) | Comparison | Channel selection |
+| 6 | [Email Statistics - Radicati Group](https://www.radicati.com/) | Research | 121 emails/day |
+| 7 | [Subject Line Prefixes - HBR](https://hbr.org/) | Research | PREFIX system |
 
 *Исследование проведено: 2026-01-18*
 

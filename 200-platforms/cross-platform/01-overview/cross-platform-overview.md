@@ -34,6 +34,45 @@ tags:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Кросс-платформенная разработка** — подход к созданию программного обеспечения, при котором единая кодовая база (или её значительная часть) используется для развёртывания на нескольких целевых платформах (Heitkötter et al., 2012, A Cross-Platform Development Approach for Mobile Applications).
+
+### Таксономия кросс-платформенных подходов
+
+| Подход | Механизм | Пример | UI | Производительность |
+|--------|----------|--------|----|--------------------|
+| **Native** | Раздельные кодовые базы | Swift + Kotlin | Нативный | Максимальная |
+| **Shared logic** | Общий код + нативный UI | KMP | Нативный | Близка к нативной |
+| **Rendered UI** | Общий UI через собственный engine | Flutter | Собственный (Skia) | Высокая |
+| **Bridge** | JS runtime + нативные компоненты | React Native | Нативные компоненты | Средняя |
+| **WebView** | HTML/CSS/JS в нативной оболочке | Ionic, Capacitor | Веб | Ниже средней |
+
+### Фундаментальный trade-off
+
+Каждая платформа (iOS, Android) эволюционировала независимо, создавая **платформенную специфичность** — набор уникальных API, UX-паттернов, lifecycle моделей. Кросс-платформенная разработка решает задачу:
+
+```
+maximize(code_reuse) subject to minimize(platform_fidelity_loss)
+```
+
+Это формализуется как **оптимизационная задача с ограничениями**: чем больше кода разделяется, тем выше риск потери нативного поведения на каждой платформе.
+
+### Историческая перспектива
+
+| Год | Технология | Подход | Судьба |
+|-----|-----------|--------|--------|
+| 2008 | PhoneGap/Cordova | WebView | Устарела |
+| 2011 | Xamarin | Compiled (.NET) | Поглощена MAUI |
+| 2015 | React Native | Bridge (JS→Native) | Активна, New Architecture |
+| 2017 | Flutter | Rendered (Dart→Skia) | Активна |
+| 2020 | KMP | Shared logic (Kotlin) | Активна, Google-recommended |
+
+> **CS-фундамент:** Кросс-платформенность связана с [[cross-decision-guide]] (выбор подхода) и [[cross-architecture]] (архитектурные паттерны). Теоретическая база — платформенная абстракция (Parnas, 1972), trade-off analysis (Kazman, ATAM, 2001).
+
 ## Ключевое философское различие
 
 ```
@@ -1078,9 +1117,17 @@ tags:
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2021). *Effective Kotlin*.** — Содержит best practices для идиоматичного Kotlin-кода, который является основой KMP-разработки. Рекомендации по API design, error handling и concurrency помогают писать shared-код, одинаково эффективный на обеих платформах.
-- **Meier R. (2022). *Professional Android*.** — Полное руководство по Android-платформе: от Activity lifecycle до Jetpack Compose. Необходимо для глубокого понимания Android-стороны кросс-платформенного сравнения.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает основы iOS-разработки: Swift, UIKit, SwiftUI, Xcode и Apple-экосистему. Даёт фундамент для понимания iOS-стороны кросс-платформенного сравнения и помогает оценить различия в философии платформ.
+### Теоретические основы
+
+- **Heitkötter H. et al. (2012).** *A Cross-Platform Development Approach for Mobile Applications.* SAC '12. — Таксономия кросс-платформенных подходов.
+- **Parnas D. (1972).** *On the Criteria To Be Used in Decomposing Systems into Modules.* — Принцип модульности, лежащий в основе платформенной абстракции.
+- **Kazman R. et al. (2001).** *ATAM: Architecture Tradeoff Analysis Method.* — Формальный анализ trade-offs кросс-платформенных решений.
+
+### Практические руководства
+
+- [KMP Official Documentation](https://kotlinlang.org/docs/multiplatform.html) — Документация Kotlin Multiplatform.
+- [Flutter Documentation](https://flutter.dev/docs) — Документация Flutter.
+- [React Native Documentation](https://reactnative.dev/docs/getting-started) — Документация React Native.
 
 ---
 

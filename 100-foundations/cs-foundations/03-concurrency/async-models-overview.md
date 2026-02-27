@@ -26,6 +26,42 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Конкурентность** (concurrency) — композиция независимо выполняемых вычислений. **Параллелизм** (parallelism) — одновременное выполнение вычислений на нескольких процессорах. Конкурентность — свойство структуры программы; параллелизм — свойство выполнения (Rob Pike, 2012).
+
+### Таксономия моделей конкурентности
+
+| Модель | Год | Авторы | Механизм | Примеры |
+|--------|-----|--------|----------|---------|
+| **Потоки (Threads)** | 1965+ | Dijkstra, Hoare | Вытесняющее планирование ОС | POSIX pthreads, Java threads |
+| **Callbacks / Event Loop** | 1995+ | Netscape, Node.js | Очередь событий, run-to-completion | JavaScript, libuv |
+| **Корутины (Coroutines)** | 1958 | Conway | Кооперативная приостановка (suspend/resume) | Kotlin, Python, C++20 |
+| **Акторы (Actor Model)** | 1973 | Hewitt, Bishop, Steiger | Асинхронные сообщения в mailbox | Erlang, Akka |
+| **CSP** | 1978 | Hoare | Синхронные каналы | Go goroutines, Kotlin channels |
+| **Futures / Promises** | 1976 | Friedman, Wise | Объект-заполнитель для будущего значения | Java CompletableFuture, JS Promise |
+
+### Формальное различие concurrency vs parallelism
+
+```
+Concurrency (структура):         Parallelism (исполнение):
+  Task A ──┐                       Task A ═══════════
+           ├──> interleaving        Task B ═══════════
+  Task B ──┘                       (физически одновременно)
+  (логически независимы,
+   могут чередоваться на 1 CPU)
+```
+
+Конкурентная программа *может* выполняться параллельно, но не обязана. Event loop в JavaScript — конкурентен (обрабатывает тысячи соединений), но не параллелен (один поток). Go goroutines — и конкурентны, и параллельны (GOMAXPROCS потоков ОС).
+
+### Связи
+
+- [[processes-threads-fundamentals]] — вытесняющая модель, на которой строятся остальные
+- [[synchronization-primitives]] — примитивы для безопасного доступа к разделяемому состоянию
+- [[kotlin-coroutines]] — практическая реализация stackless asymmetric coroutines
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -304,26 +340,55 @@ Node.js добавляет фазы:
 
 ## Coroutines: лёгкая конкурентность
 
-### Что такое Coroutine
+### Формальное определение
 
-Coroutine — функция, которая может приостановить выполнение и возобновить его позже. В отличие от обычной функции, coroutine не теряет своё состояние при паузе.
+> **Корутина** (coroutine) — обобщение подпрограммы (subroutine), допускающее множественные точки входа и выхода. В отличие от подпрограммы, которая имеет один вход (call) и один выход (return), корутина может приостановить выполнение (yield/suspend) и возобновить его позже, сохраняя локальное состояние между приостановками.
+
+Термин ввёл Мелвин Конвей (Melvin Conway) в 1958 году, первое опубликованное описание — в статье *"Design of a Separable Transition-Diagram Compiler"* (Communications of the ACM, 1963). Конвей использовал корутины для организации компилятора COBOL: лексический анализатор и синтаксический анализатор работали как корутины, передающие управление друг другу — лексер выдавал токен парсеру, парсер обрабатывал его и возвращал управление лексеру за следующим токеном.
+
+В 1980 году Кристофер Марлин (Christopher D. Marlin) сформулировал два фундаментальных свойства корутины:
+1. **Сохранение состояния** — значения локальных переменных сохраняются между последовательными вызовами
+2. **Приостановка и продолжение** — выполнение приостанавливается при выходе и продолжается с того же места при следующем входе
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                 FUNCTION vs COROUTINE                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   FUNCTION:                                                     │
-│   start ─────────────────────────────> finish                   │
-│   (run to completion)                                           │
-│                                                                 │
-│   COROUTINE:                                                    │
-│   start ───> pause ───> resume ───> pause ───> finish           │
-│              (state    (state      (state                       │
-│               saved)    restored)   saved)                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+Subroutine:   call ─────────────────────────────> return
+              (1 вход, 1 выход, run-to-completion)
+
+Coroutine:    call ──> suspend ──> resume ──> suspend ──> ... ──> return
+              (1 вход, N повторных входов, кооперативная)
+
+Thread:       start ──> [ОС планирует вытесняюще] ──> join
+              (1 вход, вытесняющая, дорогая)
 ```
+
+### Таксономия корутин
+
+Корутины классифицируются по трём ортогональным измерениям:
+
+| Измерение | Вариант A | Вариант B | Kotlin |
+|-----------|-----------|-----------|--------|
+| **Передача управления** | **Symmetric**: любая корутина может передать управление любой другой | **Asymmetric**: корутина возвращает управление только вызвавшему (как return) | Asymmetric |
+| **Стек** | **Stackful**: собственный стек, приостановка на любой глубине вызовов | **Stackless**: разделяемый стек, приостановка только на верхнем уровне | Stackless |
+| **Доступность** | **First-class**: корутина — значение, которое можно сохранить и передать | **Constrained**: управляется компилятором, пользователь работает через API | Constrained |
+
+**Symmetric vs Asymmetric.** В symmetric-корутинах (оригинальный дизайн Conway) корутина A может передать управление корутине B, а B — корутине C, создавая произвольный граф переходов. В asymmetric-корутинах (Kotlin, JavaScript generators) корутина всегда возвращает управление вызывающему — более структурировано и проще для анализа.
+
+**Stackful vs Stackless.** Stackful-корутины (Lua 5.0, Go goroutines, Fibers в Windows) имеют собственный стек вызовов, позволяя приостановиться из вложенной функции на любой глубине. Stackless-корутины (Kotlin, C++20, JavaScript async/await) делят стек с вызывающим и могут приостановиться только в явных точках (`suspend`). Stackless дешевле по памяти, stackful — гибче.
+
+**First-class vs Constrained.** First-class корутины (Scheme `call/cc`) можно захватить как значение и вызвать из произвольного места. Constrained корутины (Kotlin `suspend`) управляются компилятором — пользователь не работает с `Continuation` напрямую. Constrained подход безопаснее и позволяет компилятору оптимизировать код.
+
+### Сравнение реализаций конкурентности
+
+| Концепция | Память | Scheduling | Приостановка | Пример |
+|-----------|--------|-----------|--------------|--------|
+| **OS Thread** | ~1 MB (стек) | Вытесняющий (ядро ОС) | В любой точке | Java Thread, POSIX pthread |
+| **Green Thread** | ~KB | Вытесняющий (runtime) | В любой точке | Erlang process, Java pre-1.2 |
+| **Fiber** | ~KB | Кооперативный (runtime) | Явный yield | Ruby Fiber, Windows Fiber |
+| **Goroutine** | ~2-8 KB | Кооп. + вытесн. (runtime) | Function calls | Go |
+| **Virtual Thread** | ~1-10 KB | Вытесняющий (JVM) | Blocking calls | Java 21+ (Project Loom) |
+| **Kotlin Coroutine** | ~100-200 B | Кооперативный (компилятор) | suspend calls | Kotlin/JVM, Kotlin/Native |
+
+Kotlin coroutines — самый легковесный вариант: stackless и управляемый компилятором. Компилятор трансформирует `suspend`-функции в state machine на этапе компиляции, а библиотека `kotlinx.coroutines` добавляет dispatching, structured concurrency и channels в runtime.
 
 ### Cooperative vs Preemptive
 
@@ -335,15 +400,7 @@ Coroutine — функция, которая может приостановит
 | Race conditions | Редко | Часто |
 | Overhead | Микросекунды | Миллисекунды |
 
-Threads вытесняются принудительно — ОС прерывает в любой момент. Coroutines отдают управление сами — в известных точках (yield, await).
-
-### Stackful vs Stackless Coroutines
-
-**Stackful:** каждая coroutine имеет собственный stack. Можно приостановить на любой глубине вложенных вызовов.
-
-**Stackless:** coroutines делят stack. Приостановка только на верхнем уровне. Меньше памяти, но ограничения.
-
-Kotlin coroutines — stackless с state machine transformation.
+Threads вытесняются принудительно — ОС прерывает в любой момент. Coroutines отдают управление сами — в известных точках (yield, await). Это фундаментальная разница: кооперативная модель проще для рассуждений о корректности (нет гонок между suspension points), но требует дисциплины (блокирующий вызов в корутине заблокирует весь поток).
 
 ---
 
@@ -649,9 +706,18 @@ Kotlin coroutines — это практическая реализация async
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- Conway M.E. (1963). *Design of a Separable Transition-Diagram Compiler*. Communications of the ACM, 6(7), pp. 396–408. — первое опубликованное описание корутин; Конвей ввёл термин "coroutine" в 1958 г.
 - Hoare C.A.R. (1978). *Communicating Sequential Processes*. — оригинальная работа по CSP, заложившая основы channel-based конкурентности (Go, Kotlin channels)
 - Hewitt C., Bishop P., Steiger R. (1973). *A Universal Modular Actor Formalism for Artificial Intelligence*. — оригинальная paper по Actor Model, реализованной в Erlang и Akka
-- Marlin C. (1980). *Coroutines: A Programming Methodology, a Language Design and an Implementation*. — одна из первых систематизаций coroutines как парадигмы программирования
+- Marlin C. (1980). *Coroutines: A Programming Methodology, a Language Design and an Implementation*. — одна из первых систематизаций coroutines как парадигмы программирования; формулировка двух фундаментальных свойств корутины
+- Knuth D.E. (1997). *The Art of Computer Programming, Vol. 1*. — Section 1.4.2: формальное описание корутин как обобщения подпрограмм
+- Smith N.J. (2018). *Notes on structured concurrency, or: Go statement considered harmful*. — манифест structured concurrency; аналогия с Dijkstra "Go To Statement Considered Harmful" (1968)
+- Elizarov R. et al. (2021). *Kotlin coroutines: design and implementation*. ACM SIGPLAN Onward! — формальное описание дизайна и реализации корутин Kotlin
+
+### Практические руководства
+
 - [ui.dev: Async JavaScript Evolution](https://ui.dev/async-javascript-from-callbacks-to-promises-to-async-await) — история JS async
 - [Kotlin Docs: Coroutines](https://kotlinlang.org/docs/coroutines-basics.html) — официальная документация
 - [kt.academy: Coroutines Under the Hood](https://kt.academy/article/cc-under-the-hood) — внутреннее устройство

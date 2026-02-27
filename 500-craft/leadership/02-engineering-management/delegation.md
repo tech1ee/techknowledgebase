@@ -37,6 +37,45 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Теория делегирования в менеджменте
+
+> **Определение:** Делегирование — передача полномочий (authority) и ответственности (responsibility) за выполнение задачи или достижение результата от руководителя к подчинённому при сохранении accountability (подотчётности) за итоговый результат у руководителя.
+
+Классическое различие authority/responsibility/accountability восходит к работам Henri Fayol (*"Administration Industrielle et Generale"*, 1916), который определил delegation как один из 14 принципов управления.
+
+### Матрица Эйзенхауэра и приоритизация делегирования
+
+Dwight D. Eisenhower предложил матрицу urgent/important, которая стала основой для принятия решений о делегировании (популяризирована Stephen Covey, *"The 7 Habits of Highly Effective People"*, 1989):
+
+| | **Urgent** | **Not Urgent** |
+|---|-----------|----------------|
+| **Important** | Делай сам (кризисы, дедлайны) | Планируй и **делегируй** (стратегия, развитие) |
+| **Not Important** | **Делегируй** (рутина, запросы) | Устрани (time wasters) |
+
+### Situational Leadership и уровни делегирования
+
+Hersey & Blanchard (1969) определили, что уровень делегирования зависит от зрелости сотрудника. L. David Marquet в *"Turn the Ship Around!"* (2012) расширил эту модель, предложив **7 уровней authority** — от «скажи мне что делать» до «действуй самостоятельно, сообщай периодически»:
+
+| Уровень | Формулировка | Когда применять |
+|---------|-------------|-----------------|
+| 1 | «Скажи мне что делать» | Новичок, критическая ситуация |
+| 2 | «Изучи и предложи варианты» | Junior, новая область |
+| 3 | «Предложи решение, я одобрю» | Mid-level, знакомая задача |
+| 4 | «Действуй, но сообщи до исполнения» | Senior, важная задача |
+| 5 | «Действуй и сообщи после» | Доверенный специалист |
+| 6 | «Действуй, сообщай периодически» | Staff-level, его зона |
+| 7 | «Действуй, сообщай по необходимости» | Full ownership |
+
+### RACI-матрица
+
+> **RACI** — инструмент распределения ответственности: **R**esponsible (кто делает), **A**ccountable (кто отвечает за результат), **C**onsulted (кого спрашивают), **I**nformed (кого информируют). Формализует делегирование на уровне процессов и проектов.
+
+RACI помогает EM избежать двух крайностей: **micromanagement** (менеджер остаётся R для всего) и **abdication** (менеджер отпускает без A). Правильное делегирование: менеджер = A, сотрудник = R, с чёткими check-in points в [[one-on-one-meetings|1-on-1]].
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -702,20 +741,24 @@ not rules and control."
 
 ## Источники
 
+### Теоретические основы
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | [Turn the Ship Around](https://www.amazon.com/Turn-Ship-Around-Turning-Followers/dp/1591846404) | Book | Intent-based leadership |
-| 2 | [High Output Management](https://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884) | Book | Delegation and leverage |
-| 3 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Practical delegation |
-| 4 | [Harvard Business Review: Delegation](https://hbr.org/topic/subject/delegation) | Articles | Research and frameworks |
-| 5 | [Netflix Culture Deck](https://jobs.netflix.com/culture) | Document | Context not control |
-| 6 | [Manager Tools: Delegation](https://www.manager-tools.com/2005/10/effective-delegation-hall-of-fame-guidance) | Podcast | Tactical how-to |
+| 1 | Fayol H. "Administration Industrielle et Generale" — 1916 | Книга | 14 принципов управления, delegation of authority |
+| 2 | Hersey P., Blanchard K. "Management of Organizational Behavior" — 1969 | Книга | Situational Leadership, уровни зрелости |
+| 3 | Covey S. "The 7 Habits of Highly Effective People" — Free Press, 1989 | Книга | Матрица Эйзенхауэра, stewardship delegation |
+| 4 | Marquet L. D. "Turn the Ship Around!" — Portfolio/Penguin, 2012 | Книга | 7 уровней authority, intent-based leadership |
 
-### Дополнительное чтение
-
-- "Multipliers" by Liz Wiseman — how leaders amplify capability
-- "Drive" by Daniel Pink — motivation through autonomy
-- "The Effective Executive" by Peter Drucker — delegation principles
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [High Output Management](https://www.amazon.com/High-Output-Management-Andrew-Grove/dp/0679762884) | Book | Delegation and leverage |
+| 2 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Practical delegation |
+| 3 | [Harvard Business Review: Delegation](https://hbr.org/topic/subject/delegation) | Articles | Research and frameworks |
+| 4 | [Netflix Culture Deck](https://jobs.netflix.com/culture) | Document | Context not control |
+| 5 | [Manager Tools: Delegation](https://www.manager-tools.com/2005/10/effective-delegation-hall-of-fame-guidance) | Podcast | Tactical how-to |
+| 6 | **Multipliers** (Liz Wiseman, 2010) | Книга | How leaders amplify capability |
+| 7 | **Drive** (Daniel Pink, 2009) | Книга | Motivation through autonomy |
 
 ---
 

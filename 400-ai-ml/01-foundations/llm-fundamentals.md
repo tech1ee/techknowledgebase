@@ -145,6 +145,62 @@ Large Language Models (LLM) - это искусственные нейронны
 
 ---
 
+## Теоретические основы
+
+### Формальное определение языковой модели
+
+> **Языковая модель** (Language Model) — это вероятностное распределение над последовательностями токенов. Для последовательности токенов w₁, w₂, ..., wₙ модель оценивает совместную вероятность:
+>
+> P(w₁, w₂, ..., wₙ) = ∏ᵢ P(wᵢ | w₁, ..., wᵢ₋₁)
+>
+> Авторегрессионная языковая модель генерирует текст, последовательно сэмплируя из условного распределения P(wₜ | w₁, ..., wₜ₋₁) (Jurafsky & Martin, 2023).
+
+### Архитектура Transformer
+
+Архитектура Transformer была представлена в работе Vaswani et al. (2017) *"Attention Is All You Need"* (Google Brain и Google Research). Ключевая инновация — механизм **self-attention**, заменивший рекуррентные связи:
+
+| Компонент | Формула / Принцип | Назначение |
+|-----------|-------------------|------------|
+| **Scaled Dot-Product Attention** | Attention(Q,K,V) = softmax(QKᵀ/√dₖ)V | Взвешенное агрегирование значений |
+| **Multi-Head Attention** | Concat(head₁,...,headₕ)Wᴼ | Параллельное внимание к разным аспектам |
+| **Positional Encoding** | PE(pos,2i) = sin(pos/10000^(2i/d)) | Кодирование порядка токенов |
+| **Feed-Forward Network** | FFN(x) = max(0, xW₁+b₁)W₂+b₂ | Нелинейное преобразование |
+| **Layer Normalization** | LayerNorm(x) = γ(x-μ)/σ + β | Стабилизация обучения |
+
+### Законы масштабирования (Scaling Laws)
+
+Kaplan et al. (2020, OpenAI) эмпирически установили, что потери языковой модели следуют степенным законам:
+
+> L(N) ∝ N^(-αₙ), L(D) ∝ D^(-αd), L(C) ∝ C^(-αc)
+>
+> где N — число параметров, D — размер датасета, C — объём вычислений. Потери предсказуемо снижаются при увеличении любого из трёх факторов.
+
+Hoffmann et al. (2022, DeepMind, *"Chinchilla"*) уточнили оптимальное соотношение: число токенов обучения должно быть примерно в 20 раз больше числа параметров модели.
+
+### Хронология ключевых архитектурных инноваций
+
+| Год | Работа | Авторы | Вклад |
+|-----|--------|--------|-------|
+| 2017 | Transformer | Vaswani et al. (Google) | Self-attention вместо рекуррентности |
+| 2018 | GPT-1 | Radford et al. (OpenAI) | Decoder-only pre-training |
+| 2018 | BERT | Devlin et al. (Google) | Bidirectional encoder, masked LM |
+| 2020 | GPT-3 | Brown et al. (OpenAI) | 175B параметров, [[prompt-engineering-masterclass\|few-shot learning]] |
+| 2020 | Scaling Laws | Kaplan et al. (OpenAI) | Степенные законы масштабирования |
+| 2022 | Chinchilla | Hoffmann et al. (DeepMind) | Оптимальное соотношение параметров и данных |
+| 2022 | InstructGPT | Ouyang et al. (OpenAI) | RLHF для выравнивания |
+| 2023 | DPO | Rafailov et al. (Stanford) | Прямая оптимизация предпочтений без reward model |
+| 2024 | Mixture of Experts | DeepSeek, Mixtral | Эффективное масштабирование через разреженность |
+
+### Проблема галлюцинаций
+
+> **Галлюцинация** — генерация текста, который выглядит правдоподобно, но не соответствует фактам или входному контексту. Это фундаментальное свойство авторегрессионных моделей: они оптимизируют вероятность следующего токена, а не фактическую корректность (Ji et al., 2023, *"Survey of Hallucination in Natural Language Generation"*).
+
+Различают два типа:
+- **Intrinsic hallucination** — противоречие входным данным
+- **Extrinsic hallucination** — утверждения, которые нельзя верифицировать по входу
+
+---
+
 ## Часть 1: Эволюция NLP - от RNN к Transformer
 
 ### 1.1 Ранние подходы к обработке языка
@@ -957,18 +1013,22 @@ Llama 70B (80 layers, d=8192, seq=4096, fp16):
 
 ## Источники
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Vaswani et al. 2017 | Paper | Оригинальная архитектура Transformer |
-| 2 | [BERT: Pre-training of Deep Bidirectional Transformers](https://arxiv.org/abs/1810.04805) - Devlin et al. 2018 | Paper | Encoder-only архитектура |
-| 3 | [RoFormer: Rotary Position Embedding](https://arxiv.org/abs/2104.09864) - Su et al. 2021 | Paper | RoPE позиционное кодирование |
-| 4 | [Direct Preference Optimization](https://arxiv.org/abs/2305.18290) - Rafailov et al. 2023 | Paper | DPO как альтернатива RLHF |
-| 5 | [Mixtral of Experts](https://arxiv.org/abs/2401.04088) - Jiang et al. 2024 | Paper | MoE архитектура |
-| 6 | [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) - Jay Alammar | Tutorial | Визуальное объяснение Transformer |
-| 7 | [Understanding and Coding Self-Attention](https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html) - Sebastian Raschka | Tutorial | Реализация attention с нуля |
-| 8 | [MoE LLMs](https://cameronrwolfe.substack.com/p/moe-llms) - Cameron R. Wolfe | Blog | Глубокий анализ MoE |
-| 9 | [RLHF Illustrated](https://huggingface.co/blog/rlhf) - Hugging Face | Guide | RLHF pipeline |
-| 10 | [GPT-4 Technical Report](https://arxiv.org/abs/2303.08774) - OpenAI 2023 | Paper | Архитектура frontier модели |
+### Теоретические основы
+- Vaswani, A. et al. (2017). *Attention Is All You Need*. NeurIPS. arXiv:1706.03762.
+- Devlin, J. et al. (2018). *BERT: Pre-training of Deep Bidirectional Transformers*. arXiv:1810.04805.
+- Su, J. et al. (2021). *RoFormer: Enhanced Transformer with Rotary Position Embedding*. arXiv:2104.09864.
+- Rafailov, R. et al. (2023). *Direct Preference Optimization*. arXiv:2305.18290.
+- Jiang, A. et al. (2024). *Mixtral of Experts*. arXiv:2401.04088.
+- Kaplan, J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361.
+- Hoffmann, J. et al. (2022). *Training Compute-Optimal Large Language Models* (Chinchilla). arXiv:2203.15556.
+- Ji, Z. et al. (2023). *Survey of Hallucination in Natural Language Generation*. ACM Computing Surveys.
+- OpenAI (2023). *GPT-4 Technical Report*. arXiv:2303.08774.
+
+### Практические руководства
+- [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) — Jay Alammar
+- [Understanding and Coding Self-Attention](https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html) — Sebastian Raschka
+- [MoE LLMs](https://cameronrwolfe.substack.com/p/moe-llms) — Cameron R. Wolfe
+- [RLHF Illustrated](https://huggingface.co/blog/rlhf) — Hugging Face
 
 ---
 
@@ -985,18 +1045,6 @@ Llama 70B (80 layers, d=8192, seq=4096, fp16):
 **[[rag-advanced-techniques]]** — RAG (Retrieval-Augmented Generation) — основной метод борьбы с галлюцинациями LLM, описанными в разделе «Проблемы и ограничения». Понимание того, почему модель галлюцинирует (оптимизация правдоподобности, а не правдивости, knowledge cutoff), объясняет, зачем нужен RAG и какие продвинутые техники (Self-RAG, GraphRAG, Agentic RAG) решают конкретные ограничения наивного подхода.
 
 **[[ai-ml-overview]]** — Общий обзор AI Engineering даёт контекст, в который вписываются фундаменты LLM. Если данный материал отвечает на вопрос «как работают LLM», то обзор AI Engineering отвечает на вопрос «как строить продукты на базе LLM» — от prompt engineering и RAG до fine-tuning и production deployment. Рекомендуется как карта навигации по всему разделу AI/ML.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Jurafsky, D. & Martin, J. H. (2023). *Speech and Language Processing*, 3rd ed.** — Фундаментальный учебник по NLP, охватывающий всё от n-грамм до Transformer и LLM. Незаменим для глубокого понимания лингвистических основ, на которых строятся современные языковые модели.
-
-- **Goodfellow, I., Bengio, Y. & Courville, A. (2016). *Deep Learning*. MIT Press.** — Классический учебник по глубокому обучению, объясняющий математику нейронных сетей, backpropagation, RNN и LSTM. Даёт прочную теоретическую базу для понимания архитектур, предшествовавших Transformer.
-
-- **Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach*, 4th ed.** — Энциклопедия AI от классических методов до современных подходов. Полезна для понимания reinforcement learning (основа RLHF) и общего контекста развития искусственного интеллекта.
-
----
 
 ---
 

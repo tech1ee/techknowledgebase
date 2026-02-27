@@ -70,6 +70,34 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Ядро операционной системы (Kernel)** — привилегированная часть ОС, работающая в защищённом режиме процессора (ring 0 / EL1). Обеспечивает абстракции аппаратных ресурсов: процессы, виртуальную память, файловые системы, драйверы устройств. Теоретические основы — Dijkstra, *THE Multiprogramming System* (1968); Ritchie & Thompson, *The UNIX Time-Sharing System* (1974).
+
+### Android-модификации Linux ядра: теоретический контекст
+
+Android не создал собственное ядро — он расширил Linux. Это пример **открытого дизайна (Open Design Principle)** из Saltzer & Schroeder (1975): использовать проверенный, аудированный код вместо создания закрытого с нуля. Однако расширения Android опираются на собственные теоретические решения:
+
+| Расширение | Теоретическая основа | Проблема, которую решает |
+|------------|---------------------|-------------------------|
+| **Binder driver** | Object-Capability Security (Miller, 2006) + mmap zero-copy | IPC с однократным копированием и kernel-enforced identity вызывающего |
+| **ashmem → memfd** | Shared Memory с kernel-рекламацией | Разделяемая память, которую ядро может освободить при нехватке ресурсов (в отличие от System V shm) |
+| **lmkd (Low Memory Killer)** | Resource Management под давлением (PSI — Facebook, 2018) | Превентивное убийство процессов до срабатывания OOM Killer ядра |
+| **wakelocks → wakeup_sources** | Power State Machine | Предотвращение засыпания устройства при выполнении критических задач |
+| **SELinux (MAC)** | Mandatory Access Control (Bell & LaPadula, 1973; Biba, 1977) | Ограничение даже root-процессов: каждый домен имеет строго определённые разрешения |
+| **seccomp-BPF** | Sandboxing через фильтрацию syscalls | Ограничение набора системных вызовов, доступных процессу (Zygote фильтрует ~300 syscalls) |
+| **dm-verity** | Merkle Tree (Merkle, 1979) | Проверка целостности разделов /system, /vendor через хеш-дерево |
+| **cgroups** | Resource Isolation (Google, 2006, upstreamed в Linux 2.6.24) | Группировка процессов для ограничения CPU, памяти, I/O |
+| **GKI (Generic Kernel Image)** | ABI Stability (Treble, 2017) | Единое ядро для всех устройств; вендорный код вынесен в модули с стабильным KMI |
+
+> **Монолитное ядро vs Микроядро** — классическая дискуссия (Tanenbaum–Torvalds debate, 1992). Linux — монолитное ядро (все драйверы в kernel space). Android добавляет модульность через **GKI + KMI**: ядро от Google + вендорные модули с стабильным ABI. Это компромисс между производительностью монолита и модульностью микроядра.
+
+> **Defense in Depth** — Schneier, *Secrets and Lies* (2000). Android использует многослойную защиту: UID-изоляция (DAC) + SELinux (MAC) + seccomp-BPF (syscall фильтрация) + dm-verity (целостность файловой системы) + AVB (целостность загрузки). Компрометация одного слоя не даёт полного контроля.
+
+Связанные материалы: [[os-processes-threads]] (процессная модель Unix), [[os-memory-management]] (виртуальная память, mmap), [[android-binder-ipc]] (userspace-часть Binder), [[android-process-memory]] (lmkd и управление памятью на уровне приложений).
+
+---
+
 ## Зачем это нужно
 
 | Проблема | Без знания ядра | С пониманием ядра |
@@ -2022,6 +2050,18 @@ adb shell cat /proc/<PID>/status | grep Seccomp
 ---
 
 ## Источники
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Dijkstra E. *THE Multiprogramming System* (1968) | Многослойная архитектура ОС |
+| Ritchie D., Thompson K. *The UNIX Time-Sharing System* (1974) | Монолитное ядро, процессная модель |
+| Saltzer J., Schroeder M. *The Protection of Information in Computer Systems* (1975) | Open Design Principle, Principle of Least Privilege |
+| Bell D., LaPadula L. *Secure Computer Systems* (1973) | Mandatory Access Control (MAC) → SELinux |
+| Merkle R. *A Certified Digital Signature* (1979, Crypto) | Merkle Tree → dm-verity |
+| Miller M. *Robust Composition* (2006) | Object-Capability Model → Binder |
+| Schneier B. *Secrets and Lies* (2000) | Defense in Depth — многослойная безопасность |
+| Tanenbaum A. *Modern Operating Systems* (1992) | Монолитное ядро vs микроядро |
 
 ### Официальная документация
 - [Android Kernel Overview](https://source.android.com/docs/core/architecture/kernel) — обзор ядра Android

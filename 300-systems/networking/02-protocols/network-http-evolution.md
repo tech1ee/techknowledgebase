@@ -31,6 +31,37 @@ next_review:
 
 # Эволюция HTTP: от 1.0 до QUIC
 
+## Теоретические основы
+
+> **HTTP (HyperText Transfer Protocol)** — протокол прикладного уровня для передачи гипертекстовых документов. Создан **Tim Berners-Lee (1989)** в CERN как часть World Wide Web. Эволюция HTTP — это история борьбы с **Head-of-Line blocking** и минимизации latency.
+
+### Хронология HTTP
+
+| Версия | Год | RFC | Ключевое нововведение | Проблема, которую решает |
+|--------|-----|-----|----------------------|-------------------------|
+| **HTTP/0.9** | 1991 | — | Только GET, только HTML | Первый протокол WWW |
+| **HTTP/1.0** | 1996 | RFC 1945 | Headers, POST, Content-Type | Новое соединение на каждый запрос |
+| **HTTP/1.1** | 1997 | RFC 2068 | Keep-alive, pipelining, Host header | HOL blocking (один запрос блокирует следующие) |
+| **HTTP/2** | 2015 | RFC 7540 | Multiplexing, server push, binary framing | TCP HOL blocking при packet loss |
+| **HTTP/3** | 2022 | RFC 9114 | QUIC (UDP), 0-RTT, per-stream flow control | Полное устранение HOL blocking |
+
+### Head-of-Line Blocking: ключевая проблема
+
+```
+HTTP/1.1:  Req1 ──► Resp1 ──► Req2 ──► Resp2   (последовательно, HOL blocking)
+HTTP/2:    Req1 ──┐              Req2 ──┐
+           Resp1 ◄┘ (multiplexed) Resp2 ◄┘        (но TCP packet loss блокирует ВСЁ)
+HTTP/3:    Stream1 ──► ◄──  Stream2 ──► ◄──      (независимые QUIC streams)
+```
+
+### QUIC (RFC 9000, 2021)
+
+> **QUIC** — транспортный протокол поверх UDP, разработанный Google (2012), стандартизированный IETF. Объединяет функции TCP + TLS + HTTP/2 в одном протоколе с 0-RTT resumption.
+
+> **См. также**: [[network-transport-layer]] — TCP/UDP, [[security-https-tls]] — TLS
+
+---
+
 ## Prerequisites (Что нужно знать перед изучением)
 
 | Тема | Зачем нужна | Где изучить |
@@ -2464,12 +2495,16 @@ Practical solution:
 
 Материал основан на актуальной информации по состоянию на декабрь 2025:
 
+### Теоретические основы
+- Berners-Lee T., Fielding R., Frystyk H. (1996). *Hypertext Transfer Protocol — HTTP/1.0* (RFC 1945). — Первый формальный стандарт HTTP
+- Belshe M., Peon R., Thomson M. (2015). *Hypertext Transfer Protocol Version 2 (HTTP/2)* (RFC 7540). — Multiplexing, binary framing
+- Iyengar J., Thomson M. (2021). *QUIC: A UDP-Based Multiplexed and Secure Transport* (RFC 9000). — Основа HTTP/3
+- Bishop M. (2022). *HTTP/3* (RFC 9114). — HTTP поверх QUIC
+
 ### Официальные спецификации
-- [RFC 1945 - HTTP/1.0](https://www.rfc-editor.org/rfc/rfc1945) (1996)
 - [RFC 7230-7235 - HTTP/1.1](https://www.rfc-editor.org/rfc/rfc7230) (2014)
 - [RFC 7540 - HTTP/2](https://httpwg.org/specs/rfc7540.html) (2015)
 - [RFC 9114 - HTTP/3](https://www.rfc-editor.org/rfc/rfc9114) (2022)
-- [RFC 9000 - QUIC: A UDP-Based Multiplexed and Secure Transport](https://www.rfc-editor.org/rfc/rfc9000) (2021)
 
 ### Статистика и исследования
 - [W3Techs - Usage Statistics of HTTP/3](https://w3techs.com/technologies/details/ce-http3) (December 2025)

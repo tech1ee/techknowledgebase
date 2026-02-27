@@ -51,6 +51,35 @@ Android использует модель разрешений для защит
 
 ---
 
+## Теоретические основы
+
+### Модели управления доступом
+
+> Android Security Model объединяет несколько формальных моделей управления доступом:
+
+| Модель | Определение | Реализация в Android |
+|--------|------------|---------------------|
+| **DAC** (Discretionary Access Control) | Владелец ресурса определяет, кто имеет доступ | Linux UID/GID: каждое приложение = отдельный UID |
+| **MAC** (Mandatory Access Control) | Системная политика определяет доступ, пользователь не может переопределить | SELinux: security contexts и type enforcement |
+| **Capability-based Security** | Доступ предоставляется через unforgeable tokens | Android permissions: `<uses-permission>` как capability |
+
+### Principle of Least Privilege
+
+> **Principle of Least Privilege** (Saltzer & Schroeder, *"The Protection of Information in Computer Systems"*, 1975): каждый субъект должен иметь минимальный набор привилегий, необходимый для выполнения задачи. Android Runtime Permissions — прямая реализация этого принципа: приложение запрашивает permission только в момент использования, и пользователь может отозвать permission в любое время.
+
+### Android Sandbox Model
+
+> Android использует **process isolation** (Thompson & Ritchie, Unix, 1971) как основу безопасности: каждое приложение выполняется в отдельном Linux-процессе с уникальным UID. Это обеспечивает:
+> - **Confidentiality**: приложение A не может читать данные приложения B
+> - **Integrity**: приложение A не может модифицировать код приложения B
+> - **Availability**: crash приложения A не влияет на приложение B
+>
+> SELinux (NSA, 2000) добавляет MAC поверх DAC: даже если процесс получит root-привилегии через уязвимость, SELinux-политика ограничит его действия.
+
+> **Связь**: Access Control → [[security-concepts]], Sandboxing → [[android-kernel-extensions]], Process Isolation → [[os-processes-threads]]
+
+---
+
 ## Почему Runtime Permissions?
 
 ### Проблема: install-time permissions (до Android 6.0)
@@ -1003,18 +1032,24 @@ class AdminCommandReceiver : BroadcastReceiver() {
 
 ## Источники
 
-- [Permissions on Android - Android Developers](https://developer.android.com/guide/topics/permissions/overview) — официальная документация
-- [Request Runtime Permissions - Android Developers](https://developer.android.com/training/permissions/requesting) — runtime permissions
-- [Security Best Practices - Android Developers](https://developer.android.com/privacy-and-security/security-tips) — best practices
-- [Network Security Configuration - Android Developers](https://developer.android.com/privacy-and-security/security-config) — network security
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Saltzer J., Schroeder M. *The Protection of Information in Computer Systems* (1975) | Principle of Least Privilege — основа permission model |
+| Bell D., LaPadula L. *Secure Computer Systems* (1973) | MAC модель → SELinux в Android |
+| Dennis J., Van Horn E. *Programming Semantics for Multiprogrammed Computations* (1966) | Capability-based security → PendingIntent |
+| Anderson J. *Computer Security Technology Planning Study* (1972) | Reference Monitor → Binder UID verification |
 
----
+### Практические руководства
+- [Permissions on Android](https://developer.android.com/guide/topics/permissions/overview) — официальная документация
+- [Request Runtime Permissions](https://developer.android.com/training/permissions/requesting) — runtime permissions
+- [Security Best Practices](https://developer.android.com/privacy-and-security/security-tips) — best practices
+- [Network Security Configuration](https://developer.android.com/privacy-and-security/security-config) — network security
 
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — полное покрытие runtime permissions, Network Security Config, EncryptedSharedPreferences и Keystore API с практическими примерами обработки всех edge cases.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговая реализация runtime permission flow, BiometricPrompt и secure storage с акцентом на UX лучших практик.
-- Vasavada (2019). *Android Internals*. — системный взгляд на security model Android: sandbox isolation, UID/GID, SELinux, signature permissions и Binder security, что даёт глубокое понимание почему permissions работают именно так.
+### Книги
+- Meier (2022). *Professional Android*. — runtime permissions, Network Security Config, Keystore API.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — permission flow, BiometricPrompt.
+- Vasavada (2019). *Android Internals*. — sandbox isolation, UID/GID, SELinux, Binder security.
 
 ---
 

@@ -31,6 +31,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+AI-подготовка к интервью опирается на несколько научных направлений: теорию обучения, когнитивную психологию и исследования предиктивной валидности интервью.
+
+> **Deliberate Practice** (Ericsson, 1993) — целенаправленная практика с обратной связью. AI выступает в роли тренера, предоставляющего мгновенный feedback — аналог «expert coach» в модели Ericsson. Это превращает подготовку к интервью из пассивного чтения в активную тренировку.
+
+> **Testing Effect** (Roediger & Karpicke, 2006) — информация лучше запоминается через retrieval practice (попытку вспомнить), чем через повторное чтение. AI mock interviews реализуют этот эффект: каждый вопрос — retrieval attempt.
+
+| Концепция | Автор | Применение к AI-prep |
+|-----------|-------|---------------------|
+| Deliberate Practice | Ericsson, 1993 | AI как тренер с мгновенным feedback |
+| Testing Effect | Roediger & Karpicke, 2006 | Mock interviews = retrieval practice |
+| Zone of Proximal Development | Vygotsky, 1978 | AI адаптирует сложность вопросов под уровень |
+| Behavioral Prediction | Janz, 1982 | STAR-формат предсказывает будущее поведение |
+
+**Ключевое ограничение AI:** AI-модели генерируют статистически вероятные ответы, а не экспертные. Исследование Stanford HAI (2023) показало, что AI-сгенерированные ответы на behavioral вопросы содержат correct structure, но lacking authentic detail. Поэтому AI — инструмент структурирования и практики, а не источник ответов.
+
+→ Связано: [[deliberate-practice]], [[learning-complex-things]], [[behavioral-interview]]
+
+---
+
 ## AI Interview Preparation Framework
 
 ```
@@ -731,15 +752,23 @@ I have an Amazon [L5] interview. Create prep plan for:
 
 - [[se-interview-foundation]] — Универсальный фундамент знаний для интервью: DSA, System Design, Behavioral, AI-enabled формат. Текущий материал дополняет его конкретными промптами и тактиками использования AI на каждом этапе подготовки. Foundation даёт ЧТО учить, а AI Preparation — КАК учить эффективнее.
 
-## Источники и дальнейшее чтение
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Фундаментальное руководство по DSA-подготовке к интервью. AI-промпты из текущего материала помогают глубже разобрать паттерны и решения из этой книги, но саму базу нужно изучать здесь.
-
-- Xu A. (2020). *System Design Interview*. — Основа для подготовки к system design раундам. AI-ассистенты помогают практиковать и получать обратную связь, но структурное понимание компонентов, trade-offs и framework даёт именно эта книга.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для тех, кто готовится к Staff+ интервью. AI-промпты для behavioral и leadership вопросов работают лучше, когда есть глубокое понимание того, что компании ищут на Staff уровне.
-
 ## Источники
+
+### Теоретические основы
+
+- **Ericsson K.A., Krampe R.T., Tesch-Römer C. (1993). The Role of Deliberate Practice in the Acquisition of Expert Performance.** — Фундаментальная работа о целенаправленной практике с feedback. AI mock interviews реализуют эту модель.
+
+- **Roediger H.L., Karpicke J.D. (2006). Test-Enhanced Learning.** — Testing effect: retrieval practice эффективнее повторного чтения. AI-вопросы = retrieval practice.
+
+- **Janz T. (1982). Initial Comparisons of Patterned Behavior Description Interviews vs Unstructured Interviews.** — Behavioral interviewing: прошлое поведение предсказывает будущее. Основа STAR-формата.
+
+- **McDowell G.L. (2015). Cracking the Coding Interview.** — Фундаментальное руководство по DSA-подготовке к интервью.
+
+- **Xu A. (2020). System Design Interview.** — Основа для подготовки к system design раундам.
+
+- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Для подготовки к Staff+ интервью.
+
+### Практические руководства
 
 - [Meta AI-Enabled Coding Interview](https://www.hellointerview.com/blog/meta-ai-enabled-coding)
 - [Final Round AI: Best AI Tools 2026](https://www.finalroundai.com/blog/10-best-ai-tools-for-job-seekers)

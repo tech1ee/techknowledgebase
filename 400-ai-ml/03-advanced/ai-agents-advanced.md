@@ -82,6 +82,47 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение агента
+
+> **Рациональный агент** — сущность, которая воспринимает окружающую среду через сенсоры и воздействует на неё через эффекторы, стремясь максимизировать функцию полезности (Russell & Norvig, 2020, *"Artificial Intelligence: A Modern Approach"*, 4th ed., Chapter 2).
+
+В контексте LLM-based агентов:
+- **Сенсоры**: входные данные (user prompt, tool results, memory)
+- **Эффекторы**: вызов инструментов, генерация текста
+- **Функция полезности**: успешное выполнение задачи пользователя
+
+### BDI-архитектура и её связь с LLM-агентами
+
+BDI (Beliefs-Desires-Intentions) — формальная модель рационального агента (Rao & Georgeff, 1995):
+
+| BDI-компонент | В LLM-агенте | Реализация |
+|---------------|--------------|------------|
+| **Beliefs** (убеждения) | Контекст, memory, tool results | Conversation history, RAG |
+| **Desires** (желания) | Цель пользователя | System prompt, task description |
+| **Intentions** (намерения) | Текущий план действий | Planning step, tool selection |
+
+### Паттерн ReAct и его формализация
+
+> **ReAct** (Yao et al., 2022, Princeton) — паттерн, чередующий шаги reasoning (рассуждение) и acting (действие). Формально: цикл [Thought → Action → Observation]*, где модель генерирует мысль, выбирает действие, наблюдает результат, и повторяет до достижения цели.
+
+### Таксономия агентных архитектур
+
+| Архитектура | Описание | Примеры |
+|-------------|----------|---------|
+| **Single-agent ReAct** | Один агент с инструментами | OpenAI Agents SDK, простой LangGraph |
+| **Plan-and-Execute** | Отдельные фазы планирования и исполнения | LangGraph Plan-and-Execute |
+| **Reflection** | Агент оценивает и улучшает свой результат | Reflexion (Shinn et al., 2023) |
+| **Multi-Agent** | Несколько агентов с ролями | [[agent-frameworks-comparison\|CrewAI]], AutoGen |
+| **Hierarchical** | Orchestrator управляет sub-agents | OpenAI Agents handoffs |
+
+### Проблема галлюцинации инструментов
+
+> Агенты могут «галлюцинировать» инструменты — вызывать функции, которые не существуют, или передавать невалидные аргументы. Это фундаментальная проблема, поскольку LLM генерирует tool calls на основе вероятностного распределения, а не формальной верификации. Решения: constrained decoding, strict JSON schemas, [[ai-security-safety|guardrails]].
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: LLM — это только "мозг" без рук и ног
@@ -1741,18 +1782,29 @@ START
 
 ## Источники
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [ReAct: Synergizing Reasoning and Acting](https://arxiv.org/abs/2210.03629) - Yao et al. 2022 | Paper | Foundational pattern Thought-Action-Observation |
-| 2 | [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | Docs | Production-ready agent framework |
-| 3 | [Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) | Docs | Powers Claude Code, best practices |
-| 4 | [Model Context Protocol](https://www.anthropic.com/news/model-context-protocol) | Spec | Universal standard для AI интеграций |
-| 5 | [LangGraph Documentation](https://langchain-ai.github.io/langgraph/) | Docs | State machines для агентов |
-| 6 | [ReWOO: Decoupling Reasoning from Observations](https://arxiv.org/abs/2305.18323) | Paper | 5x token efficiency approach |
-| 7 | [Magentic-One: A Generalist Multi-Agent System](https://arxiv.org/abs/2411.04468) - Microsoft 2024 | Paper | Multi-agent orchestration patterns |
-| 8 | [OWASP GenAI Security Project](https://genai.owasp.org/) | Guide | LLM Top 10 2025, agent security |
-| 9 | [DeepLearning.AI - Agentic Design Patterns](https://www.deeplearning.ai/the-batch/agentic-design-patterns-part-2-reflection/) | Course | Reflection, Tool Use, Planning, Multi-agent |
-| 10 | [Tree of Thoughts: Deliberate Problem Solving](https://arxiv.org/abs/2305.10601) | Paper | Advanced reasoning через exploration |
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Russell S., Norvig P. (2020). *Artificial Intelligence: A Modern Approach*. 4th edition. Pearson | Формальное определение рационального агента, PEAS-модель |
+| 2 | Rao A., Georgeff M. (1995). *BDI Agents: From Theory to Practice*. ICMAS-95 | BDI-архитектура (Beliefs-Desires-Intentions) |
+| 3 | Yao S. et al. (2022). *ReAct: Synergizing Reasoning and Acting in Language Models*. arXiv:2210.03629 | Фундаментальный паттерн Thought-Action-Observation |
+| 4 | Xu B. et al. (2023). *ReWOO: Decoupling Reasoning from Observations*. arXiv:2305.18323 | 5x эффективность по токенам через разделение reasoning и execution |
+| 5 | Yao S. et al. (2023). *Tree of Thoughts: Deliberate Problem Solving with LLMs*. arXiv:2305.10601 | Параллельное исследование нескольких путей решения |
+| 6 | Fourney A. et al. (2024). *Magentic-One: A Generalist Multi-Agent System*. arXiv:2411.04468 | Паттерны мультиагентной оркестрации |
+| 7 | Wooldridge M. (2009). *An Introduction to MultiAgent Systems*. 2nd edition. Wiley | Теоретическая база мультиагентных систем |
+| 8 | Brooks R. (1986). *A Robust Layered Control System for a Mobile Robot*. IEEE | Subsumption architecture — альтернатива BDI |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | Production-ready agent framework |
+| 2 | [Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) | Powers Claude Code, best practices |
+| 3 | [Model Context Protocol](https://www.anthropic.com/news/model-context-protocol) | Universal standard для AI интеграций |
+| 4 | [LangGraph Documentation](https://langchain-ai.github.io/langgraph/) | State machines для агентов |
+| 5 | [OWASP GenAI Security Project](https://genai.owasp.org/) | LLM Top 10 2025, agent security |
+| 6 | [DeepLearning.AI - Agentic Design Patterns](https://www.deeplearning.ai/the-batch/agentic-design-patterns-part-2-reflection/) | Reflection, Tool Use, Planning, Multi-agent |
 
 ---
 

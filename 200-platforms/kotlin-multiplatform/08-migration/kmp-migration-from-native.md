@@ -47,6 +47,48 @@ next_review:
 | Clean Architecture | Понимать слои | Architecture patterns |
 | **CS: Strangler Fig Pattern** | Стратегия безопасной миграции | [[cs-strangler-fig]] |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Миграция программной системы** — процесс переноса существующего приложения с одной технологической платформы на другую при сохранении функциональной эквивалентности (ISO/IEC 14764:2006, Software Maintenance).
+
+### Strangler Fig Pattern
+
+Паттерн постепенной замены legacy-системы, описанный Martin Fowler (2004):
+
+| Характеристика | Big Bang Rewrite | Strangler Fig |
+|----------------|-----------------|---------------|
+| **Риск** | Высокий — месяцы без релизов | Низкий — замена по модулям |
+| **Время до value** | Только после завершения | Каждый перенесённый модуль |
+| **Откат** | Невозможен | Возврат отдельного модуля |
+| **Параллельная работа** | Feature freeze | Продолжается |
+| **Теоретическая основа** | Waterfall (Royce, 1970) | Incremental delivery (Gilb, 1988) |
+
+### Формальная модель миграции
+
+Миграция native → KMP формализуется как последовательность трансформаций слоёв:
+
+```
+T: L_native → L_shared ∪ L_platform
+где L = {Model, Data, Domain, Presentation, UI}
+порядок: T(Model) → T(Data) → T(Domain) → T(Presentation)
+```
+
+Каждая трансформация T(Lᵢ) сохраняет **поведенческую эквивалентность** (Opdyke, 1992) — набор тестов до и после миграции должен давать идентичные результаты.
+
+### Историческая перспектива
+
+| Период | Подход к миграции | Пример |
+|--------|------------------|--------|
+| 2000-е | Big Bang rewrite | Netscape → Mozilla |
+| 2010-е | Strangler Fig (микросервисы) | Amazon monolith → services |
+| 2018 | Shared logic extraction | Airbnb: RN → Native |
+| 2023+ | KMP incremental adoption | Netflix, McDonald's → KMP |
+
+> **CS-фундамент:** Strangler Fig Pattern связан с [[kmp-architecture-patterns]] (модульная архитектура как prerequisite) и [[kmp-project-structure]] (организация shared-модуля). Теоретическая база — Incremental Development (Gilb, 1988) и Refactoring (Fowler, 1999).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -704,11 +746,17 @@ pod 'SharedKit', '~> 1.0.0'
 
 ## Источники и дальнейшее чтение
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундамент языка Kotlin, необходимый для понимания идиом, используемых в shared-модуле. Особенно полезны главы о data classes, sealed classes и расширениях, которые составляют основу мигрируемого кода.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Практические рекомендации по написанию качественного Kotlin-кода, критичные при миграции: как правильно проектировать API shared-модуля, избегать типичных ошибок и выбирать между interface и abstract class.
+- **Fowler M. (2004).** *Strangler Fig Application.* — Паттерн постепенной замены legacy-системы, применяемый при миграции native → KMP.
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения на слои, определяющие порядок миграции: Model → Data → Domain → Presentation.
+- **Opdyke W. (1992).** *Refactoring Object-Oriented Frameworks.* PhD thesis. — Поведенческая эквивалентность при трансформации кода.
 
-- Martin R. (2017). *Clean Architecture.* — Принципы разделения на слои (Model → Data → Domain → Presentation), которые напрямую определяют порядок миграции. Понимание Dependency Rule поможет выделить слои, пригодные для выноса в shared-модуль.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундамент Kotlin для shared-модуля: data classes, sealed classes, extensions.
+- **Moskala M. (2021).** *Effective Kotlin.* — API-дизайн shared-модуля.
+- [Add KMP to existing project](https://developer.android.com/kotlin/multiplatform/migrate) — Официальный Google гайд.
 
 ---
 

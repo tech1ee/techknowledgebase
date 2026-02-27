@@ -21,7 +21,36 @@ related:
 
 ---
 
-## Терминология
+## Теоретические основы
+
+> **Adapter (Wrapper)** — структурный паттерн проектирования, преобразующий интерфейс класса в другой интерфейс, ожидаемый клиентом. Формально: если клиент ожидает интерфейс T, а доступна реализация S с несовместимым интерфейсом, Adapter A реализует T и делегирует вызовы S.
+
+### Формальная структура (GoF, 1994)
+
+```
+Client → Target (interface) ← Adapter → Adaptee
+```
+
+Два варианта реализации:
+- **Class Adapter**: Adapter наследует и Target, и Adaptee (требует множественного наследования)
+- **Object Adapter**: Adapter реализует Target и содержит ссылку на Adaptee (композиция)
+
+Kotlin поддерживает оба: Class Adapter через интерфейс + класс, Object Adapter через `by` delegation или прямое делегирование.
+
+### Связь с другими паттернами
+
+| Паттерн | Отличие от Adapter |
+|---------|-------------------|
+| **Decorator** | Тот же интерфейс, добавляет поведение. Adapter — другой интерфейс, не добавляет поведение |
+| **Facade** | Упрощает интерфейс подсистемы. Adapter — преобразует один интерфейс в другой |
+| **Bridge** | Разделяет абстракцию и реализацию заранее. Adapter — соединяет уже существующие несовместимые интерфейсы |
+| **Proxy** | Тот же интерфейс, контролирует доступ. Adapter — другой интерфейс |
+
+> **См. также**: [[design-patterns-overview]] — каталог паттернов, [[decorator-pattern]] — добавление поведения, [[composition-vs-inheritance]] — Object vs Class Adapter
+
+---
+
+
 
 | Термин | Значение |
 |--------|----------|
@@ -724,6 +753,10 @@ Adapter, преобразующий `Call<T>` (сырой HTTP-вызов) в н
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — оригинальное описание Adapter: Class Adapter vs Object Adapter, участники, применимость
+- **Freeman E. et al. (2004). Head First Design Patterns. O'Reilly.** — визуальное объяснение отличий Adapter / Facade / Decorator
 
 ### Первоисточники
 - Gamma E., Helm R., Johnson R., Vlissides J. *Design Patterns: Elements of Reusable Object-Oriented Software* (1994) — оригинальное описание Adapter (Chapter 4: Structural Patterns)

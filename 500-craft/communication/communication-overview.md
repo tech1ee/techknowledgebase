@@ -30,6 +30,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Коммуникативная компетентность** (Communicative Competence) — концепция Dell Hymes (1972), определяющая способность эффективно общаться в контексте. Расширяет лингвистическую компетентность Хомского (1965) социальным и прагматическим измерениями.
+
+### Теоретический фундамент раздела
+
+| Область раздела | Ключевая теория | Автор |
+|-----------------|-----------------|-------|
+| **Fundamentals** | Transactional Model of Communication | Barnlund, 1970 |
+| **Listening** | Client-Centered Therapy | Rogers, 1951 |
+| **Feedback** | Cybernetics / Feedback Loops | Wiener, 1948 |
+| **Difficult Conversations** | Thomas-Kilmann Conflict Model | Thomas & Kilmann, 1974 |
+| **Negotiation** | Principled Negotiation | Fisher & Ury, 1981 |
+| **Presentations** | Cognitive Theory of Multimedia Learning | Mayer, 2001 |
+| **Written** | Plain Language / Readability | Flesch, 1948 |
+| **Cross-Cultural** | Cultural Dimensions Theory | Hofstede, 1980 |
+
+Структура раздела следует принципу **от input-навыков к output-навыкам**: сначала понимание (models) и слушание (listening), затем обратная связь (feedback) и конфликты (difficult conversations), и только потом — публичные выступления (presentations) и письменная коммуникация (written). Этот порядок основан на исследованиях Brownell (2012): listening skills являются prerequisite для всех остальных коммуникативных навыков.
+
+Статистика PMI (75% проблем — коммуникационные) подтверждается мета-анализом Vermeir et al. (2015): в healthcare коммуникационные ошибки — причина 70% adverse events. IT-индустрия демонстрирует аналогичные паттерны: по данным Economist Intelligence Unit, $2 trillion ежегодно теряется из-за miscommunication в global teams.
+
+> Связь с другими материалами: [[_meta/learning-path]] определяет порядок изучения, [[communication-models]] начинает с теоретического фундамента, [[thinking/04-thinking-tools/cognitive-biases]] объясняет когнитивные искажения, влияющие на коммуникацию.
+
+---
+
 ## Quick Navigation: У меня проблема с...
 
 | Проблема | Куда идти |

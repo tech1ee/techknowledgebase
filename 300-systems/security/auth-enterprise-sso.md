@@ -31,6 +31,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Определение.** Single Sign-On (SSO) — архитектурный паттерн, при котором единственный акт аутентификации (у централизованного Identity Provider) предоставляет доступ ко множеству независимых сервисов (Service Providers) без повторного ввода учётных данных. Федерация расширяет SSO за границы одной организации через установление взаимного доверия (Trust Relationship).
+
+### Хронология протоколов федеративной аутентификации
+
+| Год | Протокол / Стандарт | Авторы / Организация | Ключевая идея |
+|-----|---------------------|---------------------|---------------|
+| 1988 | Kerberos V4 | MIT (Neuman C., Steiner J., Schiller J.) | Symmetric-key аутентификация через Ticket Granting; пароль никогда не передаётся по сети |
+| 1993 | LDAP v2 | Yeong W., Howes T., Kille S. (RFC 1487) | Lightweight-протокол доступа к каталогам X.500 |
+| 2003 | Kerberos V5 | RFC 4120 (Neuman C. et al.) | Cross-realm authentication, pre-authentication, новые encryption types |
+| 2005 | SAML 2.0 | OASIS (Hughes J., Maler E.) | XML-based assertions: IdP подписывает утверждения, SP проверяет подпись |
+| 2007 | OAuth 1.0 | Hammer-Lahav E. (Twitter, Ma.gnolia) | Делегирование доступа без передачи пароля |
+| 2014 | OpenID Connect (OIDC) | Sakimura N. et al. (OpenID Foundation) | Identity layer поверх OAuth 2.0; JWT-based ID Token |
+| 2015 | SCIM 2.0 | RFC 7643, 7644 (Hunt P. et al.) | REST API для автоматического provisioning/deprovisioning пользователей |
+| 2020 | OIDC Federation | OpenID Foundation | Автоматическое установление доверия между IdP и SP без ручного обмена метаданными |
+
+### Архитектура IdP / SP
+
+| Компонент | SAML 2.0 | OIDC | Kerberos |
+|-----------|----------|------|----------|
+| Центр доверия | IdP (Identity Provider) | OP (OpenID Provider) | KDC (Key Distribution Center) |
+| Потребитель | SP (Service Provider) | RP (Relying Party) | Application Server |
+| Формат утверждения | XML Assertion (подписанный) | JWT ID Token | Kerberos Ticket (зашифрованный) |
+| Транспорт | HTTP Redirect / POST | HTTP Redirect + backchannel | UDP/TCP (порт 88) |
+| Provisioning | Нет (дополняется SCIM) | Нет (дополняется SCIM) | Встроен в AD (LDAP) |
+
+### SCIM — автоматический provisioning
+
+> **SCIM (System for Cross-domain Identity Management)** — REST API-стандарт (RFC 7643/7644), решающий задачу lifecycle management: автоматическое создание, обновление и удаление аккаунтов пользователей во всех подключённых сервисах при изменениях в корпоративном каталоге. SSO отвечает на вопрос «как войти», SCIM — на вопрос «как создать/удалить аккаунт».
+
+**См. также:** [[auth-oauth2-oidc]] — детальная механика OIDC как современной альтернативы SAML; [[security-cryptography-fundamentals]] — цифровые подписи и X.509 сертификаты, фундамент доверия в SAML и Kerberos.
+
+---
+
 ## Зачем это знать
 
 Даже если вы не enterprise-разработчик, рано или поздно вы столкнётесь с SSO. Кнопка "Войти через корпоративный аккаунт" в Jira, Slack, Figma -- это SAML или OIDC Federation. Когда вы открываете ноутбук в офисе и без повторного ввода пароля попадаете в корпоративную почту, файловый сервер и wiki -- это Kerberos. Когда HR добавляет нового сотрудника и его аккаунт автоматически появляется в 20 сервисах -- это SCIM поверх LDAP.
@@ -541,15 +576,25 @@ SSO сокращает количество паролей до одного, н
 
 ## Источники и дальнейшее чтение
 
-1. **Neuman, C. et al. (2005). RFC 4120: The Kerberos Network Authentication Service (V5).** Полная спецификация Kerberos от авторов протокола. Зачем читать: это каноническое описание каждого шага аутентификации, формата сообщений и криптографических операций. Разделы 1-3 дают архитектурное понимание, раздел 5 -- формат сообщений. Технически сложный документ, но единственный первоисточник.
+### Теоретические основы
 
-2. **Garman, J. (2003). *Kerberos: The Definitive Guide.* O'Reilly Media.** Зачем читать: переводит RFC 4120 на "человеческий" язык. Подробно разбирает Active Directory интеграцию, cross-realm authentication и delegation. Несмотря на возраст, фундаментальные концепции не изменились -- протокол тот же. Единственная книга, полностью посвящённая Kerberos.
+1. **Neuman, C. et al. (2005). RFC 4120: The Kerberos Network Authentication Service (V5).** Полная спецификация Kerberos от авторов протокола. Разделы 1-3 дают архитектурное понимание, раздел 5 -- формат сообщений. Единственный первоисточник.
 
-3. **Hughes, J. & Maler, E. (2005). SAML 2.0 Technical Overview. OASIS Committee Draft.** Зачем читать: официальный технический обзор SAML 2.0, написанный понятнее, чем полная спецификация (Assertions and Protocols for SAML V2.0). Объясняет flows, bindings и profiles с диаграммами. Лучший стартовый документ для понимания SAML.
+2. **Hughes, J. & Maler, E. (2005). SAML 2.0 Technical Overview. OASIS Committee Draft.** Официальный технический обзор SAML 2.0, написанный понятнее, чем полная спецификация. Объясняет flows, bindings и profiles с диаграммами.
 
-4. **Howes, T., Smith, M. & Good, G. (2003). *Understanding and Deploying LDAP Directory Services.* Addison-Wesley.** Зачем читать: исчерпывающее руководство по LDAP от Tim Howes -- одного из создателей протокола. Покрывает schema design, replication, security, naming conventions. Даёт понимание того, как устроены корпоративные директории изнутри.
+3. **Howes, T., Smith, M. & Good, G. (2003). *Understanding and Deploying LDAP Directory Services.* Addison-Wesley.** Исчерпывающее руководство по LDAP от Tim Howes -- одного из создателей протокола. Покрывает schema design, replication, security, naming conventions.
 
-5. **Shibboleth Project Documentation (shibboleth.net).** Зачем читать: Shibboleth -- эталонная реализация SAML SP и IdP, используемая тысячами университетов по всему миру. Документация содержит практические примеры конфигурации, troubleshooting-гайды и best practices, недоступные в абстрактных спецификациях OASIS. Незаменима для тех, кто реально настраивает SAML federation.
+4. **Sakimura, N. et al. (2014). OpenID Connect Core 1.0.** OpenID Foundation. — Спецификация OIDC: ID Token, UserInfo endpoint, authentication flows. Определяет identity layer поверх OAuth 2.0.
+
+5. **Hunt, P. et al. (2015). RFC 7643/7644: SCIM — System for Cross-domain Identity Management.** IETF. — Спецификация REST API для автоматического provisioning. Определяет схемы User/Group и CRUD-операции.
+
+### Практические руководства
+
+6. **Garman, J. (2003). *Kerberos: The Definitive Guide.* O'Reilly Media.** Переводит RFC 4120 на «человеческий» язык. Подробно разбирает AD-интеграцию, cross-realm authentication и delegation. Единственная книга, полностью посвящённая Kerberos.
+
+7. **Shibboleth Project Documentation (shibboleth.net).** Эталонная реализация SAML SP и IdP. Документация содержит практические примеры конфигурации, troubleshooting-гайды и best practices.
+
+8. **Okta Developer Documentation (developer.okta.com).** Практическое руководство по интеграции SAML/OIDC/SCIM с современными IdP: пошаговые гайды, SDK, обработка edge cases (certificate rotation, clock skew).
 
 ---
 

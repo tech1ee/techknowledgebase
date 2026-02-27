@@ -35,6 +35,36 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### 1-on-1 в теории менеджмента
+
+> **Определение:** 1-on-1 meeting (one-on-one) — регулярная индивидуальная встреча между руководителем и подчинённым, основная цель которой — построение отношений, обмен обратной связью и поддержка профессионального развития сотрудника.
+
+Andy Grove в *"High Output Management"* (1983) формализовал 1-on-1 как **главный инструмент управленческого leverage**. Он подсчитал: 30-минутная подготовка и 30-минутная встреча = 1 час менеджера, который влияет на 2 недели работы сотрудника (80+ часов). Это ROI > 80x.
+
+> «Ninety minutes of your time can enhance the quality of your subordinate's work for two weeks, or for some eighty-plus hours.» — Andy Grove, *"High Output Management"*
+
+### Coaching vs Mentoring: теоретическое различие
+
+В контексте 1-on-1 критически важно различать два модуса взаимодействия:
+
+| Аспект | Coaching | Mentoring |
+|--------|----------|-----------|
+| **Определение** | Фасилитация самостоятельного нахождения решений через вопросы | Передача опыта и знаний от более опытного |
+| **Теоретическая база** | Timothy Gallwey, *"The Inner Game of Tennis"* (1974); GROW model (Whitmore, 1992) | Developmental relationships (Kram, 1985) |
+| **Вопрос-маркер** | «Как ты думаешь, что можно сделать?» | «Вот как я это делал...» |
+| **Когда использовать** | Сотрудник способен найти ответ сам | Сотруднику не хватает знаний/опыта |
+| **Связь с SL** | D3-D4 по [[em-fundamentals\|Hersey-Blanchard]] | D1-D2 по Hersey-Blanchard |
+
+John Whitmore в *"Coaching for Performance"* (1992) предложил модель GROW (Goal — Reality — Options — Will), которая стала стандартом для коучинговых 1-on-1:
+
+> **GROW Model** (Whitmore, 1992) — структурированная модель коучинговой беседы: определение цели (Goal), оценка текущей реальности (Reality), генерация вариантов (Options), выбор действий (Will/Way forward).
+
+Gallup Research (Q12 Employee Engagement Survey) эмпирически подтвердил, что сотрудники, получающие регулярную обратную связь через 1-on-1, показывают в 3 раза более высокий уровень engagement. SHRM (Society for Human Resource Management) установило корреляцию между отсутствием 1-on-1 и ростом текучести на 40%.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -720,20 +750,25 @@ that it's the employee's meeting, not yours."
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Grove A. "High Output Management" — Random House, 1983 | Книга | 1-on-1 как главный инструмент leverage менеджера |
+| 2 | Whitmore J. "Coaching for Performance" — Nicholas Brealey, 1992 | Книга | GROW model для коучинговых 1-on-1 |
+| 3 | Kram K. E. "Mentoring at Work" — Scott Foresman, 1985 | Книга | Теория developmental relationships |
+| 4 | Gallup "Q12 Employee Engagement Survey" — Gallup Press | Исследование | Корреляция feedback frequency и engagement |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Manager Tools: 1-on-1 Basics](https://www.manager-tools.com/2005/07/the-single-most-effective-management-tool-part-1) | Podcast | Core framework |
 | 2 | [Lara Hogan: First 1-on-1 Questions](https://larahogan.me/blog/first-one-on-one-questions/) | Article | Question bank |
 | 3 | [Rands: 1-on-1](https://randsinrepose.com/archives/the-update-the-vent-and-the-disaster/) | Article | Update/Vent/Disaster |
 | 4 | [Ben Horowitz: 1-on-1s](https://a16z.com/2012/08/30/one-on-one/) | Article | Philosophy |
-| 5 | [Gallup Q12](https://www.gallup.com/workplace/356063/gallup-q12-employee-engagement-survey.aspx) | Research | Engagement correlation |
-| 6 | [Google re:Work](https://rework.withgoogle.com/guides/managers-coach-managers-to-coach/steps/hold-effective-1-1-meetings/) | Guide | Best practices |
-
-### Дополнительное чтение
-
-- "The Making of a Manager" by Julie Zhuo — 1-on-1 chapter
-- "Radical Candor" by Kim Scott — direct but caring conversations
-- "Resilient Management" by Lara Hogan — practical scripts
+| 5 | [Google re:Work](https://rework.withgoogle.com/guides/managers-coach-managers-to-coach/steps/hold-effective-1-1-meetings/) | Guide | Best practices |
+| 6 | **The Making of a Manager** (Julie Zhuo, 2019) | Книга | 1-on-1 chapter |
+| 7 | **Radical Candor** (Kim Scott, 2017) | Книга | Direct but caring conversations |
+| 8 | **Resilient Management** (Lara Hogan, 2019) | Книга | Practical scripts |
 
 ---
 

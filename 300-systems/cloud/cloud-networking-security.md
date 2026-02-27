@@ -35,6 +35,50 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cloud Networking** — виртуализированная сетевая инфраструктура, абстрагирующая физические сети через Software-Defined Networking (SDN). **Cloud Security** — многоуровневая защита облачных ресурсов на основе модели Zero Trust.
+
+### Zero Trust Model (Forrester, 2010; NIST SP 800-207, 2020)
+
+Традиционная модель: "доверяй внутренней сети, проверяй на периметре".
+**Zero Trust**: "никогда не доверяй, всегда проверяй".
+
+| Принцип | Реализация в облаке |
+|---------|-------------------|
+| **Verify explicitly** | IAM + MFA для каждого запроса |
+| **Least privilege access** | Минимальные IAM policies, время жизни credentials |
+| **Assume breach** | Микросегментация (Security Groups), logging, encryption |
+
+### Сетевая изоляция в облаке
+
+```
+Internet
+    │
+    ▼
+Internet Gateway ─── Public Subnet (Bastion, ALB)
+                         │
+                    NAT Gateway
+                         │
+                    Private Subnet (App servers, DB)
+                         │
+                    VPC Endpoint (S3, DynamoDB — без выхода в интернет)
+```
+
+### Defense in Depth: уровни защиты
+
+| Уровень | Механизм | Пример |
+|---------|----------|--------|
+| **Network** | VPC, Subnets, NACL | Изоляция public/private |
+| **Host** | Security Groups | Stateful firewall per instance |
+| **Identity** | IAM, RBAC | Least privilege policies |
+| **Application** | WAF, API Gateway | Защита от OWASP Top 10 |
+| **Data** | Encryption (at rest + in transit) | KMS, SSL/TLS |
+
+> **См. также**: [[security-overview]] — общие принципы безопасности, [[cloud-overview]] — карта раздела
+
+---
+
 ## TL;DR
 
 - **VPC** — изолированная виртуальная сеть в облаке
@@ -440,9 +484,13 @@ resource "aws_security_group" "db" {
 
 ## Источники
 
+### Теоретические основы
+- NIST SP 800-207 (2020). *Zero Trust Architecture*. — Формальная модель Zero Trust
+- Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems*. — Принцип наименьших привилегий
+
+### Практические руководства
 - [AWS VPC Documentation](https://docs.aws.amazon.com/vpc/)
 - [AWS IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
-- [Zero Trust Architecture (NIST)](https://www.nist.gov/publications/zero-trust-architecture)
 
 ---
 

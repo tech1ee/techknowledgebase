@@ -51,6 +51,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Third-party Library** — программный компонент, разработанный за пределами основного проекта и включаемый как зависимость для решения специфических задач (networking, image loading, analytics) (Spinellis, 2003, Code Quality).
+
+### Критерии оценки KMP-библиотек (формальная модель)
+
+Выбор KMP-библиотеки должен учитывать **multi-dimensional fitness** — пригодность по нескольким осям:
+
+| Критерий | Вес | Что оценивать |
+|----------|-----|--------------|
+| KMP-совместимость | Критический | Поддержка всех нужных targets |
+| API stability | Высокий | Semantic versioning, deprecated policy |
+| Community health | Средний | Stars, contributors, issue response time |
+| Binary size | Средний | Impact на итоговый бинарник |
+| Transitive deps | Средний | Конфликты с другими зависимостями |
+
+### Эволюция KMP-экосистемы
+
+| Год | Количество KMP-библиотек | Ключевые события |
+|-----|------------------------|-----------------|
+| 2020 | ~200 | KMP Alpha, первые community-библиотеки |
+| 2022 | ~800 | Ktor, SQLDelight, Koin — stable для KMP |
+| 2023 | ~1500 | KMP Stable, Jetpack библиотеки начинают поддержку |
+| 2025 | ~3000+ | klibs.io каталог, большинство popular libs поддерживают KMP |
+
+### Принцип «Prefer KMP-first libraries»
+
+Библиотеки, изначально спроектированные для KMP (Ktor, SQLDelight), обеспечивают лучший developer experience, чем библиотеки, портированные с одной платформы. Это следствие принципа **Conway's Law** (Conway, 1968): архитектура ПО отражает коммуникационную структуру команды.
+
+> **Связь с dependency management:** Выбор библиотек в KMP — это задача [[dependency-resolution]] с дополнительным ограничением multi-target совместимости.
+
+
 ## Обзор экосистемы
 
 ```
@@ -828,11 +862,16 @@ iosMain.dependencies {
 
 ## Источники и дальнейшее чтение
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по проектированию API и управлению зависимостями в Kotlin, включая принципы минимизации coupling и правильного использования abstractions, что критично при выборе и интеграции сторонних библиотек.
+### Теоретические основы
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы инверсии зависимостей и разделения слоёв позволяют изолировать сторонние библиотеки за интерфейсами, упрощая их замену. Это особенно актуально для KMP, где библиотеки могут терять поддержку или заменяться (например, Kamel → Coil, moko-resources → Compose Resources).
+- **Conway M. (1968).** *How Do Committees Invent?* — Conway's Law: структура библиотечной экосистемы KMP отражает организационные границы сообщества.
+- **Martin R. (2017).** *Clean Architecture.* — Stable Dependencies Principle для оценки пригодности сторонних библиотек.
 
-- **Skeen J. et al. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Основы Kotlin-экосистемы, включая работу с Gradle, зависимостями и multiplatform-проектами, что даёт базу для понимания конфигурации сторонних KMP-библиотек через Version Catalog и source sets.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундамент Kotlin для понимания API сторонних KMP-библиотек.
+- **Moskala M. (2021).** *Effective Kotlin.* — Критерии оценки качества библиотек.
+- [KMP Awesome](https://github.com/AdrianMAnderson/awesome-kotlin-multiplatform) — Курируемый список KMP-библиотек.
 
 ---
 

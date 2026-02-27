@@ -30,6 +30,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Hidden Job Market** — совокупность вакансий, которые заполняются без публичного размещения на job boards. По различным оценкам, 60-80% позиций заполняются через internal referrals, networking и прямое рекрутирование.
+
+**Теоретические основы hidden job market:**
+
+| Концепция | Автор | Год | Объяснение hidden market |
+|-----------|-------|-----|--------------------------|
+| Transaction Cost Economics | Williamson | 1975 | Публикация вакансии + скрининг 250+ заявок = высокие transaction costs; referral снижает их |
+| Information Asymmetry | Akerlof | 1970 | Работодатель не может оценить качество кандидата по резюме; referral = trusted signal |
+| Social Network Theory | Granovetter | 1973 | Информация о вакансиях распространяется через social networks быстрее, чем через публичные каналы |
+| Matching Theory | Alvin Roth | 2012 (Nobel) | Эффективный matching требует информации о preferences обеих сторон; networking обеспечивает это |
+
+**Экономика hidden hiring:**
+
+```
+Public posting:  $15,000-25,000 cost per hire, 30-45 days, 1/152 conversion
+Internal referral: $1,000-3,000 cost per hire, 15-20 days, 1/16 conversion
+Direct sourcing:  $5,000-10,000 cost per hire, 20-30 days, 1/50 conversion
+```
+
+Компании рационально предпочитают referrals, потому что **стоимость ошибки найма** (bad hire) = 30-50% годовой зарплаты. Referral снижает этот риск через social accountability: рекомендующий рискует своей репутацией.
+
+> **Paradox of visibility:** чем выше уровень позиции, тем реже она публикуется. Staff+ позиции почти никогда не появляются на job boards — они заполняются через executive search и personal networks.
+
+→ Связано: [[job-search-strategy]], [[networking-tactics]], [[recruiter-relationships]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -370,15 +399,19 @@ SPREADSHEET / NOTION:
 
 - [[recruiter-relationships]] — Internal и external рекрутеры — один из каналов доступа к hidden market. Internal recruiter знает о позициях до публикации, external — работает с несколькими компаниями и может узнать о req раньше job board. Текущий материал описывает роль рекрутеров в контексте hidden market, а recruiter-relationships — как построить долгосрочные отношения с ними.
 
-## Источники и дальнейшее чтение
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Методология design thinking помогает в проактивном outreach: prototype conversations (informational interviews), identify pain points (company challenges), design value propositions. Подход "сначала пойми проблему, потом предложи решение" — основа value-forward communication для hidden market.
-
-- Fournier C. (2017). *The Manager's Path*. — Понимание perspective hiring manager помогает определить, когда и почему создаются позиции. Книга описывает, как engineering managers планируют headcount, что помогает читать signals (funding, growth, leadership changes) и обращаться проактивно.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ позиций hidden market ещё важнее: 1/3 Staff engineers получают позицию через смену компании. Книга описывает, как Staff+ candidates находятся через network, conference talks и open source contributions.
-
 ## Источники
+
+### Теоретические основы
+
+- Granovetter M. (1973). *The Strength of Weak Ties*. — Информация о вакансиях распространяется через weak ties.
+
+- Williamson O.E. (1975). *Markets and Hierarchies*. — Transaction cost economics: почему referrals дешевле public posting.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking для proactive outreach и informational interviews.
+
+- Larson W. (2022). *Staff Engineer*. — Staff+ позиции находят через network, conference talks и open source.
+
+### Практические руководства
 
 - [Scale.jobs: Hidden Job Market 2025](https://scale.jobs/blog/hidden-job-market-2025-scale-jobs-access-strategy)
 - [JobSearch.guide: Understanding Hidden Job Market](https://jobsearch.guide/blog/understanding-the-hidden-job-market/)

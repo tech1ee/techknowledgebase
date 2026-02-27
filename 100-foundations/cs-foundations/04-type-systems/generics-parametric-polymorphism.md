@@ -28,6 +28,50 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Параметрический полиморфизм (Parametric Polymorphism)** — свойство функции или типа работать единообразно для всех типов, параметризованных типовой переменной. Формально: `∀T. F(T)` — "для любого типа T, F работает с T".
+
+Это отличается от **ad-hoc полиморфизма** (overloading), где разные реализации для разных типов, и **subtype полиморфизма** (inheritance), где подтипы заменяют супертип.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **System F** | Girard, J.-Y. / Reynolds, J.C. | 1972 | Формализация параметрического полиморфизма: `Λα. λx:α. x` |
+| **ML generics** | Milner, R. | 1978 | Первая практическая реализация с type inference |
+| **C++ Templates** | Stroustrup | 1990 | Compile-time подстановка (не erasure, а monomorphization) |
+| **Java Generics** | Bracha et al. | 2004 | Type erasure: generics стираются в runtime (Java 5) |
+| **C# Generics** | Kennedy & Syme | 2001 | Reified generics: типы сохраняются в runtime (.NET 2.0) |
+| **Kotlin Generics** | JetBrains | 2016 | Declaration-site variance (`out`/`in`), `reified` через inline |
+
+### Три вида полиморфизма (Cardelli & Wegner, 1985)
+
+```
+Полиморфизм
+├── Universal (один код для всех типов)
+│   ├── Parametric     — generics: List<T>
+│   └── Inclusion      — subtype: Animal → Dog
+└── Ad-hoc (разный код для разных типов)
+    ├── Overloading    — fun sort(IntArray) / fun sort(StringArray)
+    └── Coercion       — implicit conversion: Int → Double
+```
+
+### Type Erasure vs Reification
+
+| Свойство | Erasure (JVM: Java, Kotlin) | Reification (CLR: C#) |
+|----------|---------------------------|----------------------|
+| **Runtime info** | `List<Int>` → `List` (стёрт) | `List<int>` сохранён |
+| **`is List<Int>`** | Невозможно (erasure) | Возможно |
+| **Размер binary** | Один класс для всех `T` | Отдельная специализация для value types |
+| **Формально** | `∀T. List<T> ≡ List<Object>` at runtime | `List<T>` — distinct type at runtime |
+
+> **Parametricity (Wadler, 1989):** "Theorems for Free!" — из типа параметрически полиморфной функции можно вывести свойства её поведения. Например, `f: ∀T. List<T> → List<T>` может только переставлять/удалять элементы, но не создавать новые (не знает ничего о `T`).
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -421,9 +465,15 @@ Type erasure — главное ограничение generics на JVM. Пон
 
 ## Источники и дальнейшее чтение
 
-- Pierce B. (2002). *Types and Programming Languages (TAPL)*. — фундаментальная работа по теории типов, включая System F и параметрический полиморфизм, которые лежат в основе generics
-- Cardelli L., Wegner P. (1985). *On Understanding Types, Data Abstraction, and Polymorphism*. — классическая paper, систематизирующая виды полиморфизма (parametric, ad-hoc, subtype) и их взаимодействие
-- Bloch J. (2018). *Effective Java*, 3rd ed. — главы 26-33 посвящены практике работы с generics, включая PECS, bounded wildcards и type tokens
+### Теоретические основы
+- Girard, J.-Y. (1972). "Interprétation fonctionnelle et élimination des coupures" — PhD thesis; System F
+- Reynolds, J.C. (1974). "Towards a Theory of Type Structure" — Colloque sur la Programmation; независимое открытие System F
+- Wadler, P. (1989). "Theorems for Free!" — FPCA; parametricity и "свободные теоремы"
+- Kennedy, A. & Syme, D. (2001). "Design and Implementation of Generics for the .NET CLR" — PLDI; reified generics
+
+### Практические руководства
+- Pierce, B. (2002). *TAPL* — System F и параметрический полиморфизм
+- Bloch, J. (2018). *Effective Java*, 3rd ed. — главы 26-33: generics, PECS, wildcards
 - [Kotlin Docs: Generics](https://kotlinlang.org/docs/generics.html) — official reference
 - [TypeAlias: Kotlin Generics](https://typealias.com/start/kotlin-generics/) — visual guide
 

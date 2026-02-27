@@ -36,6 +36,51 @@ Android — мобильная операционная система на ба
 
 ---
 
+## Теоретические основы
+
+### Определение и происхождение платформы
+
+> **Android** — мобильная операционная система с открытым исходным кодом на базе модифицированного ядра Linux, разработанная для устройств с сенсорным экраном (смартфоны, планшеты, ТВ-приставки, автомобильные системы). Официальное определение Google: *«Android is an open source, Linux-based software stack created for a wide array of devices and form factors»* (AOSP Documentation, 2024).
+
+### Историческая хронология
+
+| Год | Событие | Значение |
+|-----|---------|----------|
+| 2003 | Andy Rubin, Rich Miner, Nick Sears, Chris White основали Android Inc. | Изначально — ОС для цифровых камер, затем переориентирована на смартфоны |
+| 2005 | Google приобретает Android Inc. за ~$50 млн | Android становится стратегическим проектом Google |
+| 2007 | Создание Open Handset Alliance (OHA) — 34 компании | Консорциум определил открытую модель развития платформы |
+| 2008 | Android 1.0 (API 1), HTC Dream (T-Mobile G1) | Первый коммерческий релиз и устройство |
+| 2014 | Android 5.0 Lollipop — замена Dalvik на ART | Переход к AOT-компиляции, Material Design |
+| 2017 | Kotlin — официальный язык Android (Google I/O) | Начало постепенного перехода с Java на Kotlin |
+| 2019 | Kotlin — preferred language для Android | Все новые API и документация — Kotlin-first |
+| 2021 | Jetpack Compose 1.0 stable | Декларативный UI как альтернатива XML View System |
+| 2025 | Android 16 (API 36), Compose 1.10 | Adaptive layout enforcement, ProgressStyle уведомления |
+
+### Архитектурная классификация
+
+С точки зрения теории операционных систем (Tanenbaum, *Modern Operating Systems*, 2014), Android представляет собой **модифицированную монолитную ОС с пользовательским runtime**:
+
+| Характеристика | Классическая Linux | Android |
+|----------------|-------------------|---------|
+| Ядро | Монолитное | Монолитное + Binder driver, LMK, ashmem, wakelocks |
+| Модель процессов | fork/exec | Zygote fork (pre-initialized VM) |
+| IPC | pipes, sockets, shared memory | Binder (single-copy через mmap) |
+| Runtime | Нет единого (libc + интерпретаторы) | ART (register-based VM, AOT+JIT) |
+| Управление памятью | OOM Killer | Low Memory Killer (превентивный) |
+| Модель приложения | main() → event loop | Компонентная (Activity, Service, BR, CP) |
+
+### Компонентная модель как архитектурный выбор
+
+Решение использовать компонентную модель вместо единой точки входа `main()` основано на принципах, описанных Clemens Szyperski (*Component Software*, 1997): компонент — это **единица независимого развёртывания с явно определёнными интерфейсами**. В Android каждый из четырёх компонентов (Activity, Service, BroadcastReceiver, ContentProvider) может быть запущен системой независимо, что позволяет:
+
+- Запускать только необходимую часть приложения (экономия памяти)
+- Убивать неактивные компоненты для освобождения ресурсов
+- Интегрировать приложения через стандартные механизмы ([[android-intent-internals|Intent]])
+
+> **Связь с CS:** Модель процессов Android описана в работах *Bornstein, D. (2008). «Dalvik VM Internals» (Google I/O)* и развита в документации AOSP по [[android-art-runtime|ART Runtime]]. Система приоритетов процессов (foreground → cached → empty) формализована как **priority-based preemptive scheduling** в терминах теории ОС.
+
+---
+
 ## Мифы и заблуждения
 
 | Миф | Реальность |
@@ -535,18 +580,21 @@ ANDROID РАЗРАБОТЧИКУ ПОЛЕЗНО ЗНАТЬ:
 
 ## Источники
 
-- [Guide to App Architecture - Android Developers](https://developer.android.com/topic/architecture) — официальное руководство по архитектуре
+### Теоретические основы
+
+- Tanenbaum A. (2014). *Modern Operating Systems, 4th Edition*. — формальная теория ОС: процессы, управление памятью, IPC. Фундамент для понимания архитектурных решений Android
+- Szyperski C. (1997). *Component Software: Beyond Object-Oriented Programming*. — теория компонентных моделей, объясняющая, почему Android использует Activity/Service/BR/CP вместо main()
+- Bornstein D. (2008). *Dalvik VM Internals*. Google I/O. — оригинальная презентация архитектуры Dalvik, предшественника ART
+- [Platform Architecture — AOSP](https://source.android.com/docs/core/architecture) — официальная спецификация архитектурных слоёв Android
+- [Open Handset Alliance — History](https://www.openhandsetalliance.com/) — создание OHA и принципы открытой платформы
+
+### Практические руководства
+
+- Meier R. (2022). *Professional Android, 4th Edition*. — наиболее полное современное руководство по Android-разработке
+- Phillips B. et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое введение в Android-разработку с Kotlin
+- Vasavada N. (2019). *Android Internals*. — системный взгляд на Android: ART, Zygote, Binder IPC, process model
+- [Guide to App Architecture — Android Developers](https://developer.android.com/topic/architecture) — официальное руководство по архитектуре
 - [Recommendations for Android Architecture](https://developer.android.com/topic/architecture/recommendations) — best practices от Google
-- [Modern Android App Architecture Pathway](https://developer.android.com/courses/pathways/android-architecture) — курс по современной архитектуре
-- [MVVM with Clean Architecture - Toptal](https://www.toptal.com/android/android-apps-mvvm-with-clean-architecture) — практическое руководство
-
----
-
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — наиболее полное современное руководство по Android-разработке, охватывающее все ключевые компоненты от Activity lifecycle до WorkManager, Compose и модуляризации.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое введение в Android-разработку с Kotlin, идеально для систематизации знаний и заполнения пробелов в понимании компонентной модели.
-- Vasavada (2019). *Android Internals*. — системный взгляд на Android: ART, Zygote, Binder IPC, process model и memory management. Даёт глубокое понимание того, почему Android работает именно так, а не иначе.
 
 ---
 

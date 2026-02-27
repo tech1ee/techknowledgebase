@@ -37,6 +37,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Build Automation: формальная модель
+
+> **Build automation** — автоматизация процесса трансформации исходного кода в исполняемый артефакт. Формализована Stuart Feldman (Bell Labs, 1976) в утилите Make: набор правил вида `target: dependencies → commands`. С тех пор все системы сборки — вариации этой модели.
+
+| Поколение | Модель | Представители | Ключевой принцип |
+|-----------|--------|---------------|------------------|
+| 1-е (1976) | Rule-based | Make, nmake | Target + dependencies + commands |
+| 2-е (2000) | Task-based, XML | Ant, MSBuild | Platform-independent tasks |
+| 3-е (2004) | Convention-based | Maven | Convention over configuration |
+| 4-е (2012) | DAG + DSL + Cache | Gradle, Bazel, Buck | Content-addressable caching, parallelism |
+
+### Convention over Configuration (CoC)
+
+> Принцип **Convention over Configuration** (Fowler, 2006) — фреймворк определяет разумные значения по умолчанию; разработчик настраивает только отклонения. Maven ввёл CoC для Java-сборки (src/main/java, src/test/java). Android Gradle Plugin продолжает эту линию: `src/main/res`, `src/main/AndroidManifest.xml`, `build/outputs/apk/` — всё это conventions.
+
+### Reproducible Builds
+
+> **Reproducible build** — свойство, при котором один и тот же исходный код и build environment дают идентичный бинарный артефакт (бит-в-бит). Формализовано проектом Reproducible Builds (Debian, 2013). В Android Gradle это обеспечивается через: dependency locking (`gradle.lockfile`), fixed tool versions (Version Catalogs), deterministic resource processing.
+
+> **Связь**: Make → [[android-gradle-fundamentals]], DAG → [[android-compilation-pipeline]], Reproducible Builds → [[android-ci-cd]]
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -879,11 +904,19 @@ proguardFiles(
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая настройку build system и Gradle
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с подробным описанием структуры проекта и Gradle configuration
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Feldman S. *Make — A Program for Maintaining Computer Programs* (1979) | Первая build-система — предшественник Gradle |
+| Hunt A., Thomas D. *The Pragmatic Programmer* (1999) | Convention over Configuration, DRY |
+| Nystrom B. *Crafting Interpreters* (2021) | DSL design — основа Groovy/Kotlin DSL в Gradle |
+| Mokhov A. et al. *Build Systems a la Carte* (2018, ICFP) | Formal taxonomy build-систем |
 
-**Веб-ресурсы:**
+### Книги
+- Meier R. (2022). Professional Android, 4th Edition. — настройка build system и Gradle.
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide. — структура проекта и Gradle configuration.
+
+### Практические руководства
 - [Android Studio's 10 Year Anniversary - Android Developers Blog](https://android-developers.googleblog.com/2025/01/android-studios-10-year-anniversary.html)
 - [Gradle build overview - Android Developers](https://developer.android.com/build/gradle-build-overview)
 - [Configure your build - Android Developers](https://developer.android.com/build)

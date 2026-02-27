@@ -36,6 +36,39 @@ Elite команды деплоят в 973× чаще и решают инцид
 
 ---
 
+## Теоретические основы
+
+> **CI (Continuous Integration)** — практика частого (несколько раз в день) слияния кода в общую ветку с автоматической сборкой и тестированием. Формализована **Martin Fowler (2006)**. **CD (Continuous Delivery/Deployment)** — автоматическая доставка кода в production (Humble & Farley, 2010).
+
+### CI vs CD vs CD
+
+| Термин | Определение | Автоматизация |
+|--------|------------|---------------|
+| **Continuous Integration** | Merge → Build → Test автоматически | Сборка + тесты |
+| **Continuous Delivery** | + артефакт готов к деплою в любой момент | + staging deploy |
+| **Continuous Deployment** | + каждый commit автоматически в production | + production deploy |
+
+### Pipeline как DAG
+
+```
+push → [lint] → [build] → [unit tests] ──┐
+                                          ├── [integration tests] → [deploy staging] → [e2e] → [deploy prod]
+                         [security scan] ─┘
+```
+
+Каждый stage — **идемпотентная** операция: повторный запуск даёт тот же результат.
+
+### Ключевые принципы
+
+- **Fail fast**: самые быстрые проверки первыми (lint → unit → integration → e2e)
+- **Build once, deploy many**: один артефакт для всех окружений
+- **Trunk-based development**: короткоживущие ветки → меньше merge conflicts
+- **Pipeline as Code**: CI/CD описан в YAML/Groovy в репозитории, версионируется вместе с кодом
+
+> **См. также**: [[git-workflows]] — стратегии ветвления, [[docker-for-developers]] — контейнеризация для CI
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -613,6 +646,10 @@ jobs:
 ---
 
 ## Источники
+
+### Теоретические основы
+- Humble J., Farley D. (2010). *Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation*. — Фундаментальная работа по CD
+- Fowler M. (2006). *Continuous Integration*. — Формализация CI-практик
 
 ### Официальная документация
 - [GitHub Actions Documentation](https://docs.github.com/en/actions) — проверено 2025-01-03

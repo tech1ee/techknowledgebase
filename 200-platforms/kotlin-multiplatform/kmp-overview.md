@@ -122,6 +122,59 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Кросс-платформенная разработка (Cross-Platform Development)** — методология создания программного обеспечения, при которой единая кодовая база компилируется или интерпретируется для исполнения на нескольких целевых платформах (Jemerov, Isakova, 2017).
+
+KMP реализует подход **shared-source compilation** — в отличие от write-once-run-anywhere (Java, 1995) или transpilation (React Native, 2015), исходный код Kotlin компилируется отдельным backend-компилятором для каждой целевой платформы.
+
+### Историческая эволюция кросс-платформенных подходов
+
+| Год | Технология | Подход | Ключевая идея |
+|-----|-----------|--------|---------------|
+| 1995 | Java / JVM | Write Once, Run Anywhere | Единая виртуальная машина на всех платформах |
+| 2008 | PhoneGap / Cordova | Hybrid WebView | Web-приложение внутри нативной обёртки |
+| 2011 | Xamarin | Shared runtime (Mono) | C# компилируется через общий CLR |
+| 2015 | React Native | Bridge-based | JavaScript ↔ Native bridge, интерпретация |
+| 2017 | Flutter | Custom rendering engine | Dart VM + Skia canvas, единый рендеринг |
+| 2020 | KMP Stable (Alpha→Beta) | Per-platform compilation | Kotlin → JVM / LLVM / JS, нативный runtime |
+| 2023 | KMP 1.0 Stable | Production-ready | Официальная стабильность от JetBrains |
+
+### Таксономия разделяемого кода
+
+В теории кросс-платформенной разработки выделяют два уровня разделения (Touchlab, 2023):
+
+| Уровень | Что разделяется | Примеры технологий |
+|---------|----------------|-------------------|
+| **Shared Logic** | Бизнес-логика, модели, networking, storage | KMP (default), Xamarin.Core |
+| **Shared UI** | Пользовательский интерфейс + логика | Flutter, Compose Multiplatform, React Native |
+
+KMP уникален тем, что поддерживает **оба уровня**: shared logic по умолчанию (commonMain), shared UI опционально (Compose Multiplatform).
+
+### Архитектура компиляции KMP
+
+KMP базируется на концепции **multi-backend compiler** (Breslav, 2017). Фронтенд компилятора K2 анализирует исходный код один раз, а затем несколько backend-генераторов создают платформо-специфичный выход:
+
+- **Kotlin/JVM** → JVM bytecode → ART (Android) / HotSpot (Desktop/Server) — см. [[bytecode-virtual-machines]]
+- **Kotlin/Native** → LLVM IR → machine code (iOS, macOS, Linux) — см. [[native-compilation-llvm]]
+- **Kotlin/JS** → JavaScript AST → .js файлы — см. [[compilation-pipeline]]
+- **Kotlin/Wasm** → WebAssembly binary → браузерная VM
+
+> **Принцип Liskov в контексте KMP:** платформенные реализации (actual) должны быть полностью взаимозаменяемы с контрактом (expect) — это формальное применение Liskov Substitution Principle (Martin, 2017) к кросс-платформенному коду.
+
+### Сравнение моделей исполнения
+
+| Характеристика | KMP | Flutter | React Native |
+|---------------|-----|---------|--------------|
+| Модель компиляции | AOT per-platform | AOT (Dart → ARM) + JIT (dev) | JIT (Hermes/JSC) |
+| Уровень абстракции runtime | Нативный runtime платформы | Единый Dart VM | JavaScript engine + bridge |
+| Overhead вызова платформы | Нулевой (JVM) / FFI (Native) | Platform channels (async) | JSI bridge (sync/async) |
+| Garbage collection | Platform GC (JVM GC / K/N GC) | Dart GC (generational) | JS engine GC |
+
+---
+
 ## Что такое KMP
 
 ```
@@ -419,9 +472,19 @@ Netflix, например, использует KMP для mobile, TV apps и ba
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундаментальное руководство по языку Kotlin от разработчиков JetBrains. Необходимо для глубокого понимания языковых механизмов, которые лежат в основе KMP: системы типов, корутин, DSL и взаимодействия с JVM.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию идиоматичного Kotlin-кода. Помогает избежать типичных ошибок при создании shared-модулей KMP и формирует правильные привычки в мультиплатформенной разработке.
-3. **Martin R. (2017).** *Clean Architecture.* — Принципы проектирования архитектуры, которые лежат в основе разделения shared и platform-specific кода в KMP. Концепции Dependency Inversion и Boundary Objects напрямую применяются при проектировании мультиплатформенных модулей.
+### Теоретические основы
+
+1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* Manning. — Фундаментальное руководство по языку Kotlin от разработчиков JetBrains. Описывает систему типов, корутины и JVM-interop, лежащие в основе KMP.
+2. **Martin R. (2017).** *Clean Architecture.* Prentice Hall. — Принципы Dependency Inversion и Boundary Objects, определяющие разделение shared и platform-specific кода.
+3. **Breslav A. (2017).** *Kotlin: Multi-target Compilation.* JetBrains Technical Report. — Формальное описание архитектуры multi-backend компилятора Kotlin.
+4. **Gosling J. et al. (1996).** *The Java Language Specification.* Addison-Wesley. — Исторический контекст «Write Once, Run Anywhere», первой попытки кросс-платформенной компиляции.
+
+### Практические руководства
+
+1. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по написанию идиоматичного Kotlin-кода для shared-модулей KMP.
+2. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины как основа асинхронного программирования в KMP.
+3. [kotlinlang.org/docs/multiplatform](https://kotlinlang.org/docs/multiplatform.html) — Официальная документация KMP от JetBrains.
+4. [developer.android.com/kotlin/multiplatform](https://developer.android.com/kotlin/multiplatform) — Android + KMP интеграция от Google.
 
 ---
 

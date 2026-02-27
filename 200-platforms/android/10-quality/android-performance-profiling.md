@@ -44,6 +44,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Profiling: формальные методы измерения производительности
+
+> **Profiling** — систематическое измерение потребления ресурсов программой. Два фундаментальных метода:
+
+| Метод | Определение | Overhead | Точность | Android инструмент |
+|-------|------------|----------|----------|-------------------|
+| **Sampling** | Периодический снимок call stack (каждые N мс) | Низкий (~5%) | Статистическая (может пропустить короткие функции) | CPU Profiler (Sample), Perfetto |
+| **Tracing / Instrumentation** | Запись каждого входа/выхода из функции | Высокий (10-100x slowdown) | Точная (каждый вызов зафиксирован) | CPU Profiler (Trace), Method Tracing |
+
+> Выбор между sampling и tracing — это **Heisenberg trade-off**: чем точнее измерение, тем сильнее оно влияет на измеряемую систему. Donald Knuth: *"Premature optimization is the root of all evil"* (*"Structured Programming with go to Statements"*, 1974) — но профилирование — это не преждевременная оптимизация, а обоснованная.
+
+### Amdahl's Law и узкие места
+
+> **Закон Амдала** (1967): ускорение программы ограничено долей кода, которую нельзя распараллелить. Для Android: если 80% времени запуска — последовательная инициализация библиотек (`ContentProvider.onCreate()`), то оптимизация оставшихся 20% даст максимум 1.25x ускорение. Профилирование помогает найти эти 80%.
+
+### Latency Taxonomy
+
+> Основные метрики производительности Android:
+
+| Метрика | Определение | Цель (Google рекомендация) |
+|---------|------------|--------------------------|
+| **TTID** (Time to Initial Display) | Время от intent до первого frame | < 500 ms (cold start) |
+| **TTFD** (Time to Full Display) | Время до полной готовности контента | < 1000 ms |
+| **Frame duration** | Время рендеринга одного кадра | < 16.67 ms (60 FPS) / 8.33 ms (120 FPS) |
+| **GC pause** | Время остановки приложения для сборки мусора | < 2 ms (ART CC GC) |
+
+> **Связь**: Profiling → [[android-app-startup-performance]], Amdahl's Law → [[os-scheduling]], GC → [[jvm-gc-tuning]]
+
+---
+
 ## ПОЧЕМУ: Зачем профилировать
 
 ### Проблемы без профилирования
@@ -877,21 +909,23 @@ trace.stop()
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Amdahl G. *Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities* (1967) | Amdahl's Law — предел ускорения от параллелизации |
+| Graham S. et al. *gprof: A Call Graph Execution Profiler* (1982) | Sampling vs Instrumentation profiling |
+| Knuth D. *Structured Programming with go to Statements* (1974) | "Premature optimization is the root of all evil" |
+
+### Практические руководства
 - [Android Developers — Profile App Performance](https://developer.android.com/studio/profile)
 - [Android Developers — Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles/overview)
-- [Android Developers — Macrobenchmark](https://developer.android.com/topic/performance/baselineprofiles/measure-baselineprofile)
-- [LeakCanary Documentation](https://square.github.io/leakcanary/)
 - [Perfetto Documentation](https://perfetto.dev/docs/)
-- [Android Developers — R8/ProGuard](https://developer.android.com/build/shrink-code)
-- [Android Developers — ANR Diagnosis](https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs)
+- [LeakCanary Documentation](https://square.github.io/leakcanary/)
 
----
-
-## Источники и дальнейшее чтение
-
-- Vasavada (2019). *Android Internals*. — глубокое понимание ART runtime, GC, heap management и системных инструментов профилирования (dumpsys, systrace), которое необходимо для интерпретации результатов Memory и CPU Profiler.
-- Goetz (2006). *Java Concurrency in Practice*. — фундамент для анализа threading-проблем: deadlocks, contention, visibility issues, которые выявляются через CPU Profiler и thread dumps.
-- Meier (2022). *Professional Android*. — практическое руководство по использованию Android Studio Profiler, Baseline Profiles, Macrobenchmark и R8 для оптимизации production-приложений.
+### Книги
+- Vasavada (2019). *Android Internals*. — ART runtime, GC, heap management.
+- Goetz (2006). *Java Concurrency in Practice*. — threading-проблемы, deadlocks, contention.
+- Meier (2022). *Professional Android*. — Android Studio Profiler, Baseline Profiles, Macrobenchmark.
 
 ---
 

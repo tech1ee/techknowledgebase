@@ -28,6 +28,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Computer Science Fundamentals** — область информатики, изучающая абстрактные структуры данных, алгоритмы их обработки и методы анализа эффективности вычислений. Фундамент подготовки к техническим интервью и соревновательному программированию.
+
+### Карта раздела
+
+| Область | Ключевые темы | Основоположники |
+|---------|---------------|-----------------|
+| **Структуры данных** | Массивы, деревья, графы, хеш-таблицы | Кнут (1968), Тарьян (1975) |
+| **Алгоритмы** | Сортировка, поиск, графовые, DP | Дейкстра (1959), Кормен и др. (1990) |
+| **Паттерны решения** | Two Pointers, Sliding Window, BFS/DFS | Систематизация NeetCode, Blind 75 |
+| **Анализ сложности** | Big O, амортизация, Master Theorem | Бахман (1894), Кнут (1976) |
+| **Competitive Programming** | CF, ICPC, IOI | Халим (2010), CP-Algorithms |
+
+### Исторический контекст
+
+- **1945** — Джон фон Нейман: алгоритм сортировки слиянием (merge sort)
+- **1956** — Крускал: алгоритм минимального остовного дерева
+- **1959** — Дейкстра: алгоритм кратчайших путей
+- **1962** — Хоар: алгоритм быстрой сортировки (quicksort)
+- **1968** — Кнут: "The Art of Computer Programming" — систематизация алгоритмов
+- **1990** — Кормен, Лейзерсон, Ривест: CLRS — стандартный учебник
+
+### Связи
+
+- [[big-o-complexity]] — математический аппарат для анализа алгоритмов
+- [[problem-solving-framework]] — методология решения задач (UMPIRE)
+- [[coding-challenges]] — применение паттернов на практике
+- [[programming-overview]] — принципы проектирования и паттерны кода
+
+---
+
 ## Как пользоваться этим разделом
 
 > **Важно:** Каждый материал построен по [[_meta/template-deep-dive|шаблону обучения]]:
@@ -324,11 +356,18 @@ CS FUNDAMENTALS
 
 ## Источники
 
+### Теоретические основы
+
+- Knuth D.E. (1968–). *The Art of Computer Programming, Vols. 1–4*. — фундаментальный труд по алгоритмам и структурам данных, определивший стандарты анализа сложности
+- Cormen T., Leiserson C., Rivest R., Stein C. (2009). *Introduction to Algorithms (CLRS), 3rd ed.* — стандартный учебник по алгоритмам, используемый в MIT и большинстве университетов мира
+- Sedgewick R., Wayne K. (2011). *Algorithms, 4th ed.* — практико-ориентированный учебник с реализациями на Java
+
+### Практические руководства
+
 - [roadmap.sh DSA](https://roadmap.sh/datastructures-and-algorithms) — Complete learning path
 - [Tech Interview Handbook](https://www.techinterviewhandbook.org/) — Patterns, priorities
 - [NeetCode.io](https://neetcode.io/) — Curated 150 problems
 - [GeeksforGeeks DSA](https://www.geeksforgeeks.org/dsa/) — Comprehensive reference
-- [Research: CS Fundamentals Roadmap](../docs/research/2025-12-29-cs-fundamentals-roadmap.md) — Deep research
 
 ---
 

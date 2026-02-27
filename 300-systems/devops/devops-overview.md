@@ -30,6 +30,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **DevOps** — набор практик, инструментов и культурных ценностей, объединяющих разработку (Dev) и эксплуатацию (Ops) для сокращения цикла поставки ПО. Термин популяризирован **Patrick Debois (2009)** на конференции DevOpsDays.
+
+### DORA Metrics (Forsgren, Humble, Kim — «Accelerate», 2018)
+
+| Метрика | Elite | High | Medium | Low |
+|---------|-------|------|--------|-----|
+| **Deployment Frequency** | On-demand (много раз в день) | 1/день — 1/неделя | 1/неделя — 1/месяц | 1/месяц — 1/полгода |
+| **Lead Time for Changes** | < 1 час | 1 день — 1 неделя | 1 неделя — 1 месяц | 1 — 6 месяцев |
+| **MTTR** (Mean Time To Recovery) | < 1 час | < 1 день | < 1 неделя | > 6 месяцев |
+| **Change Failure Rate** | 0-15% | 16-30% | 16-30% | 46-60% |
+
+### Три пути DevOps (Kim, «The Phoenix Project», 2013)
+
+| Путь | Принцип | Практики |
+|------|---------|----------|
+| **1. Flow** | Ускорение потока от Dev к Ops | CI/CD, small batches, WIP limits |
+| **2. Feedback** | Быстрая обратная связь от Ops к Dev | Monitoring, alerting, A/B testing |
+| **3. Continuous Learning** | Культура экспериментов и обучения | Blameless post-mortems, chaos engineering |
+
+> **См. также**: [[ci-cd-pipelines]] — автоматизация, [[observability]] — мониторинг, [[cloud-overview]] — облачная инфраструктура
+
+---
+
 ## TL;DR
 
 - **DevOps** — practices для сокращения цикла от кода до production
@@ -361,11 +386,15 @@ next_review:
 
 ## Источники
 
-- [DORA State of DevOps Report](https://dora.dev/)
-- "The Phoenix Project" by Gene Kim
-- "The DevOps Handbook" by Gene Kim, et al.
-- [Google SRE Book](https://sre.google/books/)
-- [Accelerate](https://itrevolution.com/book/accelerate/) by Nicole Forsgren
+### Теоретические основы
+- Forsgren N., Humble J., Kim G. (2018). *Accelerate: The Science of Lean Software and DevOps*. — DORA metrics, научное обоснование DevOps-практик
+- Kim G. et al. (2016). *The DevOps Handbook*. — Три пути DevOps (Flow, Feedback, Continuous Learning)
+- Beyer B. et al. (2016). *Site Reliability Engineering* (Google). — SRE как реализация DevOps-принципов
+
+### Практические руководства
+- [DORA State of DevOps Report](https://dora.dev/) — ежегодное исследование метрик
+- Kim G. (2013). *The Phoenix Project*. — DevOps в формате бизнес-романа
+- [Google SRE Book](https://sre.google/books/) — практики Google SRE
 
 ---
 

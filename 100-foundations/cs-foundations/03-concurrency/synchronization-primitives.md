@@ -30,6 +30,57 @@ prerequisites:
 
 ---
 
+## Теоретические основы: формальный базис синхронизации
+
+### Проблема взаимного исключения: формальная постановка
+
+> **Определение (Dijkstra, 1965):** Проблема взаимного исключения (mutual exclusion) — обеспечить, что в **критической секции** (critical section) в любой момент находится не более одного процесса, при этом выполняются:
+> 1. **Safety (Mutual Exclusion):** ¬(in_CS(P₁) ∧ in_CS(P₂)) — два процесса не могут быть в CS одновременно
+> 2. **Liveness (Progress):** Если CS свободна и есть желающие войти — один из них войдёт за конечное время
+> 3. **Fairness (Bounded Waiting):** Каждый ожидающий процесс войдёт в CS за конечное число шагов
+
+Дейкстра решил эту задачу для N процессов с помощью **семафоров** (1965), но первое решение без специальных инструкций — **алгоритм Деккера** (1962-1965), обобщённый в **алгоритм Петерсона** (1981) — элегантное 2-процессное решение.
+
+### Условия Коффмана: необходимые условия deadlock
+
+> **Теорема (Coffman, Elphick, Shoshani, 1971):** Deadlock возможен тогда и только тогда, когда выполнены **все четыре условия одновременно:**
+
+| # | Условие | Формально | Разрушение |
+|---|---------|-----------|------------|
+| 1 | **Mutual Exclusion** | ∃ ресурс, доступный только одному процессу | Сделать ресурс разделяемым (read-only, CAS) |
+| 2 | **Hold and Wait** | Процесс удерживает ресурс и ждёт другой | Захватывать все ресурсы атомарно |
+| 3 | **No Preemption** | Ресурс нельзя отнять принудительно | Разрешить preemption (tryLock + rollback) |
+| 4 | **Circular Wait** | P₁→P₂→...→Pₙ→P₁ цикл ожидания | **Lock ordering** — всегда захватывать в одном порядке |
+
+На практике самый распространённый способ предотвращения — устранение **Circular Wait** через **тотальное упорядочивание** ресурсов.
+
+### Иерархия консенсуса Херлихи
+
+> **Теорема (Herlihy, 1991):** Каждый объект синхронизации имеет **consensus number** — максимальное число процессов, для которых он может решить задачу консенсуса wait-free.
+
+| Consensus Number | Объекты | Следствие |
+|-----------------|---------|-----------|
+| **1** | Atomic read/write регистры | Невозможно решить консенсус даже для 2 процессов |
+| **2** | Test-and-Set, Swap, FIFO Queue | Решает консенсус для 2, но не для 3+ |
+| **∞** | **Compare-and-Swap (CAS)**, LL/SC | Решает консенсус для любого числа процессов |
+
+Это фундаментальный результат: **CAS — универсальный примитив**, из которого можно построить любой lock-free объект. Именно поэтому `AtomicInteger.compareAndSet()` — основа всех lock-free структур в JVM.
+
+### Linearizability: формальная корректность
+
+> **Определение (Herlihy & Wing, 1990):** Конкурентный объект **линеаризуем** (linearizable), если каждое его выполнение эквивалентно некоторому последовательному выполнению, в котором каждая операция "происходит мгновенно" в некоторый момент между своим вызовом и возвратом.
+
+Linearizability — **золотой стандарт** корректности concurrent объектов. Это composable свойство: если A и B линеаризуемы, то A∪B тоже линеаризуем.
+
+### Связи
+
+- [[concurrency-fundamentals]] — базовые модели конкурентности
+- [[memory-model-fundamentals]] — видимость данных между потоками
+- [[jvm-memory-model]] — Java Memory Model и happens-before
+- [[databases-transactions-acid]] — аналогия: serializability ≈ linearizability для транзакций
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -650,17 +701,19 @@ class ViewModel {
 
 ## Источники и дальнейшее чтение
 
-- **Coffman, E.G., Elphick, M., Shoshani, A. (1971). System Deadlocks.** — Оригинальная статья с четырьмя условиями Coffman. Короткая, ясная, фундаментальная. Обязательное чтение для понимания deadlock.
+### Теоретические основы
 
-- **Herlihy, M. (1991). Wait-Free Synchronization.** — Революционная статья: доказательство, что любой sequential object может быть реализован без блокировок. Основа всех lock-free структур данных. Turing Award 2012.
+- **Dijkstra, E. (1965). "Cooperating Sequential Processes."** — Оригинальная работа о семафорах. Формальная постановка проблемы взаимного исключения. Исторический документ, заложивший основы
+- **Coffman, E.G., Elphick, M., Shoshani, A. (1971). "System Deadlocks." ACM Computing Surveys.** — Четыре необходимых условия deadlock. Фундаментальная, короткая, ясная
+- **Herlihy, M. (1991). "Wait-Free Synchronization." ACM TOPLAS.** — Consensus hierarchy: доказательство, что CAS — универсальный примитив. Turing Award 2012
+- **Herlihy, M. & Wing, J. (1990). "Linearizability: A Correctness Condition for Concurrent Objects." ACM TOPLAS.** — Формальное определение linearizability как золотого стандарта корректности
+- **Peterson, G.L. (1981). "Myths About the Mutual Exclusion Problem." IPL.** — Элегантный 2-процессный алгоритм взаимного исключения без специальных инструкций
 
-- **Herlihy, M. & Shavit, N. (2012). The Art of Multiprocessor Programming.** — Лучший учебник по concurrent programming: от теории (linearizability, consensus) до практики (lock-free queues, skip lists). Главы 7-9 покрывают lock-free подходы.
+### Практические руководства
 
-- **Ben-Ari, M. (2006). Principles of Concurrent and Distributed Programming.** — Академический подход с формальными моделями. Объясняет, как **доказать** корректность concurrent программы, а не просто тестировать.
-
-- **Dijkstra, E. (1965). Cooperating Sequential Processes.** — Оригинальная работа о семафорах. Исторический документ, заложивший основы.
-
-- **Jones, M.B. (1997). What Really Happened on Mars (report).** — Детальное описание бага Mars Pathfinder с priority inversion. Показывает, как ошибка синхронизации чуть не погубила миссию за $265 млн.
+- **Herlihy, M. & Shavit, N. (2012). The Art of Multiprocessor Programming.** — Лучший учебник: от теории (linearizability, consensus) до практики (lock-free queues, skip lists)
+- **Ben-Ari, M. (2006). Principles of Concurrent and Distributed Programming.** — Академический подход с формальными моделями
+- **Jones, M.B. (1997). What Really Happened on Mars (report).** — Баг Mars Pathfinder с priority inversion — ошибка синхронизации за $265 млн
 
 ---
 

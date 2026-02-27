@@ -36,6 +36,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Финансовое планирование в engineering: от учёта затрат к стратегическому инвестированию
+
+> **Определение:** Engineering Budget Planning — процесс планирования, обоснования и контроля финансовых ресурсов инженерной организации. Включает headcount planning, infrastructure costs, tools и training. Основная задача — трансляция стратегических приоритетов в финансовый план с измеримым ROI.
+
+Peter Pyhrr в *"Zero-Base Budgeting"* (1973, внедрено в Texas Instruments) предложил альтернативу инкрементальному бюджетированию: каждый расходный пакет обосновывается с нуля каждый цикл, а не как «прошлый год + X%». Для engineering это означает: каждая команда, каждый инструмент, каждый cloud ресурс должен доказать свою ценность.
+
+| Подход к бюджетированию | Автор/Источник | Принцип | Применение в engineering |
+|------------------------|---------------|---------|------------------------|
+| **Zero-Based Budgeting** | Pyhrr, 1973 | Обоснование с нуля каждый цикл | Пересмотр tooling, headcount |
+| **Activity-Based Costing** | Kaplan & Cooper, 1988 | Стоимость по активностям, не отделам | Стоимость фичи, стоимость деплоя |
+| **CapEx vs OpEx** | Accounting standards (GAAP/IFRS) | Capital vs Operating expenditures | Cloud migration impact on financials |
+| **Total Cost of Ownership** | Gartner, 1987 | Полная стоимость владения, включая hidden costs | Build vs buy decisions |
+
+Robert Kaplan и Robin Cooper в *"Cost & Effect"* (1998) показали, что Activity-Based Costing позволяет точнее определять стоимость внутренних процессов. Для engineering это применимо к расчёту «стоимости деплоя», «стоимости инцидента», «стоимости найма» — метрик, которые помогают обосновывать инвестиции в автоматизацию и [[engineering-practices|инженерные практики]].
+
+> «A budget is not just a collection of numbers, but an expression of our values and aspirations.» — Jacob Lew
+
+Stripe Developer Coefficient (2018) показал, что разработчики тратят ~33% времени на tech debt и maintenance. При average fully-loaded cost инженера $200-300K/year это означает $60-100K/year потерь на каждого инженера — критически важные данные для обоснования инвестиций в [[tech-debt-management|управление tech debt]] и developer experience.
+
+---
+
 ## Budget Components
 
 ```
@@ -187,13 +210,21 @@ DON'T:
 
 **[[executive-communication]]** — Представление бюджета руководству требует навыков executive communication: BLUF (Bottom Line Up Front), Pyramid Principle, бизнес-язык вместо технического жаргона. Успешное согласование бюджета зависит не только от качества расчётов, но и от умения убедительно представить данные, ответить на вопросы и показать альтернативы. Каждый запрос на ресурсы должен проходить тест «So what?» с точки зрения бизнес-влияния.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Pyhrr P. "Zero-Base Budgeting" — Wiley, 1973 | Книга | ZBB methodology |
+| 2 | Kaplan R., Cooper R. "Cost & Effect" — Harvard Business School Press, 1998 | Книга | Activity-Based Costing |
+| 3 | Stripe "The Developer Coefficient" — 2018 | Исследование | 33% времени на tech debt, ROI developer tools |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Engineering budget responsibilities |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Budget decisions under constraints |
+| 3 | Drucker P. "The Effective Executive" — Harper Business, 2006 | Книга | Resource allocation principles |
 
 
 ## Проверь себя

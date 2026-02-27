@@ -33,6 +33,26 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Лидерство в технологиях: научный контекст
+
+> **Определение:** Technology Leadership — дисциплина на пересечении управления людьми (management), технической экспертизы (engineering) и организационного дизайна (systems thinking). Включает роли от Tech Lead до CTO и охватывает весь спектр от tactical execution до strategic direction.
+
+John Kotter в *"What Leaders Really Do"* (Harvard Business Review, 1990) провёл фундаментальное различие: **Management** — это планирование, организация и контроль (making things run smoothly), **Leadership** — это определение направления, alignment людей и мотивация (driving change). В technology organizations эти функции часто переплетены, что делает роли EM, Tech Lead и CTO уникально сложными.
+
+| Теоретическая основа | Автор | Ключевой вклад |
+|---------------------|-------|----------------|
+| Management vs Leadership | Kotter, 1990 | Direction + alignment + motivation |
+| Servant Leadership | Greenleaf, 1970 | Leader serves the team first |
+| Situational Leadership | Hersey & Blanchard, 1969 | Style adapts to situation |
+| High Output Management | Andy Grove, 1983 | Manager's output = team's output |
+| Psychological Safety | Edmondson, 1999 | Foundation of effective teams |
+
+Andy Grove в *"High Output Management"* (1983) определил output менеджера как output его команды и организации, на которые он влияет. Это определение стало фундаментом engineering management: менеджер создаёт ценность не через собственный код, а через leverage — увеличение эффективности других людей.
+
+---
+
 ## Quick Navigation: У меня вопрос про...
 
 | Вопрос | Куда идти |

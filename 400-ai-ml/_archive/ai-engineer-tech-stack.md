@@ -45,6 +45,16 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Technology Stack** — набор инструментов и сервисов для создания AI-приложений. Стек формируется вокруг ключевых задач: model access (API), data processing (embeddings, vector DB), orchestration (frameworks), и operations (monitoring).
+
+Выбор стека определяется принципом Conway's Law (1968): архитектура системы отражает организационную структуру. AI-стек 2025 года оптимизирован под роль AI Engineer, работающего с inference (а не training).
+
+См. также: [[ai-tools-ecosystem-2025|AI Tools Ecosystem 2025]] — актуальная полная версия.
+
+---
+
 ## Важное предупреждение
 
 *AI-инструменты устаревают быстрее, чем в любой другой области. LangChain год назад был стандартом, сейчас многие считают его переусложнённым. Фокусируйся на понимании категорий инструментов, а не на заучивании конкретных названий.*
@@ -470,10 +480,19 @@ my-ai-app/
 
 ## Источники
 
-- [LangChain State of AI 2024](https://blog.langchain.com/langchain-state-of-ai-2024/) — проверено 2025-11-24
-- [Medium: AI Engineer Tech Stack 2025](https://medium.com/@alinaqishaheen/the-ai-engineers-tech-stack-in-2025-what-you-need-to-know-89e76dea89a8) — проверено 2025-11-24
-- [Zilliz: 10 Open-Source LLM Frameworks 2025](https://zilliz.com/blog/10-open-source-llm-frameworks-developers-cannot-ignore-in-2025) — проверено 2025-11-24
-- [Analytics Vidhya: Top Vector Databases 2025](https://www.analyticsvidhya.com/blog/2023/12/top-vector-databases/) — проверено 2025-11-24
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Conway M. (1968). *How Do Committees Invent?*. Datamation | Закон Conway — архитектура = организация |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [LangChain State of AI 2024](https://blog.langchain.com/langchain-state-of-ai-2024/) | Обзор экосистемы |
+| 2 | [Zilliz: 10 Open-Source LLM Frameworks](https://zilliz.com/blog/10-open-source-llm-frameworks-developers-cannot-ignore-in-2025) | Фреймворки |
+| 3 | [Analytics Vidhya: Top Vector Databases](https://www.analyticsvidhya.com/blog/2023/12/top-vector-databases/) | Vector DBs |
 
 ---
 

@@ -45,6 +45,22 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Engineering** — дисциплина построения приложений на базе foundation models (Huyen, 2024). В отличие от ML Engineering (обучение моделей), AI Engineering фокусируется на inference, интеграции и product development.
+
+| Этап роадмапа | Теоретическая база | Ключевой навык |
+|---------------|-------------------|----------------|
+| **Основы** | Python, HTTP, JSON | Работа с API |
+| **LLM Integration** | Scaling Laws (Kaplan, 2020) | Prompt engineering |
+| **RAG** | Information Retrieval (Manning et al., 2008) | Embeddings + vector search |
+| **Agents** | Rational agents (Russell & Norvig, 2020) | Tool use, orchestration |
+| **Production** | SRE (Beyer et al., 2016) | Monitoring, scaling |
+
+См. также: [[ai-engineering-intro|AI Engineering Intro]] — полное введение в профессию.
+
+---
+
 ## Честный дисклеймер
 
 *Я не буду обещать "стань AI Engineer за 30 дней". Реалистичные сроки:*
@@ -496,10 +512,20 @@ result = qa.run("Какая политика отпусков?")
 
 ## Источники
 
-- [roadmap.sh: AI Engineer](https://roadmap.sh/ai-engineer) — проверено 2025-11-24
-- [freeCodeCamp: AI Engineering Roadmap](https://www.freecodecamp.org/news/ai-engineering-roadmap/) — проверено 2025-11-24
-- [DataCamp: AI Developer Roadmap](https://www.datacamp.com/blog/ai-developer-roadmap) — проверено 2025-11-24
-- [Analytics Vidhya: Roadmap to AI Engineer 2025](https://www.analyticsvidhya.com/blog/2024/04/roadmap-to-become-an-ai-engineer/) — проверено 2025-11-24
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Huyen C. (2024). *AI Engineering*. O'Reilly | Определение дисциплины AI Engineering |
+| 2 | Kaplan J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361 | Понимание scaling → выбор модели |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [roadmap.sh: AI Engineer](https://roadmap.sh/ai-engineer) | Визуальный роадмап |
+| 2 | [freeCodeCamp: AI Engineering Roadmap](https://www.freecodecamp.org/news/ai-engineering-roadmap/) | Детальный план |
+| 3 | [DataCamp: AI Developer Roadmap](https://www.datacamp.com/blog/ai-developer-roadmap) | С упражнениями |
 
 ---
 

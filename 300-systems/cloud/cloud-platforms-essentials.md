@@ -36,6 +36,45 @@ On-premise: $50k + 4 недели настройки. Cloud: 5 минут и $5/
 
 ---
 
+## Теоретические основы
+
+> **Cloud Platform** — интегрированная экосистема облачных сервисов от одного провайдера, предоставляющая compute, storage, networking, managed services и инструменты разработки через единый API и консоль.
+
+### Историческая хронология
+
+| Год | Событие |
+|-----|---------|
+| 2006 | AWS запускает S3 и EC2 — начало modern cloud |
+| 2008 | Google App Engine (PaaS) |
+| 2010 | Microsoft Azure (GA) |
+| 2011 | NIST публикует определение Cloud Computing (SP 800-145) |
+| 2014 | AWS Lambda — начало serverless эры |
+| 2015 | Google открывает Kubernetes (CNCF) |
+| 2019 | Multi-cloud становится корпоративным стандартом |
+
+### Рынок облачных платформ (2025)
+
+| Провайдер | Доля рынка | Сильные стороны |
+|-----------|-----------|-----------------|
+| **AWS** | ~32% | Самый зрелый, 200+ сервисов, наибольшая экосистема |
+| **Azure** | ~23% | Microsoft интеграция, Enterprise, Hybrid (Azure Arc) |
+| **GCP** | ~12% | Kubernetes, BigQuery, ML/AI, networking |
+
+### AWS Well-Architected Framework: 6 столпов
+
+| Столп | Принцип |
+|-------|---------|
+| **Operational Excellence** | Автоматизация, IaC, observability |
+| **Security** | Least privilege, encryption, compliance |
+| **Reliability** | Fault tolerance, auto-recovery |
+| **Performance Efficiency** | Правильный выбор ресурсов под workload |
+| **Cost Optimization** | Оплата только за используемое (FinOps) |
+| **Sustainability** | Минимизация environmental impact |
+
+> **См. также**: [[cloud-overview]] — карта раздела, [[infrastructure-as-code]] — IaC
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: On-premise требует капитальных затрат и экспертизы
@@ -818,16 +857,25 @@ Cost:
 
 ## Источники
 
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | NIST SP 800-145 (2011). *The NIST Definition of Cloud Computing* | Формальное определение cloud computing |
+| 2 | Armbrust M. et al. (2010). *A View of Cloud Computing* (Berkeley) | Экономическая модель облаков |
+| 3 | [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) | 6 столпов архитектуры |
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
-| 1 | [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) | Docs | Best practices архитектуры |
-| 2 | [Google Cloud Architecture Framework](https://cloud.google.com/architecture/framework) | Docs | GCP patterns |
-| 3 | [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/) | Docs | Azure patterns |
-| 4 | [Cloud Market Share Q1 2025 — Synergy Research](https://www.srgresearch.com/) | Report | Актуальная статистика рынка |
-| 5 | [FinOps Foundation](https://www.finops.org/) | Guide | Cloud financial management |
-| 6 | [AWS Pricing Calculator](https://calculator.aws/) | Tool | Оценка стоимости |
-| 7 | [GCP Pricing Calculator](https://cloud.google.com/products/calculator) | Tool | Оценка стоимости GCP |
-| 8 | [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/) | Tool | Оценка стоимости Azure |
+| 1 | [Google Cloud Architecture Framework](https://cloud.google.com/architecture/framework) | Docs | GCP patterns |
+| 2 | [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/) | Docs | Azure patterns |
+| 3 | [Cloud Market Share Q1 2025 — Synergy Research](https://www.srgresearch.com/) | Report | Актуальная статистика рынка |
+| 4 | [FinOps Foundation](https://www.finops.org/) | Guide | Cloud financial management |
+| 5 | [AWS Pricing Calculator](https://calculator.aws/) | Tool | Оценка стоимости |
+| 6 | [GCP Pricing Calculator](https://cloud.google.com/products/calculator) | Tool | Оценка стоимости GCP |
+| 7 | [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/) | Tool | Оценка стоимости Azure |
 
 ---
 

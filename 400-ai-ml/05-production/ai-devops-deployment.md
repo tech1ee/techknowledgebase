@@ -78,6 +78,40 @@ status: published
 
 ---
 
+## Теоретические основы
+
+> **LLMOps** — дисциплина на пересечении DevOps и ML Engineering, фокусирующаяся на операционализации систем на базе больших языковых моделей. В отличие от классического MLOps, LLMOps концентрируется на inference (а не training), prompt management (а не feature engineering) и cost monitoring (а не accuracy metrics).
+
+Деплой LLM опирается на проверенные принципы DevOps, адаптированные под специфику AI-workloads:
+
+| Принцип | Теоретическая база | AI-специфика |
+|---------|-------------------|-------------|
+| **Infrastructure as Code** | Humble & Farley (2010), *Continuous Delivery* | GPU scheduling, model versioning, prompt versioning |
+| **Immutable Infrastructure** | Phoenix Server (Fowler, 2012) | Docker с pinned CUDA/PyTorch/model versions |
+| **Continuous Delivery** | Humble & Farley (2010) | CI/CD с eval pipeline вместо unit tests |
+| **Site Reliability** | Beyer et al. (2016), *SRE Book* | SLO для AI: latency, quality, cost |
+| **12-Factor App** | Wiggins (2011), Heroku | Конфигурация моделей через environment |
+
+> **Ключевые отличия AI-workloads от обычных сервисов:**
+> - **Cold start**: загрузка модели 70B = 5-15 минут (vs миллисекунды для обычного pod)
+> - **GPU dependency**: scheduling привязан к дефицитным GPU-ресурсам
+> - **Non-deterministic outputs**: quality assurance требует eval, а не unit tests
+> - **Cost dominance**: inference costs > infrastructure costs
+
+**Эволюция подходов к деплою AI:**
+
+| Поколение | Период | Подход | Инструменты |
+|-----------|--------|--------|-------------|
+| MLOps 1.0 | 2018-2020 | Batch training + model serving | MLflow, TFServing |
+| MLOps 2.0 | 2020-2023 | Feature stores + pipelines | Vertex AI, SageMaker |
+| **LLMOps** | 2023-present | **Prompt management + inference optimization** | vLLM, TGI, LangSmith, KEDA |
+
+Для масштабирования GPU-workloads: KEDA (Kubernetes Event-Driven Autoscaling) масштабирует по queue depth, а не по CPU — это критично, потому что GPU utilization не коррелирует с request rate из-за continuous batching (Yu et al., 2022).
+
+См. также: [[ai-observability-monitoring|Observability]] — мониторинг AI, [[llm-inference-optimization|Inference Optimization]] — ускорение, [[ai-cost-optimization|Cost Optimization]] — экономика.
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** Деплой LLM кардинально отличается от обычных приложений:
@@ -1851,5 +1885,29 @@ Prometheus + Grafana (инфраструктура), LangSmith/Langfuse (LLM tra
 | Углубиться | [[llm-inference-optimization]] | Оптимизация inference-сервера |
 | Смежная тема | [[ci-cd-pipelines]] | Общие практики CI/CD |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Humble J., Farley D. (2010). *Continuous Delivery*. Addison-Wesley | CI/CD принципы, adapted для AI |
+| 2 | Beyer B. et al. (2016). *Site Reliability Engineering*. O'Reilly (Google) | SRE-практики для production AI |
+| 3 | Sculley D. et al. (2015). *Hidden Technical Debt in Machine Learning Systems*. NeurIPS | Технический долг в ML-системах |
+| 4 | Yu G. et al. (2022). *ORCA: A Distributed Serving System for Transformer-Based Generative Models*. OSDI | Continuous batching — основа vLLM |
+| 5 | Burns B. et al. (2016). *Borg, Omega, and Kubernetes*. ACM Queue | Оркестрация контейнеров — основа для GPU scheduling |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [vLLM Documentation](https://docs.vllm.ai/) | LLM serving engine |
+| 2 | [KEDA — Kubernetes Event-Driven Autoscaling](https://keda.sh/) | Autoscaling по queue depth |
+| 3 | [KServe Documentation](https://kserve.github.io/website/) | ML serving на Kubernetes |
+| 4 | [NVIDIA GPU Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/) | GPU в Kubernetes |
+| 5 | [Google Cloud — AI Inference Best Practices](https://cloud.google.com/kubernetes-engine/docs/best-practices/machine-learning/inference/) | Оптимизация inference |
 
 *Проверено: 2026-01-09*

@@ -89,6 +89,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Dependency Resolution: формальная задача
+
+> **Dependency resolution** — задача определения совместимого набора версий всех зависимостей проекта. Формально это **constraint satisfaction problem** (CSP): каждая библиотека определяет ограничения на версии своих зависимостей, и resolver ищет присвоение версий, удовлетворяющее всем ограничениям. В общем случае задача NP-полна (Cox, 2016, *"Minimal Version Selection"*).
+
+| Стратегия разрешения | Определение | Gradle поведение |
+|---------------------|-------------|-----------------|
+| **Newest wins** | Из конфликтующих версий выбирается наибольшая | Default в Gradle — `org.slf4j:slf4j-api` 1.7 vs 2.0 → выбирается 2.0 |
+| **Minimal Version Selection** | Выбирается минимальная версия, удовлетворяющая всем constraints | Подход Go modules (Cox, 2018), не используется в Gradle |
+| **Strict version** | Конфликт → ошибка сборки | `strictly("1.5.0")` в Gradle — запрет повышения |
+| **BOM (Bill of Materials)** | Централизованная матрица совместимых версий | Compose BOM, Firebase BOM — одна зависимость задаёт все версии |
+
+### Transitive Dependencies и Diamond Problem
+
+> **Diamond dependency problem** — ситуация, когда A зависит от B и C, а B и C зависят от разных версий D. Это частный случай **dependency hell** (термин из Unix, 1990-е). Gradle решает через **conflict resolution strategy**: по умолчанию newest-wins, но можно настроить `failOnVersionConflict()` или `force()`.
+
+```
+        App
+       /   \
+      B     C
+       \   /
+     D:1.0  D:2.0  ← conflict!
+         ↓
+     D:2.0 wins (newest-wins)
+```
+
+### Classpath Isolation и Module System
+
+> `implementation` vs `api` в Gradle реализует **information hiding** (Parnas, *"On the Criteria To Be Used in Decomposing Systems into Modules"*, 1972): `implementation` скрывает зависимость от consumer модуля, `api` делает её публичной. Это снижает **recompilation scope**: изменение `implementation`-зависимости не перекомпилирует consumer.
+
+> **Связь**: CSP → [[concurrency-fundamentals]], Module System → [[android-gradle-fundamentals]], BOM → [[android-dependencies]]
+
+---
+
 ## Dependency Coordinates (GAV)
 
 ```
@@ -1157,6 +1192,15 @@ com.squareup.retrofit2:retrofit:2.9.0=releaseRuntimeClasspath
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Apt: Advanced Packaging Tool (Debian, 1998) | Dependency resolution как Constraint Satisfaction Problem |
+| Mancinelli F. et al. *Managing the Complexity of Large Free and Open Source Package-Based Software Distributions* (2006, ASE) | Diamond Problem, dependency hell |
+| Szyperski C. *Component Software: Beyond Object-Oriented Programming* (1998) | Classpath isolation, component model |
+
+### Практические руководства
 
 | # | Источник | Тип | Описание |
 |---|----------|-----|----------|

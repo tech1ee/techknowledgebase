@@ -47,8 +47,134 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис concurrency
+
+### Happens-before: частичный порядок событий
+
+> **Happens-before** --- отношение частичного порядка (partial order) между событиями в параллельной системе, определяющее, какие операции гарантированно видны другим. Введено Leslie Lamport (1978, *"Time, Clocks, and the Ordering of Events in a Distributed System"*).
+
+Формально, отношение `→` (happens-before) на множестве событий определяется:
+
+1. **Program order**: если `a` и `b` --- события в одном потоке и `a` выполняется перед `b`, то `a → b`
+2. **Synchronization order**: если `a` --- отправка сообщения (или unlock) и `b` --- его получение (или lock), то `a → b`
+3. **Транзитивность**: если `a → b` и `b → c`, то `a → c`
+
+Если ни `a → b`, ни `b → a`, события **concurrent** (параллельны) --- нет гарантии порядка. Это ключевой источник race conditions.
+
+Java Memory Model (JSR-133, 2004) адаптировала happens-before для JVM:
+
+| Правило | Happens-before |
+|---------|---------------|
+| `volatile` write → read | Запись в volatile HB чтение той же переменной |
+| `synchronized` exit → entry | Выход из monitor HB вход в тот же monitor |
+| `Thread.start()` → first instruction | Запуск потока HB первая инструкция потока |
+| Last instruction → `Thread.join()` | Последняя инструкция потока HB возврат из join |
+| `channel.send()` → `channel.receive()` | Отправка в канал HB получение того же элемента (Kotlin) |
+
+### Sequential Consistency
+
+> **Sequential Consistency** --- модель памяти, при которой результат любого выполнения эквивалентен некоторому последовательному выполнению операций всех процессоров, причём операции каждого процессора идут в program order (Lamport, 1979, *"How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs"*).
+
+Формально: выполнение sequentially consistent, если существует total order `S` на всех операциях такой, что:
+1. `S` согласован с program order каждого процессора
+2. Каждое чтение возвращает значение последней записи в `S`
+
+Sequential consistency интуитивна, но дорогая: запрещает hardware reordering. Поэтому реальные процессоры и JVM используют **ослабленные модели** (TSO, PSO, relaxed), а happens-before восстанавливает нужные гарантии точечно через `volatile`/`synchronized`.
+
+### Safety и Liveness
+
+> **Safety property** --- "ничего плохого не произойдёт". **Liveness property** --- "что-то хорошее рано или поздно произойдёт" (Lamport, 1977; Alpern & Schneider, 1985).
+
+| Свойство | Тип | Определение | Нарушение |
+|----------|-----|-------------|-----------|
+| **Mutual Exclusion** | Safety | Не более одного потока в критической секции одновременно | Race condition |
+| **Absence of Deadlock** | Safety | Система не приходит в состояние, где все заблокированы | Deadlock |
+| **Progress** (Deadlock-freedom) | Liveness | Если кто-то хочет войти в критическую секцию, кто-то войдёт | Deadlock |
+| **Starvation-freedom** | Liveness | Каждый поток, желающий войти, рано или поздно войдёт | Starvation |
+| **Wait-freedom** | Liveness | Каждый поток завершит операцию за конечное число шагов | Livelock |
+
+Фундаментальная теорема: любое свойство корректности concurrent-системы можно выразить как пересечение safety и liveness свойств.
+
+### Linearizability
+
+> **Linearizability** --- свойство concurrent-объекта, при котором каждая операция выглядит так, будто выполнена атомарно в некоторый момент между её вызовом и возвратом (Herlihy & Wing, 1990, *"Linearizability: A Correctness Condition for Concurrent Objects"*).
+
+Формально: история `H` операций linearizable, если существует последовательная история `S` такая, что:
+1. Для каждой завершённой операции в `H` её результат в `S` совпадает
+2. Если операция `a` завершилась до начала `b` в `H`, то `a` предшествует `b` в `S`
+
+| Свойство | Область | Composability | Scope |
+|----------|---------|---------------|-------|
+| **Linearizability** | Concurrent objects | Да (composable) | Отдельный объект |
+| **Serializability** | Databases (транзакции) | Нет | Набор операций |
+| **Sequential Consistency** | Memory models | Нет | Вся система |
+
+Linearizability --- "золотой стандарт" для concurrent data structures: `AtomicInteger`, `ConcurrentHashMap` в JVM линеаризуемы.
+
+### CSP: формальная модель коммуникации
+
+> **Communicating Sequential Processes (CSP)** --- формальный язык для описания concurrency через обмен сообщениями между последовательными процессами (Hoare, 1978; монография 1985).
+
+Ключевой принцип: *"Do not communicate by sharing memory; share memory by communicating"* (позже воспринятый Go).
+
+Формальные примитивы CSP:
+
+| Примитив | Нотация | Смысл |
+|----------|---------|-------|
+| **Событие** (event) | `a` | Атомарное действие |
+| **Префикс** | `a → P` | "Выполни `a`, затем веди себя как `P`" |
+| **Выбор** (choice) | `a → P □ b → Q` | "Либо `a` → `P`, либо `b` → `Q`" (external choice) |
+| **Параллельная композиция** | `P ∥ Q` | "Запусти `P` и `Q` параллельно, синхронизация на общих событиях" |
+| **STOP** | `STOP` | Deadlock --- процесс ничего не делает |
+
+В Kotlin: `Channel` --- реализация CSP-канала. `select {}` --- оператор choice. Coroutines --- процессы.
+
+### Actor Model
+
+> **Actor Model** --- модель concurrency, в которой актор --- фундаментальная единица вычисления, взаимодействующая только через асинхронные сообщения (Hewitt, Bishop, Steiger, 1973, *"A Universal Modular ACTOR Formalism for Artificial Intelligence"*).
+
+Каждый актор может:
+1. **Отправить** конечное число сообщений другим акторам
+2. **Создать** конечное число новых акторов
+3. **Определить поведение** для следующего полученного сообщения
+
+| | CSP (Hoare) | Actor Model (Hewitt) |
+|---|-------------|---------------------|
+| Коммуникация | Синхронная (rendezvous) | Асинхронная (mailbox) |
+| Каналы | Именованные каналы | Адреса акторов |
+| Выбор | `select` (external choice) | Pattern matching на mailbox |
+| Реализации | Go goroutines, Kotlin Channels | Erlang/OTP, Akka, Swift actors |
+
+В Kotlin: `actor {}` builder (deprecated), `Channel` + coroutine --- CSP-стиль. Swift actors и Erlang processes --- Actor-стиль.
+
+### Карта формальных понятий
+
+```
+Lamport 1978                     Hoare 1978
+     |                                |
+     v                                v
+Happens-before                     CSP (каналы,
+(partial order)                    процессы)
+     |                                |
+     v                                v
+Sequential          Hewitt 1973       Kotlin
+Consistency  <---   Actor Model  ---> Channels
+(Lamport 1979)         |
+     |                 v
+     v            Erlang/OTP,
+Safety/Liveness   Akka, Swift
+(Lamport 1977)
+     |
+     v
+Linearizability
+(Herlihy & Wing 1990)
+```
+
+---
+
 ## TL;DR
 
+- **Теоретическая база** --- happens-before (Lamport, 1978), CSP (Hoare, 1978), linearizability (Herlihy & Wing, 1990), safety/liveness (Lamport, 1977)
 - **Concurrency** --- структурирование программы для работы с несколькими задачами
 - **Parallelism** --- одновременное выполнение на нескольких CPU cores
 - **Kotlin coroutines** --- легковесные "потоки" с structured concurrency
@@ -61,21 +187,23 @@ next_review:
 
 ## Терминология
 
-| Термин | Значение |
-|--------|----------|
-| **Thread** | Поток выполнения внутри процесса |
-| **Process** | Изолированная единица выполнения с своей памятью |
-| **Coroutine** | Легковесная единица конкурентного выполнения в Kotlin |
-| **Race Condition** | Баг из-за timing-зависимости |
-| **Deadlock** | Взаимная блокировка потоков |
-| **Mutex** | Mutual Exclusion --- блокировка ресурса |
-| **Semaphore** | Ограничение числа одновременных доступов |
-| **Atomic** | Операция, выполняемая как единое целое |
-| **Dispatcher** | Определяет, на каком потоке/пуле выполняется корутина |
-| **Structured concurrency** | Иерархия корутин с автоматической отменой |
-| **Channel** | Примитив для передачи данных между корутинами |
-| **Flow** | Холодный асинхронный поток данных |
-| **Suspension point** | Точка, где корутина может приостановиться без блокировки потока |
+| Термин | Формально | Простыми словами |
+|--------|-----------|-----------------|
+| **Thread** | Единица планирования ядра ОС (1:1 mapping) | Поток выполнения внутри процесса |
+| **Process** | Изолированное адресное пространство + ≥1 thread | Единица выполнения с своей памятью |
+| **Coroutine** | Suspendable computation (Conway, 1958) | Легковесная единица конкурентного выполнения |
+| **Happens-before** | Partial order на событиях (Lamport, 1978) | Гарантия видимости изменений между потоками |
+| **Race Condition** | Нарушение safety при concurrent доступе к shared state | Баг из-за timing-зависимости |
+| **Deadlock** | Circular wait + hold-and-wait + mutual exclusion + no preemption | Взаимная блокировка потоков |
+| **Mutex** | Binary semaphore, обеспечивающий mutual exclusion | Блокировка ресурса |
+| **Semaphore** | Счётчик с операциями P (wait) и V (signal) (Dijkstra, 1965) | Ограничение числа одновременных доступов |
+| **Linearizability** | Каждая операция атомарна между invocation и response (Herlihy & Wing, 1990) | Операция выглядит мгновенной |
+| **Atomic** | Linearizable операция (indivisible) | Операция, выполняемая как единое целое |
+| **Dispatcher** | ContinuationInterceptor (execution policy) | Определяет, на каком потоке выполняется корутина |
+| **Structured concurrency** | Task tree с формальными инвариантами (Smith, 2018) | Иерархия корутин с автоматической отменой |
+| **Channel** | CSP-примитив: typed communication medium (Hoare, 1978) | Передача данных между корутинами |
+| **Flow** | Cold reactive stream (Reactive Streams spec) | Холодный асинхронный поток данных |
+| **Suspension point** | CPS-трансформированная точка yield | Точка приостановки без блокировки потока |
 
 ---
 
@@ -1649,15 +1777,29 @@ suspend fun example() = coroutineScope {
 
 ## Источники
 
-Goetz B. et al. (2006). *"Java Concurrency in Practice."* --- Золотой стандарт для JVM-разработчиков. Объясняет Java Memory Model, happens-before, thread safety и построение корректных concurrent-структур.
+### Теоретические основы
 
-Elizarov R. (2018). *"Structured Concurrency."* --- Статья создателя Kotlin coroutines о принципах structured concurrency, которые легли в основу `coroutineScope`, `supervisorScope` и иерархии Job.
+Lamport L. (1978). *"Time, Clocks, and the Ordering of Events in a Distributed System."* Communications of the ACM, 21(7), 558--565. --- Формализация happens-before как частичного порядка; логические часы.
 
-Moskala M. (2024). *"Kotlin Coroutines: Deep Dive."* --- Подробное руководство по Kotlin coroutines: от основ до продвинутых паттернов (Flow, Channel, testing). Лучшая книга по теме для Kotlin-разработчиков.
+Lamport L. (1979). *"How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs."* IEEE Transactions on Computers, C-28(9), 690--691. --- Определение sequential consistency.
 
-Herlihy M., Shavit N. (2012). *"The Art of Multiprocessor Programming."* --- Глубокое погружение в lock-free и wait-free алгоритмы, линеаризуемость, concurrent data structures.
+Hoare C.A.R. (1978). *"Communicating Sequential Processes."* Communications of the ACM, 21(8), 666--677. --- Оригинальная работа CSP: concurrency через обмен сообщениями. Монография: 1985.
 
-Hoare C.A.R. (1978). *"Communicating Sequential Processes."* --- Оригинальная работа, описавшая CSP-модель concurrency через обмен сообщениями. Лежит в основе goroutines (Go) и каналов (Kotlin).
+Hewitt C., Bishop P., Steiger R. (1973). *"A Universal Modular ACTOR Formalism for Artificial Intelligence."* IJCAI. --- Модель акторов: асинхронные сообщения, mailbox, создание акторов.
+
+Herlihy M., Wing J. (1990). *"Linearizability: A Correctness Condition for Concurrent Objects."* ACM Transactions on Programming Languages and Systems, 12(3), 463--492. --- Формальное определение линеаризуемости.
+
+Alpern B., Schneider F.B. (1985). *"Defining Liveness."* Information Processing Letters, 21(4), 181--185. --- Формальное разделение safety и liveness свойств.
+
+### Практические руководства
+
+Goetz B. et al. (2006). *"Java Concurrency in Practice."* --- Золотой стандарт для JVM: Java Memory Model, happens-before, thread safety.
+
+Herlihy M., Shavit N. (2012). *"The Art of Multiprocessor Programming."* --- Lock-free и wait-free алгоритмы, линеаризуемость, concurrent data structures.
+
+Elizarov R. (2018). *"Structured Concurrency."* --- Принципы structured concurrency: `coroutineScope`, `supervisorScope`, иерархия Job.
+
+Moskala M. (2024). *"Kotlin Coroutines: Deep Dive."* --- Kotlin coroutines: от основ до Flow, Channel, testing.
 
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html) --- официальная документация по корутинам
 - [Shared Mutable State and Concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html) --- Mutex, Atomic, confinement в корутинах

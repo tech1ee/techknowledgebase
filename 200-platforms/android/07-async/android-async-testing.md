@@ -82,6 +82,36 @@ mastery: 0
 
 ---
 
+## Теоретические основы
+
+### Детерминизм в тестировании конкурентного кода
+
+> **Недетерминизм** — фундаментальная проблема тестирования конкурентных систем (Lamport, *"Time, Clocks, and the Ordering of Events in a Distributed System"*, 1978). Результат зависит от порядка планирования потоков, который контролирует ОС. `kotlinx-coroutines-test` решает эту проблему через **виртуальное время**: `TestDispatcher` заменяет реальный scheduler детерминистичным, управляемым вручную.
+
+| Проблема | Теоретическая причина | Решение в kotlinx-coroutines-test |
+|----------|----------------------|-----------------------------------|
+| Flaky тесты | Недетерминизм планирования потоков | `StandardTestDispatcher` — детерминистичный порядок |
+| Бесконечные тесты | Hot Flow `collect` никогда не завершается | Turbine `test { }` — timeout-based, автоматическая отмена |
+| Зависимость от реального времени | `delay(1000)` требует 1 секунду | `advanceTimeBy(1000)` — мгновенный скачок |
+| `Dispatchers.Main` недоступен на JVM | Main Looper существует только на Android | `setMain(testDispatcher)` — замена через `MainDispatcherRule` |
+
+### Test Double Pattern для Dispatchers
+
+> Принцип **Dependency Inversion** (Martin, 1996, *SOLID*) применительно к Dispatchers: вместо хардкода `Dispatchers.IO` используется инъекция через конструктор. Это реализует паттерн **Test Double** (Meszaros, *xUnit Test Patterns*, 2007) — `TestDispatcher` выступает как Fake для реального Dispatcher.
+
+```
+Production:  ViewModel(dispatchers = AppDispatchers(IO, Default, Main))
+Testing:     ViewModel(dispatchers = AppDispatchers(testDispatcher, testDispatcher, testDispatcher))
+```
+
+### Виртуальное время: формальная модель
+
+> `TestCoroutineScheduler` реализует **дискретно-событийную симуляцию** (discrete-event simulation, Nance, 1993): время продвигается не непрерывно, а скачками между запланированными событиями. `advanceTimeBy(n)` продвигает виртуальные часы на n мс и выполняет все задачи, запланированные в этом интервале. `advanceUntilIdle()` продвигает до момента, когда не останется pending задач.
+
+> **Связь**: Детерминизм → [[concurrency-fundamentals]], Test Doubles → [[kotlin-testing]], Dependency Injection → [[android-dependency-injection]]
+
+---
+
 ## Пререквизиты
 
 | Тема | Зачем нужно | Где изучить |
@@ -2703,8 +2733,14 @@ fun `new style`() = runTest {
 
 ## Источники и дальнейшее чтение
 
-### Книги
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Lamport L. *Time, Clocks, and the Ordering of Events in a Distributed System* (1978) | Детерминизм в конкурентных системах — основа virtual time |
+| Meszaros G. *xUnit Test Patterns* (2007) | Test Double — Fake Dispatcher как Test Double |
+| Fishman G. *Discrete-Event Simulation* (2001) | Virtual Time как discrete-event simulation |
 
+### Книги
 - Moskala M. (2022). *Kotlin Coroutines: Deep Dive* -- Ch.30 "Testing coroutines", Ch.31 "Testing Flow". Исчерпывающее руководство по `runTest`, `TestDispatcher`, виртуальному времени
 - Turlcot P. (2023). *Kotlin in Action, 2nd Ed.* -- глава о тестировании корутин
 

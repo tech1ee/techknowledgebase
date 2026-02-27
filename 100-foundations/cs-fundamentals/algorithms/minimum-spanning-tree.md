@@ -29,6 +29,33 @@ next_review:
 
 # Minimum Spanning Tree (MST)
 
+## Теоретические основы
+
+> **Минимальное остовное дерево** (Minimum Spanning Tree, MST) — подграф связного взвешенного неориентированного графа, который соединяет все вершины с минимальным суммарным весом рёбер и не содержит циклов. MST содержит ровно V-1 рёбер для V вершин.
+
+### Хронология алгоритмов MST
+
+| Год | Автор | Алгоритм | Сложность | Идея |
+|-----|-------|----------|-----------|------|
+| **1926** | Отакар Борувка | Boruvka's algorithm | O(E log V) | Параллельное добавление минимальных рёбер из каждой компоненты |
+| **1956** | Джозеф Крускал | Kruskal's algorithm | O(E log E) | Жадная сортировка рёбер + Union-Find |
+| **1957** | Роберт Прим | Prim's algorithm | O(E log V) | Жадный рост дерева от произвольной вершины |
+| **1975** | Яо | Улучшение Boruvka | O(E log log V) | Комбинация с soft heaps |
+
+### Фундаментальные теоремы
+
+> **Cut Property (свойство разреза):** для любого разреза графа (разбиения вершин на два непустых подмножества) ребро минимального веса, пересекающее разрез, принадлежит некоторому MST. Это свойство обосновывает корректность жадных алгоритмов Крускала и Прима.
+
+> **Cycle Property (свойство цикла):** для любого цикла в графе ребро максимального веса в этом цикле не принадлежит ни одному MST (при условии уникальности весов). Позволяет отсекать "дорогие" рёбра.
+
+### Связи
+
+- [[greedy-algorithms]] — MST-алгоритмы — классические примеры жадной стратегии
+- [[union-find-pattern]] — структура данных DSU для алгоритма Крускала
+- [[graph-algorithms]] — базовые операции на графах (BFS, DFS)
+
+---
+
 ## TL;DR
 
 MST — подграф, соединяющий все вершины с **минимальным суммарным весом** без циклов. **Kruskal** — сортировка рёбер + Union-Find за O(E log E), лучше для sparse. **Prim** — жадный рост от вершины за O(E log V), лучше для dense. **Boruvka** — параллелизуемый, O(E log V). Основа: Cut Property (min crossing edge in MST) и Cycle Property (max cycle edge not in MST).
@@ -1330,13 +1357,21 @@ fun prim(): Long {
 
 ## Источники
 
+### Теоретические основы
+
+- Boruvka O. (1926). *O jistém problému minimálním*. — первый алгоритм MST, разработанный для проектирования электросетей Моравии
+- Kruskal J.B. (1956). *On the Shortest Spanning Subtree of a Graph and the Traveling Salesman Problem*. Proceedings of the American Mathematical Society. — жадный алгоритм с сортировкой рёбер
+- Prim R.C. (1957). *Shortest Connection Networks and Some Generalizations*. Bell System Technical Journal. — жадный рост дерева от вершины
+- Cormen T. et al. (2009). *Introduction to Algorithms (CLRS), Chapter 23*. — доказательства Cut Property и Cycle Property, анализ Kruskal и Prim
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Kruskal](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html) | Reference | Implementation |
 | 2 | [CP-Algorithms: Prim](https://cp-algorithms.com/graph/mst_prim.html) | Reference | Implementation |
 | 3 | [Princeton: MST](https://algs4.cs.princeton.edu/43mst/) | Course | Theory |
 | 4 | [CP-Algorithms: Second Best MST](https://cp-algorithms.com/graph/second_best_mst.html) | Reference | Advanced |
-| 5 | [Baeldung: Boruvka](https://www.baeldung.com/java-boruvka-algorithm) | Tutorial | Parallel MST |
 
 ---
 

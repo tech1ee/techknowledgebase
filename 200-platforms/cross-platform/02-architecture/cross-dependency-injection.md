@@ -43,6 +43,43 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Dependency Injection (DI)** — паттерн проектирования, при котором зависимости объекта предоставляются извне, а не создаются самим объектом (Fowler, 2004, Inversion of Control Containers and the Dependency Injection Pattern).
+
+### Три формы DI (Fowler, 2004)
+
+| Форма | Механизм | iOS | Android |
+|-------|----------|-----|---------|
+| **Constructor Injection** | Через параметры конструктора | `init(repo: Repository)` | `class VM(repo: Repository)` |
+| **Setter Injection** | Через свойства | Property injection | `@Inject lateinit var` |
+| **Interface Injection** | Через специальный интерфейс | Protocol-based | Редко используется |
+
+### Инверсия управления (IoC)
+
+DI — частный случай принципа **Inversion of Control** (Johnson & Foote, 1988):
+
+```
+Без IoC: class A { val b = B() }          — A контролирует создание B
+С IoC:   class A(val b: B)                 — кто-то снаружи контролирует B
+```
+
+| Аспект | iOS | Android | Кросс-платформенный |
+|--------|-----|---------|-------------------|
+| **DI framework** | Swinject, Factory, manual | Hilt (Dagger), Koin | Koin, kotlin-inject |
+| **Compile-time** | Factory (Swift macros) | Dagger/Hilt (kapt/KSP) | kotlin-inject |
+| **Runtime** | Swinject | Koin | Koin |
+| **Философия** | Manual DI предпочтителен | Framework DI стандарт | Зависит от проекта |
+
+### Почему платформы разошлись в подходах
+
+iOS-сообщество исторически предпочитает **Protocol-Oriented Programming** (Apple, WWDC 2015) и manual DI через конструкторы. Android-сообщество, наследуя Java-традиции, строит на **annotation-based DI** (Dagger → Hilt). KMP должен балансировать оба подхода.
+
+> **CS-фундамент:** DI связана с [[cross-architecture]] (архитектурная роль DI) и [[kmp-di-patterns]] (KMP-специфичные DI-паттерны). Теоретическая база — IoC (Johnson & Foote, 1988), DI Pattern (Fowler, 2004), SOLID Principles (Martin, 2003).
+
 ## 1. Manual DI: Базовый подход
 
 ### iOS: Initializer Injection
@@ -397,9 +434,16 @@ class ProfileViewModel: ObservableObject {
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design.* — Глава о Dependency Inversion Principle и Composition Root — теоретическая основа DI. Объясняет, почему зависимости должны указывать на абстракции, а не на реализации, и как это влияет на архитектуру мобильных приложений.
-- Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software.* — Паттерны Factory, Abstract Factory и Strategy напрямую связаны с DI. Книга закладывает основу для понимания инверсии управления и подмены реализаций через интерфейсы.
-- Moskala M. (2021). *Effective Kotlin: Best Practices.* — Практические рекомендации по организации DI в Kotlin-проектах: конструкторы, default parameters, Koin DSL и интеграция с Coroutines scope. Актуальна для Android и KMP.
+### Теоретические основы
+
+- **Fowler M. (2004).** *Inversion of Control Containers and the Dependency Injection Pattern.* — Формальное определение DI.
+- **Johnson R., Foote B. (1988).** *Designing Reusable Classes.* — Inversion of Control principle.
+- **Martin R. (2003).** *Agile Software Development.* — SOLID principles, включая DIP.
+
+### Практические руководства
+
+- [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android) — Hilt для Android.
+- [Koin Documentation](https://insert-koin.io/) — Koin для KMP.
 
 ---
 

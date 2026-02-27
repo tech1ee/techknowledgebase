@@ -33,6 +33,32 @@ next_review:
 
 Комплексный обзор развития асинхронных подходов в Android с 2008 по 2025 год, от Handler/Thread до Kotlin Coroutines.
 
+## Теоретические основы
+
+### Эволюция моделей конкурентности
+
+> История асинхронной работы в Android — это частный случай общей эволюции моделей конкурентности в Computer Science. Каждый переход (Thread → AsyncTask → Executors → RxJava → Coroutines) отражает движение от низкоуровневого управления потоками к высокоуровневым абстракциям.
+
+| Модель | Год | Теоретический базис | Android реализация |
+|--------|-----|--------------------|--------------------|
+| **Threads + Locks** | 1965 (Dijkstra, semaphores) | OS-level concurrency, mutex, monitor | `Thread` + `synchronized` |
+| **Thread Pools** | 2000 (Lea, *Concurrent Programming in Java*) | Object Pool pattern, M/M/c queue | `Executors`, `ThreadPoolExecutor` |
+| **Callback / Future** | 2004 (JSR-166, `java.util.concurrent`) | Continuation-passing style, promises | `AsyncTask`, `FutureTask` |
+| **Reactive Streams** | 2013 (Reactive Streams spec) | Observable/Iterable duality (Meijer) | `RxJava`, `RxAndroid` |
+| **Structured Concurrency** | 2018 (Smith, *Go considered harmful*) | Scoped tasks, cooperative cancellation | `Kotlin Coroutines`, `viewModelScope` |
+
+### Закон сохранения сложности (Tesler's Law)
+
+> Larry Tesler сформулировал закон сохранения сложности (1984): **каждое приложение имеет неснижаемую сложность; вопрос лишь в том, кто её несёт — пользователь или система**. Эволюция Android async — иллюстрация этого закона: сложность управления потоками не исчезает, а перемещается от разработчика (Thread + Handler) к фреймворку (Coroutines + Structured Concurrency).
+
+### Связь с моделью акторов
+
+> Модель акторов (Hewitt, Bishop, Steiger, 1973) предлагает альтернативу shared mutable state: каждый актор имеет приватное состояние и взаимодействует через сообщения. `Handler/Looper` в Android — это по сути однопоточный актор. `Channel` в Kotlin Coroutines формализует это: `actor { }` coroutine builder создаёт актор с mailbox (Channel) и sequential processing. Хотя `actor` API помечен как `@ObsoleteCoroutinesApi`, паттерн живёт через `MutableSharedFlow` и `Channel`.
+
+> **Связь**: Модель акторов → [[concurrency-fundamentals]], Reactive Streams → [[android-rxjava]], Structured concurrency → [[kotlin-coroutines]]
+
+---
+
 ## Почему асинхронность критична для Android
 
 ### Application Not Responding (ANR)
@@ -944,6 +970,16 @@ Threading — это основа, на которой построены все
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Tesler L. *The Smalltalk Environment* (1981) | Tesler's Law — неснижаемая сложность; пользователь или разработчик |
+| Hewitt C. et al. *A Universal Modular ACTOR Formalism* (1973) | Actor Model — формальная основа message-passing |
+| Hoare C.A.R. *Communicating Sequential Processes* (1978) | CSP — основа для корутин и каналов |
+| Conway M. *Design of a Separable Transition-Diagram Compiler* (1963) | Coroutines — оригинальное определение |
+| Meijer E. *Your Mouse is a Database* (2012) | Duality of Observable/Iterable → основа RxJava |
+
+### Книги
 - Bock J. (2018). *Android Programming with Kotlin*. — практическое руководство по Android-разработке с Kotlin, включая переход от Java-подходов к корутинам
 - Meier R. (2022). *Professional Android*, 4th ed. — комплексный справочник по Android-разработке, покрывающий эволюцию от Handler/AsyncTask до Coroutines/Flow
 - Leiva A. (2020). *Kotlin for Android Developers*. — практическое введение в Kotlin для Android, включая корутины как замену AsyncTask и RxJava

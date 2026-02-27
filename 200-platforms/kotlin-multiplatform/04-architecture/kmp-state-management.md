@@ -68,6 +68,48 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **State Management** — паттерн управления данными приложения, определяющий единственный источник истины (Single Source of Truth), предсказуемые мутации состояния и механизм оповещения подписчиков об изменениях (Czaplicki, 2012, Elm Architecture).
+
+### Теоретическая модель: Unidirectional Data Flow (UDF)
+
+UDF формализован в Elm Architecture (Czaplicki, 2012) и Redux (Abramov, 2015):
+
+```
+State → View → Intent → Reducer → New State → View ...
+```
+
+| Компонент | Описание | В KMP |
+|-----------|----------|-------|
+| State | Immutable data class | `data class UiState(...)` |
+| View | Рендеринг состояния | Compose `@Composable` / SwiftUI `View` |
+| Intent | Пользовательское действие | Sealed class `sealed class Action` |
+| Reducer | Pure function: (State, Action) → State | `fun reduce(state, action): State` |
+
+### Сравнение реактивных примитивов
+
+| Примитив | Модель | Hot/Cold | Replay | Platform |
+|----------|--------|----------|--------|----------|
+| StateFlow | State holder | Hot | Last value (1) | KMP (kotlinx.coroutines) |
+| SharedFlow | Event bus | Hot | Configurable (0..N) | KMP (kotlinx.coroutines) |
+| MutableState | Compose state | Hot | Current value | Compose Multiplatform |
+| Combine Publisher | Reactive stream | Cold/Hot | Configurable | Apple (Swift) |
+| LiveData | Lifecycle-aware | Hot | Last value | Android only |
+
+### Observer Pattern как теоретическая основа
+
+StateFlow реализует **Observer Pattern** (Gamma et al., 1994) с дополнительными гарантиями:
+
+- **Conflation:** промежуточные значения пропускаются, подписчик всегда получает последнее
+- **Structural equality:** повторное значение не вызывает emission (distinctUntilChanged)
+- **Thread-safety:** atomarное обновление через CAS (Compare-And-Swap)
+
+> **Академические источники:** Czaplicki E. (2012). *Elm: Concurrent FRP for Functional GUIs.* Thesis. Abramov D. (2015). *Redux: Predictable State Container.* — формализация UDF для JavaScript.
+
+
 ## Почему State Management — это Observer + Immutability?
 
 ### Основа: Observer Pattern (GoF, 1994)
@@ -992,9 +1034,17 @@ withContext(Dispatchers.Main.immediate) {
 
 ## Источники и дальнейшее чтение
 
-1. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Наиболее важная книга для state management в KMP. Детально описывает StateFlow, SharedFlow, Flow operators и structured concurrency — все механизмы, которые лежат в основе реактивного управления состоянием в мультиплатформенных приложениях.
-2. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения слоёв определяют, где хранится состояние (domain vs presentation) и как оно трансформируется при передаче между слоями. Помогает избежать god-object ViewModel с чрезмерным количеством state.
-3. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по immutability (data class copy()), sealed classes для state/event моделирования и proper equality определяют качество state management реализации.
+### Теоретические основы
+
+- **Czaplicki E. (2012).** *Elm: Concurrent FRP for Functional GUIs.* — Elm Architecture как основа UDF.
+- **Elliott C., Hudak P. (1997).** *Functional Reactive Animation.* — Теоретическая основа реактивных примитивов (StateFlow, @Published).
+- **Gamma E. et al. (1994).** *Design Patterns.* — Observer Pattern как основа реактивного state management.
+
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — StateFlow, SharedFlow и корутины для state management.
+- **Moskala M. (2021).** *Effective Kotlin.* — Идиоматичное управление состоянием в Kotlin.
+- [MVIKotlin](https://arkivanov.github.io/MVIKotlin/) — MVI-фреймворк для KMP.
 
 ---
 

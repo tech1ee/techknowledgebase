@@ -36,6 +36,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Deep Work** — профессиональная деятельность, выполняемая в состоянии безотвлекаемой концентрации, которая доводит когнитивные способности до предела. Такие усилия создают новую ценность, улучшают навыки и трудновоспроизводимы (Newport, 2016).
+
+Концепция Deep Work опирается на несколько линий исследований:
+
+| Работа | Автор | Год | Ключевой вывод |
+|--------|-------|-----|----------------|
+| Attention Residue | Sophie Leroy | 2009 | При переключении между задачами часть внимания остаётся на предыдущей задаче, снижая качество |
+| Cost of Interrupted Work | Gloria Mark et al. | 2008 | 23 минуты 15 секунд — время возврата к полной концентрации после прерывания |
+| Deep Work | Cal Newport | 2016 | Систематизация: 4 стратегии глубокой работы (monastic, bimodal, rhythmic, journalistic) |
+| Shallow Work | Newport | 2016 | Противоположность: логистические задачи, не требующие концентрации, легко воспроизводимы |
+| Flow State | Csikszentmihalyi | 1990 | Психологическое состояние, возникающее внутри Deep Work сессий |
+| Attention Span | Gloria Mark | 2023 | Среднее время фокуса упало до 47 секунд (с 2.5 мин в 2004) |
+
+> **Leroy (2009):** «People need to stop thinking about one task in order to fully transition their attention and perform well on another. Yet results indicate it is difficult for people to transition their attention away from an unfinished task.»
+
+Newport выделяет ключевую формулу продуктивности: **High-Quality Work Produced = Time Spent × Intensity of Focus**. Множитель «Intensity» объясняет, почему 3-4 часа Deep Work дают больше, чем 8 часов с прерываниями: при 15 прерываниях в день 345 минут теряются на восстановление контекста ([[context-switching]]).
+
+Практический потолок Deep Work — **3-4 часа в день** (подтверждено исследованиями Ericsson по deliberate practice ([[deliberate-practice]]): элитные музыканты практикуют не более 4 часов, после чего качество внимания падает). Deep Work — это не «работай больше», а «работай глубже».
+
+---
+
 ## Проблема, которую решает Deep Work
 
 Исследование UC Irvine обнаружило:
@@ -338,10 +361,16 @@ Deep Work предполагает, что твоя работа требует 
 
 ## Источники
 
+### Теоретические основы
+- Newport, C. *Deep Work: Rules for Focused Success in a Distracted World*. Grand Central, 2016
+- Leroy, S. «Why Is It So Hard to Do My Work? The Challenge of Attention Residue When Switching Between Work Tasks». Organizational Behavior and Human Decision Processes, 2009
+- [UC Irvine: Cost of Interrupted Work (Gloria Mark)](https://www.ics.uci.edu/~gmark/chi08-mark.pdf) — проверено 2025-11-24
+- Mark, G. *Attention Span: A Groundbreaking Way to Restore Balance, Happiness and Productivity*. Hanover Square Press, 2023
+
+### Практические руководства
 - [Cal Newport: Deep Work Official](https://calnewport.com/deep-work-rules-for-focused-success-in-a-distracted-world/) — проверено 2025-11-24
 - [Asana: What is Deep Work 2025](https://asana.com/resources/what-is-deep-work) — проверено 2025-11-24
 - [Reclaim: Deep Work Guide 2025](https://reclaim.ai/blog/deep-work-vs-shallow-work) — проверено 2025-11-24
-- [UC Irvine: Cost of Interrupted Work (Gloria Mark)](https://www.ics.uci.edu/~gmark/chi08-mark.pdf) — проверено 2025-11-24
 
 ---
 

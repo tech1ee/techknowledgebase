@@ -32,6 +32,50 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Сетевая модель Kubernetes** основана на трёх фундаментальных требованиях (K8s Networking Model): (1) каждый Pod получает уникальный IP-адрес; (2) любой Pod может связаться с любым другим Pod без NAT (flat network); (3) агенты на ноде могут связаться со всеми Pod на этой ноде. Эта модель формально определена в Kubernetes Design Proposals.
+
+### CNI (Container Network Interface) — формальная архитектура
+
+| Компонент | Роль | Спецификация |
+|-----------|------|-------------|
+| CNI спецификация | Стандарт интерфейса | CNCF CNI Spec v1.0 (2021) |
+| ADD/DEL/CHECK | Операции плагина | Вызываются kubelet при создании/удалении Pod |
+| IPAM plugin | Выделение IP-адресов | host-local, dhcp, aws-vpc-cni |
+| Chained plugins | Композиция | Несколько плагинов в цепочке (bandwidth, portmap) |
+
+### CNI-плагины: сравнительная таблица
+
+| Плагин | Метод | Overlay | NetworkPolicy | eBPF | Производительность |
+|--------|-------|---------|---------------|------|--------------------|
+| Flannel | VXLAN / host-gw | Да | Нет | Нет | Базовая |
+| Calico | BGP / VXLAN / eBPF | Опционально | Да (L3-L4) | Да (с v3.13) | Высокая |
+| Cilium | eBPF native | Опционально | Да (L3-L7) | Да | Очень высокая |
+| Weave | VXLAN mesh | Да | Да | Нет | Средняя |
+| AWS VPC CNI | Native VPC routing | Нет | Через SG | Нет | Native |
+
+### kube-proxy: режимы работы
+
+- **iptables mode** (по умолчанию) — создаёт цепочки iptables для каждого Service. DNAT перенаправляет трафик на Pod endpoints. Сложность: O(n) правил, обновление при каждом изменении endpoints
+- **IPVS mode** — использует IP Virtual Server (хэш-таблица в ядре). O(1) lookup, поддержка алгоритмов балансировки (rr, lc, sh). Рекомендуется при > 1000 Services
+- **eBPF replacement** (Cilium) — полностью заменяет kube-proxy, обрабатывая Service routing в eBPF-программах на уровне сокетов
+
+### Типы Service
+
+| Тип | Доступность | Механизм | Когда использовать |
+|-----|-------------|----------|-------------------|
+| ClusterIP | Только внутри кластера | Virtual IP + kube-proxy | Межсервисная коммуникация |
+| NodePort | Внешний доступ через порт ноды | ClusterIP + порт 30000-32767 | Dev/test, простые случаи |
+| LoadBalancer | Внешний облачный LB | NodePort + Cloud Controller | Production ingress |
+| ExternalName | DNS CNAME | Без проксирования | Внешние сервисы |
+
+> **Flat network model** — каждый Pod получает IP из единого адресного пространства (Pod CIDR), маршрутизируемого между всеми нодами. Это исключает необходимость NAT и port mapping, упрощая service discovery и inter-pod communication. Реализация: underlay (BGP peering между нодами) или overlay (VXLAN-инкапсуляция).
+
+**См. также:** [[network-docker-deep-dive]] (Linux networking примитивы под K8s), [[network-cloud-modern]] (облачная интеграция K8s networking), [[network-observability]] (observability в K8s-кластере)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1426,6 +1470,14 @@ kubectl scale deployment coredns -n kube-system --replicas=5
 
 ## Источники
 
+### Теоретические основы
+- CNCF CNI Specification v1.0 (2021). Container Network Interface — стандарт сетевого интерфейса для контейнеров
+- Kubernetes Design Proposals: Networking Model — формальное определение требований к сетевой модели K8s
+- RFC 7348 (2014). VXLAN — основа overlay-сетей в Flannel, Weave
+- Rizzo L. (2012). "netmap: A Novel Framework for Fast Packet I/O" — USENIX ATC (основа высокопроизводительного packet processing)
+
+### Практические руководства
+
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
 | 1 | [K8s Cluster Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/) | Docs | Official networking concepts |
@@ -1458,9 +1510,13 @@ kubectl scale deployment coredns -n kube-system --replicas=5
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Tanenbaum, Wetherall (2011).** *Computer Networks.* — фундаментальные сетевые принципы, без которых невозможно понять, как CNI-плагины реализуют overlay и underlay сети в Kubernetes.
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — современный учебник с покрытием SDN и виртуализации сетей, что напрямую применимо к пониманию сетевой модели Kubernetes.
+
+### Практические руководства
 - **Peterson, Davie (2011).** *Computer Networks: A Systems Approach.* — системный подход к сетевой архитектуре, включая виртуальные сети и туннелирование (VXLAN, GRE), которые используют CNI-плагины для pod-to-pod коммуникации между нодами.
+- **Burns B. et al. (2019).** *Kubernetes Up & Running.* — практическое руководство по K8s с главами о networking, Services и Ingress.
 
 ---
 

@@ -54,6 +54,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+Concurrent-коллекции в JVM основаны на теоретических результатах в области lock-free структур данных и формальных моделей корректности параллельных операций.
+
+> **Определение (Herlihy & Wing, 1990):** *Linearizability — каждая операция над concurrent-объектом выглядит так, будто она произошла мгновенно в некоторой точке между вызовом и возвратом.* Это формальный критерий корректности, которому соответствуют операции `ConcurrentHashMap`.
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM concurrent collections |
+|------------------------|-----------------|----------------------------------------|
+| **Linearizability** | Herlihy & Wing, 1990 | Критерий корректности `putIfAbsent()`, `computeIfAbsent()` |
+| **Lock striping** | Lea, 2000 | Разделение хэш-таблицы на независимые сегменты → `ConcurrentHashMap` |
+| **Lock-free linked list** | Harris, 2001 | CAS-based вставка/удаление без блокировок → `ConcurrentLinkedQueue` |
+| **Wait-free algorithms** | Herlihy, 1991 | Гарантия: каждый поток завершает операцию за конечное число шагов |
+| **Copy-on-Write** | ОС (COW fork) | Снимок при записи: readers работают с immutable copy → `CopyOnWriteArrayList` |
+| **Producer-Consumer** | Dijkstra, 1965 | Координация через bounded buffer → `BlockingQueue` |
+
+> **Weak consistency (JDK spec):** *Итераторы concurrent-коллекций гарантируют отсутствие `ConcurrentModificationException`, но могут не отражать изменения, произошедшие после создания итератора.* Это осознанный trade-off: strong consistency требует глобальной блокировки, weak consistency позволяет итерации без блокировок.
+
+Ключевая теоретическая проблема concurrent-коллекций — **composability**: отдельные операции (get, put) линеаризуемы, но их **комбинации** (check-then-act: `containsKey()` + `put()`) — нет. Это фундаментальное ограничение привело к появлению атомарных составных операций (`putIfAbsent`, `computeIfAbsent`, `merge`) в API `ConcurrentHashMap`.
+
+Связанные темы: [[jvm-synchronization]] (CAS и lock-free примитивы), [[jvm-concurrency-overview]] (общая карта concurrency), [[jvm-executors-futures]] (BlockingQueue как основа ThreadPoolExecutor).
+
+---
+
 ## Историческая справка: как появился java.util.concurrent
 
 До Java 5 (2004) у разработчиков было ровно два варианта для многопоточной работы с коллекциями: ручная синхронизация через `synchronized` или обёртки `Collections.synchronizedMap()` / `Collections.synchronizedList()`. Оба варианта использовали один глобальный lock на всю структуру — при тысяче потоков производительность падала катастрофически.
@@ -400,9 +423,16 @@ Unbounded очередь (`LinkedBlockingQueue()` без указания раз
 
 ## Источники и дальнейшее чтение
 
-- Goetz B. et al. (2006). *Java Concurrency in Practice*. — Каноническая книга по многопоточности на JVM. Главы 5 «Building Blocks» и 11 «Performance and Scalability» детально разбирают ConcurrentHashMap, CopyOnWriteArrayList, BlockingQueue с анализом lock striping и performance trade-offs. Обязательна к прочтению для любого Java-разработчика.
-- Lea D. (2000). *Concurrent Programming in Java: Design Principles and Patterns*, 2nd Edition. — Книга от создателя пакета java.util.concurrent. Описывает design decisions и теоретические основы, лежащие в основе concurrent collections. Помогает понять, ПОЧЕМУ структуры спроектированы именно так.
-- Herlihy M., Shavit N. (2012). *The Art of Multiprocessor Programming*, Revised Edition. — Глубокая теория lock-free и wait-free структур данных, включая CAS-based hash maps и lock-free queues. Для тех, кто хочет понять теоретические гарантии, на которых основаны JDK concurrent collections.
+### Теоретические основы
+
+- **Herlihy M., Wing J. (1990). Linearizability: A Correctness Condition for Concurrent Objects.** — формальный критерий корректности concurrent-структур данных.
+- **Harris T. (2001). A Pragmatic Implementation of Non-blocking Linked-Lists.** — CAS-based lock-free linked list, основа `ConcurrentLinkedQueue`.
+- **Herlihy M., Shavit N. (2012). The Art of Multiprocessor Programming.** — теория lock-free и wait-free структур: CAS-based hash maps, lock-free queues.
+
+### Практические руководства
+
+- **Goetz B. et al. (2006). Java Concurrency in Practice.** — главы 5 и 11: ConcurrentHashMap, CopyOnWriteArrayList, BlockingQueue, lock striping, performance trade-offs.
+- **Lea D. (2000). Concurrent Programming in Java, 2nd ed.** — design decisions и теоретические основы concurrent collections от создателя java.util.concurrent.
 
 ---
 

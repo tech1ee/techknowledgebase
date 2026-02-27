@@ -34,6 +34,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### DORA Metrics и научный подход к измерению (Forsgren, 2018)
+
+> **Определение:** Engineering Metrics — количественные и качественные показатели, используемые для оценки здоровья, производительности и эффективности инженерной организации.
+
+Nicole Forsgren, Jez Humble и Gene Kim в *"Accelerate"* (2018) провели крупнейшее научное исследование DevOps-практик и определили четыре ключевые метрики (DORA Metrics), предсказывающие как технический, так и бизнес-performance.
+
+### Goodhart's Law и опасности измерения
+
+> **Goodhart's Law** (Charles Goodhart, 1975): «Когда мера становится целью, она перестаёт быть хорошей мерой.»
+
+Это критически важно для engineering metrics: lines of code, story points, commit count — всё это легко gaming'ится. DORA metrics менее подвержены Goodhart's Law, так как четыре метрики балансируют друг друга (deployment frequency без учёта change failure rate бессмысленна).
+
+| Категория метрик | Примеры | Goodhart risk |
+|-----------------|---------|---------------|
+| **Output metrics** | Lines of code, # commits, # PRs | Высокий — легко gaming |
+| **Outcome metrics** | DORA, customer impact | Средний — сложнее gaming |
+| **Satisfaction metrics** | Developer satisfaction, eNPS | Низкий — субъективны, но ценны |
+
+SPACE Framework (Forsgren et al., 2021, ACM Queue) предложил пять измерений developer productivity: **S**atisfaction, **P**erformance, **A**ctivity, **C**ommunication, **E**fficiency — расширяя DORA Metrics для более полной картины.
+
+Robert Kaplan и David Norton в *"The Balanced Scorecard"* (Harvard Business Review, 1992) показали, что односторонние метрики ведут к оптимизации одного аспекта за счёт других. Для engineering это означает: баланс [[okrs-kpis|speed (DORA), quality (defect rate), satisfaction (eNPS), sustainability (tech debt ratio)]].
+
+---
+
 ## DORA Metrics
 
 ```
@@ -170,13 +196,21 @@ DON'T:
 
 **[[okrs-kpis]]** — Метрики инженерии напрямую связаны с OKR и KPI фреймворками, поскольку именно метрики формируют Key Results в инженерных OKR. DORA metrics часто становятся основой для KPI команд разработки, а SPACE framework помогает выбрать сбалансированный набор показателей. Правильная связка метрик с OKR позволяет команде видеть свой прогресс и влияние на бизнес-результаты.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Forsgren N. et al. "Accelerate" — IT Revolution, 2018 | Книга | DORA Metrics, научная валидация |
+| 2 | Goodhart C. "Problems of Monetary Management" — 1975 | Статья | Goodhart's Law |
+| 3 | Kaplan R., Norton D. "The Balanced Scorecard" — HBR, 1992 | Статья | Balanced approach to metrics |
+| 4 | Forsgren N. et al. "The SPACE of Developer Productivity" — ACM Queue, 2021 | Статья | SPACE framework |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [DORA Research](https://dora.dev/) | Research | Annual State of DevOps reports |
+| 2 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Metrics from EM perspective |
 
 
 ## Проверь себя

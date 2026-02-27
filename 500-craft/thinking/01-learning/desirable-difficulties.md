@@ -34,6 +34,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Desirable Difficulties** — условия обучения, которые замедляют процесс усвоения и субъективно ощущаются как неэффективные, но значительно улучшают долгосрочное запоминание и перенос знаний (Bjork, 1994).
+
+Концепция desirable difficulties выросла из десятилетий исследований памяти, начиная с работ Эббингауза:
+
+| Эффект | Первооткрыватель | Год | Размер эффекта |
+|--------|-----------------|-----|----------------|
+| Кривая забывания | Ebbinghaus | 1885 | ~50% за 1 день без повторения |
+| Spacing effect | Ebbinghaus | 1885 | +20-50% retention vs massed practice |
+| Generation effect | Slamecka & Graf | 1978 | Самостоятельно сгенерированное запоминается на 15-25% лучше |
+| Testing effect | Roediger & Karpicke | 2006 | 2-3x лучше retrieval vs rereading |
+| Interleaving effect | Rohrer & Taylor | 2007 | +43% на отложенном тесте (3x vs blocked) |
+| Desirable Difficulties (концепция) | R. Bjork | 1994 | Объединяющая рамка для всех эффектов |
+| Storage-Retrieval Strength model | R. Bjork & E. Bjork | 1992 | Чем ниже retrieval strength → тем выше storage gain |
+
+> **Bjork (1994):** «Conditions that make performance improve rapidly often fail to produce durable learning.» Центральный парадокс: то, что ощущается эффективным, часто неэффективно, и наоборот.
+
+Теоретическая основа — **New Theory of Disuse** (Bjork & Bjork, 1992): каждый элемент памяти имеет две независимые метрики — **storage strength** (прочность хранения, только растёт) и **retrieval strength** (лёгкость извлечения, быстро угасает). Ключевой инсайт: прирост storage strength обратно пропорционален retrieval strength в момент извлечения. Чем труднее вспомнить — тем прочнее запомнишь.
+
+Исследование **Karpicke & Roediger (2008)** дало наглядное подтверждение: группа, тестировавшая себя 3 раза, помнила ~80% через неделю; группа, перечитавшая 4 раза, — ~40%. При этом перечитывавшие были увереннее в своих знаниях (**fluency illusion**).
+
+Практическое значение: все четыре ключевых desirable difficulties (spacing, interleaving, testing, generation) связаны с другими статьями раздела — [[learning-complex-things]], [[deliberate-practice]], [[transfer-of-learning]].
+
+---
+
 ## Ключевая идея
 
 > **"Making things hard on yourself, but in a good way."**
@@ -778,9 +804,18 @@ Anki карточки с активным воспроизведением:
 
 ## Источники
 
-- [Bjork Learning and Forgetting Lab (UCLA)](https://bjorklab.psych.ucla.edu/research/) — официальный сайт лаборатории Бьорка. Проверено 2025-12-19
+### Теоретические основы
+- Bjork, R. A. «Memory and Metamemory Considerations in the Training of Human Beings». In *Metacognition: Knowing about Knowing*, MIT Press, 1994
+- Bjork, R. A. & Bjork, E. L. «A New Theory of Disuse and an Old Theory of Stimulus Fluctuation». In *From Learning Processes to Cognitive Processes*, 1992
 - [Making Things Hard on Yourself, But in a Good Way (Bjork & Bjork, 2011)](https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2016/04/EBjork_RBjork_2011.pdf) — ключевая статья о desirable difficulties. Проверено 2025-12-19
+- Roediger, H. L. & Karpicke, J. D. «Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention». Psychological Science, 2006
+- Karpicke, J. D. & Roediger, H. L. «The Critical Importance of Retrieval for Learning». Science, 2008
+- Rohrer, D. & Taylor, K. «The Shuffling of Mathematics Problems Improves Learning». Instructional Science, 2007
+- Slamecka, N. J. & Graf, P. «The Generation Effect». Journal of Experimental Psychology, 1978
 - [ResearchGate: Desirable Difficulties in Learning](https://www.researchgate.net/publication/284097746_Desirable_Difficulties_in_Vocabulary_Learning) — академические исследования. Проверено 2025-12-19
+
+### Практические руководства
+- [Bjork Learning and Forgetting Lab (UCLA)](https://bjorklab.psych.ucla.edu/research/) — официальный сайт лаборатории Бьорка. Проверено 2025-12-19
 - [Evidence Based Education: Spacing and Interleaving](https://evidencebased.education/spacing-interleaving/) — практические рекомендации. Проверено 2025-12-19
 - [Learning Scientists: Desirable Difficulties](https://www.learningscientists.org/blog/2021/9/16-1) — объяснение для практиков. Проверено 2025-12-19
 

@@ -43,7 +43,60 @@ next_review:
 
 ---
 
-## Prerequisites
+## Теоретические основы
+
+> **REST (Representational State Transfer)** — архитектурный стиль для распределённых гипермедиа-систем, определённый шестью ограничениями (constraints). Формализован Роем Филдингом в докторской диссертации (2000) как модель архитектуры World Wide Web.
+
+### Шесть ограничений REST (формальное определение)
+
+Филдинг вывел REST индуктивно — начав с «null style» (без ограничений) и добавляя constraints:
+
+| # | Constraint | Формальное определение | Архитектурный эффект |
+|---|-----------|----------------------|---------------------|
+| 1 | **Client-Server** | Разделение ответственности: UI ≠ хранение данных | Независимая эволюция сторон |
+| 2 | **Stateless** | Каждый запрос содержит ВСЮ информацию для обработки | Горизонтальное масштабирование |
+| 3 | **Cache** | Ответ должен явно указывать кэшируемость | Снижение нагрузки, улучшение latency |
+| 4 | **Uniform Interface** | 4 sub-constraints (см. ниже) | Упрощение архитектуры за счёт единообразия |
+| 5 | **Layered System** | Клиент не знает, общается ли с конечным сервером | Прокси, CDN, load balancer — прозрачны |
+| 6 | **Code-on-Demand** *(optional)* | Сервер может отправить исполняемый код | Расширяемость клиента (JavaScript) |
+
+**Uniform Interface** (ключевой constraint) включает:
+- **Identification of resources** — URI идентифицирует ресурс
+- **Manipulation through representations** — клиент работает с представлениями, не с ресурсами напрямую
+- **Self-descriptive messages** — сообщение содержит всё для интерпретации (Content-Type, методы)
+- **HATEOAS** — гипермедиа как движок состояния приложения
+
+### Richardson Maturity Model (2008)
+
+Leonard Richardson формализовал степень «RESTfulness» API:
+
+```
+Level 0: The Swamp of POX       — один URI, один метод (RPC через HTTP)
+Level 1: Resources               — множество URI, один метод
+Level 2: HTTP Verbs              — URI + правильные методы + статус-коды
+Level 3: Hypermedia Controls     — HATEOAS (полный REST по Филдингу)
+```
+
+> Большинство «RESTful» API останавливаются на Level 2. Филдинг в 2008 году написал: «Если engine of application state не управляется гипертекстом, это не REST API» (rant post).
+
+### Формальные свойства HTTP-методов
+
+| Метод | Safe | Idempotent | Cacheable | Семантика |
+|-------|------|------------|-----------|-----------|
+| GET | Да | Да | Да | Чтение представления ресурса |
+| HEAD | Да | Да | Да | Метаданные ресурса |
+| POST | Нет | Нет | Условно | Создание / произвольное действие |
+| PUT | Нет | Да | Нет | Полная замена ресурса |
+| PATCH | Нет | Нет | Нет | Частичное обновление |
+| DELETE | Нет | Да | Нет | Удаление ресурса |
+
+**Idempotency** — формальное свойство: f(f(x)) = f(x). PUT и DELETE идемпотентны: повторный вызов даёт тот же результат. POST — нет.
+
+> **См. также**: [[api-design]] — сравнение REST/GraphQL/gRPC, [[api-graphql-deep-dive]] — альтернатива REST, [[network-http-evolution]] — HTTP протокол
+
+---
+
+
 
 | Тема | Зачем нужна | Где изучить |
 |------|-------------|-------------|
@@ -1087,6 +1140,14 @@ HTTP-протокол, на котором построен REST:
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Fielding R.T. (2000). Architectural Styles and the Design of Network-based Software Architectures. PhD Dissertation, UC Irvine.** — оригинальное определение REST: 6 constraints, derivation process, connector/component model
+- **Richardson L. (2008). Richardson Maturity Model.** — формализация уровней RESTfulness (Level 0-3), описана Fowler
+- **Berners-Lee T., Fielding R., Masinter L. (2005). RFC 3986: Uniform Resource Identifier.** — формальная спецификация URI
+- **Fielding R. et al. (2014). RFC 7231: HTTP/1.1 Semantics and Content.** — формальная семантика HTTP-методов (safe, idempotent, cacheable)
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

@@ -51,6 +51,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Feature Flags: формальная модель
+
+> **Feature flag** (feature toggle) — механизм, формализованный Martin Fowler (2010, *"Feature Toggles"*) как conditional statement, управляемый внешней конфигурацией: `if (flag.isEnabled("new_checkout")) { showNewUI() } else { showOldUI() }`. Fowler выделяет четыре категории:
+
+| Категория | Lifetime | Динамика | Пример в Android |
+|-----------|----------|----------|-----------------|
+| **Release Toggle** | Дни-недели | Включается после стабилизации | Gradual rollout нового экрана |
+| **Experiment Toggle** | Недели-месяцы | A/B тест с метриками | Два варианта onboarding flow |
+| **Ops Toggle** | Постоянный | Kill switch для инцидентов | Отключение нового платёжного провайдера |
+| **Permission Toggle** | Постоянный | Управление доступом к фичам | Premium features для платных пользователей |
+
+### Canary Release и статистическая значимость
+
+> **Canary Release** (Humble & Farley, *"Continuous Delivery"*, 2010): новая версия развёртывается на малый процент пользователей (канарейку), мониторится, затем расширяется. Для принятия решения о расширении необходима **статистическая значимость**: p-value < 0.05, confidence interval 95%. Firebase A/B Testing автоматически рассчитывает sample size и significance.
+
+### Flag Debt: технический долг feature flags
+
+> **Flag debt** — накопление устаревших feature flags в коде. По аналогии с **technical debt** (Cunningham, 1992): каждый неубранный флаг увеличивает когнитивную сложность и число code paths. Формальная оценка: N булевых флагов создают 2^N потенциальных комбинаций. При N=10 это 1024 комбинации — протестировать все невозможно. Рекомендация: удалять flag через 30 дней после 100% rollout.
+
+> **Связь**: Feature Toggles → [[android-ci-cd]], A/B Testing → [[android-analytics-crash-reporting]], Technical Debt → [[android-code-quality-tools]]
+
+---
+
 ## Зачем это нужно
 
 ### 1. Gradual Rollouts
@@ -629,14 +654,17 @@ val provider = FakeFeatureFlagProvider(
 
 ## Источники
 
-- [Firebase Remote Config — Get Started (Android)](https://firebase.google.com/docs/remote-config/android/get-started) — официальная документация Firebase
-- [Real-time Remote Config](https://firebase.google.com/docs/remote-config/real-time) — SSE-обновления в реальном времени
-- [Firebase A/B Testing with Remote Config](https://firebase.google.com/docs/ab-testing/abtest-config) — создание экспериментов
-- [LaunchDarkly Android SDK Reference](https://launchdarkly.com/docs/sdk/client-side/android) — документация LaunchDarkly
-- [Unleash Android SDK](https://docs.getunleash.io/reference/sdks/android) — open-source feature flags
-- [Unleash Feature Flag Best Practices](https://docs.getunleash.io/guides/feature-flag-best-practices) — 11 принципов управления флагами
-- [Feature Flags — A Successful Architecture (Jeroen Mols)](https://jeroenmols.com/blog/2019/09/12/featureflagsarchitecture/) — архитектура feature flags в Android
-- [Kotlin Flow + Firebase Real-time Remote Config in MVVM/Clean Architecture](https://medium.com/bforbank-tech/using-kotlin-flow-and-firebase-realtime-remote-config-in-an-mvvm-clean-architecture-e9934f4b76ba) — reactive подход
-- [Android Feature Flag Implementation with Firebase + Kotlin Flow + Compose (droidcon 2025)](https://www.droidcon.com/2025/01/21/android-feature-flag-implementation-with-firebase-remote-config-kotlin-flow-jetpack-compose/) — современный подход
-- [The Best Feature Flag Providers for Apps in 2025 (WorkOS)](https://workos.com/blog/the-best-feature-flag-providers-for-apps-in-2025) — обзор провайдеров
-- [Flagsmith vs GrowthBook Comparison](https://www.flagsmith.com/compare/flagsmith-vs-growthbook) — сравнение open-source решений
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Fowler M. *Feature Toggles (Feature Flags)* (2010, 2017, martinfowler.com) | Taxonomy: Release, Experiment, Ops, Permission flags |
+| Humble J., Farley D. *Continuous Delivery* (2010) | Canary Release, Dark Launch — через feature flags |
+| Kohavi R. et al. *Controlled Experiments on the Web* (2009, KDD) | A/B testing формализация — Firebase A/B Testing |
+
+### Практические руководства
+- [Firebase Remote Config — Get Started](https://firebase.google.com/docs/remote-config/android/get-started) — официальная документация
+- [Firebase A/B Testing](https://firebase.google.com/docs/ab-testing/abtest-config) — создание экспериментов
+- [LaunchDarkly Android SDK](https://launchdarkly.com/docs/sdk/client-side/android) — LaunchDarkly
+- [Unleash Feature Flag Best Practices](https://docs.getunleash.io/guides/feature-flag-best-practices) — 11 принципов
+- [Feature Flags — A Successful Architecture (Jeroen Mols)](https://jeroenmols.com/blog/2019/09/12/featureflagsarchitecture/) — архитектура в Android
+- [Android Feature Flag Implementation (droidcon 2025)](https://www.droidcon.com/2025/01/21/android-feature-flag-implementation-with-firebase-remote-config-kotlin-flow-jetpack-compose/) — современный подход

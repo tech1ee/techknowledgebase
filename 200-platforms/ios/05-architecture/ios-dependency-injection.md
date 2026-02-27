@@ -30,6 +30,43 @@ prerequisites:
 
 Dependency Injection (DI) в iOS — это паттерн, позволяющий передавать зависимости объектам извне вместо их создания внутри. От простого constructor injection до мощных фреймворков (Swinject, Needle), от property wrappers до SwiftUI Environment — выбор зависит от масштаба проекта. DI критически важен для тестирования, модульности и соблюдения SOLID принципов.
 
+## Теоретические основы
+
+> **Определение:** Dependency Injection (DI) — паттерн проектирования, реализующий принцип Inversion of Control (IoC), при котором зависимости объекта передаются ему извне, а не создаются самим объектом. Впервые формализовано Martin Fowler (2004) в статье «Inversion of Control Containers and the Dependency Injection Pattern».
+
+### Теоретический фундамент DI
+
+| Принцип | Автор | Определение | Связь с DI |
+|---------|-------|-------------|-----------|
+| **Dependency Inversion Principle (DIP)** | Martin (1996), SOLID | Модули верхнего уровня не должны зависеть от модулей нижнего уровня; оба зависят от абстракций | DI — практический механизм реализации DIP |
+| **Inversion of Control (IoC)** | Johnson & Foote (1988) | Фреймворк вызывает код пользователя, а не наоборот | DI — одна из форм IoC |
+| **Open-Closed Principle (OCP)** | Meyer (1988) | Класс открыт для расширения, закрыт для модификации | DI позволяет менять поведение без модификации класса |
+
+### Три типа Dependency Injection (Fowler, 2004)
+
+| Тип | Механизм | Пример в iOS | Плюсы | Минусы |
+|-----|----------|-------------|-------|--------|
+| **Constructor Injection** | Зависимость передаётся в init() | `init(service: NetworkService)` | Immutability, compile-time safety | Verbose init |
+| **Property Injection** | Установка через свойство | `viewModel.service = NetworkService()` | Гибкость, позднее связывание | Nullable, runtime errors |
+| **Method Injection** | Передача в конкретный метод | `func fetch(using service: API)` | Точечная инъекция | Не подходит для shared state |
+
+### DI в экосистеме iOS
+
+| Подход | Механизм | Использование |
+|--------|----------|-------------|
+| Manual DI | Constructor injection, protocols | Малые проекты, максимальный контроль |
+| Swinject | Service Locator + IoC Container | Средние/крупные UIKit-проекты |
+| Needle (Uber) | Compile-time DI graph | Enterprise, large-scale |
+| SwiftUI Environment | `@Environment`, `@EnvironmentObject` | SwiftUI-native DI |
+
+### Связь с CS-фундаментом
+
+- [[ios-architecture-patterns]] — DI как компонент архитектуры
+- [[ios-testing]] — DI для подстановки моков
+- [[android-dependency-injection]] — сравнение с Dagger/Hilt в Android
+
+---
+
 ## Аналогии
 
 **Ресторан и поставки**: Представьте ресторан (ваш класс). Вместо того чтобы повар выращивал овощи и разводил скот (создавал зависимости внутри), ресторан получает продукты от поставщиков (dependency injection). Это позволяет легко менять поставщиков (mock для тестов) и не зависеть от конкретной фермы.
@@ -1705,16 +1742,16 @@ struct LargeApp: App {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — содержит практические примеры constructor injection и разделения ответственности в контексте реальных iOS-приложений; отличная база для понимания зачем нужен DI.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — объясняет протокол-ориентированное программирование и паттерны абстрагирования зависимостей через протоколы, что является основой DI в Swift.
-- Eidhof C. et al. (2019). *Advanced Swift.* — глубокое погружение в систему типов Swift, generics и protocol-oriented programming, которые активно используются при построении DI-контейнеров.
+### Теоретические основы
+- Fowler M. (2004). *Inversion of Control Containers and the Dependency Injection Pattern.* — формализация DI
+- Martin R. C. (1996). *The Dependency Inversion Principle.* C++ Report — DIP из SOLID
+- Johnson R., Foote B. (1988). *Designing Reusable Classes.* — Inversion of Control
 
-### Ресурсы
-- [Swinject Documentation](https://github.com/Swinject/Swinject)
-- [Needle by Uber](https://github.com/uber/needle)
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — протоколы и абстрагирование зависимостей
+- [Swinject Documentation](https://github.com/Swinject/Swinject) — IoC Container для iOS
+- [Needle by Uber](https://github.com/uber/needle) — compile-time DI
 - [Swift by Sundell: Dependency Injection](https://www.swiftbysundell.com/articles/dependency-injection-in-swift/)
-- [Point-Free: Dependencies](https://www.pointfree.co/collections/dependencies)
 
 ---
 

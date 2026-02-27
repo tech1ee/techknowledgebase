@@ -36,6 +36,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Модуляризация** — декомпозиция системы на независимые модули с определёнными интерфейсами. Формализована Парнасом в основополагающей статье «On the Criteria To Be Used in Decomposing Systems into Modules» (Parnas, 1972): критерий разделения — **information hiding**, а не последовательность выполнения.
+
+Теоретическая основа модуляризации — метрики **coupling** (связанность между модулями) и **cohesion** (связность внутри модуля), формализованные Stevens/Myers/Constantine (1974). Идеальный модуль имеет **low coupling** (минимум зависимостей от других модулей) и **high cohesion** (все элементы модуля работают на одну задачу).
+
+| Критерий декомпозиции | Описание | Пример на Android |
+|----------------------|----------|-------------------|
+| По фиче (vertical) | Модуль = один экран/feature | `:feature:auth`, `:feature:profile` |
+| По слою (horizontal) | Модуль = один архитектурный слой | `:data`, `:domain`, `:ui` |
+| Гибрид | Фичи + общие слои | `:feature:auth:data`, `:core:network` |
+
+> **Directed Acyclic Graph (DAG)** — обязательное свойство графа зависимостей модулей. Циклические зависимости (A → B → A) делают невозможной инкрементальную сборку и нарушают **Acyclic Dependencies Principle** (Martin, 2003). Gradle enforce DAG автоматически — циклическая зависимость вызывает ошибку сборки.
+
+**Conway's Law** (Conway, 1968): «Организация, создающая систему, создаёт дизайн, копирующий структуру коммуникаций организации.» Модуляризация Android-приложения часто отражает структуру команды: каждая feature team владеет своим модулем, что минимизирует merge conflicts и позволяет параллельную разработку.
+
+Инкрементальная сборка Gradle использует DAG модулей для **incremental compilation**: изменение в `:feature:auth` не требует пересборки `:feature:profile`, если между ними нет зависимости. Это реализация принципа **минимальной перекомпиляции** из теории сборочных систем (Feldman, Make, 1979).
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Монолит не масштабируется
@@ -1537,23 +1557,24 @@ dependencies {
 
 ## Источники
 
+### Теоретические основы
+
+- **Parnas D. (1972). On the Criteria To Be Used in Decomposing Systems into Modules.** — Information hiding
+- **Stevens W., Myers G., Constantine L. (1974). Structured Design.** — Coupling и cohesion
+- **Martin R. (2003). Agile Software Development.** — Acyclic Dependencies Principle
+- **Conway M. (1968). How Do Committees Invent?** — Conway's Law
+- **Feldman S. (1979). Make — A Program for Maintaining Computer Programs.** — Инкрементальная сборка
+
+### Практические руководства
+
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
-| 1 | [Guide to Android app modularization](https://developer.android.com/topic/modularization) | Official Docs | Основные концепции, best practices |
-| 2 | [Common modularization patterns](https://developer.android.com/topic/modularization/patterns) | Official Docs | Паттерны модуляризации |
-| 3 | [Approaches for Multi-Module Feature Architecture](https://www.droidcon.com/2024/08/30/approaches-for-multi-module-feature-architecture-on-android/) | Conference | 4 паттерна архитектуры 2024 |
-| 4 | [Making your Android project modular with convention plugins](https://michiganlabs.com/blogs/making-your-android-project-modular-with-convention-plugins) | Blog | Практика convention plugins |
-| 5 | [Now in Android](https://github.com/android/nowinandroid) | GitHub | Референсная реализация от Google |
-| 6 | [Modularization at Scale](https://medium.com/@hiren6997/modularization-at-scale-how-to-split-a-million-line-android-app-without-losing-your-mind-569c98e86512) | Blog | Опыт крупных проектов |
-| 7 | [The Pitfalls of Preliminary Over-Modularization](https://www.techyourchance.com/preliminary-over-modularization-of-android-projects/) | Blog | Анти-паттерны, когда НЕ нужно |
+| 1 | [Guide to Android app modularization](https://developer.android.com/topic/modularization) | Docs | Основные концепции |
+| 2 | [Now in Android](https://github.com/android/nowinandroid) | GitHub | Референсная реализация |
+| 3 | [Modularization at Scale](https://medium.com/@hiren6997/modularization-at-scale-how-to-split-a-million-line-android-app-without-losing-your-mind-569c98e86512) | Blog | Опыт крупных проектов |
 
----
-
-## Источники и дальнейшее чтение
-
-- Meier (2022). *Professional Android*. — охватывает модульную архитектуру Android-приложений, Gradle конфигурации для multi-module проектов и практические рекомендации по организации feature-модулей.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое руководство по структурированию Android-проектов, включая разделение на модули и управление зависимостями между ними.
-- Moskala (2021). *Effective Kotlin*. — принципы модульного дизайна в Kotlin, включая visibility modifiers (internal), API design для модулей и best practices организации кода.
+- Meier (2022). *Professional Android*. — Модульная архитектура, Gradle конфигурации
+- Moskala (2021). *Effective Kotlin*. — Visibility modifiers, API design для модулей
 
 ---
 

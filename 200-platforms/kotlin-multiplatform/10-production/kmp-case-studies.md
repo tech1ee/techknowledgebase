@@ -48,6 +48,48 @@ next_review:
 | Production | Готовность к релизу | [[kmp-production-checklist]] |
 | **CS: Survivorship Bias** | Критический анализ кейсов | [[cs-survivorship-bias]] |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Case study (исследование случая)** — эмпирический метод исследования, изучающий современное явление в его реальном контексте, особенно когда границы между явлением и контекстом размыты (Yin, 2014, Case Study Research).
+
+### Методология анализа case studies
+
+Robert Yin (2014) выделяет три типа case study, все применимые к анализу KMP adoption:
+
+| Тип | Цель | Пример в контексте KMP |
+|-----|------|----------------------|
+| **Exploratory** | Исследовать новое явление | «Возможен ли 80% shared code?» |
+| **Descriptive** | Описать процесс | «Как Netflix внедрял KMP?» |
+| **Explanatory** | Объяснить причины | «Почему McDonald's снизил crash rate на 60%?» |
+
+### Survivorship Bias
+
+> **Survivorship bias** (Wald, 1943) — систематическая ошибка, при которой анализируются только «выжившие» (успешные случаи), а неудачные игнорируются.
+
+Применительно к KMP case studies:
+- **Публикуются:** Netflix, McDonald's, Cash App (успешные)
+- **Не публикуются:** проекты, откатившие KMP; команды, не справившиеся с migration
+- **Airbnb (2018):** редкий пример публичного отказа от cross-platform (React Native), ставший ценным data point
+
+### Technology Adoption Lifecycle
+
+Everett Rogers (1962), *Diffusion of Innovations*:
+
+| Категория | Доля | KMP adoption |
+|-----------|------|-------------|
+| Innovators | 2.5% | 2020-2021: Cash App, TouchLab |
+| Early Adopters | 13.5% | 2022-2023: Netflix, Philips |
+| Early Majority | 34% | 2024-2025: McDonald's, Google Docs |
+| Late Majority | 34% | 2026+: Enterprise adoption |
+| Laggards | 16% | — |
+
+KMP в 2025-2026 находится на переходе от Early Majority к массовому adoption (подтверждено Google I/O 2025: «KMP recommended for business logic sharing»).
+
+> **CS-фундамент:** Анализ case studies связан с [[kmp-production-checklist]] (что нужно для production) и [[kmp-architecture-patterns]] (паттерны успешных проектов). Теоретическая база — Case Study Research (Yin, 2014), Diffusion of Innovations (Rogers, 1962), Survivorship Bias (Wald, 1943).
+
 ## Почему case studies требуют критического анализа?
 
 **Survivorship Bias:** Публикуются только успешные кейсы. Компании, где KMP не сработал (Airbnb 2018 с RN), редко рассказывают о провалах. Netflix показывает 50% shared — но это для internal studio apps, не для consumer Netflix app.
@@ -575,11 +617,17 @@ iosApp/
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture.* — Архитектурные принципы, применяемые в успешных KMP-проектах: разделение на слои, dependency rule, use cases. Netflix и McDonald's структурируют shared-модуль именно по этим принципам, что позволяет достигать 50-80% переиспользования кода без потери гибкости.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Качество shared-кода определяет успех KMP-проекта. Cash App создал SQLDelight и Turbine именно потому, что стандартные инструменты не соответствовали уровню качества, требуемому для финтех-приложения. Книга помогает писать код того уровня, который выдержит production-нагрузку.
+- **Yin R. (2014).** *Case Study Research: Design and Methods.* 5th ed. — Методология case study: exploratory, descriptive, explanatory подходы.
+- **Rogers E. (1962).** *Diffusion of Innovations.* — Technology Adoption Lifecycle для анализа KMP adoption.
+- **Wald A. (1943).** *A Method of Estimating Plane Vulnerability Based on Damage of Survivors.* — Survivorship bias как ключевой фактор при анализе case studies.
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Фундаментальное понимание Kotlin необходимо для оценки кейсов: почему Kotlin подходит для shared-логики, как data classes и sealed classes упрощают моделирование бизнес-логики, почему Kotlin Coroutines стали стандартом для асинхронного кода в shared-модулях.
+### Практические руководства
+
+- [KMP Case Studies (JetBrains)](https://kotlinlang.org/docs/multiplatform/case-studies.html) — Официальные case studies.
+- [Netflix KMP](https://netflixtechblog.com/) — Технический блог Netflix.
+- [Cash App KMP](https://cash.app/blog) — Опыт Cash App с KMP (7+ лет в production).
 
 ---
 

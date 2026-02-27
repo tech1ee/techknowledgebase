@@ -66,6 +66,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Interop Rendering** — техника встраивания одного графического фреймворка в pipeline другого, когда рендеринг-движок гостевой системы (Skia) выводит результат в компонент хозяйской системы (UIView/CALayer) (Apple Technical Note TN2154).
+
+Compose Multiplatform на iOS рендерит через **Metal backend Skia**, встроенный в UIViewController.
+
+### Сравнение рендеринг-моделей на iOS
+
+| Подход | Рендеринг | Native controls | Размер overhead |
+|--------|-----------|----------------|----------------|
+| SwiftUI (native) | Core Animation + Metal | Полный доступ | 0 MB |
+| Compose MP (Skia) | Skia → Metal → CALayer | Через UIKitView interop | +9 MB |
+| Flutter (Impeller) | Impeller → Metal | Через PlatformView | +12 MB |
+| React Native (Fabric) | JSI → UIKit views | Нативные компоненты | +7 MB |
+
+### Историческая эволюция Compose MP на iOS
+
+| Версия CMP | Год | iOS статус | Ключевые изменения |
+|-----------|-----|-----------|-------------------|
+| 1.0 | 2022 | Experimental | Базовый UIViewController |
+| 1.5 | 2023 | Alpha | Улучшенный touch handling |
+| 1.6 | 2024 | Beta | Native scrolling, ProMotion 120Hz |
+| 1.8 | May 2025 | **Stable** | Production-ready, accessibility |
+
+### «Punch Hole» Interop — теоретическая модель
+
+Compose MP использует технику «punch hole»: в canvas-рендеринге вырезается область, в которую встраивается нативный UIView. Это реализация паттерна **Composite** (Gamma et al., 1994) на уровне рендеринг-пайплайна: Compose tree и UIKit view hierarchy объединяются в один визуальный результат.
+
+> **CS-фундамент:** Metal как графический backend — продолжение линии GPU-accelerated rendering (Kilgard, 1996). Модели памяти при interop Kotlin/Native ↔ Swift — см. [[reference-counting-arc]] и [[garbage-collection-explained]].
+
+
 ## Почему Compose MP на iOS использует Metal, а не UIKit
 
 > **CS-фундамент:** Graphics APIs, Native Code Interop, Rendering Pipelines
@@ -913,8 +946,16 @@ Semantic tree из Compose синхронизируется с iOS accessibility
 
 ## Источники и дальнейшее чтение
 
-1. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины на iOS через Kotlin/Native имеют свои особенности: Main dispatcher привязан к iOS Main RunLoop, cancellation работает через CancellationException. Книга помогает понять асинхронную модель, которая управляет UI-обновлениями в Compose MP iOS.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по эффективному Kotlin-коду критически важны для iOS-производительности: минимизация аллокаций, правильное использование inline-функций и оптимизация recomposition напрямую влияют на плавность UI на iOS-устройствах.
+### Теоретические основы
+
+- **Gamma E. et al. (1994).** *Design Patterns.* — Composite Pattern как основа «Punch Hole» interop (UIKitView в Compose tree).
+- **Google (Skia Team).** *Skia Graphics Library.* — Rendering engine для Compose на iOS через Skiko binding.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin-основы для Compose iOS-разработки.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Корутины в контексте iOS lifecycle и Compose effects.
+- [Compose Multiplatform iOS](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform-ios.html) — Официальный гайд.
 
 ---
 

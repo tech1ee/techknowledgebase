@@ -39,6 +39,34 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение Context через паттерн Decorator
+
+> **Context** — абстрактный класс, определяющий контракт доступа к ресурсам и системным сервисам Android. Архитектурно реализован через паттерн **Decorator** (Gamma E. et al. *Design Patterns*, 1994): `ContextImpl` содержит реальную реализацию, `ContextWrapper` делегирует вызовы, `ContextThemeWrapper` добавляет тему, `Activity` добавляет Window.
+
+### Цепочка декораторов
+
+```
+ContextImpl  ← ContextWrapper  ← ContextThemeWrapper  ← Activity
+(реализация)   (делегирование)   (+ тема)               (+ Window, ActionBar)
+```
+
+Этот дизайн следует **Open-Closed Principle** (Meyer B. *Object-Oriented Software Construction*, 1988): поведение Context расширяется через наследование декораторов, а не через модификацию ContextImpl.
+
+### Service Locator vs Dependency Injection
+
+Метод `getSystemService()` реализует паттерн **Service Locator** (Fowler M. *«Inversion of Control Containers and the Dependency Injection Pattern»*, 2004): клиент запрашивает зависимость по ключу у центрального реестра. `SystemServiceRegistry` — конкретный реестр, хранящий фабрики системных сервисов:
+
+| Подход | Механизм | Пример |
+|--------|----------|--------|
+| Service Locator | `context.getSystemService(ALARM_SERVICE)` | Встроен в Android |
+| Dependency Injection | `@Inject alarmManager: AlarmManager` | Hilt/Dagger |
+
+> **Связь с memory leaks:** Формула `N(Context) = N(Activity) + N(Service) + 1(Application)` означает, что Activity Context — короткоживущий объект. Его сохранение в Singleton нарушает **lifetime containment rule**: объект не должен ссылаться на объект с более коротким временем жизни (Boehm H.J. *«Destructors, Finalizers, and Synchronization»*, 2003). Подробнее: [[android-memory-leaks]].
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Context — самый используемый и самый непонятый класс Android
@@ -1678,6 +1706,15 @@ fun ContextExamples() {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns* (1994) — паттерн Decorator: цепочка `ContextImpl → ContextWrapper → ContextThemeWrapper → Activity` расширяет поведение без модификации базовой реализации
+- **Meyer B.** *Object-Oriented Software Construction* (1988) — Open-Closed Principle: поведение Context расширяется через наследование декораторов, а не через модификацию ContextImpl
+- **Fowler M.** *«Inversion of Control Containers and the Dependency Injection Pattern»* (2004) — Service Locator: `getSystemService()` реализует запрос зависимости по ключу у центрального реестра (`SystemServiceRegistry`)
+- **Boehm H.J.** *«Destructors, Finalizers, and Synchronization»* (2003) — lifetime containment rule: объект не должен ссылаться на объект с более коротким временем жизни (Activity Context в Singleton = memory leak)
+
+### Практические руководства
+
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
 | 1 | [AOSP: ContextImpl.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/app/ContextImpl.java) | AOSP | Исходный код ContextImpl (~4500 строк) |
@@ -1697,11 +1734,9 @@ fun ContextExamples() {
 | 15 | [Activity Context vs Application Context: A Deep Dive](https://medium.com/@mahmoud.alkateb22/activity-context-vs-application-context-a-deep-dive-into-android-development-94fc41233de7) | Article | Mahmoud Alkateb — сравнение двух типов Context |
 | 16 | [Context and memory leaks in Android](https://medium.com/swlh/context-and-memory-leaks-in-android-82a39ed33002) | Article | Juan Rinconada — утечки через Context и как их предотвратить |
 
-### Книги
-
-- **Meier R. (2022)** *Professional Android* — подробно описывает иерархию Context, различия Application/Activity Context и паттерны безопасного использования Context в production-коде.
-- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практические примеры работы с Context в Activity, Fragment и Service. Полезно для понимания, когда какой Context использовать.
-- **Vasavada N. (2019)** *Android Internals* — глубокий разбор ContextImpl, ActivityThread и SystemServiceRegistry на уровне AOSP. Незаменимо для понимания внутреннего устройства.
+- **Meier R.** *Professional Android* (2022) — подробно описывает иерархию Context, различия Application/Activity Context и паттерны безопасного использования Context в production-коде
+- **Phillips B. et al.** *Android Programming: The Big Nerd Ranch Guide* (2022) — практические примеры работы с Context в Activity, Fragment и Service
+- **Vasavada N.** *Android Internals* (2019) — глубокий разбор ContextImpl, ActivityThread и SystemServiceRegistry на уровне AOSP
 
 ---
 

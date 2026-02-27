@@ -62,6 +62,47 @@ Custom View - это подкласс UIView, созданный для инка
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Custom View — переиспользуемый UI-компонент, инкапсулирующий собственную логику отрисовки, layout и обработки событий. В терминологии объектно-ориентированного проектирования (Meyer, 1997) Custom View реализует принцип Open-Closed: класс открыт для расширения (subclassing), закрыт для модификации (стабильный интерфейс).
+
+### Теоретические паттерны создания Custom Views
+
+| Паттерн | Источник | Применение в iOS | Описание |
+|---------|----------|-----------------|----------|
+| **Composite** | GoF (1994) | UIView hierarchy (addSubview) | Древовидная структура, где контейнер и лист имеют единый интерфейс |
+| **Template Method** | GoF (1994) | draw(_:), layoutSubviews() | Суперкласс определяет скелет, подклассы переопределяют шаги |
+| **Strategy** | GoF (1994) | Layout delegates, data source | Делегирование алгоритма layout/rendering внешнему объекту |
+| **Decorator** | GoF (1994) | SwiftUI view modifiers | Обёртка, добавляющая поведение без изменения исходного объекта |
+
+### Два подхода к Custom Drawing
+
+> **Retained Mode vs Immediate Mode** — фундаментальное различие в подходах к рендерингу графики (Strauss & Carey, 1992):
+
+| Характеристика | Retained Mode (композиция) | Immediate Mode (custom drawing) |
+|----------------|---------------------------|--------------------------------|
+| Модель | Сцена-граф из объектов (CALayer, UIView) | Прямые команды рисования (CGContext) |
+| Кэширование | Система кэширует layer bitmaps | Перерисовка при каждом вызове draw(_:) |
+| Производительность | Лучше для статичного UI | Лучше для динамической векторной графики |
+| Пример | UILabel, UIButton, UIStackView | Графики, индикаторы, кастомные фигуры |
+| Аналог | DOM в HTML | Canvas в HTML5 |
+
+### Cassowary Constraint Solver и Auto Layout
+
+Auto Layout использует алгоритм Cassowary (Badros et al., 2001) для решения системы линейных ограничений. `intrinsicContentSize` в Custom View предоставляет Cassowary-солверу дополнительные constraints:
+
+- **Required (1000)** — абсолютные ограничения, нарушение = ошибка layout
+- **High (750)** — Content Hugging Priority по умолчанию
+- **Low (250)** — Content Compression Resistance по умолчанию
+
+### Связь с CS-фундаментом
+
+- [[ios-view-rendering]] — render pipeline: CALayer → GPU compositing
+- [[ios-graphics-fundamentals]] — Core Graphics, Core Animation, Metal
+- [[android-custom-view-fundamentals]] — аналогичные паттерны в Android (onDraw, onMeasure)
+
+---
+
 ## Аналогии из жизни
 
 ### 1. Custom View = Конструктор LEGO (свои детали)
@@ -2192,50 +2233,19 @@ class GoodBadge: UIView {
 
 ## Источники
 
-### Официальная документация Apple
+### Теоретические основы
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Composite, Template Method, Strategy, Decorator
+- Meyer B. (1997). *Object-Oriented Software Construction, 2nd ed.* Prentice Hall — Open-Closed Principle
+- Badros G. J. et al. (2001). *The Cassowary Linear Arithmetic Constraint Solving Algorithm.* ACM TOCHI — алгоритм Auto Layout
+- Strauss P. S., Carey R. (1992). *An Object-Oriented 3D Graphics Toolkit.* SIGGRAPH — retained vs immediate mode rendering
 
-1. **View Programming Guide for iOS**
-   - [Apple Developer Documentation](https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/)
-   - Основы работы с UIView и view hierarchy
-
-2. **Drawing and Printing Guide for iOS**
-   - [Apple Developer Documentation](https://developer.apple.com/library/archive/documentation/2DDrawing/Conceptual/DrawingPrintingiOS/)
-   - Core Graphics, UIBezierPath, custom drawing
-
-3. **Auto Layout Guide**
-   - [Apple Developer Documentation](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/)
-   - Constraints, intrinsicContentSize, priorities
-
-### WWDC Sessions
-
-4. **WWDC 2018: High Performance Auto Layout**
-   - Оптимизация layout производительности
-   - Когда использовать intrinsicContentSize
-
-5. **WWDC 2014: Advanced Graphics and Animations for iOS Apps**
-   - Core Animation оптимизации
-   - CALayer vs draw(_:) performance
-
-6. **WWDC 2021: Demystify SwiftUI**
-   - Custom Views в SwiftUI
-   - Shape protocol, Canvas
-
-### Статьи и книги
-
-7. **objc.io - Advanced Auto Layout**
-   - Глубокое погружение в систему layout
-
-8. **Ray Wenderlich - Custom Controls Tutorial**
-   - Практические примеры custom views
-
-9. **iOS Drawing: Practical UIKit Solutions (Erica Sadun)**
-   - Книга о Core Graphics и custom drawing
-
-## Источники и дальнейшее чтение
-
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает UIView hierarchy, coordinate systems и основы custom drawing, формируя базу для создания кастомных компонентов
-- Keur C., Hillegass A. (2020). *iOS Programming: The Big Nerd Ranch Guide, 7th Edition.* — содержит практические упражнения по созданию custom views с Auto Layout, включая intrinsicContentSize и @IBDesignable
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — объясняет декларативный подход к custom views через Shape protocol и Canvas, помогая сравнить с UIKit-подходом
+### Практические руководства
+- [View Programming Guide for iOS](https://developer.apple.com/library/archive/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/) — Apple Documentation
+- [Auto Layout Guide](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/) — constraints, priorities
+- WWDC 2018: High Performance Auto Layout — оптимизация
+- WWDC 2014: Advanced Graphics and Animations for iOS Apps — CALayer vs draw(_:)
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — UIView hierarchy, custom drawing
+- Sadun E. *iOS Drawing: Practical UIKit Solutions.* — Core Graphics и custom drawing
 
 ---
 

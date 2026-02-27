@@ -37,6 +37,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cognitive Offloading** — использование внешних инструментов (записи, калькуляторы, AI) для снижения когнитивной нагрузки, при котором часть когнитивной обработки передаётся среде (Risko & Gilbert, 2016).
+
+Вопрос «AI как усилитель vs замена мышления» опирается на фундаментальные работы о расширенном познании:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Extended Mind | Clark & Chalmers | 1998 | Тезис о расширенном разуме: блокнот может быть частью когнитивной системы |
+| Cognitive Offloading | Risko & Gilbert | 2016 | Систематизация: когда и почему мы делегируем мышление |
+| Desirable Difficulties | R. Bjork | 1994 | Трудности при обучении улучшают запоминание — AI убирает эти трудности |
+| Your Brain on ChatGPT | MIT Media Lab | 2025 | r = -0.68 между использованием AI и критическим мышлением; 83% не помнят написанного |
+| Cognitive Paradox of AI | Frontiers in Psychology | 2025 | AI в образовании: парадокс между efficiency и learning |
+| Benefits and Costs | Nature Reviews Psychology | 2025 | Мета-анализ: cognitive offloading помогает производительности, но вредит обучению |
+
+> **Clark & Chalmers (1998):** Extended Mind Thesis — если внешний инструмент играет ту же функциональную роль, что внутренний когнитивный процесс, он может считаться частью когнитивной системы. Но есть критическое условие: инструмент должен **усиливать**, а не **заменять** мышление.
+
+Ключевое противоречие: **cognitive offloading** (Risko & Gilbert, 2016) повышает производительность в текущей задаче, но **снижает обучение**. AI убирает **desirable difficulties** ([[desirable-difficulties]]) — те самые «полезные трудности», которые укрепляют нейронные связи. MIT (2025) показал: группа ChatGPT имела самую низкую нейронную активность по ЭЭГ, а 83% не могли вспомнить ключевые тезисы собственных эссе.
+
+Практический вывод: AI-инструменты нужно использовать по-разному на разных стадиях обучения. На стадии изучения (Week 1-2) — минимальный AI, максимальная самостоятельная борьба. На стадии применения (Week 5+) — AI как ускоритель. Это требует развитой [[metacognition]] — осознания, когда AI помогает, а когда создаёт «когнитивный долг».
+
+---
+
 ## Проблема: когнитивный долг
 
 ### Исследование MIT Media Lab (2025)
@@ -782,15 +805,19 @@ First Principles:
 
 ## Источники
 
+### Теоретические основы
+- Clark, A. & Chalmers, D. «The Extended Mind». Analysis, 1998
+- [Risko & Gilbert: Cognitive Offloading (2016)](https://www.sciencedirect.com/science/article/abs/pii/S1364661316300985) — проверено 2025-12-18
 - [MIT Media Lab: Your Brain on ChatGPT](https://www.media.mit.edu/publications/your-brain-on-chatgpt/) — проверено 2025-11-24
 - [MDPI: AI Tools in Society — Cognitive Offloading (Gerlich, 2025)](https://www.mdpi.com/2075-4698/15/1/6) — проверено 2025-11-24
 - [Frontiers: The Cognitive Paradox of AI in Education](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1550621/full) — проверено 2025-11-24
+- [Nature Reviews Psychology: Benefits and Costs of Cognitive Offloading (2025)](https://www.nature.com/articles/s44159-025-00432-2) — проверено 2025-12-18
+- [Frontiers: Cognitive Offloading or Overload (2025)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1699320/full) — проверено 2025-12-18
+
+### Практические руководства
 - [Kappan: AI to Enhance, Not Replace Learning](https://kappanonline.org/ai-enhance-learning/) — проверено 2025-11-24
 - [Nx Blog: Practical Guide Effective AI Coding](https://nx.dev/blog/practical-guide-effective-ai-coding) — проверено 2025-11-24
 - [Pragmatic Engineer: AI-Assisted Coding Hard Truths](https://newsletter.pragmaticengineer.com/p/how-ai-will-change-software-engineering) — проверено 2025-11-24
-- [Risko & Gilbert: Cognitive Offloading (2016)](https://www.sciencedirect.com/science/article/abs/pii/S1364661316300985) — проверено 2025-12-18
-- [Nature Reviews Psychology: Benefits and Costs of Cognitive Offloading (2025)](https://www.nature.com/articles/s44159-025-00432-2) — проверено 2025-12-18
-- [Frontiers: Cognitive Offloading or Overload (2025)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2025.1699320/full) — проверено 2025-12-18
 
 ---
 

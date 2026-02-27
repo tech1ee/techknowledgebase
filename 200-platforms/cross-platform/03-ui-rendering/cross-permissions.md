@@ -44,6 +44,35 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Разрешения (Permissions)** — механизм контроля доступа приложения к защищённым ресурсам устройства (камера, местоположение, контакты), реализующий принцип наименьших привилегий (Saltzer & Schroeder, 1975, The Protection of Information in Computer Systems).
+
+### Модели разрешений: сравнение
+
+| Аспект | iOS | Android |
+|--------|-----|---------|
+| **Модель** | Runtime permissions (всегда) | Runtime permissions (API 23+) |
+| **Гранулярность** | Высокая (approximate/precise location) | Высокая (fine/coarse location) |
+| **Одноразовое разрешение** | «Allow Once» (iOS 13+) | «Only this time» (Android 11+) |
+| **Автоматический отзыв** | Да (неиспользуемые приложения) | Да (Android 11+, auto-reset) |
+| **Privacy manifest** | Обязателен (iOS 17+) | Data Safety section (Play Console) |
+
+### Принцип наименьших привилегий
+
+Saltzer & Schroeder (1975): «Каждый субъект должен иметь минимальный набор привилегий, необходимый для выполнения задачи.» В мобильном контексте:
+
+```
+App Capability ⊆ Granted Permissions ⊆ Declared Permissions
+```
+
+Обе платформы эволюционировали от **install-time permissions** (Android < 6.0) к **runtime permissions** с возможностью отзыва — это реализация Principle of Least Privilege.
+
+> **CS-фундамент:** Permissions связаны с [[cross-platform-overview]] (различия платформ) и [[kmp-ios-deep-dive]] (iOS privacy requirements). Теоретическая база — Access Control (Saltzer & Schroeder, 1975), Privacy by Design (Cavoukian, 2009).
+
 ## iOS: Info.plist + Privacy Manifest + ATT
 
 ### Info.plist — Декларация намерений
@@ -1290,9 +1319,15 @@ if let url = URL(string: UIApplication.openSettingsURLString) {
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Подробно описывает Runtime Permissions, Scoped Storage, background location limits и privacy best practices на Android. Помогает понять эволюцию модели разрешений от «всё при установке» к гранулярному runtime-запросу.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает Info.plist configuration, permission request flows, privacy-related APIs и App Transport Security. Даёт фундамент для понимания декларативного подхода Apple к безопасности.
-- **Martin R. (2017). *Clean Architecture*.** — Принцип разделения ответственности применяется к permission layer: бизнес-логика не должна знать о конкретном механизме запроса разрешений. Это особенно важно при проектировании shared permission абстракций в KMP.
+### Теоретические основы
+
+- **Saltzer J., Schroeder M. (1975).** *The Protection of Information in Computer Systems.* — Принцип наименьших привилегий.
+- **Cavoukian A. (2009).** *Privacy by Design: The 7 Foundational Principles.* — Privacy as default.
+
+### Практические руководства
+
+- [iOS Privacy](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files) — Privacy manifest.
+- [Android Permissions](https://developer.android.com/guide/topics/permissions/overview) — Система разрешений.
 
 ---
 

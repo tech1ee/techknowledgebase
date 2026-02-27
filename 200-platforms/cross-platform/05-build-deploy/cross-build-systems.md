@@ -43,6 +43,45 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Система сборки (Build System)** — программа, автоматизирующая трансформацию исходного кода в исполняемые артефакты через последовательность шагов, организованных в направленный ацикличный граф зависимостей (Feldman, 1979, Make — A Program for Maintaining Computer Programs).
+
+### Сравнение философий
+
+| Аспект | Xcode Build System | Gradle |
+|--------|-------------------|--------|
+| **Подход** | GUI-first (opaque) | Code-first (transparent) |
+| **Конфигурация** | .xcodeproj (бинарный plist) | build.gradle.kts (Kotlin DSL) |
+| **Детерминизм** | Зависит от Xcode state | Детерминистичный (декларативный) |
+| **Теоретическая основа** | IDE-integrated build | Make (Feldman, 1979) → Ant → Maven → Gradle |
+
+### Build как DAG
+
+Обе системы внутренне представляют сборку как **DAG (Directed Acyclic Graph)** (Kahn, 1962):
+
+```
+Source Files → Compile → Link → Sign → Package → Artifact
+     ↓              ↓
+Dependencies    Resources
+```
+
+Оптимизация build time = **минимизация критического пути** в DAG + максимизация параллелизма.
+
+### Incremental Build Theory
+
+| Свойство | Xcode | Gradle |
+|----------|-------|--------|
+| **File-level** | Да (clang dependency tracking) | Да (input/output hashing) |
+| **Task-level** | Build phases | Task avoidance (UP-TO-DATE) |
+| **Remote cache** | — | Build cache (local + remote) |
+| **Reproducibility** | Ограниченная | Полная (Gradle Enterprise) |
+
+> **CS-фундамент:** Build systems связаны с [[kmp-gradle-deep-dive]] (Gradle для KMP) и [[cross-distribution]] (packaging артефактов). Теоретическая база — Make (Feldman, 1979), DAG Scheduling (Kahn, 1962), Build Systems à la Carte (Mokhov et al., 2018).
+
 ## 1. Философия: Opaque vs Transparent
 
 ### Xcode: Opaque Box

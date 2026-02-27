@@ -63,6 +63,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Test Strategy** — план верификации и валидации программного обеспечения, определяющий уровни тестирования, распределение ответственности, инструменты и критерии достаточности (IEEE 829-2008, Standard for Software Test Documentation).
+
+### Test Pyramid в кросс-платформенном контексте
+
+Классическая Test Pyramid (Cohn, 2009) в KMP расширяется **платформенным измерением**:
+
+| Уровень | Что тестируется | Где запускается | Скорость |
+|---------|----------------|----------------|----------|
+| Unit (common) | Бизнес-логика в commonMain | JVM (host) | Быстро |
+| Unit (platform) | Platform-specific код | Каждая платформа | Средне |
+| Integration | Взаимодействие модулей | commonTest + platform | Средне |
+| UI | Пользовательские сценарии | Android/iOS devices | Медленно |
+
+### Принцип «Test in commonTest first»
+
+commonTest запускается на JVM (host machine), что обеспечивает **максимальную скорость обратной связи**. Тесты, написанные в commonTest, автоматически верифицируют shared-код для всех платформ.
+
+> **Академические источники:** Cohn M. (2009). *Succeeding with Agile.* — Test Pyramid. Myers G. (1979). *The Art of Software Testing.* — фундаментальные принципы тестирования.
+
+
 ## Почему тестирование в KMP особенное?
 
 ### Test Pyramid: экономика дефектов
@@ -624,11 +648,16 @@ fun testUser() {
 
 ## Источники и дальнейшее чтение
 
-- **Martin R. (2017).** *Clean Architecture.* — Определяет принципы тестируемой архитектуры: Dependency Inversion, Separation of Concerns и Boundary interfaces. Эти принципы напрямую применяются к организации тестовой стратегии в KMP — от выбора слоёв для покрытия до проектирования test doubles.
+### Теоретические основы
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Глава о тестировании корутин охватывает runTest, TestDispatcher и паттерны тестирования Flow. Поскольку большинство KMP-кода использует корутины, эти знания критичны для всех уровней тестовой пирамиды.
+- **IEEE 829-2008.** *Standard for Software Test Documentation.* — Формальное определение тестовой стратегии.
+- **Cohn M. (2009).** *Succeeding with Agile.* — Test Pyramid: unit > integration > UI.
+- **Martin R. (2017).** *Clean Architecture.* — Testability как следствие правильной архитектуры (Dependency Inversion).
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по написанию идиоматического Kotlin-кода, который легко тестировать: prefer composition over inheritance, используйте sealed classes для представления состояний, избегайте side effects в pure functions.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Тестирование корутин и Flow в commonTest.
+- [kotlin.test API](https://kotlinlang.org/api/latest/kotlin.test/) — Официальная документация мультиплатформенного тестирования.
 
 ---
 

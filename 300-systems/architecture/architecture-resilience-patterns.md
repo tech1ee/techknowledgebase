@@ -46,6 +46,90 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис паттернов устойчивости
+
+### Circuit Breaker: атрибуция и формальная модель
+
+> **Атрибуция:** Паттерн Circuit Breaker описан Майклом Найгардом в книге **"Release It!" (2007)**. Название — прямая аналогия с электрическим автоматом: при перегрузке цепь размыкается, предотвращая cascading failure.
+
+**Формальная модель — конечный автомат (FSM):**
+```
+CLOSED --[failure_count ≥ threshold]--> OPEN
+OPEN   --[timeout expires]-----------> HALF-OPEN
+HALF-OPEN --[test succeeds]----------> CLOSED
+HALF-OPEN --[test fails]-------------> OPEN
+```
+
+Это реализация **fail-fast principle**: лучше быстро вернуть ошибку, чем ждать timeout и потреблять ресурсы.
+
+### Exponential Backoff: формальная модель
+
+> **Происхождение:** Экспоненциальный backoff изобретён для протокола **Ethernet** (Metcalfe & Boggs, 1976). При коллизии в сети каждая станция ждёт случайное время из экспоненциально растущего интервала.
+
+**Формула:** wait_time = min(base_delay · 2^attempt + random_jitter, max_delay)
+
+| Retry # | Без jitter | С full jitter (uniform) |
+|---------|-----------|------------------------|
+| 1 | 1s | [0, 1s] |
+| 2 | 2s | [0, 2s] |
+| 3 | 4s | [0, 4s] |
+| 4 | 8s | [0, 8s] |
+
+**Jitter критически важен:** Без jitter при одновременном сбое N клиентов все ретраят в один момент → **thundering herd**. Full jitter (AWS рекомендация) распределяет нагрузку равномерно.
+
+**Математическое обоснование:** В теории массового обслуживания (queueing theory), exponential backoff с jitter аппроксимирует оптимальную стратегию доступа к shared resource — максимизирует throughput при минимизации collisions.
+
+### Bulkhead: принцип изоляции
+
+> **Происхождение:** Термин Bulkhead (переборка) из кораблестроения — водонепроницаемые стенки, делящие корпус на отсеки. Пробоина в одном отсеке не тонет весь корабль.
+
+Формально это **resource partitioning** — выделение отдельного пула ресурсов (потоки, соединения, память) для каждого зависимого сервиса:
+
+```
+БЕЗ Bulkhead:  [────── общий пул 100 потоков ──────]
+                Service A, B, C делят один пул
+                A зависает → 100 потоков заняты → B и C тоже мертвы
+
+С Bulkhead:     [── A: 40 ──][── B: 40 ──][── C: 20 ──]
+                A зависает → только 40 потоков заняты
+                B и C работают нормально
+```
+
+Аналогия в ОС: **process isolation** (address space separation) — crash одного процесса не убивает другие.
+
+### Теория надёжности: формула доступности
+
+> **Формула составной доступности:** Для последовательной цепочки из n сервисов с индивидуальным uptime pᵢ: A_total = Π pᵢ
+
+Для n=30 сервисов с p=99.9%: A = 0.999³⁰ ≈ 97.0% = **~11 часов простоя в месяц**.
+
+Resilience patterns увеличивают **эффективный uptime** каждого звена цепи за счёт:
+- Circuit Breaker → fail-fast вместо cascading failure
+- Retry → recovery от transient failures
+- Bulkhead → isolation of failure domains
+- Fallback → graceful degradation
+
+### Chaos Engineering: формализация (Netflix, 2011)
+
+> **Principles of Chaos Engineering (2014):** Chaos Engineering — дисциплина экспериментирования на распределённых системах для обнаружения слабостей до того, как они станут инцидентами.
+
+Формальный процесс:
+1. Определить "steady state" (метрики нормальной работы)
+2. Сформулировать гипотезу: "система продолжит работать при [событии]"
+3. Внести реальный fault (kill instance, add latency, drop packets)
+4. Наблюдать отклонение от steady state
+5. Минимизировать blast radius эксперимента
+
+Netflix **Chaos Monkey** (2011) — случайно убивает instances в production. **Chaos Kong** — выключает целый AWS region.
+
+### Связи
+
+- [[architecture-distributed-systems]] — распределённые системы, где resilience критичен
+- [[caching-strategies]] — cache as fallback
+- [[architecture-rate-limiting]] — rate limiting как защита от перегрузки
+
+---
+
 ## Зачем нужны Resilience Patterns? (ПОЧЕМУ)
 
 ### Главная аналогия: Домино vs Изолированные блоки
@@ -1736,20 +1820,22 @@ Netflix доказал работоспособность resilience patterns ч
 
 ## Источники
 
-| # | Источник | Тип | Credibility | Ключевой вклад |
-|---|----------|-----|-------------|----------------|
-| 1 | [Netflix Hystrix GitHub](https://github.com/Netflix/Hystrix) | Official | 0.95 | Оригинальная реализация Circuit Breaker |
-| 2 | [Resilience4j Docs](https://resilience4j.readme.io/) | Official | 0.95 | Современная Java библиотека |
-| 3 | [AWS Builders Library: Timeouts & Retries](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) | Official | 0.95 | Backoff, jitter, best practices |
-| 4 | [Microsoft: Bulkhead Pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead) | Official | 0.90 | Детальное описание Bulkhead |
-| 5 | [microservices.io: Circuit Breaker](https://microservices.io/patterns/reliability/circuit-breaker.html) | Technical Blog | 0.85 | Паттерны microservices |
-| 6 | [Netflix: How Netflix Embraces Failure](https://www.usenix.org/conference/lisa13/how-netflix-embraces-failure-improve-resilience-maximize-availability) | Conference | 0.90 | Chaos Engineering история |
-| 7 | [Gergely Orosz: Resiliency in Distributed Systems](https://newsletter.pragmaticengineer.com/p/resiliency-in-distributed-systems-74c) | Technical Blog | 0.85 | Практические примеры |
-| 8 | [AWS: Retry Behavior](https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html) | Official | 0.95 | SDK retry настройки |
-| 9 | [Martin Fowler: Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) | Technical Blog | 0.90 | Классическое описание паттерна |
-| 10 | [AKF Partners: Bulkhead Pattern](https://akfpartners.com/growth-blog/bulkhead-pattern) | Technical Blog | 0.80 | Dos and Don'ts |
-| 11 | [InfoQ: Timeouts, Retries and Idempotency](https://www.infoq.com/presentations/distributed-systems-resiliency/) | Conference | 0.85 | Взаимодействие паттернов |
-| 12 | [Netflix Case Study](https://aws.amazon.com/solutions/case-studies/netflix-case-study/) | Official | 0.90 | История миграции Netflix |
+### Теоретические основы
+
+- **Nygard, M.T. (2007). "Release It! Design and Deploy Production-Ready Software." Pragmatic Bookshelf.** — Первое системное описание Circuit Breaker pattern для software. Введение в resilience engineering для разработчиков
+- **Metcalfe, R.M. & Boggs, D.R. (1976). "Ethernet: Distributed Packet Switching for Local Computer Networks." CACM.** — Оригинальное описание exponential backoff для разрешения коллизий в Ethernet
+- **Netflix (2014). "Principles of Chaos Engineering."** — Формализация дисциплины chaos engineering: steady state hypothesis, blast radius minimization, run in production
+
+### Практические руководства
+
+| # | Источник | Тип | Ключевой вклад |
+|---|----------|-----|----------------|
+| 1 | [Netflix Hystrix GitHub](https://github.com/Netflix/Hystrix) | Official | Оригинальная реализация Circuit Breaker |
+| 2 | [Resilience4j Docs](https://resilience4j.readme.io/) | Official | Современная Java библиотека |
+| 3 | [AWS Builders Library: Timeouts & Retries](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) | Official | Backoff, jitter, best practices |
+| 4 | [Microsoft: Bulkhead Pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead) | Official | Детальное описание Bulkhead |
+| 5 | [Martin Fowler: Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) | Blog | Классическое описание паттерна |
+| 6 | [Netflix: How Netflix Embraces Failure](https://www.usenix.org/conference/lisa13/how-netflix-embraces-failure-improve-resilience-maximize-availability) | Conference | Chaos Engineering история |
 
 ---
 

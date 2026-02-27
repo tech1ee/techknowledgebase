@@ -36,6 +36,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Законы масштабирования организаций
+
+> **Определение:** Organizational Scaling — процесс увеличения численности и сложности организации при сохранении (или улучшении) эффективности, скорости и качества.
+
+Несколько фундаментальных законов определяют ограничения масштабирования:
+
+| Закон | Автор, год | Формулировка | Следствие для engineering org |
+|-------|-----------|-------------|------------------------------|
+| **Brooks's Law** | Fred Brooks, 1975 | «Добавление людей к опаздывающему проекту задерживает его ещё больше» | Коммуникационные каналы растут как n(n-1)/2 |
+| **Conway's Law** | Melvin Conway, 1968 | Архитектура = org structure | [[team-structures\|Inverse Conway Maneuver]] |
+| **Dunbar's Number** | Robin Dunbar, 1992 | Когнитивный лимит ~150 стабильных отношений | Максимум для single-context org |
+| **Two-Pizza Rule** | Jeff Bezos, ~2002 | Команда должна быть накормлена двумя пиццами | 5-8 человек = optimal team size |
+
+Fred Brooks в *"The Mythical Man-Month"* (1975) показал, что communication overhead растёт квадратично: при 10 инженерах — 45 каналов, при 50 — 1225. Это объясняет, почему каждый transition (10→30→100→300) требует fundamentally разных подходов к координации.
+
+> «Adding manpower to a late software project makes it later.» — Fred Brooks, *"The Mythical Man-Month"* (1975)
+
+Robin Dunbar в *"How Many Friends Does One Person Need?"* (2010) формализовал социальные круги: ~5 (близкие), ~15 (доверенные), ~50 (знакомые по имени), ~150 (активные связи). Это объясняет, почему при >150 инженерах организация неизбежно фрагментируется и требует формальных coordination mechanisms.
+
+Will Larson в *"An Elegant Puzzle"* (2019) описал модель «four states of a team» (falling behind, treading water, repaying debt, innovating) и определил, что задача [[cto-vs-vpe|VP Engineering]] — довести каждую команду до состояния innovation.
+
+---
+
 ## Stages of Growth
 
 ```
@@ -189,13 +214,21 @@ Self-service, internal products.
 
 **[[team-structures]]** — Выбор структуры команд (stream-aligned, platform, enabling) является ключевым решением при масштабировании инженерной организации. Conway's Law показывает, что архитектура системы отражает структуру организации, поэтому правильный выбор team topology напрямую определяет архитектурные возможности. На каждом этапе роста (10, 30, 100, 300+ инженеров) оптимальная структура команд меняется.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
-| Lencioni P. (2002) *The Five Dysfunctions of a Team: A Leadership Fable* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Brooks F. "The Mythical Man-Month" — Addison-Wesley, 1975 | Книга | Brooks's Law, communication overhead |
+| 2 | Conway M. "How Do Committees Invent?" — Datamation, 1968 | Статья | Conway's Law |
+| 3 | Dunbar R. "How Many Friends Does One Person Need?" — Faber & Faber, 2010 | Книга | Dunbar's Number (~150), social circles |
+| 4 | Larson W. "An Elegant Puzzle" — Stripe Press, 2019 | Книга | Four states of a team, scaling models |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Growth stages, org transitions |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | Scaling in crisis |
 
 
 ## Проверь себя

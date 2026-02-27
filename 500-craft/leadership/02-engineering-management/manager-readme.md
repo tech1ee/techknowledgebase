@@ -33,6 +33,37 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Manager README как организационный инструмент
+
+> **Определение:** Manager README (Working with Me Document) — формализованный документ, описывающий стиль работы, ценности, ожидания и особенности коммуникации руководителя. Служит инструментом ускорения onboarding и снижения информационной асимметрии.
+
+Практика Manager README возникла в tech-индустрии в 2010-х годах и не имеет прямого академического прототипа, но опирается на несколько теоретических оснований.
+
+### Теория психологического контракта
+
+Denise Rousseau в *"Psychological Contracts in Organizations"* (1995) описала implicit expectations между сотрудником и организацией:
+
+> **Psychological Contract** — неписаные взаимные ожидания между работником и работодателем относительно условий обмена. Нарушение контракта — главная причина снижения engagement и trust.
+
+Manager README формализует часть этого контракта, превращая implicit expectations в explicit. Это снижает вероятность violation и ускоряет alignment.
+
+| Аспект психологического контракта | Без README | С README |
+|----------------------------------|-----------|---------|
+| Стиль коммуникации менеджера | Угадывание 2-4 месяца | Ясен с дня 1 |
+| Expectations от сотрудника | Trial and error | Прозрачны |
+| Предпочтения по feedback | Конфликты из-за формата | Согласованы заранее |
+| Границы доступности | Неловкие ситуации | Определены |
+
+### Выравнивание ожиданий (Expectations Alignment)
+
+Edgar Schein в *"Organizational Culture and Leadership"* (1985) показал, что культура организации состоит из трёх уровней: артефакты, провозглашаемые ценности, базовые допущения. Manager README действует на уровне **артефактов** — видимых, осязаемых проявлений культуры, которые снижают амбивалентность при [[onboarding|вхождении в команду]].
+
+Michael Lopp (Rands in Repose) популяризировал формат README через свой *"How to Rands"* документ, а First Round Review формализовал best practices в статье *"The Indispensable Document for the Modern Manager"*. Критики (включая Camille Fournier) отмечают, что README может стать self-serving документом, если не сопровождается реальным relationship building — README ускоряет, но не заменяет [[one-on-one-meetings|1-on-1]].
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -596,6 +627,14 @@ Edit ruthlessly:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Rousseau D. M. "Psychological Contracts in Organizations" — Sage, 1995 | Книга | Теория психологического контракта, implicit expectations |
+| 2 | Schein E. H. "Organizational Culture and Leadership" — Jossey-Bass, 1985 | Книга | Три уровня культуры, артефакты |
+| 3 | Edelman Trust Barometer — Edelman, annual | Исследование | Корреляция transparency и trust (+0.7) |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Rands: How to Rands](https://randsinrepose.com/archives/how-to-rands/) | Article | README concept and example |

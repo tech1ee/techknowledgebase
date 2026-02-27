@@ -31,6 +31,26 @@ next_review:
 
 # Android Animations — от ValueAnimator до Compose Transition
 
+## Теоретические основы
+
+> **Анимация** в компьютерной графике — последовательное отображение кадров, создающее иллюзию непрерывного движения. Принцип формализован в модели **frame-based animation** (Foley et al., *Computer Graphics: Principles and Practice*, 1990): каждый кадр вычисляется как функция времени `f(t)`, где t ∈ [0, 1].
+
+Математической основой анимаций является **интерполяция** — вычисление промежуточных значений между двумя известными точками. Android `Interpolator` реализует **easing functions**, впервые систематизированные Робертом Пеннером (*Robert Penner's Programming Macromedia Flash MX*, 2002): linear, ease-in (ускорение), ease-out (замедление), ease-in-out и их комбинации. Каждая easing function — это параметрическая кривая `f: [0,1] → [0,1]`.
+
+| Поколение | API | Модель | Влияние |
+|-----------|-----|--------|---------|
+| I (2008) | View Animation (Tween) | Аффинные трансформации, только визуально | Flash/Silverlight |
+| II (2011) | Property Animation | Реальное изменение свойств объекта | WPF Storyboard |
+| III (2019) | Compose Animation | Declarative, state-driven | React Spring, SwiftUI |
+
+**Property Animation** (Android 3.0+) применяет паттерн **Observer** (Gamma et al., 1994): `ValueAnimator` генерирует значения по timeline и уведомляет слушателей на каждом кадре. `ObjectAnimator` расширяет это через **рефлексию** — автоматически вызывает setter целевого свойства.
+
+> **Spring-based animation** основана на физической модели **затухающего гармонического осциллятора**: `F = -kx - cv`, где k — жёсткость пружины, c — коэффициент демпфирования, v — скорость. Эта модель (Hooke's Law, 1678 + вязкое трение) даёт «естественное» движение, которое невозможно воспроизвести классическими easing-кривыми.
+
+**Choreographer** как центральный координатор анимаций реализует паттерн **Game Loop** (Nystrom, *Game Programming Patterns*, 2014): на каждом VSYNC-тике выполняется фиксированная последовательность `input → animation → traversal`, гарантирующая детерминированный порядок обновлений. Frame budget (16.67ms при 60Hz) — это жёсткий **real-time constraint** в терминологии систем реального времени (Burns/Wellings, 2001).
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** Анимации — ключевой элемент пользовательского опыта. Без них UI кажется "мёртвым". Но плохие анимации хуже отсутствия анимаций: дропнутые кадры, рывки, неестественное движение.
@@ -2340,22 +2360,24 @@ ANIMATION BEST PRACTICES CHECKLIST:
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Property Animation и оптимизацию UI
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с примерами реализации анимаций
-- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin, включая DSL-паттерны, применяемые в Compose Animation API
+### Теоретические основы
 
-**Веб-ресурсы:**
-1. **[Property Animation Overview](https://developer.android.com/develop/ui/views/animations/prop-animation)** — docs — Официальный гайд по Property Animation
-2. **[Compose Animation](https://developer.android.com/develop/ui/compose/animation/introduction)** — docs — Compose Animation документация
-3. **[Physics-based Animation](https://developer.android.com/develop/ui/views/animations/physics-based-motion)** — docs — SpringAnimation и FlingAnimation
-4. **[MotionLayout](https://developer.android.com/develop/ui/views/animations/motionlayout)** — docs — MotionLayout руководство
-5. **[Choreographer.java — AOSP](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/view/Choreographer.java)** — source — Исходный код Choreographer
-6. **[Compose Animation Codelab](https://developer.android.com/codelabs/jetpack-compose-animation)** — codelab — Практическое руководство
-7. **[Material Motion](https://m3.material.io/styles/motion/overview)** — docs — Material Design 3 motion guidelines
-8. **[Shared Element Transitions in Compose](https://developer.android.com/develop/ui/compose/animation/shared-elements)** — docs — Shared Element API
-9. **[Understanding Choreographer — YouTube](https://www.youtube.com/watch?v=1YfRhpDj4ew)** — video — Внутреннее устройство Choreographer
-10. **[Jank-free animations — Android Dev Summit](https://www.youtube.com/results?search_query=android+dev+summit+animations+jank+free)** — video — Оптимизация анимаций
+- **Foley J. et al. (1990). Computer Graphics: Principles and Practice.** — Frame-based animation, интерполяция
+- **Penner R. (2002). Programming Macromedia Flash MX.** — Систематизация easing functions
+- **Nystrom R. (2014). Game Programming Patterns.** — Game Loop (аналог Choreographer)
+- **Burns A., Wellings A. (2001). Real-Time Systems and Programming Languages.** — Real-time constraints (frame budget)
+- **Hooke R. (1678). De Potentia Restitutiva.** — Закон упругости, основа spring-анимаций
+
+### Практические руководства
+
+- Meier R. (2022). *Professional Android, 4th Edition.* — Property Animation и оптимизация UI
+- Phillips B. et al. (2022). *Android Programming: The Big Nerd Ranch Guide.* — примеры реализации анимаций
+- [Property Animation Overview](https://developer.android.com/develop/ui/views/animations/prop-animation) — Официальный гайд
+- [Compose Animation](https://developer.android.com/develop/ui/compose/animation/introduction) — Compose Animation документация
+- [Physics-based Animation](https://developer.android.com/develop/ui/views/animations/physics-based-motion) — SpringAnimation и FlingAnimation
+- [MotionLayout](https://developer.android.com/develop/ui/views/animations/motionlayout) — MotionLayout руководство
+- [Choreographer.java — AOSP](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/view/Choreographer.java) — Исходный код Choreographer
+- [Material Motion](https://m3.material.io/styles/motion/overview) — Material Design 3 motion guidelines
 
 ---
 

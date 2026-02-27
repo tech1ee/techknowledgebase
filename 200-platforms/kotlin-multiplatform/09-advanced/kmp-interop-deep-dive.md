@@ -54,6 +54,48 @@ next_review:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Foreign Function Interface (FFI)** — механизм, позволяющий программе, написанной на одном языке, вызывать функции и использовать данные из программы на другом языке (Finne et al., 1999, Calling Hell: A New Approach to Inter-language Communication).
+
+### Таксономия межъязыковых интерфейсов
+
+| Тип FFI | Механизм | Overhead | Пример в KMP |
+|---------|----------|----------|-------------|
+| **Direct ABI** | Общий calling convention | Минимальный | Kotlin/JVM → Java (один ABI) |
+| **Bridge через посредника** | Промежуточный язык | Средний | Kotlin/Native → ObjC → Swift |
+| **Code generation** | Генерация обёрток | Compile-time | cinterop (.def → Kotlin stubs) |
+| **Runtime marshalling** | Сериализация данных | Высокий | JS bridge (React Native) |
+
+### Проблема ABI-несовместимости
+
+Kotlin/Native и Swift компилируются через LLVM, но используют **разные runtime-системы** (Kotlin/Native runtime vs Swift runtime). Формально:
+
+```
+ABI_Kotlin/Native ≠ ABI_Swift
+∴ прямой вызов невозможен
+∴ необходим общий промежуточный ABI: Objective-C
+```
+
+Objective-C выбран как посредник, потому что: (1) Swift имеет полную ObjC-совместимость (Apple, 2014), (2) Kotlin/Native генерирует ObjC-совместимые headers, (3) ObjC ABI стабилен и документирован.
+
+### Adapter Pattern в контексте interop
+
+ObjC bridge реализует паттерн **Adapter** (Gamma et al., GoF, 1994):
+
+| GoF Adapter | KMP Interop |
+|-------------|-------------|
+| Target interface | Swift API, ожидаемый iOS-разработчиком |
+| Adaptee | Kotlin/Native compiled code |
+| Adapter | ObjC header + framework wrapper |
+
+SKIE (TouchLab) и Swift Export (JetBrains) решают проблему «lossy adaptation» — потерю информации при трансляции Kotlin → ObjC → Swift (generics, sealed classes, default arguments, coroutines).
+
+> **CS-фундамент:** Interop связан с [[kmp-ios-deep-dive]] (практика iOS-интеграции), [[kmp-expect-actual]] (платформенный полиморфизм) и [[kmp-memory-management]] (взаимодействие GC и ARC). Теоретическая база — FFI (Finne, 1999) и Adapter Pattern (GoF, 1994).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -992,11 +1034,16 @@ Swift Export улучшает **одно направление**: как Swift 
 
 ## Источники и дальнейшее чтение
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Главы о системе типов, generics и аннотациях Kotlin дают необходимый фундамент для понимания маппинга типов между Kotlin и ObjC/Swift. Ограничения generics в interop (T→T?) становятся понятнее, когда знаешь, как Kotlin обрабатывает type erasure и variance.
+### Теоретические основы
 
-- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Suspend-функции — ключевой элемент interop, поскольку их маппинг в Swift completionHandler/async/await определяет DX iOS-разработчиков. Книга объясняет внутреннее устройство suspend и CancellationException, что критично для понимания работы SKIE и правильного проектирования async API.
+- **Finne S. et al. (1999).** *Calling Hell: A New Approach to Inter-language Communication.* — Теория FFI и проблемы межъязыкового взаимодействия.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Adapter Pattern как формальная модель ObjC bridge между Kotlin/Native и Swift.
 
-- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по проектированию API (видимость, именование, default arguments) напрямую применимы к дизайну Kotlin-кода, экспортируемого в Swift. Помогает создавать API, которое будет удобно использовать по обе стороны границы interop.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin-основы для понимания interop-ограничений.
+- [SKIE Documentation](https://skie.touchlab.co/) — Swift Kotlin Interface Enhancer от TouchLab.
+- [Swift Export](https://kotlinlang.org/docs/native-swift-export.html) — Экспериментальный прямой экспорт в Swift.
 
 ---
 

@@ -45,6 +45,47 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Управление памятью** — совокупность механизмов выделения, использования и освобождения оперативной памяти в ходе исполнения программы (Knuth, 1973, The Art of Computer Programming, Vol. 1).
+
+### Две парадигмы автоматического управления
+
+| Параметр | ARC (iOS) | GC (Android) |
+|----------|-----------|--------------|
+| **Автор** | Collins, 1960 | McCarthy, 1960 |
+| **Принцип** | Счётчик ссылок при каждой операции | Периодический обход графа достижимости |
+| **Формула** | `rc(o) ← rc(o) ± 1; if rc(o) = 0 → free(o)` | `Mark(root) → Sweep(heap \ reachable)` |
+| **Детерминизм** | Высокий (момент освобождения предсказуем) | Низкий (GC решает когда запускаться) |
+| **Циклические ссылки** | Утечка (нужен weak) | Собираются автоматически |
+| **Latency** | Отсутствует GC pause | Stop-the-world паузы |
+| **CPU overhead** | Атомарные retain/release | Marking + sweeping |
+
+### Почему разные подходы?
+
+Выбор модели памяти обусловлен **историческими и архитектурными решениями**:
+
+| Фактор | iOS → ARC | Android → GC |
+|--------|-----------|--------------|
+| **Предок** | NeXTSTEP (1988), MRR | Java (1995), GC by design |
+| **Hardware** | Controlled (Apple Silicon) | Diverse (тысячи устройств) |
+| **Философия** | Предсказуемость и контроль | Удобство и безопасность |
+| **Real-time** | Пригоден (нет GC pauses) | Не пригоден (GC pauses) |
+
+### Memory Leaks: Cross-platform perspective
+
+| Тип утечки | iOS (ARC) | Android (GC) |
+|------------|-----------|--------------|
+| **Retain cycle** | A → B → A (главная проблема) | Не проблема (GC обнаруживает) |
+| **Context leak** | — | Activity/Fragment reference в singleton |
+| **Closure capture** | `[weak self]` pattern | WeakReference pattern |
+| **Инструменты** | Instruments (Leaks) | LeakCanary, Android Profiler |
+
+> **CS-фундамент:** Memory management связан с [[kmp-memory-management]] (KMP-специфика) и [[cross-performance-profiling]] (диагностика утечек). Теоретическая база — Reference Counting (Collins, 1960), Garbage Collection (McCarthy, 1960), Memory Safety (Lattner, 2014).
+
 ## Почему платформы выбрали разные подходы?
 
 ### iOS: Наследие NeXT (1988)

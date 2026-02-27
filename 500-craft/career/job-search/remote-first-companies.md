@@ -29,6 +29,36 @@ Remote-first — это не "можно работать из дома иног
 
 ---
 
+## Теоретические основы
+
+> **Remote-First** — организационная модель, в которой distributed work является default, а не исключением. В отличие от remote-friendly (офис есть, remote допускается), remote-first строит все процессы вокруг async communication и distributed collaboration.
+
+**Ключевые исследования и концепции:**
+
+| Исследование | Автор | Год | Вывод |
+|-------------|-------|-----|-------|
+| WFH Experiment | Bloom et al. (Stanford) | 2015 | Remote workers на 13% продуктивнее; на 50% ниже attrition |
+| State of Remote Work | Buffer | 2023 | 98% хотят продолжать remote; top challenge — loneliness (23%) |
+| Remote Playbook | GitLab | 2024 | Handbook-first, async-first, all-remote principles |
+| Distributed Work Study | Microsoft | 2022 | Remote увеличивает silos; async documentation снижает эффект |
+
+**Спектр remote-моделей:**
+
+```
+Office-first → Hybrid → Remote-friendly → Remote-first → All-remote
+     ↑                        ↑                   ↑            ↑
+  Все в офисе          Remote допускается    Remote = default  Нет офиса
+  (pre-2020)          (большинство 2024)     (GitLab, Zapier)  (Automattic)
+```
+
+**Bloom et al. (2015)** провели рандомизированный эксперимент на Ctrip (16,000 сотрудников): remote workers на 13% продуктивнее (9% — больше минут в день, 4% — больше calls за минуту) и на 50% реже увольнялись. Это первое научное подтверждение эффективности remote work.
+
+> **Compensation models:** Location-based (Google: SF salary > Boise salary), Location-agnostic (Automattic: одинаковая зарплата независимо от локации), Hybrid (GitLab: зональная модель по cost of living). Выбор модели определяет реальную привлекательность remote-позиции.
+
+→ Связано: [[job-search-strategy]], [[salary-benchmarks]]
+
+---
+
 ## Топ Remote-First компании (проверенные)
 
 ### Tier 1: Легенды distributed work
@@ -241,15 +271,21 @@ LATAM: 0.4-0.6x
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Обновлённое издание содержит актуальные главы о поиске remote-работы, включая оценку компаний на настоящую remote-культуру vs «remote-friendly» формальности.
-
-- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Полезна для Senior+ разработчиков, ищущих remote-позиции в leadership track. Описывает, как строить влияние и принимать архитектурные решения в распределённых командах.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Bloom N. et al. (2015). *Does Working from Home Work? Evidence from a Chinese Experiment*. Quarterly Journal of Economics. — Экспериментальное подтверждение: remote workers на 13% продуктивнее; основа для remote-first movement.
+
+- Buffer (2023). *State of Remote Work*. — Ежегодное исследование: 98% remote workers хотят продолжать; ключевые challenges: loneliness, communication.
+
+- GitLab (2024). *The Remote Playbook*. — Полная документация remote-first практик: async communication, handbook-first, all-remote culture.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Оценка компаний на настоящую remote-культуру vs формальный remote-friendly.
+
+- Larson W. (2022). *Staff Engineer*. — Leadership в distributed teams: influence и architecture decisions remotely.
+
+### Практические руководства
 
 - [Built In: Fully Remote Companies](https://builtin.com/companies/location/fully-remote)
 - [NoDesk: 750+ Remote Companies](https://nodesk.co/remote-companies/)

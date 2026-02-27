@@ -28,6 +28,53 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальные определения
+
+> **Concurrency (конкурентность)** — свойство системы, при котором несколько вычислений могут находиться в прогрессе одновременно, независимо от того, исполняются ли они физически параллельно. Это **композиция** независимо выполняемых задач (Pike, 2012).
+
+> **Parallelism (параллелизм)** — одновременное физическое исполнение нескольких вычислений на нескольких вычислительных устройствах (ядрах, процессорах).
+
+Ключевое различие: concurrency — про **структуру** программы (design-time), parallelism — про **исполнение** (runtime).
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Concurrent programming** | Dijkstra, E.W. | 1965 | "Cooperating Sequential Processes" — первая формализация |
+| **CSP** | Hoare, C.A.R. | 1978 | Communicating Sequential Processes — формальная модель конкурентности |
+| **Amdahl's Law** | Amdahl, G. | 1967 | Верхняя граница ускорения: `S = 1 / (s + (1-s)/N)` |
+| **Gustafson's Law** | Gustafson, J. | 1988 | Scaled speedup: при увеличении данных доля sequential уменьшается |
+| **Concurrency ≠ Parallelism** | Pike, R. | 2012 | Формулировка: "Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once." |
+
+### Формальные законы
+
+**Amdahl's Law (1967):**
+
+> `Speedup(N) = 1 / (s + (1 - s) / N)`
+> где `s` — доля sequential кода, `N` — число процессоров
+
+При `N → ∞`: `Speedup_max = 1/s`. Даже 5% sequential кода ограничивает ускорение 20x.
+
+**Gustafson's Law (1988):**
+
+> `Scaled_Speedup(N) = N - s·(N - 1)`
+
+Контраргумент: при увеличении `N` растёт и размер задачи, что уменьшает относительную долю sequential кода.
+
+### Модели конкурентности: теоретическая классификация
+
+| Модель | Формализм | Коммуникация | Примеры |
+|--------|-----------|--------------|---------|
+| **Shared Memory** | Ламберт, Lamport | Общая память + locks | Java threads, pthreads |
+| **Message Passing (CSP)** | Hoare, 1978 | Каналы, rendezvous | Go goroutines, Kotlin channels |
+| **Actor Model** | Hewitt, 1973 | Асинхронные сообщения | Erlang, Akka, Swift actors |
+| **Dataflow** | Dennis, 1974 | Токены данных | Reactive streams, Kotlin Flow |
+| **STM** | Shavit & Touitou, 1995 | Транзакции над памятью | Clojure refs, Haskell STM |
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -660,17 +707,17 @@ suspend fun fetchData(): List<Result> {
 
 ## Источники и дальнейшее чтение
 
-- **Herlihy, M. & Shavit, N. (2012). The Art of Multiprocessor Programming.** — Фундаментальный учебник: от теории невозможности до lock-free структур данных. Главы 1-3 дают глубокое понимание разницы между concurrency и parallelism.
+### Теоретические основы
+- Dijkstra, E.W. (1965). "Cooperating Sequential Processes" — EWD-123; первая формализация concurrent programming
+- Amdahl, G. (1967). "Validity of the Single Processor Approach..." — AFIPS; закон предела параллелизма
+- Hoare, C.A.R. (1978). "Communicating Sequential Processes" — CACM; CSP formal model
+- Hewitt, C. (1973). "A Universal Modular ACTOR Formalism for AI" — IJCAI; Actor model
+- Gustafson, J. (1988). "Reevaluating Amdahl's Law" — CACM; scaled speedup
 
-- **Ben-Ari, M. (2006). Principles of Concurrent and Distributed Programming.** — Академический подход к concurrent programming. Формальные модели, доказательства корректности. Даёт математическую строгость, которой не хватает практическим книгам.
-
-- **Pike, R. (2012). Concurrency is not Parallelism (talk).** — Каноническое объяснение разницы от создателя Go. 30-минутный доклад, который расставляет точки над i.
-
-- **Hoare, C.A.R. (1978). Communicating Sequential Processes.** — Оригинальная статья, заложившая основы CSP. Формальна, но поворотный момент в истории concurrency.
-
-- **Amdahl, G. (1967). Validity of the single processor approach to achieving large-scale computing capabilities.** — Оригинальная статья с формулировкой Amdahl's Law. Короткая (1.5 страницы), но определившая мышление о параллелизме на десятилетия.
-
-- **Gustafson, J. (1988). Reevaluating Amdahl's Law.** — Контраргумент к Amdahl: при масштабировании данных доля sequential кода уменьшается. Важный баланс к пессимизму Amdahl's Law.
+### Практические руководства
+- Pike, R. (2012). "Concurrency is not Parallelism" (talk) — каноническое объяснение разницы
+- Herlihy, M. & Shavit, N. (2012). *The Art of Multiprocessor Programming* — от теории до lock-free
+- Ben-Ari, M. (2006). *Principles of Concurrent and Distributed Programming* — формальные модели
 
 ---
 

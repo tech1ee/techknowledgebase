@@ -22,7 +22,44 @@ Kotlin занимает в этой эволюции уникальную поз
 
 ---
 
-## Эволюция подходов к ошибкам
+## Теоретические основы
+
+> **Обработка ошибок** — механизм управления аномальными ситуациями в программе. Формально: разделение нормального потока выполнения (happy path) и аномального (error path) с гарантиями корректности при обоих сценариях.
+
+### Формальная таксономия ошибок
+
+| Тип | Определение | Примеры | Стратегия |
+|-----|-------------|---------|-----------|
+| **Bug** | Дефект в логике программиста | NullPointer, IndexOutOfBounds | Исправить код, не ловить |
+| **Expected error** | Предсказуемая ситуация домена | «Пользователь не найден», «Файл не существует» | Типизированный результат (Result, sealed class) |
+| **Infrastructure error** | Transient-сбой окружения | Сеть, диск, таймаут | Retry + fallback |
+| **Fatal error** | Невосстановимая ситуация | OOM, StackOverflow | Crash + мониторинг |
+
+### Три парадигмы обработки ошибок
+
+| Парадигма | Механизм | Языки | Trade-off |
+|-----------|----------|-------|-----------|
+| **Return codes** | Возвращаемое значение (-1, null, errno) | C, Go | Явно, но легко забыть проверить |
+| **Exceptions** | throw/catch, раскрутка стека | Java, C++, Kotlin, Python | Мощно, но нелокальный control flow |
+| **Algebraic types** | Result<T, E>, Either, Option | Rust, Haskell, Kotlin (Arrow) | Компилятор заставляет обработать, но verbose |
+
+### Формальное свойство: totality
+
+**Тотальная функция** — определена для всех входов. Парциальная — может не вернуть результат (бросить exception).
+
+```
+Парциальная:  fun findUser(id: Int): User       ← может бросить исключение
+Тотальная:    fun findUser(id: Int): User?       ← null = «не найден»
+Тотальная:    fun findUser(id: Int): Result<User> ← ошибка в типе
+```
+
+Kotlin стремится к тотальности: null-safety, Result, sealed class — делают ошибки **частью типа**.
+
+> **См. также**: [[resilience-patterns]] — паттерны устойчивости, [[type-systems-fundamentals]] — типы как гарантии, [[kotlin-coroutines]] — обработка ошибок в корутинах
+
+---
+
+
 
 ```
 1960-е  Коды возврата (C, Fortran)
@@ -1107,6 +1144,13 @@ fun withdraw(amount: BigDecimal) {
 
 ## Источники
 
+### Теоретические основы
+- **Goodenough J. (1975). Exception Handling: Issues and a Proposed Notation. CACM.** — первая формализация механизма исключений
+- **Liskov B., Snyder A. (1979). Exception Handling in CLU. IEEE TSE.** — формальная модель try/catch в CLU (предшественник Java exceptions)
+- **Wadler P. (1995). Monads for Functional Programming.** — монадическая обработка ошибок (Either, Result) как альтернатива исключениям
+- **Wlaschin S. (2013). Railway Oriented Programming.** — визуальная модель цепочки Result-операций
+
+### Практические руководства
 - Nygard M. — *Release It! Design and Deploy Production-Ready Software* (2nd ed., Pragmatic Bookshelf, 2018) — философия обработки ошибок в production-системах
 - Martin R. — *Clean Architecture* (Prentice Hall, 2017) — обработка ошибок по слоям, Screaming Architecture
 - Elizarov R. — [Kotlin Coroutines Exception Handling](https://kotlinlang.org/docs/exception-handling.html) — официальная документация по ошибкам в корутинах

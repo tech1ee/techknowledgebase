@@ -29,6 +29,33 @@ Kennismigrant (Highly Skilled Migrant) — одна из самых быстры
 
 ---
 
+## Теоретические основы
+
+> **Highly Skilled Migrant (HSM) Program** — визовая программа для привлечения квалифицированных специалистов через упрощённый процесс и налоговые льготы. Нидерландская Kennismigrant — одна из наиболее эффективных HSM-программ в ЕС.
+
+**30% Ruling — экономический анализ:**
+
+| Показатель | Без 30% ruling | С 30% ruling | Разница |
+|-----------|---------------|--------------|---------|
+| Gross salary | €100,000 | €100,000 | — |
+| Taxable income | €100,000 | €70,000 | -€30,000 |
+| Approx tax | €37,000 | €28,000 | **-€9,000/год** |
+| Net income | €63,000 | €72,000 | **+€9,000/год** |
+| За 5 лет | €315,000 | €360,000 | **+€45,000** |
+
+**Теоретическое обоснование 30% ruling:** compensating differential за extraterritorial costs (переезд, двойное домохозяйство, потеря social network). Правительство NL считает, что привлечение high-skilled workers создаёт positive externalities (налоги, инновации, job creation), оправдывающие налоговую льготу.
+
+**Нидерланды как tech hub:**
+- **Amsterdam:** Booking.com (3000+ engineers), Adyen, Miro, Nike Tech
+- **Eindhoven:** ASML, Philips, NXP (hardware-heavy)
+- **Rotterdam:** Port tech, fintech startups
+
+> **Network effect:** Amsterdam стал tech hub благодаря **positive feedback loop**: Booking привлёк talent → talent создал startups → startups привлекли VC → VC привлёк больше talent. Это объясняет концентрацию tech-компаний и высокий спрос на mobile-разработчиков.
+
+→ Связано: [[austria-guide]], [[switzerland-guide]], [[uae-tech-market]], [[salary-benchmarks]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -333,15 +360,15 @@ Good packages add:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Практические советы по международному поиску работы и оценке соответствия между кандидатом и страной. Полезна для понимания, подходит ли голландская work-life balance культура вашим ожиданиям.
-
-- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Для Senior-разработчиков, стремящихся к Staff+ позициям в голландских tech-компаниях. Booking и Adyen имеют развитые IC tracks, и понимание Staff-level expectations критично для карьерного роста.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Международный поиск работы; оценка cultural fit.
+
+- Larson W. (2022). *Staff Engineer*. — Staff+ позиции в Booking, Adyen; IC track в голландских компаниях.
+
+### Практические руководства
 
 - [IND: Kennismigrant Requirements](https://ind.nl/en/required-amounts-income-requirements)
 - [Business.gov.nl: Employing Highly Skilled Migrants](https://business.gov.nl/regulations/employing-highly-skilled-migrants/)

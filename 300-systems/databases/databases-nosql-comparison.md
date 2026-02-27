@@ -35,6 +35,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **NoSQL (Not Only SQL)** — класс СУБД, отказавшихся от реляционной модели и SQL в пользу специализированных моделей данных. Возникновение связано с потребностями Web 2.0 в горизонтальном масштабировании и гибкой схеме.
+
+### BASE vs ACID
+
+| Свойство | ACID (SQL) | BASE (NoSQL) |
+|----------|-----------|-------------|
+| **A**tomicity / **B**asically **A**vailable | Всё или ничего | Система всегда отвечает |
+| **C**onsistency / **S**oft state | Данные всегда валидны | Данные могут быть временно несогласованы |
+| **I**solation / **E**ventually consistent | Транзакции не влияют друг на друга | Со временем данные станут согласованы |
+| **D**urability | Данные сохранены | — |
+
+### Теорема Брюэра в контексте NoSQL
+
+При network partition каждая NoSQL БД выбирает:
+- **CP**: MongoDB (single-document ACID), HBase — consistency > availability
+- **AP**: Cassandra, DynamoDB — availability > consistency (tunable per query)
+
+> **См. также**: [[databases-overview]] — карта раздела, [[databases-replication-sharding]] — масштабирование
+
+---
+
 ## TL;DR
 
 | Тип | Представитель | Когда использовать |
@@ -1183,11 +1206,18 @@ Elasticsearch: Поиск (full-text по товарам)
 
 ## Источники
 
+### Теоретические основы
+- DeCandia G. et al. (2007). *Dynamo: Amazon's Highly Available Key-Value Store*. — Основа DynamoDB и Cassandra (eventual consistency, consistent hashing)
+- Chang F. et al. (2006). *Bigtable: A Distributed Storage System for Structured Data*. — Модель column-family (Google)
+- Brewer E. (2012). *CAP Twelve Years Later: How the "Rules" Have Changed*. — Уточнение CAP-теоремы
+- Vogels W. (2008). *Eventually Consistent*. — Формализация eventual consistency
+
+### Практические руководства
 - [MongoDB Documentation](https://www.mongodb.com/docs/)
 - [Redis Documentation](https://redis.io/docs/)
 - [AWS DynamoDB Developer Guide](https://docs.aws.amazon.com/amazondynamodb/)
 - [Apache Cassandra Documentation](https://cassandra.apache.org/doc/latest/)
-- "Designing Data-Intensive Applications" by Martin Kleppmann — Chapter 2-3
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Chapters 2-3
 
 ---
 

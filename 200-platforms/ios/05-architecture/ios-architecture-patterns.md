@@ -30,6 +30,40 @@ prerequisites:
 
 Архитектурные паттерны iOS определяют структуру приложения и распределение ответственности между компонентами. От простого MVC (Model-View-Controller) до сложных VIPER и TCA (The Composable Architecture) — выбор зависит от размера команды, сложности приложения и требований к тестируемости. MVVM стал де-факто стандартом для SwiftUI благодаря нативной поддержке реактивности через Combine и @Published. Clean Architecture обеспечивает максимальную независимость слоев, а TCA предлагает функциональный подход с однонаправленным потоком данных.
 
+## Теоретические основы
+
+> **Определение:** Архитектурный паттерн — это повторяемая схема организации компонентов программной системы, определяющая роли, связи и правила взаимодействия между ними. В отличие от design patterns (GoF, 1994), архитектурные паттерны оперируют на уровне всего приложения, а не отдельных классов.
+
+### Генеалогия архитектурных паттернов iOS
+
+| Паттерн | Год/Автор | Теоретическая основа | Ключевой принцип |
+|---------|-----------|---------------------|-----------------|
+| **MVC** | 1979, Reenskaug (Smalltalk, Xerox PARC) | Separation of Concerns (Dijkstra, 1974) | Model хранит данные, View отображает, Controller координирует |
+| **MVP** | 1996, Potel (Taligent); 2004, Fowler | Passive View + Supervising Controller | Presenter не знает о View (только протокол) |
+| **MVVM** | 2005, Gossman (Microsoft, WPF) | Data Binding + Observer pattern | ViewModel готовит данные для отображения, View подписывается |
+| **VIPER** | 2014, Mutual Mobile | Clean Architecture (Martin, 2012) | 5 компонентов: View, Interactor, Presenter, Entity, Router |
+| **TCA** | 2020, Point-Free (Williams & Celis) | Elm Architecture (Czaplicki, 2012) + Redux | State + Action → Reducer → Effect |
+
+> **Elm Architecture (Czaplicki, 2012):** Модель, в которой (1) Model описывает состояние, (2) View — чистая функция от Model, (3) Update — чистая функция (Model, Msg) → Model. TCA адаптировал эту модель для Swift/SwiftUI с добавлением Effect для side effects.
+
+### Критерии выбора архитектуры
+
+| Критерий | MVC | MVVM | VIPER | TCA |
+|----------|-----|------|-------|-----|
+| Тестируемость | Низкая | Средняя | Высокая | Высокая |
+| Boilerplate | Минимальный | Низкий | Очень высокий | Средний |
+| Кривая обучения | Пологая | Средняя | Крутая | Крутая |
+| Масштабируемость | Плохая | Хорошая | Отличная | Отличная |
+| Рекомендуемый размер команды | 1-2 | 2-5 | 5+ | 3+ |
+
+### Связь с CS-фундаментом
+
+- [[architecture-overview]] — общие принципы программной архитектуры
+- [[ios-architecture-evolution]] — историческая эволюция паттернов
+- [[android-architecture-patterns]] — сравнение с Android (MVVM, MVI, Clean)
+
+---
+
 ## Аналогии
 
 ### MVC — это кухня небольшого ресторана
@@ -3275,9 +3309,15 @@ struct AppView: View {
 
 ## Источники и дальнейшее чтение
 
-- Eidhof C. et al. (2019). *Advanced Swift.* — продвинутые паттерны Swift, включая protocol-oriented design, которые лежат в основе Clean Architecture и VIPER
-- Martin R. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design.* — фундаментальные принципы разделения слоёв, Dependency Rule и архитектурные границы, применимые к любой платформе
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — ментальная модель SwiftUI, объясняющая почему MVVM стал естественным выбором для декларативного UI
+### Теоретические основы
+- Reenskaug T. (1979). *Models-Views-Controllers.* Xerox PARC — оригинальный MVC в Smalltalk
+- Gossman J. (2005). *Introduction to MVVM.* Microsoft — создание паттерна MVVM для WPF
+- Martin R. (2017). *Clean Architecture.* Prentice Hall — Dependency Rule, Use Cases
+- Czaplicki E. (2012). *Elm: Concurrent FRP for Functional GUIs.* — Elm Architecture (основа TCA)
+
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — почему MVVM стал стандартом для SwiftUI
+- Eidhof C. et al. (2019). *Advanced Swift.* — protocol-oriented design для Clean Architecture
 
 ---
 

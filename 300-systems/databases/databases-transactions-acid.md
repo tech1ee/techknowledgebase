@@ -44,6 +44,63 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис транзакций
+
+### ACID: происхождение термина
+
+> **Определение (Härder & Reuter, 1983):** Термин ACID введён Тео Хердером и Андреасом Ройтером в статье "Principles of Transaction-Oriented Database Recovery". Это не просто мнемоника — каждое свойство формально определено:
+
+| Свойство | Формальное определение | Обеспечивается |
+|----------|----------------------|----------------|
+| **Atomicity** | Транзакция T = {op₁, ..., opₙ} — либо все opᵢ применены, либо ни одна. Нет частичного состояния | WAL (Write-Ahead Log), undo-log |
+| **Consistency** | Если DB удовлетворяет инвариантам I до T, то DB удовлетворяет I после T. Формально: I(DB) ∧ T → I(DB') | Constraints, triggers, application logic |
+| **Isolation** | Параллельное выполнение T₁‖T₂ эквивалентно некоторому последовательному порядку T₁;T₂ или T₂;T₁ | Locks, MVCC, SSI |
+| **Durability** | После COMMIT состояние сохранено даже при crash. Формально: committed(T) → persisted(effects(T)) | WAL + fsync, replication |
+
+### Serializability: золотой стандарт изоляции
+
+> **Определение (Eswaran et al., 1976):** Расписание (schedule) S набора транзакций {T₁, ..., Tₙ} **сериализуемо** (serializable), если его результат эквивалентен результату некоторого последовательного (serial) расписания тех же транзакций.
+
+**Conflict Serializability** (Papadimitriou, 1979): Две операции **конфликтуют**, если обращаются к одному объекту и хотя бы одна — запись. Расписание conflict-serializable ⟺ его **граф конфликтов** (precedence graph) ацикличен.
+
+```
+Граф конфликтов для T₁ и T₂:
+
+  T₁: R(A) W(A)          R(B) W(B)
+  T₂:           R(A) W(A)           R(B)
+
+  Конфликты: T₁→T₂ (W(A)→R(A)), T₂→T₁ (W(A)→R(B)?  нет)
+  Граф: T₁ → T₂ (ациклический) → Сериализуемо как T₁;T₂
+```
+
+### Двухфазная блокировка (2PL)
+
+> **Теорема (Eswaran et al., 1976):** Если каждая транзакция соблюдает протокол двухфазной блокировки — фаза роста (acquiring locks) и фаза сжатия (releasing locks) — то любое допустимое расписание сериализуемо.
+
+Это **необходимое и достаточное** условие для гарантии serializability через блокировки.
+
+### Уровни изоляции: формальные аномалии
+
+Berenson et al. (1995), "A Critique of ANSI SQL Isolation Levels" — ключевая работа, показавшая, что стандарт SQL-92 определяет изоляцию через **аномалии**, а не через serializability:
+
+| Аномалия | Формально | Допускается на уровне |
+|----------|-----------|----------------------|
+| **Dirty Read** | T₂ читает данные, записанные незакоммиченной T₁ | Read Uncommitted |
+| **Non-Repeatable Read** | T₁ читает X дважды, между чтениями T₂ изменяет X | Read Committed |
+| **Phantom Read** | T₁ читает набор строк дважды, между чтениями T₂ вставляет строку | Repeatable Read |
+| **Write Skew** | T₁ и T₂ читают пересекающиеся данные и пишут в непересекающиеся — оба проходят проверку, но вместе нарушают инвариант | Snapshot Isolation |
+
+**Snapshot Isolation** (SI) — не входит в стандарт SQL, но де-факто используется в PostgreSQL (Repeatable Read = SI). SI предотвращает phantom reads, но допускает write skew.
+
+### Связи
+
+- [[databases-fundamentals-complete]] — реляционная модель и RA
+- [[sql-databases-complete]] — MVCC реализация
+- [[architecture-distributed-systems]] — распределённые транзакции (2PC, Saga)
+- [[synchronization-primitives]] — аналогия: блокировки в БД = mutex в concurrency
+
+---
+
 ## Часть 1: Интуиция без кода
 
 > Транзакции — это как контракт с базой данных: "Или делаешь всё как я сказал, или ничего не делаешь".
@@ -1156,9 +1213,18 @@ ON CONFLICT (idempotency_key) DO NOTHING;
 
 ## Источники
 
+### Теоретические основы
+
+- **Härder, T. & Reuter, A. (1983). "Principles of Transaction-Oriented Database Recovery." ACM Computing Surveys.** — Статья, в которой введён акроним ACID. Формальные определения Atomicity, Consistency, Isolation, Durability
+- **Eswaran, K.P. et al. (1976). "The Notions of Consistency and Predicate Locks in a Database System." CACM.** — Формальное определение serializability и теорема о двухфазной блокировке (2PL)
+- **Papadimitriou, C.H. (1979). "The Serializability of Concurrent Database Updates." JACM.** — Conflict serializability и precedence graph
+- **Berenson, H. et al. (1995). "A Critique of ANSI SQL Isolation Levels." SIGMOD.** — Критический анализ стандарта SQL-92, формальное определение Snapshot Isolation и write skew anomaly
+
+### Практические руководства
+
 - [PostgreSQL MVCC Documentation](https://www.postgresql.org/docs/current/mvcc.html)
 - [PostgreSQL Transaction Isolation](https://www.postgresql.org/docs/current/transaction-iso.html)
-- "Designing Data-Intensive Applications" by Martin Kleppmann — Chapter 7
+- **Kleppmann, M. (2017). "Designing Data-Intensive Applications."** — Chapter 7: Transactions
 - [Jepsen: Distributed Systems Testing](https://jepsen.io/)
 
 ---

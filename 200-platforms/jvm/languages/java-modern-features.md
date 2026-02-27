@@ -128,24 +128,74 @@ Java 1.0   Java 5      Java 7      Java 8      Java 9      Java 17     Java 21
 
 ## Терминология для новичков
 
-| Термин | Что это простыми словами | Аналогия |
-|--------|-------------------------|----------|
-| **Lambda** | Анонимная функция — код без имени | Как записка "позвони маме" вместо полного письма |
-| **Functional Interface** | Интерфейс с одним абстрактным методом | Как розетка: один слот = один тип подключения |
-| **Stream** | Конвейер операций над данными | Как лента на заводе: предметы проходят через станции |
-| **Optional** | Контейнер, который может быть пустым | Как коробка: может содержать подарок или быть пустой |
-| **Method Reference** | Ссылка на существующий метод (::) | Как "см. страницу 5" вместо переписывания |
-| **Type Inference** | Компилятор сам определяет тип | Как когда продавец понимает "дайте яблоко" без уточнений |
-| **Record** | Immutable data carrier | Как паспорт: данные фиксированы после создания |
-| **Sealed Class** | Класс с ограниченным списком наследников | Как закрытый клуб: только приглашённые могут войти |
-| **Pattern Matching** | Проверка структуры и извлечение данных | Как сортировка писем по типу конверта |
-| **Virtual Thread** | Легковесный поток, управляемый JVM | Как виртуальная очередь вместо физической |
-| **Module** | Явная единица кода с зависимостями | Как квартира в доме: свои стены, но общие коммуникации |
-| **Text Block** | Многострочная строка (""") | Как цитата в книге вместо склейки строк |
-| **Switch Expression** | Switch, который возвращает значение | Как меню в ресторане: выбрал → получил блюдо |
-| **Exhaustiveness** | Компилятор проверяет все варианты | Как чек-лист: ничего не забыто |
-| **Carrier Thread** | OS поток, на котором выполняется virtual thread | Как автобус, который везёт пассажиров (virtual threads) |
-| **Pinning** | Virtual thread "прилипает" к carrier | Как пассажир, который не выходит из автобуса на остановке |
+| Термин | Формально | Простыми словами |
+|--------|----------|------------------|
+| **Lambda** | λ-абстракция (Church 1936) — анонимная функция в типизированном λ-исчислении | Код без имени: `x -> x + 1` |
+| **Functional Interface** | SAM type — интерфейс с единственным абстрактным методом, target type для λ | Розетка: один слот = один тип подключения |
+| **Stream** | Lazy monadic pipeline над последовательностью (ленивая цепочка операций) | Конвейер: предметы проходят через станции |
+| **Optional** | Maybe monad — `Optional<T> = T + ∅` (sum type: значение или пусто) | Коробка: может содержать подарок или быть пустой |
+| **Record** | Nominal product type — `Record(A, B) = A × B` с structural equality | Паспорт: данные фиксированы после создания |
+| **Sealed Class** | Nominal sum type — `S = A + B + C`, closed hierarchy с exhaustiveness | Закрытый клуб: только приглашённые могут войти |
+| **Pattern Matching** | Деконструкция algebraic data types (ML, Milner 1973) | Сортировка писем по типу конверта |
+| **Virtual Thread** | Stackful asymmetric корутина с M:N scheduling (Conway 1958) | Виртуальная очередь вместо физической |
+| **Method Reference** | η-expansion в λ-исчислении — `f` вместо `x -> f(x)` | "См. страницу 5" вместо переписывания |
+| **Type Inference** | Hindley-Milner inference (ограниченный вариант в Java — local var) | Продавец понимает "дайте яблоко" без уточнений |
+| **Module** | Явная единица кода с declared dependencies (Jigsaw) | Квартира: свои стены, но общие коммуникации |
+| **Exhaustiveness** | Totality check — компилятор доказывает покрытие всех вариантов sum type | Чек-лист: ничего не забыто |
+| **Carrier Thread** | OS thread, на который scheduler мультиплексирует virtual threads | Автобус, который везёт пассажиров |
+| **Pinning** | Невозможность unmount virtual thread с carrier (synchronized, native) | Пассажир, который не выходит из автобуса |
+
+---
+
+## Теоретические основы: PL-теория за modern Java features
+
+Каждая "новая фича" Java имеет глубокие корни в теории языков программирования (PL theory). Понимание этих корней объясняет *почему* фичи устроены именно так.
+
+### Lambda-выражения → λ-исчисление (Church, 1936)
+
+Java lambdas — это restricted-реализация **λ-абстракции** из lambda calculus Алонзо Чёрча. Формально: λx.M — функция с параметром x и телом M. Java ограничивает lambda calculus двумя способами:
+- **Типизированные**: Java lambdas типизированы через Functional Interface (SAM type) — это **System F** (Girard 1972, Reynolds 1974), а не нетипизированное λ-исчисление
+- **Effectively final capture**: замыкание (closure) захватывает только effectively final переменные — ограничение ради безопасности в мутабельном окружении JVM
+
+### Records → Product types (алгебраические типы данных)
+
+> **Product type** — тип, значения которого являются кортежами значений составных типов. Формально: `A × B` содержит все пары `(a, b)` где `a ∈ A, b ∈ B`. Количество возможных значений = |A| × |B| (отсюда "product").
+
+Java Records (JEP 395, Java 16) — это **nominal product types**: `record Point(int x, int y)` эквивалентен `Point = int × int`. Records обеспечивают:
+- **Structural equality** — equals/hashCode по всем компонентам (как в ML/Haskell data types)
+- **Decomposition** — pattern matching деконструирует record на компоненты
+- **Immutability** — все компоненты final (как в algebraic data types)
+
+### Sealed classes → Sum types (алгебраические типы данных)
+
+> **Sum type** (tagged union, discriminated union) — тип, значения которого принадлежат ровно одному из нескольких вариантов. Формально: `A + B` содержит либо значение из A, либо из B. Количество возможных значений = |A| + |B| (отсюда "sum").
+
+Java Sealed classes (JEP 409, Java 17) — это **nominal sum types**: `sealed interface Shape permits Circle, Rectangle, Triangle` определяет `Shape = Circle + Rectangle + Triangle`. Ключевое свойство — **exhaustiveness checking**: компилятор знает все варианты и проверяет полноту switch.
+
+| PL-концепция | Java-реализация | Аналоги в других языках |
+|--------------|-----------------|------------------------|
+| Sum type | `sealed interface` + `permits` | Kotlin `sealed class`, Rust `enum`, Haskell `data` |
+| Product type | `record` | Kotlin `data class`, Rust `struct`, Haskell `data` (1 constructor) |
+| Pattern matching | `switch` с patterns | Kotlin `when`, Rust `match`, Haskell `case` |
+| ADT | sealed + record combo | Kotlin sealed + data, Rust enum с полями |
+
+### Pattern Matching → ML-семейство (1970-е)
+
+Pattern matching введён в ML (Robin Milner, 1973) как способ деконструкции алгебраических типов данных. Java перенимает три формы:
+- **Type pattern**: `case Integer i` — проверка типа + связывание (instanceof + cast)
+- **Deconstruction pattern** (preview): `case Point(var x, var y)` — деконструкция record
+- **Guard pattern**: `case Integer i when i > 0` — условие на значение
+
+Связь: sealed class (sum type) + record (product type) + pattern matching = полноценные **Algebraic Data Types** в Java, аналогичные ML/Haskell/Rust.
+
+### Virtual Threads → корутины (Conway, 1958)
+
+Virtual Threads (Project Loom, JEP 444) — это **stackful asymmetric корутины**, управляемые JVM runtime. Формально:
+- **Stackful**: каждый virtual thread имеет собственный стек вызовов (в отличие от stackless корутин Kotlin)
+- **Asymmetric**: yield всегда возвращает управление scheduler'у (а не произвольной корутине)
+- **M:N scheduling**: M virtual threads мультиплексируются на N carrier (OS) threads
+
+> **Связь**: λ-исчисление → [[functional-programming]], корутины → [[concurrency-fundamentals]], ADT → [[kotlin-type-system]]
 
 ---
 
@@ -2752,6 +2802,15 @@ ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Church A. (1936). *An Unsolvable Problem of Elementary Number Theory.* — Определение λ-исчисления, теоретическая основа всех lambda-выражений, включая Java lambdas.
+- Girard J.-Y. (1972). *Interprétation fonctionnelle et élimination des coupures.* — Система F (полиморфное λ-исчисление), формальная основа generics и типизированных lambdas в Java.
+- Milner R. (1978). *A Theory of Type Polymorphism in Programming.* — ML и pattern matching. Теоретическая основа Java pattern matching (JEP 394/441).
+- Goetz B. (2020). *Data Classes and Sealed Types for Java.* OpenJDK Design Notes. — Обоснование Records как product types и Sealed Classes как sum types; связь с algebraic data types.
+
+### Практические руководства
 
 - Urma R.-G., Fusco M., Mycroft A. (2018). *Modern Java in Action.* — Фундаментальная книга по Java 8-17: lambdas, streams, Optional, модули. Каждая фича разбирается с мотивацией, примерами и внутренним устройством. Лучший источник для понимания функциональной революции Java.
 - Bloch J. (2018). *Effective Java, 3rd Edition.* — 90 практических рекомендаций по написанию качественного Java-кода. Покрывает lambdas (Items 42-48), streams (Items 45-48), Optional (Item 55). Незаменимый справочник для перехода от знания синтаксиса к пониманию идиом.

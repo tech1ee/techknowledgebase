@@ -23,6 +23,48 @@ next_review:
 
 # OWASP MASVS & MASTG: Mobile Application Security Verification
 
+## Теоретические основы
+
+> **Определение.** OWASP MASVS (Mobile Application Security Verification Standard) — формальный стандарт безопасности мобильных приложений, определяющий набор верифицируемых требований (ЧТО проверять). OWASP MASTG (Mobile Application Security Testing Guide) — руководство по тестированию, описывающее конкретные методики и инструменты (КАК проверять). Вместе они образуют MAS (Mobile Application Security) — комплексный фреймворк верификации.
+
+### Эволюция стандарта MASVS
+
+| Год | Версия | Ключевые изменения |
+|-----|--------|-------------------|
+| 2018 | MASVS 1.0 | Первая версия: 2 уровня (L1, L2) + R (resilience), 8 категорий |
+| 2019 | MASVS 1.1 | Уточнения требований, улучшенное покрытие криптографии |
+| 2020 | MASVS 1.2 | Дополнения по platform interaction, обновлённые ссылки на MASTG |
+| 2023 | MASVS 2.0 | Кардинальная реструктуризация: уровни L1/L2 заменены на MAS Testing Profiles, добавлена категория PRIVACY, атомарные требования |
+| 2024 | MASVS 2.1 | Обновления требований STORAGE, AUTH; улучшенная интеграция с MASTG 1.7 |
+
+### Структура MAS Testing Profiles
+
+| Профиль | Назначение | Когда применять |
+|---------|-----------|----------------|
+| **L1** | Базовое тестирование | Все приложения; минимальный порог безопасности |
+| **L2** | Углублённое тестирование | Приложения с высокочувствительными данными (финансы, здоровье, PII) |
+| **R (Resilience)** | Защита от реверс-инжиниринга | Приложения с ценной бизнес-логикой, DRM, anti-fraud |
+| **P (Privacy)** | Приватность данных | Приложения, обрабатывающие PII; требования GDPR/CCPA |
+
+### Категории MASVS 2.0 и их связь с Mobile Top 10
+
+| Категория MASVS | Описание | Связь с OWASP Mobile Top 10 2024 |
+|-----------------|----------|----------------------------------|
+| MASVS-STORAGE | Безопасное хранение данных | M1 (Credentials), M9 (Data Storage) |
+| MASVS-CRYPTO | Криптография | M10 (Insufficient Cryptography) |
+| MASVS-AUTH | Аутентификация и авторизация | M3 (Insecure Auth/AuthZ) |
+| MASVS-NETWORK | Сетевые коммуникации | M5 (Insecure Communication) |
+| MASVS-PLATFORM | Взаимодействие с платформой | M4 (Insufficient I/O Validation), M8 (Misconfiguration) |
+| MASVS-CODE | Качество кода и безопасность сборки | M7 (Binary Protections), M2 (Supply Chain) |
+| MASVS-RESILIENCE | Защита от тампирования и анализа | M7 (Binary Protections) |
+| MASVS-PRIVACY | Приватность пользовательских данных | M6 (Privacy Controls) |
+
+> **Методология MASTG.** Тестирование по MASTG сочетает статический анализ (MobSF, jadx, APKTool) и динамический анализ (Frida, Objection, Burp Suite). Каждое требование MASVS сопровождается одним или несколькими тест-кейсами MASTG с воспроизводимыми шагами и ожидаемыми результатами.
+
+**См. также:** [[mobile-security-owasp]] — ландшафт угроз (Mobile Top 10), которые систематизирует MASVS; [[mobile-app-protection]] — практическая реализация требований MASVS-RESILIENCE.
+
+---
+
 ## Metadata
 - **Тип:** Deep-dive
 - **Технологии:** Mobile Security, OWASP, Android, iOS
@@ -2941,10 +2983,19 @@ PRIVACY  → Consent? Data minimization? User control?
 
 ## Источники и дальнейшее чтение
 
-- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по тестированию безопасности мобильных приложений, охватывающее практически все категории MASVS с конкретными инструментами и техниками.
-- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — для понимания серверных уязвимостей, которые дополняют клиентские требования MASVS, особенно в контексте API security.
-- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальные принципы инженерии безопасности, на которых строятся все категории MASVS, включая криптографию, аутентификацию и защиту данных.
+### Теоретические основы
+
+- OWASP Foundation. (2024). *OWASP MASVS 2.1.0.* — первоисточник: полный перечень атомарных требований безопасности по 8 категориям, определения MAS Testing Profiles (L1/L2/R/P).
+- OWASP Foundation. (2024). *OWASP MASTG 1.7.x.* — руководство по тестированию: тест-кейсы, инструменты, воспроизводимые шаги для каждого требования MASVS.
+- Anderson R. (2020). *Security Engineering: A Guide to Building Dependable Distributed Systems.* 3rd Edition. Wiley. — фундаментальные принципы инженерии безопасности, на которых строятся все категории MASVS.
+- Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по тестированию безопасности мобильных приложений, охватывающее практически все категории MASVS.
+
+### Практические руководства
+
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — серверные уязвимости, дополняющие клиентские требования MASVS, особенно API security.
 - OWASP Foundation (2021). *OWASP Testing Guide v4.* — методология тестирования безопасности, дополняющая MASTG для серверной части мобильных приложений.
+- MobSF Documentation (mobsf.github.io). — автоматизированный static/dynamic analysis, интеграция в CI/CD для покрытия MASVS-CODE и MASVS-STORAGE.
+- Frida Documentation (frida.re). — инструментация runtime для динамического тестирования MASVS-AUTH, MASVS-RESILIENCE и MASVS-NETWORK.
 
 ---
 

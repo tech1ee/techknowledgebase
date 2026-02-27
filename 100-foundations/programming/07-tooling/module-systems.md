@@ -35,6 +35,36 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Модульная система** — механизм декомпозиции программы на независимые единицы (модули) с явными зависимостями и контролируемыми границами видимости. Формализована Парнасом (1972) через принцип **information hiding**.
+
+### Формальные свойства модуля
+
+| Свойство | Определение | Метрика |
+|----------|-------------|---------|
+| **Encapsulation** | Модуль скрывает «design decision» за интерфейсом | Отношение public/total API |
+| **High cohesion** | Элементы модуля функционально связаны | Число внутренних зависимостей |
+| **Low coupling** | Модули минимально зависят друг от друга | Ce (efferent coupling) |
+| **Explicit dependencies** | Все зависимости объявлены | Нет скрытых зависимостей |
+
+### Уровни модульности в Kotlin/JVM
+
+```
+Visibility modifiers:  private → internal → protected → public
+                       (файл)    (модуль)   (подтипы)   (все)
+         ↓
+Gradle modules:        implementation (скрыто)  vs  api (транзитивно)
+         ↓
+JPMS (Java 9+):        module-info.java → exports / requires
+         ↓
+KMP:                   expect/actual → platform-specific модули
+```
+
+> **См. также**: [[coupling-cohesion]] — метрики связанности, [[build-systems-theory]] — сборка модулей, [[solid-principles]] — SRP на уровне модулей
+
+---
+
 ## Исторический контекст
 
 Идея модульности в программировании формализована **David Parnas** в знаковой статье *"On the Criteria To Be Used in Decomposing Systems into Modules"* (1972). Parnas показал, что декомпозиция должна основываться на **information hiding** — каждый модуль скрывает "design decision", а не просто группирует код по функциональности. Этот принцип остаётся фундаментом модульного проектирования.

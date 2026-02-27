@@ -47,6 +47,41 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **AI Safety** — междисциплинарная область, изучающая риски AI-систем и методы их минимизации. Для LLM-приложений ключевая угроза — **prompt injection**: манипуляция поведением модели через входные данные, аналогичная SQL injection в веб-приложениях.
+
+Безопасность LLM опирается на фундаментальные принципы computer security, адаптированные для AI:
+
+| Принцип | Автор | Применение к LLM |
+|---------|-------|------------------|
+| **Defense in Depth** | Saltzer & Schroeder (1975) | Многослойная защита: input → model → output → infra |
+| **Least Privilege** | Saltzer & Schroeder (1975) | LLM не имеет доступа к данным/действиям сверх необходимого |
+| **Fail-Safe Defaults** | Saltzer & Schroeder (1975) | По умолчанию — отказ; доступ даётся явно |
+| **Complete Mediation** | Saltzer & Schroeder (1975) | Каждый запрос проходит через guardrails |
+
+> **Таксономия угроз LLM (OWASP LLM Top 10, 2025):**
+> 1. **Prompt Injection** — #1 угроза: direct (пользователь) и indirect (через данные)
+> 2. **Sensitive Information Disclosure** — утечка PII, API ключей
+> 3. **Supply Chain Vulnerabilities** — отравленные модели/данные
+> 4. **Excessive Agency** — LLM получает слишком много прав
+> 5. **Insecure Output Handling** — XSS/SSRF через LLM output
+
+**Подходы к alignment и безопасности:**
+
+| Подход | Авторы | Механизм |
+|--------|--------|----------|
+| **RLHF** | Christiano et al. (2017) | Обучение с подкреплением на человеческих предпочтениях |
+| **Constitutional AI** | Bai et al. (2022), Anthropic | Модель следует набору правил ("конституции") |
+| **Instruction Hierarchy** | Wallace et al. (2024), OpenAI | Приоритет: system prompt > user > context |
+| **Red Teaming** | Ganguli et al. (2022), Anthropic | Атаки на модель для поиска уязвимостей |
+
+Фундаментальная проблема: **полная защита от prompt injection невозможна** (Greshake et al., 2023) — LLM не различает инструкции и данные на архитектурном уровне. Это аналогично проблеме фон Неймана (данные и код в одном пространстве). Защита возможна только через defense in depth.
+
+См. также: [[ai-agents-advanced|AI Agents]] — безопасность агентов, [[ai-observability-monitoring|Observability]] — мониторинг угроз, [[mcp-model-context-protocol|MCP]] — безопасность интеграций.
+
+---
+
 ## Часть 1: Интуиция без кода
 
 ### Аналогия 1: LLM как доверчивый сотрудник
@@ -1102,20 +1137,26 @@ MCP серверы расширяют attack surface AI-приложений: к
 
 ## Источники
 
-### Официальные
-- [OWASP Top 10 for LLM 2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) — Prompt Injection
-- [AWS LLM Security Best Practices](https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/introduction.html)
-- [Anthropic Constitutional AI](https://www.anthropic.com/research/constitutional-ai)
+### Теоретические основы
 
-### Инструменты
-- [Meta Llama Prompt Guard](https://huggingface.co/meta-llama/Prompt-Guard-86M) — Jailbreak detection
-- [Lakera Guard](https://www.lakera.ai/) — Commercial guardrails
-- [Rebuff](https://github.com/protectai/rebuff) — Open source protection
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems*. IEEE | 8 принципов безопасности: least privilege, defense in depth |
+| 2 | Greshake K. et al. (2023). *Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection*. arXiv:2302.12173 | Формализация indirect prompt injection |
+| 3 | Bai Y. et al. (2022). *Constitutional AI: Harmlessness from AI Feedback*. Anthropic | Constitutional AI — self-alignment |
+| 4 | Christiano P. et al. (2017). *Deep RL from Human Preferences*. NeurIPS | RLHF для alignment |
+| 5 | Ganguli D. et al. (2022). *Red Teaming Language Models to Reduce Harms*. Anthropic | Систематический подход к red teaming |
+| 6 | Wallace E. et al. (2024). *The Instruction Hierarchy*. OpenAI | Приоритизация инструкций |
 
-### Исследования
-- [Datadog: LLM Guardrails Best Practices](https://www.datadoghq.com/blog/llm-guardrails-best-practices/)
-- [CSA: AI Prompt Guardrails Guide](https://cloudsecurityalliance.org/blog/2025/12/10/how-to-build-ai-prompt-guardrails-an-in-depth-guide-for-securing-enterprise-genai)
-- [Mend.io: LLM Security 2025](https://www.mend.io/blog/llm-security-risks-mitigations-whats-next/)
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [OWASP Top 10 for LLM 2025](https://genai.owasp.org/) | Стандарт классификации угроз |
+| 2 | [Meta Llama Prompt Guard](https://huggingface.co/meta-llama/Prompt-Guard-86M) | Jailbreak detection model |
+| 3 | [Lakera Guard](https://www.lakera.ai/) | Commercial guardrails |
+| 4 | [Anthropic Constitutional AI](https://www.anthropic.com/research/constitutional-ai) | Constitutional AI approach |
+| 5 | [AWS LLM Security Best Practices](https://docs.aws.amazon.com/prescriptive-guidance/latest/llm-prompt-engineering-best-practices/) | Enterprise security patterns |
 
 ---
 

@@ -40,6 +40,38 @@ next_review:
 
 Без этой базы сложно понять, почему пулы потоков эффективнее создания новых потоков для каждой задачи, и как правильно настраивать параметры ThreadPoolExecutor.
 
+## Теоретические основы: формальный базис Thread Pool
+
+### Thread Pool Pattern и теория очередей
+
+> **Thread Pool** — паттерн, формализованный как частный случай **Object Pool** (GoF, 1994): вместо создания и уничтожения потоков при каждом запросе, переиспользуется фиксированный набор рабочих потоков.
+
+Формальная модель — **M/M/c queue** (теория массового обслуживания, Erlang 1917):
+- Задачи поступают с интенсивностью λ (Poisson process)
+- Обслуживание занимает экспоненциальное время с параметром μ
+- c — количество серверов (потоков в пуле)
+- **Условие стабильности**: ρ = λ/(c·μ) < 1 (иначе очередь растёт бесконечно)
+
+### Оптимальный размер пула
+
+| Тип задач | Формула | Обоснование |
+|-----------|---------|-------------|
+| **CPU-bound** | `N_threads = N_cores` | Закон Амдала: больше потоков → больше context switch overhead без ускорения |
+| **I/O-bound** | `N_threads = N_cores × (1 + W/S)` | Формула Литтла: W = wait time, S = service time |
+| **Mixed** | `N_threads = N_cores × U × (1 + W/S)` | U = target CPU utilization (0..1) |
+
+`Dispatchers.Default` в Kotlin Coroutines = N_cores потоков. `Dispatchers.IO` = max(64, N_cores) — расширенный пул для I/O-bound задач.
+
+### Work-Stealing (Blumofe & Leiserson, 1999)
+
+> **Work-Stealing** — алгоритм балансировки нагрузки, при котором idle поток «ворует» задачи из очереди занятого потока. Формально доказано: work-stealing достигает **оптимального** параллелизма с высокой вероятностью.
+
+Java `ForkJoinPool` (используемый `Dispatchers.Default`) реализует work-stealing: каждый поток имеет свою deque задач, idle потоки воруют с «хвоста» чужих deque.
+
+> **Связь**: Теория очередей → [[concurrency-fundamentals]], Work-stealing → [[kotlin-coroutines]], Закон Амдала → [[ios-gcd-deep-dive]]
+
+---
+
 ## Обзор
 
 Executors framework — это высокоуровневая абстракция над низкоуровневыми потоками Java, появившаяся в Java 5 как часть пакета `java.util.concurrent`. Вместо создания и управления потоками напрямую через `Thread`, Executors предоставляют удобный механизм для выполнения асинхронных задач с переиспользованием потоков.
@@ -2916,6 +2948,11 @@ OS scheduler напрямую влияет на performance ThreadPoolExecutor. 
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- **Blumofe R., Leiserson C. (1999).** *Scheduling Multithreaded Computations by Work Stealing.* JACM. — Формальное доказательство оптимальности work-stealing, используемого в ForkJoinPool.
+- **Erlang A.K. (1917).** *Solution of Some Problems in the Theory of Probabilities of Significance in Automatic Telephone Exchanges.* — Основы теории очередей (M/M/c model), формальный базис thread pool sizing.
 
 ### Книги
 

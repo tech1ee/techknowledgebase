@@ -65,6 +65,42 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Declarative UI Framework** — парадигма построения пользовательских интерфейсов, в которой разработчик описывает желаемое состояние UI как функцию от данных, а framework автоматически вычисляет и применяет минимальные изменения (Elliott, Hudak, 1997, Functional Reactive Programming).
+
+Compose Multiplatform расширяет Jetpack Compose на все платформы KMP, используя Skia/Skiko как единый рендеринг-движок.
+
+### Эволюция декларативных UI-фреймворков
+
+| Год | Фреймворк | Платформа | Рендеринг | Ключевая идея |
+|-----|----------|-----------|-----------|---------------|
+| 2013 | React | Web | Virtual DOM → DOM | UI = f(state), reconciliation |
+| 2017 | Flutter | Mobile + Web | Skia canvas | Widget tree, собственный rendering |
+| 2019 | SwiftUI | Apple | UIKit/AppKit backend | Declarative Swift DSL |
+| 2020 | Jetpack Compose | Android | Android Canvas/Skia | @Composable functions, recomposition |
+| 2021 | Compose Multiplatform | All | Skia/Skiko | Расширение Compose на Desktop, iOS, Web |
+
+### Архитектура рендеринга: Skia/Skiko
+
+Compose Multiplatform использует **Skiko** (Skia for Kotlin) — обёртку над Skia (Google, 2005):
+
+| Платформа | Backend Skia | Графический API |
+|-----------|-------------|-----------------|
+| Android | Встроенный в систему | OpenGL ES / Vulkan |
+| iOS | Bundled (~9 MB) | Metal |
+| Desktop | Bundled | OpenGL / Metal / DirectX |
+| Web | Bundled (Canvas) | WebGL / Canvas 2D |
+
+### Теоретическая модель: Recomposition
+
+Recomposition в Compose реализует **incremental computation** (Demers et al., 1981): при изменении state пересчитываются только те @Composable функции, которые зависят от изменённых данных. Формально это **dataflow graph** с автоматическим invalidation.
+
+> **Связь с теорией:** Functional Reactive Programming (Elliott, Hudak, 1997) формализует UI как поток трансформаций состояния. Compose реализует эту модель через snapshot system и slot table — внутренние структуры данных для отслеживания зависимостей.
+
+
 ## Почему Compose Multiplatform использует Canvas-based Rendering (Skia)
 
 > **CS-фундамент:** Rendering Pipelines, Graphics APIs, Immediate Mode vs Retained Mode
@@ -1090,9 +1126,16 @@ implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.1")
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Понимание основ Kotlin критически важно для работы с Compose MP: @Composable функции, делегирование свойств (remember, mutableStateOf), extension functions и DSL builders формируют основу декларативного UI.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по Kotlin-коду напрямую применимы при написании Composable-функций: управление state, избегание side effects, правильное использование scope functions и inline-функций для оптимизации recomposition.
-3. **Martin R. (2017).** *Clean Architecture.* — Принципы разделения UI и бизнес-логики определяют архитектуру Compose MP приложений. Boundary между Compose UI layer и shared domain/data layers проектируется по принципам Clean Architecture.
+### Теоретические основы
+
+- **Elliott C., Hudak P. (1997).** *Functional Reactive Animation.* ICFP '97. — Теоретическая основа декларативного UI: UI как функция состояния.
+- **Martin R. (2017).** *Clean Architecture.* — Принципы разделения UI и бизнес-логики, определяющие архитектуру Compose MP приложений.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основы Kotlin для @Composable функций, delegation, DSL builders.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации для Composable-функций: state management, side effects.
+- [Compose Multiplatform](https://www.jetbrains.com/compose-multiplatform/) — Официальная документация JetBrains.
 
 ---
 

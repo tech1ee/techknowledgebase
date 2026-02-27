@@ -51,6 +51,37 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис связных списков
+
+### Формальное определение
+
+> **Определение:** Связный список L — последовательность узлов (n₁, n₂, ..., nₖ), где каждый узел nᵢ = (data, next), и next(nᵢ) = nᵢ₊₁ (или null для последнего узла). Doubly-linked: nᵢ = (data, prev, next).
+
+### Историческая атрибуция
+
+> **Происхождение (Allen Newell, Cliff Shaw, Herbert Simon, 1955-1956):** Связный список изобретён для **Information Processing Language (IPL)** — одного из первых языков для ИИ в RAND Corporation. Необходимость: динамические структуры для символьных вычислений, где размер данных неизвестен заранее.
+
+### Массив vs Список: формальный trade-off
+
+| Операция | Array | Singly Linked | Doubly Linked |
+|----------|-------|---------------|---------------|
+| **Access [i]** | O(1) — random access | O(n) — sequential | O(n) |
+| **Insert at head** | O(n) — shift all | **O(1)** | **O(1)** |
+| **Insert at position** | O(n) | O(n) find + O(1) insert | O(n) find + O(1) insert |
+| **Delete at position** | O(n) | O(n) find predecessor | O(1) if have node ref |
+| **Memory per element** | sizeof(data) | sizeof(data) + sizeof(ptr) | sizeof(data) + 2·sizeof(ptr) |
+| **Cache locality** | Отличная (contiguous) | Плохая (scattered) | Плохая |
+
+**Ключевой инсайт:** На современном hardware **cache locality** часто важнее теоретической сложности. ArrayList O(n) insert может быть быстрее LinkedList O(1) insert из-за cache misses.
+
+### Связи
+
+- [[stacks-queues]] — stack и queue реализуются через linked list
+- [[trees-binary]] — дерево = обобщение linked list (2+ указателя)
+- [[memory-model-fundamentals]] — heap allocation для узлов
+
+---
+
 ## Часть 1: Интуиция без кода — Указатели как адреса
 
 ### Аналогия: Дома и адреса (понимание указателей)

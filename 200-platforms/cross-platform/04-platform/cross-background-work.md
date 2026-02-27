@@ -47,6 +47,46 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Фоновая работа (Background Work)** — выполнение задач приложением, когда оно не находится на переднем плане (foreground), с учётом ограничений операционной системы на потребление ресурсов (Apple, App Programming Guide; Google, Background Work Guide).
+
+### Ограничения фоновой работы
+
+| Аспект | iOS | Android |
+|--------|-----|---------|
+| **Философия** | «Фоновая работа = привилегия, не право» | «Фоновая работа = ограниченная возможность» |
+| **Время в background** | ~30 секунд, затем suspend | Зависит от API (WorkManager ≈ 10 мин) |
+| **Background modes** | Требуют explicit capabilities | Foreground Service + notification |
+| **Process death** | Jetsam (aggressive) | LMK (Low Memory Killer) |
+| **Periodic tasks** | BGTaskScheduler (min 15 мин) | WorkManager (min 15 мин) |
+
+### Теоретическая модель: приоритеты процессов
+
+Обе платформы реализуют **Priority-based scheduling** с killability:
+
+```
+Foreground (interactive) > Visible > Service > Cached > Empty
+                                                         ↑
+                                                    killed first
+```
+
+iOS более агрессивна в убийстве background-процессов (Jetsam), что влияет на дизайн KMP-приложений: долгие операции должны быть **resumable**.
+
+### Кросс-платформенная абстракция
+
+| Задача | iOS API | Android API | KMP подход |
+|--------|---------|-------------|-----------|
+| **Одноразовая** | URLSession background | WorkManager (OneTime) | expect/actual |
+| **Периодическая** | BGAppRefreshTask | WorkManager (Periodic) | expect/actual |
+| **Foreground** | — | Foreground Service | Platform-specific |
+| **Push-triggered** | Silent push (APNs) | FCM data message | Platform-specific |
+
+> **CS-фундамент:** Background work связан с [[cross-lifecycle]] (lifecycle и background transitions) и [[cross-concurrency-modern]] (concurrency для background tasks). Теоретическая база — Process Scheduling (Silberschatz et al., Operating System Concepts), Resource Management.
+
 ## Философия платформ
 
 ### iOS: Батарея превыше всего
@@ -1032,8 +1072,14 @@ class DownloadWorker(
 
 ## Источники и дальнейшее чтение
 
-- Meier R. (2022). *Professional Android.* — Полное руководство по Android-разработке, включая WorkManager, Services и background execution limits. Подробно описывает Doze Mode, App Standby и стратегии надёжного выполнения фоновых задач.
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Фундаментальная книга по iOS, включая главы о многопоточности, URLSession background configuration и BGTaskScheduler. Помогает понять системные ограничения iOS на фоновую работу.
+### Теоретические основы
+
+- **Silberschatz A. et al. (2018).** *Operating System Concepts.* 10th ed. — Process scheduling и priority-based resource management.
+
+### Практические руководства
+
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) — Android background tasks.
+- [BGTaskScheduler](https://developer.apple.com/documentation/backgroundtasks) — iOS background tasks.
 
 ---
 

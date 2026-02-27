@@ -67,6 +67,46 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Navigation** в контексте GUI — управление переходами между экранами (destinations) приложения, включая сохранение и восстановление состояния, передачу аргументов и обработку системных событий (back button, deep links) (Google, Android Architecture Guide, 2018).
+
+### Теоретическая модель: Navigation как конечный автомат
+
+Navigation может быть формализована как **конечный автомат (FSM)** (Hopcroft, Ullman, 1979):
+
+- **Состояния** = экраны (destinations)
+- **Переходы** = навигационные действия (navigate, pop, replace)
+- **Stack** = история переходов (Back Stack)
+- **Deep link** = прямой переход в конкретное состояние
+
+| Компонент | FSM-аналог | В navigation |
+|-----------|-----------|-------------|
+| State | Текущий экран | Current destination |
+| Transition | Действие перехода | navigate(), popBackStack() |
+| Stack | Стек вызовов | Back Stack |
+| Initial state | Стартовый экран | startDestination |
+
+### Эволюция navigation в мобильной разработке
+
+| Год | Платформа | Подход | Управление state |
+|-----|----------|--------|-----------------|
+| 2008 | iOS (UIKit) | UINavigationController | Imperative push/pop |
+| 2010 | Android | Intent + Activity stack | OS-managed back stack |
+| 2018 | Android (Jetpack) | Navigation Component | Declarative graph |
+| 2019 | SwiftUI | NavigationView/Stack | Declarative bindings |
+| 2023 | KMP | Decompose / Voyager | Cross-platform component tree |
+| 2024 | KMP | Compose Navigation MP | Official multiplatform navigation |
+
+### Type-safe navigation: теоретическое обоснование
+
+Type-safe navigation (Kotlin Serialization routes) реализует принцип **static verification** — навигационные маршруты проверяются компилятором, устраняя категорию runtime-ошибок «destination not found».
+
+> **CS-фундамент:** Конечные автоматы и формальные языки — теоретическая основа навигационных графов. Back Stack — реализация структуры данных Stack (LIFO).
+
+
 ## Почему Navigation — это Stack + Graph?
 
 ### Фундамент: Back Stack как Stack (LIFO)
@@ -997,9 +1037,16 @@ Compose Navigation упрощает mapping, но не eliminates platform setup
 
 ## Источники и дальнейшее чтение
 
-1. **Martin R. (2017).** *Clean Architecture.* — Навигация в мультиплатформенном приложении должна следовать принципам Clean Architecture: UI-слой (навигация) не должен содержать бизнес-логику, а переходы между экранами определяются use cases. Книга помогает спроектировать навигационный граф, независимый от конкретного фреймворка.
-2. **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Навигация тесно связана с корутинами: загрузка данных при переходе на экран, отмена операций при уходе с экрана, shared flows для навигационных событий. Понимание structured concurrency и lifecycle необходимо для предотвращения утечек при навигации.
-3. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по Kotlin-коду применимы к навигации: sealed classes для навигационных маршрутов, data classes для аргументов, и type-safe builders для описания навигационного графа.
+### Теоретические основы
+
+- **Hopcroft J., Ullman J. (1979).** *Introduction to Automata Theory, Languages, and Computation.* — Конечные автоматы как формальная модель навигации.
+- **Gamma E. et al. (1994).** *Design Patterns.* — State Pattern и Command Pattern в навигационных системах.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Sealed classes для type-safe навигационных маршрутов.
+- [Decompose](https://arkivanov.github.io/Decompose/) — Библиотека навигации для KMP.
+- [Voyager](https://voyager.adriel.cafe/) — Альтернативная KMP-навигация.
 
 ---
 

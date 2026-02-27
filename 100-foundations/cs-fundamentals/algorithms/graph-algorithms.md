@@ -40,6 +40,63 @@ Google Maps находит маршрут за миллисекунды сред
 
 ---
 
+## Теоретические основы: формальный базис графовых алгоритмов
+
+### Теория графов: происхождение
+
+> **Основание теории графов — задача о Кёнигсбергских мостах (Euler, 1736).** Леонард Эйлер доказал, что невозможно пройти по всем 7 мостам Кёнигсберга ровно по одному разу. Это первое формальное доказательство в теории графов: эйлеров путь существует ⟺ не более двух вершин имеют нечётную степень.
+
+### Формальные определения
+
+| Понятие | Формально |
+|---------|-----------|
+| **Граф** | G = (V, E), где V — множество вершин, E ⊆ V×V — множество рёбер |
+| **Путь** | Последовательность вершин v₁, v₂, ..., vₖ, где (vᵢ, vᵢ₊₁) ∈ E |
+| **Кратчайший путь** | Путь P из u в v, минимизирующий Σw(eᵢ) для взвешенного графа |
+| **Связная компонента** | Максимальное подмножество S ⊆ V, где ∀u,v ∈ S ∃ путь из u в v |
+| **SCC** | В ориентированном графе: ∀u,v ∈ S ∃ путь u→v **и** v→u |
+| **DAG** | Directed Acyclic Graph — ориентированный граф без циклов |
+
+### Корректность BFS: доказательство кратчайшего пути
+
+> **Теорема:** Для невзвешенного графа BFS находит кратчайший путь от источника s до каждой достижимой вершины v.
+
+**Доказательство** (индукция по расстоянию d(s,v)):
+- **База:** d(s,s) = 0 — тривиально.
+- **Шаг:** Пусть d(s,v) = k. Тогда ∃ u: d(s,u) = k-1 и (u,v) ∈ E. По предположению индукции, BFS нашёл u на уровне k-1. Поскольку BFS обрабатывает все вершины уровня k-1 до уровня k, v будет обнаружена на уровне k. ∎
+
+Ключевое свойство: BFS обрабатывает вершины **в порядке неубывания расстояния** от источника (гарантировано FIFO-очередью).
+
+### Корректность Dijkstra: жадный выбор
+
+> **Теорема (Dijkstra, 1959):** Для графа с **неотрицательными** весами алгоритм Dijkstra находит кратчайшие пути от источника ко всем вершинам.
+
+**Инвариант:** При извлечении вершины u из приоритетной очереди, dist[u] = δ(s,u) (истинное кратчайшее расстояние).
+
+**Почему не работает с отрицательными весами:** Greedy choice property нарушается — извлечённая вершина может позже получить лучший путь через отрицательное ребро. Для отрицательных весов нужен **Bellman-Ford** (1958), O(V·E).
+
+### Историческая атрибуция алгоритмов
+
+| Алгоритм | Автор | Год | Сложность |
+|----------|-------|-----|-----------|
+| **BFS** | Edward Moore | 1959 | O(V + E) |
+| **DFS** | Charles Pierre Trémaux | ~1882 (лабиринт); формализация — Tarjan, 1972 | O(V + E) |
+| **Dijkstra** | Edsger Dijkstra | 1959 | O((V+E) log V) с binary heap |
+| **Bellman-Ford** | Bellman (1958), Ford (1956) | 1956-1958 | O(V·E) |
+| **Floyd-Warshall** | Floyd (1962), Warshall (1962) | 1962 | O(V³) |
+| **Topological Sort** | Kahn (1962) | 1962 | O(V + E) |
+| **SCC (Tarjan)** | Robert Tarjan | 1972 | O(V + E) |
+| **SCC (Kosaraju)** | Rao Kosaraju | 1978 | O(V + E) |
+
+### Связи
+
+- [[big-o-complexity]] — анализ сложности графовых алгоритмов
+- [[heaps-priority-queues]] — приоритетная очередь для Dijkstra
+- [[greedy-algorithms]] — Dijkstra и MST как жадные алгоритмы
+- [[dynamic-programming]] — Bellman-Ford и Floyd-Warshall как DP на графах
+
+---
+
 ## Часть 1: Интуиция без кода
 
 ### Аналогия 1: BFS — волна на воде
@@ -1494,18 +1551,21 @@ fun isBipartite(graph: Map<Int, List<Int>>, n: Int): Boolean {
 
 ## Источники
 
-### Книги
-- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms (CLRS)."** — каноническое изложение BFS, DFS, топологической сортировки, Dijkstra, Bellman-Ford и Floyd-Warshall с формальными доказательствами корректности и анализом сложности
-- **Sedgewick & Wayne (2011). "Algorithms, 4th Edition."** — графовые алгоритмы с отличными визуализациями; сопровождающий сайт algs4.cs.princeton.edu содержит интерактивные демонстрации BFS, DFS, Dijkstra и MST алгоритмов
-- **Even (2011). "Graph Algorithms, 2nd Edition."** — специализированная книга, целиком посвящённая алгоритмам на графах; покрывает планарность, потоки в сетях, matchings и NP-полные задачи на графах
+### Теоретические основы
 
-### Онлайн-ресурсы
+- **Euler, L. (1736). "Solutio problematis ad geometriam situs pertinentis."** — Задача о Кёнигсбергских мостах. Основание теории графов
+- **Dijkstra, E.W. (1959). "A Note on Two Problems in Connexion with Graphs." Numerische Mathematik.** — Оригинальная статья с алгоритмом кратчайших путей
+- **Tarjan, R.E. (1972). "Depth-First Search and Linear Graph Algorithms." SIAM Journal on Computing.** — Формализация DFS, алгоритм SCC, lowlink
+- **Kahn, A.B. (1962). "Topological Sorting of Large Networks." CACM.** — Алгоритм топологической сортировки через in-degree
+- **Bellman, R. (1958). "On a Routing Problem." Quarterly of Applied Mathematics.** — Bellman-Ford для графов с отрицательными весами
+
+### Книги и практические руководства
+
+- **Cormen, Leiserson, Rivest & Stein (2009). "Introduction to Algorithms (CLRS)."** — каноническое изложение с формальными доказательствами
+- **Sedgewick & Wayne (2011). "Algorithms, 4th Edition."** — графовые алгоритмы с визуализациями
+- **Even (2011). "Graph Algorithms, 2nd Edition."** — специализированная книга по графовым алгоритмам
 - [Tech Interview Handbook - Graph](https://www.techinterviewhandbook.org/algorithms/graph/) — cheatsheet
-- [GeeksforGeeks - BFS](https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/) — tutorial
 - [Wikipedia - Dijkstra](https://en.wikipedia.org/wiki/Dijkstra's_algorithm) — proof
-- [CP-Algorithms - Cycle Detection](https://cp-algorithms.com/graph/finding-cycle.html) — implementation
-- [USACO Guide - Toposort](https://usaco.guide/gold/toposort) — competitive
-- [Research: Graph Algorithms](../docs/research/2025-12-29-graph-algorithms.md) — полное исследование
 
 ---
 

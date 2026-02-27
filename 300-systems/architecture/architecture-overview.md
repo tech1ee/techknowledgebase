@@ -37,7 +37,48 @@ next_review:
 
 ---
 
-## Быстрая навигация
+## Теоретические основы
+
+> **Архитектура программного обеспечения** — набор структур, необходимых для рассуждения о системе, каждая из которых включает элементы, отношения между ними и свойства тех и других (Bass, Clements & Kazman, 2012).
+
+### Формальные определения
+
+| Определение | Автор | Суть |
+|-------------|-------|------|
+| «Высокоуровневые структуры системы, дисциплина создания этих структур и документация» | IEEE 1471 / ISO 42010 | Стандартное определение |
+| «Решения, которые вы хотели бы принять правильно на ранней стадии» | Ralph Johnson | Прагматичное определение |
+| «Архитектура — это про significant decisions, где significance измеряется стоимостью изменения» | Grady Booch | Экономическое определение |
+| «Набор архитектурных решений (ADR)» | Michael Nygard | Решение как единица архитектуры |
+
+### Качественные атрибуты (Quality Attributes)
+
+Архитектура определяется не функциональными требованиями, а **качественными атрибутами** (Bass et al.):
+
+| Атрибут | Определение | Метрика |
+|---------|-------------|---------|
+| **Availability** | Готовность к выполнению задачи | % uptime, MTBF/MTTR |
+| **Scalability** | Способность обрабатывать рост нагрузки | Throughput при N× нагрузке |
+| **Performance** | Время отклика на событие | Latency P50/P99 |
+| **Modifiability** | Стоимость изменения | Время + стоимость change request |
+| **Security** | Защита от несанкционированного доступа | STRIDE threats mitigated |
+| **Testability** | Лёгкость обнаружения дефектов | Code coverage, fault injection |
+
+### Фундаментальные trade-offs
+
+Архитектура — это всегда компромисс. Ключевые оси:
+
+```
+Consistency ◄──────────────► Availability    (CAP theorem, Brewer 2000)
+Simplicity  ◄──────────────► Flexibility     (YAGNI vs extensibility)
+Performance ◄──────────────► Maintainability (оптимизация vs читаемость)
+Coupling    ◄──────────────► Autonomy        (монолит vs микросервисы)
+```
+
+> **См. также**: [[microservices-vs-monolith]] — главный архитектурный выбор, [[event-driven-architecture]] — событийная архитектура, [[dependency-injection-fundamentals]] — управление зависимостями
+
+---
+
+
 
 | Вопрос | Куда идти |
 |--------|-----------|
@@ -327,6 +368,13 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+- **Bass L., Clements P., Kazman R. (2012). Software Architecture in Practice. 3rd ed. Addison-Wesley.** — формальное определение архитектуры, quality attributes, ADD method
+- **ISO/IEC/IEEE 42010:2011. Systems and Software Engineering — Architecture Description.** — международный стандарт описания архитектуры
+- **Brewer E. (2000). Towards Robust Distributed Systems. PODC Keynote.** — CAP theorem: невозможность одновременной гарантии Consistency, Availability, Partition tolerance
+- **Conway M. (1968). How Do Committees Invent? Datamation.** — Conway's Law: структура системы повторяет структуру организации
+
+### Практические руководства
 - "Designing Data-Intensive Applications" by Martin Kleppmann
 - "Building Microservices" by Sam Newman
 - "Software Architecture: The Hard Parts" by Neal Ford

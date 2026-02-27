@@ -37,6 +37,68 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальные определения
+
+> **Аутентификация (Authentication, AuthN)** — процесс верификации заявленной идентичности сущности. Формально: функция `authenticate: Credentials → Identity | ⊥`, где `⊥` означает отказ.
+
+> **Авторизация (Authorization, AuthZ)** — процесс определения прав доступа аутентифицированной сущности к ресурсу. Формально: функция `authorize: (Identity, Resource, Action) → {permit, deny}`.
+
+Это разделение восходит к **Lampson** (1971), который формализовал **Access Control Matrix** — матрицу `M[s,o]`, где строки — субъекты (subjects), столбцы — объекты (objects), ячейки — множества разрешений.
+
+### Теоретические корни
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Access Control Matrix** | Lampson, B. | 1971 | Формальная модель: subjects × objects → permissions |
+| **Bell-LaPadula Model** | Bell & LaPadula | 1973 | Mandatory Access Control (MAC): "no read up, no write down" |
+| **RBAC** | Ferraiolo & Kuhn | 1992 | Role-Based Access Control: users → roles → permissions |
+| **ABAC** | NIST SP 800-162 | 2014 | Attribute-Based: политики на основе атрибутов субъекта, объекта, среды |
+| **PBAC/Policy-as-Code** | Zanzibar (Google) | 2019 | Relationship-based: `user:alice` is `viewer` of `doc:readme` |
+
+### Модели контроля доступа: формальная иерархия
+
+```
+DAC (Discretionary)     — владелец решает кто имеет доступ (Unix файлы)
+ └── ACL               — список (subject, permission) для каждого объекта
+ └── Capabilities      — токен, дающий право на конкретный объект
+
+MAC (Mandatory)         — система решает на основе уровней допуска
+ └── Bell-LaPadula     — конфиденциальность: no read up, no write down
+ └── Biba              — целостность: no read down, no write up
+
+RBAC                    — доступ через роли
+ └── RBAC₀             — базовый: users → roles → permissions
+ └── RBAC₁             — + иерархия ролей
+ └── RBAC₂             — + constraints (separation of duties)
+ └── RBAC₃             — RBAC₁ + RBAC₂
+
+ABAC                    — доступ через атрибуты и политики
+ └── ReBAC             — доступ через отношения (Google Zanzibar)
+```
+
+### Принцип наименьших привилегий (Saltzer & Schroeder, 1975)
+
+> **Principle of Least Privilege:** каждый субъект должен обладать минимальным набором прав, необходимым для выполнения своей задачи.
+
+Saltzer & Schroeder (1975) сформулировали 8 принципов защиты, из которых 3 напрямую относятся к AuthN/AuthZ:
+1. **Least Privilege** — минимальные права
+2. **Complete Mediation** — проверять каждый доступ (не кэшировать решения)
+3. **Fail-Safe Defaults** — по умолчанию запрещено
+
+### Формальная модель токенов
+
+| Тип токена | Модель | Верификация | Свойство |
+|------------|--------|-------------|----------|
+| **Opaque (session)** | Reference token: `token → server_lookup → state` | Требует обращения к хранилищу | Отзываемость (revocable) |
+| **JWT** | Value token: `{header}.{payload}.{signature}` | Локальная проверка подписи | Самодостаточность (self-contained) |
+| **Macaroon** | Chained HMAC: каждый caveat добавляет ограничение | Цепочка HMAC-верификаций | Атtenuation (делегирование с ограничением) |
+
+> **Компромисс:** Opaque tokens отзываемы мгновенно, но требуют централизованного хранилища. JWT верифицируемы локально, но не отзываемы до истечения `exp`. Это фундаментальный trade-off между **consistency** и **availability** в контексте аутентификации.
+
+---
+
 ## Краткая история web-аутентификации
 
 ```
@@ -254,11 +316,19 @@ OAuth:
 
 ## Источники
 
-- Richer, J. & Sanso, A. (2017). OAuth 2 in Action (Manning) -- практическое руководство по OAuth 2.0
-- Madden, N. (2020). API Security in Action (Manning) -- безопасность API от аутентификации до Zero Trust
-- OWASP Authentication Cheat Sheet -- проверенные рекомендации
-- NIST SP 800-63-4 (2025) -- стандарт digital identity и authentication
-- RFC 6749 (OAuth 2.0), RFC 7519 (JWT), RFC 7636 (PKCE) -- ключевые спецификации
+### Теоретические основы
+- Lampson, B. (1971). "Protection" — 5th Princeton Symposium on Information Sciences; Access Control Matrix
+- Bell, D.E. & LaPadula, L. (1973). "Secure Computer Systems: Mathematical Foundations" — MITRE; MAC model
+- Saltzer, J.H. & Schroeder, M.D. (1975). "The Protection of Information in Computer Systems" — Proceedings of the IEEE; 8 принципов защиты
+- Ferraiolo, D. & Kuhn, R. (1992). "Role-Based Access Controls" — 15th NIST-NSA Conference; RBAC формализация
+- Zanzibar (Google, 2019). "Zanzibar: Google's Consistent, Global Authorization System" — USENIX ATC; ReBAC
+
+### Практические руководства
+- Richer, J. & Sanso, A. (2017). *OAuth 2 in Action* (Manning) — практическое руководство по OAuth 2.0
+- Madden, N. (2020). *API Security in Action* (Manning) — безопасность API от аутентификации до Zero Trust
+- OWASP Authentication Cheat Sheet — проверенные рекомендации
+- NIST SP 800-63-4 (2025) — стандарт digital identity и authentication
+- RFC 6749 (OAuth 2.0), RFC 7519 (JWT), RFC 7636 (PKCE) — ключевые спецификации
 
 ---
 

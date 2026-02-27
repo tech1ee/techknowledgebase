@@ -28,6 +28,44 @@ prerequisites:
 
 iOS networking построен вокруг URLSession - мощного фреймворка для HTTP-запросов. Современный подход использует async/await (iOS 15+) с Codable протоколами для type-safe сериализации. URLSession предоставляет различные конфигурации (shared, default, ephemeral, background) для разных сценариев, от простых запросов до фоновых загрузок файлов.
 
+## Теоретические основы
+
+> **Сетевой стек** (network stack) — многоуровневая архитектура обработки сетевых запросов, где каждый уровень инкапсулирует определённую ответственность. URLSession реализует прикладной уровень модели OSI, абстрагируя TCP/TLS-соединения через конфигурируемые сессии.
+
+### Академический контекст
+
+Networking в iOS опирается на фундаментальные концепции сетевых протоколов и паттерны проектирования:
+
+| Концепция | Автор / год | Суть | Проявление в iOS |
+|-----------|-------------|------|-------------------|
+| Layered Architecture | Dijkstra, 1968 | Разделение на независимые уровни | URLSession → Security (TLS) → TCP → IP |
+| REST | Fielding, 2000 (PhD thesis) | Stateless, resource-oriented architecture | URLRequest с HTTP-методами, URL-ресурсы |
+| Serialization | ASN.1 (ITU-T, 1984) | Преобразование структур в поток байтов | Codable (Encodable + Decodable) |
+| Connection Pooling | HTTP/1.1 (RFC 2616, 1999) | Переиспользование TCP-соединений | URLSession автоматически управляет пулом |
+| Certificate Pinning | Moxie Marlinspike, 2011 | Привязка к конкретному сертификату | URLAuthenticationChallenge + ServerTrust |
+
+### Эволюция сетевого API в iOS
+
+| Год | API | Парадигма | Ключевое улучшение |
+|-----|-----|-----------|-------------------|
+| 2008 | NSURLConnection | Delegate-based, синхронный | Первый сетевой API в iPhone OS |
+| 2013 | NSURLSession (iOS 7) | Task-based, конфигурации | Background downloads, ephemeral sessions |
+| 2016 | URLSession (Swift 3) | Swift-native naming | Bridging с Objective-C API |
+| 2021 | async/await (iOS 15) | Structured concurrency | Линейный асинхронный код, отмена через Task |
+| 2023 | Observation + async | Reactive networking | Интеграция с SwiftUI через @Observable |
+
+> **REST (Representational State Transfer)**: Рой Филдинг определил REST в своей докторской диссертации (2000) как архитектурный стиль с 6 ограничениями: client-server, stateless, cacheable, uniform interface, layered system, code-on-demand (опционально). URLSession полностью поддерживает RESTful взаимодействие через HTTP-методы, заголовки и URL-ресурсы.
+
+### Связь с CS-фундаментом
+
+- [[networking-fundamentals]] — модель OSI, TCP/IP, HTTP протоколы
+- [[ios-async-await]] — async/await для линейного сетевого кода
+- [[security-fundamentals]] — TLS, certificate pinning, ATS
+- [[ios-repository-pattern]] — абстракция сетевого слоя через Repository
+- [[ios-combine]] — реактивные сетевые запросы через Publisher
+
+---
+
 ## Аналогии
 
 **URLSession как почтовое отделение**: URLSessionConfiguration определяет правила работы (часы работы, политики доставки), URLRequest - это конверт с адресом и содержимым, а URLSessionTask - почтальон, доставляющий письмо. Data task доставляет короткие сообщения в память, download task - большие посылки на диск, upload task - отправка тяжелых грузов.
@@ -1798,10 +1836,15 @@ actor TokenManager {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает URLSession API, конфигурации сессий, Codable протоколы и async/await для networking; отличная отправная точка для систематизации знаний.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры построения сетевого слоя с URLSession, обработки ошибок и парсинга JSON; рекомендуется для hands-on изучения.
-- Eidhof C. et al. (2019). *Advanced Swift.* — глубокое погружение в Codable, generics и протоколы, которые являются основой для type-safe networking layer.
+### Теоретические основы
+- Fielding R. (2000). *Architectural Styles and the Design of Network-based Software Architectures.* PhD thesis, UC Irvine. — определение REST, 6 архитектурных ограничений, формализация HTTP как application protocol
+- Berners-Lee T., Fielding R., Masinter L. (2005). *RFC 3986: Uniform Resource Identifier.* — формальная грамматика URI, основа URLComponents в iOS
+- Rescorla E. (2018). *RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3.* — криптографические основы безопасного сетевого взаимодействия, реализованные в ATS
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — подробно описывает URLSession API, конфигурации сессий, Codable протоколы и async/await для networking
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — практические примеры построения сетевого слоя с URLSession, обработки ошибок и парсинга JSON
+- Eidhof C. et al. (2019). *Advanced Swift.* — глубокое погружение в Codable, generics и протоколы, которые являются основой для type-safe networking layer
 
 ### Документация
 - [Apple URLSession Documentation](https://developer.apple.com/documentation/foundation/urlsession)

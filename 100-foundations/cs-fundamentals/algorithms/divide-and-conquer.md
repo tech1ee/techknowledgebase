@@ -33,6 +33,53 @@ Divide and Conquer — парадигма: **разбить** задачу на 
 
 ---
 
+## Теоретические основы: формальный базис Divide and Conquer
+
+### Формальная структура D&C
+
+> **Определение:** Divide and Conquer — парадигма алгоритмов, состоящая из трёх шагов:
+> 1. **Divide:** Разбить задачу размера n на a подзадач размера n/b
+> 2. **Conquer:** Решить подзадачи рекурсивно (или напрямую при базовом случае)
+> 3. **Combine:** Объединить решения подзадач за f(n)
+
+### Master Theorem: анализ сложности D&C
+
+> **Теорема (Bentley, Haken, Saxe, 1980):** Для рекурренции T(n) = a·T(n/b) + Θ(nᵈ):
+
+| Случай | Условие | Результат | Пример |
+|--------|---------|-----------|--------|
+| **1** | d < log_b(a) | T(n) = Θ(n^(log_b a)) | Karatsuba: a=3, b=2, d=1 → O(n^1.58) |
+| **2** | d = log_b(a) | T(n) = Θ(nᵈ · log n) | MergeSort: a=2, b=2, d=1 → O(n log n) |
+| **3** | d > log_b(a) | T(n) = Θ(nᵈ) | Binary Search: a=1, b=2, d=0 → O(log n) |
+
+**Интуиция:** Сравниваем "работу на корневом уровне" (nᵈ) с "числом листьев" (n^(log_b a)). Кто доминирует — тот определяет сложность.
+
+### Каноническое трио D&C алгоритмов
+
+| Алгоритм | a | b | f(n) | Сложность |
+|----------|---|---|------|-----------|
+| **Binary Search** | 1 | 2 | O(1) | O(log n) |
+| **MergeSort** | 2 | 2 | O(n) | O(n log n) |
+| **Karatsuba Multiply** | 3 | 2 | O(n) | O(n^1.585) |
+| **Strassen Matrix Mult.** | 7 | 2 | O(n²) | O(n^2.807) |
+
+### D&C vs DP: формальное различие
+
+| Критерий | Divide & Conquer | Dynamic Programming |
+|----------|-----------------|---------------------|
+| **Подзадачи** | Независимые, не пересекаются | Перекрывающиеся |
+| **Решение** | Рекурсия без кэширования | Рекурсия + мемоизация или таблица |
+| **Примеры** | MergeSort, QuickSort, Binary Search | Fibonacci, Knapsack, LCS |
+| **Структура** | Дерево рекурсии — каждый лист уникален | DAG подзадач — подзадачи повторяются |
+
+### Связи
+
+- [[sorting-algorithms]] — MergeSort, QuickSort как D&C
+- [[recursion-fundamentals]] — рекурсия как механизм D&C
+- [[dynamic-programming]] — DP = D&C + мемоизация при overlapping subproblems
+
+---
+
 ## Часть 1: Интуиция без кода
 
 ### Аналогия 1: Турнир на выбывание
@@ -1203,12 +1250,19 @@ fun countInversions(arr: IntArray, l: Int, r: Int): Long {
 
 ## Источники
 
+### Теоретические основы
+
+- **Bentley, J.L., Haken, D., Saxe, J.B. (1980). "A General Method for Solving Divide-and-Conquer Recurrences." ACM SIGACT News.** — Master Theorem: формальный инструмент анализа D&C рекуррений
+- **Karatsuba, A. & Ofman, Y. (1962). "Multiplication of Multidigit Numbers on Automata." Soviet Physics Doklady.** — Первый subquadratic алгоритм умножения O(n^1.585), опровергший гипотезу Колмогорова об Ω(n²)
+- **Strassen, V. (1969). "Gaussian Elimination is not Optimal." Numerische Mathematik.** — Первый subcubic алгоритм умножения матриц O(n^2.807)
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
-| 1 | [CLRS] Introduction to Algorithms | Book | Theory |
-| 2 | [CP-Algorithms: D&C](https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html) | Reference | D&C DP |
-| 3 | [MIT OCW 6.006](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/) | Course | Master Theorem |
-| 4 | [Karatsuba Algorithm](https://en.wikipedia.org/wiki/Karatsuba_algorithm) | Wiki | Multiplication |
+| 1 | **Cormen et al. (2009). CLRS, Chapter 4.** | Book | Master Theorem, D&C paradigm |
+| 2 | [MIT OCW 6.006](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/) | Course | Master Theorem |
+| 3 | [CP-Algorithms: D&C](https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html) | Reference | D&C DP |
 
 ---
 

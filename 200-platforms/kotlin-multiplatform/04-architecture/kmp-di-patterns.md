@@ -68,6 +68,44 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Dependency Injection (DI)** — паттерн проектирования, в котором зависимости объекта предоставляются извне (инжектируются), а не создаются самим объектом. Формализован Мартином Фаулером как частный случай Inversion of Control (Fowler, 2004, «Inversion of Control Containers and the Dependency Injection pattern»).
+
+### Теоретическая классификация DI
+
+| Тип DI | Механизм | Время разрешения | Пример в KMP |
+|--------|----------|-----------------|-------------|
+| Constructor injection | Зависимости в конструкторе | Compile-time | `class Repo(val api: Api)` |
+| Interface injection | Setter через интерфейс | Runtime | `inject<Api>()` (Koin) |
+| Service locator | Глобальный реестр | Runtime | `KoinComponent.get()` |
+
+### DI в контексте KMP: уникальные вызовы
+
+В кросс-платформенном контексте DI решает дополнительную задачу — **платформенную инъекцию**: common-код запрашивает абстракцию, а платформенный код предоставляет реализацию:
+
+```
+commonMain:  interface HttpEngine → expect val platformModule
+androidMain: actual val platformModule → OkHttp engine
+iosMain:     actual val platformModule → Darwin engine
+```
+
+Это расширение классического DI **платформенным измерением** — аналог «multi-tenant injection» в enterprise-системах (Fowler, 2014).
+
+### Compile-time vs Runtime DI
+
+| Характеристика | Compile-time (kotlin-inject) | Runtime (Koin) |
+|---------------|-------|------|
+| Обнаружение ошибок | При компиляции | При запуске |
+| Performance | Нет reflection overhead | Минимальный overhead |
+| Code generation | KSP (Kotlin Symbol Processing) | Нет codegen |
+| Boilerplate | Больше (аннотации, компоненты) | Меньше (DSL) |
+
+> **Академические источники:** Fowler M. (2004). *Inversion of Control Containers and the DI Pattern.* martinfowler.com. Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley (Abstract Factory, Strategy).
+
+
 ## Почему Dependency Injection критичен для KMP?
 
 ### Проблема: Platform Dependencies Everywhere
@@ -1031,9 +1069,16 @@ Manual DI + interfaces + expect/actual — полноценное решение
 
 ## Источники и дальнейшее чтение
 
-1. **Martin R. (2017).** *Clean Architecture.* — Принцип Dependency Inversion (буква "D" в SOLID) является теоретической основой всех DI-паттернов. Книга объясняет, почему зависимости должны указывать в сторону абстракций и как это реализовать через инверсию контроля.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по организации зависимостей в Kotlin: использование интерфейсов для абстракций, companion object factories, и паттерны, дружественные к DI-фреймворкам в мультиплатформенном контексте.
-3. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Понимание Kotlin-механизмов (делегирование, reified generics, extension functions) необходимо для работы с DI-фреймворками: Koin использует DSL builders, kotlin-inject — KSP annotation processing, Manual DI — delegation и lazy initialization.
+### Теоретические основы
+
+- **Fowler M. (2004).** *Inversion of Control Containers and the Dependency Injection Pattern.* — Формальное определение DI и три формы injection.
+- **Martin R. (2003).** *Agile Software Development: Principles, Patterns, and Practices.* — Dependency Inversion Principle как теоретическая основа DI.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin-конструкции для DI: delegation, reified generics.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практические паттерны DI в Kotlin.
+- [Koin Documentation](https://insert-koin.io/) — Официальная документация Koin для KMP.
 
 ---
 

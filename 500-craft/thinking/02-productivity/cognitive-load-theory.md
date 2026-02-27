@@ -34,6 +34,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Cognitive Load Theory (CLT)** — теория обучения, основанная на ограничениях рабочей памяти: эффективное обучение требует минимизации ненужной (extraneous) нагрузки и максимизации полезной (germane) нагрузки при учёте неизбежной (intrinsic) сложности материала (Sweller, 1988).
+
+CLT — одна из наиболее влиятельных теорий instructional design, выросшая из модели рабочей памяти Baddeley:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Модель рабочей памяти | Baddeley & Hitch | 1974 | Рабочая память состоит из компонентов с ограниченной ёмкостью |
+| Магическое число 7±2 | Miller | 1956 | Ограничение на количество одновременно обрабатываемых элементов |
+| Cognitive Load Theory | Sweller | 1988 | Три типа нагрузки: intrinsic, extraneous, germane |
+| Element interactivity | Sweller & Chandler | 1994 | Intrinsic load определяется взаимодействием элементов, а не их количеством |
+| Multimedia Learning | Mayer | 2001, 2009 | Принципы дизайна обучения на основе CLT (redundancy, split attention, modality) |
+| Schema automation | Sweller | 2010 | Автоматизация схем снижает нагрузку на рабочую память |
+
+> **Sweller (1988):** «Instructional design should be based on the assumption that working memory has a limited capacity and that instructional materials should be designed so as to reduce unnecessary cognitive load.»
+
+Три типа когнитивной нагрузки:
+- **Intrinsic load** — определяется сложностью самого материала (element interactivity). Нельзя убрать, но можно управлять через последовательность и декомпозицию.
+- **Extraneous load** — вызвана плохим дизайном подачи. Можно и нужно устранять (например: плохие переменные, отсутствие комментариев, запутанная документация).
+- **Germane load** — когнитивные усилия на формирование schemas (ментальных моделей). Полезная нагрузка, которую нужно максимизировать.
+
+Для разработчиков CLT объясняет, почему clean code ([[clean-code]]) — не эстетика, а когнитивная необходимость: хорошее именование, малые функции, отсутствие «магических чисел» снижают extraneous load, высвобождая рабочую память для понимания бизнес-логики (intrinsic load).
+
+---
+
 ## Почему это важно для разработчиков
 
 Каждый разработчик ежедневно сталкивается с когнитивной нагрузкой:
@@ -1153,12 +1179,19 @@ def get_active_items(data, threshold, excluded_keys, limit=None):
 
 ## Источники
 
-- [eLearning Industry: Cognitive Load Theory](https://elearningindustry.com/cognitive-load-theory-and-instructional-design) — проверено 2025-12-19
-- [ResearchGate: Cognitive Load Theory in Educational Practice](https://www.researchgate.net/publication/338908733_Cognitive_Load_Theory_Applications_for_Learning) — проверено 2025-12-19
+### Теоретические основы
+- Sweller, J. «Cognitive Load During Problem Solving: Effects on Learning». Cognitive Science, 1988
+- Sweller, J. & Chandler, P. «Why Some Material Is Difficult to Learn». Cognition and Instruction, 1994
+- Baddeley, A. D. & Hitch, G. «Working Memory». Psychology of Learning and Motivation, 1974
+- Miller, G. A. «The Magical Number Seven, Plus or Minus Two». Psychological Review, 1956
+- Mayer, R. E. *Multimedia Learning*. Cambridge University Press, 2009
 - [SAGE Journals: Cognitive Load Theory Review](https://journals.sagepub.com/doi/10.1177/1529100612453266) — проверено 2025-12-19
 - [Educational Psychology Review: Sweller's CLT](https://link.springer.com/article/10.1007/s10648-019-09465-5) — проверено 2025-12-19
+- [ResearchGate: Cognitive Load Theory in Educational Practice](https://www.researchgate.net/publication/338908733_Cognitive_Load_Theory_Applications_for_Learning) — проверено 2025-12-19
+
+### Практические руководства
+- [eLearning Industry: Cognitive Load Theory](https://elearningindustry.com/cognitive-load-theory-and-instructional-design) — проверено 2025-12-19
 - [Nielsen Norman Group: Information Scent](https://www.nngroup.com/articles/information-scent/) — проверено 2025-12-19
-- [Mayer, R. E. (2009). Multimedia Learning](https://www.cambridge.org/core/books/multimedia-learning/A930E6B3F4003B4E2F8FB6DD9E3E5AFA) — Cambridge University Press
 
 ---
 

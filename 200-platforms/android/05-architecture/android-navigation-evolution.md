@@ -42,6 +42,26 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Навигационная модель** — формальное описание пространства состояний UI-приложения и допустимых переходов между ними. В теории автоматов это **граф переходов** конечного автомата (Hopcroft/Ullman, 1979), где состояния — экраны, а переходы — навигационные действия.
+
+Эволюция навигации в Android отражает общий тренд от **императивного** управления (явный вызов `startActivity()`, `FragmentTransaction`) к **декларативному** описанию (Navigation Graph, Type-safe Routes). Это параллель с эволюцией UI: от `findViewById` к Compose.
+
+| Поколение | Период | Модель | Проблема |
+|-----------|--------|--------|----------|
+| I | 2008-2014 | Activity + Intent | Нет back stack API, тяжёлый IPC |
+| II | 2014-2018 | Fragment + Transaction | `IllegalStateException`, ручной back stack |
+| III | 2018-2023 | Navigation Component (XML) | Type-safety через codegen (Safe Args) |
+| IV | 2023-2025 | Type-safe Navigation (Kotlin) | Нативная type-safety через Serialization |
+| V | 2025+ | Navigation 3 (Compose-native) | Приложение контролирует back stack напрямую |
+
+> **Routing** — задача сопоставления идентификатора (URI, route string, type) с обработчиком. В веб-разработке это решено давно (CGI → Servlet → REST frameworks). Android прошёл аналогичный путь: от `Intent` action strings → `Fragment` tags → `NavGraph` destinations → Kotlin `@Serializable` routes.
+
+Ключевой инсайт эволюции: каждое поколение **повышает уровень абстракции** и **переносит проверки из runtime в compile-time** — от string-based Intent extras (crash в runtime) к type-safe Kotlin Serialization routes (ошибка компиляции).
+
+---
+
 ## Терминология
 
 | Термин | Что это | Аналогия |
@@ -583,9 +603,16 @@ Fragments остаются основой Navigation Component и использ
 
 ## Источники и дальнейшее чтение
 
-- Google (2024). *Navigation Component Documentation*. — официальное руководство по Navigation Component и Navigation 3 с примерами, migration guides и best practices. Первоисточник для всех API, описанных в этом обзоре.
-- Leiva, A. (2023). *Kotlin for Android Developers*. — практические примеры навигации в Kotlin, включая Safe Args, deep links и модульную навигацию. Полезен для понимания Kotlin-специфичных паттернов в навигации.
-- Google I/O (2024). *What's New in Navigation* (talk). — презентация Navigation 3 с объяснением design decisions: почему отказались от XML graph, зачем type-safe routes, как работает back stack ownership.
+### Теоретические основы
+
+- **Hopcroft J., Ullman J. (1979). Introduction to Automata Theory.** — Граф переходов, FSM для навигационной модели
+- **Knuth D. (1968). The Art of Computer Programming.** — Stack (LIFO) для back stack
+
+### Практические руководства
+
+- Google (2024). *Navigation Component Documentation*. — Navigation Component и Navigation 3
+- Google I/O (2024). *What's New in Navigation*. — Navigation 3, type-safe routes, back stack ownership
+- Leiva A. (2023). *Kotlin for Android Developers*. — Safe Args, deep links, модульная навигация
 
 ---
 

@@ -53,6 +53,33 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Standard Library Extension (kotlinx)** — набор официальных библиотек JetBrains, расширяющих стандартную библиотеку Kotlin мультиплатформенными реализациями распространённых задач: сериализация, дата/время, конкурентность, ввод-вывод (JetBrains, kotlinx Specification, 2020).
+
+### Таксономия kotlinx-библиотек
+
+| Библиотека | Домен | Теоретическая основа |
+|-----------|-------|---------------------|
+| kotlinx-serialization | Сериализация/десериализация | Теория формальных грамматик (JSON, Protobuf) |
+| kotlinx-coroutines | Конкурентность | Structured concurrency (Elizarov, 2018) |
+| kotlinx-datetime | Дата и время | ISO 8601, календарные системы |
+| kotlinx-io | Ввод-вывод | Buffer abstraction (okio model) |
+| kotlinx-atomicfu | Атомарные операции | Lock-free algorithms (Herlihy, 1991) |
+
+### Почему отдельные библиотеки, а не stdlib
+
+Kotlin stdlib содержит только **минимально необходимый** набор (Principle of Least Surprise). kotlinx-библиотеки вынесены отдельно по принципу **Separation of Concerns**:
+
+- **Независимые циклы релизов** — обновление сериализации не требует обновления компилятора
+- **Opt-in модель** — проект подключает только нужные зависимости
+- **Platform-specific optimization** — каждая библиотека оптимизирована для каждого target
+
+> **Связь с CS-фундаментом:** Сериализация — теория формальных грамматик и кодирований. Корутины — structured concurrency и cooperative scheduling. atomicfu — lock-free алгоритмы и модели памяти.
+
+
 ## Обзор kotlinx экосистемы
 
 ```
@@ -900,11 +927,16 @@ val meetingTime: Instant  // Однозначный момент в UTC
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Фундаментальное введение в Kotlin, включая работу с generics и annotations, которые лежат в основе @Serializable и compile-time code generation в kotlinx-serialization.
+### Теоретические основы
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Исчерпывающее руководство по корутинам, Flow, StateFlow и structured concurrency — всё, что составляет ядро kotlinx-coroutines и используется в каждом KMP-проекте для асинхронной работы.
+- **Parnas D. (1972).** *On the Criteria To Be Used in Decomposing Systems into Modules.* — Принцип разделения ответственности, реализованный в модульной структуре kotlinx-библиотек.
+- **Martin R. (2017).** *Clean Architecture.* — Single Responsibility Principle как основа отделения standard library от extensions.
 
-- **Moskala M. (2021).** *Effective Kotlin.* — Практические рекомендации по идиоматическому использованию Kotlin, включая best practices для работы с коллекциями, nullable типами и DSL-подобными API, что напрямую применимо к конфигурации Json {} и DateTimePeriod.
+### Практические руководства
+
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Полное руководство по kotlinx-coroutines.
+- **Moskala M. (2021).** *Effective Kotlin.* — Практическое использование kotlinx-библиотек.
+- [kotlinx-serialization Guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md) — Официальный гайд.
 
 ---
 

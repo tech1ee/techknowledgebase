@@ -37,6 +37,56 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Конфликт** — ситуация, в которой стороны воспринимают несовместимость своих целей, интересов или ценностей и действуют в соответствии с этим восприятием (Thomas, 1992). Важно: конфликт определяется *восприятием* несовместимости, а не её объективным наличием.
+
+### Thomas-Kilmann Conflict Mode Instrument (TKI, 1974)
+
+Kenneth Thomas и Ralph Kilmann разработали инструмент TKI на основе двух измерений поведения в конфликте:
+
+| Измерение | Описание | Полюса |
+|-----------|----------|--------|
+| **Assertiveness** | Степень стремления удовлетворить *свои* интересы | Высокая ↔ Низкая |
+| **Cooperativeness** | Степень стремления удовлетворить интересы *другого* | Высокая ↔ Низкая |
+
+Комбинация двух осей даёт пять стилей (modes):
+
+| Стиль | Assertiveness | Cooperativeness | Когда оптимален |
+|-------|--------------|-----------------|-----------------|
+| **Competing** | Высокая | Низкая | Emergency, принципиальный вопрос |
+| **Collaborating** | Высокая | Высокая | Важен и результат, и отношения |
+| **Compromising** | Средняя | Средняя | Равная сила сторон, временное решение |
+| **Avoiding** | Низкая | Низкая | Тривиальный вопрос, нужно остыть |
+| **Accommodating** | Низкая | Высокая | Вопрос важнее для другого, build goodwill |
+
+### Принципиальные переговоры (Fisher & Ury, 1981)
+
+Роджер Фишер и Уильям Юри из Harvard Negotiation Project в книге «Getting to Yes» (1981) предложили метод **principled negotiation**, ставший фундаментом конструктивного разрешения конфликтов:
+
+> «Разделяй людей и проблему. Фокусируйся на интересах, не на позициях. Генерируй варианты для взаимной выгоды. Настаивай на объективных критериях.» — Fisher & Ury, 1981
+
+Четыре принципа:
+1. **Separate the people from the problem** — атакуй проблему, не человека
+2. **Focus on interests, not positions** — позиция «microservices» vs. интерес «масштабируемость»
+3. **Generate options for mutual gain** — brainstorm перед выбором
+4. **Insist on objective criteria** — benchmarks, metrics, а не мнения
+
+### Конструктивный vs. деструктивный конфликт
+
+Morton Deutsch (1973, «The Resolution of Conflict») разделил конфликты на два типа:
+
+| Тип | Признаки | Результат |
+|-----|----------|-----------|
+| **Конструктивный** | Фокус на идеях, mutual respect, активное слушание | Лучшие решения, innovation, trust |
+| **Деструктивный** | Ad hominem, win-lose framing, escalation | Damaged relationships, poor decisions |
+
+В IT-контексте «здоровый конфликт» (Patrick Lencioni, «Five Dysfunctions of a Team», 2002) — необходимый компонент эффективных команд. Команды, избегающие конфликта, принимают худшие решения из-за [[cognitive-biases|groupthink]].
+
+---
+
 ## Зачем это нужно?
 
 ### Представьте ситуацию
@@ -804,6 +854,17 @@ Commit полностью. Если решение провалилось — co
 ---
 
 ## Источники
+
+### Теоретические основы
+
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Thomas K.W., Kilmann R.H. Thomas-Kilmann Conflict Mode Instrument. Xicom, 1974 | Инструмент | TKI: 5 стилей конфликтного поведения |
+| 2 | Fisher R., Ury W. Getting to Yes: Negotiating Agreement Without Giving In. Houghton Mifflin, 1981 | Монография | Principled negotiation, четыре принципа |
+| 3 | Johnson D.W., Johnson R.T. Conflict in the classroom: Controversy and learning // Review of Educational Research, 1979 | Статья | Constructive controversy theory |
+| 4 | Deutsch M. The Resolution of Conflict: Constructive and Destructive Processes. Yale University Press, 1973 | Монография | Функциональные vs. дисфункциональные конфликты |
+
+### Практические руководства
 
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|

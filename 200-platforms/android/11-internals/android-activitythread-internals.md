@@ -77,6 +77,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Event Loop** — паттерн обработки событий, где единственный поток циклически извлекает сообщения из очереди и вызывает соответствующие обработчики. Формализован в Schmidt, *Reactor: An Object Behavioral Pattern for Demultiplexing and Dispatching Handles for Synchronous Events* (1995). ActivityThread — это, по сути, event loop Android-приложения, построенный поверх [[android-handler-looper|Handler/Looper/MessageQueue]].
+
+### Паттерны проектирования в ActivityThread
+
+| Паттерн | Формальный источник | Как реализован в ActivityThread |
+|---------|--------------------|---------------------------------|
+| Command Pattern | GoF, *Design Patterns* (1994) | `ClientTransactionItem` — инкапсуляция lifecycle-операций как объектов: `LaunchActivityItem`, `ResumeActivityItem`, `DestroyActivityItem` |
+| Transaction Pattern | Gray & Reuter, *Transaction Processing* (1993) | `ClientTransaction` группирует несколько lifecycle-команд в одну транзакцию; `TransactionExecutor` гарантирует атомарное исполнение |
+| State Machine | Hopcroft & Ullman, *Introduction to Automata Theory* (1979) | `TransactionExecutor` реализует lifecycle как конечный автомат: невозможно перейти в ON_RESUME не пройдя ON_CREATE → ON_START |
+| Proxy/Stub | GoF + Birrell & Nelson (1984) | `ApplicationThread` — Binder stub в процессе приложения; AMS вызывает его через proxy |
+| Mediator | GoF, *Design Patterns* (1994) | `Instrumentation` — посредник между ActivityThread и Activity; перехватывает создание Activity, вызов lifecycle, старт других Activity |
+
+> **Конечный автомат жизненного цикла (Lifecycle State Machine)** — lifecycle Activity представляет собой классический детерминированный конечный автомат (DFA). Состояния: {PRE_ON_CREATE, ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY}. Переходы определены в `TransactionExecutor.cycleToPath()` — автомат всегда проходит промежуточные состояния последовательно.
+
+> **Instrumentation как Aspect-Oriented Programming** — класс `Instrumentation` реализует принцип AOP (Kiczales et al., 1997, *Aspect-Oriented Programming*): сквозная функциональность (мониторинг, тестирование) внедряется без модификации основного кода. Espresso и UI Automator используют `Instrumentation` для перехвата и контроля lifecycle.
+
+### Процесс как единица восстановления
+
+> **Process Death & Recovery** — модель Android, где система может убить любой процесс в любой момент, а framework восстанавливает его состояние. Это реализация концепции **Crash-Only Software** (Candea & Fox, 2003, *Crash-Only Software*, HotOS). AMS хранит `ActivityClientRecord` (включая `savedInstanceState`) для каждого Activity, позволяя воссоздать UI после пересоздания процесса.
+
+Связанные материалы: [[android-handler-looper]] (Event Loop), [[android-binder-ipc]] (транспорт команд от AMS), [[android-system-services]] (AMS как источник lifecycle-команд), [[android-activity-lifecycle]] (прикладной уровень lifecycle).
+
+---
+
 ## Зачем это нужно
 
 | Проблема | Без знания ActivityThread | С пониманием ActivityThread |
@@ -2291,6 +2317,17 @@ class MyProvider : ContentProvider() {
 ---
 
 ## Источники
+
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Schmidt D. *Reactor: An Object Behavioral Pattern* (1995) | Event Loop — основа ActivityThread |
+| GoF. *Design Patterns* (1994) | Command Pattern → ClientTransactionItem; Mediator → Instrumentation |
+| Gray J., Reuter A. *Transaction Processing: Concepts and Techniques* (1993) | Transaction Pattern → ClientTransaction |
+| Hopcroft J., Ullman J. *Introduction to Automata Theory* (1979) | State Machine → TransactionExecutor lifecycle FSM |
+| Birrell A., Nelson B. *Implementing Remote Procedure Calls* (1984) | Proxy/Stub → ApplicationThread Binder IPC |
+| Kiczales G. et al. *Aspect-Oriented Programming* (1997, ECOOP) | AOP → Instrumentation как cross-cutting concern |
+| Candea G., Fox A. *Crash-Only Software* (2003, HotOS) | Process Death & Recovery model |
 
 ### AOSP Source Code
 - [ActivityThread.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/app/ActivityThread.java) — главный исходный файл

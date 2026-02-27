@@ -55,6 +55,63 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис куч
+
+### Heap: изобретение и определение
+
+> **Определение (J.W.J. Williams, 1964):** **Бинарная куча** (binary heap) — полное бинарное дерево, удовлетворяющее **heap property**: для min-heap: ∀ узел v: key(parent(v)) ≤ key(v); для max-heap: key(parent(v)) ≥ key(v).
+
+Williams изобрёл heap одновременно с **HeapSort** — первым in-place O(n log n) алгоритмом сортировки (1964).
+
+### Priority Queue: ADT vs реализация
+
+> **Разделение понятий:** **Priority Queue** — это **абстрактный тип данных** (ADT), определяющий операции: insert(key, priority), extractMin(), peek(). **Heap** — одна из **реализаций** этого ADT.
+
+| Реализация PQ | insert | extractMin | peek | decreaseKey |
+|--------------|--------|------------|------|-------------|
+| **Unsorted array** | O(1) | O(n) | O(n) | O(1) |
+| **Sorted array** | O(n) | O(1) | O(1) | O(n) |
+| **Binary Heap** | O(log n) | O(log n) | O(1) | O(log n) |
+| **Fibonacci Heap** | O(1) amort. | O(log n) amort. | O(1) | **O(1) amort.** |
+| **Brodal Queue** | O(1) worst | O(log n) worst | O(1) | O(1) worst |
+
+### Build-Heap за O(n): доказательство
+
+> **Теорема (Floyd, 1964):** Построение кучи из неупорядоченного массива n элементов выполняется за O(n), а не за O(n log n).
+
+**Доказательство:**
+Алгоритм: sift-down от последнего внутреннего узла (⌊n/2⌋) до корня.
+
+Стоимость sift-down для узла на высоте h = O(h). Число узлов на высоте h ≤ ⌈n / 2^(h+1)⌉.
+
+```
+Суммарная стоимость = Σ (h=0 to log n) ⌈n/2^(h+1)⌉ · O(h)
+                    = O(n · Σ (h=0 to ∞) h/2^h)
+                    = O(n · 2)     ← сумма ряда h·x^h при x=1/2 = 2
+                    = O(n)
+```
+
+**Интуиция:** Большинство узлов — на нижних уровнях (мало работы), мало узлов — на верхних (много работы). Взвешенная сумма = O(n).
+
+### Fibonacci Heap (Fredman & Tarjan, 1987)
+
+> **Мотивация:** Binary heap имеет O(log n) для decreaseKey. В алгоритме Dijkstra с |V| extractMin и |E| decreaseKey это даёт O((V+E) log V). Fibonacci heap уменьшает decreaseKey до O(1) amortized → Dijkstra за O(V log V + E).
+
+Fibonacci heap — коллекция деревьев (лес), где:
+- insert и merge = O(1) (ленивое добавление)
+- extractMin = O(log n) amortized (консолидация деревьев)
+- decreaseKey = O(1) amortized (каскадное отсечение)
+
+На практике Fibonacci heap редко используется из-за больших констант и плохой cache locality. Но теоретически он **оптимален** для graph algorithms.
+
+### Связи
+
+- [[sorting-algorithms]] — HeapSort (Williams, 1964)
+- [[graph-algorithms]] — Dijkstra, Prim используют priority queue
+- [[trees-binary]] — heap как complete binary tree
+
+---
+
 ## Часть 1: Интуиция без кода (начни здесь!)
 
 > **Цель:** Понять ИДЕЮ кучи и приоритетной очереди до любого кода.
@@ -1595,20 +1652,19 @@ val efficientHeap = PriorityQueue(largeArray.toList())
 
 ## Источники
 
-1. [GeeksforGeeks — Binary Heap](https://www.geeksforgeeks.org/dsa/binary-heap/)
-2. [Tech Interview Handbook — Heap](https://www.techinterviewhandbook.org/algorithms/heap/)
-3. [Interview Cake — Heap](https://www.interviewcake.com/concept/java/heap)
-4. [Wikipedia — Binary Heap](https://en.wikipedia.org/wiki/Binary_heap)
-5. [BezKoder — Kotlin Priority Queue](https://www.bezkoder.com/kotlin-priority-queue/)
-6. [Kodeco — Priority Queues in Kotlin](https://www.kodeco.com/books/data-structures-algorithms-in-kotlin/v1.0/chapters/13-priority-queues)
-7. [LeetCode — Top K Discussion](https://leetcode.com/discuss/general-discussion/1088565/top-k-problems-sort-heap-and-quickselect)
-8. Research: [2025-12-29-heaps-priority-queues.md](../../docs/research/2025-12-29-heaps-priority-queues.md)
+### Теоретические основы
 
-### Книги
+- **Williams, J.W.J. (1964). "Algorithm 232: Heapsort." CACM, 7(6).** — Оригинальная статья: изобретение binary heap и HeapSort. Первый in-place O(n log n) алгоритм сортировки
+- **Floyd, R.W. (1964). "Algorithm 245: Treesort 3." CACM.** — Build-Heap за O(n): доказательство линейного времени построения кучи через bottom-up sift-down
+- **Fredman, M.L. & Tarjan, R.E. (1987). "Fibonacci Heaps and Their Uses in Improved Network Optimization Algorithms." JACM.** — Fibonacci heap: O(1) amortized decreaseKey, улучшение Dijkstra до O(V log V + E)
 
-- **Cormen, Leiserson, Rivest, Stein (2009). "Introduction to Algorithms" (CLRS).** — Глава 6 (Heapsort) — каноническое изложение бинарной кучи: build-heap за O(n) с полным математическим доказательством, heap sort, priority queue как ADT. Глава 19 — кучи Фибоначчи с амортизированным анализом. Это основной теоретический источник для понимания, почему heap работает.
-- **Sedgewick, Wayne (2011). "Algorithms."** — Раздел 2.4 (Priority Queues) — образцовая реализация на Java с пошаговыми визуализациями. Особенно ценны: swim/sink операции, indexed priority queue для Dijkstra, multiway heaps. Код из книги можно использовать как reference implementation.
-- **Skiena (2008). "The Algorithm Design Manual."** — Глава 3 и 4 — практический взгляд на priority queue: когда использовать heap vs BST vs sorted array, реальные применения в scheduling и graph algorithms. War Stories показывают, как выбор правильной структуры данных (часто — heap) решает реальные инженерные задачи.
+### Книги и практические руководства
+
+- **Cormen et al. (2009). CLRS.** — Глава 6 (Heapsort) + Глава 19 (Fibonacci heaps) с полными доказательствами
+- **Sedgewick & Wayne (2011). "Algorithms."** — Раздел 2.4: swim/sink, indexed PQ для Dijkstra
+- **Skiena (2008). "The Algorithm Design Manual."** — Когда использовать heap vs BST vs sorted array
+- [Tech Interview Handbook — Heap](https://www.techinterviewhandbook.org/algorithms/heap/)
+- [Wikipedia — Binary Heap](https://en.wikipedia.org/wiki/Binary_heap)
 
 ---
 

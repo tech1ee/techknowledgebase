@@ -162,6 +162,28 @@ Proposal  Annotations  APT/JSR-269  Release    1.0        (KAPT→KSP)
 
 ---
 
+## Теоретические основы
+
+Annotation Processing опирается на концепции **метапрограммирования** (metaprogramming) — написания программ, которые генерируют или трансформируют другие программы.
+
+> **Определение:** *Metaprogramming — техника программирования, при которой программа трактует другие программы (или саму себя) как данные, анализируя или генерируя код.*
+
+| Теоретическая концепция | Автор / Источник | Применение в JVM |
+|------------------------|-----------------|-----------------|
+| **Metaprogramming** | Lisp macros (1960-е) | Annotation processors генерируют Java-код на compile-time |
+| **Metadata facility** | JSR-175, Bloch (2002) | Стандартный синтаксис `@Annotation` для метаданных в Java 5 |
+| **Pluggable annotation processing** | JSR-269, Darcy (2006) | API для compile-time обработки аннотаций, интегрированный в javac |
+| **Staged computation** | MetaML, Taha (1999) | Разделение вычислений на этапы: compile-time vs runtime |
+| **Template metaprogramming** | C++ templates, Veldhuizen (1995) | Генерация кода на этапе компиляции → аналог APT в Java |
+
+> **Ключевой принцип (JSR-269):** *Annotation processors могут генерировать новые файлы, но не могут модифицировать существующий исходный код.* Это осознанное ограничение: модификация AST привела бы к хрупкости и непредсказуемости компиляции. Lombok нарушает этот принцип через internal API javac.
+
+Annotation Processing реализует паттерн **multi-round processing**: компилятор запускает процессоры в раундах (rounds), где каждый раунд может генерировать новые файлы с аннотациями, которые будут обработаны в следующем раунде. Процесс завершается, когда ни один процессор не сгенерировал новых файлов.
+
+Связанные темы: [[jvm-reflection-api]] (runtime-аннотации читаются через Reflection), [[jvm-bytecode-manipulation]] (альтернативный подход: модификация байткода вместо генерации исходников), [[jvm-service-loader-spi]] (регистрация процессоров через META-INF/services).
+
+---
+
 ## Проблема: Boilerplate и Type Safety
 
 ### Традиционный подход
@@ -1317,9 +1339,16 @@ public class OrderAuditLog {
 
 ## Источники и дальнейшее чтение
 
-- Bloch J. (2018). *Effective Java*, 3rd Edition. — Главы 39-41 посвящены аннотациям: когда создавать собственные, как правильно использовать @Override, и почему marker interfaces иногда лучше marker annotations.
-- Evans B., Flanagan D. (2018). *Java in a Nutshell*, 7th Edition. — Подробный справочник по синтаксису аннотаций, retention policies и annotation processing API с практическими примерами.
-- Lindholm T. et al. (2014). *The Java Virtual Machine Specification*, Java SE 8 Edition. — Глава 4 описывает формат class-файлов и как аннотации хранятся в атрибутах RuntimeVisibleAnnotations и RuntimeInvisibleAnnotations.
+### Теоретические основы
+
+- **JSR-175 (2002). A Metadata Facility for the Java Programming Language.** — спецификация аннотаций в Java.
+- **JSR-269 (2006). Pluggable Annotation Processing API.** — спецификация compile-time обработки аннотаций.
+- **Lindholm T. et al. (2014). JVM Specification.** — глава 4: формат class-файлов, RuntimeVisibleAnnotations и RuntimeInvisibleAnnotations.
+
+### Практические руководства
+
+- **Bloch J. (2018). Effective Java, 3rd ed.** — главы 39--41: создание собственных аннотаций, @Override, marker interfaces vs marker annotations.
+- **Evans B., Flanagan D. (2018). Java in a Nutshell, 7th ed.** — синтаксис аннотаций, retention policies, annotation processing API.
 
 ---
 

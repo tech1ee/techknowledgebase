@@ -34,6 +34,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Engineering Blog** — публичная техническая документация решений, принятых инженерными командами компании. В отличие от учебников, блоги описывают **реальные trade-offs в продакшен-системах**: конкретные числа, метрики, неудачные решения и их исправления.
+
+**Почему engineering blogs ценнее учебников для SD-интервью:**
+
+| Критерий | Учебник | Engineering Blog |
+|----------|---------|-----------------|
+| Trade-offs | Теоретические | Реальные, с метриками |
+| Масштаб | Абстрактный | Конкретный (миллионы пользователей) |
+| Неудачи | Редко описаны | Часто центральная тема |
+| Актуальность | Устаревает за 2-3 года | Описывает текущий стек |
+| Контекст | Изолированная задача | Бизнес-ограничения, legacy, team size |
+
+**Категории знаний из engineering blogs:**
+1. **Architecture decisions** — почему выбрали GraphQL, а не REST (Airbnb)
+2. **Failure stories** — как обрабатывали sync failures (Trello)
+3. **Performance optimizations** — prefetching стратегии (Instagram)
+4. **Scale challenges** — monorepo для 1000+ инженеров (Uber)
+5. **Protocol innovations** — QUIC вместо TCP (Snapchat, Uber)
+
+На System Design интервью ссылка на engineering blog демонстрирует **глубину понимания**: "В статье Instagram Engineering описано, как они решали проблему prefetching..." — это сильнее, чем абстрактное "можно использовать prefetching".
+
+> **Принцип первоисточника:** лучший способ понять, как работает система — прочитать, как её описывают создатели. Блог Trello Engineering (7 статей по offline-first) даёт больше практических знаний о sync architecture, чем любой учебник.
+
+→ Связано: [[system-design-android]], [[caching-strategies]], [[architecture-resilience-patterns]]
+
+---
+
 ## По темам
 
 ### Backend API Design
@@ -208,6 +237,12 @@ Optimistic UI (network lag), QUIC protocol, Failover handling, Android monorepo,
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Xu A. (2020). *System Design Interview*. — Backend-ориентированный framework, который engineering blogs дополняют mobile-specific trade-offs и реальными примерами.
+
+### Практические руководства
 
 - [iartr/mobile-system-design — BLOGPOSTS.MD](https://github.com/iartr/mobile-system-design/blob/master/BLOGPOSTS.MD)
 - [weeeBox/mobile-system-design](https://github.com/weeeBox/mobile-system-design) — оригинальный репозиторий

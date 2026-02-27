@@ -28,6 +28,46 @@ prerequisites:
 
 ---
 
+## Теоретические основы: формальный базис модели памяти
+
+### Stack: формальная модель
+
+> **Определение:** Stack — LIFO (Last In, First Out) структура данных, формально определённая операциями: push(x), pop() → x, peek() → x. В контексте памяти: call stack хранит **activation records** (stack frames), каждая содержит: параметры функции, локальные переменные, адрес возврата, сохранённые регистры.
+
+**ALGOL 60** (Backus, Naur et al., 1960) — первый язык с **блочной структурой** (block scoping) и рекурсией, потребовавший stack для управления вызовами. До этого (Fortran) вся память выделялась статически.
+
+### Heap: формальная модель
+
+> **Определение:** Heap (в контексте memory management) — область памяти для **динамической аллокации** блоков произвольного размера с произвольным временем жизни. Формально: allocate(n) → ptr, free(ptr).
+
+**Проблема фрагментации:** После серии alloc/free возникают "дырки" — свободные блоки, разбросанные по heap. Задача аллокатора — найти подходящий блок. Это задача **bin packing** (NP-hard в общем случае).
+
+Стратегии аллокации:
+| Стратегия | Описание | Фрагментация |
+|-----------|----------|--------------|
+| **First Fit** | Первый подходящий блок | Умеренная |
+| **Best Fit** | Наименьший подходящий блок | Много мелких дырок |
+| **Buddy System** (Knowlton, 1965) | Блоки размером 2ᵏ, разбиение/слияние | Внутренняя (до 50%) |
+
+### Escape Analysis: формальная основа оптимизации
+
+> **Определение:** Escape analysis — статический анализ компилятора, определяющий, может ли объект быть доступен за пределами scope создания. Если нет ("не убегает"), объект можно аллоцировать на stack вместо heap.
+
+Три уровня "побега":
+1. **NoEscape** — объект используется только в текущей функции → stack allocation
+2. **ArgEscape** — объект передаётся в аргумент, но не сохраняется → возможна stack allocation
+3. **GlobalEscape** — объект доступен глобально → heap allocation обязательна
+
+JVM HotSpot реализует escape analysis с Java 6 (2006), что позволяет **scalar replacement** — полное устранение объекта, замена его полей на локальные переменные.
+
+### Связи
+
+- [[garbage-collection-explained]] — автоматическое управление heap
+- [[reference-counting-arc]] — альтернатива GC для heap
+- [[cpu-architecture-basics]] — аппаратная поддержка stack (SP регистр)
+
+---
+
 ## Зачем это знать
 
 Когда ты пишешь `val user = User("John")` в Kotlin, что происходит? Где хранится `user`? Где хранится сам объект `User`? Почему иногда программа падает с `StackOverflowError`, а иногда с `OutOfMemoryError`?
@@ -637,15 +677,17 @@ Reference Counting — другой ответ на тот же вопрос. В
 
 ## Источники и дальнейшее чтение
 
-- **Bryant, R. & O'Hallaron, D. (2015). Computer Systems: A Programmer's Perspective.** — фундаментальный учебник, главы 9-10 подробно объясняют иерархию памяти, виртуальную память и динамическую аллокацию. Идеален для понимания связи между hardware и software уровнями управления памятью.
+### Теоретические основы
 
-- **Tanenbaum, A. (2014). Modern Operating Systems.** — классический учебник по ОС, глава 3 посвящена управлению памятью. Объясняет, как ОС предоставляет процессам виртуальное адресное пространство, поверх которого работают stack и heap. Даёт необходимый контекст "уровнем ниже".
+- **Knuth, D. (1997). "The Art of Computer Programming, Vol. 1." Section 2.5.** — Исчерпывающее описание алгоритмов динамической аллокации: First Fit, Best Fit, Buddy System. Математически строгий анализ фрагментации
+- **Knowlton, K.C. (1965). "A Fast Storage Allocator." CACM.** — Buddy System: аллокация блоками размером 2ᵏ с O(log n) split/merge
+- **Backus, J. et al. (1960). "Report on the Algorithmic Language ALGOL 60."** — Первый язык с блочной структурой и рекурсией, потребовавший call stack
 
-- **Knuth, D. (1997). The Art of Computer Programming, Vol. 1.** — секция 2.5 содержит исчерпывающее описание алгоритмов динамической аллокации, включая Buddy System. Математически строгий, но удивительно читаемый.
+### Практические руководства
 
-- [Baeldung: Stack and Heap](https://www.baeldung.com/cs/memory-stack-vs-heap) — техническое объяснение
+- **Bryant, R. & O'Hallaron, D. (2015). Computer Systems: A Programmer's Perspective.** — Главы 9-10: иерархия памяти, виртуальная память, динамическая аллокация
+- **Tanenbaum, A. (2014). Modern Operating Systems.** — Глава 3: управление памятью на уровне ОС
 - [CS225 Illinois: Stack and Heap Memory](https://courses.grainger.illinois.edu/cs225/fa2022/resources/stack-heap/) — академический курс
-- [Microsoft: Memory Allocation History](https://learn.microsoft.com/en-us/archive/blogs/abhinaba/back-to-basics-memory-allocation-a-walk-down-the-history) — историческая справка
 - [Kotlin Docs: Native Memory Manager](https://kotlinlang.org/docs/native-memory-manager.html) — официальная документация
 
 ---

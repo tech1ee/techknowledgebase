@@ -35,6 +35,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Репликация** — поддержание копий одних и тех же данных на нескольких узлах для повышения доступности, отказоустойчивости и производительности чтения. **Шардинг (partitioning)** — разделение данных между узлами для горизонтального масштабирования записи и хранения.
+
+### Формальные модели репликации
+
+| Модель | Механизм | Consistency | Latency записи |
+|--------|----------|-------------|----------------|
+| **Single-leader** | Один master принимает записи → реплики копируют | Strong (sync) / Eventual (async) | Низкая (один round-trip) |
+| **Multi-leader** | Несколько masters → conflict resolution | Eventual | Низкая (local writes) |
+| **Leaderless** | Quorum reads/writes (R + W > N) | Tunable (зависит от quorum) | Средняя (ожидание quorum) |
+
+### FLP-невозможность (Fischer, Lynch, Paterson, 1985)
+
+> В асинхронной распределённой системе **невозможно** гарантировать консенсус, если хотя бы один процесс может отказать. Это фундаментальное ограничение определяет trade-offs всех протоколов репликации.
+
+**Практический обход:** timeout-based failure detectors (Raft, Paxos) — ослабляют асинхронность допущением о partial synchrony.
+
+### Стратегии шардинга
+
+| Стратегия | Механизм | Плюсы | Минусы |
+|-----------|----------|-------|--------|
+| **Hash-based** | shard = hash(key) mod N | Равномерное распределение | Потеря range queries, resharding при добавлении узлов |
+| **Range-based** | shard = key range [A-M], [N-Z] | Эффективные range scans | Hot spots при неравномерном распределении |
+| **Directory-based** | Lookup table: key → shard | Гибкость перемещения | Single point of failure (directory) |
+| **Consistent hashing** | Hash ring с виртуальными узлами | Минимальный resharding (K/N ключей) | Неравномерность без virtual nodes |
+
+### Ключевые теоремы
+
+- **CAP** (Brewer, 2000): при network partition — выбор между Consistency и Availability
+- **PACELC** (Abadi, 2012): расширение CAP — даже **без** partition есть trade-off Latency vs Consistency
+- **Eventual Consistency** (Vogels, 2008): формальное определение — все реплики **со временем** сходятся к одному состоянию при отсутствии новых записей
+
+> **См. также**: [[databases-overview]] — карта раздела, [[databases-transactions-acid]] — ACID и isolation levels
+
+---
+
 ## TL;DR
 
 - **Репликация** — копирование данных на несколько серверов (HA + read scaling)
@@ -890,9 +927,16 @@ INSERT INTO orders (id, ...) VALUES (gen_random_uuid(), ...);
 
 ## Источники
 
+### Теоретические основы
+- Fischer M., Lynch N., Paterson M. (1985). *Impossibility of Distributed Consensus with One Faulty Process* (FLP). — Фундаментальная теорема о невозможности консенсуса
+- Lamport L. (1998). *The Part-Time Parliament* (Paxos). — Классический алгоритм консенсуса
+- Ongaro D., Ousterhout J. (2014). *In Search of an Understandable Consensus Algorithm* (Raft). — Понятная альтернатива Paxos
+- Karger D. et al. (1997). *Consistent Hashing and Random Trees*. — Основа consistent hashing для шардинга
+
+### Практические руководства
 - [PostgreSQL Streaming Replication](https://www.postgresql.org/docs/current/warm-standby.html)
 - [Citus Documentation](https://docs.citusdata.com/)
-- "Designing Data-Intensive Applications" by Martin Kleppmann — Chapters 5-6
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Chapters 5-6
 - [Jepsen: Distributed Systems Analysis](https://jepsen.io/)
 
 ---

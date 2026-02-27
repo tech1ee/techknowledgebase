@@ -33,6 +33,45 @@ Swift и Objective-C могут работать вместе в одном пр
 
 ---
 
+## Теоретические основы
+
+> **Language Interoperability** (интероп) — способность кода на одном языке вызывать код на другом языке в рамках единого процесса. Swift-ObjC interop реализует **bidirectional FFI** (Foreign Function Interface): Swift может вызывать Objective-C через bridging header, а Objective-C может вызывать Swift через generated header (-Swift.h).
+
+### Академический контекст
+
+Интероп между Swift и Objective-C основан на фундаментальных концепциях языковых runtime:
+
+| Концепция | Автор / год | Суть | Проявление в Swift-ObjC interop |
+|-----------|-------------|------|----------------------------------|
+| Foreign Function Interface | Различные, 1980-е | Вызов функций между языками | Bridging Header (ObjC→Swift), -Swift.h (Swift→ObjC) |
+| Dynamic Dispatch | Smalltalk (Kay, 1972) | Метод определяется в runtime через message passing | objc_msgSend, @objc атрибут, #selector |
+| Static vs Dynamic Typing | Кардинальное различие | Проверка типов на этапе компиляции vs runtime | Swift (static) ↔ ObjC (dynamic); bridging конвертирует |
+| Name Mangling | C++ (1980-е) | Кодирование сигнатуры в имени символа | Swift name mangling vs ObjC flat naming |
+| Runtime Reflection | Smalltalk, CLOS | Самоанализ типов в runtime | ObjC Runtime (class_getName, method_getImplementation) |
+
+### Два мира: Static Swift vs Dynamic Objective-C
+
+| Аспект | Swift | Objective-C |
+|--------|-------|-------------|
+| Dispatch | Static (vtable) по умолчанию | Dynamic (objc_msgSend) всегда |
+| Типизация | Static, compile-time | Dynamic, runtime (id) |
+| Nullability | Optional<T> — часть типа | Nullable/Nonnull — аннотации |
+| ARC | Compile-time (SIL-оптимизации) | Compile-time (но с dynamic overhead) |
+| Generics | Monomorphization + type erasure | Нет (NSArray, NSDictionary — untyped) |
+| Метапрограммирование | Macros (compile-time) | Runtime: method swizzling, KVO |
+
+> **Ключевой компромисс**: @objc атрибут «понижает» Swift до динамической диспетчеризации ObjC Runtime, теряя преимущества статической оптимизации (inlining, devirtualization). Это необходимая цена за совместимость с UIKit (target-action, KVO, NSNotification), который построен на ObjC Runtime message passing.
+
+### Связь с CS-фундаментом
+
+- [[ios-compilation-pipeline]] — bridging на этапе компиляции: ClangImporter для ObjC
+- [[ios-app-components]] — UIKit API требует @objc для target-action, KVO, selectors
+- [[ffi-foreign-function-interface]] — общая теория FFI между языками
+- [[kotlin-interop]] — Kotlin-Java interop как аналогичная проблема на Android
+- [[ios-process-memory]] — ARC в Swift vs ARC в ObjC: различия в оптимизации
+
+---
+
 ## Зачем это нужно?
 
 ### Legacy-код и постепенная миграция

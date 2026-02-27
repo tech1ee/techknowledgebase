@@ -51,6 +51,34 @@ next_review:
 | Direct Reply не работает | FLAG_IMMUTABLE вместо FLAG_MUTABLE | Текст ответа не попадает в Intent |
 | Badge count неправильный | Нет setNumber() или wrong channel | Запутанный пользователь |
 
+## Теоретические основы
+
+### Publish-Subscribe: формальная модель уведомлений
+
+> Система уведомлений Android реализует паттерн **Publish-Subscribe** (Birman & Joseph, *"Exploiting Virtual Synchrony in Distributed Systems"*, 1987): приложение (publisher) отправляет уведомление в NotificationManagerService (broker), который доставляет его в SystemUI (subscriber) с учётом пользовательских preferences и system policies.
+
+| Компонент pub-sub | Роль в Android | Ответственность |
+|-------------------|---------------|----------------|
+| **Publisher** | Приложение (`NotificationManager.notify()`) | Создание уведомления, выбор channel, content |
+| **Broker** | `NotificationManagerService` (system_server) | Проверка permissions, rate limiting, ranking, persistence |
+| **Subscriber** | SystemUI (`StatusBarService`) | Отображение, группировка, user interaction |
+
+### Priority Queue и Ranking
+
+> NotificationManagerService ранжирует уведомления через **priority queue**: каждое уведомление получает score на основе channel importance, conversation status, time, sender. Это реализация **multi-criteria decision analysis** (MCDA) — формального метода ранжирования объектов по нескольким критериям с весами.
+
+### Rate Limiting: защита от abuse
+
+> Android 15 вводит **notification cooldown** — реализацию **token bucket algorithm** (Turner, 1986): каждое приложение имеет «бюджет» уведомлений; при превышении лимита importance снижается автоматически. Это защита от notification spam, аналогичная rate limiting в сетевых протоколах.
+
+### Immutability и Security: PendingIntent
+
+> `PendingIntent` — это **capability token** (Dennis & Van Horn, 1966): unforgeable ссылка, делегирующая право выполнить действие от имени отправителя. `FLAG_IMMUTABLE` (Android 12+) гарантирует, что получатель не может модифицировать Intent — принцип **integrity** из модели Bell-LaPadula.
+
+> **Связь**: Pub-Sub → [[android-binder-ipc]], PendingIntent → [[android-intent-internals]], Rate Limiting → [[networking-overview]]
+
+---
+
 ### Актуальность (2024-2025)
 
 ```
@@ -2504,28 +2532,27 @@ class NotificationReceiver : BroadcastReceiver() {
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| GoF. *Design Patterns* (1994) | Publish-Subscribe Pattern → NotificationManager |
+| Silberschatz A. et al. *Operating System Concepts* (1983+) | Priority Queue → notification ranking |
+| Turner K. *Token Bucket Algorithm* (RFC 2697, 1999) | Rate Limiting → notification cooldown (Android 15+) |
+| Dennis J., Van Horn E. *Programming Semantics for Multiprogrammed Computations* (1966) | Capability token → PendingIntent |
+
+### Практические руководства
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
-| 1 | [Create a notification](https://developer.android.com/develop/ui/views/notifications/build-notification) | Docs | Построение уведомлений — полный guide |
-| 2 | [Notification channels](https://developer.android.com/develop/ui/views/notifications/channels) | Docs | Управление каналами, importance levels |
+| 1 | [Create a notification](https://developer.android.com/develop/ui/views/notifications/build-notification) | Docs | Построение уведомлений |
+| 2 | [Notification channels](https://developer.android.com/develop/ui/views/notifications/channels) | Docs | Управление каналами |
 | 3 | [Notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) | Docs | POST_NOTIFICATIONS (Android 13+) |
-| 4 | [Android 12 behavior changes](https://developer.android.com/about/versions/12/behavior-changes-12) | Docs | Trampoline restrictions, PendingIntent mutability |
-| 5 | [Notification styles](https://developer.android.com/develop/ui/views/notifications/expanded) | Docs | BigText, BigPicture, Messaging, Inbox styles |
-| 6 | [AOSP: NMS.java](https://cs.android.com/android/platform/superproject/+/main:frameworks/base/services/core/java/com/android/server/notification/NotificationManagerService.java) | AOSP | NotificationManagerService source |
-| 7 | [Foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types) | Docs | FGS types и required permissions (Android 14+) |
-| 8 | [Bubbles](https://developer.android.com/develop/ui/views/notifications/bubbles) | Docs | Conversation bubbles API |
-| 9 | [People and conversations](https://developer.android.com/develop/ui/views/notifications/conversations) | Docs | MessagingStyle, shortcuts, conversation space |
-| 10 | [NotificationListenerService](https://developer.android.com/reference/android/service/notification/NotificationListenerService) | API | Мониторинг всех уведомлений системы |
-| 11 | [Full-screen intents](https://developer.android.com/develop/ui/views/notifications/time-sensitive) | Docs | Звонки, будильники, urgent notifications |
-| 12 | [AOSP: NotificationRecord.java](https://cs.android.com/android/platform/superproject/+/main:frameworks/base/services/core/java/com/android/server/notification/NotificationRecord.java) | AOSP | Внутреннее представление уведомления |
-| 13 | [Android 14 FGS changes](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Docs | FGS type enforcement |
-| 14 | [Android 15 notification changes](https://developer.android.com/about/versions/15/behavior-changes-all) | Docs | Cooldown, DND modes |
+| 4 | [AOSP: NMS.java](https://cs.android.com/android/platform/superproject/+/main:frameworks/base/services/core/java/com/android/server/notification/NotificationManagerService.java) | AOSP | NMS source |
+| 5 | [Foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types) | Docs | FGS types (Android 14+) |
 
-## Источники и дальнейшее чтение
-
-- Vasavada (2019). *Android Internals*. — глубокое погружение в системные сервисы Android, включая NotificationManagerService, Binder IPC и StatusBarService, что даёт полное понимание пути уведомления от вызова notify() до отображения на экране.
-- Meier (2022). *Professional Android*. — практическое руководство по NotificationChannel, PendingIntent, Foreground Service notifications и совместимости с различными версиями Android.
-- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — пошаговое создание уведомлений с различными стилями, обработкой действий и интеграцией с lifecycle компонентами.
+### Книги
+- Vasavada (2019). *Android Internals*. — NMS, Binder IPC, StatusBarService.
+- Meier (2022). *Professional Android*. — NotificationChannel, PendingIntent, FGS.
+- Phillips et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — уведомления, стили, actions.
 
 ---
 

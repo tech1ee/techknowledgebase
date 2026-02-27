@@ -28,6 +28,36 @@ next_review:
 
 # Network Flow
 
+## Теоретические основы
+
+> **Сетевой поток** (Network Flow) — задача нахождения максимального потока из источника (source) в сток (sink) в ориентированном графе с пропускными способностями рёбер, при соблюдении ограничений пропускной способности и закона сохранения потока в промежуточных вершинах.
+
+### Хронология ключевых результатов
+
+| Год | Авторы | Результат | Сложность |
+|-----|--------|-----------|-----------|
+| **1956** | Форд, Фалкерсон | Метод Ford-Fulkerson + теорема max-flow min-cut | O(E * max_flow) |
+| **1970** | Диниц (Dinic) | Алгоритм Диница (layered graphs + blocking flows) | O(V^2 * E) |
+| **1972** | Эдмондс, Карп | BFS-версия Ford-Fulkerson (Edmonds-Karp) | O(V * E^2) |
+| **1973** | Хопкрофт, Карп | Максимальное паросочетание в двудольном графе | O(E * sqrt(V)) |
+| **1988** | Голдберг, Тарьян | Push-relabel алгоритм | O(V^2 * E) |
+
+### Теорема Max-Flow Min-Cut
+
+> **Теорема Форда–Фалкерсона (1956):** в любой сети максимальный поток из s в t равен минимальной пропускной способности разреза, разделяющего s и t. Это один из фундаментальных результатов комбинаторной оптимизации, связывающий задачу потока с задачей разреза через LP-двойственность.
+
+### Residual Graph
+
+Ключевая конструкция: residual graph (остаточный граф) содержит для каждого ребра (u,v) с capacity c и flow f: прямое ребро с остаточной capacity (c - f) и обратное ребро с capacity f. Augmenting path в residual graph позволяет увеличить поток.
+
+### Связи
+
+- [[graph-algorithms]] — BFS/DFS как основа поиска augmenting paths
+- [[graph-advanced]] — SCC, двудольные графы, связанные с потоками
+- [[shortest-paths]] — BFS для кратчайшего augmenting path (Edmonds-Karp)
+
+---
+
 ## TL;DR
 
 Network Flow — нахождение максимального потока из source в sink. **Ford-Fulkerson** — O(E × max_flow), **Edmonds-Karp** (BFS) — O(VE²), **Dinic** — O(V²E). Max-Flow = Min-Cut (теорема). Применения: bipartite matching, edge-disjoint paths, project selection.
@@ -918,11 +948,19 @@ fun maxBipartiteMatching(left: Int, right: Int, edges: List<Pair<Int, Int>>): In
 
 ## Источники
 
+### Теоретические основы
+
+- Ford L.R., Fulkerson D.R. (1956). *Maximal Flow Through a Network*. Canadian Journal of Mathematics. — метод Ford-Fulkerson и доказательство теоремы max-flow min-cut
+- Dinic E.A. (1970). *Algorithm for Solution of a Problem of Maximum Flow in Networks with Power Estimation*. Soviet Mathematics Doklady. — алгоритм Диница с layered graphs, O(V^2 * E)
+- Edmonds J., Karp R.M. (1972). *Theoretical Improvements in Algorithmic Efficiency for Network Flow Problems*. Journal of the ACM. — BFS-вариант Ford-Fulkerson, O(V * E^2)
+- Cormen T. et al. (2009). *Introduction to Algorithms (CLRS), Chapter 26*. — теория потоков, min-cut, bipartite matching
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [CP-Algorithms: Max Flow](https://cp-algorithms.com/graph/edmonds_karp.html) | Reference | Edmonds-Karp |
 | 2 | [CP-Algorithms: Dinic](https://cp-algorithms.com/graph/dinic.html) | Reference | Dinic |
-| 3 | [CLRS] Introduction to Algorithms | Book | Theory |
 
 ---
 

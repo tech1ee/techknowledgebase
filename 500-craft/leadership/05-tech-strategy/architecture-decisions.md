@@ -35,6 +35,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### ADR как формализация архитектурных решений
+
+> **Определение:** Architecture Decision Record (ADR) — документ, фиксирующий значимое архитектурное решение вместе с контекстом и последствиями. Формат предложен Michael Nygard в блог-посте *"Documenting Architecture Decisions"* (2011).
+
+Michael Nygard предложил формат ADR как решение проблемы потери контекста: когда авторы решения покидают команду, обоснование (rationale) теряется, и новые инженеры либо повторяют ошибки, либо тратят время на rediscovery.
+
+| Секция ADR (Nygard, 2011) | Назначение | Пример |
+|---------------------------|-----------|--------|
+| **Title** | Краткое название решения | «ADR-007: Use PostgreSQL for primary data store» |
+| **Status** | Proposed / Accepted / Deprecated / Superseded | Accepted |
+| **Context** | Ситуация и forces, вынуждающие принять решение | «Growing data volume, need for JSONB support» |
+| **Decision** | Само решение | «We will use PostgreSQL 15+» |
+| **Consequences** | Результаты: positive, negative, neutral | «+Mature ecosystem, -Learning curve for NoSQL team» |
+
+### Frameworks принятия решений
+
+> **DACI** (Driver, Approver, Contributor, Informed) — framework распределения ролей при принятии решений, аналог RACI для decision-making. Driver готовит решение, Approver принимает финальное решение, Contributors предоставляют input, Informed получают уведомление.
+
+Philippe Kruchten в *"An Ontology of Architectural Decisions in Software-Intensive Systems"* (3rd Groningen Workshop on Software Variability, 2004) формализовал классификацию архитектурных решений: existence decisions (что будет), property decisions (какие свойства), executive decisions (как организовать процесс). Эта классификация помогает определить, какие решения заслуживают ADR, а какие — нет.
+
+Dan McKinley (*"Choose Boring Technology"*, 2015) предложил концепцию **innovation tokens** — у каждой команды ограниченный бюджет на нестандартные технологические решения, что должно влиять на [[technical-vision|tech vision]] и контекст ADR.
+
+---
+
 ## Зачем ADR
 
 ```
@@ -189,11 +215,18 @@ Version controlled with code
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [ADR GitHub](https://adr.github.io/) | Resource |
-| [Michael Nygard ADR](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) | Article |
-| [ThoughtWorks Tech Radar](https://www.thoughtworks.com/radar) | Reference |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Nygard M. "Documenting Architecture Decisions" — Cognitect Blog, 2011 | Статья | Формат ADR (Status, Context, Decision, Consequences) |
+| 2 | Kruchten P. "An Ontology of Architectural Decisions" — 2004 | Статья | Классификация архитектурных решений |
+| 3 | McKinley D. "Choose Boring Technology" — 2015 | Статья/доклад | Innovation tokens, boring by default |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [ADR GitHub](https://adr.github.io/) | Resource | Templates, tooling |
+| 2 | [ThoughtWorks Tech Radar](https://www.thoughtworks.com/radar) | Reference | Technology assessment framework |
 
 ---
 

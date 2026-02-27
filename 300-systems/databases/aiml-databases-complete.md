@@ -31,6 +31,35 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Vector Database** — специализированная СУБД для хранения и поиска высокоразмерных векторных представлений (embeddings). Основана на **Approximate Nearest Neighbor (ANN)** алгоритмах, которые жертвуют точностью ради скорости поиска в пространствах с тысячами измерений.
+
+### Проблема: «проклятие размерности»
+
+В пространствах высокой размерности (d > 100) точный поиск ближайшего соседа (kNN) становится **вычислительно неподъёмным**: O(n·d) для brute force. ANN-алгоритмы решают это через приблизительный поиск.
+
+### ANN-алгоритмы: ключевые подходы
+
+| Алгоритм | Принцип | Сложность поиска | Использование |
+|----------|---------|-----------------|---------------|
+| **HNSW** (Malkov & Yashunin, 2018) | Иерархический граф (skip list + NSW) | O(log n) | Pinecone, Weaviate, pgvector |
+| **IVF** (Inverted File Index) | Кластеризация + поиск в ближайших кластерах | O(n/k · d) | FAISS, Milvus |
+| **Product Quantization (PQ)** | Сжатие векторов через sub-vector квантизацию | O(n · d/m) | Compressed search, FAISS |
+| **ScaNN** (Google, 2020) | Anisotropic vector quantization | O(√n · d) | Google Vertex AI |
+
+### Метрики расстояния
+
+| Метрика | Формула | Когда использовать |
+|---------|---------|-------------------|
+| **Cosine similarity** | cos(θ) = (A·B) / (‖A‖·‖B‖) | Семантическое сходство текстов |
+| **Euclidean (L2)** | √Σ(aᵢ - bᵢ)² | Визуальное сходство, кластеризация |
+| **Dot product** | Σ(aᵢ · bᵢ) | Когда магнитуда важна (recommendation) |
+
+> **См. также**: [[embeddings-complete-guide]] — как создаются embeddings, [[databases-overview]] — карта раздела
+
+---
+
 ## Prerequisites
 
 | Тема            | Зачем нужно                                 | Где изучить                         |
@@ -1649,9 +1678,15 @@ Chunking:
 
 ## Источники и дальнейшее чтение
 
-- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Главы о хранилищах данных, индексах и распределённых системах дают фундамент для понимания архитектуры vector databases и trade-offs между consistency, availability и performance.
-- Petrov A. (2019). *Database Internals*. — Глубокий разбор алгоритмов индексации (B-Tree, LSM-Tree), который помогает понять, почему ANN-алгоритмы (HNSW, IVF) работают принципиально иначе и какие trade-offs они предлагают.
-- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор различных моделей данных (document, graph, key-value), который помогает выбрать правильный тип хранилища для AI/ML-задач и понять, когда vector DB необходима, а когда достаточно расширения существующей БД.
+### Теоретические основы
+- Malkov Y., Yashunin D. (2018). *Efficient and Robust Approximate Nearest Neighbor Using Hierarchical Navigable Small World Graphs* (HNSW). — Основа большинства modern vector databases
+- Johnson J. et al. (2019). *Billion-scale Similarity Search with GPUs* (FAISS). — Meta AI, IVF + PQ
+- Guo R. et al. (2020). *Accelerating Large-Scale Inference with Anisotropic Vector Quantization* (ScaNN). — Google Research
+
+### Практические руководства
+- Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Фундамент архитектуры хранилищ данных и индексов
+- Petrov A. (2019). *Database Internals*. — Алгоритмы индексации (B-Tree, LSM-Tree) для контекста ANN
+- Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Обзор моделей данных для выбора хранилища
 
 ---
 

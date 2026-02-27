@@ -29,6 +29,56 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальные определения
+
+> **Интерпретатор** — программа, которая напрямую исполняет инструкции исходного языка (или bytecode) без предварительной трансляции в машинный код.
+
+> **JIT-компилятор (Just-In-Time)** — компилятор, который транслирует код в машинный **во время исполнения** программы, используя runtime-информацию для оптимизаций, недоступных AOT-компилятору.
+
+### Историческая атрибуция
+
+| Событие | Автор | Год | Вклад |
+|---------|-------|-----|-------|
+| **Первый JIT** | McCarthy, J. | 1960 | LISP eval — компиляция выражений во время исполнения |
+| **Threaded code** | Bell, J.R. | 1973 | Первая оптимизация dispatch: indirect threading |
+| **Self** | Chambers, Ungar | 1989 | Первая VM с adaptive optimization и inline caching |
+| **Inline Caching** | Deutsch & Schiffman | 1984 | Кэширование типов на call site — основа всех современных JIT |
+| **HotSpot** | Hölzle, Griesemer | 1999 | Adaptive JIT для Java: profile → compile hot code |
+| **Tiered Compilation** | Paleczny et al. | 2001 | Multi-tier JIT: интерпретатор → C1 → C2 |
+| **Tracing JIT** | Gal et al. | 2006 | Компиляция "горячих путей" (traces) вместо методов |
+| **GraalVM** | Würthinger et al. | 2013 | Meta-compilation: Truffle framework → automatic JIT |
+
+### Спектр стратегий исполнения
+
+```
+        Startup speed →                    ← Peak performance
+┌──────────────────────────────────────────────────────────┐
+│ Interpreter   Baseline JIT   Optimizing JIT    AOT       │
+│ (мгновенный   (быстрая       (медленная         (всё      │
+│  старт,       компиляция,    компиляция,        заранее,  │
+│  медленный    средняя        максимальная       пик =     │
+│  пик)         скорость)      скорость)          старт)    │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Фундаментальная теорема JIT-оптимизации
+
+> **Наблюдение (Hölzle et al., 1991):** ~90% call sites являются **мономорфными** (вызывают один конкретный метод). Это позволяет JIT заменять виртуальный вызов (vtable lookup) прямым вызовом с guard check.
+
+**Следствие:** Speculative optimization — JIT оптимизирует для наиболее вероятного случая и вставляет deoptimization trap для редких случаев. Если предположение нарушается — fallback к интерпретатору (деоптимизация).
+
+### Partial Evaluation (Futamura Projections, 1971)
+
+Теоретический фундамент JIT основан на **частичных вычислениях** (partial evaluation):
+
+> **Первая проекция Футамуры:** Специализация интерпретатора `I` для конкретной программы `P` эквивалентна компиляции `P`: `spec(I, P) = compiled_P`
+
+GraalVM/Truffle реализует именно эту идею: пишешь интерпретатор, Truffle автоматически генерирует JIT.
+
+---
+
 ## Зачем это знать
 
 Каждый раз, когда Android-приложение "подтормаживает" при первом запуске, а потом работает плавно — это JIT-компиляция в действии. Каждый раз, когда серверное приложение на JVM показывает посредственные бенчмарки в первые 30 секунд, а потом ускоряется в 5-10 раз — это JIT "прогрелся".
@@ -568,17 +618,17 @@ JIT оптимизирует предсказуемые ветвления: ес
 
 ## Источники и дальнейшее чтение
 
-- **Aycock, J. (2003). A Brief History of Just-In-Time.** — Фундаментальная статья, прослеживающая историю JIT от 1960-х до 2000-х. Показывает, как идея runtime-компиляции развивалась от McCarthy через Smalltalk к HotSpot. Короткая (20 страниц), но плотная — обязательное чтение для понимания контекста.
+### Теоретические основы
+- Futamura, Y. (1971). "Partial Evaluation of Computation Process" — Systems, Computers, Controls; Futamura projections
+- Deutsch, L.P. & Schiffman, A. (1984). "Efficient Implementation of the Smalltalk-80 System" — POPL; inline caching
+- Hölzle, U. et al. (1991). "Optimizing Dynamically-Typed OO Languages With Polymorphic Inline Caches" — ECOOP; 90% monomorphic
+- Aycock, J. (2003). "A Brief History of Just-In-Time" — ACM Computing Surveys; история JIT от 1960-х
+- Würthinger, T. et al. (2013). "One VM to Rule Them All" — Onward!; GraalVM/Truffle meta-compilation
 
-- **Wuerthinger, T. et al. (2013). One VM to Rule Them All.** — Статья от создателей GraalVM. Описывает идею meta-compilation: фреймворк Truffle позволяет написать интерпретатор языка, а Graal автоматически генерирует JIT. Показывает будущее JIT-технологий.
-
-- **Hölzle, U., Chambers, C., Ungar, D. (1991). Optimizing Dynamically-Typed Object-Oriented Languages With Polymorphic Inline Caches.** — Классическая работа по inline caching. Показывает, что 90% call sites monomorphic — основа для всех последующих JIT-оптимизаций. Без этой статьи не было бы ни HotSpot, ни V8.
-
-- **Nystrom, R. (2021). Crafting Interpreters.** — Практическое руководство. Часть II ("A Bytecode Virtual Machine") показывает реализацию интерпретатора. Помогает "почувствовать", что JIT ускоряет и почему интерпретация медленная.
-
-- [Oracle: JIT Compilation in HotSpot](https://docs.oracle.com/en/java/javase/21/vm/java-hotspot-virtual-machine-performance-enhancements.html) — Официальная документация HotSpot. Описывает tiered compilation, пороги, tuning-параметры.
-
-- [V8 Blog: Ignition, Sparkplug, Maglev, TurboFan](https://v8.dev/blog) — Блог V8. Каждый компонент pipeline описан в отдельном посте с деталями реализации.
+### Практические руководства
+- Nystrom, R. (2021). *Crafting Interpreters* — реализация интерпретатора шаг за шагом
+- [Oracle: JIT in HotSpot](https://docs.oracle.com/en/java/javase/21/vm/java-hotspot-virtual-machine-performance-enhancements.html) — tiered compilation
+- [V8 Blog](https://v8.dev/blog) — Ignition, Sparkplug, Maglev, TurboFan
 
 ---
 

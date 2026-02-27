@@ -28,6 +28,45 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Латентность сети** — суммарная задержка между отправкой запроса и получением ответа. Формально декомпозируется на четыре компонента (Kurose, Ross, 2021): d_total = d_proc + d_queue + d_trans + d_prop, где d_proc — обработка в узле, d_queue — ожидание в очереди, d_trans — время передачи (L/R), d_prop — время распространения сигнала (d/s).
+
+### Таксономия компонентов задержки
+
+| Компонент | Формула | Зависит от | Типичные значения | Как оптимизировать |
+|-----------|---------|-----------|-------------------|-------------------|
+| **Propagation delay** | d/s (расстояние / скорость света) | Физическое расстояние | 1 ms на 200 км | CDN, edge computing |
+| **Transmission delay** | L/R (размер / bandwidth) | Пропускная способность канала | <1 ms на 1 Gbps | Сжатие, уменьшение payload |
+| **Processing delay** | CPU-зависим | Мощность маршрутизатора | <1 ms | Аппаратное ускорение |
+| **Queueing delay** | Зависит от нагрузки | Степень загрузки канала | 0-100+ ms | QoS, уменьшение трафика |
+| **TCP handshake** | 1 RTT (SYN + SYN-ACK) | RTT между клиентом и сервером | 10-200 ms | Connection pooling, keep-alive |
+| **TLS handshake** | 1-2 RTT (TLS 1.2: 2 RTT, TLS 1.3: 1 RTT) | RTT + крипто | 20-400 ms | TLS 1.3, 0-RTT, session resumption |
+| **DNS resolution** | 1-4 RTT (recursive) | Кэш, расстояние до DNS | 5-100 ms | dns-prefetch, local resolver |
+
+### Закон Литтла для сетевых систем
+
+> **Закон Литтла (Little's Law, 1961):** L = lambda * W, где L — среднее число запросов в системе, lambda — средняя скорость поступления запросов, W — среднее время пребывания запроса в системе. Для сетевых сервисов: если throughput = 100 req/s и avg latency = 50ms, то в среднем в системе находятся 5 запросов одновременно.
+
+Применение в capacity planning:
+- **Максимальный throughput:** если на сервер приходит 1000 req/s и каждый обрабатывается 10ms, нужно минимум 10 параллельных worker-ов
+- **Connection pool sizing:** pool_size >= lambda * avg_latency_to_db
+
+### Latency vs Throughput: формальное соотношение
+
+- **Latency** — время обработки одного запроса (единица: секунды)
+- **Throughput** — количество обработанных запросов в единицу времени (единица: req/s)
+- Связь нелинейна: увеличение throughput через batching повышает latency; уменьшение latency через кэширование может повысить throughput
+- **Утилизация по Erlang:** при загрузке системы > 70% queueing delay растёт экспоненциально
+
+### Tail Latency Amplification (Dean & Barroso, 2013)
+
+> При fan-out на N сервисов вероятность попадания хотя бы одного запроса в "хвост" распределения: P(tail) = 1 - (1-p)^N. Для N=10 и P99: P = 1-(0.99)^10 = 9.6%. Для N=100: P = 63.4%. Jeff Dean (Google) формализовал это в "The Tail at Scale" (2013, Communications of the ACM).
+
+**См. также:** [[network-performance-optimization]] (TCP tuning и системная оптимизация), [[network-transport-layer]] (TCP handshake, congestion control), [[network-http-evolution]] (HTTP/2 multiplexing, HTTP/3 0-RTT)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1491,6 +1530,14 @@ tc qdisc del dev eth0 root netem
 
 ## Источники
 
+### Теоретические основы
+- Little J.D.C. (1961). "A Proof for the Queuing Formula: L = lambda * W" — Operations Research
+- Dean J., Barroso L.A. (2013). "The Tail at Scale" — Communications of the ACM (tail latency amplification)
+- Jacobson V. (1988). "Congestion Avoidance and Control" — ACM SIGCOMM (slow start и его влияние на latency)
+- RFC 7323 (2014). TCP Extensions for High Performance — Window Scaling, Round-Trip Time Measurement
+
+### Практические руководства
+
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|
 | 1 | [High Performance Browser Networking](https://hpbn.co) | Книга | TCP/TLS latency, fundamentals |
@@ -1523,9 +1570,12 @@ tc qdisc del dev eth0 root netem
 
 ## Источники и дальнейшее чтение
 
-- **Grigorik (2013).** *High Performance Browser Networking.* — лучшее практическое руководство по latency optimization: TCP, TLS, HTTP/2, WebSocket, WebRTC; доступно бесплатно на hpbn.co; обязательное чтение для любого, кто оптимизирует сетевые задержки.
-- **Fall, Stevens (2011).** *TCP/IP Illustrated, Vol. 1 (2nd ed).* — детальный разбор TCP-таймеров, retransmission и congestion control с реальными дампами пакетов; необходим для понимания, откуда берутся задержки на транспортном уровне.
+### Теоретические основы
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — фундаментальные объяснения queueing delay, propagation delay и transmission delay; математическая модель задержек помогает определить теоретические пределы оптимизации.
+- **Fall, Stevens (2011).** *TCP/IP Illustrated, Vol. 1 (2nd ed).* — детальный разбор TCP-таймеров, retransmission и congestion control с реальными дампами пакетов; необходим для понимания, откуда берутся задержки на транспортном уровне.
+
+### Практические руководства
+- **Grigorik (2013).** *High Performance Browser Networking.* — лучшее практическое руководство по latency optimization: TCP, TLS, HTTP/2, WebSocket, WebRTC; доступно бесплатно на hpbn.co; обязательное чтение для любого, кто оптимизирует сетевые задержки.
 
 ---
 

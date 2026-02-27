@@ -34,6 +34,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Disaster Recovery (DR)** — процесс восстановления IT-систем после катастрофического сбоя (стихийное бедствие, hardware failure, кибератака). В облаке DR реализуется через географическое распределение и автоматизацию failover.
+
+### Формальные определения
+
+| Метрика | Определение | Влияет на |
+|---------|------------|-----------|
+| **RTO** (Recovery Time Objective) | Максимально допустимое время простоя | Тип DR-стратегии |
+| **RPO** (Recovery Point Objective) | Максимально допустимая потеря данных | Частоту репликации/бэкапов |
+| **MTTR** (Mean Time To Recovery) | Среднее время восстановления (метрика SRE) | Автоматизацию recovery |
+| **MTBF** (Mean Time Between Failures) | Среднее время между сбоями | Надёжность инфраструктуры |
+
+### 4 стратегии DR (по возрастанию стоимости)
+
+| Стратегия | RTO | RPO | Стоимость | Механизм |
+|-----------|-----|-----|-----------|----------|
+| **Backup & Restore** | Часы | Часы | $ | Восстановление из бэкапа в другом регионе |
+| **Pilot Light** | Минуты—часы | Минуты | $$ | Минимальная инфраструктура всегда запущена (DB replica) |
+| **Warm Standby** | Минуты | Секунды | $$$ | Полная копия на минимальной мощности |
+| **Hot Standby (Active-Active)** | Секунды | ~0 | $$$$ | Полная копия на полной мощности |
+
+### Формула стоимости простоя
+
+> **Cost of downtime** = (потерянный доход/час) + (SLA penalties) + (репутационный ущерб) + (стоимость recovery)
+
+Для e-commerce с $1M/день: 1 час простоя ≈ $41,700. Стоимость Warm Standby ($500/мес) окупается при одном инциденте.
+
+> **См. также**: [[databases-backup-recovery]] — бэкапы БД, [[cloud-overview]] — карта раздела
+
+---
+
 ## TL;DR
 
 - **Multi-AZ** — защита от сбоя датацентра (auto failover)
@@ -391,9 +423,14 @@ resource "aws_route53_record" "secondary" {
 
 ## Источники
 
+### Теоретические основы
+- Patterson D. et al. (2002). *Recovery-Oriented Computing (ROC)*. — Проектирование систем с учётом неизбежности сбоев
+- Laprie J.C. (1995). *Dependable Computing and Fault Tolerance*. — Формальная модель надёжности: availability, reliability, safety
+
+### Практические руководства
 - [AWS Disaster Recovery](https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/)
 - [AWS Well-Architected: Reliability Pillar](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/)
-- "Release It!" by Michael Nygard — Stability patterns
+- Nygard M. (2018). *Release It!* — Stability patterns
 
 ---
 

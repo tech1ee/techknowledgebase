@@ -98,6 +98,52 @@ related:
 
 ---
 
+## Теоретические основы
+
+### Определение Foundation Model
+
+> **Foundation Model** — предобученная на масштабных данных модель, которая может быть адаптирована к широкому спектру задач (Bommasani et al., 2021, Stanford CRFM). В отличие от task-specific моделей, foundation models обучаются один раз, а затем используются через fine-tuning, prompting или RAG.
+
+### Таксономия архитектур LLM
+
+| Архитектура | Примеры | Принцип | Применение |
+|-------------|---------|---------|------------|
+| **Dense Transformer** | GPT-4o, Claude Sonnet | Все параметры активны на каждом токене | Универсальные задачи |
+| **Mixture of Experts (MoE)** | DeepSeek V3, Llama 4, Mixtral | Только часть параметров активна (sparse) | Масштаб при контроле стоимости |
+| **Encoder-only** | BERT, RoBERTa | Bidirectional attention | Классификация, NER |
+| **Encoder-Decoder** | T5, BART | Cross-attention | Перевод, суммаризация |
+| **Decoder-only** | GPT, Claude, Llama | Causal (autoregressive) attention | Генерация текста |
+
+### Эволюция законов масштабирования
+
+Развитие подходов к масштабированию моделей прошло три ключевых этапа:
+
+1. **Kaplan Scaling Laws** (2020, OpenAI) — потери модели снижаются по степенному закону при увеличении параметров, данных или вычислений. Приоритет отдавался увеличению числа параметров.
+2. **Chinchilla Scaling** (Hoffmann et al., 2022, DeepMind) — показал, что оптимально увеличивать данные и параметры пропорционально (~20 токенов на параметр). Это привело к пересмотру подходов к обучению.
+3. **Test-Time Compute Scaling** (2024, OpenAI o1) — новая парадигма: вместо масштабирования модели при обучении, масштабируется вычисление при [[reasoning-models-guide|inference через reasoning tokens]].
+
+### Open Source vs Closed Source: теоретические trade-offs
+
+> Дебат open vs closed source моделей имеет глубокие корни в теории инноваций. Согласно модели Раймонда (*"The Cathedral and the Bazaar"*, 1999), открытая разработка ускоряет инновации через crowdsourced improvements. В контексте LLM это проявляется: DeepSeek V3 (MIT license) обучен за $5.6M vs $100M+ для закрытых аналогов.
+
+| Аспект | Closed Source | Open Weight | Теоретическое основание |
+|--------|---------------|-------------|------------------------|
+| **Безопасность** | Контролируемое alignment | Community audit | Linus's Law: "given enough eyes, all bugs are shallow" |
+| **Стоимость** | API pricing | Self-hosting | Теория TCO: capex vs opex |
+| **Кастомизация** | Ограничена API | Fine-tuning, merge | Гибкость vs vendor lock-in |
+| **Приватность** | Данные уходят к провайдеру | Данные остаются локально | Data sovereignty requirements |
+| **Воспроизводимость** | Невозможна | Полная | Научный метод |
+
+### Бенчмарки: критический анализ
+
+По данным Stanford HAI Report (2025), традиционные бенчмарки (MMLU, HumanEval) достигли "saturated" состояния — топовые модели показывают >90%, что затрудняет дифференциацию. Новое поколение бенчмарков:
+- **GPQA** (graduate-level questions) — вопросы, сложные даже для экспертов
+- **SWE-bench** — решение реальных GitHub issues
+- **Humanity's Last Exam** — задачи, составленные экспертами специально для frontier моделей
+- **LMArena (Chatbot Arena)** — Elo-рейтинг на основе human preferences (Zheng et al., 2023)
+
+---
+
 ## Введение
 
 2024-2025 годы стали переломными для индустрии больших языковых моделей. Мы наблюдаем несколько ключевых трендов:
@@ -839,23 +885,25 @@ Qwen (Tongyi Qianwen) - линейка LLM от Alibaba Cloud. Активно и
 
 ## Источники
 
-| # | Источник | Тип | Вклад |
-|---|----------|-----|-------|
-| 1 | [OpenAI Models Docs](https://platform.openai.com/docs/models) | Docs | GPT-4o, o1/o3 specs |
-| 2 | [Anthropic Claude 3.5](https://www.anthropic.com/news/claude-3-5-sonnet) | Blog | Sonnet, Computer Use |
-| 3 | [Google Gemini 2.0](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/) | Blog | Flash, Pro specs |
-| 4 | [Meta Llama 4](https://ai.meta.com/blog/llama-4-multimodal-intelligence/) | Blog | 10M context, Scout |
-| 5 | [DeepSeek R1 Paper](https://arxiv.org/abs/2501.12948) | Paper | Reasoning, MoE |
-| 6 | [DeepSeek V3 Report](https://arxiv.org/abs/2412.19437) | Paper | 671B params, efficiency |
-| 7 | [Qwen 2.5 Blog](https://qwenlm.github.io/blog/qwen2.5-llm/) | Blog | Multilingual, coding |
-| 8 | [Mistral Docs](https://docs.mistral.ai/getting-started/models) | Docs | NeMo, Large 2 |
-| 9 | [Artificial Analysis Leaderboard](https://artificialanalysis.ai/leaderboards/models) | Benchmark | Live rankings |
-| 10 | [Vellum LLM Leaderboard](https://www.vellum.ai/llm-leaderboard) | Benchmark | Quality comparison |
-| 11 | [Stanford HAI 2025 Report](https://hai.stanford.edu/ai-index/2025-ai-index-report/technical-performance) | Report | Industry trends |
-| 12 | [HuggingFace Open LLM](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard) | Benchmark | Open-source rankings |
-| 13 | [OpenAI Pricing](https://platform.openai.com/docs/pricing) | Pricing | Token costs |
-| 14 | [Anthropic Pricing](https://www.anthropic.com/pricing) | Pricing | Claude costs |
-| 15 | [Price Per Token](https://pricepertoken.com/) | Tool | Cost calculator |
+### Теоретические основы
+- Bommasani, R. et al. (2021). *On the Opportunities and Risks of Foundation Models*. arXiv:2108.07258.
+- Kaplan, J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361.
+- Hoffmann, J. et al. (2022). *Training Compute-Optimal Large Language Models* (Chinchilla). arXiv:2203.15556.
+- Zheng, L. et al. (2023). *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*. arXiv:2306.05685.
+- DeepSeek-AI (2025). *DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via RL*. arXiv:2501.12948.
+- DeepSeek-AI (2024). *DeepSeek-V3 Technical Report*. arXiv:2412.19437.
+- Raymond, E. S. (1999). *The Cathedral and the Bazaar*. O'Reilly Media.
+
+### Практические руководства
+- [OpenAI Models Docs](https://platform.openai.com/docs/models)
+- [Anthropic Claude 3.5](https://www.anthropic.com/news/claude-3-5-sonnet)
+- [Google Gemini 2.0](https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/)
+- [Meta Llama 4](https://ai.meta.com/blog/llama-4-multimodal-intelligence/)
+- [Qwen 2.5 Blog](https://qwenlm.github.io/blog/qwen2.5-llm/)
+- [Mistral Docs](https://docs.mistral.ai/getting-started/models)
+- [Artificial Analysis Leaderboard](https://artificialanalysis.ai/leaderboards/models)
+- [Stanford HAI 2025 Report](https://hai.stanford.edu/ai-index/2025-ai-index-report/technical-performance)
+- [HuggingFace Open LLM Leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard)
 
 ---
 
@@ -874,18 +922,6 @@ Qwen (Tongyi Qianwen) - линейка LLM от Alibaba Cloud. Активно и
 **[[reasoning-models-guide]]** — Reasoning-модели (o1, o3, DeepSeek R1, Claude Extended Thinking) — один из ключевых трендов 2024-2025, упомянутых в данном обзоре. Гайд по reasoning моделям углубляется в механику test-time compute, GRPO, self-correction и объясняет, почему эти модели в 10-100x дороже стандартных, но дают качественный скачок на задачах математики, кодинга и научного анализа.
 
 **[[ai-api-integration]]** — Практическая интеграция с моделями через API — следующий шаг после выбора модели. Гайд по API-интеграции описывает форматы запросов, обработку streaming-ответов, retry-логику, управление rate limits и стоимостью для каждого провайдера (OpenAI, Anthropic, Google, DeepSeek), упомянутого в данном ландшафте.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach*, 4th ed.** — Энциклопедический обзор AI, позволяющий увидеть современные LLM в контексте 70-летней истории искусственного интеллекта. Помогает понять, почему reasoning-модели — это возврат к идеям search и planning, но реализованный средствами deep learning.
-
-- **Jurafsky, D. & Martin, J. H. (2023). *Speech and Language Processing*, 3rd ed.** — Детальное описание архитектур Transformer, attention mechanisms и методов обучения, на которых основаны все модели в данном ландшафте. Незаменим для понимания технических спецификаций каждого семейства моделей.
-
-- **Huyen, C. (2022). *Designing Machine Learning Systems*. O'Reilly.** — Практическое руководство по выбору и интеграции ML-моделей в production-системы, включая анализ стоимости, latency и trade-offs при выборе между закрытыми API и open-source self-hosting.
-
----
 
 ---
 

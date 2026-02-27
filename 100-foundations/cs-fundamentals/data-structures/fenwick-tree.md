@@ -32,6 +32,47 @@ Fenwick Tree (BIT) — структура для prefix sum queries и point upd
 
 ---
 
+## Теоретические основы
+
+> **Binary Indexed Tree (BIT)** — структура данных, предложенная Питером Фенвиком в 1994 году, позволяющая вычислять prefix sum и выполнять point update за O(log n) с использованием O(n) памяти, основанная на разложении индекса по младшим битам двоичного представления.
+
+### Формальная модель префиксных сумм
+
+Дан массив A[1..n]. Задача prefix sum: вычислить `sum(A[1..i])` для произвольного i и обновить `A[i] += delta`. Наивные подходы:
+
+| Подход | Prefix sum | Point update | Пространство |
+|--------|-----------|--------------|---------------|
+| Хранить массив A | O(n) | O(1) | O(n) |
+| Хранить prefix sums | O(1) | O(n) | O(n) |
+| **Fenwick Tree** | **O(log n)** | **O(log n)** | **O(n)** |
+
+BIT достигает баланса: каждый элемент `tree[i]` хранит сумму блока элементов A, размер которого определяется наименее значимым битом i: `lowbit(i) = i & (-i)`.
+
+### Сравнение с деревом отрезков
+
+| Критерий | Fenwick Tree | Segment Tree |
+|----------|-------------|--------------|
+| Сложность кода | 8-10 строк | 30-50 строк |
+| Память | O(n) | O(4n) |
+| Point update + prefix query | O(log n) | O(log n) |
+| Range update + range query | Возможно (два BIT) | Lazy propagation |
+| Range min/max query | **Не поддерживает** | Поддерживает |
+| Константа | Меньше | Больше |
+
+> **Ключевое ограничение:** Fenwick Tree работает только для обратимых операций (сложение, XOR). Для необратимых (min, max) используется [[segment-tree]] или [[sparse-table]].
+
+### Историческая справка
+
+| Год | Событие | Значение |
+|-----|---------|----------|
+| 1989 | Рябко Б.Я., "Быстрый онлайн-код" | Первое описание аналогичной структуры в контексте теории кодирования |
+| 1994 | Fenwick P., "A New Data Structure for Cumulative Frequency Tables" | Независимое переоткрытие, популяризация в англоязычном сообществе |
+| 2000-е | Широкое применение в CP | BIT стал стандартным инструментом на Codeforces, ICPC, IOI |
+
+**Связанные темы:** [[segment-tree]] (более мощная альтернатива), [[sparse-table]] (O(1) для статических данных), [[bit-manipulation]] (LSB-арифметика, лежащая в основе BIT)
+
+---
+
 ## Интуиция
 
 ### Аналогия 1: BIT как многоуровневая агрегация
@@ -755,13 +796,14 @@ private val tree = LongArray(n + 1)
 
 ## Источники и дальнейшее чтение
 
-- **Fenwick, P. (1994). A New Data Structure for Cumulative Frequency Tables.** -- Оригинальная статья. Фенвик представил структуру для задач подсчёта частот (cumulative frequency tables), но идея оказалась универсальнее -- применима к любым prefix sum задачам.
+### Теоретические основы
+- **Fenwick, P. (1994). "A New Data Structure for Cumulative Frequency Tables."** Software: Practice and Experience. — Оригинальная статья. Фенвик представил структуру для задач подсчёта частот (cumulative frequency tables), но идея оказалась универсальнее — применима к любым prefix sum задачам.
+- **Рябко, Б.Я. (1989). "Быстрый онлайн-код."** Доклады АН СССР. — Первое описание аналогичной структуры в контексте теории кодирования; опередила работу Фенвика на 5 лет.
+- **Cormen, T. et al. (2009). "Introduction to Algorithms (CLRS)."** — CLRS не описывает Fenwick Tree напрямую, но глава о бинарных операциях и augmented data structures даёт теоретическую базу.
 
-- **Cormen, T. et al. (2009). Introduction to Algorithms (CLRS).** -- CLRS не описывает Fenwick Tree напрямую, но глава о бинарных операциях и augmented data structures даёт теоретическую базу.
-
-- **Halim, S. (2013). Competitive Programming 3, Chapter 2.4.4.** -- Лучшее практическое описание Fenwick Tree: от базовой реализации до 2D BIT и range update/range query с двумя BIT. Включает таблицу "Fenwick vs Segment Tree".
-
-- **CP-Algorithms (cp-algorithms.com/data_structures/fenwick.html).** -- Полное руководство с описанием всех вариантов: point update/prefix query, range update/point query, range update/range query, 2D BIT.
+### Практические руководства
+- **Halim, S. (2013). "Competitive Programming 3", Chapter 2.4.4.** — Лучшее практическое описание Fenwick Tree: от базовой реализации до 2D BIT и range update/range query с двумя BIT. Включает таблицу "Fenwick vs Segment Tree".
+- [CP-Algorithms — Fenwick Tree](https://cp-algorithms.com/data_structures/fenwick.html) — полное руководство с описанием всех вариантов: point update/prefix query, range update/point query, range update/range query, 2D BIT.
 
 ---
 

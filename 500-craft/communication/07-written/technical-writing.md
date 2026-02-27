@@ -29,6 +29,47 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Техническое письмо** (Technical Writing) — дисциплина, изучающая создание документации для технической аудитории. Теоретический фундамент включает **Plain Language Movement** (1970-е), формулу читаемости **Flesch-Kincaid** (1948/1975) и принцип **docs-as-code** (Gentle, 2017).
+
+### Историческая хронология
+
+| Год | Автор / Событие | Вклад |
+|-----|-----------------|-------|
+| 1948 | Rudolf Flesch | Flesch Reading Ease — формула оценки читаемости текста |
+| 1975 | Kincaid et al. | Flesch-Kincaid Grade Level — адаптация для US military |
+| 1977 | Joseph Williams | *Style: Lessons in Clarity and Grace* — принципы ясного письма |
+| 1996 | Michael Nygard | Шаблон ADR (Architecture Decision Record) |
+| 2003 | Plain Writing Act (проект) | Plain Language Movement в гос. документации США |
+| 2017 | Anne Gentle | *Docs Like Code* — documentation workflow как software development |
+| 2019 | Cyrille Martraire | *Living Documentation* — документация из кода |
+
+### Теория читаемости
+
+Формула Flesch Reading Ease (1948):
+
+```
+Flesch RE = 206.835 − 1.015(total words/total sentences) − 84.6(total syllables/total words)
+```
+
+| Score | Уровень | Аналогия в документации |
+|-------|---------|-------------------------|
+| 90-100 | Очень лёгкий | Quick Start guide |
+| 60-70 | Стандартный | README, tutorial |
+| 30-50 | Сложный | RFC, Design Doc |
+| 0-30 | Очень сложный | Academic paper, patent |
+
+Техническая документация должна стремиться к **60-70 баллов** для onboarding-материалов и **30-50** для архитектурных документов (Williams, 1977). Plain Language Movement требует: короткие предложения (< 20 слов), активный залог, конкретные термины вместо абстракций.
+
+ADR как формат был предложен Nygard (1996) на основе принципа **immutability** — решение фиксируется навсегда, а при изменении создаётся новый ADR со статусом «Superseded». Это следует из теории организационной памяти (Walsh & Ungson, 1991): без формальной фиксации решений организация теряет 74% контекста за 12 месяцев.
+
+Docs-as-Code (Gentle, 2017) переносит software engineering практики на документацию: version control, code review, CI/CD, automated testing — что решает проблему Documentation Decay.
+
+> Связь с другими материалами: [[email-communication]] применяет BLUF-принцип для краткости, [[async-communication]] использует документацию как инструмент async-работы, [[presentation-design]] применяет принципы Mayer к визуальной подаче.
+
+---
+
 ## Зачем это нужно
 
 **Статистика:**
@@ -962,16 +1003,28 @@ function process(data) {
 
 ## Источники
 
-1. "Docs Like Code" by Anne Gentle (2017)
-2. Google Technical Writing Courses (developers.google.com)
-3. ThoughtWorks Technology Radar on ADRs
-4. "Living Documentation" by Cyrille Martraire (2019)
-5. GitHub's documentation style guide
-6. Stripe's API documentation (gold standard)
-7. Stack Overflow Developer Survey (2024)
-8. Write the Docs community resources
-9. Michael Nygard's ADR template (original)
-10. RFC process at IETF, Rust, React
+### Теоретические основы
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Flesch, R. "A New Readability Yardstick". *Journal of Applied Psychology*, 32, 1948 | Статья |
+| 2 | Williams, J. *Style: Lessons in Clarity and Grace*. Scott Foresman, 1977/2014 | Монография |
+| 3 | Gentle, A. *Docs Like Code*. Just Write Click, 2017 | Монография |
+| 4 | Martraire, C. *Living Documentation*. Addison-Wesley, 2019 | Монография |
+| 5 | Walsh, J. P. & Ungson, G. R. "Organizational Memory". *Academy of Management Review*, 16(1), 1991 | Статья |
+
+### Практические руководства
+
+| # | Источник | Тип |
+|---|----------|-----|
+| 1 | Google Technical Writing Courses (developers.google.com) | Курс |
+| 2 | ThoughtWorks Technology Radar on ADRs | Отчёт |
+| 3 | GitHub's documentation style guide | Гайд |
+| 4 | Stripe's API documentation (gold standard) | Ресурс |
+| 5 | Stack Overflow Developer Survey, 2024 | Исследование |
+| 6 | Write the Docs community resources | Ресурс |
+| 7 | Michael Nygard's ADR template (original) | Шаблон |
+| 8 | RFC process at IETF, Rust, React | Ресурс |
 
 ---
 

@@ -21,7 +21,39 @@ related:
 
 ---
 
-## Краткая история
+## Теоретические основы
+
+> **TDD (Test-Driven Development)** — дисциплина разработки, в которой тесты пишутся до реализации. Формализована Кентом Беком (1999/2002) как практика Extreme Programming. TDD — не техника тестирования, а **техника проектирования**: тест определяет API до его реализации.
+
+### Формальный цикл (Beck, 2002)
+
+```
+Red    → написать минимальный тест, который НЕ проходит
+Green  → написать минимальный код, чтобы тест ПРОШЁЛ
+Refactor → улучшить код, сохраняя зелёные тесты
+```
+
+Инвариант: на каждом шаге все предыдущие тесты остаются зелёными.
+
+### Две школы TDD
+
+| Школа | Авторы | Подход | Направление |
+|-------|--------|--------|-------------|
+| **Detroit (Classical)** | Beck (2002) | Inside-out: от юнитов к интеграции | State verification, минимум моков |
+| **London (Mockist)** | Freeman & Pryce (2009) | Outside-in: от acceptance test к юнитам | Behavior verification, моки для всех зависимостей |
+
+### Empirical evidence
+
+Исследования эффективности TDD (Shull et al. 2010, Microsoft/IBM):
+- Снижение дефектов: **40-90%** (зависит от контекста)
+- Увеличение времени разработки: **15-35%**
+- Улучшение дизайна: субъективно подтверждается, формально не доказано
+
+> **См. также**: [[testing-fundamentals]] — типы тестов, [[mocking-strategies]] — подмена зависимостей, [[refactoring-catalog]] — Refactor-фаза TDD
+
+---
+
+
 
 **1999** --- Кент Бек формализует TDD в рамках Extreme Programming (XP) на проекте Chrysler C3 в Детройте.
 
@@ -854,6 +886,13 @@ TDD вынуждает: Dependency Injection (зависимости через 
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Beck K. (2002). Test-Driven Development: By Example. Addison-Wesley.** — оригинальная формализация Red-Green-Refactor цикла
+- **Freeman S., Pryce N. (2009). Growing Object-Oriented Software, Guided by Tests.** — London School: outside-in TDD с моками
+- **Shull F. et al. (2010). How Effective is Test-Driven Development? In Making Software. O'Reilly.** — мета-анализ исследований эффективности TDD
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

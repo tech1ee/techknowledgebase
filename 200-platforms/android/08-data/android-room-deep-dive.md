@@ -51,6 +51,34 @@ Room решает все три проблемы одним архитектур
 
 ---
 
+## Теоретические основы
+
+### Object-Relational Impedance Mismatch
+
+> **Object-relational impedance mismatch** — фундаментальное несоответствие между объектной моделью (классы, наследование, полиморфизм) и реляционной моделью (таблицы, строки, SQL). Термин популяризирован Ted Neward (2006, *"The Vietnam of Computer Science"*). Room решает эту проблему через compile-time mapping: аннотации `@Entity`, `@Dao`, `@Query` создают мост между Kotlin data class и SQL-таблицей без runtime reflection.
+
+| Аспект несоответствия | Объектная модель | Реляционная модель | Как решает Room |
+|----------------------|------------------|--------------------|-----------------|
+| **Identity** | `==` / `===` / hashCode | PRIMARY KEY | `@PrimaryKey` на поле entity |
+| **Наследование** | `class Child : Parent` | Нет наследования таблиц | `@Entity` на каждом классе отдельно |
+| **Ассоциации** | Ссылки на объекты | Foreign keys + JOIN | `@Relation`, `@ForeignKey`, Map return types |
+| **Коллекции** | `List<Item>` в поле | Отдельная таблица с FK | `@Relation` + embedded queries |
+| **Навигация** | `order.customer.name` | `JOIN orders ON ...` | Multimap queries (Room 2.4+) |
+
+### Repository Pattern (Fowler, 2002)
+
+> Martin Fowler (*Patterns of Enterprise Application Architecture*, 2002) определяет **Repository** как посредника между domain-слоем и data-слоем, инкапсулирующего логику доступа к данным. В Android Room DAO — это нижний уровень Repository: он абстрагирует SQL. Выше располагается Repository-класс, который абстрагирует источник данных (Room + Network).
+
+### Annotation Processing: compile-time code generation
+
+> Room использует **KSP** (Kotlin Symbol Processing) для генерации кода при компиляции. Это реализация паттерна **metaprogramming** — код, который генерирует код. Исторически Java использовала APT (JSR-269, 2006), затем KAPT (Kotlin Annotation Processing Tool), и наконец KSP (2021) — в 2x быстрее KAPT за счёт работы с Kotlin AST напрямую.
+
+> Compile-time verification SQL — ключевое свойство Room. Annotation processor парсит SQL-строку из `@Query`, проверяет её синтаксис, сопоставляет имена таблиц/колонок с `@Entity` и верифицирует типы возвращаемых значений. Если SQL некорректен — ошибка компиляции, а не runtime crash.
+
+> **Связь**: ORM → [[database-design-optimization]], Repository Pattern → [[android-repository-pattern]], KSP → [[android-compilation-pipeline]]
+
+---
+
 ## Терминология
 
 | Термин | Что это | Аналогия из реальной жизни |
@@ -724,17 +752,20 @@ TypeConverter, объявленный на уровне Entity, не будет 
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022).** *Professional Android.* -- подробное описание Room с production-ready примерами Entity, DAO, миграций и TypeConverters. Рекомендуется как практическое руководство после понимания теории из текущего файла.
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Neward T. *The Vietnam of Computer Science* (2006) | Object-Relational Impedance Mismatch — проблема, которую решает Room |
+| Fowler M. *Patterns of Enterprise Application Architecture* (2002) | Repository Pattern, Data Mapper, Active Record |
+| Alur D. et al. *Core J2EE Patterns* (2003) | DAO Pattern — первоисточник паттерна Room DAO |
+| Codd E.F. *A Relational Model of Data* (1970) | Реляционная модель — основа SQLite |
 
-- **Phillips B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* -- пошаговое руководство по Room от основ до Relations. Отличная книга для тех, кто предпочитает учиться через building -- каждая глава строит реальное приложение.
-
-- **Alur D., Crupi J., Malks D. (2003).** *Core J2EE Patterns: Best Practices and Design Strategies.* -- оригинальное описание паттерна DAO (Data Access Object), который Room реализует через аннотации. Понимание первоисточника помогает осознать, почему DAO -- интерфейс, а не класс, и почему он абстрагирует источник данных.
-
-- **Muntenescu F. (2017-2022).** *7 Steps to Room / Room series on Medium.* -- серия статей от Developer Advocate Google, объясняющая design decisions Room: почему compile-time verification, почему annotation processing, почему Flow вместо LiveData. Лучший источник для понимания "почему так", а не только "как".
-
-- **Android Developers (2024).** *Save Data in a Local Database Using Room.* -- официальная документация. Всегда актуальна, содержит последние API и best practices. Используйте как reference после прочтения текущего deep-dive.
-
-- **Android Developers (2024).** *Room KMP Migration Guide.* -- руководство по использованию Room в Kotlin Multiplatform проектах. Покрывает платформо-специфичные драйверы, ограничения и migration path с Android-only Room.
+### Практические руководства
+- **Meier R. (2022).** *Professional Android.* -- подробное описание Room с production-ready примерами Entity, DAO, миграций и TypeConverters.
+- **Phillips B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* -- пошаговое руководство по Room от основ до Relations.
+- **Muntenescu F. (2017-2022).** *7 Steps to Room / Room series on Medium.* -- серия статей от Developer Advocate Google, объясняющая design decisions Room.
+- **Android Developers (2024).** *Save Data in a Local Database Using Room.* -- официальная документация.
+- **Android Developers (2024).** *Room KMP Migration Guide.* -- руководство по использованию Room в KMP.
 
 ---
 

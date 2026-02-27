@@ -40,6 +40,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Production AI System** — распределённая система, обеспечивающая надёжный (reliable), масштабируемый (scalable) и экономически эффективный (cost-efficient) inference предобученных моделей с гарантиями качества обслуживания (QoS).
+
+### Теоретический фундамент
+
+| Принцип | Источник | Применение в AI Production |
+|---------|----------|---------------------------|
+| **Queueing Theory** | Little's Law: $L = \lambda W$ | Sizing inference queue, batching |
+| **Amdahl's Law** | Amdahl (1967) | Ограничения параллелизма GPU |
+| **CAP Theorem** | Brewer (2000) | Consistency vs Availability для AI-кэша |
+| **SRE principles** | Beyer et al. (2016) | SLO/SLI для LLM-сервисов |
+| **Roofline Model** | Williams et al. (2009) | Memory-bound vs Compute-bound анализ |
+
+### Ключевые метрики
+
+> **Time to First Token (TTFT)** и **Tokens per Second (TPS)** — две основные метрики inference-производительности. TTFT определяется prefill-фазой (обработка промпта), TPS — decode-фазой (генерация токенов). Оптимизация одной метрики часто ухудшает другую — это фундаментальный trade-off (Kwon et al., 2023, vLLM).
+
+### Эволюция AI Serving
+
+| Этап | Период | Характеристика | Ключевые системы |
+|------|--------|---------------|-----------------|
+| Batch ML | 2010-2016 | Offline predictions | Spark MLlib |
+| Real-time ML | 2016-2020 | Online inference, <100ms | TensorFlow Serving, TorchServe |
+| **LLM Serving** | 2022+ | Autoregressive, KV cache, >1s | vLLM, TGI, Triton |
+| **Agentic Serving** | 2024+ | Multi-step, tool calls, streaming | LangServe, Modal |
+
+> **Continuous batching** (Yu et al., 2022, Orca) — техника, позволяющая добавлять новые запросы в batch на лету, не дожидаясь завершения текущих. Увеличивает throughput в 2-10x по сравнению со static batching.
+
+**Связи:** [[llm-inference-optimization]] (оптимизация inference), [[ai-cost-optimization]] (управление стоимостью), [[ai-observability-monitoring]] (мониторинг)
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -851,6 +884,17 @@ API Gateway (auth, rate limiting), AI Orchestration Layer (model router, semanti
 
 ## Источники
 
+### Теоретические основы
+
+- Kwon W. et al. (2023). *Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM)*. SOSP
+- Yu G. et al. (2022). *Orca: A Distributed Serving System for Transformer-Based Generative Models*. OSDI
+- Beyer B. et al. (2016). *Site Reliability Engineering*. O'Reilly
+- Williams S. et al. (2009). *Roofline: An Insightful Visual Performance Model*. CACM
+- Huyen C. (2022). *Designing Machine Learning Systems*. O'Reilly
+- Amdahl G. (1967). *Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities*. AFIPS
+
+### Практические руководства
+
 - [vLLM Documentation](https://docs.vllm.ai/) — high-throughput serving
 - [LangSmith](https://docs.smith.langchain.com/) — LLM observability
 - [OpenAI Cookbook](https://cookbook.openai.com/) — best practices
@@ -870,13 +914,6 @@ API Gateway (auth, rate limiting), AI Orchestration Layer (model router, semanti
 **[[ai-evaluation-metrics]]** — Метрики оценки в продакшене принципиально отличаются от offline-метрик: online evaluation включает A/B-тестирование, мониторинг качества в реальном времени, отслеживание degradation и drift. Production AI-система без метрик — это чёрный ящик, где невозможно обнаружить проблемы до жалоб пользователей. LLM-as-a-Judge, user feedback loops и автоматические алерты — ключевые компоненты production-мониторинга.
 
 **[[cloud-serverless-patterns]]** — Serverless-паттерны (Lambda, Cloud Functions, Modal) предлагают экономичную альтернативу для AI-инференса: оплата только за использование, автоматическое масштабирование, отсутствие управления серверами. Однако cold start, ограничения по памяти и таймауты создают специфические вызовы для LLM-сервисов. Выбор между serverless и dedicated GPU-инстансами зависит от паттерна нагрузки и требований к latency.
-
----
-
-## Источники и дальнейшее чтение
-
-- **Huyen C. (2022). Designing Machine Learning Systems. O'Reilly.** — наиболее практичное руководство по ML в продакшене, покрывающее serving, мониторинг, A/B-тестирование, data pipelines и все аспекты MLOps, необходимые для production AI-систем
-- **Russell S., Norvig P. (2020). Artificial Intelligence: A Modern Approach. 4th edition.** — теоретическая база для понимания trade-offs в AI-системах: точность vs скорость, exploration vs exploitation, что важно для принятия архитектурных решений в продакшене
 
 ---
 

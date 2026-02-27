@@ -70,6 +70,35 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Document Q&A** — специализированная RAG-система для извлечения структурированной информации из документов (PDF, DOCX, images). В отличие от general-purpose RAG, фокусируется на точном извлечении фактов (суммы, даты, условия) с цитированием источников.
+
+Теоретическая база Document Q&A объединяет NLP, computer vision и information extraction:
+
+| Компонент | Теория | Практика |
+|-----------|--------|----------|
+| **Document Parsing** | Document layout analysis (Binmakhashen & Mahmoud, 2019) | Docling, LlamaParse, PyMuPDF4LLM |
+| **OCR** | Optical Character Recognition (Smith, 2007, Tesseract) | Vision models (GPT-4V, Claude Vision) |
+| **Information Extraction** | Named Entity Recognition (Nadeau & Sekine, 2007) | Structured Outputs + Pydantic schema |
+| **Grounded Generation** | Attributed QA (Bohnet et al., 2022) | Цитирование: каждый факт → ссылка на источник |
+| **Document Comparison** | Text diff + semantic similarity | Cross-document analysis |
+
+> **Structured extraction** формально: дан документ $D$ и схема $S = \{field_1: type_1, ..., field_n: type_n\}$, задача — извлечь значения $\{v_1, ..., v_n\}$ с максимальной точностью. LLM + Structured Outputs решает это через constrained decoding по схеме $S$.
+
+**Два подхода к Document Q&A:**
+
+| Подход | Описание | Когда использовать |
+|--------|----------|-------------------|
+| **Parse → Chunk → RAG** | Текстовый парсинг + chunking + vector search | Текстовые документы, длинные PDF |
+| **Vision-based** | PDF → изображения → LLM с vision | Таблицы, графики, сложный layout |
+
+Проблема **layout understanding**: PDF — визуальный формат, и таблицы/списки теряют структуру при текстовом извлечении. Vision-based подход решает это, но стоит 5-10x дороже.
+
+См. также: [[tutorial-rag-chatbot|RAG Chatbot Tutorial]] — базовый RAG, [[structured-outputs-tools|Structured Outputs]] — гарантированный формат, [[ai-data-preparation|Data Preparation]] — chunking.
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: Неструктурированные данные в документах
@@ -1475,5 +1504,27 @@ Answer correctness (vs ground truth), faithfulness (ответ основан н
 | Углубиться | [[ai-data-preparation]] | Глубокая подготовка данных |
 | Смежная тема | [[structured-outputs-tools]] | Structured outputs и tool use |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Bohnet B. et al. (2022). *Attributed Question Answering: Evaluation and Modeling for Attributed LLMs*. arXiv:2212.08037 | Attributed QA — ответы с цитированием |
+| 2 | Binmakhashen G., Mahmoud S. (2019). *Document Layout Analysis: A Comprehensive Survey*. ACM Computing Surveys | Теория document layout analysis |
+| 3 | Nadeau D., Sekine S. (2007). *A Survey of Named Entity Recognition and Classification*. Lingvisticae Investigationes | NER — основа information extraction |
+| 4 | Smith R. (2007). *An Overview of the Tesseract OCR Engine*. ICDAR | Tesseract — основа современных OCR |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Docling — IBM](https://github.com/DS4SD/docling) | Document parsing library |
+| 2 | [LlamaParse](https://cloud.llamaindex.ai/parse) | SaaS document parsing |
+| 3 | [Pydantic AI](https://ai.pydantic.dev/) | Structured outputs framework |
+| 4 | [PyMuPDF4LLM](https://pymupdf.readthedocs.io/) | PDF → Markdown conversion |
 
 *Проверено: 2026-01-09*

@@ -42,6 +42,36 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Эволюция теории менеджмента: от Taylor к Agile
+
+> **Определение:** Engineering Management — дисциплина на стыке управления людьми и технического лидерства, применяющая принципы менеджмента к организации работы инженерных команд. Отличается от general management необходимостью глубокого технического контекста.
+
+Понимание роли Engineering Manager невозможно без контекста эволюции управленческой мысли:
+
+| Эпоха | Теоретик | Ключевая идея | Влияние на EM |
+|-------|----------|---------------|---------------|
+| 1911 | Frederick Taylor, *"Scientific Management"* | Оптимизация процессов, измерение производительности | Метрики, process improvement |
+| 1943 | Abraham Maslow, *"A Theory of Human Motivation"* | Иерархия потребностей | Понимание мотивации инженеров |
+| 1954 | Peter Drucker, *"The Practice of Management"* | Management by Objectives (MBO) | OKRs, performance management |
+| 1960 | Douglas McGregor, *"The Human Side of Enterprise"* | Theory X vs Theory Y | Доверие vs контроль в команде |
+| 2001 | Agile Manifesto | Individuals over processes, working software | Self-organizing teams, servant leadership |
+
+Peter Drucker в *"The Effective Executive"* (1966) сформулировал принцип, центральный для роли EM:
+
+> «Задача руководителя — не делать работу за других, а сделать других способными выполнять свою работу эффективно.» — Peter Drucker
+
+### Engineering Management как самостоятельная дисциплина
+
+Andy Grove в *"High Output Management"* (1983) определил output менеджера как **output его организации плюс output соседних организаций, на которые он влияет**. Эта формула остаётся фундаментом для оценки эффективности EM: не личная продуктивность, а производительность команды.
+
+Camille Fournier в *"The Manager's Path"* (2017) систематизировала Engineering Management как карьерный путь с чёткими ступенями и [[transition-to-management|переходом]], описав его как **career change**, а не promotion. Это перекликается с исследованиями identity shift (Ibarra H., *"Working Identity"*, 2003), показывающими, что смена профессиональной роли требует пересмотра самоидентификации.
+
+Исследования Google (Project Oxygen, 2008; обновление 2018) эмпирически выделили 10 поведений эффективного менеджера, подтвердив, что технические навыки занимают последнее место в рейтинге — на первых местах coaching, empowerment и [[one-on-one-meetings|quality 1-on-1s]].
+
+---
+
 ## Зачем понимать эту роль?
 
 ### Типичная ситуация
@@ -669,9 +699,20 @@ SCRIPT:
 
 ## Источники
 
+### Теоретические основы
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | The Manager's Path (Camille Fournier) | Book | Role definition, progression |
+| 1 | Taylor F. W. "The Principles of Scientific Management" — Harper, 1911 | Книга | Основы научного управления |
+| 2 | Drucker P. "The Practice of Management" — Harper, 1954 | Книга | Management by Objectives |
+| 3 | Drucker P. "The Effective Executive" — Harper, 1966 | Книга | Принципы эффективного руководства |
+| 4 | McGregor D. "The Human Side of Enterprise" — McGraw-Hill, 1960 | Книга | Theory X vs Theory Y |
+| 5 | Grove A. "High Output Management" — Random House, 1983 | Книга | Output менеджера = output организации |
+| 6 | Google "Project Oxygen" — re:Work, 2008 (upd. 2018) | Исследование | 10 поведений эффективного менеджера |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Book | Role definition, progression |
 | 2 | [Rands in Repose](https://randsinrepose.com) | Blog | Rands Test, practical advice |
 | 3 | [What are signs of a great manager](https://rework.withgoogle.com) | Research | Google's management research |
 | 4 | [First Round Review](https://review.firstround.com) | Articles | EM best practices |

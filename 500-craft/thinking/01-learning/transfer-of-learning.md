@@ -34,6 +34,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Transfer of Learning** — применение знаний, навыков и стратегий, приобретённых в одном контексте, к новым и отличающимся ситуациям (Perkins & Salomon, 1992).
+
+Проблема переноса знаний — одна из старейших в психологии обучения, начатая ещё с полемики о «формальной дисциплине» в XIX веке:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Теория общих элементов | Thorndike & Woodworth | 1901 | Перенос пропорционален числу общих элементов между ситуациями |
+| Identical elements theory | Thorndike | 1924 | Опровержение мифа о «тренировке ума» латынью |
+| Inert knowledge | Whitehead | 1929 | Знание, которое есть, но не активируется в нужном контексте |
+| Low Road / High Road | Perkins & Salomon | 1988 | Два пути переноса: автоматический (near) и осознанный (far) |
+| Taxonomy of far transfer | Barnett & Ceci | 2002 | Систематизация: что, когда, контекст переноса |
+| Мета-анализ шахмат | Sala & Gobet | 2017 | Near-zero effect шахмат на общие когнитивные способности |
+
+> **Thorndike & Woodworth (1901):** «The amount of transfer from one function to another is a function of the number of elements common to the two functions.» Этот принцип объясняет, почему near transfer надёжен (много общих элементов), а far transfer — редок (мало общих элементов).
+
+Модель **Perkins & Salomon (1988)** остаётся наиболее влиятельной: **Low Road** — автоматический перенос при сходстве стимулов (не требует усилий, но ограничен near transfer); **High Road** — осознанная абстракция принципов и намеренный поиск связей (требует усилий, но открывает far transfer). Существует два направления High Road: **forward-reaching** (при изучении: «где ещё пригодится?») и **backward-reaching** (при проблеме: «что из известного применимо?»).
+
+Критический вывод из мета-анализов: **far transfer — скорее исключение, чем правило** (Barnett & Ceci, 2002). Sala & Gobet (2017) показали near-zero эффект шахмат на математику и общий интеллект. Это означает: для переноса нужна **mindful abstraction** — осознанное извлечение глубинных принципов из конкретного опыта. См. [[mental-models]] — ментальные модели как инструмент High Road transfer.
+
+---
+
 ## Почему это важно
 
 > "In many respects, transfer is the most critical concept in teaching."
@@ -753,14 +776,18 @@ class CreditCardPayment(PaymentStrategy):
 
 ## Источники
 
+### Теоретические основы
+- Thorndike, E. L. & Woodworth, R. S. «The Influence of Improvement in One Mental Function upon the Efficiency of Other Functions». Psychological Review, 1901
+- Perkins, D. N. & Salomon, G. «Teaching for Transfer». Educational Leadership, 1988
+- Barnett, S. M. & Ceci, S. J. «When and Where Do We Apply What We Learn? A Taxonomy for Far Transfer». Psychological Bulletin, 2002
+- Sala, G. & Gobet, F. «Does Chess Instruction Improve Mathematical Problem-Solving Ability?» Educational Research Review, 2017
+- Haskell, R. E. *Transfer of Learning: Cognition, Instruction, and Reasoning*. Academic Press, 2001
+- [Springer: Educational Psychology Review — Transfer](https://link.springer.com/article/10.1007/s10648-019-09465-5) — проверено 2025-12-19
+- [NAP: How People Learn (Chapter 3)](https://nap.nationalacademies.org/read/9853/chapter/5) — проверено 2025-12-19
+
+### Практические руководства
 - [Wikipedia: Transfer of Learning](https://en.wikipedia.org/wiki/Transfer_of_learning) — проверено 2025-12-19
 - [Yale Poorvu Center: Transfer of Learning](https://poorvucenter.yale.edu/TransferLearning) — проверено 2025-12-19
-- [NAP: How People Learn (Chapter 3)](https://nap.nationalacademies.org/read/9853/chapter/5) — проверено 2025-12-19
-- [Springer: Educational Psychology Review - Transfer](https://link.springer.com/article/10.1007/s10648-019-09465-5) — проверено 2025-12-19
-- Perkins, D. N., & Salomon, G. (1988). Teaching for transfer. Educational Leadership, 46(1), 22-32.
-- Thorndike, E. L., & Woodworth, R. S. (1901). The influence of improvement in one mental function upon the efficiency of other functions.
-- Barnett, S. M., & Ceci, S. J. (2002). When and where do we apply what we learn? A taxonomy for far transfer.
-- Sala, G., & Gobet, F. (2017). Does chess instruction improve mathematical problem-solving ability? Two experimental studies with an active control group.
 
 ---
 

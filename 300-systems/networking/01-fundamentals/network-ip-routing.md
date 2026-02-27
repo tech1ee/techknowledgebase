@@ -35,6 +35,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **IP (Internet Protocol)** — протокол сетевого уровня (L3), обеспечивающий адресацию хостов и маршрутизацию дейтаграмм в объединённых сетях без установления соединения (connectionless, best-effort delivery). Формально определён в RFC 791 (Postel, 1981).
+
+### Формальная модель IP
+
+RFC 791 определяет IP-дейтаграмму как самодостаточную единицу передачи данных с заголовком (20-60 байт) и полезной нагрузкой. Ключевые поля заголовка: Source/Destination Address (32 бита каждый в IPv4), TTL, Protocol, Header Checksum. IPv6 (RFC 8200, Deering & Hinden, 2017) расширяет адресное пространство до 128 бит и упрощает заголовок.
+
+### Алгоритмы маршрутизации
+
+| Алгоритм | Тип | Протокол | Область применения |
+|----------|-----|----------|-------------------|
+| Distance-Vector | Bellman-Ford | RIP (RFC 2453, 1998) | Малые сети, до 15 hop |
+| Link-State | Dijkstra SPF | OSPF (RFC 2328, Moy, 1998) | Корпоративные сети, IGP |
+| Path-Vector | Policy-based | BGP-4 (RFC 4271, Rekhter et al., 2006) | Межоператорская маршрутизация, EGP |
+
+### Хронология ключевых стандартов
+
+- **1974** — Cerf & Kahn публикуют "A Protocol for Packet Network Intercommunication" — основа TCP/IP
+- **1981** — RFC 791 (IPv4), RFC 792 (ICMP) — формализация Internet Protocol
+- **1993** — RFC 1519 (CIDR) — бесклассовая адресация, замена классовой модели A/B/C
+- **1998** — RFC 2328 (OSPFv2), RFC 2453 (RIPv2) — стандартизация IGP-протоколов
+- **2006** — RFC 4271 (BGP-4) — обновлённая спецификация протокола межоператорской маршрутизации
+- **2017** — RFC 8200 (IPv6) — финальная спецификация IPv6
+
+> **Longest Prefix Match (LPM)** — фундаментальный принцип IP-маршрутизации: при наличии нескольких совпадающих маршрутов выбирается маршрут с наиболее длинным (специфичным) префиксом. Этот механизм обеспечивает иерархическую агрегацию маршрутов и является основой масштабируемости глобальной таблицы маршрутизации.
+
+**См. также:** [[network-physical-layer]] (L2-коммутация как дополнение к L3-маршрутизации), [[network-transport-layer]] (TCP/UDP поверх IP), [[network-cloud-modern]] (виртуализация IP-маршрутизации в облаке)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1936,12 +1967,17 @@ iptables -t nat -A PREROUTING -p tcp --dport 80 \
 
 ## Источники
 
-- [RFC 791 - Internet Protocol](https://datatracker.ietf.org/doc/html/rfc791)
-- [RFC 8200 - IPv6 Specification](https://datatracker.ietf.org/doc/html/rfc8200)
-- [RFC 792 - ICMP](https://datatracker.ietf.org/doc/html/rfc792)
-- [RFC 826 - ARP](https://datatracker.ietf.org/doc/html/rfc826)
-- [RFC 1918 - Private Addresses](https://datatracker.ietf.org/doc/html/rfc1918)
-- [RFC 4271 - BGP-4](https://datatracker.ietf.org/doc/html/rfc4271)
+### Теоретические основы
+- [RFC 791 - Internet Protocol](https://datatracker.ietf.org/doc/html/rfc791) — Postel, 1981
+- [RFC 8200 - IPv6 Specification](https://datatracker.ietf.org/doc/html/rfc8200) — Deering & Hinden, 2017
+- [RFC 792 - ICMP](https://datatracker.ietf.org/doc/html/rfc792) — Postel, 1981
+- [RFC 826 - ARP](https://datatracker.ietf.org/doc/html/rfc826) — Plummer, 1982
+- [RFC 1918 - Private Addresses](https://datatracker.ietf.org/doc/html/rfc1918) — Rekhter et al., 1996
+- [RFC 4271 - BGP-4](https://datatracker.ietf.org/doc/html/rfc4271) — Rekhter et al., 2006
+- [RFC 2328 - OSPFv2](https://datatracker.ietf.org/doc/html/rfc2328) — Moy, 1998
+
+### Практические руководства
+- Cerf V., Kahn R. (1974). "A Protocol for Packet Network Intercommunication" — IEEE Transactions on Communications
 
 ---
 
@@ -1959,9 +1995,13 @@ iptables -t nat -A PREROUTING -p tcp --dport 80 \
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Tanenbaum, Wetherall (2011).** *Computer Networks.* — наиболее глубокое описание IP-протокола, алгоритмов маршрутизации (distance vector, link state) и BGP; обязательное чтение для понимания сетевого уровня.
 - **Comer (2015).** *Internetworking with TCP/IP.* — практически ориентированный учебник с детальным разбором IP-адресации, subnetting, CIDR и NAT; отличный справочник для повседневной работы.
 - **Fall, Stevens (2011).** *TCP/IP Illustrated, Vol. 1 (2nd ed).* — обновлённая классика с детальным разбором IP, ICMP, ARP и маршрутизации с реальными дампами пакетов; незаменим для глубокого понимания протоколов.
+
+### Практические руководства
+- **Huitema (2000).** *Routing in the Internet.* — практический взгляд на BGP, OSPF и проектирование маршрутизации в реальных сетях.
 
 ---
 

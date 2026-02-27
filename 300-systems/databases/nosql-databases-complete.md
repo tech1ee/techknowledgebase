@@ -74,6 +74,53 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис NoSQL
+
+### CAP Theorem: формальные определения (Gilbert & Lynch, 2002)
+
+Каждая NoSQL-система делает выбор в рамках CAP:
+
+| Свойство | Формальное определение | Пример |
+|----------|----------------------|--------|
+| **Consistency** | Каждое чтение возвращает результат последней записи (linearizability) | CP: MongoDB (single-document), HBase |
+| **Availability** | Каждый запрос к не-failed узлу получает ответ | AP: Cassandra, DynamoDB, CouchDB |
+| **Partition Tolerance** | Система продолжает работать при потере сообщений между узлами | Обязательно для distributed systems |
+
+Brewer (2012) уточнил: выбор CP vs AP делается **per-operation**, а не раз и навсегда для всей системы.
+
+### BASE vs ACID
+
+> **BASE** (Basically Available, Soft state, Eventually consistent) — акроним, противопоставляемый ACID для описания свойств AP-систем. Не является формальной спецификацией (в отличие от ACID), а скорее набором design principles.
+
+**Eventual Consistency** (Vogels, 2009) — формально: если не поступает новых обновлений, все реплики в конечном итоге сойдутся к одному значению. Время сходимости (convergence window) зависит от протокола: **gossip** (Cassandra) — O(log N) раундов, **anti-entropy** — O(N) обменов.
+
+### Vector Clocks и Conflict Resolution (Lamport, 1978; Fidge/Mattern, 1988)
+
+> **Vector Clock** — механизм отслеживания причинно-следственных связей (causality) между событиями в распределённой системе. Каждый узел поддерживает вектор `[c1, c2, ..., cn]`, где `ci` — логическое время узла `i`.
+
+Правило: событие A **happened-before** B (`A → B`) тогда и только тогда, когда `VC(A) < VC(B)` покомпонентно. Если ни `A → B`, ни `B → A` — события **concurrent**, требующие conflict resolution.
+
+| Стратегия | Механизм | Используется в |
+|-----------|----------|----------------|
+| **Last-Writer-Wins (LWW)** | Timestamp определяет победителя | Cassandra |
+| **Vector Clocks** | Клиент разрешает конфликт | Riak (до v2.0) |
+| **CRDTs** | Conflict-free merge без координации | Riak (v2.0+), Redis CRDT |
+
+### LSM-Tree vs B-Tree (O'Neil et al., 1996)
+
+NoSQL-базы используют два основных storage engine:
+
+| Свойство | B-Tree | LSM-Tree |
+|----------|--------|----------|
+| **Write** | O(log N) random I/O | O(1) sequential I/O (append-only) |
+| **Read** | O(log N) — одна структура | O(log N × L) — проверка L уровней |
+| **Space amplification** | Низкая | Высокая (compaction) |
+| **Используется** | PostgreSQL, MySQL/InnoDB, MongoDB (WiredTiger) | Cassandra, RocksDB, LevelDB |
+
+> **Связь**: CAP → [[databases-fundamentals-complete]], Vector Clocks → [[concurrency-fundamentals]], LSM-Tree → [[sql-databases-complete]]
+
+---
+
 ## Table of Contents
 
 1. [Введение в NoSQL](#введение-в-nosql)
@@ -1676,6 +1723,16 @@ const user = await db.users.findOne(
 [[databases-fundamentals-complete]] — Фундаментальные концепции (ACID vs BASE, CAP-теорема, индексы) являются основой для понимания trade-offs NoSQL. Без знания реляционной модели сложно оценить, от чего именно отказывается каждый тип NoSQL и какие преимущества это даёт. Обязательный пререквизит перед этим материалом.
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- Gilbert S., Lynch N. (2002). *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services.* — Формальное доказательство CAP-теоремы.
+- Vogels W. (2009). *Eventually Consistent.* Communications of the ACM. — Формальное определение eventual consistency и таксономия consistency моделей.
+- O'Neil P. et al. (1996). *The Log-Structured Merge-Tree (LSM-Tree).* Acta Informatica. — Определение LSM-Tree, используемого в Cassandra, RocksDB, LevelDB.
+- Lamport L. (1978). *Time, Clocks, and the Ordering of Events in a Distributed System.* — Logical clocks, на основе которых построены Vector Clocks.
+- Shapiro M. et al. (2011). *Conflict-free Replicated Data Types.* — Формальное определение CRDTs для eventual consistency без координации.
+
+### Практические руководства
 
 - Kleppmann M. (2017). *Designing Data-Intensive Applications*. — Лучшая книга для понимания trade-offs между SQL и NoSQL: репликация, партиционирование, consistency модели. Обязательна для осознанного выбора NoSQL-решения.
 - Redmond E., Wilson J.R. (2012). *Seven Databases in Seven Weeks*. — Практический обзор PostgreSQL, MongoDB, Redis, CouchDB, Neo4j, HBase, Riak с hands-on примерами. Идеальна для быстрого знакомства с разными моделями данных.

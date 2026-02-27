@@ -31,6 +31,27 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Handbook как кодификация культуры
+
+> **Определение:** Company Handbook (Employee Handbook) — формализованный документ, описывающий политики, процедуры, ценности и нормы организации. В контексте tech-компаний эволюционировал от юридического документа к living document, отражающему операционную культуру.
+
+Организационная документация как инструмент культуры восходит к концепции Edgar Schein (*"Organizational Culture and Leadership"*, 1985), где **артефакты** (visible organizational structures and processes) составляют первый уровень культуры. Handbook — наиболее явный артефакт.
+
+| Эпоха | Тип handbook | Пример | Цель |
+|-------|-------------|--------|------|
+| Традиционный | Юридический/HR документ | Большинство корпораций | Compliance, legal protection |
+| Культурный (2009+) | Manifesto ценностей | Netflix Culture Deck | Attract-repel talent, alignment |
+| Операционный (2015+) | Living wiki процессов | GitLab Handbook (3000+ стр.) | Radical transparency, [[scaling-engineering-org\|scaling]] |
+| Философский | Vision документ | Valve Handbook, Basecamp | Organizational design principles |
+
+Netflix Culture Deck (2009) Рида Хастингса и Пэтти Маккорд стал поворотным моментом: Шерил Сэндберг назвала его «одним из важнейших документов, когда-либо вышедших из Кремниевой долины». Он показал, что handbook может быть инструментом **employer branding** и **self-selection** — кандидаты, не разделяющие ценности, отсеиваются сами.
+
+GitLab пошёл дальше: их публичный handbook стал операционной системой компании, реализуя принцип **handbook-first** — если решение не задокументировано в handbook, оно не считается принятым. Это формализация принципа «documentation as culture» для [[team-culture|распределённых команд]].
+
+---
+
 ## Famous Handbooks
 
 ### GitLab Handbook
@@ -241,6 +262,13 @@ ZAPIER:
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Schein E. H. "Organizational Culture and Leadership" — Jossey-Bass, 1985 | Книга | Артефакты как первый уровень культуры |
+| 2 | Hastings R., Meyer E. "No Rules Rules" — Penguin Press, 2020 | Книга | Netflix culture philosophy |
+
+### Практические руководства (Handbooks)
 | Handbook | URL |
 |----------|-----|
 | GitLab | https://about.gitlab.com/handbook/ |

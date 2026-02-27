@@ -34,6 +34,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Эволюция моделей разработки ПО
+
+> **Определение:** Software Development Life Cycle (SDLC) — формализованный процесс планирования, создания, тестирования и развёртывания программного обеспечения. Эволюционировал от линейных моделей к итеративным и непрерывным.
+
+| Эпоха | Модель | Ключевая идея | Ограничения |
+|-------|--------|---------------|-------------|
+| 1970 | **Waterfall** (Royce) | Последовательные фазы: requirements → design → code → test → deploy | Невозможность изменений, поздний feedback |
+| 1986 | **Spiral** (Boehm) | Итерации с анализом рисков | Сложность, overhead |
+| 2001 | **Agile** (Manifesto) | Working software, responding to change | Размытые практики без Scrum/XP |
+| 2009 | **DevOps** (Allspaw & Hammond) | Dev + Ops как единый процесс, continuous delivery | Организационное сопротивление |
+| 2019 | **DevSecOps** | Security shift-left, integrated в CI/CD | Tooling complexity |
+
+### Cynefin Framework (Snowden, 2007)
+
+Dave Snowden в *"A Leader's Framework for Decision Making"* (Harvard Business Review, 2007) предложил Cynefin framework для выбора подхода к работе в зависимости от контекста:
+
+> **Cynefin** — framework принятия решений, классифицирующий ситуации по четырём доменам: **Clear** (best practices), **Complicated** (good practices, нужен эксперт), **Complex** (emergent practices, нужен experiment), **Chaotic** (novel practices, действуй немедленно).
+
+Для выбора [[agile-practices|development process]]: Waterfall работает в Clear-домене (требования известны), Agile/Scrum — в Complicated, Kanban — в Complex (непредсказуемый поток). Jez Humble и David Farley в *"Continuous Delivery"* (2010) формализовали CD как ответ на потребность в быстром feedback loop.
+
+---
+
 ## Git Workflows
 
 ```
@@ -180,11 +204,19 @@ RELEASE DONE WHEN:
 
 ## Источники
 
-| Источник | Тип |
-|----------|-----|
-| [Trunk Based Development](https://trunkbaseddevelopment.com/) | Guide |
-| [Continuous Delivery](https://continuousdelivery.com/) | Book/Site |
-| [Feature Flags](https://martinfowler.com/articles/feature-toggles.html) | Article |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Royce W. "Managing the Development of Large Software Systems" — IEEE WESCON, 1970 | Статья | Waterfall model (и его ограничения) |
+| 2 | Snowden D. "A Leader's Framework for Decision Making" — HBR, 2007 | Статья | Cynefin framework |
+| 3 | Humble J., Farley D. "Continuous Delivery" — Addison-Wesley, 2010 | Книга | CD pipeline, deployment automation |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Trunk Based Development](https://trunkbaseddevelopment.com/) | Guide | Short-lived branches |
+| 2 | [Continuous Delivery](https://continuousdelivery.com/) | Book/Site | CD practices |
+| 3 | [Feature Flags](https://martinfowler.com/articles/feature-toggles.html) | Article | Feature toggles taxonomy |
 
 ---
 

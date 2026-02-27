@@ -30,6 +30,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Дифференциация** — стратегия создания уникальной ценности, которая выделяет продукт (или кандидата) среди конкурентов. В контексте job market: когда 250+ кандидатов выглядят одинаково, побеждает тот, кто запоминается.
+
+| Теория | Автор | Год | Ключевая идея | Применение к job search |
+|--------|-------|-----|---------------|------------------------|
+| Purple Cow | Seth Godin | 2003 | Быть remarkable — единственный способ быть замеченным в мире noise | Создавать memorable touchpoints (video intro, contribution portfolio) |
+| Signaling Theory | Michael Spence | 1973 | Сигналы (costly actions) снижают информационную асимметрию | Open source contributions, tailored artifacts = costly signals |
+| Positioning | Al Ries, Jack Trout | 1981 | Занять уникальную позицию в сознании аудитории | "Compose migration expert" вместо "Android developer" |
+| Competitive Advantage | Michael Porter | 1985 | Либо cost leadership, либо differentiation | Для кандидата — только differentiation (нельзя конкурировать ценой) |
+| Attention Economy | Herbert Simon | 1971 | Внимание — ограниченный ресурс; информация потребляет внимание | 7 секунд рекрутера на резюме → каждый элемент должен работать |
+
+**Модель Година: Remarkable = Worth Remarking About**
+
+Godin утверждает, что в мире перенасыщения информацией (250+ заявок) единственная стратегия — быть **remarkable** (достойным замечания). Не лучшим, а *другим*. Применительно к job search:
+- **Обычное:** резюме + LinkedIn + mass apply
+- **Remarkable:** contribution portfolio + warm intro + value-forward outreach
+
+> **Теория сигналов Спенса** объясняет, почему portfolio и referrals работают лучше резюме: это **costly signals** — действия, которые требуют реальных усилий и которые некомпетентный кандидат не сможет имитировать. Резюме может написать каждый; working code с documented architecture decisions — только опытный инженер.
+
+→ Связано: [[personal-brand]], [[portfolio-strategy]], [[job-search-strategy]]
+
+---
+
 ## Проблема: все выглядят одинаково
 
 ```
@@ -358,15 +382,25 @@ SELF-CHECK:
 
 - [[job-search-strategy]] — Standing out работает внутри системной стратегии поиска. Targeted outreach с персонализацией, value-forward communication, warm introductions — всё это требует системного подхода из job search strategy. Без стратегии standing out превращается в хаотичные попытки; без дифференциации стратегия даёт средние результаты.
 
-## Источники и дальнейшее чтение
-
-- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking подход помогает определить свою уникальную ценность и найти правильные компании, где эта ценность наиболее востребована. Вместо "я ищу любую работу" — "я решаю конкретную проблему для конкретных компаний".
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Техническая подготовка — основа, без которой никакая дифференциация не поможет. Книга обеспечивает прохождение technical bar, а standing out стратегии работают поверх этого фундамента, превращая "прошёл барьер" в "запомнился".
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — На Senior+ уровне дифференциация смещается от coding skills к leadership, architecture decisions и cross-team impact. Книга помогает найти правильные истории и артефакты для "Contribution Portfolio" на высоком уровне.
-
 ## Источники
+
+### Теоретические основы
+
+- Godin S. (2003). *Purple Cow: Transform Your Business by Being Remarkable*. — Быть remarkable — единственный способ быть замеченным в мире информационного шума.
+
+- Spence M. (1973). *Job Market Signaling*. — Costly signals (portfolio, referrals) эффективнее cheap signals (резюме) для снижения информационной асимметрии.
+
+- Ries A., Trout J. (1981). *Positioning*. — Стратегия занятия уникальной позиции в сознании целевой аудитории.
+
+- Porter M. (1985). *Competitive Advantage*. — Дифференциация как единственная жизнеспособная стратегия для кандидата (cost leadership невозможен).
+
+- Simon H. (1971). *Designing Organizations for an Information-Rich World*. — Внимание как ограниченный ресурс в эпоху информационного перенасыщения.
+
+- Burnett B., Evans D. (2016). *Designing Your Life*. — Design thinking для определения уникальной ценности.
+
+- Larson W. (2022). *Staff Engineer*. — Дифференциация на Senior+ уровне через leadership и cross-team impact.
+
+### Практические руководства
 
 - [Resumeway: Stand Out in Competitive Job Market](https://www.resumeway.com/blog/stand-out-in-a-competitive-job-market/)
 - [Index.dev: How to Land a Tech Job 2025](https://www.index.dev/blog/how-to-land-a-tech-job)

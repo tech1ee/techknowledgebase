@@ -37,6 +37,45 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Принципы управления Drucker и их применение к EM
+
+> **Определение:** Engineering Management Fundamentals — совокупность базовых принципов, навыков и практик, необходимых для эффективного управления инженерной командой. Сочетает классическую теорию менеджмента с особенностями работы со knowledge workers.
+
+Peter Drucker в *"The Practice of Management"* (1954) ввёл концепцию Management by Objectives (MBO), которая позже трансформировалась в OKR через Andy Grove. В *"The Effective Executive"* (1966) Drucker определил пять привычек эффективного руководителя, напрямую применимых к EM:
+
+| Привычка Drucker | Применение к EM | Связь с практиками |
+|-----------------|-----------------|-------------------|
+| Знай, куда уходит время | Time audit: meetings vs people work vs coding | [[delegation]] |
+| Фокус на contribution | Output = team performance, не свой код | [[performance-management]] |
+| Строй на сильных сторонах | Staffing decisions, stretch assignments | [[building-engineering-team]] |
+| Приоритизация | First things first, say no | [[strategic-thinking]] |
+| Эффективные решения | Decision frameworks, не paralysis | [[architecture-decisions]] |
+
+### Ситуационное лидерство (Hersey & Blanchard, 1969)
+
+Paul Hersey и Ken Blanchard в модели Situational Leadership определили, что не существует единственного «лучшего» стиля руководства — стиль должен адаптироваться к уровню зрелости (readiness) подчинённого:
+
+> **Situational Leadership** — модель адаптивного лидерства, где стиль руководства определяется пересечением competence и commitment сотрудника по конкретной задаче.
+
+| Уровень сотрудника | Стиль EM | Поведение |
+|-------------------|----------|-----------|
+| **D1:** Low competence, high commitment (junior) | Directing | Чёткие инструкции, close supervision |
+| **D2:** Some competence, low commitment | Coaching | Объяснение «почему», поддержка мотивации |
+| **D3:** High competence, variable commitment | Supporting | Совместное принятие решений, слушание |
+| **D4:** High competence, high commitment (senior) | Delegating | Передача authority и ответственности |
+
+### Servant Leadership (Greenleaf, 1970)
+
+Robert K. Greenleaf в эссе *"The Servant as Leader"* (1970) предложил инверсию традиционной модели лидерства:
+
+> «Servant-leader — это прежде всего servant. Это начинается с естественного чувства, что хочешь служить. Затем сознательный выбор приводит к стремлению вести за собой.» — Robert K. Greenleaf
+
+Эта философия лежит в основе современного Engineering Management: EM существует для того, чтобы **команда** была эффективна, а не наоборот. Google Project Oxygen (2008) эмпирически подтвердил, что топ-качество менеджера — «is a good coach» (servant behavior), а не «has key technical skills».
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -583,23 +622,29 @@ EM так занят командой, что не развивает собст
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Drucker P. "The Practice of Management" — Harper, 1954 | Книга | Management by Objectives |
+| 2 | Drucker P. "The Effective Executive" — Harper, 1966 | Книга | Пять привычек эффективного руководителя |
+| 3 | Hersey P., Blanchard K. "Management of Organizational Behavior" — Prentice-Hall, 1969 | Книга | Situational Leadership Model |
+| 4 | Greenleaf R. K. "The Servant as Leader" — Greenleaf Center, 1970 | Эссе | Servant Leadership |
+| 5 | Grove A. "High Output Management" — Random House, 1983 | Книга | Output менеджера = output организации |
+| 6 | Google "Project Oxygen" — re:Work, 2008 | Исследование | Топ-качества эффективного менеджера |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Framework EM ответственностей |
-| 2 | [High Output Management](https://www.goodreads.com/book/show/324750.High_Output_Management) | Book | Метрики, leverage |
-| 3 | [Google re:Work](https://rework.withgoogle.com/) | Research | Project Oxygen, Aristotle |
-| 4 | [Rands in Repose](https://randsinrepose.com/) | Blog | Практические советы EM |
-| 5 | [Gallup Manager Research](https://www.gallup.com/workplace/insights.aspx) | Research | Impact statistics |
-| 6 | [DDI Leadership Research](https://www.ddiworld.com/) | Research | Failure rates |
-| 7 | [Manager Tools Podcast](https://www.manager-tools.com/) | Podcast | Tactical advice |
-| 8 | [First Round Review](https://review.firstround.com/) | Articles | Case studies |
-
-### Дополнительное чтение
-
-- "An Elegant Puzzle" by Will Larson — для senior EM
-- "Radical Candor" by Kim Scott — feedback culture
-- "Multipliers" by Liz Wiseman — leverage через людей
-- "The Five Dysfunctions of a Team" by Patrick Lencioni — team health
+| 2 | [Google re:Work](https://rework.withgoogle.com/) | Research | Project Oxygen, Aristotle |
+| 3 | [Rands in Repose](https://randsinrepose.com/) | Blog | Практические советы EM |
+| 4 | [Gallup Manager Research](https://www.gallup.com/workplace/insights.aspx) | Research | Impact statistics |
+| 5 | [DDI Leadership Research](https://www.ddiworld.com/) | Research | Failure rates |
+| 6 | [Manager Tools Podcast](https://www.manager-tools.com/) | Podcast | Tactical advice |
+| 7 | [First Round Review](https://review.firstround.com/) | Articles | Case studies |
+| 8 | **An Elegant Puzzle** (Will Larson, 2019) | Книга | Для senior EM |
+| 9 | **Radical Candor** (Kim Scott, 2017) | Книга | Feedback culture |
+| 10 | **Multipliers** (Liz Wiseman, 2010) | Книга | Leverage через людей |
 
 ---
 

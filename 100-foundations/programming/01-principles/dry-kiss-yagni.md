@@ -21,7 +21,46 @@ related:
 
 ---
 
-## DRY: Don't Repeat Yourself
+## Теоретические основы
+
+> **Мета-принципы** — принципы более высокого уровня абстракции, чем паттерны проектирования или SOLID: они применимы к любому аспекту системы (код, данные, конфигурация, процессы). DRY, KISS, YAGNI — три фундаментальных мета-принципа, формализующих управление **сложностью** программных систем.
+
+### Формальные определения
+
+| Принцип | Автор | Формальное определение | Что минимизирует |
+|---------|-------|----------------------|-----------------|
+| **DRY** | Hunt & Thomas (1999) | Каждый элемент знания имеет единственное, непротиворечивое, авторитетное представление в системе | Дублирование знания (не кода!) |
+| **KISS** | Kelly Johnson (Lockheed, ~1960) | Системы работают лучше, если остаются простыми, а не усложняются | Accidental complexity |
+| **YAGNI** | Ron Jeffries / Kent Beck (XP, 1999) | Не реализуй функциональность, пока она не нужна прямо сейчас | Speculative generality |
+
+### Связь с теорией сложности
+
+Фред Брукс (1986) в «No Silver Bullet» разделил сложность на:
+- **Essential complexity** — неизбежная сложность предметной области
+- **Accidental complexity** — сложность, привнесённая инструментами и решениями
+
+Мета-принципы направлены на минимизацию accidental complexity:
+- **KISS** → не добавляй сложность без необходимости
+- **YAGNI** → не добавляй функциональность «на будущее»
+- **DRY** → не дублируй знание (дублирование = скрытая сложность синхронизации)
+
+### Фундаментальный конфликт принципов
+
+Мета-принципы **конфликтуют** друг с другом:
+
+```
+DRY + абстракция → может нарушить KISS (лишняя сложность)
+KISS + дублирование → может нарушить DRY (знание в двух местах)
+YAGNI + отказ от абстракции → может создать технический долг
+```
+
+Сэнди Метц (2016): «Duplication is far cheaper than the wrong abstraction» — разрешение конфликта в пользу KISS/YAGNI над DRY.
+
+> **См. также**: [[clean-code]] — практики чистого кода, [[code-smells]] — признаки нарушений, [[solid-principles]] — принципы проектирования
+
+---
+
+
 
 ### Происхождение и точное определение
 
@@ -913,6 +952,12 @@ Visitor → sealed class + when. Strategy → higher-order function. Builder →
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Brooks F. (1986). No Silver Bullet — Essence and Accident in Software Engineering. IEEE Computer.** — разделение essential и accidental complexity, фундамент для понимания мета-принципов
+- **Hunt A., Thomas D. (1999). The Pragmatic Programmer. Addison-Wesley.** — формальное определение DRY: «Every piece of knowledge must have a single, unambiguous, authoritative representation»
+- **Beck K. (1999). Extreme Programming Explained. Addison-Wesley.** — YAGNI как часть XP-методологии
+- **Metz S. (2016). The Wrong Abstraction.** — формализация конфликта DRY vs KISS: «duplication is far cheaper than the wrong abstraction»
 
 ### Первоисточники
 - Hunt A., Thomas D. (1999). *The Pragmatic Programmer*. --- Определение DRY: "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system"

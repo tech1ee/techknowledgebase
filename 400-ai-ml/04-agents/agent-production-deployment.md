@@ -62,6 +62,37 @@ related:
 
 ---
 
+## Теоретические основы
+
+> **Production Deployment** AI-агентов — процесс перевода автономных AI-систем из среды разработки в production с обеспечением надёжности, масштабируемости, безопасности и наблюдаемости. Это отдельная инженерная дисциплина на пересечении ML Engineering и Site Reliability Engineering.
+
+Деплой агентов опирается на проверенные принципы из системного проектирования и distributed systems:
+
+| Принцип | Теоретическая база | Применение к агентам |
+|---------|-------------------|---------------------|
+| **Reliability** | Laprie J.-C. (1992), Dependability Framework | Fault tolerance: retry, fallback, circuit breaker |
+| **Scalability** | Amdahl's Law (1967), Universal Scalability Law | Horizontal scaling workers, queue-based architecture |
+| **Stateful Execution** | Lamport (1978), Time, Clocks, and the Ordering of Events | Checkpointing: сохранение и восстановление состояния |
+| **Graceful Degradation** | Herlihy & Wing (1990), Linearizability | Partial results при failure вместо полного отказа |
+| **Defense in Depth** | Saltzer & Schroeder (1975) | Multi-layer security: input validation → guardrails → output filtering |
+
+> **Ключевое отличие от деплоя обычных сервисов**: агенты имеют **непредсказуемое время выполнения** (от секунд до минут), **недетерминированное потребление ресурсов** и **зависимость от внешних API** (LLM providers). Это требует специфических паттернов: async execution, long-polling, checkpointing.
+
+**Паттерны production архитектуры:**
+
+| Паттерн | Описание | Когда использовать |
+|---------|----------|-------------------|
+| **Sync Request-Response** | Клиент ждёт ответа | Быстрые задачи (<30s) |
+| **Async Queue-Worker** | Задача в очередь → worker → callback | Длительные задачи (>30s) |
+| **Event-Driven** | Агент реагирует на события | Reactive системы |
+| **Serverless** | Function-as-a-Service | Нечастые, burst-нагрузки |
+
+Формула доступности для агентной системы с $n$ последовательными зависимостями: $A_{system} = \prod_{i=1}^{n} A_i$. При 3 внешних API с 99.9% availability каждый → $A_{system} = 0.999^3 = 99.7\%$ → ~2.6 часа downtime в год. Это мотивирует fallback-стратегии и multi-provider подход.
+
+См. также: [[agent-cost-optimization|Cost Optimization]] — экономика production, [[ai-observability-monitoring|Observability]] — мониторинг, [[ai-devops-deployment|AI DevOps]] — инфраструктура.
+
+---
+
 ## Архитектура Production Agent System
 
 ### High-Level Architecture
@@ -1285,11 +1316,26 @@ Kubernetes — основная платформа для production deployment 
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- Huyen, C. (2022). *Designing Machine Learning Systems.* O'Reilly Media. — Deployment patterns, infrastructure design и production best practices для ML систем.
-- Géron, A. (2022). *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow.* 3rd Edition. O'Reilly Media. — Практические аспекты deployment и scaling ML моделей.
-- Russell, S. & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach.* 4th Edition. Pearson. — Архитектура интеллектуальных агентов и требования к их runtime environments.
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Laprie J.-C. (1992). *Dependability: Basic Concepts and Terminology*. Springer | Фреймворк надёжности: fault tolerance, availability |
+| 2 | Lamport L. (1978). *Time, Clocks, and the Ordering of Events in a Distributed System*. CACM | Ordering и checkpointing в распределённых системах |
+| 3 | Nygard M. (2018). *Release It! Design and Deploy Production-Ready Software*. 2nd ed. Pragmatic Bookshelf | Circuit breaker, bulkhead, stability patterns |
+| 4 | Beyer B. et al. (2016). *Site Reliability Engineering*. O'Reilly (Google) | SRE-принципы для production AI систем |
+| 5 | Kleppmann M. (2017). *Designing Data-Intensive Applications*. O'Reilly | Distributed systems patterns |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [Anthropic — Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) | Production patterns от Anthropic |
+| 2 | [LangGraph — Deployment Guide](https://langchain-ai.github.io/langgraph/cloud/) | LangGraph Cloud deployment |
+| 3 | [OpenAI — Production Best Practices](https://platform.openai.com/docs/guides/production-best-practices) | API reliability patterns |
+| 4 | [Kubernetes Documentation](https://kubernetes.io/docs/) | Container orchestration |
 
 ---
 

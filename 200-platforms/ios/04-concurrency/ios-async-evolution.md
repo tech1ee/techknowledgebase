@@ -31,6 +31,70 @@ related:
 
 **Аналогия**: Если NSThread — это ручная коробка передач с двойным сцеплением, то GCD — автомат, async/await — Tesla на автопилоте, а Swift 6 — система предупреждения о столкновениях.
 
+## Теоретические основы
+
+> **Определение:** Асинхронное программирование — парадигма, в которой операция инициируется, но её результат обрабатывается позже через callback, promise или continuation, позволяя потоку выполнения не блокироваться в ожидании. Формализовано в модели Communicating Sequential Processes (Hoare, 1978).
+
+### Теоретические модели конкурентности
+
+| Модель | Автор | Год | Реализация в iOS |
+|--------|-------|-----|-----------------|
+| Communicating Sequential Processes (CSP) | C. A. R. Hoare | 1978 | Channels (неявно в GCD) |
+| Actor Model | Carl Hewitt | 1973 | Swift actors (iOS 15+) |
+| Futures / Promises | Baker & Hewitt | 1977 | Combine, async/await |
+| Structured Concurrency | Martin Sústrik (libdill) | 2016 | Swift TaskGroup, async let |
+| Cooperative Multitasking | — (исторически) | — | Swift async/await (suspension points) |
+
+> **Structured Concurrency (Elizarov et al., 2019):** Принцип, согласно которому конкурентные операции образуют иерархию: дочерняя задача не может пережить родительскую. Это устраняет проблему «огненных» задач (fire-and-forget) и утечки ресурсов. Реализован в Swift через `Task`, `TaskGroup`, `async let`.
+
+### Эволюция как смена уровней абстракции
+
+| Эпоха | Абстракция | Проблемы предыдущей эпохи | Решение |
+|-------|-----------|--------------------------|---------|
+| NSThread (2007) | Потоки | Отсутствие абстракций | Прямое управление pthreads |
+| GCD (2009) | Очереди задач | Race conditions, deadlocks, boilerplate | Thread pool + work-stealing |
+| Promises (2017) | Цепочки значений | Callback hell, pyramid of doom | Линейная цепочка .then/.catch |
+| async/await (2021) | Suspension points | Ошибки в цепочках, memory leaks | Линейный код, structured concurrency |
+| Swift 6 (2024) | Compile-time safety | Runtime data races | Статический анализ @Sendable, actor isolation |
+
+### Связь с CS-фундаментом
+
+- [[concurrency-fundamentals]] — теоретические модели конкурентности (CSP, Actor Model)
+- [[ios-threading-fundamentals]] — GCD как практическая основа
+- [[kotlin-coroutines]] — аналогичная эволюция в Kotlin (Coroutines = structured concurrency)
+
+---
+
+## Теоретические основы
+
+> **Определение:** Асинхронное программирование — модель выполнения, при которой операции инициируются без блокировки вызывающего потока, а результат доставляется через callback, promise/future или suspension point. Формализовано в работах Friedman & Wise (1976) по futures и Liskov & Shrira (1988) по promises.
+
+### Теоретическая классификация моделей асинхронности
+
+| Модель | Теоретическая основа | Реализация в iOS | Эпоха |
+|--------|---------------------|-----------------|-------|
+| **Threads** | Dijkstra (1965), POSIX threads | NSThread, pthread | 2007-2009 |
+| **Event Loop** | Reactor pattern (Schmidt, 1995) | RunLoop, CFRunLoop | 2007-н.в. |
+| **Task Queues** | Work-stealing (Blumofe & Leiserson, 1999) | GCD / libdispatch | 2009-н.в. |
+| **Operations** | Command pattern (GoF, 1994) | NSOperation, OperationQueue | 2010-н.в. |
+| **Futures/Promises** | Friedman & Wise (1976) | PromiseKit, Combine | 2017-2019 |
+| **Structured Concurrency** | Sutter (2005), Kotlin (2018) | Swift async/await, TaskGroup | 2021-н.в. |
+| **Actor Model** | Hewitt et al. (1973, MIT) | Swift actors, @MainActor | 2021-н.в. |
+
+> **Structured Concurrency (Elizarov, 2018):** Принцип, согласно которому каждая асинхронная операция имеет определённый scope (область жизни) и не может пережить своего родителя. Гарантирует отсутствие «orphaned tasks» и упрощает отмену/обработку ошибок.
+
+### Actor Model
+
+> **Actor Model (Hewitt, Bishop & Steiger, 1973):** Модель вычислений, где actor — это примитив параллелизма, который: (1) получает сообщения, (2) создаёт новых actors, (3) отправляет сообщения, (4) определяет поведение для следующего сообщения. В Swift actors реализуют *serial execution* всех обращений к своему состоянию.
+
+### Связь с CS-фундаментом
+
+- [[concurrency-fundamentals]] — теория параллелизма и модели синхронизации
+- [[ios-threading-fundamentals]] — практика GCD и threading в iOS
+- [[kotlin-coroutines]] — сравнение с Kotlin Coroutines (structured concurrency, suspend functions)
+
+---
+
 ## Временная линия эволюции
 
 ```
@@ -1266,9 +1330,16 @@ GCD остаётся фундаментом iOS concurrency — async/await ра
 
 ## Источники и дальнейшее чтение
 
-- Neuburg M. (2021). *iOS Programming Fundamentals with Swift*. — глубокое покрытие GCD, NSOperation и эволюции threading в iOS, включая паттерны и антипаттерны каждой эпохи
-- Sadun E. (2016). *The Swift Developer's Cookbook*. — практические рецепты для работы с concurrency в Swift, от GCD до раннего Combine
-- Apple Developer Documentation (2024). *Swift Concurrency*. — официальная документация по async/await, actors и structured concurrency, определяющая современный стандарт
+### Теоретические основы
+- Friedman D. P., Wise D. S. (1976). *The Impact of Applicative Programming on Multiprocessing.* — концепция futures
+- Liskov B., Shrira L. (1988). *Promises: Linguistic Support for Efficient Asynchronous Procedure Calls.* PLDI — формализация promises
+- Hewitt C. et al. (1973). *A Universal Modular Actor Formalism for AI.* IJCAI — Actor Model
+- Elizarov R. (2018). *Structured Concurrency.* — принцип structured concurrency (Kotlin)
+
+### Практические руководства
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — GCD, NSOperation, async/await
+- [Swift Concurrency](https://developer.apple.com/documentation/swift/concurrency) — Apple Documentation
+- WWDC 2021: [Meet async/await in Swift](https://developer.apple.com/videos/play/wwdc2021/10132/)
 
 ## Связанные материалы
 

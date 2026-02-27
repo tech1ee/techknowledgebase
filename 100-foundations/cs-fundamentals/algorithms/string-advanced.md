@@ -28,6 +28,38 @@ next_review:
 
 # Advanced String Algorithms
 
+## Теоретические основы
+
+> **Строковые алгоритмы** — раздел информатики, изучающий эффективные методы поиска, сопоставления и анализа текстовых данных. Ключевые задачи: поиск подстроки, множественный поиск паттернов, нахождение повторов и палиндромов.
+
+### Хронология ключевых алгоритмов
+
+| Год | Авторы | Алгоритм | Сложность | Задача |
+|-----|--------|----------|-----------|--------|
+| **1970** | Кнут, Моррис, Пратт | KMP (опубликован в 1977) | O(n + m) | Поиск одного паттерна в тексте |
+| **1975** | Ахо, Корасик | Aho-Corasick | O(n + m + z) | Поиск множества паттернов одновременно |
+| **1987** | Укконен | Ukkonen's algorithm | O(n) | Онлайн-построение suffix tree |
+| **1993** | Мэнбер, Майерс | Suffix Array | O(n log n) | Компактная альтернатива suffix tree |
+| **2003** | Кэркенен, Сандерс, Буркхардт | DC3/SA-IS | O(n) | Линейное построение suffix array |
+
+### Prefix function и Z-function
+
+> **Prefix function (KMP, 1977):** pi[i] — длина наибольшего собственного суффикса строки s[0..i], который одновременно является её префиксом. Вычисляется за O(n). Основа алгоритма Кнута–Морриса–Пратта для поиска подстроки без откатов.
+
+> **Z-function:** z[i] — длина наибольшей подстроки, начинающейся с позиции i и совпадающей с префиксом строки. Вычисляется за O(n). Альтернатива KMP для поиска подстроки: конкатенируем pattern + "#" + text, ищем z[i] == len(pattern).
+
+### Суффиксные структуры
+
+Suffix Array хранит отсортированные суффиксы строки в массиве индексов (O(n) памяти). В паре с LCP array (longest common prefix между соседними суффиксами) решает задачи: число различных подстрок, longest repeated substring, pattern matching за O(m log n). Кэш-эффективнее suffix tree.
+
+### Связи
+
+- [[string-algorithms]] — базовые строковые алгоритмы (KMP, Rabin-Karp, Z-function)
+- [[tries]] — Trie как основа Aho-Corasick
+- [[arrays-strings]] — базовые операции со строками
+
+---
+
 ## TL;DR
 
 **Suffix Array** — отсортированные суффиксы за O(n log n), база для LCP и string queries. **Aho-Corasick** — поиск множества паттернов за O(n + m + z), trie + failure links. **Manacher** — все палиндромы за O(n), использует симметрию. **Suffix Automaton** — O(n) памяти для ВСЕХ подстрок, мощнейшая структура. Выбор: single pattern → KMP, multiple patterns → Aho-Corasick, substring analysis → Suffix Array/Automaton.
@@ -1568,6 +1600,15 @@ nodes[v].output.addAll(nodes[nodes[v].fail].output)
 ---
 
 ## Источники
+
+### Теоретические основы
+
+- Knuth D.E., Morris J.H., Pratt V.R. (1977). *Fast Pattern Matching in Strings*. SIAM Journal on Computing. — алгоритм KMP, O(n+m) поиск подстроки без откатов; разработан независимо в 1970
+- Aho A.V., Corasick M.J. (1975). *Efficient String Matching: An Aid to Bibliographic Search*. Communications of the ACM. — многопаттерновый поиск на основе Trie с failure links, O(n+m+z)
+- Manber U., Myers G. (1993). *Suffix Arrays: A New Method for On-Line String Searches*. SIAM Journal on Computing. — suffix array как компактная альтернатива suffix tree, O(n log n) построение
+- Ukkonen E. (1995). *On-Line Construction of Suffix Trees*. Algorithmica. — онлайн-алгоритм построения suffix tree за O(n)
+
+### Практические руководства
 
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|

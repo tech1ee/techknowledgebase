@@ -39,6 +39,21 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Evaluation** — систематическое измерение качества AI-систем по формальным метрикам. Для RAG: RAGAS framework (Es et al., 2023) определяет ключевые метрики — faithfulness, relevance, context recall. Для LLM: LLM-as-Judge (Zheng et al., 2023) позволяет масштабировать оценку.
+
+| Тип метрик | Примеры | Теоретическая база |
+|-----------|---------|-------------------|
+| **IR Metrics** | Precision, Recall, nDCG | Voorhees (2000), TREC |
+| **NLG Metrics** | BLEU, ROUGE, BERTScore | Papineni et al. (2002) |
+| **RAG Metrics** | Faithfulness, Relevance | Es et al. (2023), RAGAS |
+| **LLM-as-Judge** | Pairwise comparison, scoring | Zheng et al. (2023) |
+
+См. также: [[agent-evaluation-testing|Agent Evaluation]] — полная версия с тестированием агентов.
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -705,11 +720,21 @@ BLEU — метрика для оценки качества перевода/г
 
 ## Источники
 
-- [RAGAS Documentation](https://docs.ragas.io/) — RAG evaluation
-- [LangSmith](https://docs.smith.langchain.com/) — evaluation platform
-- [OpenAI Evals](https://github.com/openai/evals) — evaluation framework
-- [HELM Benchmark](https://crfm.stanford.edu/helm/) — holistic evaluation
-- [Judging LLM-as-Judge Paper](https://arxiv.org/abs/2306.05685)
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Es S. et al. (2023). *RAGAS*. arXiv:2309.15217 | RAG evaluation metrics |
+| 2 | Zheng L. et al. (2023). *Judging LLM-as-a-Judge*. arXiv:2306.05685 | LLM-as-Judge формализация |
+| 3 | Voorhees E. (2000). *Variations in Relevance Judgments*. IP&M | IR метрики |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [RAGAS Documentation](https://docs.ragas.io/) | RAG evaluation |
+| 2 | [OpenAI Evals](https://github.com/openai/evals) | Evaluation framework |
+| 3 | [HELM Benchmark](https://crfm.stanford.edu/helm/) | Holistic evaluation |
 
 ---
 

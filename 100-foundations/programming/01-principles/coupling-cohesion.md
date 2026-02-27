@@ -20,7 +20,40 @@ SOLID появился в 2000-х. Clean Architecture -- в 2017. А coupling и
 
 ---
 
-## Зачем две метрики, а не одна?
+## Теоретические основы
+
+> **Coupling (связанность)** — степень взаимозависимости между модулями системы. **Cohesion (связность)** — степень, в которой элементы внутри одного модуля функционально связаны между собой. Формализованы Ларри Константином и Эдвардом Йорданом (1974/1979) как количественные метрики качества модульного дизайна.
+
+### Формальные определения (Stevens, Myers, Constantine, 1974)
+
+Оригинальная статья в IBM Systems Journal определила:
+- **Coupling**: мера силы связи между двумя модулями. Минимизация coupling → минимизация «ripple effect» (изменение в одном модуле вызывает каскад изменений)
+- **Cohesion**: мера функциональной связи между элементами одного модуля. Максимизация cohesion → модуль делает одну вещь хорошо
+
+### Математическая модель (Martin, 2002)
+
+Robert Martin формализовал coupling через метрики:
+
+| Метрика | Формула | Что измеряет |
+|---------|---------|-------------|
+| **Ca** (Afferent coupling) | Число классов снаружи, зависящих от модуля | Ответственность (кто от нас зависит) |
+| **Ce** (Efferent coupling) | Число классов снаружи, от которых зависит модуль | Зависимость (от кого мы зависим) |
+| **Instability (I)** | Ce / (Ca + Ce), диапазон [0, 1] | 0 = стабильный, 1 = нестабильный |
+| **Abstractness (A)** | Абстрактные классы / Все классы, [0, 1] | 0 = конкретный, 1 = абстрактный |
+| **Distance (D)** | \|A + I - 1\| | Расстояние от «Main Sequence» (идеал D=0) |
+
+### Связь с другими принципами
+
+- **SRP** → следствие high cohesion (один модуль = одна ответственность)
+- **DIP** → механизм снижения coupling (зависимость от абстракций)
+- **ISP** → минимизация coupling через узкие интерфейсы
+- **Conway's Law** → coupling между модулями отражает coupling между командами
+
+> **См. также**: [[solid-principles]] — SOLID как следствие low coupling + high cohesion, [[clean-code]] — метрики сложности, [[microservices-vs-monolith]] — coupling на уровне сервисов
+
+---
+
+
 
 Coupling (связанность) отвечает на вопрос: **насколько модули зависят друг от друга?**
 Cohesion (связность) отвечает на вопрос: **насколько элементы внутри модуля связаны между собой?**
@@ -895,6 +928,12 @@ SOLID -- следствие стремления к low coupling + high cohesion
 
 ## Источники
 
+### Теоретические основы
+- **Stevens W., Myers G., Constantine L. (1974). Structured Design. IBM Systems Journal.** — первая публикация формальных определений coupling и cohesion
+- **Constantine L., Yourdon E. (1979). Structured Design. Prentice Hall.** — книга-первоисточник: 7 типов coupling, 7 типов cohesion
+- **Martin R. (2002). Agile Software Development. Prentice Hall.** — метрики Ca, Ce, Instability, Abstractness, Distance from Main Sequence
+
+### Практические руководства
 - Constantine L., Yourdon E. (1979). *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design*. -- Первоисточник: определение 7 типов cohesion и 7 типов coupling.
 - Stevens W., Myers G., Constantine L. (1974). "Structured Design". *IBM Systems Journal*, 13(2). -- Статья-предшественник книги, первая публикация метрик.
 - Martin R. (2002). *Agile Software Development: Principles, Patterns, and Practices*. -- Метрики Ca, Ce, Instability, Abstractness, Distance from Main Sequence.

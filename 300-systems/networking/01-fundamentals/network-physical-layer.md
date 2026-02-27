@@ -32,6 +32,51 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Теорема Шеннона о пропускной способности канала** (Shannon, 1948): C = B * log2(1 + S/N), где C — максимальная пропускная способность канала (бит/с), B — полоса пропускания (Гц), S/N — отношение сигнал/шум. Определяет фундаментальный предел скорости передачи данных по каналу с шумом.
+
+### Фундаментальные теоремы
+
+| Теорема | Автор, год | Формула / суть | Значение |
+|---------|-----------|----------------|----------|
+| Теорема Найквиста | Nyquist, 1928 | f_max = 2B (для канала без шума) | Максимальная частота дискретизации |
+| Теорема Шеннона | Shannon, 1948 | C = B * log2(1 + S/N) | Предел пропускной способности канала с шумом |
+| CSMA/CD | Metcalfe, 1976 | Carrier Sense Multiple Access with Collision Detection | Основа Ethernet до full-duplex |
+
+### Физические среды передачи
+
+| Среда | Стандарт | Скорость | Дальность | Особенности |
+|-------|----------|----------|-----------|-------------|
+| Витая пара Cat5e | IEEE 802.3ab | 1 Gbps | 100 м | Наиболее распространённая |
+| Витая пара Cat6a | IEEE 802.3an | 10 Gbps | 100 м | Дата-центры |
+| Одномодовое оптоволокно | IEEE 802.3ae | 10-100 Gbps | 40+ км | Магистральные линии |
+| Многомодовое оптоволокно | IEEE 802.3ae | 10-100 Gbps | 300-550 м | Внутри зданий |
+| WiFi 6 (802.11ax) | IEEE 802.11ax | До 9.6 Gbps | ~30 м | OFDMA, MU-MIMO |
+
+### Схемы кодирования
+
+- **Manchester encoding** — каждый бит кодируется переходом сигнала (используется в 10BASE-T Ethernet)
+- **4B/5B** — 4 бита данных кодируются 5 битами для обеспечения синхронизации (100BASE-TX)
+- **8B/10B** — 8 бит данных кодируются 10 битами (1000BASE-T), overhead 20%
+- **64B/66B** — 64 бита данных кодируются 66 битами (10GBASE-T), overhead 3%
+- **PAM-4** — 4-уровневая амплитудная модуляция (200G/400G Ethernet)
+
+### Хронология
+
+- **1948** — Shannon C. "A Mathematical Theory of Communication" — фундамент теории информации
+- **1973** — Metcalfe, Boggs изобретают Ethernet в Xerox PARC
+- **1985** — IEEE 802.3 — первый стандарт Ethernet (10 Mbps)
+- **1997** — IEEE 802.11 — первый стандарт WiFi (2 Mbps)
+- **1999** — IEEE 802.3ab — Gigabit Ethernet по витой паре
+- **2020** — IEEE 802.11ax (WiFi 6) — OFDMA, BSS Coloring
+
+> **CSMA/CD vs CSMA/CA** — два подхода к разделению среды: Ethernet (CSMA/CD) обнаруживает коллизию и прекращает передачу; WiFi (CSMA/CA) избегает коллизий через механизм RTS/CTS и случайный backoff, поскольку в радиоканале обнаружение коллизии невозможно.
+
+**См. также:** [[network-ip-routing]] (L3-маршрутизация поверх L2-коммутации), [[network-fundamentals-for-developers]] (общий обзор модели OSI)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1684,6 +1729,12 @@ nmcli connection show
 
 ## Источники
 
+### Теоретические основы
+- Shannon C. (1948). "A Mathematical Theory of Communication" — Bell System Technical Journal
+- Nyquist H. (1928). "Certain Topics in Telegraph Transmission Theory" — AIEE Transactions
+- Metcalfe R., Boggs D. (1976). "Ethernet: Distributed Packet Switching for Local Computer Networks" — Communications of the ACM
+
+### Практические руководства
 - [IEEE 802.3 Ethernet Standard](https://standards.ieee.org/standard/802_3-2018.html)
 - [IEEE 802.11 WiFi Standards](https://standards.ieee.org/standard/802_11-2020.html)
 - [WiFi Alliance](https://www.wi-fi.org/)
@@ -1703,8 +1754,11 @@ nmcli connection show
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Tanenbaum, Wetherall (2011).** *Computer Networks.* — наиболее глубокое описание физического и канального уровней: кодирование сигналов, Ethernet, WiFi, MAC-протоколы, коммутация и VLAN; обязательный учебник для понимания L1/L2.
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — доступное объяснение канального уровня с акцентом на Ethernet и WiFi, включая CSMA/CD и CSMA/CA; хорош для первого знакомства с темой.
+
+### Практические руководства
 - **Peterson, Davie (2011).** *Computer Networks: A Systems Approach.* — системный взгляд на физические среды передачи данных и канальные протоколы, включая современные высокоскоростные технологии (10GbE, 100GbE).
 
 ---

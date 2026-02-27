@@ -49,6 +49,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение модульности
+
+> **Модульность** (modularity) — свойство системы, позволяющее разбивать её на части (модули) с минимальными взаимозависимостями. Ключевые метрики: **cohesion** (связность внутри модуля) и **coupling** (связанность между модулями). Идеал — high cohesion, low coupling (Stevens W., Myers G., Constantine L. *«Structured Design»*, 1974).
+
+В Android-проекте модульность реализована через Gradle-модули с тремя типами зависимостей:
+- `implementation` — зависимость скрыта от потребителей (information hiding)
+- `api` — зависимость экспортирована потребителям (leaky abstraction)
+- `compileOnly` — используется только при компиляции
+
+### Convention over Configuration
+
+Структура Android-проекта следует принципу **Convention over Configuration** (CoC), формализованному в Ruby on Rails (Hansson D.H., 2004) и впоследствии принятому Maven и Gradle:
+
+| Конвенция | Что подразумевается |
+|-----------|-------------------|
+| `src/main/kotlin/` | Основные исходники |
+| `src/test/` | Unit-тесты (JVM) |
+| `src/androidTest/` | Instrumented-тесты |
+| `src/main/res/` | Ресурсы (layouts, strings, drawables) |
+| `build.gradle.kts` | Конфигурация модуля |
+
+### Теория графов зависимостей
+
+Dependency graph между модулями формирует **DAG** (Directed Acyclic Graph) — ориентированный ациклический граф (Cormen T. et al. *Introduction to Algorithms*, 2009). Gradle использует **топологическую сортировку** DAG для определения порядка сборки. Циклические зависимости между модулями запрещены — это гарантирует:
+
+- Детерминированный порядок компиляции
+- Возможность параллельной сборки независимых модулей
+- Инкрементальную перекомпиляцию только затронутых модулей
+
+> **Связь с архитектурой:** Принцип [[android-clean-architecture|Clean Architecture]] (Robert C. Martin, 2012) определяет направление зависимостей: внешние слои зависят от внутренних, но не наоборот. В модульном Android-проекте это выражается как: `:feature` → `:core:domain` (но не наоборот), `:core:data` → `:core:domain` (инверсия зависимостей через интерфейсы).
+
+---
+
 ## Стандартная структура проекта
 
 ```
@@ -900,12 +935,21 @@ apikey.properties
 
 ## Источники
 
-- [Create an Android project - Android Developers](https://developer.android.com/studio/projects)
-- [Configure your build - Android Developers](https://developer.android.com/build)
-- [Add build dependencies - Android Developers](https://developer.android.com/build/dependencies)
-- [Create source sets - Android Developers](https://developer.android.com/build/build-variants#sourcesets)
-- [Guide to app architecture - Android Developers](https://developer.android.com/topic/architecture)
-- [Now in Android - GitHub](https://github.com/android/nowinandroid) — reference project
+### Теоретические основы
+
+- Stevens W., Myers G., Constantine L. (1974). *Structured Design*. — формализация cohesion и coupling
+- Cormen T. et al. (2009). *Introduction to Algorithms, 3rd Edition*. — теория DAG и топологическая сортировка
+- Martin R.C. (2012). *Clean Architecture*. — Dependency Rule и направление зависимостей между слоями
+- Parnas D.L. (1972). *On the Criteria to Be Used in Decomposing Systems into Modules*. — information hiding
+
+### Практические руководства
+
+- [Create an Android project — Android Developers](https://developer.android.com/studio/projects)
+- [Configure your build — Android Developers](https://developer.android.com/build)
+- [Add build dependencies — Android Developers](https://developer.android.com/build/dependencies)
+- [Create source sets — Android Developers](https://developer.android.com/build/build-variants#sourcesets)
+- [Guide to app architecture — Android Developers](https://developer.android.com/topic/architecture)
+- [Now in Android — GitHub](https://github.com/android/nowinandroid) — reference project
 
 ---
 

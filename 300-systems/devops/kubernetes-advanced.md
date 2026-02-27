@@ -35,6 +35,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Kubernetes production hardening** — набор механизмов для обеспечения безопасности, сетевой изоляции и расширяемости K8s-кластеров в production-окружениях.
+
+### RBAC: формальная модель (Sandhu et al., 1996)
+
+> **Role-Based Access Control** — модель управления доступом, где permissions назначаются **ролям**, а не пользователям напрямую. В K8s:
+
+```
+Subject (User/Group/ServiceAccount)
+    │
+    └── RoleBinding / ClusterRoleBinding
+            │
+            └── Role / ClusterRole
+                    │
+                    └── Rules: [apiGroups, resources, verbs]
+```
+
+### Kubernetes Operator Pattern (CoreOS, 2016)
+
+> **Operator** = Custom Resource Definition (CRD) + Custom Controller. Кодифицирует **операционные знания** (domain expertise) человека-оператора в автоматизированный control loop.
+
+| Уровень зрелости Operator | Описание |
+|---------------------------|----------|
+| **Level 1: Basic Install** | Автоматическая установка |
+| **Level 2: Seamless Upgrades** | Обновление без downtime |
+| **Level 3: Full Lifecycle** | Backup, restore, scaling |
+| **Level 4: Deep Insights** | Metrics, alerts, dashboards |
+| **Level 5: Auto Pilot** | Auto-tuning, anomaly detection |
+
+> **См. также**: [[kubernetes-basics]] — основы K8s, [[security-overview]] — общие принципы безопасности
+
+---
+
 ## TL;DR
 
 - **RBAC** — Role-Based Access Control, кто что может делать в кластере
@@ -645,9 +679,13 @@ spec:
 
 ## Источники
 
+### Теоретические основы
+- Sandhu R. et al. (1996). *Role-Based Access Control Models*. — Формальная модель RBAC
+- [Operator Pattern (CoreOS, 2016)](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) — CRD + Custom Controller
+
+### Практические руководства
 - [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 - [Network Policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-- [Operator Pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)
 - [External Secrets Operator](https://external-secrets.io/)
 - [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/)
 

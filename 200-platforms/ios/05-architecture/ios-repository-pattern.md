@@ -39,6 +39,39 @@ Repository Pattern в iOS — это архитектурный паттерн, 
 - 📱 Offline-first архитектура
 - 🔌 Легкая замена источников данных
 
+## Теоретические основы
+
+> **Определение:** Repository Pattern — паттерн, опосредующий взаимодействие между доменным слоем и слоем данных, предоставляя коллекционно-подобный интерфейс для доступа к доменным объектам (Fowler, 2002, Patterns of Enterprise Application Architecture).
+
+### Теоретический фундамент
+
+| Паттерн | Автор | Определение | Роль в Repository |
+|---------|-------|-------------|------------------|
+| **Repository** | Fowler (2002) / Evans (2003, DDD) | Абстракция коллекции доменных объектов | Центральный паттерн |
+| **Unit of Work** | Fowler (2002) | Отслеживание изменений для batch-сохранения | NSManagedObjectContext в Core Data |
+| **Data Mapper** | Fowler (2002) | Преобразование между domain и persistence моделями | DTO ↔ Entity маппинг |
+| **Strategy** | GoF (1994) | Взаимозаменяемые алгоритмы | Remote vs Local data source |
+| **SSOT (Single Source of Truth)** | Нормализация (Codd, 1970) | Одно каноническое место для данных | Repository как единый источник |
+
+> **Domain-Driven Design (Evans, 2003):** Repository в DDD — это «механизм инкапсуляции логики хранения, поиска и извлечения объектов». Repository предоставляет иллюзию in-memory коллекции доменных объектов, скрывая детали persistence.
+
+### Cache-стратегии в Repository
+
+| Стратегия | Описание | Когда использовать |
+|-----------|----------|-------------------|
+| **Cache-First** | Сначала кэш, fallback на сеть | Часто читаемые, редко меняющиеся данные |
+| **Network-First** | Сначала сеть, fallback на кэш | Критичные к актуальности данные |
+| **Stale-While-Revalidate** | Показать кэш, обновить в фоне | Баланс скорости и актуальности |
+| **Write-Through** | Запись в кэш и сеть одновременно | Данные, создаваемые пользователем |
+
+### Связь с CS-фундаментом
+
+- [[ios-data-persistence]] — механизмы хранения данных в iOS
+- [[ios-networking]] — сетевой слой как data source
+- [[android-repository-pattern]] — аналогичный паттерн в Android
+
+---
+
 ## Аналогии
 
 ### Библиотекарь
@@ -1864,10 +1897,14 @@ class UserService {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — демонстрирует построение data layer с разделением на network и persistence слои, что является основой для Repository Pattern; практические примеры с Core Data и URLSession.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает протокол-ориентированное программирование, которое является основой для абстрагирования Repository через протоколы, а также работу с Codable для маппинга DTO в domain models.
-- Eidhof C. et al. (2019). *Advanced Swift.* — глубокое погружение в generics, associated types и protocol composition, которые активно используются при проектировании гибких Repository-интерфейсов.
+### Теоретические основы
+- Fowler M. (2002). *Patterns of Enterprise Application Architecture.* Addison-Wesley — Repository, Unit of Work, Data Mapper
+- Evans E. (2003). *Domain-Driven Design.* Addison-Wesley — Repository в контексте DDD
+- Codd E. F. (1970). *A Relational Model of Data.* Communications of the ACM — нормализация и SSOT
+
+### Практические руководства
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — Core Data + URLSession data layer
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — протоколы, Codable, маппинг
 
 ---
 

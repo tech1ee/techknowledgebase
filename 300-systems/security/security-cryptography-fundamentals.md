@@ -32,6 +32,42 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Криптография** -- наука о методах обеспечения конфиденциальности, целостности и аутентичности информации с помощью математических преобразований (Menezes, van Oorschot, Vanstone, 1996).
+
+### Теоретический фундамент: Шеннон (1949)
+
+Клод Шеннон в работе *"Communication Theory of Secrecy Systems"* (Bell System Technical Journal, 1949) заложил математический фундамент криптографии, определив два ключевых свойства шифров:
+
+- **Confusion** -- сложная связь между ключом и шифротекстом (реализуется через substitution)
+- **Diffusion** -- распространение влияния одного бита plaintext на весь ciphertext (реализуется через permutation)
+
+Эти свойства лежат в основе всех современных блочных шифров, включая AES.
+
+### Хронология ключевых результатов
+
+| Год | Автор(ы) | Результат |
+|-----|----------|-----------|
+| 1949 | Shannon | Формальная теория секретности, confusion/diffusion |
+| 1976 | Diffie, Hellman | Протокол обмена ключами (асимметричная криптография) |
+| 1977 | Rivest, Shamir, Adleman | RSA -- первая практическая схема с открытым ключом |
+| 1993 | NIST | SHA-1 (позже сломан, 2017) |
+| 2001 | Daemen, Rijmen (NIST) | AES (Rijndael) -- стандарт симметричного шифрования |
+| 2015 | Bernstein et al. | Curve25519 / Ed25519 -- эллиптическая криптография |
+
+### Три столпа криптографии
+
+| Примитив | Задача | Свойство CIA | Пример |
+|----------|--------|-------------|--------|
+| **Symmetric encryption** | Конфиденциальность данных | Confidentiality | AES-256-GCM |
+| **Asymmetric encryption** | Обмен ключами, подписи | Confidentiality + Integrity | RSA, ECDSA |
+| **Hash functions** | Проверка целостности, хранение паролей | Integrity | SHA-256, Argon2 |
+
+> **Принцип Керкгоффса** (1883): безопасность системы должна зависеть только от секретности ключа, а не алгоритма. Все современные стандарты (AES, RSA, SHA) -- открытые, что позволяет их аудит. См. также [[security-fundamentals]].
+
+---
+
 ## TL;DR
 
 - **Symmetric** — один ключ для encrypt/decrypt (AES)
@@ -367,7 +403,17 @@ except:
 
 ## Источники
 
-- [Cryptography Engineering](https://www.schneier.com/books/cryptography-engineering/) by Bruce Schneier
+### Теоретические основы
+
+- Shannon C. (1949). *"Communication Theory of Secrecy Systems."* Bell System Technical Journal, 28(4). — математический фундамент: confusion, diffusion, perfect secrecy.
+- Diffie W., Hellman M. (1976). *"New Directions in Cryptography."* IEEE Transactions on Information Theory. — протокол обмена ключами, начало асимметричной криптографии.
+- Rivest R., Shamir A., Adleman L. (1978). *"A Method for Obtaining Digital Signatures and Public-Key Cryptosystems."* Communications of the ACM. — алгоритм RSA.
+- Menezes A., van Oorschot P., Vanstone S. (1996). *Handbook of Applied Cryptography.* CRC Press. — справочник по прикладной криптографии.
+- Stallings W. (2017). *Cryptography and Network Security.* 7th Edition. Pearson.
+
+### Практические руководства
+
+- Schneier B. (2010). [Cryptography Engineering](https://www.schneier.com/books/cryptography-engineering/). Wiley.
 - [Python cryptography library](https://cryptography.io/)
 - [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
 

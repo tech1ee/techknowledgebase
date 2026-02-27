@@ -34,6 +34,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Программная экосистема (Software Ecosystem)** — совокупность платформы, инструментов, библиотек, сообщества и практик, образующих единую среду разработки. Термин формализован в Jansen et al., *Software Ecosystems: Analyzing and Managing Business Networks in the Software Industry* (2009).
+
+### Экосистема Android в контексте теории платформ
+
+| Концепция | Автор / Источник | Проявление в Android |
+|-----------|-----------------|---------------------|
+| Platform Ecosystem | Gawer & Cusumano, *Platform Leadership* (2002) | Google предоставляет платформу (AOSP + Play Services), OEM-вендоры и разработчики создают ценность поверх неё |
+| Two-Sided Market | Rochet & Tirole, *Two-Sided Markets* (2003, JEEA) | Play Store связывает разработчиков (supply) и пользователей (demand); сетевой эффект усиливает обе стороны |
+| Convention over Configuration | David Heinemeier Hansson (Ruby on Rails, 2004) | Jetpack Compose, Navigation 3, AGP 9.0 — всё движется к опinionated defaults с возможностью кастомизации |
+| Backward Compatibility vs Evolution | Lehman's Laws of Software Evolution (1980) | Android поддерживает minSdk 21 (2014) в 2026; deprecated API живут 3–5 версий; desugaring библиотеки мостят разрыв |
+| Modular Architecture | Parnas, *On the Criteria for Decomposing Systems into Modules* (1972) | Jetpack: ~100 независимых артефактов; Gradle модулизация; dynamic feature modules |
+
+> **Закон Конвея (Conway's Law, 1968)** — *"Организации проектируют системы, отражающие их собственную структуру коммуникации."* Структура Android-экосистемы отражает организационную модель Google: Platform team → Jetpack team → Developer Relations → OEM partners. Каждая команда владеет своим слоем стека.
+
+> **Технологический радар (Technology Radar)** — метод оценки зрелости технологий, предложенный ThoughtWorks (2010). Библиотеки Android можно классифицировать по четырём кольцам: **Adopt** (Compose, Coroutines, Hilt), **Trial** (KMP, Compose Multiplatform), **Assess** (Gemini Nano on-device), **Hold** (Java-only, KAPT, AsyncTask).
+
+Связанные материалы: [[android-overview]] (обзор платформы), [[android-architecture]] (архитектура ОС), [[android-jetpack-libraries-map]] (детальная карта Jetpack).
+
+---
+
 ## Platform Status
 
 | Компонент | Версия | Дата выхода | Примечание |
@@ -329,6 +351,17 @@ AndroidX библиотеки требуют API 23+ с июня 2025. targetSdk
 
 ## Источники
 
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Jansen S. et al. *Software Ecosystems: Analyzing and Managing Business Networks in the Software Industry* (2009) | Определение программной экосистемы |
+| Gawer A., Cusumano M. *Platform Leadership* (2002) | Platform Ecosystem — модель Android |
+| Rochet J.-C., Tirole J. *Two-Sided Markets* (2003, JEEA) | Two-Sided Market → Play Store |
+| Parnas D. *On the Criteria for Decomposing Systems into Modules* (1972) | Модульная архитектура → Jetpack |
+| Conway M. *How Do Committees Invent?* (1968) | Conway's Law — структура организации → архитектура |
+| Lehman M. *Programs, Life Cycles, and Laws of Software Evolution* (1980) | Законы эволюции ПО → backward compatibility |
+
+### Практические руководства
 - [Android Developers — What's new](https://developer.android.com/about/versions) — версии Android и что нового
 - [AndroidX Releases](https://developer.android.com/jetpack/androidx/versions) — все Jetpack-библиотеки
 - [Kotlin Blog](https://blog.jetbrains.com/kotlin/) — релизы Kotlin

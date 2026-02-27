@@ -46,6 +46,48 @@ next_review:
 | Flutter/Dart | Понимать откуда мигрируем | Flutter docs |
 | **CS: Rewrite vs Refactor** | Когда переписывать с нуля | [[cs-rewrite-vs-refactor]] |
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Платформенная перезапись (Platform Rewrite)** — полная замена технологического стека приложения с сохранением бизнес-требований, но без переноса исходного кода (в отличие от рефакторинга или инкрементальной миграции).
+
+### Классификация миграций
+
+Joel Spolsky (2000) в статье "Things You Should Never Do" предостерегал от полных переписок. Однако Flutter → KMP — особый случай:
+
+| Критерий | Рефакторинг | Инкрементальная миграция | Полная перезапись |
+|----------|-------------|--------------------------|-------------------|
+| **Код переносится** | Да, с улучшениями | Частично | Нет |
+| **Язык меняется** | Нет | Возможно | Да (Dart → Kotlin) |
+| **Архитектура** | Сохраняется | Эволюционирует | Проектируется заново |
+| **Тесты** | Адаптируются | Частично переписываются | Пишутся с нуля |
+| **Риск** | Низкий | Средний | Высокий |
+| **Применимость к Flutter→KMP** | Невозможен | Невозможен (разные VM) | Единственный путь |
+
+### Почему Flutter → KMP = rewrite?
+
+С формальной точки зрения, Flutter и KMP используют **несовместимые модели исполнения**:
+
+- **Flutter**: Dart VM → собственный rendering engine (Skia Canvas) → единый UI на всех платформах
+- **KMP**: Kotlin compiler → нативный код (JVM/LLVM/JS) → нативный UI каждой платформы
+
+Между Dart AST и Kotlin AST нет изоморфизма, позволяющего автоматическую трансляцию: семантика языков различается в обработке null safety, async/await, типовой системе (Dart Sound Null Safety vs Kotlin null types).
+
+### ROI-модель миграции
+
+Формализация решения о миграции (Kazman et al., 2001, ATAM):
+
+```
+ROI = (Benefit_shared_code + Benefit_native_UX + Benefit_performance)
+    / (Cost_rewrite + Cost_learning + Cost_dual_maintenance_period)
+```
+
+Миграция оправдана когда ROI > 1 на горизонте 12-18 месяцев.
+
+> **CS-фундамент:** Решение rewrite vs refactor связано с [[cross-decision-guide]] (выбор стека) и [[kmp-architecture-patterns]] (архитектура целевой системы). Теоретическая база — ATAM (Kazman, 2001) и Second-System Effect (Brooks, 1975).
+
 ## Терминология
 
 | Термин | Что это | Аналогия из жизни |
@@ -531,11 +573,17 @@ fun UserListScreen(
 
 ## Источники и дальнейшее чтение
 
-- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Основное руководство для Flutter/Dart-разработчиков, переходящих на Kotlin. Покрывает все ключевые отличия: data classes вместо freezed, null safety, extension functions, sealed classes — всё, что нужно для перевода Dart-кода в идиоматический Kotlin.
+### Теоретические основы
 
-- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — При миграции с Flutter state management (BLoC, Riverpod) на KMP ViewModel + StateFlow необходимо глубокое понимание корутин. Книга покрывает Flow, StateFlow, structured concurrency — замену Dart Streams и async/await в контексте KMP.
+- **Kazman R. et al. (2001).** *ATAM: Architecture Tradeoff Analysis Method.* — Формальный метод оценки ROI миграции.
+- **Brooks F. (1975).** *The Mythical Man-Month.* — Second-System Effect: риски полной перезаписи.
+- **Spolsky J. (2000).** *Things You Should Never Do.* — Аргументы против rewrite, применимые к оценке Flutter→KMP.
 
-- **Martin R. (2017).** *Clean Architecture.* — Принципы чистой архитектуры одинаково применимы и в Flutter, и в KMP. Книга помогает при миграции сохранить архитектурные слои (Domain, Data, Presentation) и правильно перенести бизнес-логику, абстрагировав её от конкретного фреймворка.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Руководство для Dart/Flutter-разработчиков, переходящих на Kotlin.
+- **Moskala M. (2022).** *Kotlin Coroutines: Deep Dive.* — Замена BLoC/Riverpod на ViewModel + StateFlow.
+- **Martin R. (2017).** *Clean Architecture.* — Сохранение архитектурных слоёв при миграции.
 
 ---
 

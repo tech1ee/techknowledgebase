@@ -29,6 +29,24 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Dependency Injection (DI)** — паттерн проектирования, при котором зависимости объекта передаются ему извне, а не создаются внутри. Формализован Мартином Фаулером как частный случай **Inversion of Control** (IoC): «вместо того чтобы объект сам находил свои зависимости, контейнер инжектирует их» (Fowler, *Inversion of Control Containers and the Dependency Injection Pattern*, 2004).
+
+DI реализует **Dependency Inversion Principle** (Martin, SOLID, 1996): модули высокого уровня не должны зависеть от модулей низкого уровня — оба должны зависеть от абстракций. На практике: `UserRepository(api: UserApi)` вместо `UserRepository { val api = RetrofitClient.create() }`.
+
+| Подход | Модель | Проверки | Фреймворки |
+|--------|--------|----------|------------|
+| Constructor Injection | Зависимости через конструктор | Compile-time (типизация) | Manual DI, Dagger, Hilt, kotlin-inject, Metro |
+| Service Locator | Запрос зависимости у реестра | Runtime (crash при отсутствии) | Koin, Kodein |
+| Field Injection | Injection в поля (reflection) | Runtime | Spring, Dagger (@Inject field) |
+
+> **Service Locator vs DI** — две реализации IoC, часто путаемые. Fowler (2004) разделил их: в DI контейнер **push** зависимости в объект, в Service Locator объект **pull** зависимости из реестра. Koin и Kodein формально ближе к Service Locator (`get()`, `inject()`), хотя позиционируются как DI.
+
+Выбор между compile-time (Dagger, Hilt, kotlin-inject, Metro) и runtime (Koin, Kodein) DI — это trade-off между **safety** и **simplicity**: compile-time фреймворки находят ошибки при сборке, но добавляют annotation processing overhead; runtime фреймворки проще в настройке, но ошибки отсутствующих зависимостей обнаруживаются только при запуске.
+
+---
+
 ## Экосистема DI: Карта решений
 
 ```
@@ -231,12 +249,17 @@ next_review:
 
 ## Источники
 
-### Официальные
+### Теоретические основы
+
+- **Fowler M. (2004). Inversion of Control Containers and the Dependency Injection Pattern.** — Формализация DI, различие DI vs Service Locator
+- **Martin R. (1996). The Dependency Inversion Principle.** — SOLID DIP
+- **Seemann M. (2019). Dependency Injection: Principles, Practices, and Patterns.** — Composition Root, Pure DI
+
+### Практические руководства
+
 - [Android Developers - DI Guide](https://developer.android.com/training/dependency-injection)
 - [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Koin Documentation](https://insert-koin.io/)
-
-### Benchmarks
 - [ProAndroidDev Benchmark 2024](https://proandroiddev.com/benchmarking-koin-vs-dagger-hilt-in-modern-android-development-2024-ff7bb40470df)
 
 ---

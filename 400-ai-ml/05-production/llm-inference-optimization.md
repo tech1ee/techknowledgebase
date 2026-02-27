@@ -71,6 +71,37 @@ status: published
 
 ---
 
+## Теоретические основы
+
+> **Inference optimization** — совокупность техник ускорения и удешевления процесса генерации текста LLM при сохранении качества. Включает оптимизации на уровнях: алгоритмическом (attention), системном (memory management), аппаратном (quantization) и архитектурном (batching).
+
+Inference LLM — это автоколебательный процесс: модель генерирует токены один за другим, каждый раз пересчитывая attention. Основные bottleneck:
+
+| Bottleneck | Теоретическая база | Решение |
+|------------|-------------------|---------|
+| **Memory bandwidth** | Roofline model (Williams et al., 2009) | Quantization: 16-bit → 4-bit, 4x меньше данных |
+| **Quadratic attention** | $O(n^2)$ complexity (Vaswani et al., 2017) | KV Cache: не пересчитывать уже вычисленные пары |
+| **KV Cache memory** | Fragmentation как в OS memory | PagedAttention (Kwon et al., 2023): виртуальная память для KV cache |
+| **Sequential decoding** | Autoregressive nature | Speculative decoding (Leviathan et al., 2022): draft + verify |
+| **GPU underutilization** | Batching theory | Continuous batching (Yu et al., 2022): ORCA scheduler |
+
+> **PagedAttention** (Kwon et al., 2023, vLLM): применяет принцип виртуальной памяти (paging) из ОС к KV Cache. Вместо выделения непрерывного блока памяти для каждого запроса, KV Cache разбивается на страницы фиксированного размера. Это устраняет фрагментацию и позволяет обслуживать на **2-4x** больше запросов одновременно.
+
+**Ключевые метрики inference:**
+
+| Метрика | Определение | Target (production) |
+|---------|-------------|-------------------|
+| **TTFT** | Time To First Token — latency до первого токена | < 500ms |
+| **TPOT** | Time Per Output Token — скорость генерации | < 50ms/token |
+| **Throughput** | Requests/second при заданном SLA | Зависит от нагрузки |
+| **GPU Utilization** | % использования вычислительных ресурсов | > 70% |
+
+**Quantization** уменьшает precision весов модели: FP16 → INT8 → INT4. По теории информации (Shannon, 1948), потеря точности при переходе 16→4 бит минимальна для хорошо обученных моделей, так как распределение весов имеет низкую энтропию. На практике: INT4 quantization даёт <1% деградации на большинстве бенчмарков при 4x уменьшении памяти.
+
+См. также: [[local-llms-self-hosting|Self-Hosting]] — практика self-hosting, [[ai-cost-optimization|Cost Optimization]] — экономический аспект, [[ai-devops-deployment|AI DevOps]] — deployment.
+
+---
+
 ## Введение: Почему это критически важно
 
 Представьте, что у вас есть мощный спорткар (LLM), но вы застряли в пробке (плохо оптимизированный инференс). Сколько бы лошадиных сил ни было под капотом, вы никуда не едете. Именно так выглядит production-deployment LLM без оптимизации: модель есть, но пользователи ждут по 10-20 секунд ответа, а счета за GPU растут как снежный ком.
@@ -993,5 +1024,30 @@ Tensor parallelism: один слой модели разделяется меж
 | Углубиться | [[ai-fine-tuning-guide]] | Fine-tuning для оптимизированных моделей |
 | Смежная тема | [[jvm-gc-tuning]] | Аналогии оптимизации runtime в JVM |
 | Обзор | [[ai-engineering-moc]] | Вернуться к карте AI Engineering |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | Kwon W. et al. (2023). *Efficient Memory Management for LLM Serving with PagedAttention*. SOSP. arXiv:2309.06180 | vLLM, PagedAttention |
+| 2 | Yu G. et al. (2022). *ORCA: A Distributed Serving System for Transformer-Based Generative Models*. OSDI | Continuous batching |
+| 3 | Leviathan Y. et al. (2022). *Fast Inference from Transformers via Speculative Decoding*. arXiv:2211.17192 | Speculative decoding |
+| 4 | Williams S. et al. (2009). *Roofline: An Insightful Visual Performance Model*. CACM | Roofline model — memory vs compute bound |
+| 5 | Dettmers T. et al. (2022). *GPT3.int8(): 8-bit Matrix Multiplication for Transformers*. NeurIPS | INT8 quantization |
+| 6 | Vaswani A. et al. (2017). *Attention Is All You Need*. NeurIPS | Transformer architecture |
+
+### Практические руководства
+
+| # | Источник | Вклад |
+|---|----------|-------|
+| 1 | [vLLM Documentation](https://docs.vllm.ai/) | PagedAttention serving engine |
+| 2 | [TensorRT-LLM — NVIDIA](https://github.com/NVIDIA/TensorRT-LLM) | GPU-optimized inference |
+| 3 | [SGLang](https://github.com/sgl-project/sglang) | Radix attention, structured generation |
+| 4 | [Text Generation Inference (TGI)](https://huggingface.co/docs/text-generation-inference) | HuggingFace serving |
+| 5 | [llama.cpp](https://github.com/ggerganov/llama.cpp) | CPU/GPU inference, GGUF format |
 
 *Проверено: 2026-01-09*

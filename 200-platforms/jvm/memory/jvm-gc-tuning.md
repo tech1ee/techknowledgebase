@@ -71,6 +71,33 @@ p99 latency скачет до секунд? CPU 100%, но throughput падае
 
 ---
 
+## Теоретические основы
+
+Сборка мусора (Garbage Collection) опирается на фундаментальные результаты теории автоматического управления памятью, разработанные на протяжении более шести десятилетий.
+
+> **Определение (McCarthy, 1960):** *Garbage collection — автоматическое определение и освобождение памяти, занятой объектами, которые больше не достижимы из корневого множества ссылок (GC roots).*
+
+Формально, GC решает задачу **reachability analysis** на графе объектов: живым считается объект, достижимый от GC roots (стек потоков, static поля, JNI-ссылки) по цепочке ссылок. Всё недостижимое — мусор.
+
+| Теоретическая концепция | Автор / Источник | Влияние на современные JVM GC |
+|------------------------|-----------------|------------------------------|
+| **Mark-Sweep** | McCarthy, 1960 (Lisp) | Базовый алгоритм: mark reachable, sweep unreachable. Основа всех tracing collectors |
+| **Copying collection** | Cheney, 1970 | Копирование живых объектов в новую область. Основа Young Gen (Eden → Survivor) |
+| **Generational hypothesis** | Ungar, 1984; Wilson, 1992 | «Большинство объектов умирают молодыми» — фундамент разделения на Young/Old Gen |
+| **Tri-color marking** | Dijkstra et al., 1978 | Алгоритм concurrent marking: white/gray/black. Позволяет сканировать heap параллельно с приложением |
+| **Incremental collection** | Baker, 1978 | Сбор мусора частями, а не целиком — предшественник G1 regions |
+| **Concurrent compaction** | Click et al. (Azul C4), 2005 | Перемещение объектов без STW — реализовано в ZGC через colored pointers |
+
+> **Generational hypothesis (Ungar, 1984; Wilson, 1992):** *«Большинство объектов умирают молодыми: 90-98% объектов в типичной программе становятся недостижимыми вскоре после создания.»* — Это наблюдение определило архитектуру всех современных JVM GC: Young Generation собирается часто и дёшево, Old Generation — редко.
+
+Теоретический фундамент **concurrent** GC описан в работе **Dijkstra et al. (1978)** *"On-the-Fly Garbage Collection: An Exercise in Cooperation"*, где предложен tri-color marking алгоритм, позволяющий сканировать граф объектов параллельно с мутатором (приложением). Ключевая проблема concurrent GC — **write barrier invariant**: мутатор может изменять граф во время marking, и без write barriers сборщик может пропустить живые объекты. G1, ZGC и Shenandoah используют различные варианты write/load barriers для поддержания корректности.
+
+Формальный анализ trade-offs между throughput и latency в GC описан в работе **Jones, Hosking, Moss (2011)** *"The Garbage Collection Handbook"*, которая остаётся наиболее полным теоретическим руководством по алгоритмам GC.
+
+Связанные темы: [[jvm-memory-model]] (структура heap и поколений), [[jvm-performance-overview]] (GC в контексте общей оптимизации), [[jvm-profiling]] (allocation profiling как первый шаг перед GC tuning).
+
+---
+
 ## Историческая справка
 
 Сборка мусора -- одна из старейших идей в computer science, и её эволюция объясняет, почему современные сборщики устроены именно так.
@@ -626,9 +653,18 @@ else:
 
 ## Источники и дальнейшее чтение
 
-- Jones R., Hosking A., Moss E. (2011). *The Garbage Collection Handbook: The Art of Automatic Memory Management.* -- Фундаментальная книга по всем алгоритмам GC: от mark-sweep до concurrent collectors. Описывает теоретическую базу, на которой построены все JVM сборщики. Незаменима для глубокого понимания ПОЧЕМУ G1 использует регионы, ПОЧЕМУ ZGC использует colored pointers и ПОЧЕМУ generational hypothesis работает.
-- Oaks S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond, 2nd ed.* -- Практическое руководство по GC tuning: выбор сборщика, sizing, интерпретация GC логов, оптимизация allocation rate. Главы 5-7 -- лучший источник для JVM-специфичного GC tuning с реальными примерами и benchmarks.
-- Tene G. (2019). *Understanding Java Garbage Collection (talk).* -- Доклад Gil Tene (создателя Azul Zing/C4 GC) с визуальным объяснением работы различных GC алгоритмов. Отлично объясняет компромиссы между throughput и latency, concurrent vs parallel phases, и почему "pauseless" GC -- не совсем pauseless. Доступен на YouTube.
+### Теоретические основы
+
+- **McCarthy J. (1960). Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I.** — первый алгоритм GC (mark-sweep) для Lisp.
+- **Dijkstra E.W. et al. (1978). On-the-Fly Garbage Collection: An Exercise in Cooperation.** — tri-color marking, основа concurrent GC.
+- **Ungar D. (1984). Generation Scavenging: A Non-Disruptive High Performance Storage Reclamation Algorithm.** — generational hypothesis и копирующий сборщик.
+- **Wilson P.R. (1992). Uniprocessor Garbage Collection Techniques.** — обзор алгоритмов GC и формализация generational hypothesis.
+- **Jones R., Hosking A., Moss E. (2011). The Garbage Collection Handbook.** — наиболее полное теоретическое руководство по всем алгоритмам GC.
+
+### Практические руководства
+
+- **Oaks S. (2020). Java Performance, 2nd ed.** — практическое руководство по GC tuning: выбор сборщика, sizing, интерпретация GC логов.
+- **Tene G. (2019). Understanding Java Garbage Collection (talk).** — визуальное объяснение компромиссов между throughput и latency в различных GC.
 
 ---
 

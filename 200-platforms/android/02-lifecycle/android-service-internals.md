@@ -37,6 +37,28 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение Service в контексте клиент-серверной модели
+
+> **Service** — программный компонент, выполняющий долгоживущие операции в фоновом режиме без пользовательского интерфейса. В терминах клиент-серверной архитектуры (Orfali R. et al. *Client/Server Survival Guide*, 1999), Android Service реализует **server-side component**, к которому клиенты обращаются через Binder IPC.
+
+### Три архетипа Service и их теоретические основы
+
+| Тип | Паттерн проектирования | Формальная модель |
+|-----|------------------------|------------------|
+| Started Service | **Command** (Gamma E. et al., 1994) | Fire-and-forget: клиент отправляет команду, Service выполняет |
+| Bound Service | **Proxy** / **Client-Server** | Request-response: клиент получает IBinder, вызывает методы |
+| Foreground Service | **Observer** + приоритетная очередь | Continuous operation с уведомлением пользователя |
+
+### Эволюция ограничений как Principle of Least Privilege
+
+Ужесточение ограничений на Service (Android 8 → 14 → 15) реализует **Principle of Least Privilege** (Saltzer J., Schroeder M. *«The Protection of Information in Computer Systems»*, 1975): каждый компонент получает минимально необходимые привилегии. AIDL (Android Interface Definition Language) — аналог IDL из CORBA (OMG, 1991), адаптированный для мобильных устройств с учётом Binder thread pool.
+
+> **Связь с IPC:** Bound Service использует [[android-binder-ipc|Binder IPC]] для межпроцессного взаимодействия. Три уровня IPC (Local Binder → Messenger → AIDL) соответствуют возрастающей сложности и возможностям, аналогично уровням RPC в распределённых системах (Birrell A., Nelson B. *«Implementing Remote Procedure Calls»*, 1984).
+
+---
+
 ## Зачем это нужно
 
 ### Проблема: сервисы — один из самых неправильно понимаемых компонентов Android
@@ -2295,6 +2317,15 @@ Intent — механизм запуска Service (startService, bindService). 
 
 ## Источники
 
+### Теоретические основы
+
+- **Gamma E., Helm R., Johnson R., Vlissides J.** *Design Patterns* (1994) — паттерн Command (Started Service: fire-and-forget) и Proxy (Bound Service через Binder IPC)
+- **Saltzer J., Schroeder M.** *«The Protection of Information in Computer Systems»* (1975) — Principle of Least Privilege, реализуемый ужесточением ограничений на Service (Android 8 → 14 → 15)
+- **Birrell A., Nelson B.** *«Implementing Remote Procedure Calls»* (1984) — три уровня IPC в Bound Service (Local Binder → Messenger → AIDL) как уровни RPC в распределённых системах
+- **Orfali R. et al.** *Client/Server Survival Guide* (1999) — Service как server-side component; AIDL как аналог CORBA IDL для мобильных устройств
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [Android Developers: Services overview](https://developer.android.com/develop/background-work/services) | Документация | Официальное руководство по Service lifecycle |
@@ -2312,11 +2343,9 @@ Intent — механизм запуска Service (startService, bindService). 
 | 13 | [Android Developers: WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) | Документация | WorkManager как замена Service |
 | 14 | [Android Source: ActivityManagerService](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/core/java/com/android/server/am/ActiveServices.java) | Исходный код | Service management в AOSP |
 
-## Источники и дальнейшее чтение
-
-- **Meier R. (2022). Professional Android.** — Глубокое покрытие Service lifecycle, Bound Services и Foreground Services с практическими примерами. Одна из немногих книг, объясняющих AIDL и Binder IPC на прикладном уровне.
-- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое введение в Service с акцентом на правильный выбор между Service, WorkManager и корутинами. Хороший старт для понимания lifecycle.
-- **Vasavada N. (2019). Android Internals.** — Детали реализации ActivityManagerService, Binder транзакций и процессного управления Service на уровне AOSP. Для тех, кто хочет понять, что происходит «под капотом» системных вызовов.
+- **Meier R.** *Professional Android* (2022) — глубокое покрытие Service lifecycle, Bound Services и Foreground Services с практическими примерами
+- **Phillips B. et al.** *Android Programming: The Big Nerd Ranch Guide* (2022) — пошаговое введение в Service с акцентом на правильный выбор между Service, WorkManager и корутинами
+- **Vasavada N.** *Android Internals* (2019) — детали реализации ActivityManagerService, Binder транзакций и процессного управления Service на уровне AOSP
 
 ---
 

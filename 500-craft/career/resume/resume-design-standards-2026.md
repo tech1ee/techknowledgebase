@@ -24,6 +24,36 @@ next_review:
 
 # Resume Design Standards 2026: Pixel-Perfect Guidelines
 
+## Теоретические основы
+
+> **Visual Hierarchy** — принцип дизайна, определяющий порядок восприятия элементов на странице. В контексте резюме: рекрутер за 6 секунд должен увидеть Name → Title → Key Skills → Most Recent Role → Impact Metrics.
+
+**Теоретические основы resume design:**
+
+| Принцип | Автор/Источник | Применение к резюме |
+|---------|---------------|---------------------|
+| **Gestalt Laws** | Wertheimer (1923) | Proximity (группировка секций), Similarity (consistent formatting) |
+| **F-Pattern Reading** | Nielsen Norman Group (2006) | Глаз сканирует слева-направо, сверху-вниз; ключевая информация — top-left |
+| **Typography Hierarchy** | Robert Bringhurst (1992) | 3 уровня: H1 (name), H2 (sections), body (content) |
+| **White Space** | Jan Tschichold (1928) | Margins и spacing улучшают readability и parsing |
+
+**ATS Compatibility — технические ограничения:**
+
+```
+SAFE:      Single column, top-to-bottom flow, standard fonts
+           .docx or .pdf, no headers/footers for contact info
+RISKY:     Two columns, tables, text boxes
+FAIL:      Images, icons, custom fonts, infographics
+```
+
+ATS parser читает документ как **plain text stream**: top-to-bottom, left-to-right. Двухколоночный layout смешивает текст из разных колонок. Иконки и графика = пустое место для парсера. Это техническое ограничение, не предпочтение.
+
+> **Nielsen Norman Group (2006), F-Pattern:** eye-tracking показывает, что рекрутер сканирует резюме в F-pattern. Первые 2 строки читаются полностью (имя, headline), затем — только левая часть каждой строки. Implications: самая важная информация — в первых 2 строках и в начале каждого bullet point.
+
+→ Связано: [[resume-strategy]], [[linkedin-optimization]]
+
+---
+
 ## Executive Summary
 
 One-page resume with every millimeter planned. ATS-friendly but visually polished.
@@ -347,11 +377,17 @@ File size: Under 1MB
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит примеры правильно оформленных резюме для tech-позиций и типичные ошибки форматирования. Помогает понять, как рекрутеры сканируют резюме за 6 секунд и какие design decisions критичны.
+### Теоретические основы
 
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Практические советы по созданию резюме, которое проходит ATS и одновременно привлекает внимание рекрутера. Глава о «two audiences» (робот и человек) помогает балансировать между ATS-оптимизацией и читабельностью.
+- Nielsen Norman Group (2006). *F-Shaped Pattern For Reading Web Content*. — Eye-tracking: рекрутер сканирует F-pattern; ключевая информация — top-left.
+
+- Bringhurst R. (1992). *The Elements of Typographic Style*. — Типографическая иерархия для professional documents.
+
+- McDowell G.L. (2015). *Cracking the Coding Interview*. — Примеры tech-резюме; типичные ошибки форматирования.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Two audiences (ATS + human); balance между parsability и readability.
 
 ---
 

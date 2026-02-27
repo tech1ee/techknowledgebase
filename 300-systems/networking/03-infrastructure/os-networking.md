@@ -36,6 +36,48 @@ Socket — абстракция для сетевого I/O (файловый д
 
 ---
 
+## Теоретические основы
+
+> **Berkeley Sockets API** (Joy, Fabry et al., 1983) — программный интерфейс для сетевого взаимодействия, впервые реализованный в 4.2BSD. Определяет абстракцию сокета как файлового дескриптора и набор системных вызовов: `socket()`, `bind()`, `listen()`, `accept()`, `connect()`, `send()`, `recv()`, `close()`. Стал де-факто стандартом для всех Unix-подобных ОС и основой POSIX networking API.
+
+### Системные вызовы сокетов
+
+| Вызов | Сигнатура (упрощённо) | Роль | Сторона |
+|-------|----------------------|------|---------|
+| `socket()` | `socket(AF_INET, SOCK_STREAM, 0)` | Создание сокета (fd) | Обе |
+| `bind()` | `bind(fd, addr, addrlen)` | Привязка к адресу и порту | Сервер |
+| `listen()` | `listen(fd, backlog)` | Перевод в режим прослушивания | Сервер |
+| `accept()` | `accept(fd, addr, addrlen)` | Принятие входящего соединения | Сервер |
+| `connect()` | `connect(fd, addr, addrlen)` | Установление соединения | Клиент |
+| `send()`/`recv()` | `send(fd, buf, len, flags)` | Обмен данными | Обе |
+| `close()` | `close(fd)` | Закрытие соединения | Обе |
+
+### TCP/IP стек в ядре Linux
+
+Путь пакета через ядро (ingress): NIC -> DMA -> Ring Buffer -> NAPI softirq -> `netif_receive_skb()` -> Netfilter PREROUTING -> IP routing -> Netfilter INPUT -> TCP/UDP -> Socket receive buffer -> `recv()` в userspace.
+
+Ключевые структуры ядра:
+- **sk_buff** — описывает один сетевой пакет в ядре (заголовки, данные, метаданные)
+- **struct sock** — представляет сокет в ядре (состояние TCP, буферы, таймеры)
+- **net_device** — абстракция сетевого интерфейса (физического или виртуального)
+
+### Хронология
+
+- **1983** — Berkeley Sockets API в 4.2BSD (Joy, Fabry, Leffler, McKusick)
+- **1985** — RFC 1122 формализует требования к TCP/IP стеку хоста
+- **1994** — Stevens W.R. "TCP/IP Illustrated" — описание реализации в BSD-ядре
+- **1998** — Linux 2.2: netfilter framework (Rusty Russell) заменяет ipfwadm
+- **2002** — Linux 2.6: epoll (Davide Libenzi) — масштабируемый I/O multiplexing
+- **2006** — Linux Network Namespaces — изоляция сетевого стека
+- **2014** — eBPF в Linux 3.18 (Alexei Starovoitov) — программируемость ядра без модификации
+- **2018** — XDP (eXpress Data Path) — обработка пакетов на уровне NIC driver
+
+> **Принцип "всё есть файл"** в Unix: сокет представлен файловым дескриптором (fd), что позволяет использовать стандартные операции `read()`/`write()` для сетевого I/O и интегрировать сокеты с `select()`/`poll()`/`epoll()` для мультиплексирования.
+
+**См. также:** [[network-transport-layer]] (TCP/UDP протоколы), [[network-docker-deep-dive]] (network namespaces в контейнерах), [[network-performance-optimization]] (sysctl tuning ядра)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -1938,6 +1980,12 @@ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+- Joy W., Fabry R., Leffler S., McKusick M. (1983). 4.2BSD Networking Implementation Notes — Berkeley CSRG
+- RFC 1122 (1989). Requirements for Internet Hosts — Communication Layers (Braden, ed.)
+- Libenzi D. (2002). "/dev/epoll — A Scalable I/O Event Notification Mechanism" — Linux Kernel Mailing List
+- Starovoitov A. (2014). "BPF — in-kernel virtual machine" — Linux Plumbers Conference
 
 ### Онлайн-ресурсы
 - [Linux Kernel Networking Documentation](https://www.kernel.org/doc/html/latest/networking/index.html) — проверено 2025-12-18

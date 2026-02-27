@@ -35,6 +35,60 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Database monitoring** — непрерывный сбор и анализ метрик СУБД для обнаружения проблем до того, как они станут инцидентами. **Database security** — многоуровневая защита данных от несанкционированного доступа, утечек и атак.
+
+### Четыре категории метрик (USE Method, Gregg 2013)
+
+| Категория | Что измеряет | Ключевые метрики PostgreSQL |
+|-----------|-------------|---------------------------|
+| **Utilization** | Занятость ресурса | CPU %, connections / max_connections, buffer cache hit ratio |
+| **Saturation** | Очередь/перегрузка | Lock waits, disk I/O queue, replication lag |
+| **Errors** | Частота ошибок | Deadlocks, failed transactions, checksum errors |
+| **Throughput** | Объём работы | TPS (transactions/sec), rows read/written |
+
+### Defense in Depth — модель безопасности БД
+
+```
+┌─────────────────────────────────────────────┐
+│ Network: Firewall, VPC, SSL/TLS             │
+│  ┌─────────────────────────────────────────┐ │
+│  │ Authentication: pg_hba.conf, LDAP, SCRAM│ │
+│  │  ┌─────────────────────────────────────┐ │ │
+│  │  │ Authorization: GRANT, REVOKE, Roles │ │ │
+│  │  │  ┌─────────────────────────────────┐ │ │ │
+│  │  │  │ Row-Level: RLS policies         │ │ │ │
+│  │  │  │  ┌─────────────────────────────┐ │ │ │ │
+│  │  │  │  │ Column-Level: Encryption    │ │ │ │ │
+│  │  │  │  │  ┌─────────────────────────┐ │ │ │ │ │
+│  │  │  │  │  │ Audit: pgAudit logging  │ │ │ │ │ │
+│  │  │  │  │  └─────────────────────────┘ │ │ │ │ │
+│  │  │  │  └─────────────────────────────┘ │ │ │ │
+│  │  │  └─────────────────────────────────┘ │ │ │
+│  │  └─────────────────────────────────────┘ │ │
+│  └─────────────────────────────────────────┘ │
+└─────────────────────────────────────────────┘
+```
+
+### Принцип наименьших привилегий (Saltzer & Schroeder, 1975)
+
+> Каждый субъект (пользователь, приложение) должен иметь **минимально необходимые** права для выполнения своей задачи. В БД: приложение **не** должно работать от superuser; каждый микросервис — свой пользователь с GRANT только на нужные таблицы.
+
+### OWASP Top 10 угроз для БД
+
+| Угроза | Защита в PostgreSQL |
+|--------|-------------------|
+| **SQL Injection** | Prepared statements (parameterized queries) |
+| **Broken Authentication** | SCRAM-SHA-256, certificate auth |
+| **Sensitive Data Exposure** | TDE, column encryption, SSL in transit |
+| **Broken Access Control** | RLS, GRANT/REVOKE, pg_hba.conf |
+| **Security Misconfiguration** | CIS Benchmark, pg_hba.conf audit |
+
+> **См. также**: [[security-overview]] — общие принципы безопасности, [[observability]] — системы наблюдаемости
+
+---
+
 ## TL;DR
 
 **Мониторинг:**
@@ -1005,6 +1059,12 @@ pgaudit.log_relation = on
 
 ## Источники
 
+### Теоретические основы
+- Saltzer J., Schroeder M. (1975). *The Protection of Information in Computer Systems*. — Принцип наименьших привилегий и другие принципы безопасности
+- Gregg B. (2013). *Systems Performance*. — USE Method для мониторинга ресурсов
+- OWASP (2021). *Top 10 Web Application Security Risks*. — SQL injection, broken auth и другие угрозы БД
+
+### Практические руководства
 - [PostgreSQL Monitoring Statistics](https://www.postgresql.org/docs/current/monitoring-stats.html)
 - [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html)
 - [PostgreSQL Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)

@@ -151,6 +151,26 @@ loading      introduced    for logging   improved       provides/uses
 
 ---
 
+## Теоретические основы
+
+Service Provider Interface (SPI) реализует фундаментальные принципы **инверсии зависимостей** и **позднего связывания** в контексте модульных систем.
+
+> **Dependency Inversion Principle (Martin, 1996):** *«Модули верхнего уровня не должны зависеть от модулей нижнего уровня. Оба должны зависеть от абстракций.»*
+
+| Теоретическая концепция | Автор / Источник | Применение в ServiceLoader |
+|------------------------|-----------------|---------------------------|
+| **Dependency Inversion** | Martin (SOLID), 1996 | Код зависит от интерфейса (Service), не от реализации (Provider) |
+| **Plugin architecture** | Gamma et al. (GoF), 1994 | ServiceLoader обнаруживает и загружает плагины через META-INF/services |
+| **Late binding** | Ingalls, 1978 | Реализация определяется в runtime, а не в compile-time |
+| **Inversion of Control** | Johnson, 2004 | Framework (ServiceLoader) создаёт объекты, а не прикладной код |
+| **Convention over Configuration** | — | META-INF/services как конвенция для регистрации провайдеров |
+
+> **Ключевой паттерн:** SPI разделяет «что нужно» (Service interface) от «кто предоставляет» (Provider implementation). Это позволяет добавлять реализации без перекомпиляции потребителя — достаточно добавить JAR в classpath.
+
+Связанные темы: [[jvm-class-loader-deep-dive]] (Context ClassLoader для обнаружения провайдеров), [[jvm-module-system]] (`provides`/`uses` в JPMS), [[jvm-reflection-api]] (ServiceLoader создаёт экземпляры через Reflection).
+
+---
+
 ## TL;DR
 
 **ServiceLoader** — встроенный механизм Java для **обнаружения и загрузки реализаций во время выполнения**. Паттерн **Service Provider Interface (SPI)** обеспечивает архитектуру плагинов и слабую связанность.
@@ -813,10 +833,19 @@ Overhead ServiceLoader:
 
 ## Источники
 
-1. [Oracle: ServiceLoader Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) — Официальная документация
-2. [Baeldung: Loading JDBC Drivers](https://www.baeldung.com/java-jdbc-loading-drivers) — История загрузки JDBC драйверов
-3. [Reflectoring: Implementing Plugins with SPI](https://reflectoring.io/service-provider-interface/) — Практическое руководство по SPI
-4. [NorthCoder: Class Loaders and Service Providers](https://northcoder.com/post/class-loaders-service-providers-and/) — Глубокий разбор ServiceLoader и JDBC
+### Теоретические основы
+
+- Martin R. (1996). *The Dependency Inversion Principle*. — Формулировка DIP (SOLID): модули верхнего уровня не должны зависеть от модулей нижнего; оба зависят от абстракций. Теоретический фундамент SPI.
+- Gamma E. et al. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. — Strategy pattern и другие паттерны расширяемости, которые SPI реализует на уровне платформы.
+- Bloch J. (2018). *Effective Java*, 3rd Edition. — Item 59 «Know and use the libraries» и Item 1 «Consider static factory methods» описывают service provider framework pattern.
+- Parlog N. (2019). *The Java Module System*. — Интеграция ServiceLoader с JPMS: uses/provides директивы, provider methods, миграция от META-INF/services.
+
+### Практические руководства
+
+- [Oracle: ServiceLoader Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) — Официальная документация API.
+- [Baeldung: Loading JDBC Drivers](https://www.baeldung.com/java-jdbc-loading-drivers) — История загрузки JDBC драйверов через SPI.
+- [Reflectoring: Implementing Plugins with SPI](https://reflectoring.io/service-provider-interface/) — Практическое руководство по созданию SPI.
+- [NorthCoder: Class Loaders and Service Providers](https://northcoder.com/post/class-loaders-service-providers-and/) — Глубокий разбор ServiceLoader и JDBC.
 
 ---
 

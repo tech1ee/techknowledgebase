@@ -36,6 +36,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Структурированная коммуникация: от McKinsey к Silicon Valley
+
+> **Определение:** Executive Communication — набор принципов и техник структурирования информации для быстрого принятия решений руководством. Ключевой принцип: conclusion first, details on demand. Оптимизирована для контекста ограниченного времени и высокой цены решений.
+
+Barbara Minto в *"The Pyramid Principle"* (1987, McKinsey) формализовала подход к структурированию коммуникации: начинай с ответа (conclusion), затем supporting arguments, затем evidence — только по запросу. Этот подход стал стандартом в management consulting и executive communication. SCQA framework (Situation, Complication, Question, Answer) — конкретная техника из этой же школы.
+
+| Фреймворк | Автор/Источник | Ключевая идея | Когда использовать |
+|-----------|---------------|---------------|-------------------|
+| **Pyramid Principle** | Barbara Minto, 1987 | Conclusion → Supporting → Details | Любая executive communication |
+| **BLUF** | Military origin (US Army) | Bottom Line Up Front | Emails, status updates |
+| **SCQA** | McKinsey/Minto | Situation → Complication → Question → Answer | Proposals, presentations |
+| **Assertion-Evidence** | Michael Alley, 2003 | Slide = assertion sentence + visual evidence | Technical presentations |
+
+Военная доктрина BLUF (Bottom Line Up Front), формализованная в AR 25-50 (US Army regulation), требует начинать любое сообщение с главного вывода. В engineering leadership это применяется для incident updates, status reports и budget requests — контекстов, где время на обработку информации минимально.
+
+> «Start with the answer first. If they want to know more, they'll ask.» — Barbara Minto, *"The Pyramid Principle"* (1987)
+
+Nancy Duarte в *"Resonate"* (2010) и *"Slide:ology"* (2008) исследовала storytelling в presentations, показав, что эффективная коммуникация следует структуре «what is → what could be → new bliss». Для [[stakeholder-management|технических лидеров]] это означает: не рассказывай про технологию — рассказывай про business impact и transformation.
+
+---
+
 ## Pyramid Principle (Minto)
 
 ```
@@ -187,13 +210,22 @@ CONTENT:
 
 **[[crisis-management]]** — Навыки executive communication критически важны во время кризиса, когда каждое сообщение должно быть максимально чётким и действенным. Pyramid Principle и BLUF формат позволяют быстро донести суть проблемы, текущий статус и необходимые решения до руководства. Умение структурировать escalation updates и post-incident reports — прямое применение принципов коммуникации с руководством.
 
-## Источники и дальнейшее чтение
+## Источники
 
-| Источник | Тип |
-|----------|-----|
-| Drucker P. (2006) *The Effective Executive: The Definitive Guide to Getting the Right Things Done* | Книга |
-| Fournier C. (2017) *The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change* | Книга |
-| Horowitz B. (2014) *The Hard Thing About Hard Things: Building a Business When There Are No Easy Answers* | Книга |
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Minto B. "The Pyramid Principle" — Minto International, 1987 | Книга | Pyramid structure, SCQA framework |
+| 2 | Duarte N. "Resonate" — Wiley, 2010 | Книга | Storytelling structure: what is → what could be |
+| 3 | Alley M. "The Craft of Scientific Presentations" — Springer, 2003 | Книга | Assertion-Evidence slide design |
+| 4 | US Army AR 25-50 — Department of the Army | Regulation | BLUF (Bottom Line Up Front) format |
+
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Fournier C. "The Manager's Path" — O'Reilly, 2017 | Книга | Communication at different leadership levels |
+| 2 | Horowitz B. "The Hard Thing About Hard Things" — Harper Business, 2014 | Книга | CEO communication patterns |
+| 3 | Drucker P. "The Effective Executive" — Harper Business, 2006 | Книга | Effective communication habits |
 
 
 ## Проверь себя

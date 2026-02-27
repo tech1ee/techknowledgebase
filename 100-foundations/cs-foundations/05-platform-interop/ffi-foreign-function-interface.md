@@ -52,6 +52,52 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **FFI (Foreign Function Interface)** — механизм, позволяющий программе на одном языке вызывать функции, написанные на другом языке, с корректной передачей данных через boundary между runtime-средами.
+
+### Историческая атрибуция
+
+| Событие | Автор/Система | Год | Вклад |
+|---------|--------------|-----|-------|
+| **FORTRAN calling C** | IBM | 1960s | Первый practical interop (общий ABI) |
+| **JNI** | Sun Microsystems | 1997 | Java Native Interface — мост JVM ↔ native |
+| **P/Invoke** | Microsoft | 2002 | .NET → native DLL через DllImport |
+| **ctypes** | Python | 2003 | Dynamic FFI: вызов C без компиляции |
+| **cinterop** | JetBrains | 2017 | Kotlin/Native → C/Objective-C через .def файлы |
+| **Project Panama** | Oracle (JEP 454) | 2023 | Java FFM API — замена JNI (Java 22) |
+
+### Теоретические проблемы FFI
+
+FFI решает 3 фундаментальные проблемы пересечения языковых границ:
+
+| Проблема | Суть | Пример |
+|----------|------|--------|
+| **Type mapping** | Разные представления типов | Kotlin `String` (UTF-16, GC-managed) ↔ C `char*` (UTF-8, manual alloc) |
+| **Memory management** | Разные модели владения памятью | GC (JVM) vs manual (C) vs ARC (Swift) |
+| **Call overhead** | Стоимость пересечения boundary | JNI call: ~20-100ns (vs 1-3ns для обычного вызова) |
+
+### Taxonomy of FFI mechanisms
+
+```
+FFI Mechanisms
+├── Static (compile-time binding)
+│   ├── JNI         — Java ↔ C/C++ через native methods
+│   ├── cinterop    — Kotlin/Native ↔ C через .def
+│   └── Swift/ObjC  — автоматический bridging header
+├── Dynamic (runtime binding)
+│   ├── ctypes      — Python → C (без компиляции)
+│   ├── libffi      — универсальная runtime FFI библиотека
+│   └── JNA         — Java → C (без JNI boilerplate)
+└── IDL-based (contract-first)
+    ├── SWIG        — C/C++ → Python/Java/Ruby/...
+    └── Protocol Buffers + gRPC — language-neutral RPC
+```
+
+---
+
 ## Зачем это знать
 
 Каждый мобильный разработчик рано или поздно сталкивается с FFI. На Android ты вызываешь C/C++ через JNI для работы с OpenGL, аудиокодеками, криптографией. На iOS ты взаимодействуешь со Swift/Objective-C фреймворками. В Kotlin Multiplatform ты используешь cinterop для доступа к платформенным API. Даже если ты не пишешь FFI-код напрямую, библиотеки, которые ты используешь (SQLite, Realm, OpenSSL), работают через FFI.
@@ -690,12 +736,15 @@ val result = bridge.doSomething()
 
 ## Источники и дальнейшее чтение
 
-- Liang, S. (1999). *The Java Native Interface: Programmer's Guide and Specification*. — Каноническая книга от одного из авторов JNI. Объясняет не только API, но и design decisions: почему JNI устроен именно так, какие альтернативы рассматривались и отвергались. Обязательна для тех, кто пишет JNI-код.
-- Bryant, R. & O'Hallaron, D. (2015). *Computer Systems: A Programmer's Perspective*. — Глава 7 (Linking) объясняет, как динамические библиотеки загружаются и связываются, что является фундаментом для понимания FFI на бинарном уровне.
-- [Android Developer: JNI Tips](https://developer.android.com/training/articles/perf-jni) — практическое руководство от Google по правильному использованию JNI на Android. Содержит конкретные рекомендации по производительности и управлению памятью.
-- [Kotlin Docs: C Interop](https://kotlinlang.org/docs/native-c-interop.html) — официальная документация по cinterop. Объясняет формат .def файлов, маппинг типов и работу с Objective-C frameworks.
-- [Apple: Objective-C Runtime Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/) — объясняет message dispatch, objc_msgSend и runtime-механизмы, через которые Kotlin/Native взаимодействует с iOS.
-- [JEP 454: Foreign Function & Memory API](https://openjdk.org/jeps/454) — спецификация нового FFI для Java, призванного заменить JNI. Полезно для понимания, какие проблемы JNI не решил и как их адресует новый подход.
+### Теоретические основы
+- Liang, S. (1999). *The Java Native Interface: Programmer's Guide and Specification* — каноническая книга, design decisions JNI
+- [JEP 454: Foreign Function & Memory API](https://openjdk.org/jeps/454) — замена JNI (Java 22, Project Panama)
+
+### Практические руководства
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — гл.7: dynamic linking
+- [Android Developer: JNI Tips](https://developer.android.com/training/articles/perf-jni) — JNI на Android
+- [Kotlin Docs: C Interop](https://kotlinlang.org/docs/native-c-interop.html) — cinterop документация
+- [Apple: ObjC Runtime Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/) — objc_msgSend
 
 ---
 

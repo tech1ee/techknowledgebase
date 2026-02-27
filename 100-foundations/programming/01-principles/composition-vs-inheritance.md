@@ -22,7 +22,36 @@ related:
 
 ---
 
-## Историческая справка
+## Теоретические основы
+
+> **Композиция** — механизм построения сложных объектов из более простых через включение (has-a relationship). **Наследование** — механизм определения нового типа как расширения существующего (is-a relationship). Принцип «предпочитай композицию наследованию» формализован GoF (1994) и обоснован через **Fragile Base Class Problem** и **нарушение инкапсуляции**.
+
+### Формальная модель отношений
+
+| Отношение | Формальное определение | Семантика | Связанность |
+|-----------|----------------------|-----------|-------------|
+| **Наследование** (is-a) | S <: T — подтиповое отношение | S является разновидностью T | Высокая: S зависит от реализации T |
+| **Композиция** (has-a) | A содержит поле типа B | A использует B через интерфейс | Низкая: A зависит только от контракта B |
+| **Делегирование** (by) | A переадресует вызовы B | A имеет тот же интерфейс, реализация в B | Минимальная: зависимость от интерфейса |
+
+### Fragile Base Class Problem (формально)
+
+Михаелис и Россберг (2001) формализовали проблему:
+- **Инвариант**: изменение реализации базового класса T не должно влиять на корректность подкласса S
+- **Нарушение**: наследование реализации создаёт **implicit coupling** — S зависит от внутренних деталей T
+- **Следствие**: безобидное изменение в T может нарушить контракт S без изменения интерфейса
+
+### Принцип GoF (1994)
+
+> "Favor object composition over class inheritance"
+
+GoF обосновали: наследование = white-box reuse (подкласс видит внутренности), композиция = black-box reuse (используется только интерфейс). Black-box reuse предпочтительнее, т.к. не нарушает инкапсуляцию.
+
+> **См. также**: [[oop-fundamentals]] — основы ООП, [[solid-principles]] — LSP как формализация корректного наследования, [[decorator-pattern]] — композиция в действии
+
+---
+
+
 
 Идея "предпочитай композицию наследованию" не нова:
 
@@ -790,6 +819,12 @@ class InstrumentedSet<E>(
 
 ## Источники
 
+### Теоретические основы
+- **Gamma E. et al. (1994). Design Patterns. Addison-Wesley.** — «Favor object composition over class inheritance» (принцип #2), white-box vs black-box reuse
+- **Liskov B. (1988). Data Abstraction and Hierarchy. OOPSLA.** — формальные требования к корректному наследованию (LSP)
+- **Mikhajlov L., Sekerinski E. (1998). A Study of the Fragile Base Class Problem. ECOOP.** — формализация Fragile Base Class Problem
+
+### Практические руководства
 - Gamma E., Helm R., Johnson R., Vlissides J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. -- Принцип "Favor object composition over class inheritance", паттерны Decorator, Strategy, Proxy.
 - Bloch J. (2018). *Effective Java, 3rd Edition*. -- Item 18: "Favor composition over inheritance"; Item 17: "Design and document for inheritance, or prohibit it". Пример `InstrumentedHashSet`.
 - Москала М. (2021). *Effective Kotlin*. -- Item 36: "Prefer composition over inheritance". Kotlin-специфичные примеры с `by`-делегированием.

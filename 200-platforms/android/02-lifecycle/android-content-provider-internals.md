@@ -40,6 +40,31 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Определение ContentProvider как абстракции доступа к данным
+
+> **ContentProvider** реализует паттерн **Repository** (Fowler M. *Patterns of Enterprise Application Architecture*, 2002) на уровне IPC: он предоставляет единый CRUD-интерфейс (query, insert, update, delete) для доступа к данным, скрывая детали хранения (SQLite, файлы, сеть) за URI-based API.
+
+### URI-адресация как REST-подобный интерфейс
+
+ContentProvider использует **URI-адресацию**, соответствующую принципам REST (Fielding R. *«Architectural Styles and the Design of Network-based Software Architectures»*, 2000):
+
+| REST-принцип | Реализация в ContentProvider |
+|-------------|------------------------------|
+| Resource identification | `content://authority/path/id` — URI идентифицирует ресурс |
+| Uniform interface | CRUD через ContentResolver (query, insert, update, delete) |
+| Stateless | Каждый запрос самодостаточен, состояние хранится в БД |
+| Representation | Cursor — табличное представление данных |
+
+### CursorWindow и shared memory
+
+CursorWindow использует **shared memory** (ashmem/memfd) для передачи данных между процессами без копирования через Binder. Это реализация принципа **zero-copy** (Pai V. et al. *«IO-Lite: A Unified I/O Buffering and Caching System»*, 1999), адаптированного для Android IPC: данные записываются в shared buffer и читаются получателем напрямую.
+
+> **Связь с компонентной моделью:** ContentProvider — единственный компонент Android, lifecycle которого привязан к процессу, а не к взаимодействию с пользователем. Он создаётся при старте процесса (до `Application.onCreate()`) и живёт до убийства процесса. Это делает его идеальным хуком для ранней инициализации — что использует [[android-app-startup-performance|App Startup]] library.
+
+---
+
 ## Зачем это нужно
 
 ### Проблемы без понимания ContentProvider
@@ -1835,6 +1860,14 @@ class NotesProvider : ContentProvider() {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- **Fowler M.** *Patterns of Enterprise Application Architecture* (2002) — паттерн Repository: ContentProvider реализует CRUD-интерфейс для доступа к данным, скрывая детали хранения за URI-based API
+- **Fielding R.** *«Architectural Styles and the Design of Network-based Software Architectures»* (2000) — REST-принципы: URI-адресация ContentProvider (`content://authority/path/id`) как resource identification с uniform interface
+- **Pai V. et al.** *«IO-Lite: A Unified I/O Buffering and Caching System»* (1999) — zero-copy принцип: CursorWindow использует shared memory (ashmem/memfd) для передачи данных без копирования через Binder
+
+### Практические руководства
+
 | # | Источник | Тип | Описание |
 |---|---------|-----|----------|
 | 1 | [Content Providers](https://developer.android.com/guide/topics/providers/content-providers) | Docs | Официальная документация |
@@ -1850,11 +1883,9 @@ class NotesProvider : ContentProvider() {
 | 11 | [Scoped Storage](https://developer.android.com/about/versions/11/privacy/storage) | Docs | Scoped Storage изменения |
 | 12 | [Photo Picker](https://developer.android.com/training/data-storage/shared/photopicker) | Docs | Android 13+ Photo Picker |
 
-### Книги
-
-- **Meier R. (2022)** *Professional Android* — глава о ContentProvider охватывает реализацию CRUD-операций, FileProvider и работу с системными провайдерами (MediaStore, Contacts). Полезно для понимания production-паттернов.
-- **Phillips B. et al. (2022)** *Android Programming: The Big Nerd Ranch Guide* — практический подход к ContentProvider с пошаговыми примерами создания собственного провайдера и интеграции с Room.
-- **Vasavada N. (2019)** *Android Internals* — детальное описание Binder IPC, CursorWindow shared memory и внутреннего устройства ContentProvider на уровне AOSP.
+- **Meier R.** *Professional Android* (2022) — глава о ContentProvider: CRUD-операции, FileProvider и работа с системными провайдерами (MediaStore, Contacts)
+- **Phillips B. et al.** *Android Programming: The Big Nerd Ranch Guide* (2022) — практический подход к ContentProvider с пошаговыми примерами создания собственного провайдера
+- **Vasavada N.** *Android Internals* (2019) — детальное описание Binder IPC, CursorWindow shared memory и внутреннего устройства ContentProvider на уровне AOSP
 
 ---
 

@@ -31,6 +31,36 @@ Senior позиции требуют не только знания паттер
 
 ---
 
+## Теоретические основы
+
+> **Software Architecture** — фундаментальная структура программной системы: компоненты, их взаимосвязи, принципы проектирования и эволюции. На интервью оценивается не знание паттернов, а **understanding of trade-offs** при выборе одного подхода над другим.
+
+**Эволюция Android-архитектур:**
+
+| Год | Паттерн | Проблема, которую решал |
+|-----|---------|------------------------|
+| 2010-2015 | MVC (неявный) | Нет separation of concerns; God Activity |
+| 2015-2017 | MVP | Testability; но Presenter привязан к View lifecycle |
+| 2017-2020 | MVVM + LiveData | Lifecycle awareness; но bidirectional data flow |
+| 2020-2024 | MVI + Compose | Unidirectional data flow; но boilerplate |
+| 2024+ | MVI + Compose + KMP | Cross-platform shared logic; complexity trade-off |
+
+**Ключевые принципы оценки архитектуры (ISO/IEC 25010):**
+
+| Критерий | Вопрос | MVVM | MVI |
+|----------|--------|------|-----|
+| Testability | Легко ли тестировать? | Medium (LiveData) | High (pure functions) |
+| Maintainability | Легко ли менять? | Medium | High (single state) |
+| Scalability | Масштабируется ли? | Medium | High (state machine) |
+| Complexity | Насколько сложно? | Low | Medium-High |
+| Learning Curve | Легко ли освоить? | Low | Medium |
+
+На Senior-интервью ожидается не ответ "MVI лучше MVVM", а **"MVI лучше для X context, потому что Y trade-off приемлем"**. Архитектурное мышление = context-dependent decision making.
+
+→ Связано: [[android-questions]], [[system-design-android]], [[technical-interview]]
+
+---
+
 ## MVVM
 
 ### Что такое MVVM и как работает?
@@ -602,17 +632,19 @@ data class CheckoutState(
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **Xu A. (2020). System Design Interview.** — Даёт фреймворк для обсуждения архитектурных решений на интервью: как структурировать ответ, какие trade-offs обсуждать, как рисовать диаграммы. Хотя фокус на backend, подход полностью применим к mobile architecture.
-
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Главы об Object-Oriented Design показывают, как интервьюеры оценивают архитектурное мышление. Полезна для понимания формата вопросов и ожидаемой глубины ответов на Senior-позиции.
-
-- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Объясняет, как архитектурные решения связаны с technical leadership на Staff+ уровне. Помогает выйти за рамки паттернов к стратегическому мышлению об архитектуре.
-
----
-
 ## Источники
+
+### Теоретические основы
+
+- Martin R.C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. — Принципы Clean Architecture: dependency rule, separation of concerns.
+
+- ISO/IEC 25010 (2011). *Systems and software Quality Requirements and Evaluation*. — Стандартные критерии оценки качества архитектуры.
+
+- Xu A. (2020). *System Design Interview*. — Framework для обсуждения trade-offs на интервью.
+
+- Larson W. (2022). *Staff Engineer*. — Архитектурные решения как technical leadership на Staff+ уровне.
+
+### Практические руководства
 
 - [ProAndroidDev: Android Architecture](https://proandroiddev.com/android-interview-series-2024-part-8-android-architecture-07ca74eee000)
 - [Medium: MVI and Clean Architecture](https://medium.com/@sharmapraveen91/mastering-mvi-and-clean-architecture-20-advanced-interview-questions-every-android-developer-bf0d9e02d22b)

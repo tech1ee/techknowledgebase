@@ -37,6 +37,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Принципы дизайна интервью: signal vs noise
+
+> **Определение:** Structured Interview — метод оценки кандидатов, при котором все кандидаты отвечают на одинаковые заранее определённые вопросы, оцениваемые по единой шкале. Противоположность — unstructured interview, где вопросы варьируются.
+
+Schmidt & Hunter (1998) в мета-анализе показали, что structured interviews (r = 0.51) значительно превосходят unstructured (r = 0.38) по предсказательной валидности. Ключевой принцип — **signal-to-noise ratio**: каждый вопрос и каждый этап интервью должен максимизировать сигнал (релевантную информацию о кандидате) и минимизировать шум (bias, irrelevant data).
+
+| Принцип дизайна | Научная основа | Реализация |
+|----------------|---------------|------------|
+| **Одинаковые вопросы** | Снижает interviewer bias (Campion et al., 1997) | Scorecards с predetermined questions |
+| **Behavioural questions** | Past behavior predicts future (Janz, 1982) | STAR format (Situation-Task-Action-Result) |
+| **Independent scoring** | Предотвращает groupthink (Janis, 1972) | Каждый интервьюер пишет feedback до debrief |
+| **Multiple assessors** | Повышает inter-rater reliability | 4-5 интервьюеров для full-time позиции |
+| **Work samples** | Highest validity (Schmidt & Hunter, 1998) | Take-home projects, pair programming |
+
+### Предсказательная валидность методов оценки
+
+Tom Janz в *"The Patterned Behavior Description Interview"* (1982) формализовал принцип, что **лучший предсказатель будущего поведения — прошлое поведение в аналогичных ситуациях**. Это основа behavioral interviewing (STAR method), которую Google формализовал через re:Work guidelines.
+
+> **Predictive Validity** — степень, в которой результаты метода отбора предсказывают реальную производительность на рабочем месте. Измеряется коэффициентом корреляции (r) от 0 до 1.
+
+Allen Huffcutt & Winfred Arthur в мета-анализе *"Hunter and Hunter Revisited"* (Journal of Applied Psychology, 1994) подтвердили, что adding structure к интервью монотонно повышает validity. При этом diminishing returns наступают после 4-5 интервью — дополнительные раунды не добавляют значимого сигнала, но ухудшают candidate experience.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -692,19 +718,24 @@ If can't decide — problem is criteria, not data.
 
 ## Источники
 
+### Теоретические основы
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | Schmidt F. L., Hunter J. E. "The Validity and Utility of Selection Methods" — Psychological Bulletin, 1998 | Мета-анализ | Валидность structured vs unstructured interviews |
+| 2 | Janz T. "The Patterned Behavior Description Interview" — Behavior Research Press, 1982 | Книга | Behavioral interviewing, past behavior principle |
+| 3 | Campion M. A. et al. "A Review of Structure in the Selection Interview" — Personnel Psychology, 1997 | Статья | Компоненты структуры интервью |
+| 4 | Huffcutt A. I., Arthur W. "Hunter and Hunter Revisited" — Journal of Applied Psychology, 1994 | Мета-анализ | Diminishing returns после 4-5 интервью |
+
+### Практические руководства
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
 | 1 | [Google re:Work Hiring](https://rework.withgoogle.com/subjects/hiring/) | Research | Structured interviews |
-| 2 | [Schmidt & Hunter Meta-Analysis](https://citeseerx.ist.psu.edu/document?doi=10.1.1.172.1733) | Research | Interview validity |
-| 3 | [Stripe Interview Process](https://stripe.com/blog/bring-your-own-interview) | Article | Practical approach |
-| 4 | [interviewing.io Research](https://interviewing.io/blog) | Research | Technical interview insights |
-| 5 | [First Round Review: Interviews](https://review.firstround.com/) | Articles | Practical tips |
-
-### Дополнительное чтение
-
-- "Who" by Geoff Smart — structured hiring
-- "Work Rules!" by Laszlo Bock — Google hiring
-- "The Effective Hiring Manager" by Mark Horstman — Manager Tools
+| 2 | [Stripe Interview Process](https://stripe.com/blog/bring-your-own-interview) | Article | Practical approach |
+| 3 | [interviewing.io Research](https://interviewing.io/blog) | Research | Technical interview insights |
+| 4 | [First Round Review: Interviews](https://review.firstround.com/) | Articles | Practical tips |
+| 5 | **Who** (Geoff Smart, 2008) | Книга | Structured hiring |
+| 6 | **Work Rules!** (Laszlo Bock, 2015) | Книга | Google hiring |
+| 7 | **The Effective Hiring Manager** (Mark Horstman, 2019) | Книга | Manager Tools approach |
 
 ---
 

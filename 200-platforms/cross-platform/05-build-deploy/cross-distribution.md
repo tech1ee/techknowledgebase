@@ -47,6 +47,48 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Дистрибуция мобильного приложения** — процесс доставки подписанного артефакта до конечного устройства пользователя через управляемый канал (app store), включающий review, размещение и обновление (Apple App Store Review Guidelines; Google Play Developer Policy).
+
+### Сравнение каналов дистрибуции
+
+| Аспект | iOS (App Store) | Android (Play Store) |
+|--------|-----------------|---------------------|
+| **Формат** | .ipa (подписанный .app в zip) | .aab (Android App Bundle) |
+| **Review** | Ручной + автоматический (1-7 дней) | Автоматический + ручной (часы-дни) |
+| **Альтернативные stores** | EU (DMA 2024): альтернативные маркетплейсы | Любые: APK sideloading, F-Droid, etc. |
+| **Beta testing** | TestFlight (Apple) | Internal/Closed/Open testing tracks |
+| **Phased rollout** | Phased Release (7 дней) | Staged rollout (% users) |
+| **Mandatory updates** | Нет (рекомендательно) | In-app updates API |
+
+### Модель публикации: walled garden vs open market
+
+| Параметр | iOS (Walled Garden) | Android (Open Market) |
+|----------|--------------------|-----------------------|
+| **Контроль** | Apple полностью контролирует | Google контролирует Play Store |
+| **Комиссия** | 15-30% (Small Business Program) | 15-30% |
+| **Sideloading** | Ограничен (EU: AltStore) | Свободный |
+| **Enterprise** | Enterprise Program ($299/year) | Managed Google Play |
+
+### Семантическое версионирование
+
+SemVer (Preston-Werner, 2010) для KMP-приложений:
+
+```
+MAJOR.MINOR.PATCH
+  ↓       ↓      ↓
+Breaking  New    Bugfix
+change   feature
+```
+
+В KMP-контексте: версия shared module и версия app — **независимые** (shared module может быть 2.x, а app — 1.x).
+
+> **CS-фундамент:** Distribution связан с [[cross-code-signing]] (подпись перед публикацией) и [[kmp-ci-cd]] (автоматизация публикации). Теоретическая база — Software Distribution (IEEE), SemVer (Preston-Werner, 2010).
+
 ## 1. Review Process — Процесс модерации
 
 ### App Store Review
@@ -905,8 +947,15 @@ D) Pause Phased Release → Исправить → Обычный Review → Res
 
 ## Источники и дальнейшее чтение
 
-- Meier R. (2022). *Professional Android.* — Разбирает Play Store публикацию, AAB формат, staged rollout, in-app updates и Play Feature Delivery. Практическое руководство по подготовке Android-приложения к release.
-- Neuburg M. (2023). *iOS Programming Fundamentals with Swift.* — Охватывает App Store Connect, TestFlight, provisioning и процесс публикации iOS-приложений. Помогает понять требования Apple к метаданным, скриншотам и App Review guidelines.
+### Теоретические основы
+
+- **Preston-Werner T. (2010).** *Semantic Versioning 2.0.0.* — SemVer для версионирования приложений.
+
+### Практические руководства
+
+- [App Store Connect](https://developer.apple.com/app-store-connect/) — iOS дистрибуция.
+- [Google Play Console](https://developer.android.com/distribute/console) — Android дистрибуция.
+- [Fastlane](https://fastlane.tools/) — Автоматизация дистрибуции для обеих платформ.
 
 ---
 

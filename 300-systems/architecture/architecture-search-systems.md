@@ -35,7 +35,69 @@ next_review:
 
 ---
 
-## Что нужно знать перед изучением
+## Теоретические основы
+
+> **Information Retrieval (IR)** — область CS, изучающая поиск неструктурированной информации (обычно текста) в больших коллекциях. Формализована Джерардом Салтоном (Cornell, 1960-е), создателем SMART — первой автоматической IR-системы.
+
+### Формальная модель поиска
+
+Задача полнотекстового поиска:
+- **Дано**: коллекция документов D = {d₁, d₂, ..., dₙ} и запрос q
+- **Найти**: ранжированный список документов R ⊂ D, отсортированных по релевантности score(dᵢ, q)
+
+Три фундаментальных модели IR:
+
+| Модель | Автор | Принцип | Пример |
+|--------|-------|---------|--------|
+| **Boolean** | — (1950-е) | Документ релевантен или нет (AND/OR/NOT) | SQL LIKE, regex |
+| **Vector Space** | Salton (1975) | Документ и запрос — векторы в пространстве терминов, similarity = cos(θ) | TF-IDF |
+| **Probabilistic** | Robertson & Spärck Jones (1976) | P(relevant\|document, query) — вероятность релевантности | BM25, Language Models |
+
+### Ключевые формулы
+
+**TF-IDF** (Term Frequency × Inverse Document Frequency):
+```
+tf-idf(t, d, D) = tf(t, d) × log(|D| / df(t))
+```
+- tf(t, d) — частота терма t в документе d
+- df(t) — число документов, содержащих t
+- Интуиция: слово важно, если часто в документе, но редко в коллекции
+
+**BM25** (Robertson & Zaragoza, 2009):
+```
+BM25(q, d) = Σ IDF(qᵢ) × [tf(qᵢ, d) × (k₁ + 1)] / [tf(qᵢ, d) + k₁ × (1 - b + b × |d|/avgdl)]
+```
+- k₁ ≈ 1.2 — насыщение term frequency
+- b ≈ 0.75 — нормализация по длине документа
+- BM25 — стандарт де-факто в Elasticsearch/Lucene (заменил TF-IDF в v5.0)
+
+### Метрики качества поиска
+
+| Метрика | Формула | Что измеряет |
+|---------|---------|-------------|
+| **Precision** | \|relevant ∩ retrieved\| / \|retrieved\| | Доля релевантных среди найденных |
+| **Recall** | \|relevant ∩ retrieved\| / \|relevant\| | Доля найденных среди всех релевантных |
+| **F1** | 2 × P × R / (P + R) | Гармоническое среднее P и R |
+| **NDCG** | DCG / IDCG | Качество ранжирования (позиция важна) |
+
+### Историческая хронология
+
+| Год | Событие | Значение |
+|-----|---------|----------|
+| 1945 | Bush — Memex | Концепция гипертекстового поиска |
+| 1960 | Salton — SMART | Первая автоматическая IR-система |
+| 1975 | Salton — Vector Space Model | TF-IDF, cosine similarity |
+| 1976 | Robertson & Spärck Jones | Probabilistic IR → путь к BM25 |
+| 1999 | Lucene (Doug Cutting) | Open source full-text search library |
+| 2004 | Solr | Enterprise search на основе Lucene |
+| 2010 | Elasticsearch (Shay Banon) | Distributed search + JSON API |
+| 2021 | OpenSearch (AWS fork) | Open source форк Elasticsearch |
+
+> **См. также**: [[databases-overview]] — SQL vs NoSQL, [[caching-strategies]] — кэширование результатов поиска, [[ai-ml-overview]] — vector search и semantic retrieval
+
+---
+
+
 
 Прежде чем изучать поисковые системы, убедитесь, что понимаете:
 
@@ -1394,6 +1456,14 @@ GET /products/_search
 ---
 
 ## Источники
+
+### Теоретические основы
+- **Salton G. (1968). Automatic Information Organization and Retrieval. McGraw-Hill.** — основоположник Information Retrieval, создатель SMART-системы и Vector Space Model
+- **Robertson S.E., Spärck Jones K. (1976). Relevance Weighting of Search Terms. JASIST.** — основа probabilistic IR → путь к BM25
+- **Robertson S.E., Zaragoza H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. Foundations and Trends in IR.** — полное изложение BM25 и его вариантов
+- **Manning C.D., Raghavan P., Schütze H. (2008). Introduction to Information Retrieval. Cambridge.** — каноническая книга по IR (свободно доступна онлайн)
+
+### Практические руководства
 
 | # | Источник | Тип | Достоверность | Вклад |
 |---|----------|-----|---------------|-------|

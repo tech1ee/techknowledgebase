@@ -43,6 +43,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формализация как конечный автомат
+
+> **Конечный автомат (Finite State Machine)** — математическая модель вычисления, определяемая пятёркой `(Q, Σ, δ, q₀, F)`, где Q — множество состояний, Σ — алфавит входных символов, δ — функция переходов, q₀ — начальное состояние, F — множество конечных состояний (Hopcroft J., Ullman J. *Introduction to Automata Theory*, 1979).
+
+Activity Lifecycle формально описывается как детерминированный конечный автомат:
+
+| Элемент FSM | Activity Lifecycle |
+|------------|-------------------|
+| Q (состояния) | {INITIALIZED, CREATED, STARTED, RESUMED, DESTROYED} |
+| Σ (входные символы) | {onCreate, onStart, onResume, onPause, onStop, onDestroy, configChange, processKill} |
+| δ (переходы) | Определены контрактом Android Framework |
+| q₀ (начальное) | INITIALIZED |
+| F (конечные) | {DESTROYED} |
+
+### Историческая эволюция
+
+Концепция управляемого системой жизненного цикла объектов берёт начало в **Enterprise JavaBeans** (Sun Microsystems, 1998), где контейнер управлял lifecycle серверных компонентов (creation → pooling → passivation → destruction). Android адаптировал эту модель для мобильных ограничений:
+
+| Платформа | Кто управляет lifecycle | Мотивация |
+|-----------|------------------------|-----------|
+| Desktop (Win32) | Приложение (WndProc message loop) | Много ресурсов, стабильная среда |
+| Java EE / EJB | Контейнер (Application Server) | Масштабируемость серверных ресурсов |
+| Android | System Server (AMS) | Экономия памяти и батареи |
+| iOS (UIKit) | System (UIApplicationDelegate) | Аналогичная мобильная мотивация |
+
+### Callback-контракт и шаблонный метод
+
+Activity lifecycle реализует паттерн **Template Method** (Gamma E. et al. *Design Patterns*, 1994): базовый класс `Activity` определяет алгоритм (последовательность callback-вызовов), а подклассы переопределяют отдельные шаги (`onCreate`, `onResume`). Вызов `super.onCreate()` обязателен — нарушение контракта приводит к `SuperNotCalledException`.
+
+> **Связь с теорией ОС:** Жизненный цикл Activity — прямое следствие архитектуры [[android-architecture|процессной модели Android]]. Система (ActivityManagerService) управляет состояниями через [[android-binder-ipc|Binder IPC]], используя паттерн **Command** (ClientTransaction → ActivityLifecycleItem). Формальное описание: Silberschatz A., Galvin P. *Operating System Concepts* (2018), глава «Process Scheduling».
+
+---
+
 ## Зачем вообще нужен жизненный цикл?
 
 ### Проблема: почему нельзя просто сделать обычный класс?
@@ -756,18 +791,22 @@ fun `ViewModel data survives configuration change`() {
 | Callback Pattern | Система вызывает методы Activity, инверсия контроля (IoC) |
 | Serialization | savedInstanceState → Bundle → Parcel (IPC), ограничение ~1MB |
 
-## Источники и дальнейшее чтение
+## Источники
 
-**Книги:**
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник, подробно разбирающий Activity lifecycle с упражнениями и примерами сохранения состояния
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке с глубоким описанием жизненного цикла компонентов
-- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их взаимодействие с lifecycle (viewModelScope, lifecycleScope)
+### Теоретические основы
 
-**Веб-ресурсы:**
-- [The Activity Lifecycle - Android Developers](https://developer.android.com/guide/components/activities/activity-lifecycle) — официальная документация
-- [Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle) — lifecycle-aware компоненты
-- [Activity Lifecycle Codelab](https://developer.android.com/codelabs/basic-android-kotlin-compose-activity-lifecycle) — практический codelab
-- [ViewModel Persistence - droidcon](https://www.droidcon.com/2025/01/13/understanding-viewmodel-persistence-across-configuration-changes-in-android/) — ViewModel и config changes
+- Hopcroft J., Ullman J. (1979). *Introduction to Automata Theory, Languages, and Computation*. — формальное определение FSM, применённое к lifecycle
+- Gamma E. et al. (1994). *Design Patterns*. — Template Method, Observer, State паттерны в lifecycle
+- Silberschatz A., Galvin P. (2018). *Operating System Concepts, 10th Edition*. — process scheduling и управление ресурсами
+- Sun Microsystems (1998). *Enterprise JavaBeans Specification*. — контейнерное управление lifecycle компонентов
+
+### Практические руководства
+
+- Phillips B. et al. (2022). *Android Programming: The Big Nerd Ranch Guide*. — практический разбор Activity lifecycle
+- Meier R. (2022). *Professional Android*. — жизненный цикл компонентов
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive*. — корутины и lifecycle
+- [The Activity Lifecycle — Android Developers](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 ---
 

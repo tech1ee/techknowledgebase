@@ -29,6 +29,48 @@ next_review:
 cs-foundations: [Mobile Security, Authentication, Cryptography, Supply Chain Security, Data Protection]
 ---
 
+## Теоретические основы
+
+> **Определение.** OWASP Mobile Top 10 — экспертный консенсус-рейтинг наиболее критичных категорий уязвимостей мобильных приложений, публикуемый OWASP Foundation на основе анализа реальных инцидентов, данных bug bounty программ и экспертных оценок. Версия 2024 — первое обновление за 8 лет, отражающее радикальные изменения в мобильном ландшафте.
+
+### Эволюция OWASP Mobile Top 10
+
+| Год | Версия | Ключевые изменения |
+|-----|--------|-------------------|
+| 2014 | Mobile Top 10 v1.0 | Первый список; фокус на client-side: Weak Server Side Controls, Insecure Data Storage, Insufficient Transport Layer Protection |
+| 2016 | Mobile Top 10 v2.0 | Добавлены Code Tampering и Reverse Engineering как отдельные категории; 10 позиций |
+| 2024 | Mobile Top 10 v3.0 | Supply Chain Security (M2) — новая категория; Code Tampering + Reverse Engineering объединены в M7; Privacy Controls (M6) — новая категория; полная перенумерация |
+
+### Таксономия мобильных угроз
+
+| Уровень атаки | Категории OWASP 2024 | Вектор | Платформа |
+|---------------|---------------------|--------|-----------|
+| Хранение и credentials | M1, M9 | Статический анализ, backup extraction | Android, iOS |
+| Цепочка поставок | M2 | Вредоносные SDK, зависимости с CVE | Обе |
+| Аутентификация / авторизация | M3 | IDOR, bypass биометрии, отсутствие server-side AuthZ | Обе |
+| Криптография | M10 | Слабые алгоритмы, hardcoded ключи | Обе |
+| Сетевые коммуникации | M5 | MITM, отсутствие pinning, cleartext | Обе |
+| Приватность | M6 | PII в логах, clipboard, backups | Обе |
+| Бинарная защита | M7 | Reverse engineering, code tampering | Обе |
+| Конфигурация | M4, M8 | Exported components, debuggable flag, WebView | Android (больше), iOS |
+
+### Сравнение модели безопасности iOS и Android
+
+| Аспект | Android | iOS |
+|--------|---------|-----|
+| Песочница | UID-based, SELinux | App Sandbox (Seatbelt) |
+| Хранилище ключей | Android Keystore (TEE/StrongBox) | Keychain + Secure Enclave |
+| Установка приложений | Play Store + sideloading | App Store (+ AltStore, TestFlight) |
+| Code signing | Обязательная подпись APK/AAB | Apple Developer Certificate + Notarization |
+| Runtime protection | SafetyNet → Play Integrity API | App Attest + DeviceCheck |
+| Permissions | Manifest + runtime (granular) | Purpose strings + runtime (granular) |
+
+> **Методологическая связь.** OWASP Mobile Top 10 определяет ЧТО может пойти не так. [[mobile-security-masvs|MASVS]] определяет КАК это систематически проверить. [[mobile-app-protection|Mobile App Protection]] описывает конкретные КОНТРМЕРЫ для каждой категории.
+
+**См. также:** [[web-security-owasp]] — OWASP Web Top 10 для серверной части мобильных приложений; [[security-fundamentals]] — CIA Triad, Defense in Depth как теоретический фундамент.
+
+---
+
 ## Зачем это нужно
 
 OWASP Mobile Top 10 2024 — первое крупное обновление списка за 8 лет (с 2016). За это время мобильный ландшафт кардинально изменился: более 90% приложений интегрируют хотя бы один сторонний SDK, атаки на supply chain стали массовыми, а требования к приватности (GDPR, CCPA) — обязательными.
@@ -1328,11 +1370,18 @@ OWASP Mobile Top 10 соответствует категориям OWASP MASVS:
 
 ## Источники
 
-- [OWASP Mobile Top 10 2024 - Official](https://owasp.org/www-project-mobile-top-10/)
+### Теоретические основы
+
+- [OWASP Mobile Top 10 2024 - Official](https://owasp.org/www-project-mobile-top-10/) — первоисточник: полный список категорий, методология ранжирования, описание каждой уязвимости
 - [M1: Improper Credential Usage - OWASP](https://owasp.org/www-project-mobile-top-10/2023-risks/m1-improper-credential-usage)
 - [M2: Inadequate Supply Chain Security - OWASP](https://owasp.org/www-project-mobile-top-10/2023-risks/m2-inadequate-supply-chain-security.html)
 - [M6: Inadequate Privacy Controls - OWASP](https://owasp.org/www-project-mobile-top-10/2023-risks/m6-inadequate-privacy-controls)
 - [M8: Security Misconfiguration - OWASP](https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration)
+- Enck W. et al. (2014). "TaintDroid: An Information-Flow Tracking System for Realtime Privacy Monitoring on Smartphones." ACM TOCS. — академическое исследование утечек данных на Android, научный фундамент для категорий M6 и M9
+- Felt A. et al. (2011). "Android Permissions Demystified." ACM CCS. — формальный анализ модели разрешений Android, основа для понимания M4 и M8
+
+### Практические руководства
+
 - [OWASP Mobile Top 10 2024 - Indusface](https://www.indusface.com/blog/owasp-mobile-top-10-2024/)
 - [OWASP Mobile Top 10 2024 Update - Cobalt](https://www.cobalt.io/blog/owasp-mobile-top-10-2024-update)
 - [OWASP Mobile Top 10 2024 - Astra](https://www.getastra.com/blog/mobile/owasp-mobile-top-10-2024-a-security-guide/)
@@ -1357,10 +1406,17 @@ OWASP Mobile Top 10 соответствует категориям OWASP MASVS:
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
 - Dunham K. (2022). *Mobile Application Security.* Wiley. — комплексное руководство по безопасности мобильных приложений, покрывающее уязвимости из OWASP Mobile Top 10 с практическими примерами для Android и iOS.
-- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — несмотря на фокус на веб, многие атаки (injection, broken auth, IDOR) применимы к мобильным API и бэкендам, с которыми взаимодействуют мобильные приложения.
 - Shostack A. (2014). *Threat Modeling: Designing for Security.* Wiley. — методология моделирования угроз, применимая к мобильным приложениям для систематического выявления уязвимостей из Mobile Top 10 на этапе проектирования.
+- Stuttard D., Pinto M. (2011). *The Web Application Hacker's Handbook.* 2nd Edition. Wiley. — многие атаки (injection, broken auth, IDOR) применимы к мобильным API и бэкендам.
+
+### Практические руководства
+
 - OWASP Foundation (2021). *OWASP Testing Guide v4.* — практическое руководство по тестированию безопасности, включая мобильные приложения и связанные с ними веб-API.
+- Android Security Documentation (developer.android.com/security). — официальные гайды Google по безопасности Android-приложений: Keystore, BiometricPrompt, Network Security Config.
+- Apple Platform Security Guide (support.apple.com/guide/security). — техническое описание архитектуры безопасности iOS: Secure Enclave, App Sandbox, Data Protection.
 
 ---
 

@@ -35,6 +35,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Метакогниция (Metacognition)** — знание и регуляция собственных когнитивных процессов; «мышление о мышлении» (Flavell, 1979).
+
+Термин введён **Джоном Флавеллом** в 1976 году, но корни уходят глубже — к концепции интроспекции Уильяма Джеймса (1890) и идеям Жана Пиаже о рефлексивном абстрагировании:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| Metacognition | Flavell | 1976, 1979 | Ввёл термин, выделил метакогнитивное знание и опыт |
+| Self-Regulated Learning | Zimmerman | 1986, 2002 | Модель саморегулируемого обучения: forethought → performance → self-reflection |
+| Calibration | Dunning & Kruger | 1999 | Некомпетентные переоценивают себя; эксперты — калиброваны точнее |
+| Fluency illusion | Jacoby & Whitehouse | 1989 | Лёгкость обработки создаёт ложное чувство знания |
+| Judgments of Learning | Nelson & Narens | 1990 | Модель мониторинга: мета-уровень наблюдает за объектным уровнем |
+| Metacognition & AI | British Journal of Ed. Tech. | 2025 | В AI-среде студенты снижают саморегуляцию без метакогнитивной поддержки |
+
+> **Flavell (1979):** метакогниция включает три типа знания — знание о себе как познающем субъекте (**person**), знание о задачах (**task**), знание о стратегиях (**strategy**).
+
+Практическая ценность метакогниции подтверждена мета-анализами: **Wang, Haertel & Walberg (1990)** показали, что метакогнитивные навыки — один из сильнейших предикторов академической успешности (d = 0.69). Модель **Zimmerman (2002)** — циклический процесс (forethought → performance → self-reflection) — стала стандартом в исследованиях саморегулируемого обучения.
+
+Ключевая ловушка: **Dunning-Kruger эффект** (1999) ([[cognitive-biases]]) — люди с низкой компетенцией систематически переоценивают свои знания. Метакогниция — единственное противоядие: осознанный мониторинг «что именно я понял?» вместо «вроде понял».
+
+---
+
 ## Зачем это нужно
 
 Представь двух разработчиков, изучающих Kubernetes:
@@ -364,10 +387,18 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+- Flavell, J. H. «Metacognition and Cognitive Monitoring: A New Area of Cognitive-Developmental Inquiry». American Psychologist, 1979
+- Zimmerman, B. J. «Becoming a Self-Regulated Learner: An Overview». Theory into Practice, 2002
+- Nelson, T. O. & Narens, L. «Metamemory: A Theoretical Framework and New Findings». Psychology of Learning and Motivation, 1990
+- Dunning, D. & Kruger, J. «Unskilled and Unaware of It». Journal of Personality and Social Psychology, 1999
+- Wang, M. C., Haertel, G. D. & Walberg, H. J. «What Influences Learning?» Journal of Educational Research, 1990
 - [PMC: Fostering Metacognition to Support Student Learning](https://pmc.ncbi.nlm.nih.gov/articles/PMC8734377/) — проверено 2025-11-24
-- [UNC Learning Center: Metacognitive Study Strategies](https://learningcenter.unc.edu/tips-and-tools/metacognitive-study-strategies/) — проверено 2025-11-24
 - [British Journal of Educational Technology: Metacognition in AI Environments (2025)](https://bera-journals.onlinelibrary.wiley.com/doi/10.1111/bjet.13599) — проверено 2025-11-24
 - [Frontiers: Metacognitive Strategies and Critical Thinking](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.913219/full) — проверено 2025-11-24
+
+### Практические руководства
+- [UNC Learning Center: Metacognitive Study Strategies](https://learningcenter.unc.edu/tips-and-tools/metacognitive-study-strategies/) — проверено 2025-11-24
 
 ---
 

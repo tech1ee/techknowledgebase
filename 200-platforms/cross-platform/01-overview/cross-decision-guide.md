@@ -59,6 +59,50 @@ ELSE IF (MVP/стартап AND маленькая команда AND скоро
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Архитектурное решение (Architecture Decision)** — выбор, который существенно влияет на структуру, поведение или качественные атрибуты системы и который трудно или дорого изменить после реализации (Jansen & Bosch, 2005).
+
+### Architecture Decision Records (ADR)
+
+Michael Nygard (2011) предложил формат документирования архитектурных решений:
+
+| Компонент ADR | Применение к выбору стека |
+|---------------|--------------------------|
+| **Context** | Бизнес-требования, размер команды, бюджет |
+| **Decision** | Native / KMP / Flutter / RN |
+| **Consequences** | Trade-offs по стоимости, скорости, качеству |
+| **Status** | Accepted / Deprecated / Superseded |
+
+### Multi-Criteria Decision Analysis (MCDA)
+
+Выбор кросс-платформенного стека — задача **многокритериальной оптимизации** (Saaty, 1980, Analytic Hierarchy Process):
+
+| Критерий | Вес | Native | KMP | Flutter |
+|----------|-----|--------|-----|---------|
+| UX quality | 0.25 | 10 | 9 | 7 |
+| Dev speed | 0.20 | 5 | 7 | 9 |
+| Code reuse | 0.20 | 0 | 7 | 9 |
+| Performance | 0.15 | 10 | 9 | 8 |
+| Team skills | 0.10 | Variable | Variable | Variable |
+| Ecosystem | 0.10 | 10 | 8 | 7 |
+
+Оптимальный выбор зависит от **весов критериев**, которые определяются контекстом проекта (стартап vs enterprise, MVP vs production).
+
+### Reversibility of Decisions
+
+Решение о выборе стека классифицируется как **Type 1 decision** (Bezos, 2015) — необратимое или труднообратимое. Стоимость смены стека растёт нелинейно с размером кодовой базы:
+
+```
+Cost_migration ≈ O(n × m)
+где n = размер кодовой базы, m = глубина платформенной интеграции
+```
+
+> **CS-фундамент:** Принятие архитектурных решений связано с [[cross-architecture]] (последствия выбора) и [[kmp-migration-from-native]] / [[kmp-migration-from-flutter]] (стоимость смены решения). Теоретическая база — ADR (Nygard, 2011), MCDA (Saaty, 1980), ATAM (Kazman et al., 2001).
+
 ## 2. Когда выбирать Native iOS + Native Android
 
 ### Идеальные условия
@@ -712,8 +756,16 @@ D) React Native модули
 
 ## Источники и дальнейшее чтение
 
-- Martin R. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design.* — Принципы архитектурных решений: независимость от фреймворков, UI и баз данных. Напрямую применимы к выбору между Native, KMP и Flutter — правильная архитектура минимизирует зависимость от конкретного стека.
-- Moskala M. (2021). *Effective Kotlin: Best Practices.* — Практическое руководство по Kotlin, которое помогает оценить продуктивность разработки на KMP. Включает рекомендации по проектированию API shared-модулей и идиоматичному Kotlin-коду.
+### Теоретические основы
+
+- **Saaty T. (1980).** *The Analytic Hierarchy Process.* — MCDA для формализации многокритериального выбора стека.
+- **Kazman R. et al. (2001).** *ATAM: Architecture Tradeoff Analysis Method.* — Анализ архитектурных trade-offs.
+- **Nygard M. (2011).** *Documenting Architecture Decisions.* — ADR формат для документирования решений.
+
+### Практические руководства
+
+- [KMP vs Flutter (JetBrains)](https://kotlinlang.org/docs/multiplatform/kotlin-multiplatform-flutter.html) — Официальное сравнение.
+- [Choosing Cross-Platform Framework](https://developer.android.com/kotlin/multiplatform) — Google рекомендации.
 
 ---
 

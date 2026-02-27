@@ -36,6 +36,47 @@ Docker — не "для DevOps", а для всех. Упаковываешь п
 
 ---
 
+## Теоретические основы
+
+> **Контейнер** — изолированный процесс, использующий механизмы ядра Linux для ограничения видимости и ресурсов. **Docker** (Solomon Hykes, 2013) — платформа, стандартизировавшая создание, распространение и запуск контейнеров через OCI (Open Container Initiative) спецификации.
+
+### Механизмы изоляции Linux
+
+| Механизм | Что изолирует | Пример |
+|----------|--------------|--------|
+| **Namespaces** | Видимость ресурсов (PID, NET, MNT, UTS, IPC, USER) | Процессы в контейнере не видят процессы хоста |
+| **cgroups** (Control Groups) | Лимиты ресурсов (CPU, RAM, I/O) | Контейнер не может использовать > 512MB RAM |
+| **Union FS** (OverlayFS) | Слоистая файловая система (layers) | Образ = стек read-only слоёв + writable layer |
+| **seccomp** | Системные вызовы | Блокировка опасных syscalls (e.g., reboot) |
+
+### VM vs Container: архитектурное различие
+
+```
+VM:                            Container:
+┌────────┐ ┌────────┐         ┌────────┐ ┌────────┐
+│  App   │ │  App   │         │  App   │ │  App   │
+│  Bins  │ │  Bins  │         │  Bins  │ │  Bins  │
+│ Guest  │ │ Guest  │         └────┬───┘ └────┬───┘
+│  OS    │ │  OS    │              │           │
+└────┬───┘ └────┬───┘         ┌───┴───────────┴───┐
+┌────┴──────────┴───┐         │   Container Engine │
+│   Hypervisor      │         │   (Docker/containerd)│
+└────────┬──────────┘         └────────┬──────────┘
+┌────────┴──────────┐         ┌────────┴──────────┐
+│   Host OS         │         │   Host OS (Linux)  │
+└───────────────────┘         └───────────────────┘
+```
+
+### OCI Standards
+
+- **OCI Image Spec** — формат образа контейнера (layers, manifest, config)
+- **OCI Runtime Spec** — как запускать контейнер (lifecycle, environment)
+- **OCI Distribution Spec** — как передавать образы (push/pull to registry)
+
+> **См. также**: [[os-virtualization]] — VM vs контейнеры, [[kubernetes-basics]] — оркестрация
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -732,6 +773,10 @@ docker run -it my-app /bin/sh
 ---
 
 ## Источники
+
+### Теоретические основы
+- Merkel D. (2014). *Docker: Lightweight Linux Containers for Consistent Development and Deployment*. — Linux Journal, первая публикация о Docker
+- [OCI Specifications](https://opencontainers.org/) — Open Container Initiative: стандарты Image, Runtime, Distribution
 
 ### Официальная документация
 - [Docker Docs: Best Practices](https://docs.docker.com/build/building/best-practices/) — проверено 2025-01-03

@@ -67,6 +67,31 @@ JVM --- не просто "штука, которая запускает Java". 
 
 ---
 
+## Теоретические основы
+
+JVM как технология базируется на нескольких фундаментальных идеях computer science, каждая из которых появилась задолго до Java:
+
+> **Определение:** Виртуальная машина (process VM) --- программная реализация абстрактного вычислительного устройства, определяющего собственный набор инструкций (ISA), модель памяти и правила выполнения, изолированные от конкретного hardware. — Smith & Nair, *Virtual Machines*, 2005.
+
+**Платформенная независимость через промежуточное представление.** Идея компиляции в промежуточный код (а не в машинный) впервые воплощена в P-code (1966, ETH Zürich) для языка Pascal Никлауса Вирта. UCSD Pascal (1978) распространял программы в виде P-code, исполняемом на P-machine --- прямом предшественнике JVM. Гослинг и команда Green Project (1991) адаптировали ту же идею для встраиваемых устройств, создав Oak bytecode и Oak VM.
+
+**Автоматическое управление памятью.** Garbage collection изобретён Джоном Маккарти (John McCarthy) в 1960 году для языка Lisp. Маккарти предложил алгоритм mark-sweep: пометить достижимые объекты, освободить все остальные. Все современные JVM-сборщики (G1, ZGC, Shenandoah) --- эволюция этой идеи, дополненная generational hypothesis (Ungar, 1984) и concurrent marking (Dijkstra et al., 1978).
+
+**Адаптивная компиляция.** JIT-компиляция для динамических языков впервые описана в работах Питера Дойча и Алана Шиффмана (Deutsch & Schiffman, 1984) для Smalltalk-80. Urs Hölzle и David Ungar (1994) развили подход в Self VM, где adaptive optimization на основе runtime-профиля давала производительность, сопоставимую с C. Sun Microsystems привлекла эту команду для создания HotSpot VM (1999), которая остаётся ядром OpenJDK.
+
+| Теоретическая идея | Год | Автор | Воплощение в JVM |
+|---------------------|-----|-------|------------------|
+| P-code machine | 1966 | Wirth (ETH) | JVM bytecode, `.class`-формат |
+| Garbage collection | 1960 | McCarthy (MIT) | G1, ZGC, Shenandoah |
+| Generational GC | 1984 | Ungar (Stanford) | Young/Old generations |
+| Adaptive JIT | 1984 | Deutsch & Schiffman | Tiered compilation (C1→C2) |
+| Profile-guided opt. | 1994 | Hölzle & Ungar (Self) | HotSpot VM, deoptimization |
+| Bytecode verification | 2003 | Leroy (INRIA) | Формальная верификация типов при загрузке класса |
+
+Эти теоретические корни объясняют, *почему* JVM устроена именно так: [[jvm-virtual-machine-concept|стековая архитектура]] унаследована от P-code, [[jvm-gc-tuning|сборщики мусора]] развивают идеи McCarthy и Ungar, а [[jvm-jit-compiler|JIT-компиляция]] воспроизводит подход Self VM.
+
+---
+
 ## Историческая справка: от тостеров до облаков
 
 ### Green Project (1991--1994): всё началось не с компьютеров
@@ -438,11 +463,20 @@ java -XX:+PrintCompilation MyApp  # JIT компиляция
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
+
+- McCarthy J. (1960). *Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I.* — Первое описание автоматического управления памятью (garbage collection) для Lisp. Алгоритм mark-sweep, предложенный в этой работе, лежит в основе всех современных JVM-сборщиков.
+- Deutsch L.P., Schiffman A.M. (1984). *Efficient Implementation of the Smalltalk-80 System.* — Первое описание JIT-компиляции для динамических языков; заложило основу для HotSpot VM.
+- Hölzle U., Ungar D. (1994). *Optimizing Dynamically-Dispatched Calls with Run-Time Type Feedback.* — Profile-guided adaptive optimization в Self VM. Команда Self была нанята Sun для создания HotSpot.
+- Smith J.E., Nair R. (2005). *Virtual Machines: Versatile Platforms for Systems and Processes.* — Каноническая таксономия виртуальных машин. Классификация JVM как process VM.
+
+### Практические руководства
+
 Lindholm, T. et al. (2014). *The Java Virtual Machine Specification, Java SE 8 Edition.* --- Официальная спецификация JVM. Определяет байткод, class-файл формат, верификацию и модель памяти. Не учебник, но единственный авторитетный источник для точных деталей.
 
 Gosling, J. et al. (2023). *The Java Language Specification, Java SE 21 Edition.* --- Спецификация языка Java. Дополняет JVM Spec: что компилятор должен генерировать и какие гарантии даёт язык. Необходима при написании компиляторов и инструментов анализа.
 
-Venners, B. (2000). *Inside the Java Virtual Machine.* --- Одна из первых книг, объясняющих внутренности JVM на доступном уровне. Несмотря на возраст, фундаментальные концепции (class loading, execution engine, memory model) актуальны. Хороша как введение перед чтением спецификации.
+Venners, B. (2000). *Inside the Java Virtual Machine.* --- Одна из первых книг, объясняющих внутренности JVM на доступном уровне. Несмотря на возраст, фундаментальные концепции (class loading, execution engine, memory model) актуальны.
 
 Oaks, S. (2020). *Java Performance: In-Depth Advice for Tuning and Programming Java 8, 11, and Beyond.* --- Практическое руководство по производительности JVM: GC, JIT, мониторинг. Покрывает и HotSpot, и GraalVM.
 

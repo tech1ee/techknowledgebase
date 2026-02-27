@@ -58,6 +58,41 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+> **Определение:** Навигация в мобильных приложениях — это система управления переходами между экранами (screens/routes), формализуемая как ориентированный граф, где вершины — экраны, рёбра — переходы, а текущее состояние — позиция пользователя в графе.
+
+### Теоретические паттерны навигации
+
+| Паттерн | Структура данных | Пример в iOS | Семантика |
+|---------|-----------------|-------------|-----------|
+| **Stack** (LIFO) | Стек экранов | UINavigationController, NavigationStack | Иерархическая навигация: push/pop |
+| **Tab** (параллельные стеки) | Массив корневых экранов | UITabBarController, TabView | Переключение контекстов |
+| **Modal** (прерывание) | Отдельный стек поверх текущего | present/dismiss, sheet/fullScreenCover | Временное прерывание flow |
+| **Graph** (произвольный) | Coordinator / Router | Custom coordinator pattern | Произвольные переходы |
+
+### Паттерн Coordinator (Khanlou, 2015)
+
+> **Coordinator Pattern** — архитектурный паттерн, предложенный Soroush Khanlou (2015), который выносит логику навигации из View Controller в отдельный объект (Coordinator). Это реализация принципа Single Responsibility (Martin, 2003): ViewController отвечает за UI, Coordinator — за навигацию.
+
+### Эволюция навигации в iOS
+
+| Эпоха | Подход | Механизм | Проблемы |
+|-------|--------|----------|----------|
+| 2008-2013 | Storyboard Segues | performSegue(withIdentifier:) | Нетестируемо, implicit dependencies |
+| 2013-2018 | Programmatic UIKit | pushViewController/present | Boilerplate, VC знает о навигации |
+| 2015-н.в. | Coordinator Pattern | Внешний объект управляет navigation | Дополнительная сложность |
+| 2019-2022 | NavigationView (SwiftUI) | Декларативный, state-based | Ограниченная programmatic навигация |
+| 2022-н.в. | NavigationStack (iOS 16) | NavigationPath + value-based routing | Полная programmatic навигация |
+
+### Связь с CS-фундаментом
+
+- [[ios-viewcontroller-lifecycle]] — lifecycle events при push/pop/present
+- [[ios-architecture-patterns]] — навигация как часть архитектуры приложения
+- [[android-navigation]] — сравнение с Navigation Component в Android
+
+---
+
 ## Жизненные аналогии
 
 ### 1. Навигационный стек = Стопка книг
@@ -1020,10 +1055,15 @@ struct AppView: View {
 
 ## Источники и дальнейшее чтение
 
-### Книги
-- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — глубоко раскрывает декларативную навигацию в SwiftUI, объясняя связь между state management и NavigationStack; обязательна для понимания современного подхода к навигации.
-- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — подробный разбор UINavigationController, модальных презентаций, Tab Bar и Segues с практическими примерами; лучшая книга для освоения UIKit-навигации.
-- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — описывает как UIKit, так и SwiftUI навигацию, включая новые API NavigationStack и NavigationSplitView, а также deep linking.
+### Теоретические основы
+- Gamma E. et al. (1994). *Design Patterns.* Addison-Wesley — Observer, Mediator (координация навигации)
+- Martin R. C. (2003). *Agile Software Development.* Prentice Hall — Single Responsibility Principle
+- Khanlou S. (2015). *Coordinators Redux.* — формализация Coordinator Pattern для iOS
+
+### Практические руководства
+- Eidhof C. et al. (2020). *Thinking in SwiftUI.* — NavigationStack, декларативная навигация
+- Keur C., Hillegass A. (2020). *iOS Programming: Big Nerd Ranch Guide.* — UINavigationController, модальные презентации
+- Neuburg M. (2023). *iOS 17 Programming Fundamentals with Swift.* — NavigationStack, NavigationSplitView, deep linking
 
 ---
 

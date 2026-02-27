@@ -33,6 +33,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Системное программирование (Systems Programming)** — область разработки ПО, связанная с созданием и исследованием программных систем, обеспечивающих платформу для прикладного ПО: ядра ОС, драйверы, runtime-среды, компиляторы, IPC-механизмы.
+
+Android как операционная система представляет собой **многослойную архитектуру** (layered architecture), описанную ещё Дейкстрой (Dijkstra, 1968, *THE Multiprogramming System*). Каждый слой предоставляет абстракции для вышележащего и скрывает детали реализации нижележащего:
+
+| Слой | Формальная роль | Ключевая абстракция | Файл раздела |
+|------|----------------|---------------------|--------------|
+| Linux Kernel | Управление ресурсами, изоляция | Процесс, виртуальная память, файловый дескриптор | [[android-kernel-extensions]] |
+| IPC (Binder) | Коммуникация между процессами | Proxy/Stub, Parcel, capability token | [[android-binder-ipc]] |
+| Runtime (ART) | Исполнение байткода, управление памятью | Виртуальная машина, GC, class loading | [[android-art-runtime]] |
+| System Services | Координация ресурсов платформы | Manager/Service, Binder API | [[android-system-services]] |
+| Application Framework | Жизненный цикл приложения | Activity, Service, ContentProvider | [[android-activitythread-internals]] |
+
+### Ключевые теоретические концепции раздела
+
+> **Принцип наименьших привилегий (Principle of Least Privilege)** — Saltzer & Schroeder, 1975, *The Protection of Information in Computer Systems*. Каждый компонент системы должен иметь минимально необходимые права. В Android реализуется через UID-per-app, SELinux, seccomp-BPF.
+
+> **Разделение механизма и политики (Separation of Mechanism and Policy)** — Levin et al., 1975, *Policy/mechanism separation in Hydra*. Ядро предоставляет механизмы (Binder driver, cgroups, namespaces), а userspace определяет политику (кого убить при OOM, какие permissions дать приложению).
+
+> **Абстракция процесса как единица изоляции** — Thompson & Ritchie, 1974, *The UNIX Time-Sharing System*. Android использует Unix-процессы как границы безопасности: каждое приложение работает в отдельном процессе с уникальным UID.
+
+Изучение internals следует модели **вертикального среза** (vertical slice): вместо горизонтального покрытия API мы прослеживаем путь вызова от пользовательского кода через все слои до ядра. Например, `startActivity()` проходит через [[android-activitythread-internals]] → [[android-binder-ipc]] → [[android-system-services]] → обратно через Binder → callback в ActivityThread.
+
+---
+
 ## Зачем изучать internals
 
 | Что вы поймёте | Без этих знаний |
@@ -159,7 +185,16 @@ next_review:
 
 ## Источники (общие для раздела)
 
-### Книги
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Dijkstra E. *THE Multiprogramming System* (1968) | Многослойная архитектура ОС |
+| Ritchie D., Thompson K. *The UNIX Time-Sharing System* (1974) | Процессная модель, абстракции ядра |
+| Saltzer J., Schroeder M. *The Protection of Information in Computer Systems* (1975) | Principle of Least Privilege, защитные механизмы |
+| Tanenbaum A. *Modern Operating Systems* (1992, и последующие издания) | Управление ресурсами, IPC, планирование |
+| Smith J., Nair R. *Virtual Machines: Versatile Platforms for Systems and Processes* (2005) | Теория виртуальных машин |
+
+### Книги по Android Internals
 | Книга | Применение |
 |-------|-----------|
 | Vasavada N. *Android Internals: A Confectioner's Cookbook* (2019) | Все файлы — AOSP internals |

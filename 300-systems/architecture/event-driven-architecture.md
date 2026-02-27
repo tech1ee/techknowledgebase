@@ -35,6 +35,53 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Event-Driven Architecture (EDA)** — архитектурный стиль, в котором компоненты системы взаимодействуют через продуцирование, обнаружение и реагирование на события (events), а не через прямые синхронные вызовы.
+
+> **Event** — неизменяемая запись о факте, произошедшем в системе. Формально: `Event = (type, timestamp, source, data)`.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Publish-Subscribe** | — (messaging systems) | 1970s | Первые pub/sub системы в финансовых организациях |
+| **Event Sourcing** | — (accounting concept) | Ancient | Бухгалтерский журнал: хранить не состояние, а историю изменений |
+| **Domain Events** | Evans, E. | 2003 | "Domain-Driven Design" — events как часть ubiquitous language |
+| **CQRS** | Young, G. | 2010 | Command Query Responsibility Segregation — разделение чтения и записи |
+| **Event Sourcing (formal)** | Young, G. & Fowler, M. | 2005-2011 | Формализация для software: state = fold(events) |
+| **Reactive Manifesto** | Bonér et al. | 2013 | Responsive, Resilient, Elastic, Message-Driven |
+| **Apache Kafka** | LinkedIn (Kreps et al.) | 2011 | Distributed commit log — event streaming platform |
+
+### Три паттерна событий (Fowler, 2017)
+
+| Паттерн | Что содержит event | Coupling | Пример |
+|---------|-------------------|---------|--------|
+| **Event Notification** | Минимум: "что-то произошло" + ID | Низкий (consumer запрашивает детали) | `OrderCreated { orderId: 123 }` |
+| **Event-Carried State Transfer** | Полные данные | Средний (consumer автономен) | `OrderCreated { orderId: 123, items: [...], total: 99.99 }` |
+| **Event Sourcing** | Каждое изменение = event | Максимальная гибкость | `ItemAdded`, `ItemRemoved`, `OrderPlaced` |
+
+### Event Sourcing: формальная модель
+
+> **Состояние = свёртка (fold) всех событий:**
+> `state(t) = fold(apply, initial_state, events[0..t])`
+
+Это изоморфно **append-only log** (Kafka) и **accounting ledger** (бухгалтерский журнал).
+
+### Гарантии доставки
+
+| Гарантия | Описание | Сложность реализации |
+|----------|----------|---------------------|
+| **At-most-once** | Сообщение доставлено 0 или 1 раз | Простая (fire and forget) |
+| **At-least-once** | Сообщение доставлено ≥1 раз (возможны дубли) | Средняя (retry + ack) |
+| **Exactly-once** | Сообщение доставлено ровно 1 раз | Сложная (idempotency + transactions) |
+
+> **Теоретическое ограничение:** Exactly-once delivery невозможна в распределённой системе (Two Generals Problem). На практике достигается через **at-least-once + idempotent consumer**.
+
+---
+
 ## Prerequisites (Что нужно знать заранее)
 
 | Тема | Зачем нужна | Где изучить |
@@ -840,6 +887,15 @@ events.emit('order:created', order);
 ---
 
 ## Источники
+
+### Теоретические основы
+- Evans, E. (2003). *Domain-Driven Design* — Domain Events как часть ubiquitous language
+- Young, G. (2010). "CQRS Documents" — Command Query Responsibility Segregation
+- Kreps, J. et al. (2011). "Kafka: A Distributed Messaging System for Log Processing" — NetDB; Apache Kafka
+- Bonér, J. et al. (2013). "The Reactive Manifesto" — responsive, resilient, elastic, message-driven
+- Fowler, M. (2017). "What do you mean by 'Event-Driven'?" — три паттерна событий
+
+### Практические руководства
 
 ### Концепции и паттерны
 - [Martin Fowler: Event-Driven Architecture](https://martinfowler.com/articles/201701-event-driven.html) — каноническое описание

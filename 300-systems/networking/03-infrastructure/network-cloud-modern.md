@@ -31,6 +31,41 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **SDN (Software-Defined Networking)** — архитектурная парадигма, основанная на формальном разделении плоскости управления (control plane) и плоскости данных (data plane). SDN-контроллер централизованно управляет правилами forwarding через программируемые интерфейсы (OpenFlow, RFC 7426). Эта модель лежит в основе всех облачных сетевых абстракций.
+
+### Формальная модель SDN
+
+| Уровень | Компонент | Функция | Примеры |
+|---------|-----------|---------|---------|
+| Application Plane | Сетевые приложения | Бизнес-логика, политики | Firewall, Load Balancer, IDS |
+| Control Plane | SDN-контроллер | Централизованное управление | OpenDaylight, ONOS, AWS VPC Controller |
+| Data Plane | Коммутаторы/маршрутизаторы | Forwarding пакетов по правилам | Open vSwitch, DPDK, SmartNIC |
+
+### NFV и overlay-сети
+
+- **NFV (Network Functions Virtualization)** — замена аппаратных сетевых устройств программными реализациями (виртуальные маршрутизаторы, файерволы, балансировщики). ETSI NFV ISG стандартизировал архитектуру в 2012 году
+- **VXLAN (RFC 7348, Mahalingam et al., 2014)** — протокол overlay-сети, инкапсулирующий L2-кадры в UDP-пакеты (порт 4789). Поддерживает до 16 млн виртуальных сегментов (24-бит VNI). Основа сетевой виртуализации в AWS VPC, Azure VNet
+- **GENEVE (RFC 8926, 2020)** — эволюция VXLAN с расширяемыми метаданными, поддерживается AWS Gateway Load Balancer
+
+### Service Mesh архитектура
+
+> **Service Mesh** — инфраструктурный уровень для управления межсервисной коммуникацией, реализованный через sidecar-прокси (Envoy, linkerd2-proxy) или eBPF (Cilium). Формально: L7-aware прокси, обеспечивающий mTLS, observability, traffic management и policy enforcement без модификации кода приложений.
+
+### Хронология облачных сетевых технологий
+
+- **2008** — McKeown et al. "OpenFlow: Enabling Innovation in Campus Networks" — основа SDN
+- **2009** — AWS VPC — первая коммерческая реализация виртуальных частных сетей в облаке
+- **2012** — ETSI NFV ISG — стандартизация Network Functions Virtualization
+- **2014** — RFC 7348 (VXLAN) — стандарт overlay-сетей для дата-центров
+- **2017** — Istio 0.1 — первый production-ready service mesh
+- **2023** — Cilium graduated CNCF — eBPF-based networking и service mesh
+
+**См. также:** [[network-ip-routing]] (классическая маршрутизация как фундамент VPC), [[infrastructure-as-code]] (автоматизация облачных сетей), [[network-kubernetes-deep-dive]] (K8s networking поверх облачных сетей)
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -3153,6 +3188,13 @@ resource "aws_ce_anomaly_subscription" "network" {
 
 ## Источники
 
+### Теоретические основы
+- McKeown N. et al. (2008). "OpenFlow: Enabling Innovation in Campus Networks" — ACM SIGCOMM Computer Communication Review
+- Mahalingam M. et al. (2014). RFC 7348 — VXLAN: A Framework for Overlaying Virtualized Layer 2 Networks over Layer 3 Networks
+- RFC 8926 (2020). Geneve: Generic Network Virtualization Encapsulation
+- RFC 7426 (2015). Software-Defined Networking (SDN): Layers and Architecture Terminology
+- ETSI GS NFV 002 (2014). Network Functions Virtualisation; Architectural Framework
+
 ### 2024-2025 Updates
 - [AWS VPC Lattice](https://aws.amazon.com/vpc/lattice/) - проверено 2025-12-26
 - [Migrating from App Mesh to VPC Lattice](https://aws.amazon.com/blogs/containers/migrating-from-aws-app-mesh-to-amazon-vpc-lattice/) - проверено 2025-12-26
@@ -3212,8 +3254,12 @@ resource "aws_ce_anomaly_subscription" "network" {
 
 ## Источники и дальнейшее чтение
 
+### Теоретические основы
 - **Kurose, Ross (2021).** *Computer Networking: A Top-Down Approach.* — фундаментальный учебник, объясняющий сетевые принципы от приложений до физического уровня; даёт теоретическую базу для понимания облачных сетевых абстракций.
 - **Tanenbaum, Wetherall (2011).** *Computer Networks.* — классический учебник с глубоким покрытием всех уровней сетевого стека; особенно полезен для понимания маршрутизации и коммутации, которые лежат в основе VPC и SDN.
+- **Nadeau, Gray (2013).** *SDN: Software Defined Networks.* — первая монография по SDN, объясняющая архитектуру OpenFlow и разделение control/data plane.
+
+### Практические руководства
 - **Grigorik (2013).** *High Performance Browser Networking.* — практическое руководство по оптимизации сетевого взаимодействия, включая CDN, TLS и HTTP/2; незаменим для понимания того, как Load Balancer и CDN влияют на производительность приложений.
 
 ---

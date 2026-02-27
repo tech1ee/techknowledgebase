@@ -36,6 +36,39 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### История оценки производительности
+
+> **Определение:** Performance Management — непрерывный процесс установления ожиданий, наблюдения за результатами, предоставления обратной связи и развития сотрудников для достижения организационных целей.
+
+Формальная оценка производительности зародилась в начале XX века с работ Frederick Taylor (*"Scientific Management"*, 1911), где рабочие оценивались по количественным метрикам output. В военной индустрии 1940-х появились merit rating systems, которые после Второй мировой войны перешли в корпоративный сектор в форме annual performance reviews.
+
+### Критика Deming: почему ранжирование вредит
+
+W. Edwards Deming в *"Out of the Crisis"* (1986) включил performance appraisal и merit rating в свой список «7 смертельных болезней менеджмента»:
+
+> «Evaluation of performance, merit rating, or annual review... nourishes short-term performance, annihilates long-term planning, builds fear, demolishes teamwork, nourishes rivalry and politics.» — W. Edwards Deming
+
+| Аргумент Deming | Современное подтверждение |
+|----------------|--------------------------|
+| Rankings порождают конкуренцию вместо collaboration | Microsoft «stack ranking» отменён в 2013 после падения инноваций |
+| Annual review слишком редок для коррекции | 65% сотрудников недовольны частотой feedback (Gallup) |
+| Оценка зависит от системы, а не от человека | 80% вариации — системные факторы, 20% — индивидуальные (Deming) |
+| Рейтинги создают fear, а не motivation | Adobe перешёл на Check-in (2012), отказавшись от ratings |
+
+### OKR: от MBO к современному performance management
+
+John Doerr в *"Measure What Matters"* (2018) описал эволюцию OKR (Objectives and Key Results):
+
+> **OKR** — система целеполагания, при которой Objective (амбициозная качественная цель) измеряется через Key Results (2-5 количественных показателей). Создана Andy Grove в Intel (1970-е), популяризирована в Google через John Doerr (1999).
+
+MBO Drucker (1954) → OKR Grove (1970-е) → Google OKR (1999) → Industry standard (2010-е). Ключевое отличие OKR от MBO: OKR допускает 70% completion как success (stretch goals), тогда как MBO подразумевает 100% выполнение. Это перекликается с концепцией [[motivation|intrinsic motivation]] и flow state.
+
+Kim Scott в *"Radical Candor"* (2017) предложила матрицу обратной связи, объединяющую personal care и direct challenge, как практический framework для continuous [[one-on-one-meetings|feedback]] в performance management.
+
+---
+
 ## Зачем это нужно?
 
 ### Типичная ситуация
@@ -719,20 +752,25 @@ AFTER REVIEW CHECKLIST:
 
 ## Источники
 
+### Теоретические основы
 | # | Источник | Тип | Что взято |
 |---|----------|-----|-----------|
-| 1 | [Radical Candor](https://www.radicalcandor.com/) | Book | Feedback philosophy |
-| 2 | [Netflix Culture Deck](https://jobs.netflix.com/culture) | Document | No formal reviews |
-| 3 | [Google re:Work: Performance](https://rework.withgoogle.com/guides/set-goals-with-okrs/steps/introduction/) | Guide | OKRs + calibration |
-| 4 | [Adobe Check-in](https://www.adobe.com/check-in.html) | Case Study | Dropping annual reviews |
-| 5 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Performance conversations |
-| 6 | [Gallup State of the American Manager](https://www.gallup.com/services/182138/state-american-manager.aspx) | Research | Feedback frequency stats |
+| 1 | Deming W. E. "Out of the Crisis" — MIT Press, 1986 | Книга | Критика merit rating, системный подход |
+| 2 | Drucker P. "The Practice of Management" — Harper, 1954 | Книга | Management by Objectives (MBO) |
+| 3 | Doerr J. "Measure What Matters" — Portfolio/Penguin, 2018 | Книга | OKR: от Grove до Google |
+| 4 | Scott K. "Radical Candor" — St. Martin's Press, 2017 | Книга | Матрица Care Personally × Challenge Directly |
 
-### Дополнительное чтение
-
-- "Thanks for the Feedback" by Stone & Heen — receiving feedback
-- "Crucial Conversations" — difficult performance talks
-- "Nine Lies About Work" by Buckingham — critique of ratings
+### Практические руководства
+| # | Источник | Тип | Что взято |
+|---|----------|-----|-----------|
+| 1 | [Netflix Culture Deck](https://jobs.netflix.com/culture) | Document | No formal reviews |
+| 2 | [Google re:Work: Performance](https://rework.withgoogle.com/guides/set-goals-with-okrs/steps/introduction/) | Guide | OKRs + calibration |
+| 3 | [Adobe Check-in](https://www.adobe.com/check-in.html) | Case Study | Dropping annual reviews |
+| 4 | [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/) | Book | Performance conversations |
+| 5 | [Gallup State of the American Manager](https://www.gallup.com/services/182138/state-american-manager.aspx) | Research | Feedback frequency stats |
+| 6 | **Thanks for the Feedback** (Stone & Heen, 2014) | Книга | Receiving feedback |
+| 7 | **Crucial Conversations** (Patterson et al., 2002) | Книга | Difficult performance talks |
+| 8 | **Nine Lies About Work** (Buckingham & Goodall, 2019) | Книга | Critique of ratings |
 
 ---
 

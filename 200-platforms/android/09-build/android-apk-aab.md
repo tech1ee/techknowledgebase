@@ -97,6 +97,37 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Package Formats: от архивов к app bundles
+
+> Формат пакета приложения — это **container format** (формат-контейнер), объединяющий исполняемый код, ресурсы и метаданные. Концепция восходит к Unix `ar` archives (1971) и развивается через JAR (Sun, 1997) → APK (Google, 2008) → AAB (Google, 2018).
+
+| Формат | Базовый формат | Содержимое | Ключевое свойство |
+|--------|---------------|-----------|-------------------|
+| **JAR** | ZIP | `.class` + `META-INF/MANIFEST.MF` | Java-portable distribution |
+| **APK** | ZIP | DEX + resources + `AndroidManifest.xml` + signing | Self-contained installable package |
+| **AAB** | ZIP (protobuf) | DEX + resources + `BundleConfig.pb` | Split-ready, server-side optimization |
+
+### Code Signing: цепочка доверия
+
+> **Digital Signature** (Diffie & Hellman, 1976; RSA, Rivest, Shamir, Adleman, 1977) — криптографический механизм, гарантирующий: 1) **authenticity** — пакет создан владельцем ключа; 2) **integrity** — содержимое не изменено после подписания. Android v2/v3 signing использует подпись всего ZIP как блока (APK Signature Scheme), а не отдельных файлов (JAR signing v1).
+
+| Signing scheme | Год | Механизм | Преимущество |
+|---------------|-----|----------|-------------|
+| JAR Signing (v1) | 2008 | SHA-256 каждого файла в `META-INF/*.SF` | Совместимость |
+| APK Signature v2 | 2016 | Подпись всего ZIP-архива как блока | Быстрая верификация, защита от zip manipulation |
+| APK Signature v3 | 2018 | v2 + key rotation support | Смена signing key без потери обновлений |
+| APK Signature v3.1 | 2021 | v3 + rotation targeting | Rotation only for new Android versions |
+
+### Split APK: принцип Dynamic Delivery
+
+> AAB реализует принцип **lazy loading** для ресурсов: вместо одного Universal APK пользователь получает **Base APK** + **Configuration Splits** (density, ABI, language) + опциональные **Dynamic Feature Modules**. Это application of the **Pareto Principle** (80/20): 80% пользователей используют только одну locale, одну density и одну ABI — остальные ресурсы не нужны.
+
+> **Связь**: ZIP format → [[android-compilation-pipeline]], Signing → [[android-permissions-security]], Optimization → [[android-proguard-r8]]
+
+---
+
 ## APK: Структура и Формат
 
 ### APK — это ZIP архив
@@ -1314,11 +1345,18 @@ android {
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая процесс сборки и дистрибуции приложений
-- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide, 5th Edition. — практический учебник с разделами по сборке, подписанию и публикации APK/AAB
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Diffie W., Hellman M. *New Directions in Cryptography* (1976) | Криптографические основы code signing |
+| Rivest R. et al. *A Method for Obtaining Digital Signatures* (1978) | RSA — основа APK Signature Scheme |
+| Deutsch P. *DEFLATE Compressed Data Format Specification* (RFC 1951, 1996) | ZIP-формат, лежащий в основе APK |
 
-**Веб-ресурсы:**
+### Книги
+- Meier R. (2022). Professional Android, 4th Edition. — процесс сборки и дистрибуции.
+- Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide. — сборка, подписание и публикация.
+
+### Практические руководства
 
 | # | Источник | Тип | Ключевой вклад |
 |---|----------|-----|----------------|

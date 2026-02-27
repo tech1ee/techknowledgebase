@@ -58,6 +58,46 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **expect/actual** — механизм compile-time platform polymorphism в Kotlin Multiplatform, реализующий контрактную модель: expect-декларация определяет сигнатуру в common-коде, actual-декларация предоставляет платформо-специфичную реализацию, верифицируемую компилятором (JetBrains, Kotlin Language Specification, 2023).
+
+### Теоретический контекст: виды полиморфизма
+
+Expect/actual вводит новый вид полиморфизма, отсутствующий в классической таксономии Cardelli-Wegner (1985):
+
+| Вид полиморфизма | Механизм | Разрешение | Пример |
+|-----------------|----------|-----------|--------|
+| Ad-hoc (overloading) | Перегрузка функций | Compile-time | `fun print(x: Int)` / `fun print(x: String)` |
+| Parametric (generics) | Типовые параметры | Compile-time (erasure) | `fun <T> identity(x: T): T` |
+| Subtype (inheritance) | Виртуальная таблица | Runtime (vtable dispatch) | `interface Shape` → `class Circle` |
+| **Platform (expect/actual)** | Per-target compilation | **Compile-time (per-platform)** | `expect fun uuid(): String` |
+
+### Историческое сравнение механизмов платформенной абстракции
+
+| Механизм | Язык/Технология | Год | Гарантии |
+|----------|----------------|-----|----------|
+| `#ifdef` / `#ifndef` | C/C++ | 1972 | Препроцессор, нет type safety |
+| Partial classes | C# / Xamarin | 2004 | Compile-time, но нет контрактов |
+| Platform interfaces + DI | Java / Spring | 2003 | Runtime injection, loosely typed |
+| `expect/actual` | Kotlin / KMP | 2017 | Compile-time, type-safe, контрактная модель |
+
+### Связь с теорией типов
+
+Expect/actual реализует **structural type compatibility** для typealias:
+
+```
+actual typealias AtomicInt = java.util.concurrent.atomic.AtomicInteger
+```
+
+Компилятор проверяет, что `AtomicInteger` **структурно совместим** с контрактом `expect class AtomicInt` — имеет те же конструкторы, методы и свойства. Это формальное применение **structural subtyping** (Pierce, 2002) — см. [[type-systems-theory]].
+
+> **Связь с Dependency Inversion (Martin, 2003):** expect-декларация в commonMain = абстракция (inner circle), actual в platform source set = деталь реализации (outer circle). Зависимости направлены внутрь — common определяет контракт, platform реализует.
+
+---
+
 ## Почему expect/actual устроен именно так
 
 ### Фундаментальная проблема: платформенный полиморфизм
@@ -934,11 +974,18 @@ fun getPlatform(): String = getPlatformImpl().ifEmpty { "Unknown" }
 
 ## Источники и дальнейшее чтение
 
-- Jemerov D., Isakova S. (2017). *Kotlin in Action.* — Главы о системе типов, интерфейсах и generics дают необходимый фундамент для понимания expect/actual как compile-time platform polymorphism. Связь с type system (structural compatibility для typealias, contract enforcement) становится понятнее на основе фундаментальных знаний о типах.
+### Теоретические основы
 
-- Moskala M. (2021). *Effective Kotlin.* — Рекомендации по проектированию API (interface vs abstract class, factory functions, dependency injection) напрямую применимы к выбору между expect/actual class и interface + expect factory function. Книга помогает принять решение: когда использовать expect/actual, а когда — interfaces + DI.
+- **Cardelli L., Wegner P. (1985).** *On Understanding Types, Data Abstraction, and Polymorphism.* Computing Surveys. — Классическая таксономия полиморфизма, расширяемая platform polymorphism в KMP.
+- **Pierce B. (2002).** *Types and Programming Languages.* MIT Press. — Формальная теория structural subtyping, реализованная в typealias-маппинге.
+- **Martin R. (2003).** *Agile Software Development.* Pearson. — Dependency Inversion Principle, лежащий в основе expect/actual.
 
-- Martin R. (2017). *Clean Architecture.* — Dependency Inversion Principle, лежащий в основе паттерна «interface в commonMain + actual factory в platform», подробно разобран в этой книге. Принцип «зависимости направлены внутрь» объясняет, почему common код определяет контракт, а platform код его реализует.
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* Manning. — Система типов, интерфейсы и generics как фундамент expect/actual.
+- **Moskala M. (2021).** *Effective Kotlin.* — Проектирование API: выбор между expect/actual class и interface + factory.
+- [Expected/Actual Declarations](https://kotlinlang.org/docs/multiplatform/multiplatform-expect-actual.html) — Полная официальная документация.
+- [Touchlab - Expect/Actuals](https://touchlab.co/expect-actuals-statements-kotlin-multiplatform) — Практический 5-минутный гайд.
 
 ---
 

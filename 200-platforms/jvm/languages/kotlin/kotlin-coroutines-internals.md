@@ -82,23 +82,65 @@ mastery: 0
 
 ## Терминология
 
-| Термин | Определение |
-|--------|------------|
-| **CPS (Continuation Passing Style)** | Стиль трансформации, при котором функция не возвращает результат, а передаёт его в callback (Continuation) |
-| **Continuation** | Интерфейс с методом `resumeWith(Result<T>)` — "что делать дальше с результатом" |
-| **State Machine** | Конечный автомат, генерируемый компилятором из suspend-функции; каждое состояние — код между двумя точками приостановки |
-| **Suspension Point** | Место вызова другой suspend-функции; точка, в которой корутина может приостановиться |
-| **COROUTINE_SUSPENDED** | Специальное sentinel-значение (`CoroutineSingletons.COROUTINE_SUSPENDED`); означает "корутина приостановлена, результат будет позже" |
-| **BaseContinuationImpl** | Базовый класс state machine; содержит `resumeWith()` и абстрактный `invokeSuspend()` |
-| **DispatchedContinuation** | Обёртка над Continuation, которая при resume ставит задачу в очередь диспатчера |
-| **ContinuationInterceptor** | Элемент контекста, который перехватывает (оборачивает) каждый Continuation — по сути, диспатчер |
-| **Job** | Элемент контекста, представляющий жизненный цикл корутины; формирует parent-child иерархию |
-| **Structured Concurrency** | Принцип: child-корутины привязаны к parent; отмена parent отменяет children; parent ждёт children |
-| **CoroutineScheduler** | Внутренний планировщик kotlinx.coroutines; реализует work-stealing поверх shared thread pool |
-| **Label** | Целочисленное поле в state machine; определяет, в какое состояние перейти при следующем `invokeSuspend()` |
-| **SuspendLambda** | Подкласс ContinuationImpl, генерируемый компилятором для suspend-лямбд (блоков launch, async) |
-| **CoroutineScheduler** | Кастомный планировщик kotlinx.coroutines; реализует work-stealing; обслуживает и Default, и IO задачи |
-| **UndispatchedCoroutine** | Оптимизация withContext: когда dispatcher не меняется, корутина выполняется без dispatch в текущем потоке |
+| Термин | Определение | CS-происхождение |
+|--------|------------|------------------|
+| **CPS (Continuation Passing Style)** | Стиль трансформации, при котором функция не возвращает результат, а передаёт его в callback (Continuation) | Fischer (1972), Reynolds (1972); стандартная техника в компиляторах функциональных языков |
+| **Continuation** | Интерфейс с методом `resumeWith(Result<T>)` — "что делать дальше с результатом" | "Остаток вычисления" (Strachey, Wadsworth, 1970-е); first-class через `call/cc` в Scheme (1975) |
+| **State Machine** | Конечный автомат, генерируемый компилятором из suspend-функции; каждое состояние — код между двумя точками приостановки | FSM (Finite State Machine) — базовая модель вычислений |
+| **Suspension Point** | Место вызова другой suspend-функции; точка, в которой корутина может приостановиться | Cooperative scheduling: программист определяет точки переключения (vs preemptive) |
+| **COROUTINE_SUSPENDED** | Специальное sentinel-значение (`CoroutineSingletons.COROUTINE_SUSPENDED`); означает "корутина приостановлена, результат будет позже" | Sentinel value pattern |
+| **BaseContinuationImpl** | Базовый класс state machine; содержит `resumeWith()` и абстрактный `invokeSuspend()` | Template Method pattern |
+| **DispatchedContinuation** | Обёртка над Continuation, которая при resume ставит задачу в очередь диспатчера | Decorator pattern: добавляет dispatch к Continuation |
+| **ContinuationInterceptor** | Элемент контекста, который перехватывает (оборачивает) каждый Continuation — по сути, диспатчер | Interceptor pattern + Strategy pattern |
+| **Job** | Lifecycle handle корутины: элемент контекста + state machine жизненного цикла; формирует parent-child иерархию | Аналог Erlang supervision tree; dual role (context + lifecycle) |
+| **Structured Concurrency** | Принцип: child-корутины привязаны к parent; отмена parent отменяет children; parent ждёт children | Smith (2018), аналогия с Dijkstra "GOTO Harmful" (1968) |
+| **CoroutineScheduler** | Внутренний планировщик kotlinx.coroutines; реализует work-stealing поверх shared thread pool | Work-stealing: Blumofe & Leiserson (1999) |
+| **Label** | Целочисленное поле в state machine; определяет, в какое состояние перейти при следующем `invokeSuspend()` | FSM state identifier |
+| **SuspendLambda** | Подкласс ContinuationImpl, генерируемый компилятором для suspend-лямбд (блоков launch, async) | Compiler-generated closure |
+| **UndispatchedCoroutine** | Оптимизация withContext: когда dispatcher не меняется, корутина выполняется без dispatch в текущем потоке | Fast path optimization |
+
+---
+
+## Теоретические основы
+
+Внутренняя реализация корутин Kotlin основана на фундаментальных концепциях из теории вычислений и компиляторов.
+
+### Continuation Passing Style (CPS)
+
+> **Формально:** CPS-трансформация (Fischer, 1972; Reynolds, 1972) — преобразование программы, при котором каждая функция получает дополнительный аргумент — **continuation** (продолжение), описывающее «что делать дальше с результатом». Вместо `return value` функция вызывает `continuation(value)`.
+
+Kotlin-компилятор выполняет **ограниченную CPS-трансформацию**: только `suspend`-функции получают параметр `Continuation<T>`. Это отличает Kotlin от полного CPS (Scheme `call/cc`, Appel 1992) — нельзя захватить произвольную continuation, только в точках `suspend`.
+
+### State Machines и Finite Automata
+
+Компилятор трансформирует suspend-функцию в **конечный автомат** (FSM, Finite State Machine). Формально:
+
+| Компонент FSM | Реализация в Kotlin |
+|--------------|---------------------|
+| Множество состояний Q | `label = 0, 1, 2, ...` (Int поле) |
+| Входной алфавит Σ | Результат предыдущего suspend-вызова (`Result<T>`) |
+| Функция переходов δ | `when(label)` в `invokeSuspend()` |
+| Начальное состояние q₀ | `label = 0` |
+| Sentinel SUSPENDED | `COROUTINE_SUSPENDED` — корутина приостановлена, автомат ждёт |
+
+> **Ключевое свойство:** state machine хранит весь стек вызовов в полях объекта (stackless coroutine), а не в стеке потока. Это обеспечивает O(n) памяти на n корутин вместо O(n × stack_size) для n потоков. Marlin (1980, *Coroutines: A Programming Methodology*) формализовал этот подход как «coroutines without a stack».
+
+### Work-Stealing и планирование
+
+`CoroutineScheduler` реализует **work-stealing** алгоритм (Blumofe & Leiserson, 1999, *Scheduling Multithreaded Computations by Work Stealing*): каждый поток имеет локальную очередь задач (deque); когда очередь пуста, поток «ворует» задачу из очереди другого потока. Гарантии:
+
+- **Ожидаемое время** выполнения: O(T₁/P + T∞), где T₁ — суммарная работа, T∞ — критический путь, P — число процессоров
+- **Ожидаемое число steal-операций**: O(P × T∞) — пропорционально числу процессоров, не числу задач
+
+### Structured Concurrency
+
+> **Формально:** structured concurrency (Smith, 2018, *Notes on Structured Concurrency*; Elizarov, 2018) — принцип, при котором lifetime дочерних задач ограничен lifetime родительской задачи. Это аналог structured programming Dijkstra (1968): как `goto` заменяется блоками `if/while/for`, так неструктурированные потоки заменяются parent-child иерархией с автоматической отменой и ожиданием.
+
+### Happens-before гарантии
+
+Корутины обеспечивают **happens-before** (Lamport, 1978) при каждом suspend/resume: все записи до `suspend` видны после `resume` в том же или другом потоке. Это достигается через `volatile` поле `_state` в `CancellableContinuationImpl` — аналог `synchronized` без блокировки.
+
+См. также: [[kotlin-coroutines]] — API-уровень корутин, [[jvm-memory-model]] — happens-before и JMM, [[jvm-concurrency-overview]] — потоки и синхронизация JVM.
 
 ---
 
@@ -529,6 +571,23 @@ suspend fun <T> withRetry(block: suspend () -> T): T { ... }
 
 ## Continuation и его реализация
 
+### Что такое continuation в CS
+
+> **Continuation** — представление "остатка вычисления" (the rest of the computation) от заданной точки программы. Если выполнение находится в точке P, continuation — функция, принимающая значение в P и производящая финальный результат.
+
+Концепция возникла в денотационной семантике (Christopher Strachey, Christopher Wadsworth, 1970-е). Программист впервые получил доступ к continuation через `call/cc` (call with current continuation) в Scheme (Sussman & Steele, 1975) — оператор, захватывающий текущую continuation как first-class value.
+
+Kotlin использует **restricted single-shot continuation** — наиболее ограниченный и безопасный вариант:
+
+| Свойство | call/cc (Scheme) | Delimited (Scala, OCaml) | Kotlin Continuation |
+|----------|------------------|--------------------------|---------------------|
+| Захват стека | Весь стек вызовов | До ближайшего delimiter | Нет (stackless state machine) |
+| Повторный вызов | Да (multi-shot) | Да | Нет (single-shot) |
+| Доступ пользователю | Полный (first-class) | Полный | Только через `suspendCoroutine {}` |
+| Overhead | Высокий (копия стека) | Средний | Низкий (~48-128 байт объект) |
+
+Ограниченность Kotlin continuation — осознанный дизайн-выбор: single-shot гарантирует, что continuation не будет вызвана повторно (нет проблем с дублированием side effects); отсутствие захвата стека минимизирует аллокации; пользователь работает с высокоуровневым API (`launch`, `async`, `withContext`), а не с raw Continuation.
+
 ### Интерфейс Continuation<T>
 
 ```kotlin
@@ -731,6 +790,25 @@ internal fun <T> (suspend () -> T).startCoroutineCancellable(
 ---
 
 ## CoroutineContext: архитектура
+
+### Что такое CoroutineContext как структура данных
+
+> **CoroutineContext** — гетерогенное иммутабельное индексированное множество (heterogeneous immutable indexed set): персистентная структура данных, отображающая типизированные ключи (`Key<E>`) в типизированные значения (`Element`).
+
+В теории языков программирования это реализация концепции **окружения** (environment) — маппинга имён в значения, сопровождающего вычисление. Корутина несёт свой контекст через асинхронные границы (dispatches между потоками), и контекст определяет "в каком окружении" она выполняется.
+
+Аналоги в других системах:
+
+| Система | Аналог | Ключевое отличие от CoroutineContext |
+|---------|--------|--------------------------------------|
+| Go `context.Context` | Bag of values + cancellation + deadline | Нетипизированный (`any`); CoroutineContext — типобезопасный через Key pattern |
+| Java `ThreadLocal` | Per-thread storage | Привязан к потоку, мутабельный; CoroutineContext — привязан к корутине, иммутабельный |
+| Haskell `Reader` monad | Implicit configuration threading | Та же идея: пронести конфигурацию через вычисление без явной передачи |
+| Lisp dynamic scope | Runtime environment | Динамическое окружение; CoroutineContext — явно компонуемое через `plus()` |
+
+**Почему иммутабельный?** Корутины переключаются между потоками при каждом dispatch. Мутабельный контекст потребовал бы синхронизации (locks) при каждом доступе. Иммутабельность даёт thread safety by construction: `plus()` создаёт новый контекст, старый остаётся неизменным. Это тот же принцип, что в persistent data structures Clojure.
+
+**Почему Composite pattern?** Каждый `Element` одновременно является `CoroutineContext`. Одиночный `Job()` — валидный контекст. Не нужна обёртка: `launch(Dispatchers.IO)` работает напрямую. API единообразен для одного элемента и для коллекции.
 
 ### Element и Key pattern
 
@@ -1485,6 +1563,20 @@ fun main() = runBlocking {
 ---
 
 ## Job и Cancellation internals
+
+### Что такое Job концептуально
+
+> **Job** — lifecycle handle корутины: first-class представление единицы конкурентной работы. Он отвечает на три вопроса: работает ли задача? завершилась ли? отменена ли?
+
+Job имеет **двойную роль** — и это ключевой дизайн-выбор Kotlin coroutines:
+1. **CoroutineContext.Element** — элемент контекста, путешествующий с корутиной. Parent-child иерархия устанавливается через наследование контекста: `context[Job]` находит parent Job, и новый child Job регистрируется в нём.
+2. **Lifecycle state machine** — конечный автомат, управляющий жизненным циклом: New → Active → Completing → Completed (или Cancelling → Cancelled).
+
+Двойная роль элегантно связывает lifecycle management с контекстной пропагацией: не нужно отдельного механизма для построения parent-child дерева — оно возникает автоматически из наследования контекста.
+
+**Аналогия с Erlang/OTP.** Job hierarchy напоминает деревья супервизии (supervision trees) Erlang: parent Job — супервизор, child Jobs — управляемые процессы. Отмена распространяется вниз (parent → children), ошибки — вверх (child → parent). `SupervisorJob` — аналог Erlang supervisor стратегии `one_for_one`: ошибка одного child не затрагивает siblings. Ключевое отличие: Kotlin использует лексическую привязку (structured concurrency), Erlang — динамические деревья.
+
+**Tree invariant.** Jobs формируют строгое дерево (не DAG): у каждого Job ровно один parent (кроме root Jobs). Это гарантирует однозначные пути владения и очистки — нет ситуации, когда две сущности "делят" ответственность за одну корутину.
 
 ### State machine Job-а
 
@@ -2358,34 +2450,28 @@ scope.launch {
 
 ## Источники и дальнейшее чтение
 
-### Книги
+### Теоретические основы
 
-1. Moskala M. (2022). *Kotlin Coroutines: Deep Dive* — Ch.1-15. Наиболее полное руководство по internals: state machine, Continuation, Dispatchers, structured concurrency, testing.
-2. Goetz B. et al. (2006). *Java Concurrency in Practice* — фундамент для понимания happens-before, thread pool, Executor, который лежит под корутинами.
-3. Herlihy M., Shavit N. (2012). *The Art of Multiprocessor Programming* — lock-free алгоритмы, work-stealing, CAS — всё это используется в CoroutineScheduler и Channel.
+1. Fischer M.J. (1972). *Lambda Calculus Schemata*. ACM Conference on Proving Assertions about Programs. — Формализация CPS-трансформации, используемой Kotlin-компилятором для suspend-функций.
+2. Reynolds J. (1972). *Definitional Interpreters for Higher-Order Programming Languages*. — Независимое описание CPS; теоретическая база для continuation как first-class value.
+3. Blumofe R., Leiserson C. (1999). *Scheduling Multithreaded Computations by Work Stealing*. JACM. — Work-stealing алгоритм, реализованный в CoroutineScheduler.
+4. Marlin C. (1980). *Coroutines: A Programming Methodology, a Language Design and an Implementation*. — Формализация stackless coroutines.
+5. Elizarov R. (2021). *Kotlin Coroutines: Design and Implementation*. — Research paper от автора библиотеки: формальное описание дизайна корутин.
+6. Smith N. (2018). *Notes on Structured Concurrency*. — Формализация structured concurrency как аналога structured programming.
+7. Lamport L. (1978). *Time, Clocks, and the Ordering of Events in a Distributed System*. — Happens-before relation, обеспечиваемая при suspend/resume.
 
-### Доклады и презентации
+### Практические руководства
 
-4. Elizarov R. (2017). *Deep Dive into Coroutines on JVM* — KotlinConf 2017. Архитектурные решения: почему CPS, почему state machine, бенчмарки. Слайды: resources.jetbrains.com
-5. Elizarov R. (2018). *Kotlin Coroutines in Practice* — KotlinConf 2018. Практические паттерны, structured concurrency, обработка ошибок.
-6. Elizarov R. (2021). *Kotlin Coroutines: Design and Implementation* — Research paper. Формальное описание дизайна корутин.
-
-### Исходный код и документация
-
-7. kotlinx.coroutines source code — GitHub: github.com/Kotlin/kotlinx.coroutines. Ключевые файлы: JobSupport.kt, CoroutineScheduler.kt, CancellableContinuationImpl.kt, Dispatchers.kt
-8. Kotlin stdlib source — GitHub: github.com/JetBrains/kotlin. Файлы: BaseContinuationImpl, ContinuationImpl.kt, CoroutineContext.kt
-9. KEEP-0087: Coroutines — github.com/Kotlin/KEEP/blob/master/proposals/coroutines.md. Оригинальное предложение по дизайну корутин.
-10. Kotlin Documentation: Debug coroutines — jetbrains.com/help/idea/debug-kotlin-coroutines.html
-11. kotlinx-coroutines-debug API — kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/
-
-### Статьи
-
-12. Anifantakis I. (2025). *Inside Kotlin Coroutines: State Machines, Continuations, and Structured Concurrency* — ProAndroidDev. Подробный разбор state machine с диаграммами.
-13. Moskala M. *Coroutines under the hood* — kt.academy/article/cc-under-the-hood. Статья-выжимка из книги.
-14. Moskala M. *Kotlin Coroutines dispatchers* — kt.academy/article/cc-dispatchers. Детальное описание каждого диспатчера.
-15. Moskala M. *What is CoroutineContext and how does it work?* — kt.academy/article/cc-coroutine-context. Element/Key паттерн.
-16. *Understanding Kotlin Suspend Functions Internally* — droidcon.com (2025). CPS-трансформация с примерами байткода.
-17. *The Beginner's Guide to Kotlin Coroutine Internals* — DoorDash Engineering Blog. Практический разбор internals.
+8. Moskala M. (2022). *Kotlin Coroutines: Deep Dive* — Ch.1-15. Наиболее полное руководство по internals: state machine, Continuation, Dispatchers, structured concurrency, testing.
+9. Goetz B. et al. (2006). *Java Concurrency in Practice* — фундамент для понимания happens-before, thread pool, Executor, который лежит под корутинами.
+10. Herlihy M., Shavit N. (2012). *The Art of Multiprocessor Programming* — lock-free алгоритмы, work-stealing, CAS — всё это используется в CoroutineScheduler и Channel.
+11. Elizarov R. (2017). *Deep Dive into Coroutines on JVM* — KotlinConf 2017. Архитектурные решения: почему CPS, почему state machine, бенчмарки.
+12. Elizarov R. (2018). *Kotlin Coroutines in Practice* — KotlinConf 2018. Практические паттерны, structured concurrency, обработка ошибок.
+13. kotlinx.coroutines source code — GitHub: github.com/Kotlin/kotlinx.coroutines. Ключевые файлы: JobSupport.kt, CoroutineScheduler.kt, CancellableContinuationImpl.kt, Dispatchers.kt
+14. KEEP-0087: Coroutines — github.com/Kotlin/KEEP/blob/master/proposals/coroutines.md. Оригинальное предложение по дизайну корутин.
+15. Anifantakis I. (2025). *Inside Kotlin Coroutines: State Machines, Continuations, and Structured Concurrency* — ProAndroidDev.
+16. Moskala M. *Coroutines under the hood* — kt.academy/article/cc-under-the-hood.
+17. Moskala M. *Kotlin Coroutines dispatchers* — kt.academy/article/cc-dispatchers.
 
 ---
 

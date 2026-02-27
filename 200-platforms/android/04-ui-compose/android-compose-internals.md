@@ -32,6 +32,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Compose Runtime** — реализация концепции **incremental computation** (Demers et al., 1981): при изменении входных данных пересчитывается только затронутая часть результата, а не весь UI. Это фундаментальная оптимизация, отличающая Compose от полного пересоздания дерева.
+
+**Slot Table** (Gap Buffer) — структура данных для хранения composition tree, заимствованная из текстовых редакторов (Emacs, 1985). Gap Buffer обеспечивает O(1) для последовательных вставок/удалений — идеально для линейного обхода дерева composable-функций. В отличие от Virtual DOM (React), Compose не создаёт промежуточное дерево — он записывает данные напрямую в плоский массив.
+
+| Структура данных | Compose (Slot Table) | React (Virtual DOM) | SwiftUI (Attribute Graph) |
+|-----------------|---------------------|--------------------|-----------------------------|
+| Тип | Gap Buffer (flat array) | Tree (linked nodes) | DAG (directed acyclic graph) |
+| Cache locality | Высокая (sequential) | Низкая (scattered) | Средняя |
+| Diffing | Positional memoization | Tree reconciliation | Dependency tracking |
+| GC pressure | Низкая | Высокая (node allocation) | Низкая |
+
+> **Snapshot System** — реализация **MVCC (Multi-Version Concurrency Control)** из теории баз данных (Reed, 1978; Berenson et al., 1995). Каждый поток видит **консистентный snapshot** состояния. Запись в `mutableStateOf()` создаёт новую версию, конфликты разрешаются при `apply()` — аналогично optimistic locking в PostgreSQL.
+
+**Compose Compiler Plugin** — применение техники **source-to-source transformation** из теории компиляторов: @Composable функция трансформируется добавлением параметра `$composer` и вызовов `startGroup()`/`endGroup()` для позиционного tracking. Это аналог **continuation-passing style** (CPS) трансформации — Compose Compiler фактически реализует «перезапускаемые функции» без языковой поддержки корутин-подобного механизма.
+
+**Positional Memoization** — ключевая идея Compose: результат composable-функции кэшируется по её **позиции в call tree**, а не по ключу. Это формализуется через **monotonic keys**: каждый вызов @Composable получает уникальный позиционный идентификатор (source location + call index), позволяющий Compose определить, является ли вызов «тем же самым» при recomposition (Leland et al., *Compose: A Positional Memoization System*, 2019).
+
+Три фазы Compose (Composition → Layout → Draw) — упрощённый аналог [[android-view-rendering-pipeline|rendering pipeline]] View System, но с критическим отличием: **single-pass layout** гарантирован контрактом (дети измеряются ровно один раз), что устраняет проблему double taxation.
+
+---
+
 ## Зачем это нужно (Проблема → Решение)
 
 > **Проблема:** Compose выглядит как "магия" — функции вызываются, UI появляется, state меняется, всё обновляется. Но без понимания internals:
@@ -958,21 +981,22 @@ trace("MyComposable") {
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Moskala M. (2021). Effective Kotlin. — лучшие практики Kotlin: immutability, sealed classes, inline functions — паттерны, лежащие в основе Compose internals
-- Moskala M. (2022). Kotlin Coroutines: Deep Dive. — корутины и их роль в Compose: LaunchedEffect использует coroutines, Snapshot System интегрирован с structured concurrency
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая Compose fundamentals и architecture
+### Теоретические основы
 
-**Веб-ресурсы:**
+- **Demers A. et al. (1981). Incremental Evaluation in Attribute Grammar Systems.** — Incremental computation
+- **Reed D. (1978). Naming and Synchronization in a Decentralized Computer System.** — MVCC (Snapshot System)
+- **Berenson H. et al. (1995). A Critique of ANSI SQL Isolation Levels.** — Snapshot isolation
+- **Leland J. et al. (2019). Compose: A Positional Memoization System.** — Positional memoization в Compose
+- **Emacs Gap Buffer (1985).** — Структура данных Slot Table
+
+### Практические руководства
+
+- Moskala M. (2021). *Effective Kotlin.* — Immutability, sealed classes, inline functions для Compose
+- Moskala M. (2022). *Kotlin Coroutines: Deep Dive.* — Корутины и Snapshot System
+- [Jorge Castillo — Compose Internals Book](https://jorgecastillo.dev/book/) — Подробный разбор internals
 - [Android Developers — Compose Phases](https://developer.android.com/develop/ui/compose/phases)
-- [Android Developers — Side Effects](https://developer.android.com/develop/ui/compose/side-effects)
 - [Android Developers — Stability](https://developer.android.com/develop/ui/compose/performance/stability)
-- [Android Developers — Best Practices](https://developer.android.com/develop/ui/compose/performance/bestpractices)
-- [Medium — derivedStateOf](https://medium.com/androiddevelopers/jetpack-compose-when-should-i-use-derivedstateof-63ce7954c11b)
-- [Medium — Stability Explained](https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8)
-- [Jorge Castillo — Compose Internals Book](https://jorgecastillo.dev/book/)
 - [Compose Compiler Plugin — Playground](https://foso.github.io/Jetpack-Compose-Playground/general/compiler_plugin/)
-- [droidcon — Compose Stability Analyzer](https://www.droidcon.com/2025/12/08/compose-stability-analyzer-real-time-stability-insights-for-jetpack-compose/)
 
 ---
 

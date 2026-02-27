@@ -31,6 +31,30 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Software Engineering Interview** — формализованный процесс оценки технических и поведенческих компетенций кандидата. Современный формат (coding + system design + behavioral) сформировался в FAANG в 2010-х годах, но корни уходят в 1990-е.
+
+**Историческая эволюция SE-интервью:**
+
+| Эпоха | Формат | Что оценивалось | Проблема |
+|-------|--------|-----------------|----------|
+| 1990-е | Brain teasers (Microsoft) | Креативность, IQ | Низкая predictive validity |
+| 2000-е | Algorithmic whiteboard (Google) | DSA skills | Слабая корреляция с реальной работой |
+| 2010-е | Structured multi-round (FAANG) | Coding + Design + Behavioral | Высокий false negative rate |
+| 2020-е | AI-enabled + practical (Meta, 2026) | Real-world problem solving + AI pair | Формат ещё формируется |
+
+**Ключевые исследования:**
+- **Schmidt & Hunter (1998)** показали, что структурированные интервью (validity = 0.51) значительно превосходят неструктурированные (0.38) в предсказании job performance. Это обосновывает multi-round формат с чёткими rubrics.
+- **Maurer et al. (2008)** — мета-анализ: подготовка к интервью (coaching) повышает результаты, не снижая validity оценки. Научное обоснование системной подготовки.
+- **Google's Project Oxygen (2008)** — внутреннее исследование показало, что brain teasers не коррелируют с успехом на работе, что привело к отказу от них в пользу structured behavioral.
+
+> **Четыре столпа оценки** (Four Pillars) — DSA, System Design, Behavioral, Domain Knowledge — отражают модель компетенций инженера: *решает задачи* (DSA), *проектирует системы* (SD), *работает с людьми* (Behavioral), *знает предметную область* (Domain). Вес каждого столпа зависит от уровня кандидата.
+
+→ Связано: [[interview-process]], [[coding-challenges]], [[system-design-android]], [[behavioral-interview]]
+
+---
+
 ## Что изменилось в 2026
 
 ```
@@ -663,15 +687,21 @@ AI-ENABLED MISTAKES:
 
 - [[behavioral-interview]] — Полное руководство по STAR method, Amazon Leadership Principles, Google Googleyness и Meta Core Values. Текущий материал описывает behavioral как один из четырёх pillars, а этот — даёт 8 dimensions оценки, company-specific подготовку и 6-8 готовых историй.
 
-## Источники и дальнейшее чтение
-
-- McDowell G. L. (2015). *Cracking the Coding Interview*. — Фундаментальная книга для DSA-подготовки: 189 задач с разбором, паттерны решения, tips для каждого типа интервью. Покрывает Pillar 1 текущего материала с практическими примерами и подробными объяснениями.
-
-- Xu A. (2020). *System Design Interview*. — Структурированный подход к system design с 13 реальными задачами. Хотя книга фокусируется на backend, framework и подход к clarification, estimations и trade-offs применимы к mobile system design из Pillar 2.
-
-- Larson W. (2022). *Staff Engineer: Leadership Beyond the Management Track*. — Для Staff+ уровня, где System Design и Behavioral важнее DSA. Книга объясняет, что компании ищут на L6+ и как демонстрировать leadership, cross-team impact и architectural thinking на интервью.
-
 ## Источники
+
+### Теоретические основы
+
+- Schmidt F.L., Hunter J.E. (1998). *The Validity and Utility of Selection Methods in Personnel Psychology*. Psychological Bulletin. — Мета-анализ валидности методов отбора; обоснование structured interviews.
+
+- Maurer T.J. et al. (2008). *Interviewee Coaching, Preparation Strategies, and Response Strategies*. — Мета-анализ: подготовка повышает результаты, не снижая validity.
+
+- McDowell G. L. (2015). *Cracking the Coding Interview*. — 189 задач с разбором, покрывает Pillar 1 (DSA) с практическими примерами.
+
+- Xu A. (2020). *System Design Interview*. — 13 реальных задач, framework для Pillar 2 (System Design).
+
+- Larson W. (2022). *Staff Engineer*. — Ожидания на L6+ уровне, где System Design и Behavioral важнее DSA.
+
+### Практические руководства
 
 - [Final Round AI: Software Engineering Job Market 2026](https://www.finalroundai.com/blog/software-engineering-job-market-2026)
 - [Meta AI-Enabled Coding Interview Guide](https://www.coditioning.com/blog/13/meta-ai-enabled-coding-interview-guide)

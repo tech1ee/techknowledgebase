@@ -83,6 +83,32 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Schema Evolution: формальная проблема
+
+> **Schema evolution** — фундаментальная проблема реляционных баз данных: как изменить структуру БД, сохранив существующие данные. Formalized by Carlo Zaniolo (1984, *"Database Relations with Null Values"*) и развита в работах по temporal databases. В мобильном контексте проблема усугубляется: миграция выполняется на устройстве пользователя без DBA, откат невозможен.
+
+| Операция | SQL | Совместимость | AutoMigration (Room 2.4+) |
+|----------|-----|---------------|---------------------------|
+| Добавить колонку | `ALTER TABLE ADD COLUMN` | Backward compatible | Автоматическая |
+| Удалить колонку | `CREATE TABLE + INSERT + DROP + RENAME` | Breaking | Требует `@DeleteColumn` |
+| Переименовать колонку | `ALTER TABLE RENAME COLUMN` (SQLite 3.25+) | Breaking | Требует `@RenameColumn` |
+| Добавить таблицу | `CREATE TABLE` | Backward compatible | Автоматическая |
+| Изменить тип колонки | Невозможно в SQLite ALTER | Breaking | Только ручная миграция |
+
+### Backward vs Forward Compatibility
+
+> В теории систем различают **backward compatibility** (новый код читает старые данные) и **forward compatibility** (старый код читает новые данные). Room миграции обеспечивают только backward compatibility: версия N+1 приложения может работать с данными версии N. Forward compatibility невозможна: версия N не знает о колонках, добавленных в N+1. Это определяет важнейшее правило: **миграции необратимы** на мобильных устройствах.
+
+### Идемпотентность миграций
+
+> **Идемпотентность** (свойство операции: повторное применение даёт тот же результат) — желательное, но не гарантированное свойство Room-миграций. `ALTER TABLE ADD COLUMN` не идемпотентна — повторное применение вызовет ошибку. Поэтому Room строго версионирует схему: каждая миграция применяется ровно один раз, а version number монотонно возрастает.
+
+> **Связь**: Schema evolution → [[database-design-optimization]], Тестирование миграций → [[android-testing]], Room basics → [[android-room-deep-dive]]
+
+---
+
 ## Prerequisites
 
 | Тема | Зачем нужно | Где изучить |
@@ -752,15 +778,18 @@ Android Studio предоставляет Database Inspector (View -> Tool Windo
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022).** *Professional Android.* — Глава по Room содержит подробные примеры ручных миграций с пошаговыми объяснениями, включая сложные сценарии с foreign keys и индексами. Одна из немногих книг, где миграции разбираются на production-уровне.
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Kleppmann M. *Designing Data-Intensive Applications* (2017), Ch.4 | Schema evolution, forward/backward compatibility |
+| Bernstein P., Newcomer E. *Principles of Transaction Processing* (2009) | Идемпотентность миграций |
+| Codd E.F. *A Relational Model of Data* (1970) | Нормальные формы, schema constraints |
 
-- **Phillips B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* — Практический подход: от первой Entity до первой миграции. Хорошо объясняет связь между аннотациями Room и сгенерированным SQL. Рекомендуется для начинающих как first-read.
-
-- **Kleppmann M. (2017).** *Designing Data-Intensive Applications.* — Глава 4 «Encoding and Evolution» разбирает schema evolution на уровне теории: forward/backward compatibility, schema-on-read vs schema-on-write. Даёт фундаментальное понимание, ПОЧЕМУ миграции устроены именно так, безотносительно конкретных инструментов.
-
-- **Google (2024).** *Room Database Migrations* — [developer.android.com/training/data-storage/room/migrating-db-versions](https://developer.android.com/training/data-storage/room/migrating-db-versions) — Официальная документация с актуальными примерами AutoMigration, MigrationTestHelper и schema export. Первый источник при возникновении конкретных вопросов.
-
-- **Google (2024).** *Testing Migrations* — [developer.android.com/training/data-storage/room/migrating-db-versions#testing](https://developer.android.com/training/data-storage/room/migrating-db-versions#testing) — Подробное руководство по настройке MigrationTestHelper с KSP, включая примеры для JUnit 4 и JUnit 5.
+### Практические руководства
+- **Meier R. (2022).** *Professional Android.* — подробные примеры ручных миграций, включая foreign keys и индексы.
+- **Phillips B. et al. (2022).** *Android Programming: The Big Nerd Ranch Guide.* — от первой Entity до первой миграции.
+- **Google (2024).** *Room Database Migrations* — [developer.android.com](https://developer.android.com/training/data-storage/room/migrating-db-versions) — официальная документация AutoMigration, MigrationTestHelper.
+- **Google (2024).** *Testing Migrations* — [developer.android.com](https://developer.android.com/training/data-storage/room/migrating-db-versions#testing) — настройка MigrationTestHelper с KSP.
 
 ---
 

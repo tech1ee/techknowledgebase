@@ -69,6 +69,40 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **Desktop GUI Framework** — программный каркас для построения графических интерфейсов настольных приложений, обеспечивающий window management, event loop, rendering и интеграцию с операционной системой (Olsen, 1998, Developing User Interfaces).
+
+Compose Desktop — декларативный GUI-фреймворк на базе JVM, использующий Skia для аппаратно-ускоренного рендеринга.
+
+### Таксономия desktop GUI-фреймворков
+
+| Категория | Примеры | Рендеринг | Совместимость |
+|-----------|---------|-----------|--------------|
+| Native widgets | Win32, Cocoa, GTK | Платформенные виджеты | Одна ОС |
+| Cross-platform native | Qt, wxWidgets | Абстракция над нативными | Несколько ОС |
+| Custom rendering | Swing, Compose Desktop | Собственный рендеринг (Skia) | Все ОС через JVM |
+| Web-based | Electron, Tauri | Chromium / WebView | Все ОС через браузер |
+
+### Event Loop и Window Management
+
+Desktop-приложения основаны на **event-driven architecture** (Gamma et al., 1994, Observer pattern):
+
+- **Event loop** (message pump) обрабатывает системные события (клавиатура, мышь, resize)
+- **Window manager** координирует положение, размер и z-order окон
+- **Compose runtime** преобразует события в recomposition через snapshot system
+
+В Compose Desktop `application { }` DSL инкапсулирует event loop, а `Window { }` — создание нативного окна через AWT/Swing interop.
+
+### JVM Packaging: теоретическая модель
+
+jpackage (JEP 343, JDK 14+) реализует принцип **self-contained deployment**: приложение + минимальный JDK (через jlink) + нативный launcher упаковываются в один инсталлятор. Это устраняет «dependency hell» — проблему несовместимости версий runtime.
+
+> **CS-фундамент:** JVM и bytecode — [[bytecode-virtual-machines]]. Event-driven архитектура — фундаментальный паттерн из [[compilation-pipeline]] (runtime execution model).
+
+
 ## Почему Compose Desktop лучше Electron для desktop apps
 
 > **CS-фундамент:** JVM Internals, Graphics APIs, GUI Frameworks History
@@ -1153,9 +1187,16 @@ jobs:
 
 ## Источники и дальнейшее чтение
 
-1. **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Глубокое понимание Kotlin на JVM необходимо для desktop-разработки: Java interop (Swing), работа с потоками, корутины и extension functions используются повсеместно в desktop-приложениях.
-2. **Moskala M. (2021).** *Effective Kotlin.* — Рекомендации по эффективному коду особенно актуальны для desktop: управление ресурсами (use, Closeable), обработка ошибок и оптимизация производительности JVM-приложений с GUI.
-3. **Skeen A. (2019).** *Kotlin Programming: The Big Nerd Ranch Guide.* — Практическое руководство по Kotlin с акцентом на JVM. Помогает понять взаимодействие Kotlin с Java-экосистемой, что важно для Swing interop и использования Java-библиотек в desktop-приложениях.
+### Теоретические основы
+
+- **Gosling J. et al. (2014).** *The Java Language Specification.* — JVM runtime для desktop Compose: threading, window management, event loop.
+- **Google (Skia Team).** *Skia Graphics Library.* — GPU-accelerated rendering для desktop через Skiko.
+
+### Практические руководства
+
+- **Jemerov D., Isakova S. (2017).** *Kotlin in Action.* — Kotlin для desktop Compose applications.
+- **Moskala M. (2021).** *Effective Kotlin.* — Идиоматичный Kotlin в desktop UI-коде.
+- [Compose for Desktop](https://github.com/JetBrains/compose-multiplatform/tree/master/tutorials) — Туториалы JetBrains.
 
 ---
 

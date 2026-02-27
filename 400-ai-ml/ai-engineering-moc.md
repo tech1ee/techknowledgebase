@@ -29,6 +29,43 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **AI Engineering** — инженерная дисциплина, возникшая в 2023-2024 годах на стыке Software Engineering и Machine Learning, фокусирующаяся на создании production-ready приложений на базе foundation models (Bommasani et al., 2021). Ключевое отличие от ML Engineering: AI Engineer использует предобученные модели как building blocks, а не обучает их с нуля.
+
+### Теоретический фундамент дисциплины
+
+| Область | Ключевые работы | Вклад в AI Engineering |
+|---------|----------------|----------------------|
+| **Transformer architecture** | Vaswani et al. (2017) | Основа всех современных LLM |
+| **Foundation models** | Bommasani et al. (2021) | Концепция универсальных моделей |
+| **Scaling laws** | Kaplan et al. (2020) | Предсказуемость качества от размера |
+| **In-context learning** | Brown et al. (2020) | Few-shot без обучения |
+| **RLHF** | Ouyang et al. (2022) | Alignment моделей с намерениями |
+| **RAG** | Lewis et al. (2020) | Retrieval + Generation |
+
+### Иерархия навыков AI инженера
+
+```
+УРОВЕНЬ 4: Production & Operations
+   Observability, Cost optimization, Security, Deployment
+         │
+УРОВЕНЬ 3: Advanced Patterns
+   Agents (ReAct, BDI), Multi-agent, Fine-tuning (LoRA), Reasoning
+         │
+УРОВЕНЬ 2: Core Skills
+   RAG, Embeddings, Vector DB, Prompt Engineering, Structured Outputs
+         │
+УРОВЕНЬ 1: Foundations
+   LLM fundamentals, API integration, Tokenization, Context windows
+```
+
+> **Принцип минимального вмешательства** (Karpathy, 2023): в AI Engineering оптимальная стратегия — начинать с наименее инвазивного подхода. Prompt Engineering решает ~70% задач, RAG добавляет ~20%, и только оставшиеся ~10% требуют fine-tuning или pre-training.
+
+**Связи:** [[ai-ml-overview-v2]] (обзор AI/ML), [[llm-fundamentals]] (как работают LLM), [[ai-engineering-intro]] (введение)
+
+---
+
 ## Что такое AI Engineering?
 
 ```
@@ -374,6 +411,28 @@ LLM-вызовы стоят денег за каждый токен. Без оп
 | Кросс-домен: базы данных | [[databases-overview]] | Vector databases — часть экосистемы БД, полезно понимать контекст |
 | Кросс-домен: DevOps | [[ai-devops-deployment]] | CI/CD для AI систем, контейнеризация моделей, инфраструктура |
 | Кросс-домен: архитектура | [[clean-code]] | Принципы чистого кода применимы и к AI-пайплайнам |
+
+---
+
+## Источники
+
+### Теоретические основы
+
+- Vaswani A. et al. (2017). *Attention Is All You Need*. NeurIPS
+- Bommasani R. et al. (2021). *On the Opportunities and Risks of Foundation Models*. arXiv:2108.07258
+- Kaplan J. et al. (2020). *Scaling Laws for Neural Language Models*. arXiv:2001.08361
+- Brown T. et al. (2020). *Language Models are Few-Shot Learners (GPT-3)*. NeurIPS
+- Lewis P. et al. (2020). *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. NeurIPS
+- Ouyang L. et al. (2022). *Training Language Models to Follow Instructions with Human Feedback*. NeurIPS
+- Russell S., Norvig P. (2020). *Artificial Intelligence: A Modern Approach*. 4th edition. Pearson
+
+### Практические руководства
+
+- [Anthropic Docs](https://docs.anthropic.com/) — Claude API и техники
+- [OpenAI Cookbook](https://cookbook.openai.com/) — примеры и best practices
+- [LangChain Docs](https://python.langchain.com/) — framework documentation
+- [Pinecone Learning](https://www.pinecone.io/learn/) — RAG и vector search
+- [Huyen C. (2022). Designing Machine Learning Systems. O'Reilly](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/) — практическое руководство
 
 ---
 

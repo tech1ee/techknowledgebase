@@ -36,6 +36,35 @@ Senior Android Developer с 7 годами опыта конкурирует с 
 
 ---
 
+## Теоретические основы
+
+> **Resume** (от фр. *résumé* — краткое изложение) — структурированный документ, представляющий профессиональный опыт кандидата. Эволюционировал от простого хронологического списка (1950-е) до AI-оптимизированного маркетингового документа (2026).
+
+**Историческая эволюция резюме:**
+
+| Эпоха | Формат | Аудитория | Ключевое требование |
+|-------|--------|-----------|---------------------|
+| 1950-1990 | Chronological, typed | Hiring manager | Полнота информации |
+| 1990-2010 | Digital, emailed | HR department | Keyword matching |
+| 2010-2020 | ATS-optimized | ATS software | Parsability, keywords |
+| 2020-2026 | AI-screened | AI + ATS + Human | Semantic matching, impact metrics |
+
+**ATS (Applicant Tracking System):** программное обеспечение для автоматизации найма. В 2026 году 97% компаний используют ATS, 82% добавляют AI-слой для semantic analysis. Это означает, что резюме читается **тремя аудиториями**: (1) ATS parser (формат), (2) AI screener (семантика), (3) рекрутер (6 секунд).
+
+**Теоретические концепции:**
+
+| Концепция | Применение к резюме |
+|-----------|---------------------|
+| **Signaling Theory** (Spence, 1973) | Метрики и achievements — costly signals компетенции |
+| **Information Processing** (Miller, 1956) | 7±2 chunks: рекрутер за 6 секунд обрабатывает ~5 key points |
+| **Persuasion** (Cialdini, 1984) | Social proof (компании), Authority (titles), Scarcity (unique skills) |
+
+> **Dual-audience problem:** резюме 2026 должно одновременно проходить AI/ATS-скрининг (keywords, parsability) И впечатлять рекрутера за 6 секунд (impact statements, visual hierarchy). Оптимизация только для одной аудитории снижает эффективность для другой.
+
+→ Связано: [[linkedin-optimization]], [[resume-design-standards-2026]], [[ai-interview-preparation]]
+
+---
+
 ## Что изменилось в 2026
 
 ```
@@ -652,15 +681,17 @@ FINAL:
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Содержит примеры резюме для tech-позиций и детальный разбор, как рекрутеры оценивают каждый bullet point. Формула «Action + Task + Result» из книги — основа impact statements.
+### Теоретические основы
 
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Фундаментальный подход к resume strategy: не просто список навыков, а storytelling карьерного пути. Помогает выстроить narrative, который резонирует с hiring managers и проходит AI-скрининг.
+- Spence M. (1973). *Job Market Signaling*. — Резюме как signaling device; метрики и achievements как costly signals.
 
----
+- McDowell G.L. (2015). *Cracking the Coding Interview*. — Примеры резюме для tech; формула Action + Task + Result.
 
-## Источники 2026
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Resume как storytelling карьерного пути; dual-audience strategy.
+
+### Практические руководства
 
 - [National Search Group: ATS AI Optimization 2026](https://www.nationalsearchgroup.com/optimize-resume-for-ats-ai-screening/)
 - [Final Round AI: Resume Tips 2026](https://www.finalroundai.com/blog/resume-tips-2026)

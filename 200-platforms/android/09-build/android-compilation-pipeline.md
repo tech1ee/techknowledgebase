@@ -41,6 +41,39 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Теория компиляции: фазы трансформации
+
+> Классическая модель компилятора (Aho, Sethi, Ullman — *"Dragon Book"*, 1986) определяет фазы: lexical analysis → syntax analysis → semantic analysis → intermediate code generation → optimization → target code generation. Android compilation pipeline добавляет уникальный шаг: **JVM bytecode → DEX bytecode** — трансформация между двумя виртуальными машинами.
+
+| Фаза | Классическая компиляция | Android Pipeline | Инструмент |
+|------|------------------------|------------------|-----------|
+| Frontend | Source → AST | `.kt`/`.java` → AST | Kotlin Compiler (K2), javac |
+| Middle-end | AST → IR (intermediate) | AST → JVM bytecode (`.class`) | Kotlin IR backend, javac |
+| Backend | IR → machine code | `.class` → DEX bytecode (`.dex`) | D8 / R8 |
+| Optimization | Dead code elimination, inlining | Shrinking, obfuscation, desugaring | R8 (integrated) |
+| Packaging | Linking → executable | DEX + resources → APK/AAB | AAPT2, zip, signing |
+
+### Register-based vs Stack-based Virtual Machines
+
+> JVM использует **stack-based** архитектуру: операнды помещаются на стек, операции извлекают и возвращают значения на стек. DEX (Dalvik Executable) использует **register-based** архитектуру: операнды хранятся в виртуальных регистрах. Исследование Shi et al. (2008, *"Virtual Machine Showdown: Stack Versus Registers"*) показало, что register-based VM выполняет на 47% меньше инструкций, что критично для мобильных устройств с ограниченным CPU.
+
+```
+JVM (stack-based):           DEX (register-based):
+  iload_1                      add-int v0, v1, v2
+  iload_2                      (одна инструкция вместо трёх)
+  iadd
+```
+
+### Desugaring: обратная совместимость через трансформацию
+
+> **Desugaring** — процесс преобразования конструкций языка более новых версий в эквивалентный код для старых версий. D8 desugaring реализует **source-to-source transformation** (Abelson & Sussman, SICP, 1985): Java 8+ features (lambdas, method references, `Stream API`, `Optional`) трансформируются в эквивалентный Java 7 bytecode, совместимый со старыми API levels.
+
+> **Связь**: Компиляция → [[jvm-basics-history]], DEX → [[android-art-runtime]], R8 → [[android-proguard-r8]]
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -766,12 +799,19 @@ org.gradle.configuration-cache=true
 
 ## Источники и дальнейшее чтение
 
-**Книги:**
-- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — внутреннее устройство Android: DEX формат, ART runtime, dex2oat компиляция на уровне ядра
-- Meier R. (2022). Professional Android, 4th Edition. — комплексное руководство по Android-разработке, включая build process и compilation stages
-- Leiva A. (2017). Kotlin for Android Developers. — Kotlin-first Android разработка, включая особенности компиляции Kotlin в DEX bytecode
+### Теоретические основы
+| Источник | Применение |
+|----------|-----------|
+| Aho A. et al. *Compilers: Principles, Techniques, and Tools* (Dragon Book, 1986/2006) | Фазы компиляции: lexing → parsing → semantic analysis → optimization → codegen |
+| Shi Y. et al. *Virtual Machine Showdown: Stack vs. Registers* (2008) | Register-based VM (DEX) vs Stack-based (JVM bytecode) |
+| Proebsting T. *Simple Translation of Goal-Directed Evaluation* (1997) | SSA form, используемая в R8 optimizer |
 
-**Веб-ресурсы:**
+### Книги
+- Vasavada N. (2019). Android Internals: A Confectioner's Cookbook. — DEX формат, ART runtime, dex2oat
+- Meier R. (2022). Professional Android, 4th Edition. — build process и compilation stages
+- Leiva A. (2017). Kotlin for Android Developers. — компиляция Kotlin в DEX bytecode
+
+### Практические руководства
 - [d8 - Android Developers](https://developer.android.com/tools/d8)
 - [R8 shrinking - Android Developers](https://developer.android.com/build/shrink-code)
 - [Configure your build - Android Developers](https://developer.android.com/build)

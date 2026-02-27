@@ -29,6 +29,38 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Technology Adoption Lifecycle** (Rogers, 1962) — модель распространения инноваций: от Innovators (2.5%) через Early Adopters (13.5%), Early Majority (34%), Late Majority (34%) до Laggards (16%). Каждая технология на Android-рынке находится на своей стадии adoption.
+
+**Android Technologies — Technology Adoption Curve (2025):**
+
+| Стадия | Технология | Карьерный импакт |
+|--------|-----------|-----------------|
+| **Late Majority** | Kotlin, Coroutines | Baseline; отсутствие = red flag |
+| **Early Majority** | Jetpack Compose, MVI | Must-have для новых позиций |
+| **Early Adopters** | KMP, AI-assisted dev | Strong differentiator (+15-25%) |
+| **Innovators** | On-device ML, Compose Web | Nice-to-have; future investment |
+
+**Концепция T-shaped Developer (David Guest, 1991):**
+
+```
+Breadth: знания многих технологий на поверхностном уровне
+           ─────────────────────────────────────────
+                              │
+Depth: глубокая экспертиза    │  ← Kotlin, Compose, Architecture
+       в одной области        │
+                              │
+```
+
+T-shaped developer — это Senior: глубокая экспертиза в Android + понимание backend, CI/CD, AI tools, product thinking. Рынок 2025 ценит **depth + adjacent breadth**, а не pure specialization или generic knowledge.
+
+> **Gartner Hype Cycle** дополняет Rogers: после пика завышенных ожиданий (KMP в 2023) технология проходит "trough of disillusionment" и выходит на "plateau of productivity" (KMP в 2025 — production-ready для shared logic).
+
+→ Связано: [[android-job-market-2025]], [[salary-benchmarks]], [[interview-process]]
+
+---
+
 ## Терминология
 
 | Термин | Что это |
@@ -517,19 +549,20 @@ Coroutines:
 
 ---
 
-## Источники и дальнейшее чтение
-
-- **McDowell G.L. (2015). Cracking the Coding Interview.** — Хотя фокус на алгоритмах, главы о подготовке к техническим интервью показывают, какие навыки ценятся в FAANG и как их демонстрировать. Помогает перевести список навыков в конкретные действия для подготовки.
-
-- **Xu A. (2020). System Design Interview.** — System Design — один из ключевых Strong Advantage навыков для Senior+. Эта книга даёт фреймворк для mobile-specific design questions, которые всё чаще появляются на интервью.
-
----
-
 ## Источники
 
-Исследование: 20+ источников
+### Теоретические основы
 
-Ключевые:
+- Rogers E.M. (1962). *Diffusion of Innovations*. — Technology adoption lifecycle: Innovators → Early Adopters → Majority → Laggards.
+
+- Guest D. (1991). *The Hunt is On for the Renaissance Man of Computing*. The Independent. — T-shaped developer: depth + breadth.
+
+- McDowell G.L. (2015). *Cracking the Coding Interview*. — Какие навыки ценятся в FAANG и как их демонстрировать.
+
+- Xu A. (2020). *System Design Interview*. — System Design как Strong Advantage навык для Senior+.
+
+### Практические руководства
+
 - [TechHub Asia: Android Career Outlook 2025](https://techhub.asia/android-developer-career/)
 - [Medium: Modern Android Architecture 2025](https://medium.com/@androidlab/modern-android-app-architecture-in-2025-mvvm-mvi-and-clean-architecture-with-jetpack-compose-c0df3c727334)
 - [Medium: Hot Android Skills 2025](https://medium.com/@androidlab/hot-android-skills-in-2025-what-employers-projects-are-demanding-a6478cd0aa90)

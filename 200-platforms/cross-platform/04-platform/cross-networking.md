@@ -46,6 +46,49 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Сетевое взаимодействие мобильного приложения** — процесс обмена данными между клиентом (мобильное устройство) и сервером через сетевые протоколы, с учётом ненадёжности мобильного канала связи (Fielding, 2000, REST; HTTP/1.1 RFC 7230-7235).
+
+### Сравнение сетевых стеков
+
+| Уровень | iOS | Android | KMP |
+|---------|-----|---------|-----|
+| **Transport** | URLSession (Foundation) | OkHttp (Square) | Ktor Client (engine abstraction) |
+| **Serialization** | Codable / JSONDecoder | kotlinx-serialization / Gson | kotlinx-serialization |
+| **Caching** | URLCache | OkHttp Cache | Ktor + platform cache |
+| **Certificate pinning** | URLSessionDelegate | OkHttp CertificatePinner | Ktor + platform impl |
+| **WebSocket** | URLSessionWebSocketTask | OkHttp WebSocket | Ktor WebSocket |
+
+### REST как архитектурный стиль
+
+Fielding (2000) определил REST через 6 ограничений (constraints):
+
+| Constraint | Описание | Значение для мобильных |
+|-----------|----------|----------------------|
+| Client-Server | Разделение ответственности | Mobile = thin client |
+| Stateless | Каждый запрос самодостаточен | Нет зависимости от server state |
+| Cacheable | Ответы помечены как cacheable | Offline support |
+| Uniform Interface | Единый интерфейс (URL + HTTP methods) | Предсказуемый API |
+| Layered System | Промежуточные слои прозрачны | CDN, load balancers |
+| Code-on-Demand | Опциональная загрузка кода | WebView, JS execution |
+
+### Strategy Pattern для HTTP engines
+
+Ktor Client реализует **Strategy Pattern** (GoF, 1994) для HTTP-движков:
+
+```
+expect: HttpClientEngine (абстрактная стратегия)
+actual iOS: Darwin (URLSession)
+actual Android: OkHttp
+actual JS: JsClient (fetch API)
+```
+
+> **CS-фундамент:** Networking связан с [[kmp-ktor-networking]] (Ktor deep dive) и [[cross-data-persistence]] (offline caching). Теоретическая база — REST (Fielding, 2000), Strategy Pattern (GoF, 1994), HTTP (RFC 7230).
+
 ## 1. Архитектура сетевого стека
 
 ### iOS: URLSession
@@ -1556,9 +1599,16 @@ Ktor абстрагирует различия, давая единый API.
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Описывает сетевой стек Android: OkHttp, Retrofit, WorkManager для фоновых загрузок и best practices для работы с REST API. Помогает понять, как Android-подход к networking отличается от iOS.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает URLSession, URLRequest, JSON-декодирование через Codable и async/await для сетевых запросов. Даёт фундамент для понимания iOS-подхода к networking.
-- **Moskala M. (2021). *Effective Kotlin*.** — Содержит рекомендации по работе с корутинами, Flow и обработке ошибок, что напрямую применяется при проектировании сетевого слоя в Ktor Client для KMP-приложений.
+### Теоретические основы
+
+- **Fielding R. (2000).** *Architectural Styles and the Design of Network-based Software Architectures.* — REST architectural style.
+- **Gamma E. et al. (1994).** *Design Patterns.* — Strategy Pattern для HTTP engine abstraction.
+
+### Практические руководства
+
+- [Ktor Client](https://ktor.io/docs/client-overview.html) — KMP HTTP client.
+- [URLSession](https://developer.apple.com/documentation/foundation/urlsession) — iOS networking.
+- [OkHttp](https://square.github.io/okhttp/) — Android HTTP client.
 
 ---
 

@@ -46,6 +46,49 @@ related:
 
 ---
 
+
+## Теоретические основы
+
+### Формальное определение
+
+> **Императивный UI** — парадигма построения интерфейса, при которой разработчик последовательно выполняет команды для создания и мутации элементов UI (создать → настроить → добавить → обновить).
+
+### Историческая необходимость
+
+Императивный UI был единственным подходом на мобильных платформах до 2019:
+
+| Год | Платформа | Framework | Модель |
+|-----|-----------|-----------|--------|
+| 2008 | iOS | UIKit | Императивный (MVC) |
+| 2008 | Android | View System | Императивный (XML + Activity) |
+| 2019 | iOS | SwiftUI | Декларативный |
+| 2019 | Android | Compose (alpha) | Декларативный |
+| 2021 | Android | Compose 1.0 | Декларативный (stable) |
+
+### Модель обновления: мутация vs описание
+
+В императивном UI **обновление — мутация состояния view tree**:
+
+```
+view.text = newValue        // мутация одного свойства
+view.isHidden = condition   // мутация другого свойства
+// Разработчик отвечает за согласованность ВСЕХ свойств
+```
+
+Проблема — **state synchronization**: при N свойств и M состояний нужно обработать N × M комбинаций. Это экспоненциально растёт с усложнением UI, что привело к появлению декларативного подхода.
+
+### Auto Layout / ConstraintLayout: системы ограничений
+
+Обе платформы используют **constraint satisfaction** (Cassowary algorithm, Badros et al., 2001) для layout:
+
+| Framework | iOS (Auto Layout) | Android (ConstraintLayout) |
+|-----------|-------------------|---------------------------|
+| Алгоритм | Cassowary | Modified Cassowary |
+| Язык ограничений | NSLayoutConstraint, VFL | XML constraints, MotionLayout |
+| Сложность | O(n) для типичных layout | O(n) для типичных layout |
+
+> **CS-фундамент:** Императивный UI связан с [[cross-ui-declarative]] (эволюционная замена) и [[cross-lifecycle]] (lifecycle управляет обновлениями). Теоретическая база — MVC (Reenskaug, 1979), Constraint Satisfaction (Badros et al., 2001).
+
 ## 1. Почему Imperative UI всё ещё актуален
 
 ### Легаси-код никуда не денется
@@ -1961,9 +2004,15 @@ Chains в ConstraintLayout позволяют группировать views и 
 
 ## Источники и дальнейшее чтение
 
-- **Meier R. (2022). *Professional Android*.** — Подробно описывает Android View system: layouts, RecyclerView, custom views, animations и performance-оптимизацию. Помогает освоить imperative UI Android и понять, когда мигрировать на Compose.
-- **Neuburg M. (2023). *iOS Programming Fundamentals*.** — Раскрывает UIView hierarchy, Auto Layout, storyboards, UITableView и lifecycle UIViewController. Даёт фундамент для понимания imperative UI на iOS, который остаётся актуальным для поддержки legacy-кода.
-- **Gamma E. et al. (1994). *Design Patterns*.** — Template Method (UIView lifecycle), Observer (delegates/datasources), Composite (view hierarchy) и Adapter (RecyclerView.Adapter) — это именно те паттерны, которые лежат в основе imperative UI обеих платформ. Книга помогает распознавать эти паттерны в API и применять их осознанно.
+### Теоретические основы
+
+- **Reenskaug T. (1979).** *Models-Views-Controllers.* — MVC как архитектура императивного UI.
+- **Badros G. et al. (2001).** *The Cassowary Linear Arithmetic Constraint Solving Algorithm.* — Cassowary для Auto Layout и ConstraintLayout.
+
+### Практические руководства
+
+- [UIKit Documentation](https://developer.apple.com/documentation/uikit) — Императивный UI iOS.
+- [Android View System](https://developer.android.com/develop/ui/views) — Императивный UI Android.
 
 ---
 

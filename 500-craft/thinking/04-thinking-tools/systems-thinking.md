@@ -34,6 +34,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **Системное мышление (Systems Thinking)** — подход к анализу, который фокусируется на взаимосвязях между компонентами системы, а не на самих компонентах; понимание того, как поведение возникает из взаимодействий, а не из свойств частей (Meadows, 2008).
+
+Системное мышление развивалось на пересечении кибернетики, биологии и менеджмента:
+
+| Работа | Автор | Год | Вклад |
+|--------|-------|-----|-------|
+| General System Theory | Ludwig von Bertalanffy | 1968 | Основа: открытые системы, эмерджентность, изоморфизм |
+| Cybernetics | Norbert Wiener | 1948 | Feedback loops, саморегулирующиеся системы |
+| The Fifth Discipline | Peter Senge | 1990 | 5 дисциплин обучающейся организации, системные архетипы |
+| Cynefin Framework | Dave Snowden | 2003 | 4 домена: Simple, Complicated, Complex, Chaotic — разные стратегии для каждого |
+| Thinking in Systems | Donella Meadows | 2008 | Stocks, flows, feedback loops, leverage points |
+| Антихрупкость | Nassim Taleb | 2012 | Системы, которые выигрывают от стресса и хаоса |
+
+> **Meadows (2008):** «A system is a set of things — people, cells, molecules, or whatever — interconnected in such a way that they produce their own pattern of behavior over time.» Ключевое: система — не сумма частей, а результат их **взаимодействий**.
+
+Фундаментальные концепции: **feedback loops** (усиливающие и балансирующие), **emergence** (свойства системы, отсутствующие у частей), **leverage points** (Meadows, 1999 — 12 точек воздействия, от наименее до наиболее эффективных). Для разработчиков: **Cynefin** (Snowden, 2003) объясняет, почему одни проблемы решаются best practices (Simple), другие требуют экспертов (Complicated), а третьи — экспериментов и проб (Complex).
+
+Связь с архитектурой ПО: Conway's Law (1968) — «Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations» — классический пример системного мышления. См. [[mental-models]] — системные модели как часть latticework.
+
+---
+
 ## История: почему это важно
 
 В 1999 году NASA потеряла Mars Climate Orbiter — аппарат стоимостью $125 миллионов. Причина? Одна команда использовала метрическую систему, другая — имперскую. Никто не проверил совместимость.
@@ -360,6 +383,14 @@ next_review:
 
 ## Источники
 
+### Теоретические основы
+- Meadows, D. H. *Thinking in Systems: A Primer*. Chelsea Green, 2008
+- Senge, P. *The Fifth Discipline*. Doubleday, 1990
+- von Bertalanffy, L. *General System Theory*. George Braziller, 1968
+- Snowden, D. J. & Boone, M. E. «A Leader's Framework for Decision Making (Cynefin)». Harvard Business Review, 2007
+- Meadows, D. H. «Leverage Points: Places to Intervene in a System». Sustainability Institute, 1999
+
+### Практические руководства
 - [HBR: Why You Need Systems Thinking Now (2025)](https://hbr.org/2025/09/why-you-need-systems-thinking-now) — проверено 2025-11-24
 - [SEBoK: Foundations of Systems Engineering](https://sebokwiki.org/wiki/Foundations_of_Systems_Engineering) — проверено 2025-11-24
 - [Excella: Solving Complex Problems with Systems Thinking](https://www.excella.com/insights/solving-complex-problems-with-systems-thinking) — проверено 2025-11-24

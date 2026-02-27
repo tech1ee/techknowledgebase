@@ -48,6 +48,52 @@ prerequisites:
 
 ---
 
+## Теоретические основы
+
+### Формальное определение
+
+> **CPU (Central Processing Unit)** — устройство, исполняющее инструкции программы через цикл Fetch → Decode → Execute. Формальная модель: конечный автомат с доступом к регистровому файлу и памяти.
+
+### Историческая атрибуция
+
+| Концепция | Автор | Год | Вклад |
+|-----------|-------|-----|-------|
+| **Von Neumann Architecture** | von Neumann, J. | 1945 | Stored-program computer: данные и инструкции в одной памяти |
+| **Pipelining** | IBM (Stretch) | 1961 | Конвейерное выполнение: несколько инструкций одновременно |
+| **Cache Memory** | Wilkes, M. | 1965 | "Slave memory" — быстрый буфер между CPU и RAM |
+| **RISC** | Patterson & Ditzel | 1980 | Reduced Instruction Set — простые инструкции, быстрый pipeline |
+| **CISC** | Intel (x86) | 1978 | Complex Instruction Set — мощные инструкции, сложный decode |
+| **Superscalar** | IBM RS/6000 | 1990 | Несколько инструкций за такт (ILP) |
+| **Out-of-Order** | Tomasulo, R. (IBM) | 1967 | Переупорядочивание инструкций для максимальной утилизации |
+| **Branch Prediction** | Smith, J.E. | 1981 | Предсказание условных переходов (95%+ accuracy) |
+
+### Memory Hierarchy: формальная модель
+
+```
+               Latency     Size        Cost/GB
+Registers      ~0.3 ns     ~1 KB       $$$$$$
+L1 Cache       ~1 ns       32-128 KB   $$$$$
+L2 Cache       ~4 ns       256KB-1MB   $$$$
+L3 Cache       ~10 ns      4-64 MB     $$$
+RAM            ~100 ns     8-64 GB     $$
+SSD            ~100 μs     256GB-4TB   $
+HDD            ~10 ms      1-20 TB     ¢
+```
+
+> **Принцип локальности (Denning, 1968):**
+> - **Temporal locality:** если данные использованы, они скоро будут использованы снова
+> - **Spatial locality:** если данные по адресу `A` использованы, данные по адресу `A+1` скоро будут использованы
+>
+> Cache exploits locality: 90%+ hit rate при правильной организации данных.
+
+### Amdahl's Law для CPU
+
+> При `N` ядрах и `s` — доле sequential кода: `Speedup = 1 / (s + (1-s)/N)`
+
+Практическое следствие: оптимизация однопоточной производительности (IPC, cache, branch prediction) часто важнее добавления ядер.
+
+---
+
 ## Зачем это знать
 
 Большинство разработчиков воспринимают процессор как "чёрный ящик": подаёшь код — получаешь результат. Но эта абстракция ломается, когда ты сталкиваешься с performance-проблемами, которые невозможно объяснить на уровне алгоритмов. Два алгоритма с одинаковой O(n) сложностью, но один работает в 8 раз быстрее — почему? Сортировка массива перед обработкой ускоряет цикл в 5 раз — как? Ответы лежат на уровне CPU.
@@ -543,10 +589,17 @@ for (i in 0 until n) {
 
 ## Источники и дальнейшее чтение
 
-- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design: The Hardware/Software Interface*. — Стандартный учебник по архитектуре компьютеров. Главы о pipeline, cache hierarchy и branch prediction написаны с позиции программиста, не hardware-инженера. RISC-V edition (2020) содержит актуальные примеры.
-- Drepper, U. (2007). *What Every Programmer Should Know About Memory*. — Классическая статья (114 страниц), объясняющая иерархию памяти, cache-friendly programming и NUMA. Несмотря на возраст, фундаментальные принципы не изменились. Обязательное чтение.
-- Bryant, R. & O'Hallaron, D. (2015). *Computer Systems: A Programmer's Perspective*. — Главы 4 (Processor Architecture) и 6 (The Memory Hierarchy) — лучшее объяснение pipeline и кэширования с практическими примерами влияния на производительность кода.
-- Hennessy, J. & Patterson, D. (2019). *Computer Architecture: A Quantitative Approach*. — Более продвинутая книга тех же авторов. Подробный количественный анализ branch prediction, out-of-order execution и cache coherence. Для тех, кто хочет понять глубже.
+### Теоретические основы
+- von Neumann, J. (1945). "First Draft of a Report on the EDVAC" — stored-program architecture
+- Tomasulo, R. (1967). "An Efficient Algorithm for Exploiting Multiple Arithmetic Units" — IBM J. R&D; out-of-order execution
+- Denning, P. (1968). "The Working Set Model for Program Behavior" — CACM; принцип локальности
+- Smith, J.E. (1981). "A Study of Branch Prediction Strategies" — ISCA; branch prediction
+
+### Практические руководства
+- Patterson, D. & Hennessy, J. (2017). *Computer Organization and Design* — стандартный учебник
+- Drepper, U. (2007). *What Every Programmer Should Know About Memory* — cache-friendly programming
+- Bryant, R. & O'Hallaron, D. (2015). *CSAPP* — гл.4 (pipeline), гл.6 (memory hierarchy)
+- Hennessy, J. & Patterson, D. (2019). *Computer Architecture: A Quantitative Approach* — advanced
 
 ---
 

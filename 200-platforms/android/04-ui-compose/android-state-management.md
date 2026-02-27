@@ -34,6 +34,29 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+> **State management** — задача управления **mutable state** в интерактивной системе. Формально: определение множества допустимых состояний S, множества событий E и функции переходов `δ: S × E → S` — это конечный автомат (Hopcroft/Ullman, 1979). Каждый UI-экран может быть формализован как FSM с состояниями (Loading, Content, Error) и переходами (Load → Success/Failure).
+
+Эволюция state management в Android отражает переход от **mutable shared state** (прямые мутации View) к **unidirectional data flow** (однонаправленный поток данных):
+
+| Поколение | Паттерн | Модель | Проблема, которую решает |
+|-----------|---------|--------|--------------------------|
+| I (2008) | Прямые мутации View | `textView.text = data` | — |
+| II (2017) | LiveData + ViewModel | Observer pattern (GoF) | Configuration change survival |
+| III (2021) | StateFlow + Compose | Reactive streams (Meijer, 2012) | Lifecycle-aware, thread-safe |
+| IV (2024) | MVI / Circuit / Molecule | Event Sourcing (Fowler, 2005) | Predictable state transitions |
+
+> **Unidirectional Data Flow (UDF)** — архитектурный принцип, при котором данные движутся в одном направлении: `UI → Event → Reducer → State → UI`. Формализован в архитектуре Flux (Facebook, 2014) и вдохновлён **Elm Architecture** (Czaplicki, 2012): `Model → Update → View` — чистый функциональный цикл без побочных эффектов.
+
+**StateFlow** реализует паттерн **Conflated BroadcastChannel** из реактивного программирования: горячий поток с семантикой «последнее значение» (replay = 1) и **structural equality** для дедупликации. Это формализация **Observable** из Reactive Extensions (Meijer, 2012), адаптированная для Kotlin корутин.
+
+Проблема **one-time events** (навигация, toast) vs **persistent state** (данные экрана) восходит к различию между **commands** и **queries** в CQRS (Fowler, 2011): state — это query (идемпотентное чтение), event — это command (одноразовое действие). `StateFlow` моделирует query (replay последнего значения), `Channel` моделирует command (FIFO, доставка ровно одному потребителю).
+
+**SavedStateHandle** решает проблему **persistence boundary** — различие между process memory (ViewModel, RAM) и persistent storage (Bundle, disk). Это реализация паттерна **Memento** (Gamma et al., 1994): состояние сериализуется для восстановления после process death, сохраняя инкапсуляцию ViewModel.
+
+---
+
 ## Зачем это нужно
 
 **Проблема:** Android UI имеет сложный lifecycle. Данные должны:
@@ -1185,26 +1208,26 @@ Bundle и Parcelable — механизм сохранения state при proc
 
 ## Источники
 
+### Теоретические основы
+
+- **Hopcroft J., Ullman J. (1979). Introduction to Automata Theory.** — Конечные автоматы для моделирования UI state
+- **Meijer E. (2012). Your Mouse is a Database.** — Reactive Streams и Observable паттерн
+- **Czaplicki E. (2012). Elm: Concurrent FRP for Functional GUIs.** — Elm Architecture (Model-Update-View)
+- **Fowler M. (2005). Event Sourcing.** — Основа MVI: state как результат применения событий
+- **Gamma E. et al. (1994). Design Patterns.** — Memento (SavedStateHandle), Observer (LiveData/StateFlow)
+
+### Практические руководства
+
 | # | Источник | Тип | Вклад |
 |---|----------|-----|-------|
 | 1 | [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) | Docs | Основы StateFlow vs SharedFlow |
 | 2 | [Compose State](https://developer.android.com/jetpack/compose/state) | Docs | State hoisting, remember |
-| 3 | [Side Effects in Compose](https://developer.android.com/jetpack/compose/side-effects) | Docs | LaunchedEffect, DisposableEffect |
-| 4 | [A safer way to collect flows](https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda) | Article | repeatOnLifecycle best practices |
-| 5 | [Saved State module for ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate) | Docs | SavedStateHandle API |
-| 6 | [Handle configuration changes](https://developer.android.com/guide/topics/resources/runtime-changes) | Docs | Configuration change vs process death |
-| 7 | [Save UI states](https://developer.android.com/topic/libraries/architecture/saving-states) | Docs | Полный гайд по сохранению состояния |
-| 8 | [LiveData vs StateFlow](https://proandroiddev.com/livedata-vs-stateflow-6a9f0387c2e7) | Article | Сравнение подходов |
-| 9 | [Reddit: SavedStateHandle experiences](https://reddit.com/r/androiddev) | Community | Практические кейсы |
-| 10 | [Compose lifecycle](https://developer.android.com/jetpack/compose/lifecycle) | Docs | Lifecycle-aware state collection |
-| 11 | [collectAsStateWithLifecycle](https://developer.android.com/reference/kotlin/androidx/lifecycle/compose/package-summary) | Docs | API reference |
-| 12 | [Molecule by Cash App](https://github.com/cashapp/molecule) | GitHub | Альтернативный подход 2024 |
+| 3 | [A safer way to collect flows](https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda) | Article | repeatOnLifecycle |
+| 4 | [Save UI states](https://developer.android.com/topic/libraries/architecture/saving-states) | Docs | Полный гайд |
+| 5 | [Molecule by Cash App](https://github.com/cashapp/molecule) | GitHub | Альтернативный подход 2024 |
 
-## Источники и дальнейшее чтение
-
-- **Moskala M. (2022). Kotlin Coroutines Deep Dive.** — Исчерпывающее руководство по Flow, StateFlow и SharedFlow. Объясняет разницу между горячими и холодными потоками, backpressure и structured concurrency — всё, что лежит в основе state management на корутинах.
-- **Moskala M. (2021). Effective Kotlin.** — Практики работы с immutable state, data classes для state representation и best practices по избеганию side effects. Формирует правильное мышление для проектирования state containers.
-- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — Пошаговое введение в ViewModel, LiveData и SavedStateHandle с понятными примерами. Хороший старт для тех, кто только начинает работать с state management в Android.
+- **Moskala M. (2022). Kotlin Coroutines Deep Dive.** — Flow, StateFlow, SharedFlow, structured concurrency
+- **Phillips B. et al. (2022). Android Programming: The Big Nerd Ranch Guide.** — ViewModel, LiveData, SavedStateHandle
 
 ---
 

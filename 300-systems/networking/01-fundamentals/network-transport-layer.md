@@ -71,9 +71,64 @@ next_review:
 
 ---
 
+## Теоретические основы: формальный базис транспортного уровня
+
+### End-to-End Principle (Saltzer, Reed, Clark, 1984)
+
+> **End-to-End Principle** — архитектурный принцип, утверждающий: функции, зависящие от приложения, следует реализовывать на концах коммуникации (в endpoint'ах), а не в промежуточных узлах сети. Формально: *"The function in question can completely and correctly be implemented only with the knowledge and help of the application standing at the endpoints."*
+
+TCP реализует reliable delivery именно на endpoint'ах (отправитель и получатель), а не в промежуточных маршрутизаторах. IP-сеть остаётся «глупой» (best-effort) — это фундаментальное архитектурное решение, позволившее интернету масштабироваться.
+
+### TCP: формальные гарантии
+
+TCP предоставляет три формальные гарантии поверх ненадёжного IP:
+
+| Гарантия | Формально | Механизм |
+|----------|----------|----------|
+| **Reliable delivery** | Каждый отправленный байт будет доставлен ровно один раз или соединение будет разорвано | Sequence numbers + ACK + retransmission |
+| **In-order delivery** | Получатель видит байты в том же порядке, в котором их отправил отправитель | Sequence numbers + reordering buffer |
+| **Flow control** | Отправитель не превышает способность получателя обрабатывать данные | Sliding Window (rwnd — receiver window) |
+
+### Congestion Control: AIMD (Jacobson, 1988)
+
+> **AIMD (Additive Increase / Multiplicative Decrease)** — алгоритм управления перегрузкой, формально доказанный как сходящийся к справедливому распределению пропускной способности (Chiu & Jain, 1989).
+
+Принцип: **увеличивай окно линейно** (cwnd += 1 MSS за RTT), **уменьшай мультипликативно** при потере (cwnd /= 2). Формальное свойство — **fairness convergence**: n потоков, разделяющих канал, сходятся к равным долям `bandwidth / n`.
+
+```
+cwnd (congestion window)
+ ^
+ |         /\      /\      /\
+ |        /  \    /  \    /
+ |       /    \  /    \  /
+ |      /      \/      \/
+ |     /
+ |    /
+ +──────────────────────────── время
+     ↑ Additive    ↑ Multiplicative
+       Increase      Decrease (packet loss)
+```
+
+Эволюция алгоритмов: Tahoe (1988) → Reno (1990) → CUBIC (2008, Linux default) → BBR (2016, Google, departure from loss-based to model-based).
+
+### QUIC: формальные отличия от TCP
+
+QUIC (RFC 9000, 2021) — не просто «TCP поверх UDP», а переосмысление транспортного уровня:
+
+| Свойство | TCP | QUIC |
+|----------|-----|------|
+| Head-of-Line blocking | Да (один поток байтов) | Нет (мультиплексированные streams) |
+| Handshake | 1-3 RTT (TCP + TLS) | 0-1 RTT (интегрированный TLS 1.3) |
+| Connection migration | Привязка к IP:port (ломается при смене сети) | Connection ID (работает при смене WiFi→LTE) |
+| Congestion control | Зависит от ОС (CUBIC/BBR) | На уровне приложения (гибкая настройка) |
+
+> **Связь**: End-to-End Principle → [[networking-overview]], Congestion control → [[network-http-evolution]], QUIC → [[network-dns-tls]]
+
+---
+
 ## Часть 1: Интуиция без кода
 
-> 💡 **Цель раздела**: Понять транспортный уровень через 5 аналогий из реальной жизни, прежде чем погружаться в технические детали.
+> Цель раздела: Понять транспортный уровень через 5 аналогий из реальной жизни, прежде чем погружаться в технические детали.
 
 ### Аналогия 1: TCP как заказное письмо с уведомлением
 
@@ -1634,6 +1689,15 @@ socket.setSoTimeout(30000);     // Read timeout: 30 секунд
 ---
 
 ## Источники и дальнейшее чтение
+
+### Теоретические основы
+
+- **Saltzer J., Reed D., Clark D. (1984). *End-to-End Arguments in System Design.* ACM TOCS.** — Определение End-to-End Principle — фундаментального архитектурного принципа интернета, объясняющего, почему TCP реализован на endpoint'ах.
+- **Jacobson V. (1988). *Congestion Avoidance and Control.* ACM SIGCOMM.** — Определение AIMD congestion control. Одна из наиболее влиятельных работ в истории интернета.
+- **Chiu D., Jain R. (1989). *Analysis of the Increase and Decrease Algorithms for Congestion Avoidance.* Computer Networks.** — Формальное доказательство fairness convergence AIMD.
+- **Iyengar J., Thomson M. (2021). *RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport.*** — Формальная спецификация QUIC.
+
+### Практические руководства
 
 - **Stevens W.R. (1994). TCP/IP Illustrated, Volume 1: The Protocols.** — Классический и наиболее глубокий разбор TCP/IP стека с реальными трассировками пакетов. Незаменим для понимания TCP state machine, congestion control и поведения протоколов в деталях.
 

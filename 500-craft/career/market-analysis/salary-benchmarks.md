@@ -29,6 +29,37 @@ Senior Android Developer в US Remote зарабатывает $120,000-160,000 
 
 ---
 
+## Теоретические основы
+
+> **Compensation Theory** — экономическая теория, объясняющая формирование заработной платы на основе market pricing, human capital, supply/demand и compensating differentials.
+
+**Ключевые концепции:**
+
+| Теория | Автор | Год | Применение к tech compensation |
+|--------|-------|-----|-------------------------------|
+| Human Capital Theory | Gary Becker | 1964 | Инвестиции в навыки (KMP, AI) увеличивают market value |
+| Compensating Differentials | Adam Smith | 1776 | Неприятные условия (CoL, visa) компенсируются зарплатой |
+| Market Pricing | — | — | Levels.fyi / Glassdoor определяют market rate для позиции |
+| Equity Theory | J. Stacy Adams | 1963 | Воспринимаемая справедливость: input/output ratio vs peers |
+| Total Compensation | — | — | Base + Equity + Bonus + Benefits = TC |
+
+**Структура Total Compensation в tech:**
+
+```
+FAANG Senior (L5):     Base $180K + RSU $100K/yr + Bonus $30K = TC $310K
+Startup Senior:        Base $150K + Options (?) + Bonus $10K = TC $160K+
+European Senior:       Base €85K + Bonus €10K = TC €95K (+ benefits)
+UAE Senior:            Base $70K + Housing $20K = TC $90K (tax-free)
+```
+
+**Becker (1964), Human Capital Theory:** инвестиции в навыки (образование, training, experience) увеличивают **productivity** и, следовательно, market value. Для Android-разработчика: изучение KMP (+15-25% к зарплате) или AI tools — это human capital investment с измеримым ROI.
+
+> **Compensating Differentials (Smith, 1776):** почему зарплаты в SF выше, чем в UAE? Высокий CoL, налоги и конкуренция за talent **компенсируются** более высокой gross salary. Net savings могут быть сопоставимыми: $180K gross в SF ≈ $70K gross в Dubai по savings.
+
+→ Связано: [[negotiation]], [[remote-first-companies]], [[android-job-market-2025]]
+
+---
+
 ## Quick Reference
 
 ### Senior Android (5+ лет) — Annual Total Comp
@@ -411,11 +442,17 @@ Typical Resolution:   $160,000-170,000
 
 ---
 
-## Источники и дальнейшее чтение
+## Источники
 
-- **Bolles R.N. (2023). What Color Is Your Parachute?** — Содержит практические советы по исследованию зарплат и переговорам об оффере. Помогает перевести сухие бенчмарки в конкретную стратегию переговоров с учётом региона и уровня позиции.
+### Теоретические основы
 
-- **Larson W. (2022). Staff Engineer: Leadership Beyond the Management Track.** — Объясняет зарплатную прогрессию на Staff+ уровне, где компенсация существенно отличается от Senior. Полезна для понимания, как добраться до top percentiles в зарплатных диапазонах.
+- Becker G.S. (1964). *Human Capital*. — Инвестиции в навыки увеличивают market value; обоснование upskilling.
+
+- Adams J.S. (1963). *Toward an Understanding of Inequity*. Journal of Abnormal and Social Psychology. — Equity theory: perceived fairness of compensation.
+
+- Bolles R.N. (2023). *What Color Is Your Parachute?*. — Исследование зарплат и стратегия переговоров.
+
+- Larson W. (2022). *Staff Engineer*. — Зарплатная прогрессия на Staff+ уровне ($300K-$600K TC).
 
 ---
 

@@ -50,6 +50,25 @@ Compose изменил не только UI --- он изменил, где жи
 
 ---
 
+## Теоретические основы
+
+> **Component Architecture** — архитектурный подход, где приложение строится из самодостаточных компонентов, каждый из которых инкапсулирует состояние, логику и представление. Восходит к **Component-Based Software Engineering** (Szyperski, 1997) и получил новую жизнь в декларативных UI-фреймворках (React, 2013).
+
+Compose-native архитектуры (Circuit, Decompose, Molecule) представляют **парадигмальный сдвиг** от ViewModel-centric к Compose-centric организации: вместо `Activity → ViewModel → UI` используется `@Composable Presenter → @Composable UI`, где Compose Runtime управляет и состоянием, и рендерингом.
+
+| Архитектура | Модель состояния | Формальная основа | Авторы |
+|-------------|-----------------|-------------------|--------|
+| Circuit | `@Composable Presenter → UiState` | State Hoisting + Composition | Slack (Zac Sweers, 2022) |
+| Decompose | Component tree с lifecycle | Hierarchical State Machine | Arkadii Ivanov (JetBrains, 2020) |
+| Molecule | Compose Runtime без UI | Reactive Streams через Composition | Cash App (Jake Wharton, 2021) |
+| Traditional MVVM | ViewModel + StateFlow | Observer pattern | Google (2017) |
+
+> **Presenter-as-Composable** (Circuit) — радикальная идея: если Compose Runtime умеет отслеживать состояние, управлять lifecycle и выполнять side-effects (LaunchedEffect), то **ViewModel избыточен**. Presenter становится @Composable-функцией, которая «производит» state и обрабатывает events. Это формализация принципа **State Hoisting** (поднятие состояния) до архитектурного уровня.
+
+**Molecule** использует Compose Runtime **без UI** — только как **reactive runtime** для production потоков данных. Это демонстрирует, что Compose — не UI-фреймворк, а **general-purpose incremental computation engine** (аналогия: React Server Components используют React runtime без DOM).
+
+---
+
 ## Терминология
 
 | Термин | Значение |
@@ -1143,18 +1162,21 @@ fun `task list displays items`() {
 
 ## Источники
 
+### Теоретические основы
+
+- **Szyperski C. (1997). Component Software: Beyond Object-Oriented Programming.** — Component-Based Software Engineering
+- **Elliott C., Hudak P. (1997). Functional Reactive Animation.** — Functional UI (`UI = f(state)`)
+- **Czaplicki E. (2012). Elm: Concurrent FRP for Functional GUIs.** — Elm Architecture (Model-Update-View)
+
+### Практические руководства
+
 | Источник | Описание | URL |
 |----------|----------|-----|
-| **Circuit Documentation** | Официальная документация фреймворка | [slackhq.github.io/circuit](https://slackhq.github.io/circuit/) |
-| **Circuit GitHub** | Исходный код, примеры, changelog | [github.com/slackhq/circuit](https://github.com/slackhq/circuit) |
-| **Decompose Documentation** | Официальная документация, guides | [arkivanov.github.io/Decompose](https://arkivanov.github.io/Decompose/) |
-| **Decompose GitHub** | Исходный код, samples, releases | [github.com/arkivanov/Decompose](https://github.com/arkivanov/Decompose) |
-| **Molecule GitHub** | Исходный код, README, API docs | [github.com/cashapp/molecule](https://github.com/cashapp/molecule) |
-| **Molecule Blog Post** | "The state of managing state (with Compose)" от Cash App | [code.cash.app/the-state-of-managing-state-with-compose](https://code.cash.app/the-state-of-managing-state-with-compose) |
-| **Molecule 1.0 Announcement** | Стабильный мультиплатформенный релиз | [code.cash.app/molecule-1-0](https://code.cash.app/molecule-1-0) |
-| **Google Compose Architecture** | Официальный guide по архитектуре Compose | [developer.android.com/develop/ui/compose/architecture](https://developer.android.com/develop/ui/compose/architecture) |
-| **Modern Compose Architecture with Circuit** | Доклад Zac Sweers (Slack) | [speakerdeck.com/zacsweers](https://speakerdeck.com/zacsweers/modern-compose-architecture-with-circuit) |
-| **Circuit vs ViewModel Analysis** | Сравнительный анализ подходов | [medium.com/@keisardev](https://medium.com/@keisardev/circuit-vs-jetpack-compose-viewmodel-in-depth-analysis-d3c8f4d02cc1) |
+| **Circuit Documentation** | Официальная документация | [slackhq.github.io/circuit](https://slackhq.github.io/circuit/) |
+| **Decompose Documentation** | Документация, guides | [arkivanov.github.io/Decompose](https://arkivanov.github.io/Decompose/) |
+| **Molecule GitHub** | Исходный код, API docs | [github.com/cashapp/molecule](https://github.com/cashapp/molecule) |
+| **Google Compose Architecture** | Архитектура Compose | [developer.android.com](https://developer.android.com/develop/ui/compose/architecture) |
+| **Modern Compose Architecture** | Доклад Zac Sweers | [speakerdeck.com/zacsweers](https://speakerdeck.com/zacsweers/modern-compose-architecture-with-circuit) |
 
 ---
 

@@ -25,6 +25,23 @@ next_review:
 
 ---
 
+## Теоретические основы
+
+### Instructional Design и структура обучающих материалов
+
+> **Определение:** Leadership Content Template — стандартизированная структура для создания обучающих материалов по технологическому лидерству, основанная на принципах instructional design и когнитивной науки.
+
+Robert Gagné в *"The Conditions of Learning"* (1965) определил девять «events of instruction», формирующих эффективный обучающий опыт. Этот шаблон реализует ключевые events: attention (TL;DR), recall (Prerequisites), guidance (пошаговый процесс), practice (скрипты и templates), assessment (чеклист качества). Richard Mayer в *"Multimedia Learning"* (2001) показал, что комбинация текста, визуальных элементов (ASCII-визуализации) и структурированных таблиц снижает extraneous cognitive load и улучшает retention.
+
+| Принцип | Автор | Как реализован в шаблоне |
+|---------|-------|------------------------|
+| **Events of Instruction** | Gagné, 1965 | 12 обязательных секций = 9 events |
+| **Multimedia Learning** | Mayer, 2001 | ASCII-визуализации + таблицы + текст |
+| **Cognitive Load Theory** | Sweller, 1988 | Ограничение объёма (2500-4500 слов) |
+| **Vicarious Learning** | Bandura, 1977 | Секция «Кейсы из реальных компаний» |
+
+---
+
 ## Принципы
 
 1. **Практический фокус** — конкретные действия, не абстрактные советы
