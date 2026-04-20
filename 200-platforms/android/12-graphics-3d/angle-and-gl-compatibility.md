@@ -72,6 +72,56 @@ App uses OpenGL ES API
 
 ---
 
+## Как работает — детали
+
+### Архитектура ANGLE
+
+ANGLE имеет модульную архитектуру:
+- **EGL implementation** — platform-specific context creation.
+- **GLES implementation** — OpenGL ES 2.0/3.0/3.1/3.2 full spec.
+- **Backends** — Vulkan, D3D, Metal, OpenGL desktop.
+- **Shader translator** — GLSL ES → SPIR-V (Vulkan) / HLSL (D3D) / Metal shader language.
+
+На Android активен Vulkan backend. Каждый GL call translates:
+- `glDrawElements` → `vkCmdDrawIndexed` (после state setup).
+- `glBindTexture` → image layout transition + descriptor update.
+- `glUseProgram` → pipeline binding (with PSO lookup).
+- `glUniformMatrix4fv` → UBO update или push constant.
+
+### Pipeline state management
+
+GL состояние (blend mode, depth test, culling) держится в mutable state в GL, но Vulkan требует pre-compiled PSO. ANGLE:
+1. Hashes current GL state.
+2. Looks up в PSO cache.
+3. Если miss — creates new VkPipeline.
+4. Binds.
+
+Cache hit — fast. Cache miss (new state combination) — stall. Most apps hit cache большинство frames.
+
+### Shader translation
+
+GLSL ES shader compiled в SPIR-V at runtime через `glslang`. Cached для reuse. First launch может быть slower как все unique shaders compile.
+
+ANGLE uses Vulkan pipeline cache — saves compiled shader binaries between sessions. Second launch near-instant.
+
+### Vertex buffer handling
+
+GL `glBufferData` — single call. ANGLE:
+1. Creates VkBuffer.
+2. Allocates memory.
+3. Если DEVICE_LOCAL — staging buffer copy.
+4. Tracks ownership.
+
+Extra overhead per call, but for static buffers amortized.
+
+### Texture handling
+
+`glTexImage2D` → VkImage creation + upload. ANGLE может use Host Image Copy (VPA-16) если available — skip staging.
+
+Mipmap generation (`glGenerateMipmap`) → vkCmdBlitImage sequence.
+
+---
+
 ## Performance
 
 Обычно ANGLE:

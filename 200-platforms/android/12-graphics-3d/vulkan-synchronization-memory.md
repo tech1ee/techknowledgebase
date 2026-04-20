@@ -33,7 +33,67 @@ primary_sources:
 
 # Vulkan Synchronization и Memory
 
-Vulkan — explicit API, значит программист отвечает за два сложных domain: **synchronization** (execution и memory dependencies между commands) и **memory management** (allocation, typing, binding). Неправильное использование — source most Vulkan bugs.
+Vulkan — explicit API, значит программист отвечает за два сложных domain: **synchronization** (execution и memory dependencies между commands) и **memory management** (allocation, typing, binding). Неправильное использование — source most Vulkan bugs. Эти две темы — самое сложное в Vulkan, и понимание их — маркер продвинутого Vulkan developer'а.
+
+---
+
+## Зачем это знать
+
+**Первое — correctness.** Без правильной synchronization — race conditions, visual corruption, crashes. Symptom может appear random на разных GPUs.
+
+**Второе — performance.** Over-synchronization кастратирует parallelism. Under-synchronization = bugs. Finding sweet spot — skill.
+
+**Третье — mobile specifics.** Memory types на mobile other than desktop (unified memory model, lazy allocation for TBR). Правильные choices значат разница между smooth 60 FPS и frame drops.
+
+---
+
+## Prerequisites
+
+| Тема | Зачем нужно |
+|---|---|
+| [[vulkan-pipeline-command-buffers]] | CBs между которыми sync |
+| [[vulkan-on-android-fundamentals]] | Core Vulkan concepts |
+| [[tile-based-rendering-mobile]] | Memoryless attachments |
+
+---
+
+## Терминология
+
+| Термин | Что |
+|---|---|
+| Execution dependency | Порядок между stages (A перед B) |
+| Memory dependency | Visibility writes A для reads B |
+| Semaphore | GPU-to-GPU sync между queue submissions |
+| Fence | GPU-to-CPU sync (CPU ждёт GPU done) |
+| Barrier | Synchronization within command buffer |
+| Timeline semaphore | Semaphore с monotonically incrementing counter |
+| Image layout | Internal GPU representation image (COLOR_ATTACHMENT_OPTIMAL, SHADER_READ_ONLY_OPTIMAL, etc.) |
+| Pipeline stage | Конкретная stage rendering pipeline где synchronization applies |
+| Access mask | What operation (read/write, specific type) synchronization covers |
+| Memory type | Category of memory (DEVICE_LOCAL, HOST_VISIBLE, etc.) |
+| Heap | Pool of memory (GPU heap, system heap) |
+| VMA | Vulkan Memory Allocator, AMD's recommended allocator library |
+| Lazy allocation | Memory backing allocated on-demand, used для transient resources |
+
+---
+
+## Историческая справка
+
+В OpenGL ES driver handled sync transparently — программист не думал. Но это stopping point performance:
+- Driver needed to track dependencies conservatively.
+- Over-synchronization common (driver can't know application intent).
+- Multi-threaded rendering impossible без significant performance loss.
+
+Vulkan philosophy: expose sync, let programmer decide.
+
+Historical Vulkan sync API:
+- **Vulkan 1.0 (2016):** VkPipelineBarrier, VkEvent, VkSemaphore, VkFence. Complex API с separate masks.
+- **Vulkan 1.1 (2018):** Subgroup operations.
+- **Vulkan 1.2 (2019):** Timeline semaphores — more flexible sync.
+- **Vulkan 1.3 (2022):** `VK_KHR_synchronization2` — simplified API (unified `VkDependencyInfo`).
+- **Vulkan 1.4 (2024):** Host image copy (no staging buffer).
+
+VPA-16 (Android 16) requires synchronization2 — модернизация developer experience.
 
 ---
 
@@ -183,6 +243,103 @@ Production Vulkan apps обычно используют VMA.
 
 ---
 
+## Staging buffer pattern
+
+Для DEVICE_LOCAL memory (быстро для GPU) CPU не может write directly. Pattern:
+
+1. Create staging buffer в HOST_VISIBLE memory.
+2. CPU писет data в staging buffer.
+3. Command buffer copies staging → DEVICE_LOCAL via `vkCmdCopyBuffer`.
+4. Submit, wait completion.
+5. Destroy staging buffer.
+
+```cpp
+// Create staging
+VkBuffer stagingBuffer;
+VkDeviceMemory stagingMem;
+createBuffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+             stagingBuffer, stagingMem);
+
+// Map, write data
+void* mapped;
+vkMapMemory(device, stagingMem, 0, size, 0, &mapped);
+memcpy(mapped, srcData, size);
+vkUnmapMemory(device, stagingMem);
+
+// Create destination
+VkBuffer destBuffer;
+createBuffer(size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+             destBuffer, destMem);
+
+// Copy command
+VkBufferCopy copyRegion = { 0, 0, size };
+vkCmdCopyBuffer(cmd, stagingBuffer, destBuffer, 1, &copyRegion);
+
+// Submit and wait
+submitAndWait(cmd);
+
+// Cleanup staging
+vkDestroyBuffer(device, stagingBuffer, nullptr);
+vkFreeMemory(device, stagingMem, nullptr);
+```
+
+Host image copy (VPA-16) bypasses staging buffer — can write directly в VkImage.
+
+## Queue families
+
+Vulkan GPUs expose multiple **queue families**:
+- **Graphics** — vertex + fragment + compute.
+- **Compute** — compute only.
+- **Transfer** — memory copies only.
+- **Sparse binding** — sparse resources.
+
+Different queue families могут execute parallel. Async compute — doing compute work parallel с graphics. На mobile typically:
+- 1 graphics queue (main rendering).
+- 1 transfer queue (for async uploads) — available on most modern SoCs.
+- 1 compute queue — shared или separate.
+
+```cpp
+uint32_t queueFamilyCount;
+vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queueFamilyCount, nullptr);
+std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+vkGetPhysicalDeviceQueueFamilyProperties(gpu, &queueFamilyCount, queueFamilies.data());
+
+// Find specific queue family
+for (uint32_t i = 0; i < queueFamilyCount; i++) {
+    if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+        graphicsQueueFamilyIndex = i;
+    }
+    if (queueFamilies[i].queueFlags == VK_QUEUE_TRANSFER_BIT) {
+        transferQueueFamilyIndex = i;  // dedicated transfer queue
+    }
+}
+```
+
+## Queue ownership transfer
+
+Resources accessed by multiple queue families требуют ownership transfer. Rare в простых apps, но important если используете async transfer queue:
+
+```cpp
+// Release from graphics queue
+VkBufferMemoryBarrier2 release = {
+    .srcQueueFamilyIndex = graphicsQueueFamilyIndex,
+    .dstQueueFamilyIndex = transferQueueFamilyIndex,
+    // ...
+};
+
+// Acquire in transfer queue (on submit там)
+VkBufferMemoryBarrier2 acquire = {
+    .srcQueueFamilyIndex = graphicsQueueFamilyIndex,
+    .dstQueueFamilyIndex = transferQueueFamilyIndex,
+    // ...
+};
+```
+
+---
+
 ## Memoryless attachments
 
 Ключевой mobile feature. Depth buffer, G-buffer, transient offscreen для TBR:
@@ -197,6 +354,49 @@ VkImageCreateInfo depthImage = {
 ```
 
 Tile memory never flushed to DRAM. Zero bandwidth cost для depth.
+
+---
+
+## Реальные кейсы
+
+### Filament memory strategy
+
+Filament uses VMA (Vulkan Memory Allocator) под капотом:
+- Static vertex/index buffers: DEVICE_LOCAL + staging upload.
+- Per-frame UBOs: HOST_VISIBLE + HOST_COHERENT, ring buffer pattern.
+- Textures: DEVICE_LOCAL с staging, или Host Image Copy где supported.
+- Depth/G-buffer: LAZILY_ALLOCATED (memoryless).
+
+Peak memory на Sponza scene: ~80 MB device local, 8 MB host visible для ring buffers.
+
+### Planner 5D custom engine
+
+Custom allocator (до VMA existed):
+- Pool of DEVICE_LOCAL blocks (16 MB each).
+- Linear sub-allocations within pool.
+- Defragmentation periodically.
+- Staging pool 32 MB reused для uploads.
+
+Peak usage: ~60 MB для 50-object interior scene с PBR textures.
+
+### Timeline semaphore use case
+
+Synchronizing async compute с graphics:
+```cpp
+// Graphics queue signals timeline = N
+vkQueueSubmit(graphicsQueue, ..., { .signalSemaphoreValue = N });
+
+// Compute queue waits N, then performs post-processing
+vkQueueSubmit(computeQueue, ..., {
+    .waitSemaphoreValue = N,
+    .signalSemaphoreValue = N+1,
+});
+
+// Main thread waits N+1 before present
+vkWaitSemaphores(device, { .pSemaphores = &timeline, .pValues = &nplus1 });
+```
+
+Traditional binary semaphores не enough — timeline позволяет multi-step синхронизацию.
 
 ---
 
