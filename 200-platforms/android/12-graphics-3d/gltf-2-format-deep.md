@@ -35,6 +35,29 @@ difficulty: 3
 
 # glTF 2.0: де-факто стандарт
 
+## Историческая справка
+
+Путь к glTF 2.0 и его adoption:
+
+- **1970s-1980s — ранние форматы.** PLY, STL — академические, simple geometry.
+- **1990s — OBJ (Wavefront Technologies).** Text-based, still used. Только geometry + basic materials.
+- **1996 — COLLADA (Sony CE).** XML-based, comprehensive. But verbose и slow to parse.
+- **2005 — FBX становится dominant.** Autodesk proprietary, industry-standard для authoring. Closed format, license fees.
+- **2011 — Khronos начинает glTF working group.**
+- **2015 — glTF 1.0 released.** Embedded shader code — проблематично для cross-platform.
+- **2017 — glTF 2.0 released.** Removed shader code, added **PBR metallic-roughness** materials. Industry takes notice.
+- **2018 — Google Filament adopts glTF 2.0.**
+- **2019 — Facebook / Meta use glTF для VR assets.** Quest store.
+- **2020 — Mozilla uses для WebXR.** Web standard for 3D.
+- **2021 — Apple USDZ (Universal Scene Description zip).** Apple's alternative, но glTF remains web/Android default.
+- **2023 — glTF 2.0 extensions stabilized.** KHR_mesh_compression (meshopt), KHR_texture_basisu, KHR_lights_punctual standardized.
+- **2026 — Near-universal adoption.** Unity (via plugin), Unreal, Godot, Blender, Maya — all export/import glTF 2.0.
+
+glTF success factors: open, royalty-free, PBR-focused, streaming-friendly, Khronos backing, good tooling (validator, viewer).
+
+---
+
+
 glTF (**GL Transmission Format**) — open-standard Khronos для 3D-ассетов, оптимизированный для transmission и rendering, не authoring. Version 2.0 released 2017, с тех пор became "JPEG для 3D": Android / iOS / web / Unreal / Unity / Godot / Filament — все support. Google Filament uses glTF as primary format.
 
 ---

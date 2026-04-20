@@ -29,6 +29,27 @@ primary_sources:
 
 # Texture compression на mobile
 
+## Историческая справка
+
+Texture compression эволюционировал через несколько поколений:
+
+- **1996 — S3TC (DXT).** S3 Graphics introduced block compression. DXT1/3/5 formats. Patented, licensing issues.
+- **2000s — desktop adoption.** OpenGL EXT_texture_compression_s3tc. Ubiquitous в games.
+- **2002 — PVRTC (Imagination).** First mobile texture compression, PowerVR chips.
+- **2006 — ETC1.** Ericsson Texture Compression, open royalty-free. Mali, Adreno support.
+- **2012 — ETC2.** Improved ETC1 with alpha. OpenGL ES 3.0 required.
+- **2012 — ASTC (ARM).** Adaptive Scalable Texture Compression. Wide range of bit rates (0.89 bpp to 8 bpp). Variable block sizes.
+- **2015 — BC7 (desktop).** High-quality desktop format.
+- **2019 — Basis Universal.** Binomial LLC — transcoded-to-native format. Paradigm shift: single source file, native на device.
+- **2022 — KTX 2.0 с KHR_texture_basisu.** Khronos standardizes container.
+- **2023 — glTF 2.0 extension adopts KTX 2.0.** Industry standardizes.
+- **2026 — KTX 2.0 + Basis Universal** — default для production mobile apps.
+
+Каждая revolution принесла ~2× better compression или ~2× better quality. Совместимость maintained through `textureCompressionSupported` queries.
+
+---
+
+
 Mobile apps с textures легко превышают 500 MB APK без compression. KTX2 + Basis Universal — современный стандарт 2026, reducing 5-10× от PNG with imperceptible quality loss, и transcoding на device в GPU-native format.
 
 ---
