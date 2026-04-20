@@ -1,7 +1,7 @@
 ---
 title: "Android MOC"
 created: 2026-02-09
-modified: 2026-02-09
+modified: 2026-04-20
 type: moc
 tags:
   - topic/android
@@ -83,6 +83,22 @@ tags:
 - [[android-canvas-drawing]] — 2D-рисование: Canvas, Paint, Path, трансформации
 - [[android-graphics-apis]] — графические API: OpenGL ES, Vulkan, выбор уровня абстракции
 - [[android-animations]] — от ValueAnimator до Compose Transition, Choreographer и VSYNC
+
+### Graphics & 3D
+> Полноценный курс по 3D-графике с абсолютного нуля до уровня Planner 5D / IKEA Place.
+
+- ⭐ [[android-graphics-3d-moc]] — карта раздела: 16 модулей от математики до capstone
+- **Фундамент:** [[gpu-architecture-fundamentals]] · [[tile-based-rendering-mobile]] · [[rendering-pipeline-overview]]
+- **Android stack deep:** [[surfaceflinger-and-buffer-queue]] · [[vsync-choreographer-deep]] · [[android-graphics-stack-overview-v2]]
+- **Низкоуровневые API:** [[vulkan-on-android-fundamentals]] · [[vulkan-pipeline-command-buffers]] · [[angle-and-gl-compatibility]] · [[opengl-vs-vulkan-decision]]
+- **Шейдеры:** [[shader-programming-fundamentals]] · [[glsl-language-deep]] · [[spir-v-and-compilation]] · [[agsl-runtime-shader-compose]] · [[shader-compilation-jitter-mitigation]]
+- **Движки:** ⭐ [[engine-comparison-matrix]] · [[filament-architecture-deep]] · [[sceneview-arcore-composable-3d]] · [[godot-4-on-android-renderer]]
+- **Compose-интеграция:** [[compose-canvas-drawscope-deep]] · [[graphicslayer-modifier-deep]] · [[androidexternalsurface-vs-embedded]] · [[filament-inside-compose]]
+- **Оптимизация:** [[frustum-culling]] · [[occlusion-culling]] · [[level-of-detail-lod]] · [[instancing-batching-draw-calls]] · [[overdraw-and-blending-cost]] · [[gpu-memory-management-mobile]]
+- **Production:** [[thermal-throttling-and-adpf]] · [[frame-pacing-swappy-library]] · [[vulkan-profiles-vpa-16-android16]] · [[battery-drain-plane-detection]]
+- **AR:** [[arcore-fundamentals]] · [[arcore-plane-detection-deep]] · [[arcore-depth-api]] · [[arcore-geospatial-api-vps]] · [[ar-lighting-estimation]] · [[ar-occlusion-rendering]]
+- **Кейсы:** [[case-planner-5d]] · [[case-ikea-place-ar]] · [[case-sweet-home-3d-android]] · [[case-magicplan-ndk-ar]]
+- **Capstone:** [[build-3d-home-planner-from-scratch]]
 
 ### UI: Jetpack Compose
 - [[android-compose]] — декларативный UI: Composable, State, Recomposition
