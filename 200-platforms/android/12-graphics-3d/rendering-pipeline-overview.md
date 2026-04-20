@@ -197,6 +197,27 @@ difficulty: 4
 
 ---
 
+## Историческая эволюция
+
+Rendering pipeline в текущем виде — результат 40 лет эволюции. Понимание истории объясняет, почему некоторые стадии есть, некоторые deprecated, и куда движется эта архитектура в 2026.
+
+- **1980-е — fixed-function pipelines.** Первые GPU (SGI Reality Engine, Voodoo 1) имели полностью fixed-function pipeline: vertex transform, lighting, rasterization, texture mapping — всё hardwired.
+- **1999 — GeForce 256, первый consumer T&L (Transform & Lighting).** Hardware vertex transform, но всё ещё fixed logic.
+- **2001 — GeForce 3, первые programmable vertex shaders.** DirectX 8.0 / vertex shader 1.1. Появляется ключевое разделение programmable vs fixed-function.
+- **2002 — Radeon 9700, programmable pixel shaders.** Pixel shader 2.0.
+- **2006 — GeForce 8800, unified shader architecture.** Vertex и pixel (тогда уже fragment) shaders работают на одинаковых ALU. Это позволяет GPU балансировать нагрузку.
+- **2010 — OpenGL 4, tessellation shaders.** Hull + domain (control + evaluation) shaders для adaptive mesh subdivision.
+- **2015 — OpenGL ES 3.1, compute shaders на mobile.** Первый generic compute на mobile.
+- **2016 — Vulkan, pipeline state objects (PSO).** Immutable state snapshots — CPU cost validation убит.
+- **2018 — NVIDIA Turing, mesh shaders.** Заменяют vertex + geometry stages одним mesh shader. Лучше для modern meshlet-based renderers.
+- **2020 — Ray tracing integrated в graphics pipeline.** DirectX 12 Ultimate, Vulkan RT extensions.
+- **2023 — Work graphs (DirectX 12).** Producer-consumer GPU-driven pipeline — GPU сам spawn'ит дополнительные work items.
+- **2024–2026 — Mesh shaders на mobile** (Adreno 730+, Mali-G720). Variable Rate Shading (VRS) — разное разрешение shading per tile.
+
+Направление ясное: от **CPU-driven rigid pipeline** к **GPU-driven flexible graph**. Но в 2026 mobile ещё живёт классическим vertex-fragment pipeline — mesh shaders только начинают приходить, работы graphs на mobile нет.
+
+---
+
 ## Теоретические основы
 
 ### Programmable vs fixed-function
@@ -233,6 +254,90 @@ Winding order: по умолчанию OpenGL/Vulkan — counter-clockwise = fro
 - **Premultiplied:** `(1, 1-srcAlpha)` — когда src RGB уже умножен на alpha.
 
 Blending на TBR выполняется в tile memory — очень дёшево. На IMR — через ROP → framebuffer → ROP reads, дорого.
+
+### Каждая стадия детально
+
+**1. Input Assembly (IA).** Читает index buffer + vertex buffer, строит primitives. Primitive topology configurable: `POINT_LIST`, `LINE_LIST`, `LINE_STRIP`, `TRIANGLE_LIST`, `TRIANGLE_STRIP`, `TRIANGLE_FAN`. На mobile чаще всего `TRIANGLE_LIST` (с index buffer для переиспользования vertices).
+
+Primitive restart: в strip топологиях специальный index (`0xFFFFFFFF` для 32-bit) сигнализирует «начать новый strip». Экономит на submission, но немного медленнее rasterizer.
+
+Vertex binding — configurable: можно несколько vertex buffer, interleaved или separate (position / normal / UV отдельно). Separate — лучше cache locality, если разные passes используют разные subsets (например, depth pre-pass нужен только position).
+
+**2. Vertex Shader.** Execute per-vertex. Output — transformed position (in clip space) + varyings. Limit: обычно до 32 varying vec4 (output locations). Typical work: MVP multiplication, normal transform, UV passthrough.
+
+Optimization: vertex cache reuse — GPU кэширует transformed vertices по index. Index buffer с cache-friendly ordering (vertex cache optimizer — Forsyth 2006, meshoptimizer лайбрари) уменьшает vertex shader invocations на 30–50%.
+
+**3. Tessellation Control Shader (TCS).** Optional. Принимает patch (обычно quad или triangle), выводит control points и tessellation levels. На mobile почти не используется (overhead высок).
+
+**4. Tessellation Evaluation Shader (TES).** Optional. Выполняется для каждого сгенерированного tessellated vertex. Позиция через interpolation control points.
+
+**5. Geometry Shader.** Optional. Принимает primitive (triangle), может output 0, 1 или много primitives. Legacy feature, slow on mobile — deprecated практически везде.
+
+**6. Primitive Assembly.** Собирает треугольники из vertex outputs. Определяет winding order.
+
+**7. Clipping.** Fixed-function. Отсекает geometry outside clip volume. Clip volume в OpenGL: `-w ≤ x, y, z ≤ w`. В Vulkan (и DirectX): `-w ≤ x, y ≤ w, 0 ≤ z ≤ w` (half-Z).
+
+Clipping может генерировать новые vertices (например, треугольник частично за пределами — создаётся четырёхугольник, разбивается на два треугольника). Это hardware-cheap, но может увеличить число fragments.
+
+**8. Perspective Divide.** Fixed-function. `(x, y, z, w)` → `(x/w, y/w, z/w, 1/w)`. Результат — Normalized Device Coordinates (NDC), где `-1 ≤ x, y ≤ 1`, `0 ≤ z ≤ 1` (Vulkan).
+
+`1/w` сохраняется для **perspective-correct interpolation** attributes в fragment stage.
+
+**9. Viewport Transform.** Fixed-function. NDC → pixel coordinates через viewport matrix. `x_pixel = (x_ndc + 1) × viewport.width / 2 + viewport.x`.
+
+**10. Face Culling.** Optional fixed-function. Определяет per triangle — front или back — по signed area (sign of cross product of triangle edges в screen space). Cull mode configurable: `NONE`, `FRONT`, `BACK`, `FRONT_AND_BACK`.
+
+**11. Rasterization.** Fixed-function. Triangle → fragments. Использует edge equations или scan-line alg. Mobile GPUs обычно tile-based rasterizer (по 4×4 или 8×8 quads внутри tile).
+
+Для each pixel вычисляется:
+- Barycentric coordinates — для interpolation varyings.
+- Sample coverage (MSAA) — пиксель может быть partially covered.
+- Derivatives (`dFdx`, `dFdy`) — для mipmap selection.
+
+**12. Early-Z.** Optional hardware. Depth test до fragment shader. Условия:
+- Fragment shader не пишет `gl_FragDepth`.
+- Fragment shader не использует `discard`.
+- Depth write enabled.
+
+Mali и PowerVR делают это через Hierarchical-Z (Hi-Z): упрощённая depth pyramid на block level, быстрый coarse reject больших чанков.
+
+**13. Fragment Shader.** Execute per-fragment. Output — colour (и optionally depth). Typical work: texture sampling, lighting computation, normal mapping.
+
+Compiler optimizations: inlining, dead code elimination, constant folding. На mobile важно — fragment shader runs 100s of thousands per frame.
+
+**14. Late-Z.** Если early-Z пропущен, depth test здесь.
+
+**15. Stencil Test.** Configurable. Используется для: masking (рендер только в определённой области), shadow volumes (legacy), portal effects.
+
+**16. Blending.** ROP. `src * srcFactor [op] dst * dstFactor`. Operations: `ADD`, `SUBTRACT`, `MIN`, `MAX`. На TBR — tile memory R/W; cost близок к fragment shader.
+
+**17. Framebuffer Write.** На IMR: MMIO write в DRAM. На TBR: write в tile memory; финальный store в конце render pass.
+
+**18. Compositing (SurfaceFlinger).** Android compositor комбинирует swapchain из приложения + system UI (status bar, navigation bar) + overlays. Hardware Composer HAL выбирает между GPU composition и Display Overlay hardware.
+
+**19. Display.** Scanout в display panel (OLED/LCD), synchronized with VSYNC.
+
+### Perspective-correct interpolation
+
+Naive linear interpolation barycentric coordinates дает **affine interpolation**, которая искажается в perspective (уходящая вдаль линия кажется «вогнутой»). Hardware делает **perspective-correct**:
+
+```
+attribute_interp = (a_v0 / w_v0 * bary0 + a_v1 / w_v1 * bary1 + a_v2 / w_v2 * bary2) /
+                   (1/w_v0 * bary0 + 1/w_v1 * bary1 + 1/w_v2 * bary2)
+```
+
+`1/w` сохранён в NDC. Hardware делает это автоматически. GLSL atribute с qualifier `noperspective` (если поддерживается) — линейная interpolation, без деления.
+
+### Derivatives
+
+Fragment shader может вызывать `dFdx(value)` / `dFdy(value)` — получить разницу value между соседними фрагментами. Используется для:
+- Mipmap selection (auto LOD в `texture()`).
+- Screen-space normal reconstruction.
+- Anti-aliasing edge detection.
+
+Cost: practically free — GPU всегда выполняет fragment shader в **quads** (2×2 блоки), derivatives — differences between invocations.
+
+**Важно:** derivatives могут быть **wrong** near triangle edges (quads где только 1–2 fragments valid). В `discard`-heavy shaders это видно как artifacts.
 
 ---
 
@@ -354,6 +459,46 @@ Scene использует ~50 materials × 2 shader variants (lit/unlit) = ~100
 
 AR shaders избегают `discard` чтобы включить early-Z. Результат — fragment shader executions сниженные на 20–30% через ранний depth test occluded фрагментов.
 
+### Кейс 3b: Pipeline cache warm-up на старте приложения
+
+Ikea Place делает pipeline cache warm-up при старте: предварительно создаёт все нужные PSO и прогревает Vulkan pipeline cache. Время старта растёт на 200 мс, но нет hitches при первом использовании каждого material.
+
+Код паттерна:
+```kotlin
+class PipelineWarmup {
+    fun warmupAllPipelines() {
+        val pipelineInfos = listOf(
+            opaquePipelineInfo,
+            translucentPipelineInfo,
+            skyboxPipelineInfo,
+            shadowPipelineInfo
+        )
+        val pipelines = Array(pipelineInfos.size) { VK_NULL_HANDLE.toLong() }
+        vkCreateGraphicsPipelines(
+            device,
+            pipelineCache,  // shared cache
+            pipelineInfos.size,
+            pipelineInfos.toNativeArray(),
+            null,
+            pipelines
+        )
+    }
+}
+```
+
+На Snapdragon 8 Gen 3 warm-up 30 PSO ≈ 180 мс. Без него first-frame при usage каждого material — ~30 мс hitch. Users notice.
+
+### Кейс 4: Mesh shader experiments
+
+Mesh shaders доступны на Adreno 730+ (Snapdragon 8 Gen 2) и новых Mali (2024+). Переписывание vertex + index-based pipeline на meshlet-based (группы ~64–128 triangles с perlined vertex data) дает:
+- 40% снижение geometry bandwidth (meshlets compressed).
+- Per-meshlet culling (frustum, occlusion) — skip 50–80% invisible meshlets.
+- Per-meshlet LOD selection.
+
+На Galaxy S23 Ultra Epic Citadel demo: mesh shader pipeline 120 FPS vs classic 85 FPS.
+
+На mobile это ещё experimental — driver quality варьируется. Production apps (Planner 5D, IKEA Place) пока не приняли.
+
 ### Кейс 3: Filament — Forward+ pipeline
 
 Forward+ использует:
@@ -362,6 +507,67 @@ Forward+ использует:
 - PSO 3: skybox (culling off, depth test always, depth write off)
 
 3 PSO на scene — минимум state changes.
+
+---
+
+## CPU-side: как draw call доходит до GPU
+
+Draw call не прямой hardware command — это complex pipeline через несколько software layers:
+
+```
+Application code (Kotlin/C++)
+        ↓
+Vulkan API (vkCmdDrawIndexed)
+        ↓
+Vulkan driver (vendor-specific: Qualcomm, ARM, Samsung)
+        ↓
+Kernel driver (via ioctl)
+        ↓
+GPU command stream (device-specific instruction format)
+        ↓
+GPU hardware
+```
+
+**Vulkan API call** записывает command в **command buffer** — это CPU-side memory buffer с encoded commands. Команда не выполнена — просто записана.
+
+**Submission** (`vkQueueSubmit`) отправляет command buffer в queue. Driver валидирует (layer checks), transplates в device-specific command stream, помещает в kernel queue.
+
+**Kernel driver** делает MMIO writes в GPU registers, сообщая о new work. GPU scheduler подхватывает.
+
+**GPU hardware** обрабатывает command stream. Выполняет стадии pipeline.
+
+Latency total: typically 2–5 мс между `vkCmdDrawIndexed` и начало GPU execution на Android. Это **хорошо** — намного быстрее, чем OpenGL ES (где каждый glDraw* call синхронный и валидируется).
+
+### Почему OpenGL ES медленнее
+
+В OpenGL ES каждый `glDrawElements` валидирует all state (depth, blend, cull, bindings). Это happens в driver, занимает ~20–50 μs per draw. При 1000 draws = 20–50 мс только на CPU overhead.
+
+Vulkan PSO идея: всё validated заранее, при creation. `vkCmdBindPipeline` — фактически указатель; `vkCmdDraw` — просто encoding command. ~1–2 μs per draw. 1000 draws = 1–2 мс.
+
+### Multithreaded command recording
+
+Vulkan command buffers могут recording в разных threads parallel. Scene с 5 render passes (shadow, opaque, translucent, UI, tonemap) — каждый в своём thread. Final submission sequential на main thread.
+
+Mobile Android scenarios: ~4–8 threads typical. Beyond — ROI diminishing из-за scheduling overhead.
+
+---
+
+## GPU-side: выполнение stages
+
+GPU внутренне organized как **distributed parallel machine**:
+
+- **Command Processor (CP)** — читает command stream, dispatches work.
+- **Shader Cores (SC)** — выполняют programmable stages (vertex, fragment, compute). Параллельные, выполняют warps/wavefronts.
+- **Rasterizer / RBE** — fixed-function hardware для rasterization.
+- **TMU (Texture Mapping Units)** — texture sampling.
+- **ROP (Render Output Units)** — blending, depth/stencil test, write.
+
+Между стадиями — **FIFO queues**. Когда SC заканчивает vertex shader, output помещается в FIFO. Rasterizer читает из FIFO. Если FIFO full — upstream stage stalls.
+
+Поэтому balance между stages критичен. Симптомы:
+- Vertex-bound (много transform, мало ROP): Vertex FIFO full. Решение — LOD, упрощение vertex shader.
+- Fragment-bound: Fragment stage занят texture sampling / ALU. Решение — снижать разрешение texture, упрощать shader.
+- ROP-bound: bandwidth на framebuffer high. Решение — снижать overdraw, MSAA off (на IMR), AFBC on (на Mali).
 
 ---
 

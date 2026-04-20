@@ -181,6 +181,127 @@ Three timings:
 
 Proper offsets give app time to render before SF time. Android auto-tunes offsets based on hardware.
 
+### BufferQueue state machine — подробно
+
+BufferQueue хранит array of BufferSlots (обычно 3-4). Каждый slot имеет state:
+
+- **FREE**: available to dequeue.
+- **DEQUEUED**: producer обладает этим slot (в процессе рендера).
+- **QUEUED**: producer отдал buffer, waiting consumer pickup.
+- **ACQUIRED**: consumer получил buffer (в процессе compositing).
+- **SHARED**: rare, для special scenarios (e.g., PresentModeSharedContinuousRefresh).
+
+Transitions:
+```
+FREE → dequeueBuffer() → DEQUEUED
+DEQUEUED → queueBuffer() → QUEUED
+QUEUED → acquireBuffer() → ACQUIRED
+ACQUIRED → releaseBuffer() → FREE
+```
+
+Each transition через Binder IPC (producer-side process → system_server). Latency per transition: ~100 μs typical. 3 transitions per frame → ~300 μs IPC overhead. Acceptable.
+
+### Sync fences — why they matter
+
+Каждый buffer transition accompanied by **sync fence** — kernel object signalling when GPU operations complete.
+
+- **Acquire fence:** когда GPU закончил writing в buffer. Producer signals, consumer waits.
+- **Release fence:** когда consumer finished using buffer. Consumer signals, producer waits.
+
+Fences позволяют **pipelining** без polling. Producer может queue buffer с acquire fence not yet signaled; consumer acquires, waits fence GPU-side (не CPU-side). Parallelism high.
+
+Vulkan: `VkSemaphore` mapped к fence. SurfaceFlinger receives `VkSemaphore` through platform extensions.
+
+### Composition types
+
+SurfaceFlinger имеет два основных composition paths:
+
+1. **HWC composition (device composition):** HWC HAL handles всё. Zero GPU usage для composition. Best battery.
+2. **Client composition (GPU composition):** SurfaceFlinger использует OpenGL ES для composing всех layers в один framebuffer, потом пишет в display's BufferQueue. Higher battery cost.
+
+Hybrid: некоторые layers HWC, другие GPU composition (called "client target"). HWC provides final target для blend всего.
+
+Decision логика (упрощённо):
+- Check each layer: can HWC handle blend mode? Format? Rotation? Transform?
+- If all layers fit — full HWC composition.
+- If some don't — client composition of those layers, HWC blend with rest.
+- If nothing fits — full GPU composition.
+
+### ION / DMA-BUF allocation
+
+Underneath Gralloc — kernel memory allocation mechanisms:
+
+- **ION** (legacy, Android 8-11): Sony-developed framework for shared memory between processes и hardware.
+- **DMA-BUF** (Android 12+): replacement for ION. Kernel's generic buffer sharing.
+
+Both provide: shared memory exposable по fd across processes, accessible by CPU + GPU + display hardware.
+
+Different **heaps** for different use cases:
+- `SYSTEM_HEAP`: regular cached RAM. CPU-friendly.
+- `CONTIG_HEAP`: physically contiguous. Some hardware (older DSPs) требует.
+- `CARVEOUT_HEAP`: reserved at boot. Predictable but inflexible.
+
+Modern Android mostly использует SYSTEM_HEAP с scatter-gather IOMMU support.
+
+### Multi-display support
+
+Android 16 полностью supports multi-display:
+
+- **Foldable phones:** два displays, simultaneous или switched.
+- **External displays:** HDMI, DisplayPort.
+- **Virtual displays:** for screenshare, recording.
+
+SurfaceFlinger manages separate composition per display. Each display имеет own VSYNC signal, own HWC instance.
+
+Apps могут target specific display через WindowManager APIs. Vulkan swapchain supports multi-surface.
+
+### Adaptive Frame Rate
+
+Android 12+ introduced adaptive refresh. Display может skip refreshes если no new frames:
+
+- **Typical flow:** 120 Hz display, app renders at 60 FPS. Display refreshes at 60 Hz (half cadence).
+- **Battery saving:** display backlight / OLED pixel driving less.
+- **API:** `Surface.setFrameRate(fps, compatibility)`.
+
+Compatibility modes:
+- `FRAME_RATE_COMPATIBILITY_DEFAULT`: any refresh.
+- `FRAME_RATE_COMPATIBILITY_FIXED_SOURCE`: exact match (video playback, 24 FPS film).
+
+### HDR composition
+
+Android 13+ supports HDR10, HLG, Dolby Vision. HWC must blend HDR и SDR layers правильно:
+- Convert SDR layers to HDR colorspace (inverse tonemap).
+- Blend in HDR linear space.
+- Clip or tonemap for display capability.
+
+Requires hardware support. Most flagship 2022+ phones.
+
+### PresentMode timing detail
+
+Vulkan present modes map to specific SurfaceFlinger behaviors:
+
+**FIFO (VSYNC-locked):**
+1. vkAcquireNextImageKHR — dequeue from BufferQueue.
+2. App renders.
+3. vkQueuePresentKHR — queue buffer.
+4. SurfaceFlinger acquires at VSYNC, composes.
+5. Display shows.
+
+Latency: 1-2 frames typically. Battery-efficient.
+
+**MAILBOX (latest frame):**
+1. App renders as fast as possible.
+2. New buffer replaces old queued (not-yet-acquired) buffer.
+3. SurfaceFlinger always shows latest.
+
+Latency: minimum. Battery: high (constant rendering).
+
+**IMMEDIATE (no sync):**
+1. Presented buffer may not align with VSYNC — **tearing visible**.
+2. No FIFO buffering.
+
+Practically never used on mobile. OK for benchmarks/testing.
+
 ---
 
 ## Уровень 1 — начинающим
@@ -267,6 +388,34 @@ ARCore camera preview идёт через отдельный surface. SurfaceFli
 ### Games с 120 FPS
 
 Games запрашивают `VK_PRESENT_MODE_MAILBOX_KHR` + `setFrameRate(120.0f)`. SurfaceFlinger VSYNC-lock на 120 Hz display.
+
+### Кейс 4: Picture-in-Picture mode
+
+Когда video app entering PiP:
+1. WindowManager resizes Surface.
+2. BufferQueue reallocates buffers with new dimensions.
+3. App может продолжать rendering in smaller surface.
+4. SurfaceFlinger composes PiP window на top других apps.
+
+Challenge: reallocation pauses rendering briefly. Swappy и Vulkan must handle gracefully (VK_ERROR_OUT_OF_DATE_KHR → recreate swapchain).
+
+### Кейс 5: Foldable phone unfold
+
+Galaxy Fold и similar devices:
+- Unfold event: SurfaceFlinger detects display change.
+- VSYNC signal может switch from inner display to outer/merged display.
+- App receives Configuration change → recreates swapchain with new dimensions.
+
+Proper handling requires app состояние preservation + smooth transition. Bad handling — user sees brief black screen or flicker.
+
+### Кейс 6: Split-screen multi-window
+
+Android 7+ multi-window:
+- Каждое приложение имеет own surface in own BufferQueue.
+- SurfaceFlinger composes N app surfaces + system UI.
+- Each app surface может быть at different size / position.
+
+Challenges для games: sudden resize during gameplay, reduced render area (may reduce quality tier).
 
 ---
 

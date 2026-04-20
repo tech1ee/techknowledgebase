@@ -76,6 +76,26 @@ difficulty: 4
 
 ---
 
+## Историческая справка
+
+Z-buffer — одно из немногих изобретений в computer graphics, где можно назвать дату и автора. Вот полный контекст:
+
+- **1974 — Ed Catmull.** Диссертация «A Subdivision Algorithm for Computer Display of Curved Surfaces» (University of Utah). Catmull описывает algorithmic problem: как отобразить 3D surface на 2D screen с правильным hidden surface removal. Ранее использовались painter's algorithm (отсортировать polygons по distance, рисовать back-to-front) или BSP trees. Обе плохо scalable. Catmull предлагает: для каждого pixel хранить depth. Линейный по memory, независим от сцены.
+- **1975 — Tom Duff, Henry Fuchs.** Независимо предлагают похожие идеи в CGI/SIGGRAPH публикациях.
+- **1978 — Fuchs et al. BSP trees** для hidden surface. BSP остался в architecture-heavy scenes (Quake 1996).
+- **1983 — Silicon Graphics Iris 2000.** Первый commercial GPU с hardware z-buffer.
+- **1996 — 3dfx Voodoo 1.** Consumer-grade Z-buffered rasterizer. Революция PC gaming.
+- **1999 — Early-Z optimization появляется.** ATI Radeon и NVIDIA GeForce 3 имплементируют.
+- **2003 — Hierarchical Z (Hi-Z).** Block-level summary буфер для быстрого tile rejection.
+- **2009 — Reverse-Z описан.** [Matt Pettineo](https://therealmjp.github.io/posts/reversed-depth-buffer/), [Nathan Reed](https://www.reedbeta.com/blog/depth-precision-visualized/) и другие популяризируют.
+- **2015 — Windows 10 DX12.** Microsoft рекомендует reverse-Z как «best practice» для новых игр.
+- **2020+ — Filament, Unreal, Unity** все switch на reverse-Z default для новых проектов.
+- **2024 — Variable rate depth.** Некоторые GPU могут делать depth test с разной resolution по regions экрана.
+
+Интересный факт: Catmull — co-founder Pixar Animation Studios. Тот же человек, кто изобрёл z-buffer, основал студию, которая использовала его для Toy Story (1995).
+
+---
+
 ## Теоретические основы
 
 ### Catmull 1974 — оригинальная идея
@@ -90,6 +110,63 @@ difficulty: 4
 3. Если ближе — записать новый color и новый z. Иначе — отбросить.
 
 Elegant, parallel-friendly (no sorting of primitives). С 1980-х — стандарт всей аппаратной графики.
+
+### Математика precision: откуда берётся нелинейность
+
+Glubina в z-buffer хранится **после perspective divide**. Perspective projection matrix (стандартная):
+
+```
+P = | f/aspect  0                   0                     0                          |
+    | 0         f                   0                     0                          |
+    | 0         0       (near+far)/(near-far)   (2*near*far)/(near-far)              |
+    | 0         0                  -1                     0                          |
+```
+
+где `f = 1/tan(fovY/2)`.
+
+После умножения точки `(x, y, z_view, 1)`:
+- `clip.z = (near+far)/(near-far) * z_view + (2*near*far)/(near-far)`
+- `clip.w = -z_view`
+
+После perspective divide:
+```
+z_ndc = clip.z / clip.w = -( (near+far) + 2*near*far / z_view ) / (near-far)
+```
+
+Это **гиперболическая функция** `z_view`. Для `near=0.1, far=1000`:
+- `z_view = 0.1` → `z_ndc = 0.0`
+- `z_view = 1.0` → `z_ndc = 0.9001`
+- `z_view = 10.0` → `z_ndc = 0.99001`
+- `z_view = 100.0` → `z_ndc = 0.99901`
+- `z_view = 1000.0` → `z_ndc = 1.0`
+
+Логарифмическое распределение. Precision `z_view` около far — практически нулевая.
+
+### Float32 precision — второй шрам
+
+Float32 хранит ~23 бита mantissa. Для значений около `1.0`:
+- Precision = 2^(-23) ≈ 1.2 × 10⁻⁷.
+
+Для значений около `0.0001`:
+- Exponent снижается, effective precision shifts — ~1.0 × 10⁻¹¹ (много точнее).
+
+Стандартный z-buffer концентрирует values около `1.0` для far — удваивает проблему.
+
+### Reverse-Z математически
+
+Reverse-Z inverts: `z_ndc_rev = 1 - z_ndc`.
+
+```
+z_view = 0.1   → z_ndc_rev = 1.0    (near)
+z_view = 1.0   → z_ndc_rev = 0.0999
+z_view = 10.0  → z_ndc_rev = 0.00999
+z_view = 100.0 → z_ndc_rev = 0.00099
+z_view = 1000.0→ z_ndc_rev = 0.0    (far)
+```
+
+Now near z_ndc values около 1.0 (low float precision) соответствуют near objects, где precision не критична (объекты близко). Far z_ndc values около 0.0 (high float precision) соответствуют far objects, где precision критична.
+
+Выигрыш: ~20 бит effective precision вместо ~4.
 
 ### Nonlinear precision (legacy)
 
@@ -259,6 +336,46 @@ Vulkan `VK_EXT_depth_clip_enable`:
 
 Depth clamp useful для skyboxes (draw на `z = far_plane`, no need to clip).
 
+### Depth buffer на TBR/TBDR
+
+Depth buffer на tile-based GPUs — особая история. Вместо хранения всего depth buffer в DRAM, хранится **только per-tile section** в on-chip SRAM. Это:
+- Во-первых, экономит bandwidth (депт read/write не gehen to DRAM).
+- Во-вторых, позволяет `VK_ATTACHMENT_STORE_OP_DONT_CARE` — depth dropped после tile render.
+- В-третьих, комбинируя с `VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT` — attachment **никогда** не аллоцируется DRAM.
+
+На Adreno 730: 1920×1080×4 depth buffer (8 MB) — memoryless attachment экономит именно 8 MB device memory. Per-frame — не DRAM writes, не DRAM reads.
+
+Depth для shadow mapping — другая история. Shadow map **должен** быть сохранён в DRAM (используется в main pass как texture). Memoryless не применим.
+
+### Depth prepass на mobile — когда оправдан
+
+Depth pre-pass: render только depth (null fragment shader), потом main render pass с expensive shaders. Raison d'etre — early-Z culling main pass.
+
+На IMR: typically помогает. Overhead vertex transform compensated by fragment savings.
+
+На TBR (Mali, Adreno): **обычно contraindicated**. TBR binning уже делает per-tile primitive list; HSR (PowerVR) делает per-pixel occlusion free. Depth pre-pass добавляет второй vertex pass без существенного benefit.
+
+Исключения для TBR:
+- Fragment shader очень expensive (20+ texture samples).
+- Много overdraw (5x+).
+- Нет HSR (т.е. не PowerVR/Apple).
+
+Filament по умолчанию отключает depth pre-pass на mobile. Unreal Mobile — тоже.
+
+### Hardware depth compression
+
+Все mobile GPUs применяют lossless depth compression — typically 4× для plane-ish regions (pixels с coherent depth). Транспарентно для программиста. Adreno — UBWC (Universal Bandwidth Compression), Mali — AFBC (через framebuffer, не pure depth).
+
+Implications:
+- Если scene имеет много sharp depth discontinuities (deep foliage), compression ratio падает до 1.5×.
+- Bandwidth budget для depth не fixed — depends on content.
+
+### Double-buffered depth / depth resolve
+
+MSAA × depth — интересный case. Каждый subpixel имеет свой depth. В конце render pass для MSAA — **depth resolve**: avg или nearest sample выбирается как per-pixel depth.
+
+На mobile TBR depth MSAA — практически бесплатно (все samples в tile memory). На IMR — 4× depth bandwidth.
+
 ### Shadow map depth issues
 
 Shadow map — это просто depth buffer rendered from light. Precision requirements ещё выше (artifacts as shadow acne). Typical fixes:
@@ -294,6 +411,85 @@ Filament fragment shaders avoid discard через использование al
 | Reverse-Z требует новое hardware | Работает на любом OpenGL ES 3.0+ и Vulkan GPU |
 
 ---
+
+## Stencil buffer и его применения
+
+Stencil — 8-bit буфер, обычно packed с depth. Configurable per-fragment operations:
+- **Reference value** (to compare).
+- **Compare mask** (bits to consider).
+- **Write mask** (bits to write).
+- **Fail action, depth fail action, pass action**: KEEP, ZERO, REPLACE, INCREMENT, DECREMENT, INVERT.
+
+Классические use cases:
+
+**UI masking:** Render UI только inside определённой region. First pass: render mask shape в stencil (INCREMENT). Second pass: main UI, stencil test = `STENCIL_FUNC_EQUAL` к mask value.
+
+**Portal effects:** Сложный visual where через «портал» показывается другой мир. Stencil маркирует portal pixels, second render pass рисует мир через them.
+
+**Shadow volumes (legacy):** Carmack's reverse technique. Pre-shader era, up to Doom 3 (2004). Сегодня заменены shadow maps.
+
+**Deferred decals:** Project decals on geometry используя stencil для masking non-receiver surfaces.
+
+На mobile stencil тест обычно free если depth attachment с stencil (D24S8, D32S8) — ROP processes both together. Пример pipeline config:
+
+```cpp
+VkStencilOpState stencilOp = {
+    .failOp = VK_STENCIL_OP_KEEP,
+    .passOp = VK_STENCIL_OP_REPLACE,
+    .depthFailOp = VK_STENCIL_OP_KEEP,
+    .compareOp = VK_COMPARE_OP_ALWAYS,
+    .compareMask = 0xFF,
+    .writeMask = 0xFF,
+    .reference = 1,
+};
+
+VkPipelineDepthStencilStateCreateInfo ds = {
+    .stencilTestEnable = VK_TRUE,
+    .front = stencilOp,
+    .back = stencilOp,
+    ...
+};
+```
+
+## Polygon offset — детально
+
+Когда две surfaces copy depth (например, decal на wall), даже identical geometry может давать z-fighting из-за rasterization jitter. `VkPipelineRasterizationStateCreateInfo.depthBias*`:
+
+```
+effective_bias = depthBiasConstantFactor * depthFormatScale + 
+                 depthBiasSlopeFactor * max(|dz/dx|, |dz/dy|)
+```
+
+- **depthFormatScale** — resolution depth format (D24: 2⁻²⁴, D32: min resolvable difference).
+- **slopeFactor** — увеличивает bias для oblique surfaces (где depth changes быстро per pixel).
+
+Типичные values для shadow map:
+- `constantFactor = 0.005` (~5-10 depth units).
+- `slopeFactor = 1.5` (adjust для oblique surfaces).
+
+Слишком мало → shadow acne (self-shadowing artifacts). Слишком много → peter-panning (тени отделены от объекта).
+
+## Depth-based effects
+
+### Fog
+
+Depth value используется для exponential или linear fog:
+```glsl
+float depth = gl_FragCoord.z;
+float linearDepth = near / (far - depth * (far - near));
+float fogFactor = exp(-fogDensity * linearDepth);
+fragColor.rgb = mix(fogColor, fragColor.rgb, fogFactor);
+```
+
+### SSAO (Screen Space Ambient Occlusion)
+
+Sample depth values in hemisphere around fragment, compare к current depth. Если neighbours closer — occluded. На mobile: expensive, часто simplified до 4-8 samples.
+
+### Depth-based post-processing
+
+Depth of field (bokeh blur) — depth determines blur radius. Motion blur — per-pixel velocity computed from depth + reprojection.
+
+На mobile — frequently simplified или skipped. Battery budget не позволяет full screen-space effects.
 
 ## Подводные камни
 

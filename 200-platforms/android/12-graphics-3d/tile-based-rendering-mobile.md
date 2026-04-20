@@ -92,16 +92,28 @@ difficulty: 5
 
 ## Историческая справка
 
-- **1987 — Pixel-Planes 4 (UNC Chapel Hill).** Первая academic TBR-архитектура.
-- **1995 — PowerVR Series1 (NEC PCX1).** Первая commercial TBR для PC.
-- **1996 — PowerVR Series2 в Sega Dreamcast.** TBDR в потребительском устройстве.
-- **2005+ — PowerVR SGX в ранних смартфонах** (iPhone, HTC Nexus One).
-- **2007 — ARM Mali-200.** Первый Mali с TBR.
-- **2012 — Qualcomm Adreno 320.** Flex render (TBR + IMR switching).
-- **2016 — Vulkan 1.0.** `VkRenderPass` — API признание TBR как стандарта mobile.
-- **2018 — Apple A11 Bionic.** AGX custom TBDR.
-- **2023 — ARM Immortalis G720.** Ray tracing поверх TBR.
-- **2026 — Xclipse 960 (RDNA4-based).** AMD архитектура частично адаптирована к TBR через tiling cache.
+Tile-based rendering не был изобретён для мобильных устройств — его origin лежит в academic research 1980-х, когда проблема bandwidth была одинаково болезненной и на рабочих станциях.
+
+- **1983 — Pixel-Planes 3 (Fuchs et al., UNC Chapel Hill).** Первая parallel-rasterizer архитектура с scan-line декомпозицией. Ещё не tile, но заложила идею параллельной обработки экрана кусками.
+- **1987 — Pixel-Planes 4 (Fuchs, Poulton).** Формальная academic TBR-архитектура. Экран делится на blocks, parallel processors обрабатывают независимо. Опубликована на SIGGRAPH'87.
+- **1993 — Pixel-Planes 5 / PixelFlow.** Commercial incarnation idea. ~$500k рабочая станция.
+- **1995 — PowerVR Series1 (NEC PCX1).** Videologic (спин-офф ImgTec) сделала first consumer TBDR chip, для PC. 500 000 проданных юнитов.
+- **1996 — PowerVR Series2 в Sega Dreamcast.** TBDR в массовой потребительской консоли. Выживаемость идеи доказана.
+- **2001 — PowerVR MBX.** Первый mobile-targeted PowerVR. Использован в TI OMAP, позже в iPhone 2G/3G/3GS.
+- **2005+ — PowerVR SGX в первых смартфонах** (iPhone 3GS/4/4S, ранние Android — HTC Magic/Hero).
+- **2007 — ARM Mali-200.** Первая ARM TBR. Не TBDR — ARM целеустремлённо выбрала чистый TBR для упрощения hardware и экономии die-area.
+- **2012 — Qualcomm Adreno 320.** «Flex render»: может переключаться между TBR (mobile-style) и Direct Mode (desktop-style IMR) в зависимости от scene complexity. Driver определяет автоматически.
+- **2014 — Apple A8 (custom PowerVR GX6450).** Apple начинает кастомизировать PowerVR под iOS workloads.
+- **2016 — Vulkan 1.0.** `VkRenderPass` — первый API который сделал TBR semantics first-class. До Vulkan, OpenGL ES driver'ы были вынуждены inferring tile boundaries эвристиками — часто ошибались.
+- **2018 — Apple A11 Bionic (AGX 1st gen).** Apple dropped PowerVR licensing, сделала собственный TBDR engine. ImgTec financial crisis последствие.
+- **2020 — Apple M1 (AGX 2nd gen) desktop.** TBDR впервые вернулся на desktop через Mac. Desktop games вынужденно учитывать tile behaviour.
+- **2021 — Mali-G710 (Valhall architecture).** Command Stream Frontend 2.0, улучшенная tiling compression.
+- **2023 — ARM Immortalis G720 (5th Gen Valhall).** Hardware ray tracing units поверх TBR — гибридная архитектура.
+- **2024 — Imagination B-Series (Photon).** Возвращение Imagination в mobile race с PVRIC4 compression.
+- **2026 — Samsung Xclipse 960 (RDNA4-based).** AMD архитектура с Samsung tiling cache; не полный TBR, но bandwidth-aware IMR.
+- **2026 (April) — Qualcomm Adreno 830 (Snapdragon 8 Elite Gen 4).** Sliced rendering — tiling cache + cluster culling. Ближе всего к TBDR из Adreno-линейки.
+
+Почему академическая идея 1987 года заняла 20 лет чтобы стать mainstream? Ответ — **bandwidth economics**. В 1990-х VRAM был быстрым относительно GPU arithmetic (GPU был слабым). Начиная с мобилки 2000-х arithmetic стал дёшев, а bandwidth — дорог (mobile имеет shared LPDDR с CPU, и energy per byte access в 100× выше arithmetic). TBR идеально матчит этот disbalance. Этот же disbalance теперь приходит и на desktop — M1, Xclipse — значит tile-based thinking станет универсальным, а не только мобильным.
 
 ---
 
@@ -304,6 +316,131 @@ Samsung Xclipse (RDNA2/3/4) — гибрид. RDNA архитектурно IMR,
 
 Практика: Xclipse требует тех же render pass-оптимизаций как Mali/Adreno, но TBDR features (HSR) там нет — overdraw cost присутствует.
 
+### Аппаратная реализация: анатомия трёх поколений Mali
+
+Чтобы понять, как TBR устроен hardware-side, пройдём через эволюцию ARM Mali. Это важно, потому что ~60% Android devices в 2026 году работают на Mali GPU.
+
+**Mali-200 / Mali-400 (Utgard, 2007–2012):**
+- Разделение на dedicated Vertex Processor и Fragment Processors (до 4).
+- Tile size 16×16 пикселей.
+- Parameter Buffer — external DRAM, до 16 MB.
+- Нет compute shaders — pure graphics pipeline.
+- Hi-Z ограниченный (только для opaque pass).
+
+**Mali-T6xx/T7xx/T8xx (Midgard, 2012–2016):**
+- Unified Shader Core — vertex и fragment на одних ALU.
+- Tile size 16×16, с поддержкой до 48×48 (для less-complex scenes).
+- Compute shader support (OpenGL ES 3.1).
+- AFBC 1.0 — первая lossless compression framebuffer.
+
+**Mali-G7x/G5x (Bifrost, 2017–2019):**
+- Clause-based execution — short sequences инструкций с одним scheduling decision.
+- Quad-SIMD warp size (vs 16-wide в Midgard) — better branch efficiency.
+- Adaptive Scalable Texture Compression (ASTC) hardware.
+- AFBC 1.2 — cross-attachment compression.
+
+**Mali-G7xx/G5xx (Valhall, 2019–2023):**
+- Warps 16-wide.
+- Superscalar execution.
+- Vulkan 1.1+ first-class support.
+- Command Stream Frontend CSF 2.0 (Mali-G710+) — hardware scheduler для graphics + compute без CPU involvement.
+
+**Immortalis G720/G925 (5th Gen Valhall + hardware RT, 2023–2026):**
+- Deferred Vertex Shading (DVS) — vertex shader запускается только для primitives видимых в tile.
+- Ray Tracing Unit (RTU) — acceleration structures traversal.
+- Variable Rate Shading (VRS) — shade resolution per tile region.
+
+### Hardware comparison: Mali vs Adreno vs PowerVR vs Xclipse
+
+| Параметр | ARM Mali-G720 | Adreno 830 | PowerVR DXT-72 | Xclipse 960 |
+|---|---|---|---|---|
+| Архитектура | TBR + DVS | TBR / sliced IMR | TBDR с PVRIC4 | IMR + tiling cache (RDNA4) |
+| Tile size | 16×16 / 32×32 | 16×16 (sliced ~128×128) | 32×32 | N/A (sliced) |
+| HSR | Нет (Early-Z only) | Low Resolution Z + LRZ | Полный HSR через Tag Buffer | Early-Z |
+| Framebuffer compression | AFBC 1.3 | UBWC 3.0 | PVRIC4 | Delta Color Compression |
+| MSAA cost (4×) | ~1.2× tile budget | ~1.3× | ~1.1× (tag-based) | ~1.5× |
+| Ray Tracing HW | RTU (G720+) | Нет (G5 Elite добавил) | PhotonRT | Hardware RT cores |
+| Memory bandwidth (LPDDR5X) | 51.2 GB/s shared | 64 GB/s shared | зависит от SoC | 68.2 GB/s shared |
+
+### Bandwidth arithmetic — пример worked
+
+Разберём, сколько bandwidth съедает кадр 1920×1080 с 4× overdraw (типично для 3D-сцены с UI):
+
+**IMR подход (неприменим на mobile, но для сравнения):**
+- Color write: 1920 × 1080 × 4 overdraw × 4 bytes (RGBA8) = 33.2 MB
+- Depth write: 1920 × 1080 × 4 × 4 bytes (D32) = 33.2 MB
+- Depth read (для Z-test): ~16 MB
+- **Итого: ~82 MB/frame × 60 FPS = 4.9 GB/s** (только framebuffer)
+
+**TBR подход (правильно сделанный Vulkan render pass):**
+- Tile memory used (per tile, 16×16 RGBA8 + D32): 16×16×8 bytes = 2 KB (помещается в SRAM).
+- Color tile store (финальный): 1920 × 1080 × 4 bytes = 8.3 MB (один write per pixel, не per overdraw).
+- Depth tile store: `DONT_CARE` = 0 bytes.
+- Tile load: `CLEAR` = 0 bytes.
+- **Итого: ~8.3 MB/frame × 60 FPS = 0.5 GB/s**
+
+Разница — 10×. На mobile это буквально разница между «держит 60 FPS сутки в casual game» и «throttlит через 20 минут».
+
+### AFBC deep — как работает lossless compression
+
+AFBC (Arm Framebuffer Compression) — proprietary формат от ARM, прозрачный для программиста. Как он работает:
+
+1. Framebuffer разбивается на **superblocks** 16×16 или 32×8 пикселей.
+2. Каждый superblock — анализируется на entropy. Если пиксели похожие (один цвет, градиент) — упаковывается в компактное представление.
+3. Header per superblock указывает, сколько байт занимает payload (variable-length).
+4. GPU умеет читать/писать superblock-formatted memory напрямую через texture units.
+
+Типичная компрессия для UI (много solid colors): ~3× — ~20 MB → 7 MB.
+Для 3D scene с noise / complex textures: ~1.2–1.5× — умеренная экономия.
+Для pure noise (worst case): ~1× — AFBC detects и отключается per-block.
+
+AFBC требует:
+- Compatible format: RGBA8, BGRA8, R8G8B8 (не все поддерживаются).
+- Flag `VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT` или `EGL_EXT_image_dma_buf_import`.
+- Правильный lifetime — buffer не должен mapped CPU-side (CPU не понимает AFBC).
+
+### PowerVR Tag Buffer — сердце TBDR
+
+TBDR эффективность упирается в **Tag Buffer**, структуру per-tile размером ~256 bytes хранящую:
+- Pointer на closest visible primitive per pixel (или per subpixel для MSAA).
+- Depth value этого primitive.
+
+Алгоритм:
+1. Binning: primitives распределяются по tiles.
+2. Per-tile: rasteriser генерирует fragments, но не вызывает fragment shader — instead, для каждого pixel обновляется Tag Buffer (keeping closest-primitive ID).
+3. После processing всех primitives: Tag Buffer содержит для каждого пикселя — единственный fragment shader invocation нужный.
+4. Fragment shader вызывается per-pixel once (opaque geometry).
+
+Overdraw cost: **ноль** для opaque. Для transparent (alpha blending) tag buffer не может rejectить — нужно shade всё → TBDR быстро деградирует в TBR при heavy transparency.
+
+### MSAA на TBR — важная особенность
+
+Multi-Sample Anti-Aliasing в IMR очень дорогой: 4× color bandwidth, 4× depth bandwidth. В TBR MSAA практически **бесплатен**:
+
+- MSAA samples хранятся в tile memory (увеличенный ~4× tile buffer).
+- В конце tile происходит **resolve** — усреднение samples в один output pixel.
+- **Только resolved pixel** пишется в framebuffer.
+
+Bandwidth cost: тот же, что без MSAA. Только tile memory budget увеличен. На Mali-G710 MSAA 4× tile size становится 8×8 (вместо 16×16), но visual quality +++.
+
+Mobile приложения, которые отказались от MSAA «потому что дорого», делали ошибку — на TBR MSAA почти free.
+
+### Parameter buffer sizing — как не обжечься
+
+Parameter buffer хранит per-tile primitive lists. Размер зависит от:
+- Количество primitives × bytes per primitive pointer (~8 bytes).
+- Количество tiles (зависит от resolution и tile size).
+- Overlap factor (primitive может попадать в несколько tiles).
+
+Пример для 1920×1080 с 500k triangles:
+- Tiles: (1920/16) × (1080/16) = 120 × 68 = 8160 tiles.
+- Average primitive overlap: ~2–4 tiles.
+- Parameter buffer entries: 500k × 3 = 1.5M pointers × 8 bytes = 12 MB.
+
+Mali-G710 default parameter buffer: 16 MB. Если больше — **incremental rendering**: GPU flusht частичный parameter buffer, рендерит эти tiles, clears buffer, продолжает. Потеря 20–40% performance.
+
+Симптом: FPS drop catastrophic при пересечении ~500k primitives на screen. Решение — LOD, frustum culling до submit, batching.
+
 ---
 
 ## Как работает под капотом
@@ -350,6 +487,24 @@ AR scene рендерится в Forward+ pipeline: per-cluster light list, sing
 ### Кейс 3: Godot 4.4 Mobile renderer
 
 После оптимизаций 2024–2026: pre-rotation для all Android apps, immutable samplers (не меняют state между draw calls внутри render pass), persistent shared buffers (reuse tile memory). Результат на Galaxy S24: FPS +10–15% против Godot 4.2.
+
+### Кейс 4: Filament Mobile rendering path
+
+Google Filament на Android использует Forward+ рендеринг со специальными оптимизациями под TBR:
+- Depth prepass опционален (выключен по умолчанию на mobile — Early-Z + HSR делают его лишним на TBR/TBDR).
+- Single render pass для scene + translucent + UI.
+- Bloom/tonemap — subpass dependencies, G-buffer пропускается полностью через tile memory.
+- MSAA 4× включён по умолчанию на TBDR (PowerVR, Apple) — almost free.
+
+Замер на Pixel 7 Pro (Mali-G710): Sponza scene 1600 tris × 150 objects, 60 FPS при 30% GPU utilization.
+
+### Кейс 5: Unreal Engine 5 Mobile с Lumen Mobile
+
+UE5 Mobile renderer (2023+) попытался использовать Lumen (software ray tracing). На mobile TBR это проблематично потому что Lumen требует много ray tracing в random memory patterns — убивает tile efficiency.
+
+Результат: Lumen Mobile ограничен — работает только для «precomputed» direct lighting, без real-time GI. На Galaxy S23 Ultra (Adreno 740): 30 FPS при разрешении 720p. Для сравнения без Lumen — 60 FPS при 1080p.
+
+Lesson: GI techniques которые работают на desktop IMR, нужно адаптировать (или отключать) для mobile TBR. Filament и Unity URP пошли путём «baked GI» именно по этой причине.
 
 ---
 

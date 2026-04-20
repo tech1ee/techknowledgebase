@@ -255,6 +255,95 @@ Use `Surface.setFrameRate(targetFrameRate, compatibility)` чтобы hint to sy
 
 Expected: `doFrame` < 16.67 ms (60 Hz target). If higher, jank.
 
+### VSYNC internal signal chain
+
+Детали hardware → app flow:
+
+1. **Display panel** генерирует VSYNC pulse (hardware signal) в конце каждого refresh cycle.
+2. **Display Controller** (часть SoC) получает signal через MIPI DSI или DisplayPort.
+3. **Kernel display driver** (часть DRM subsystem) register interrupt handler.
+4. **evdev или eventfd** дистрибьютит userspace.
+5. **SurfaceFlinger** listens через `Choreographer` in system_server.
+6. **App processes** также listen через own `Choreographer` instance.
+
+Каждый hop добавляет latency (~50-100 μs каждый). Total VSYNC → app wake: typically 200-500 μs на modern SoC.
+
+### VSYNC prediction
+
+SurfaceFlinger maintains **VSYNC period** и predicts future VSYNC timestamps:
+
+```
+predicted_vsync_n = last_vsync + n * vsync_period
+```
+
+App может query: `Choreographer.getFrameTime()` — timestamp of most recent frame. `Choreographer.FrameData.getExpectedPresentationTimeNanos()` — when current frame will appear on display.
+
+Это позволяет **temporal consistency** в animations — движение synchronized с actual display time, не nominal rate.
+
+### Adaptive refresh rate
+
+90/120/144 Hz displays могут dynamically adjust refresh:
+- Scrolling list — 120 Hz for smoothness.
+- Static screen — 60 Hz for battery.
+- Video playback 24 FPS — exact 24 Hz (иначе judder).
+
+App hint через:
+```kotlin
+surface.setFrameRate(
+    60.0f,
+    Surface.FRAME_RATE_COMPATIBILITY_DEFAULT,
+    Surface.CHANGE_FRAME_RATE_ALWAYS
+)
+```
+
+Android 11+. System может combine hints from multiple apps; window manager decides final refresh.
+
+### Frame callback scheduling detail
+
+`Choreographer.postFrameCallback` enqueues callback для next VSYNC. Internals:
+
+- Callbacks grouped по type (INPUT, ANIMATION, TRAVERSAL, COMMIT).
+- At VSYNC, each group fires in order.
+- Callbacks execute в main thread (Looper context).
+- If `doFrame` exceeds VSYNC period — **miss**, next VSYNC uses stale data.
+
+В Android 13+ added **Extended frame callback**:
+```kotlin
+choreographer.setFrameCallback(object : Choreographer.FrameCallback {
+    override fun doFrame(frameTimeNanos: Long) {
+        // Callback
+    }
+})
+
+// New API (Android 13+)
+choreographer.setFrameCallback(object : Choreographer.FrameCallback2 {
+    override fun doFrame(data: Choreographer.FrameData) {
+        val frameTime = data.frameTimeNanos
+        val expectedPresent = data.preferredFrameTimeline?.expectedPresentationTimeNanos
+        val deadline = data.preferredFrameTimeline?.deadlineNanos
+    }
+})
+```
+
+FrameData provides multiple timeline options (for higher refresh rates), explicit presentation time, frame deadline.
+
+### Janks: measuring и mitigation
+
+Jank metrics на Android:
+
+- **Frame drops (%):** дроп frames / total frames × 100%. Target <1%.
+- **Missed deadlines (%):** frames submitted after deadline. Target <0.5%.
+- **Frame time p99:** 99th percentile frame time. Target < refresh_period.
+
+JankStats library (Android 12+) автоматически tracks.
+
+Typical causes:
+- Main thread blocked (IO, heavy computation, reflection).
+- Slow recomposition (Compose state changes triggering wide recomposition).
+- Shader compilation hitches (first-use).
+- GC pauses (large object allocations).
+- Animation callback doing too much work.
+
 ---
 
 ## Реальные кейсы
@@ -266,6 +355,33 @@ Expected: `doFrame` < 16.67 ms (60 Hz target). If higher, jank.
 ### IKEA Place — AR camera sync
 
 ARCore camera updates arrive asynchronously. App uses Choreographer to synchronize rendering with VSYNC, смotря на latest ARCore data.
+
+### Sweet Home 3D — Canvas animations на Choreographer
+
+Animations для 2D floor plan (wall drag, furniture rotation) implemented через ValueAnimator, который internally использует Choreographer. Callback per frame updates position, invalidates View, hardware renders at next VSYNC.
+
+```kotlin
+val animator = ObjectAnimator.ofFloat(view, "translationX", 0f, 100f).apply {
+    duration = 300
+    interpolator = FastOutSlowInInterpolator()
+}
+animator.start()
+// Internally posts to Choreographer; each frame updates
+```
+
+### Performance debug trace
+
+AGI showing jank:
+```
+VSYNC ──────┬────────┬────────┬────────┬──────
+            │        │        │        │
+Frame 1: 12ms ✓      │        │        │
+Frame 2:    16.8ms ✗ (missed) │        │
+Frame 3:         15.5ms ✗ (previous caused this)
+Frame 4:              12ms ✓
+```
+
+Missed frame cascades — одна slow frame toxicifies subsequent (renders backup в BufferQueue).
 
 ### Games — Swappy integration
 
