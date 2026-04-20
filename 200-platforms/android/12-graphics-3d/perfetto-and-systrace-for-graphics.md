@@ -31,6 +31,21 @@ difficulty: 4
 
 # Perfetto и Systrace
 
+## Историческая справка
+
+- **2012 — Systrace появился** в Android 4.1 Project Butter. Python tool wrapping `atrace`. Produced HTML visualizations.
+- **2013-2018 — Systrace iteration.** Expansion categories, better UI.
+- **2018 — Perfetto announced** как modernization.
+- **2019 — Perfetto becomes primary.** Systrace deprecated в documentation.
+- **2020 — Perfetto в Android framework.** Required for CTS tests.
+- **2022 — Perfetto UI redesign.**
+- **2024 — Systrace removed** from AOSP (Android 14+).
+- **2026 — Perfetto mature,** used в Google internally + widely externally.
+
+Perfetto advantages: protobuf-based format (smaller, faster parse), SQL-based query interface, better scalability (30+ minute traces), web UI (no install).
+
+
+
 **Perfetto** — modern system tracing для Android (replaces Systrace, which is deprecated). Captures kernel events, CPU scheduling, frame timing, app code traces. Complementary to AGI: Perfetto dla system-level issues, AGI — per-GPU-draw.
 
 ---

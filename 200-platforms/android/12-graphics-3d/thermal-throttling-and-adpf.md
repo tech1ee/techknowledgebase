@@ -31,6 +31,30 @@ difficulty: 5
 
 # Thermal throttling и ADPF
 
+## Почему phones throttle
+
+Mobile SoC physics:
+- **TDP (Thermal Design Power):** ~5-10 W sustained, 15-25 W peak.
+- **Heat dissipation:** через phone chassis (plastic/metal) + (sometimes) vapor chamber + graphite sheets.
+- **Battery heating:** thermal transfer к battery накопительно.
+- **User comfort:** surface temperature > 45°C uncomfortable.
+
+При sustained GPU/CPU load:
+1. Chip temperature rises.
+2. OS монitor kernel tempsensors.
+3. Threshold passed → governor reduces CPU/GPU clock.
+4. Performance drops.
+
+Historical evolution:
+- **2010s:** Crude throttling (simple temperature-based).
+- **2016+:** Smarter algorithms (predictive, per-component).
+- **2020 — ADPF introduced.** Android 11. Cooperative API.
+- **2022 — Hints API.** CPU/GPU load hints.
+- **2024 — GameMode integration.** System-level profiles.
+- **2026 — ML-based thermal prediction** в некоторых phones.
+
+
+
 Mobile phones — **thermally-constrained**. Sustained high performance heats chip → OS throttles CPU/GPU → FPS drops. После 5-10 минут intensive 3D graphics типичный performance drops 30-50%. Production apps **должны** handle this.
 
 **ADPF (Android Dynamic Performance Framework)** — Google's API для cooperative thermal management. App tells OS expected load, OS responds с thermal state, app adjusts quality.

@@ -31,6 +31,27 @@ difficulty: 5
 
 # Android Frame Pacing Library
 
+## Зачем frame pacing critical
+
+Inconsistent frame times — проблема восприятия более сильная чем абсолютный FPS:
+- **60 FPS stable:** nominal 16.67 ms per frame, perceived smooth.
+- **60 FPS unstable:** varies 12-22 ms, perceived as stutter, worse чем stable 30.
+- **Android VSYNC strict:** missed VSYNC = frame dropped → doubled perceived frame time (33 ms).
+
+Games с variable frame times, даже если average FPS high, feel unplayable. Solution: **pace frames to consistent intervals**.
+
+## Historical context
+
+- **2012 — Project Butter.** Android adds VSYNC locking для UI.
+- **2017 — games struggle.** Manual frame pacing с eglSwapInterval.
+- **2018 — Swappy released.** Open-source library от Google.
+- **2019 — Vulkan support added.**
+- **2020+ — integration в Unity, Unreal, Godot.**
+- **2024 — Android 14 frame timing APIs.** More direct access to expected presentation time.
+- **2026 — Swappy standard.** Almost all Android games use.
+
+
+
 **Swappy** — Google's library для stable frame pacing. Wraps OpenGL `eglSwapBuffers` / Vulkan `vkQueuePresent`. Automatically handles VSYNC timing, adaptive refresh rate, thermal throttling, wait/presentation mode selection.
 
 Result: consistent inter-frame intervals (jank reduction), даже когда app renders faster than display.

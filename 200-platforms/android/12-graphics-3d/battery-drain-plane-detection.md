@@ -25,6 +25,27 @@ difficulty: 3
 
 # Battery drain AR-apps
 
+## Battery как constraint для AR
+
+Mobile AR imposes harsh battery budget:
+- Typical user session: 5-15 минут.
+- После 30 минут активного использования — phone hot, пользователь сам перестаёт.
+- 62% uninstall rate для apps с > 30% drain per hour (Google Play research).
+- Camera + GPU + ML = perfect storm для drain.
+
+Для context: idle phone drain ~2% per hour. Regular game ~15% per hour. Heavy AR ~40%+ per hour. Difference — chemistry of lithium battery heating affects lifespan ("calendar aging").
+
+## Historical perspective
+
+- **2010s — mobile AR была niche.** Battery consequences не concern.
+- **2017 — ARCore launched.** Immediately battery issues obvious.
+- **2019 — IKEA Place optimizes** аggressively, publishes findings.
+- **2020 — Google документирует battery best practices.**
+- **2022 — ADPF integration для AR.**
+- **2024 — ML-based depth API optimized** для battery.
+
+
+
 Real concern для AR-приложений: 40% battery drop за 30 минут использования. Users uninstall apps с such behavior — Google research показал 62% uninstall rate для apps с severe battery drain. Plane detection + camera capture + 3D rendering — heaviest combination на mobile.
 
 ---

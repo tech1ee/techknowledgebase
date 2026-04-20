@@ -31,6 +31,24 @@ difficulty: 5
 
 # Vulkan Profile for Android 16 (VPA-16)
 
+## Evolution of Vulkan on Android
+
+Vulkan history на Android:
+
+- **2016 — Android 7.0 Nougat.** Vulkan 1.0 добавлен в NDK.
+- **2017 — Android 8.** Vulkan 1.0.68 common target.
+- **2018 — ANGLE для ChromeOS и WebGL.**
+- **2019 — Android 10.** Vulkan 1.1 become mainstream.
+- **2021 — Vulkan 1.2 common.**
+- **2023 — Vulkan 1.3 adoption.** dynamic rendering popular.
+- **2024 — Android 15.** ANGLE as optional default driver.
+- **2025 — VPA-16 draft.** Google publishes requirements.
+- **2026 — Android 16 ships** с VPA-16 mandatory.
+
+Before VPA-16, Vulkan fragmentation was extreme. Different Android 10 devices support wildly different extensions. Apps needed feature detection + multiple code paths. VPA-16 standardizes baseline.
+
+
+
 Android 16 (April 2026) ввёл **VPA-16** — обязательный сертификационный Vulkan profile для new devices. Разработчик может рассчитывать на определённые Vulkan 1.3+ features без fallback кода, если `minSdk = Android 16`.
 
 ---

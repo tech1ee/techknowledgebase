@@ -34,6 +34,27 @@ difficulty: 4
 
 # Android GPU Inspector (AGI)
 
+## Историческая справка
+
+GPU profiling инструменты эволюция:
+
+- **Early 2010s — vendor-specific tools.** Adreno Profiler (Qualcomm), Mali Graphics Analyzer (ARM), PVRTune (Imagination). Каждый workable только для своего vendor.
+- **2018 — Google announces Android GPU Inspector.** Cross-vendor, unified.
+- **2020 — AGI 1.0 released.** Initially limited к Pixel phones.
+- **2022 — AGI 2.0.** Support Adreno + Mali + PowerVR.
+- **2023 — Vulkan support mature.**
+- **2024 — AGI integration с Android Studio.**
+- **2026 — current,** de-facto standard.
+
+Before AGI, cross-vendor profiling требовал switching tools для different devices. AGI unified experience, accelerated Android graphics development.
+
+Alternatives в 2026:
+- **RenderDoc** — open source frame debugger. Weaker на Android, stronger на desktop.
+- **NSight Mobile** — NVIDIA's mobile profiler (rarely applicable на Android).
+- **Vendor-specific** — still exist, deeper native insights, но harder to use.
+
+
+
 **AGI** — Google's primary GPU profiling tool на Android. Supports Adreno (Qualcomm), Mali (ARM), PowerVR (Imagination). Features: frame profile (per-draw call timing), system profile (CPU/GPU correlation), shader performance analysis.
 
 Tool de-facto стандарт для Android graphics profiling в 2026.
