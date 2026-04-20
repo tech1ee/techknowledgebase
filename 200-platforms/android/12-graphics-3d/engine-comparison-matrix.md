@@ -355,7 +355,7 @@ Three.js (Ricardo Cabello, 2010) — 3D для web. Через Android WebView �
 **Что это:** Epic Games engine. UE5 Mobile — подмножество features для мобилок. 5 % royalty после $1M revenue.
 
 **Сильные стороны:**
-- **Cutting-edge graphics**: Lumen (GI), Virtual Shadow Maps (не на mobile полностью).
+- **Высокоуровневый рендер**: Lumen (global illumination), Virtual Shadow Maps (не на mobile полностью), Nanite отсутствует на мобилках.
 - **Blueprints visual scripting**.
 - **AAA-level polish**.
 
