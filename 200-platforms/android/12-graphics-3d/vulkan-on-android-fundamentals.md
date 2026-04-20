@@ -101,6 +101,43 @@ Vulkan became first-class on Android — Google invested heavily in drivers, too
 
 ---
 
+## Философия Vulkan — что делает его особенным
+
+Vulkan spec (Khronos 2016) был спроектирован с тремя core principles:
+
+### 1. Explicit over implicit
+
+**OpenGL ES философия:** driver «знает лучше». Hide complexity, allow simple patterns. Example: `glBufferData(target, size, data)` — driver decides where memory lives, when to copy, lifetime, etc.
+
+**Vulkan философия:** программист «знает лучше». Expose every decision. Example: для того же effect в Vulkan — создаём VkBuffer с usage flags, запрашиваем memory requirements, allocate VkDeviceMemory из explicit memory type (DEVICE_LOCAL, HOST_VISIBLE, etc.), bind. 4 calls вместо одного.
+
+Cost: более сложный API, более длинный initialization. Benefit: no hidden driver overhead, predictable performance.
+
+### 2. Pre-validate, pre-compile
+
+OpenGL ES валидирует **каждый draw call** (shader binding, state consistency, etc.) — expensive overhead каждый раз.
+
+Vulkan валидирует **pipeline creation once**. Compile все shaders, validate all state → opaque VkPipeline. Every draw then just binds pipeline и issues command — zero validation cost.
+
+Impact: app с 1000 draws/frame может save 10-20 ms CPU per frame on OpenGL ES → ~30-60 FPS pure from API overhead reduction.
+
+### 3. Multi-threaded by design
+
+OpenGL ES имеет **single GL context** per thread. Switching contexts = expensive. Thus rendering happens on one thread.
+
+Vulkan: command buffers могут записываться **параллельно** в разных threads. Finally submitted to queue from one thread. Games с complex scenes могут использовать 4-8 threads для parallel command recording.
+
+Example: Planner 5D scene recording:
+- Thread 1: shadow map command buffer.
+- Thread 2: opaque scene command buffer.
+- Thread 3: transparent objects command buffer.
+- Thread 4: UI overlay command buffer.
+- Main thread: submit all 4 to queue sequentially.
+
+4× faster CPU-side commanding vs serial OpenGL ES.
+
+---
+
 ## Архитектура Vulkan на Android
 
 ```
@@ -228,6 +265,166 @@ while (running) {
 
 ---
 
+## Swapchain на Android — детально
+
+Swapchain — мост между Vulkan rendering и Android display/compositor. Создаётся over platform-specific surface.
+
+```cpp
+// Android-specific surface creation
+VkAndroidSurfaceCreateInfoKHR surfaceInfo = {
+    .sType = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
+    .window = androidNativeWindow,  // from AAssetManager или ANativeWindow
+};
+VkSurfaceKHR surface;
+vkCreateAndroidSurfaceKHR(instance, &surfaceInfo, nullptr, &surface);
+
+// Query surface capabilities
+VkSurfaceCapabilitiesKHR caps;
+vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &caps);
+
+// Создание swapchain
+VkSwapchainCreateInfoKHR swapchainInfo = {
+    .surface = surface,
+    .minImageCount = 3,  // triple buffering typical
+    .imageFormat = VK_FORMAT_R8G8B8A8_UNORM,
+    .imageExtent = caps.currentExtent,
+    .presentMode = VK_PRESENT_MODE_FIFO_KHR,
+    .preTransform = caps.currentTransform,  // для pre-rotation!
+    ...
+};
+```
+
+### Pre-rotation на Android
+
+Ключевая особенность: phone может быть в portrait или landscape. Если `currentTransform == VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR` — display expects rotated output.
+
+**Wrong approach:** render in identity orientation, compositor handles rotation → extra pass, 10-15% overhead.
+
+**Right approach:** render in physical orientation. Apply rotation matrix in vertex shader:
+
+```glsl
+// Vertex shader
+layout(push_constant) uniform PrerotateConstants {
+    mat4 prerotateMatrix;
+} prerotate;
+
+void main() {
+    gl_Position = prerotate.prerotateMatrix * mvpMatrix * position;
+}
+```
+
+CPU-side matrix computed once per orientation change:
+```cpp
+mat4 prerotate = mat4(1.0f);
+switch (surfaceCaps.currentTransform) {
+    case VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR:
+        prerotate = rotate(prerotate, 90.0f, vec3(0, 0, 1));
+        break;
+    case VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR:
+        prerotate = rotate(prerotate, 180.0f, vec3(0, 0, 1));
+        break;
+    // ...
+}
+```
+
+### Swapchain image acquisition
+
+```cpp
+uint32_t imageIndex;
+VkResult result = vkAcquireNextImageKHR(
+    device, swapchain, UINT64_MAX,
+    imageAvailableSemaphore,  // signals когда image ready
+    VK_NULL_HANDLE,
+    &imageIndex
+);
+
+if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+    // Window resized или orientation changed — recreate swapchain
+    recreateSwapchain();
+    return;
+}
+```
+
+### Present mode nuances
+
+- **FIFO:** guaranteed VSYNC-lock. Safe battery-efficient choice.
+- **FIFO_RELAXED:** VSYNC unless late — then immediate. Reduces stuttering на slow frames.
+- **MAILBOX:** latest frame always shown. No tearing. High battery use.
+- **IMMEDIATE:** no sync. Tearing possible. Rarely used.
+
+На Android VRR (variable refresh rate) — FIFO_RELAXED часто best choice. `Surface.setFrameRate()` hint для adaptive VSYNC.
+
+---
+
+## Validation layers — must for development
+
+Vulkan не прощает mistakes. Spec violation = undefined behavior (crash, corruption, silent incorrect rendering).
+
+**Validation layers** — injectable CPU layer that intercepts API calls и checks spec compliance. Catches 90% of bugs.
+
+```cpp
+const char* validationLayers[] = {
+    "VK_LAYER_KHRONOS_validation",  // Khronos-provided
+};
+
+VkInstanceCreateInfo instanceInfo = {
+    .enabledLayerCount = 1,
+    .ppEnabledLayerNames = validationLayers,
+    // ...
+};
+```
+
+Messages printed через debug callback:
+```cpp
+VkDebugUtilsMessengerCreateInfoEXT debugInfo = {
+    .messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                       VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+    .messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+                   VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                   VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+    .pfnUserCallback = debugCallback,
+};
+```
+
+**Production builds:** disable validation layers — 10-30% CPU overhead.
+
+---
+
+## Extensions важные для Android
+
+Vulkan базовая spec — minimal. Extensions добавляют platform features.
+
+### Required для Android
+
+- `VK_KHR_surface` — generic surface.
+- `VK_KHR_android_surface` — Android ANativeWindow integration.
+- `VK_KHR_swapchain` — swapchain support.
+
+### Highly recommended
+
+- `VK_KHR_maintenance1/2/3/4` — minor spec fixes, always enable.
+- `VK_KHR_external_memory/semaphore/fence` — sharing resources between processes (e.g., camera feed).
+- `VK_KHR_shader_float16_int8` — smaller data types для compute.
+- `VK_EXT_debug_utils` — debug labels, naming resources.
+
+### VPA-16 mandatory
+
+- `VK_KHR_dynamic_rendering`
+- `VK_KHR_synchronization2`
+- `VK_EXT_host_image_copy`
+- `VK_KHR_push_descriptor`
+- `VK_EXT_extended_dynamic_state3`
+- `VK_EXT_image_compression_control`
+
+### Flagship / specialized
+
+- `VK_KHR_ray_tracing_pipeline` — full ray tracing.
+- `VK_KHR_ray_query` — inline ray queries в regular shaders.
+- `VK_EXT_mesh_shader` — modern geometry pipeline.
+- `VK_EXT_fragment_shader_interlock` — ordered fragment shader execution.
+
+---
+
 ## Ключевые особенности Vulkan vs OpenGL ES
 
 ### Explicit synchronization
@@ -261,6 +458,65 @@ OpenGL ES driver validates state каждый draw call (slow). Vulkan validates
 OpenGL ES — GL context per thread, switching expensive. Vulkan — command buffers can be recorded on multiple threads parallel, then submitted from one.
 
 Games с multi-threaded rendering — significant win.
+
+---
+
+## Типичные ошибки Android-developers при переходе на Vulkan
+
+### Ошибка: missing pre-rotation
+
+OpenGL ES driver автоматически делает rotation для orientation. Vulkan — нет. Забытое pre-rotation в Vulkan приводит:
+- 10-15% performance drop (лишний compositor pass).
+- Battery drain увеличен.
+- На older phones — visible tearing или artifacts.
+
+### Ошибка: тяжёлая synchronization
+
+Vulkan allows fine-grained synchronization. Novice programmers часто over-synchronize (too many fences, barriers), что убивает parallelism. Best practice: start с minimal sync (one fence per frame), add только когда validation layers flag issues.
+
+### Ошибка: создание pipeline в hot path
+
+VkPipeline creation — expensive (shader compilation). Если app создаёт pipelines in rendering loop (при смене state), получает hitches.
+
+**Solution:** предсоздать все нужные pipelines at startup, cache via VkPipelineCache. См. [[shader-compilation-jitter-mitigation]].
+
+### Ошибка: неправильный memory type
+
+Vulkan имеет много memory types:
+- `DEVICE_LOCAL_BIT`: быстрая GPU memory. Default choice.
+- `HOST_VISIBLE_BIT`: CPU может читать/писать. Медленнее для GPU.
+- `DEVICE_LOCAL | HOST_VISIBLE`: best of both (unified memory на mobile!). Available на most Android.
+- `LAZILY_ALLOCATED_BIT`: memoryless attachments, transient.
+
+Mobile GPUs имеют unified memory — no dedicated VRAM. Properties different от desktop. Использовать `LAZILY_ALLOCATED` для depth/stencil = major bandwidth saving.
+
+### Ошибка: ignoring device limits
+
+`VkPhysicalDeviceLimits` содержит tons of constraints: max texture size, max uniform buffer size, max bound descriptors, etc. Разные devices — разные limits. Mobile обычно ниже desktop.
+
+Example: `maxImageDimension2D` на flagship = 16384, на budget = 4096. Если app предполагает 8K texture, на budget device fails.
+
+**Solution:** always query limits, scale assets / quality tiers accordingly.
+
+---
+
+## Performance budget на Android mobile
+
+Typical target 60 FPS = 16.67 ms/frame. Breakdown:
+
+| Stage | Budget | Notes |
+|---|---|---|
+| CPU app logic | ~3-5 ms | Main thread, Compose, physics |
+| CPU command recording | ~1-2 ms | Vulkan command buffers |
+| CPU → GPU submission | ~0.5 ms | Vulkan driver |
+| GPU execution | ~8-10 ms | Actual rendering |
+| Composition (SF) | ~1-2 ms | SurfaceFlinger |
+| HWC | ~0.5 ms | Hardware composition |
+| Total | ~15 ms | Буфер 1-2 ms для variance |
+
+При 120 FPS — half of this. At 30 FPS — double.
+
+Thermal throttling на sustained load: CPU/GPU downclock → budget becomes tighter. Game mode / ADPF helps maintain budget (см. [[thermal-throttling-and-adpf]]).
 
 ---
 
