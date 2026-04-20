@@ -28,6 +28,23 @@ difficulty: 4
 
 ---
 
+## Историческая справка
+
+Frustum culling — одна из древнейших optimization techniques в real-time 3D:
+
+- **1969 — Sutherland-Hodgman polygon clipping.** Algorithm for clipping polygon vs plane. Basis of modern clipping.
+- **1980s — scanline rendering.** Early games implemented basic bounding sphere vs frustum.
+- **1996 — Quake (id Software).** BSP tree + PVS (Potentially Visible Set) for levels. Advanced culling for maze-like environments.
+- **2001 — Gribb & Hartmann paper.** "Fast Extraction of Viewing Frustum Planes from the World-View-Projection Matrix" — now-classical technique used everywhere.
+- **2005+ — modern engines.** Hierarchical bounding volumes (BVH), spatial hashing.
+- **2015+ — GPU-driven culling.** Compute shaders perform culling на GPU, feeding multi-draw-indirect.
+- **2020+ — occlusion culling alongside frustum.** Hierarchical Z (Hi-Z) buffer generated первым frame, used во втором.
+- **2023+ — meshlet culling (UE5 Nanite).** Per-meshlet frustum + backface + cluster culling.
+
+Frustum culling remains fundamental — даже с advanced techniques, первая stage остаётся простая AABB-vs-frustum test.
+
+---
+
 ## Зачем
 
 Без culling — каждый object рисуется, даже невидимый. GPU выполняет vertex shaders для всех вершин, clip-ит на стадии clipping (см. [[rendering-pipeline-overview]]). CPU overhead на draw calls также растёт.

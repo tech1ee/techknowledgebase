@@ -29,6 +29,16 @@ difficulty: 5
 
 ---
 
+## Историческая справка
+
+- **1980s — BSP trees (Binary Space Partition).** Doom (1993), Quake (1996). Static scene decomposition.
+- **1996 — John Carmack** introduces PVS (Potentially Visible Set) precomputed for level sections.
+- **1999 — Hardware occlusion queries.** OpenGL extension. Required full GPU roundtrip.
+- **2003 — Hierarchical Z (Hi-Z).** NVIDIA, ATI — hardware feature.
+- **2010 — Umbra company.** Middleware for offline-baked occlusion. Used in Unity, Unreal.
+- **2015 — GPU-driven occlusion.** Compute shaders on previous frame's depth.
+- **2020+ — Nanite (UE5).** Meshlet-level occlusion на GPU.
+
 ## Techniques
 
 ### 1. Hardware occlusion queries

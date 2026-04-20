@@ -28,6 +28,26 @@ difficulty: 5
 
 ---
 
+## Уникальность mobile memory
+
+Unlike desktop GPUs с dedicated VRAM (separate 8-24 GB), mobile GPUs share system RAM with CPU:
+- **Unified Memory Architecture (UMA).** Physical same pool.
+- **Bandwidth shared.** 51-68 GB/s LPDDR5X, divided between CPU (30-40%), GPU (40-60%), display (10-20%).
+- **No PCIe overhead** — same physical memory, no transfer latency.
+- **Но cache coherence — tricky.** CPU writes needed flush для GPU visibility.
+
+Consequences:
+- **Memory "pressure" shared.** App using too much RAM affects both CPU и GPU.
+- **Transfer "free"** (nominally) — no PCIe, но cache flushes still have cost.
+- **Bandwidth is king.** More budget goes к reducing memory reads/writes чем к allocations themselves.
+
+Historical evolution:
+- **2010 — early mobile.** Very limited memory (512 MB total RAM). Textures had to be compressed aggressively.
+- **2015 — 4 GB becomes norm.**
+- **2020 — flagship 12 GB+.**
+- **2024 — 16 GB flagship.** Enables desktop-class games.
+- **2026 — 24 GB coming в ultra-flagship.** AI workloads drive increased memory.
+
 ## Memory hierarchy на mobile
 
 ```

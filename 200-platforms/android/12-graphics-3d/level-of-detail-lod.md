@@ -28,6 +28,24 @@ difficulty: 3
 
 ---
 
+## Историческая справка
+
+LOD эволюционировал от manual decimation к automatic continuous chains:
+
+- **1976 — Clark.** "Hierarchical geometric models for visible surface algorithms" — first academic LOD.
+- **1984 — DeHaemer, Zyda.** Practical LOD algorithms.
+- **1992 — Hoppe** "Mesh optimization" — edge collapse-based simplification.
+- **1996 — progressive meshes (Hoppe).** Continuous LOD via encoded edge operations.
+- **1997-2000 — industry adoption.** Quake 3 Arena uses LOD for terrain.
+- **2000s — commercial tools.** Simplygon (2006), InstantMesh.
+- **2010 — Tessellation shaders** (OpenGL 4.0) — hardware tessellation for surface LOD.
+- **2013 — Nvidia Meshes to Meshlets research.**
+- **2020 — Mesh shaders (NVIDIA Turing).** Meshlet-based geometry pipeline.
+- **2022 — Nanite (UE5).** Automatic continuous LOD through virtualized geometry. Revolutionary на desktop.
+- **2024 — Meshlet LOD на mobile.** Adreno 730+, Mali G715+ with mesh shader support experimental.
+
+2026 standard: glTF с MSFT_lod extension, автоматическая generation через meshoptimizer в asset pipeline.
+
 ## Основная идея
 
 Classical LOD chain:

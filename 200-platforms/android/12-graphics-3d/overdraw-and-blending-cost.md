@@ -70,6 +70,29 @@ Quick visual check.
 
 ---
 
+## Worked example: UI overdraw analysis
+
+Typical Compose screen с complex UI:
+- Scaffold background (1× opaque).
+- Content area background (2×).
+- LazyColumn background (3×).
+- Item card elevation (4×).
+- Item icon background (5×).
+- Text на top (drawn but no additional fragment).
+
+Total в item area: 5× overdraw. Весь screen ~2-3× average.
+
+С Material 3 — container colors + tonal elevation tint даёт больше layers. Need mindful design.
+
+Compose 1.6+ added `Modifier.drawBehind { }` optimization — некоторые backgrounds merge при composition. But not automatic everywhere.
+
+## Measurement tools
+
+1. **ADB GPU overdraw:** `adb shell setprop debug.hwui.overdraw show` → colored visualization.
+2. **AGI Frame Profile:** stage-by-stage breakdown.
+3. **Perfetto:** `GPU Completion` counters.
+4. **adb dumpsys gfxinfo [package]:** frame time histogram.
+
 ## Mitigation
 
 ### 1. Draw opaque front-to-back

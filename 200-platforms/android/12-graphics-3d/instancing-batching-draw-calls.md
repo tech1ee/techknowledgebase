@@ -28,6 +28,16 @@ difficulty: 4
 
 ---
 
+## Историческая справка
+
+Draw call cost — постоянная проблема GPU:
+- **2000s — CPU-bound.** OpenGL ES 1.x/2.x driver overhead dominated.
+- **2013 — AMD Mantle.** First API spotlight на draw call reduction.
+- **2016 — Vulkan.** ~10-20× reduction vs GL.
+- **2017 — Multi-draw indirect.** GPU reads draw parameters, enables GPU-driven rendering.
+- **2020 — Mesh shaders.** Replace draw calls entirely for some scenarios.
+- **2026 — Mesh shader adoption на mobile** (Adreno 730+).
+
 ## Cost of a draw call
 
 На OpenGL ES: ~20-50 μs per draw call (driver validation). На Vulkan: ~5-15 μs. Flagship mobile CPU обрабатывает ~20,000-50,000 draw calls/second.
