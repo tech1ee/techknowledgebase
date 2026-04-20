@@ -31,6 +31,25 @@ difficulty: 4
 
 # Классические модели освещения
 
+## Историческая справка
+
+Эволюция моделей освещения в computer graphics:
+
+- **1760 — Johann Heinrich Lambert, "Photometria".** Formulates that intensity of reflection off matte surface is proportional to cosine of angle между light and surface normal. Basis всех diffuse models.
+- **1971 — Henri Gouraud (Université Grenoble).** Per-vertex lighting + interpolation (Gouraud shading). Used в early 3D rendering.
+- **1975 — Bui Tuong Phong (PhD University of Utah).** "Illumination for Computer Generated Pictures" CACM. Per-pixel shading + specular highlight via reflection vector. First to give real-time 3D a recognizable look.
+- **1977 — Jim Blinn.** "Models of Light Reflection for Computer Synthesized Pictures" SIGGRAPH. Half-vector optimization. Also microfacet theory introduced.
+- **1982 — Robert Cook & Kenneth Torrance.** Cook-Torrance model — physically-based microfacet BRDF. Scientific but not real-time.
+- **1986 — James Kajiya.** Rendering equation, full math framework.
+- **1994 — Gregory Ward.** Anisotropic reflection (brushed metal).
+- **2000 — Standard Cg shading language.** NVIDIA popularizes programmable shaders with Phong/Blinn examples.
+- **2012 — Disney BRDF.** Unified PBR model.
+
+Интересный факт: Bui Tuong Phong умер от leukemia в 1975, в том же году когда его PhD thesis был published. Ему было 32. Phong shading — его наследие в каждой современной 3D-графике.
+
+---
+
+
 До PBR (2012+) все real-time rendering использовало классические модели — **Lambert**, **Phong**, **Blinn-Phong**. Даже сегодня они актуальны для: mobile low-end devices, simple UI 3D, stylized games. Плюс PBR built on top of их mathematical foundation.
 
 ---

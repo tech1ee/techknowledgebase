@@ -38,6 +38,31 @@ difficulty: 7
 
 # PBR: Physically Based Rendering
 
+## Историческая справка
+
+PBR эволюционировал через несколько десятилетий, но «прорыв» произошёл в 2012:
+
+- **1967 — Bui Tuong Phong.** Phong shading model. Simple, ad-hoc, but huge step forward.
+- **1977 — Blinn.** Blinn-Phong — improvement via half-vector. Still ad-hoc.
+- **1982 — Cook-Torrance.** Физически-базированная microfacet BRDF. Academic, не mainstream.
+- **1997 — Lafortune.** Generalized Cook-Torrance.
+- **2007 — Oren-Nayar.** Rough diffuse model.
+- **2010 — Walter, Burley (paper on GGX).** Improved microfacet distribution.
+- **2012 — Burley / Disney.** "Physically-Based Shading at Disney" SIGGRAPH course. Unified BRDF с 11 parameters. Pixar, Disney films adopt.
+- **2013 — Brian Karis / Epic Games.** "Real Shading in Unreal Engine 4" SIGGRAPH 2013. Adaptation for real-time. Industry takes notice.
+- **2014 — Unreal Engine 4.** First major engine с PBR default.
+- **2015 — Unity 5.** Adds Standard Shader (PBR).
+- **2017 — glTF 2.0.** Metallic-roughness workflow standardized.
+- **2018 — Google Filament.** PBR for mobile. Open-source implementation.
+- **2020 — Most mobile engines adopt PBR.** Unity URP, Unreal Mobile, Godot 4.
+- **2026 — PBR default для new projects.** Industry-wide standard.
+
+Parallel developments: ACES tonemapping, HDR textures, IBL, all complementary к PBR.
+
+---
+
+## Зачем это знать — expanded
+
 В 2012 на SIGGRAPH Brent Burley из Disney представил унифицированную модель shading, которая заменила ad-hoc Phong/Blinn и стала indust-standard. **Disney BRDF** — «одна модель для всего»: металл, кожа, ткань, пластик — описываются 4-6 параметров вместо 20+ ad-hoc. Unreal Engine 4 (Karis 2013) адаптировал её для real-time. Google Filament (2018) принёс PBR на mobile. В 2026 PBR — default для любой serious 3D-app.
 
 ---
@@ -57,6 +82,42 @@ PBR:
 Результат — one material definition, correct look in любой scene.
 
 ---
+
+## Physical intuition — что измеряет PBR
+
+PBR simulates interaction of light с real-world materials. Key physical quantities:
+
+### Irradiance vs Radiance
+
+- **Irradiance** (E) — энергия света, hitting surface per unit area. Units: W/m².
+- **Radiance** (L) — энергия света, traveling в direction ω per unit area per unit solid angle. Units: W/(m²·sr).
+
+PBR шейдеры работают с radiance — directional light quantity.
+
+### BRDF (Bidirectional Reflectance Distribution Function)
+
+BRDF — fundamental PBR quantity. Defines how much light coming из direction ωi reflects к direction ωo:
+
+```
+f(ωi, ωo) = dL_reflected(ωo) / dE_incoming(ωi)
+```
+
+Units: 1/sr (per steradian).
+
+Для **perfect diffuse** (Lambertian): `f = albedo / π` (constant, independent of ωo).
+
+Для **perfect mirror**: `f = δ(ωo - reflect(ωi))` (delta function).
+
+Real materials — between extremes.
+
+### Energy conservation requirement
+
+BRDF must satisfy:
+```
+∫_Ω f(ωi, ωo) · cos(θo) dωo ≤ 1  для всех ωi
+```
+
+Reflected energy ≤ incoming. Classical Phong (`specular = cos(θh)^n`) **violates** это для large `n`.
 
 ## Principles
 

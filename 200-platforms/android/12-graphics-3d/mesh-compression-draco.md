@@ -137,6 +137,54 @@ Unity, Unreal, Godot, Filament, Three.js — все поддерживают `EX
 
 ---
 
+## Detailed algorithms
+
+### Edgebreaker (Draco connectivity compression)
+
+Topology encoding идея: вместо хранения полного triangle list (3 indices × N triangles), encode **traversal of triangle mesh** через символы:
+
+- C (continue): продолжить текущий fan.
+- L (left): повернуть налево.
+- R (right): повернуть направо.
+- E (end): заканчать путь.
+- S (split): ветвление.
+
+Символы ~2.5 bits per triangle average. For 10k-triangle mesh: ~25k bits = 3 KB vs 120 KB uncompressed. **40× compression** только на connectivity.
+
+### Parallelogram prediction
+
+Для positions: predict next vertex based на previous triangle:
+
+```
+given triangle ABC, predict vertex D = A + C - B (parallelogram completion)
+actual D может отличаться — store delta (usually small)
+```
+
+Delta small → fewer bits to encode. Works хорошо для smooth meshes, плохо для high-detail noisy geometry.
+
+### Vertex cache optimization (meshopt)
+
+Modern GPU имеет small vertex cache (~16-32 vertices). Если triangle references vertex уже в cache — reuse. If not — re-transform (costly).
+
+Meshopt reorders index buffer to maximize cache hits. Algorithm: Tom Forsyth 2006.
+
+Benefit: 20-50% reduction vertex shader invocations. **Не compression**, но related asset pipeline step.
+
+### Overdraw optimization (meshopt)
+
+Reorder triangles чтобы front-facing triangles rendered first → early-Z rejection более effective. Works for opaque geometry.
+
+Combined с vertex cache optimization: `meshopt_optimizeVertexCache` → `meshopt_optimizeOverdraw` → `meshopt_optimizeVertexFetch`.
+
+### Simplification (meshopt)
+
+Edge collapse-based LOD generation:
+1. Find edge с smallest **visual error** if collapsed.
+2. Collapse edge, creating new vertex.
+3. Repeat until target triangle count.
+
+Output: multiple LOD levels от same source model. See [[level-of-detail-lod]].
+
 ## Quantization
 
 Both techniques rely heavily на quantization:

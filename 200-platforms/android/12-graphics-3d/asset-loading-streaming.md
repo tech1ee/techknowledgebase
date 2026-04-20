@@ -132,6 +132,89 @@ User sees something instantly, quality improves smoothly.
 
 ---
 
+## Advanced loading patterns
+
+### Manifest-based loading
+
+Apps generate asset manifest (JSON) describing dependencies:
+
+```json
+{
+  "scenes": {
+    "living_room": {
+      "required": ["sofa_high", "tv_unit", "coffee_table"],
+      "textures": ["wood_oak", "fabric_linen"],
+      "memory_budget_mb": 150
+    }
+  }
+}
+```
+
+Runtime loader fetches только what's needed, caches intelligently.
+
+### Priority queues
+
+```kotlin
+class AssetLoader {
+    private val priorityQueue = PriorityBlockingQueue<LoadRequest>()
+    
+    fun request(asset: String, priority: Int) {
+        priorityQueue.add(LoadRequest(asset, priority))
+    }
+    
+    // Background worker processes highest priority first
+    // Visible/near assets priority 100
+    // Background/distant priority 10
+}
+```
+
+Ensures user sees important content fast.
+
+### Predictive loading
+
+Based на camera movement direction, pre-load assets в соседних rooms / areas. Requires scene graph knowledge.
+
+Example: в IKEA Place, если camera detects user's gaze direction, pre-fetch furniture likely to be pointed at.
+
+### Dependency tracking
+
+Assets могут have dependencies: sofa uses wood texture + fabric texture + normal map. Loader должен:
+1. Parse dependencies от manifest / glTF.
+2. Load dependencies before main asset.
+3. Refcount shared assets (wood texture используется многими models).
+
+```kotlin
+class RefCountedAsset<T>(val asset: T) {
+    private var refCount = 0
+    fun acquire() = synchronized(this) { refCount++ }
+    fun release() = synchronized(this) {
+        if (--refCount == 0) {
+            cleanup()
+        }
+    }
+}
+```
+
+### Bundle grouping
+
+Group related assets в bundles — one IO operation, less overhead:
+- All sofa variants в одном .glb.
+- All kitchen appliances в one bundle.
+
+Trade-off: memory usage (load-all-or-nothing) vs IO efficiency.
+
+### Compression at multiple levels
+
+Full asset pipeline:
+1. Source model — Blender .blend.
+2. Export → glTF 2.0 (text).
+3. Geometry compress — `gltfpack` (meshopt) или `gltf-pipeline` (Draco).
+4. Textures compress — `toktx` → KTX 2.0 с Basis Universal.
+5. Bundle — into `.glb` single file.
+6. Optional deflate compression at OS level (Play Asset Delivery handles).
+
+Final asset: ~10% original size with imperceptible quality loss.
+
 ## Texture streaming
 
 Large textures — biggest memory hog. Strategies:
