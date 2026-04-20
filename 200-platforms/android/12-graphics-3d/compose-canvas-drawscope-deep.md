@@ -30,6 +30,69 @@ difficulty: 3
 
 Jetpack Compose предоставляет два главных способа custom graphics: **`Canvas` composable** (с DrawScope) и **`Modifier.drawBehind / drawWithContent`**. Под капотом — Skia через AOSP HWUI. Не-3D, но critical для UI effects, data visualization, particle effects в UI.
 
+## Под капотом — Skia + HWUI
+
+DrawScope operations transparently convert:
+1. `drawCircle(...)` → Skia `SkCanvas::drawCircle(...)`.
+2. Skia queues in DisplayList.
+3. HWUI RenderThread picks up DisplayList.
+4. Translated к OpenGL ES или Vulkan commands (depending on backend).
+5. GPU renders to framebuffer.
+6. SurfaceFlinger composes.
+
+Performance — HWUI caches DisplayList. Если DrawScope commands unchanged — no retranslation. Cached display list replayed fast.
+
+## Когда использовать
+
+**Идеально подходит для:**
+- Charts, graphs, data visualization.
+- Custom progress indicators.
+- Particle-like UI effects.
+- Custom shapes (rounded rects с unique corners, star shapes, etc.).
+- Drawing over existing composables (overlays, badges).
+- Simple 2D games (puzzle, card games).
+
+**Не подходит для:**
+- 3D rendering (use AndroidExternalSurface + Filament).
+- Massive particle systems (thousands of particles) — use Compute shader.
+- Real-time photo/video effects — use RenderEffect + AGSL.
+- Procedural noise/patterns — use AGSL shader.
+
+## Performance considerations
+
+Каждый DrawScope operation has cost:
+- Simple shape (line, rect, circle): ~1-5 μs.
+- Path drawing (complex): 10-50 μs.
+- Text rendering: 20-100 μs.
+- Image drawing (cached): ~2-10 μs.
+- Image drawing (uncached): 50+ ms (trigger initial upload).
+
+Budget per frame: 16 ms @ 60 FPS. Allows thousands simple shapes.
+
+**State changes are cheap** в DrawScope — Skia handles batching internally. Но too many layers (graphicsLayer modifications) can hurt.
+
+## Connection к RenderEffect
+
+DrawScope output можно pipe через RenderEffect:
+
+```kotlin
+Canvas(modifier = Modifier
+    .size(200.dp)
+    .graphicsLayer {
+        renderEffect = BlurEffect(
+            radiusX = 20f, radiusY = 20f,
+            edgeTreatment = TileMode.Decal
+        )
+    }
+) {
+    drawCircle(Color.Blue, radius = 80f)
+}
+```
+
+Blur applied post-draw. GPU-accelerated.
+
+---
+
 ---
 
 ## Canvas composable

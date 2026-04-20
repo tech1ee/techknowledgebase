@@ -30,6 +30,89 @@ difficulty: 3
 
 `Modifier.graphicsLayer { ... }` — способ применить GPU-accelerated transformations и effects к composable: rotation, scale, alpha, shadow, clipping, render effects. Внутри — separate Skia layer, rendered independently и composed over content.
 
+## Анатомия Layer
+
+Когда вы applying `graphicsLayer`:
+1. Compose allocates Skia offscreen buffer (или reuses если possible).
+2. Child content renders в этот buffer.
+3. Buffer compositied на parent с applied transformations/effects.
+
+Это **separation of concerns**: content rendering не aware о transformation. Modifications только at composition stage.
+
+### Когда layer создаётся
+
+Compose optimizes: layer created ТОЛЬКО когда transformation applied. `alpha = 1f, rotation = 0f, scale = 1f` → no layer allocation.
+
+Layer имеет real memory cost:
+- GPU texture для buffer: 4 × width × height bytes.
+- Example 300×300 View: 360 KB. 100 rotated views на screen: 36 MB GPU memory.
+
+Unwise usage (e.g., graphicsLayer every small item в LazyColumn) — memory bloat.
+
+### Invalidation
+
+Если child content changes → layer invalidated → re-rendered content → new composition. Cost ~= re-drawing content + layer composition.
+
+Если только transformation changes (e.g., animated rotation) — **content NOT re-rendered**, только composition parameters updated. Much faster.
+
+Это — основная причина animations должны use `graphicsLayer`, не modifier.rotate():
+
+```kotlin
+// Bad — re-layout每 frame
+Modifier.rotate(animatedAngle)
+
+// Good — только composition parameter changes
+Modifier.graphicsLayer { rotationZ = animatedAngle }
+```
+
+## Pseudo-3D с cameraDistance
+
+`cameraDistance` determines perspective:
+- Low value (1-3): strong perspective, close-up distortion.
+- Medium (8-12): natural-looking flip.
+- High (20+): almost orthogonal, минимальный perspective.
+
+Density-adjusted: multiply by `density` для DPI-consistent experience.
+
+```kotlin
+.graphicsLayer {
+    rotationY = flipAngle  // 0..180 для card flip
+    cameraDistance = 12f * density  // natural
+}
+```
+
+Classic use case — card flip animation. Two `graphicsLayer` Composables, opposite rotationY, swap visible at 90°.
+
+## RenderEffect composition
+
+Compose 1.5+ supports RenderEffect for advanced post-processing:
+
+```kotlin
+.graphicsLayer {
+    renderEffect = BlurEffect(radiusX = 20f, radiusY = 20f, edgeTreatment = TileMode.Decal)
+}
+```
+
+Supported effects:
+- BlurEffect (Gaussian blur).
+- ColorMatrixEffect (color grading).
+- OffsetEffect (translation for shadows).
+- ChainedEffect (combine).
+- RuntimeShaderEffect (AGSL custom shader!).
+
+GPU-accelerated. Performance depends on layer size + effect complexity.
+
+## Производительность
+
+- **Layer allocation:** ~1-2 ms (one-time).
+- **Composition per frame:** ~0.5-2 ms (depending on size).
+- **RenderEffect overhead:** 0.5-5 ms зависит от effect.
+- **Layer invalidation trigger re-render:** variable (depends on content).
+
+Rule: use graphicsLayer liberally для animations (rotations, scales, fades). Be cautious для large static layers.
+
+
+
 **Важно:** graphicsLayer — **2D**, не настоящий 3D. Для true 3D scenes — Filament/SceneView. GraphicsLayer может делать pseudo-3D effects через rotation + cameraDistance.
 
 ---

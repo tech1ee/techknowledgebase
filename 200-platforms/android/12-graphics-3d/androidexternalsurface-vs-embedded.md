@@ -29,6 +29,25 @@ difficulty: 4
 
 # AndroidExternalSurface vs AndroidEmbeddedExternalSurface
 
+## Зачем два варианта
+
+Before Compose 1.6 embedding Surface в Compose было painful — через AndroidView + SurfaceView, AndroidView + TextureView или legacy hacks. Compose 1.6 добавил native support с **явным выбором** composition strategy.
+
+Два composable reflect два принципа Android compositing:
+
+1. **SurfaceView-like** (AndroidExternalSurface): отдельный compositing layer, handled by SurfaceFlinger. Efficient (может использовать Hardware Composer), но не integrates с UI transformations.
+
+2. **TextureView-like** (AndroidEmbeddedExternalSurface): surface rendered как Compose view. Integrates с transformations (scale, rotate, alpha), но дороже (GPU composition).
+
+Historical context:
+- **Android 1.0-4.0:** только SurfaceView. Complex lifecycle, не embedded.
+- **Android 4.0:** TextureView introduced. Embeddable но performance hit.
+- **Android 7.0:** SurfaceView improvements — can blend с View hierarchy.
+- **Compose 1.0-1.5:** manual integration via AndroidView.
+- **Compose 1.6 (2024):** AndroidExternalSurface + AndroidEmbeddedExternalSurface — first-class.
+
+
+
 В Compose 1.6+ появились два composables для embedding native Android `Surface` в UI: **`AndroidExternalSurface`** и **`AndroidEmbeddedExternalSurface`**. Оба используются для: Filament 3D rendering, camera preview, video playback, OpenGL / Vulkan custom rendering.
 
 Разница — в том, КАК surface композитится с остальным Compose UI.

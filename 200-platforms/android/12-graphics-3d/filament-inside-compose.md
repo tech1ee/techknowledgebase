@@ -30,6 +30,56 @@ difficulty: 5
 
 ---
 
+## Ключевые решения
+
+Интеграция Filament в Compose имеет несколько architecture decisions:
+
+### 1. Когда создавать Filament Engine
+
+Filament `Engine` — heavy (~10 MB allocations, GPU contexts). Создавать:
+- **Per-Activity:** если несколько Composables используют engine.
+- **Singleton:** если весь app shares one scene.
+- **Per-composable** (anti-pattern): slow, memory-heavy.
+
+Best: hoisted в ViewModel, shared across composable instances.
+
+### 2. Lifecycle coordination
+
+Engine must be destroyed when composable disposed:
+```kotlin
+DisposableEffect(Unit) {
+    val engine = Engine.create()
+    // ... setup ...
+    onDispose {
+        engine.destroy()
+    }
+}
+```
+
+Пропуск onDispose — memory leak.
+
+### 3. Surface choice
+
+- **AndroidExternalSurface** — fullscreen или large rendering. HWC friendly.
+- **AndroidEmbeddedExternalSurface** — integrated с Compose transformations, UI overlay.
+
+Для Planner 5D-like app — AndroidExternalSurface когда в 3D mode, AndroidEmbeddedExternalSurface для PIP preview.
+
+### 4. Threading
+
+Filament engine is not thread-safe по default. Должны render from one thread. Compose main thread suffices для most scenarios. Для очень complex scenes — dedicated render thread через Handler.
+
+### 5. Input handling
+
+Compose handles touch via `Modifier.pointerInput`. Передача touch в Filament:
+```kotlin
+.pointerInput(Unit) {
+    detectDragGestures { change, dragAmount ->
+        camera.rotate(dragAmount.x, dragAmount.y)
+    }
+}
+```
+
 ## Setup
 
 ```kotlin
