@@ -30,6 +30,59 @@ difficulty: 5
 
 Детализация material system Filament — как описать material, compile, load, bind textures.
 
+## Зачем отдельный material system
+
+Встроенный в GLSL материал требует 500+ lines shader code. Реализация multiple materials становится copy-paste hell. Filament решает:
+
+1. **Декларативный DSL** — material expressed в 20-50 lines vs 500+ raw GLSL.
+2. **Compile-time оптимизация** — unused features stripped.
+3. **Shader permutations** — automatic generation variants для lit/unlit, shadow/no-shadow, instancing/not, etc.
+4. **Shader validation** — errors at compile time, не runtime.
+5. **Cross-platform** — один .mat → compiles для GL / Vulkan / Metal.
+
+### Shading models (full list)
+
+- **lit** — default PBR (Disney BRDF).
+- **unlit** — без lighting, pure albedo. Для UI / decals / foliage cards.
+- **subsurface** — skin, wax. Simplified SSS approximation.
+- **cloth** — specialized BRDF для fabrics (Ashikhmin / Charlie distribution).
+- **specularGlossiness** — legacy workflow (до metallic-roughness standardization).
+
+### Material parameters types
+
+- `float, float2, float3, float4` — scalars / vectors.
+- `float3x3, float4x4` — matrices.
+- `sampler2d, sampler3d, samplerCube` — textures.
+- `bool` — flags.
+
+### Vertex attribute requirements
+
+```
+requires : [ uv0, uv1, color, tangents ]
+```
+
+Declares what vertex data material needs. Filament validates mesh provides these attributes.
+
+### Compile-time features
+
+```
+material {
+    variantFilter : [ skinning ],  // exclude skinning variant
+    culling : back,                // back / front / none / frontAndBack
+    depthWrite : true,
+    depthCulling : true,
+    doubleSided : false,
+    ...
+}
+```
+
+### Packing tricks
+
+MetallicRoughness map хранит 3 grayscale values в RGB channels: R = occlusion, G = roughness, B = metallic. Одна texture вместо трёх. Saves memory и bandwidth.
+
+---
+
+
 ---
 
 ## Material definition file

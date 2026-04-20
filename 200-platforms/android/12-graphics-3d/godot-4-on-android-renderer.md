@@ -34,6 +34,32 @@ difficulty: 4
 
 # Godot 4.4 на Android
 
+## Историческая справка
+
+Godot history для Android context:
+
+- **2007 — Godot начат** в Argentina by Juan Linietsky. Internal engine для studio Okam.
+- **2014 — Godot open-sourced** MIT license.
+- **2015 — Godot 1.0.**
+- **2017 — Godot 2.0.** GLES 2.0 support, Android export stable.
+- **2020 — Godot 3.2.** Mobile features mature.
+- **2022 — Godot 3.5.**
+- **2023 — Godot 4.0 released.** Полный rewrite с Vulkan backend, rendering rewrite, scripting VM upgrade.
+- **2024 — Godot 4.2-4.3.** Mobile renderer stabilization.
+- **2025 — Godot 4.4** released. Pre-rotation, immutable samplers, persistent shared buffers.
+- **2026 — current.** Actively developed с monthly releases.
+
+Godot team ~20 full-time developers + community contributors. Funding через Software Freedom Conservancy + donations.
+
+Comparison к Unity / Unreal:
+- **Lighter weight** — 30-40 MB APK base.
+- **Open source** — no royalties, no license fees.
+- **Less mature** в некоторых features (animation blending, terrain).
+- **Excellent для 2D** (Godot's strong suit).
+- **Mobile 3D** competitive с Unity URP quality.
+
+
+
 **Godot 4.0** (March 2023) — полный rewrite с Vulkan-backend. **Godot 4.4** (март 2026) — latest с Mobile renderer optimizations. MIT license, community-driven development.
 
 Godot — **full engine** (не просто renderer как Filament). Включает scene graph, physics (Godot Physics или Jolt plugin), animation, audio, networking, GUI editor. Для games — excellent choice на Android.

@@ -33,6 +33,24 @@ difficulty: 4
 
 # SceneView Android
 
+## Историческая справка
+
+SceneView рассказ:
+
+- **2018 — Google releases Sceneform.** Based on own engine, ARCore integrated. Designed Android-first для AR apps.
+- **2020 — Sceneform deprecated.** Google strategic shift к cross-platform ARCore. Repository archived.
+- **2020 — SceneView project started.** Thomas Gorisse (French indie developer) + community. Goal: continue Sceneform API with modernization.
+- **2021 — SceneView 1.0.** Filament + ARCore backend. Kotlin-first.
+- **2022 — Compose integration.**
+- **2023 — Major refactor** для modern Android.
+- **2024 — ARCore Geospatial integration.**
+- **2025 — Dependency injection friendly.**
+- **2026 — v2.x current, stable, used в production apps.**
+
+SceneView — примечательный success community-driven continuation когда Google abandoned.
+
+
+
 **SceneView** — community-maintained Android library для 3D и AR, successor Google Sceneform (deprecated 2020, archived). Использует Filament + ARCore под капотом, provides scene graph + Kotlin-first API + Compose integration.
 
 Primary value: **быстрый старт** для 3D/AR приложения. Loading glTF → отображение в сцене за 5-10 строк кода. Отличный fit для product viewers, AR shopping apps, quick prototypes.

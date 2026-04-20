@@ -37,6 +37,25 @@ difficulty: 6
 
 # Google Filament: архитектура PBR-движка
 
+## Историческая справка
+
+Filament timeline:
+- **2014 — Romain Guy** (Android framework lead) начинает экспериментировать с PBR на mobile в свободное время.
+- **2017 — проект announced** на Google I/O.
+- **2018 — Filament 1.0 open-sourced.** Apache 2.0 license.
+- **2019 — ARCore integration.** Sceneform uses Filament as backend.
+- **2020 — Vulkan backend stable.**
+- **2021 — Google deprecates Sceneform.** Community picks up → **SceneView** (built on Filament).
+- **2022 — 1.20 стабильный, IBL improvements.**
+- **2023 — Filament с AGSL integration.**
+- **2024 — 1.50+, dynamic resolution, better mobile optimizations.**
+- **2025 — 1.60, PBR Neutral tone mapping added.**
+- **2026 — 1.71 (current), full VPA-16 support.**
+
+В 2026 Filament — единственный mainstream mobile PBR engine с open-source и industry-grade quality. Alternative только Unity / Unreal (heavier).
+
+
+
 **Filament** — Google's open-source PBR rendering engine, released 2018, автор Romain Guy (ex-Android framework team). Версия 1.71 (апрель 2026). Language: C++ с Java/Kotlin bindings. Platforms: Android, iOS, Linux, macOS, Windows, WebGL, Fuchsia.
 
 Filament — **pure rendering engine**, не framework. Отсутствуют scene management, physics, animation (частично), input, UI. Это даёт flexibility (используйте с любой architecture) но требует подтянуть эти capabilities самостоятельно или через SceneView.
