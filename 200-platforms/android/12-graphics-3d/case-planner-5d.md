@@ -32,6 +32,30 @@ difficulty: 4
 
 # Case study: Planner 5D
 
+## Компания history
+
+Planner 5D timeline:
+
+- **2011 — founded** в Вильнюсе (Литва) Сергеем Норицыным и Алексеем Шеретьевым.
+- **2012 — первая версия** app для iPad.
+- **2014 — Android launch.** Cross-platform С++/NDK engine.
+- **2015 — user base ~10M.**
+- **2018 — web version** через Emscripten (C++ → WebAssembly).
+- **2019 — AR mode** добавлен.
+- **2021 — 4K cloud rendering** — AI-enhanced.
+- **2023 — 74M users.** One of top interior design apps.
+- **2024 — ML-powered furniture search.**
+- **2026 — 74M+ users, 160M designs.** Continued growth.
+
+Series funding: $22M+ over 10 years. Team ~150+ people, distributed.
+
+Business model freemium:
+- Free: limited catalog, 2D + 3D view, basic AR.
+- Premium ($6.99/month): full catalog, 4K rendering credits, advanced AR features.
+- Enterprise: licensed to real estate companies, interior design firms.
+
+
+
 **Planner 5D** — flagship interior design app. 74 million users, 160 million designs. Founded 2011, Android and iOS + web. Flagship для класс home planner / interior design apps.
 
 ---

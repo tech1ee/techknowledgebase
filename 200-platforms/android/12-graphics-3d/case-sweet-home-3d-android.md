@@ -32,6 +32,31 @@ difficulty: 3
 
 # Case study: Sweet Home 3D
 
+## История проекта
+
+Sweet Home 3D — французская альтернатива Planner 5D, с противоположной философией (open-source, offline-first):
+
+- **2006 — Emmanuel Puybaret** начинает проект в Eteks company.
+- **2006 — v1.0** — Java-based, desktop only. GPL license.
+- **2010 — 1M downloads** от SourceForge.
+- **2012 — community contributors** добавляют features.
+- **2014 — Android port** published. Limited subset of desktop features.
+- **2017 — 10M+ downloads cumulative.**
+- **2019 — Yafaray rendering** replaces Sunflow для photorealism.
+- **2021 — glTF 2.0 import/export.**
+- **2023 — 20M+ downloads, 40+ languages.**
+- **2026 — still active development.** Monthly releases.
+
+Financial sustainability:
+- Free под GPL.
+- Donations via PayPal.
+- Paid iOS version ($5-10) subsidizes development.
+- Enterprise custom development.
+
+Developer count: ~1-2 core + community contributors. Prove что small team может sustain significant open-source project long-term.
+
+
+
 **Sweet Home 3D** — open-source interior design software. Desktop с 2006 (Eteks), Android port позже. Alternative architecture: Java-based, offline-first, open-source. Contrast к Planner 5D's cloud-heavy model.
 
 ---

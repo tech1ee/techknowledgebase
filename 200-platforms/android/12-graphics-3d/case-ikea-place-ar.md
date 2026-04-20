@@ -34,6 +34,37 @@ difficulty: 4
 
 # Case study: IKEA Place
 
+## Business context
+
+IKEA — мировой лидер в flat-pack furniture. Target audience — homeowners decorating/furnishing. Key challenge: **return rate от online purchases** — особенно high для bulky furniture (sofa "не подходит в комнату", "cвет цвет отличается").
+
+IKEA Place AR solves:
+1. **Size uncertainty** — accurate 98% dimensional scaling.
+2. **Colour matching** — lighting estimation showing real-look color.
+3. **Aesthetic compatibility** — virtual sofa в actual room context.
+
+ROI от IKEA's perspective:
+- ~$10M investment в app development (estimated).
+- 11× conversion lift measured.
+- 20% return rate reduction для AR-assisted purchases.
+- Substantial ROI positive.
+
+## Timeline
+
+- **2013 — Apple acquires PrimeSense** (ToF sensor tech). IKEA internally experiments.
+- **2016 — iOS 11 announced с ARKit.**
+- **2017 — IKEA Place launches** на iOS. Multi-month development.
+- **2018 — Android version** with ARCore.
+- **2019 — Depth API occlusion.** 2× conversion improvement.
+- **2020 — Light estimation environmental HDR.**
+- **2022 — renamed IKEA Kreativ** включающий room scanning.
+- **2024 — AI-powered room design** suggestions.
+- **2026 — continued growth.** 60M+ installs cumulative.
+
+Development team: IKEA digital division + external consulting (Space10, Area 17). Not a huge team — focused experience.
+
+
+
 **IKEA Place** — AR shopping app, launched 2017 (iOS) / 2018 (Android ARCore). Revolutionary: pre-purchase "try на space" furniture. Bench mark для AR shopping:
 - **11× higher purchase intent** from users who used AR vs browsed 2D catalog (multiple studies).
 - **2000 true-scale 3D models** of IKEA furniture.

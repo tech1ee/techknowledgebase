@@ -30,6 +30,33 @@ difficulty: 4
 
 # Physics engines на mobile
 
+## Физика в 3D-графике
+
+Physics simulation необходима когда scene имеет interactivity:
+- **Gravity** объектов.
+- **Collision detection** между objects.
+- **Rigid body dynamics** (жёсткие тела moving realistically).
+- **Constraints** (joints, hinges).
+- **Ragdolls** (character animation).
+- **Cloth, hair, fluid** simulation (advanced).
+
+Для interior design apps (Planner 5D, IKEA Place) — physics usually not needed (static furniture). Для games — essential.
+
+## Historical progression
+
+- **1990s — rigid body physics research.** Jim Baraff, David Mirich academics.
+- **2001 — Havok** — commercial engine, used Halo, Half-Life 2. Expensive.
+- **2003 — ODE (Open Dynamics Engine).** Academic open-source.
+- **2005 — PhysX launch** (AGEIA, acquired by NVIDIA 2008).
+- **2005 — Bullet Physics** started by Erwin Coumans (SCE R&D).
+- **2010 — Bullet v2.** Used в многих games, Blender, OpenCV.
+- **2018 — Box2D popularized** для 2D games.
+- **2022 — Jolt Physics** released. Horizon Forbidden West foundation.
+- **2024 — Godot adopts Jolt через plugin.**
+- **2026 — Jolt становится default** для новых проектов.
+
+
+
 3D apps с interactivity часто need physics — collision detection, rigid body dynamics, ragdolls. Три главных open-source options для mobile: **Jolt**, **Bullet**, **ReactPhysics3D**. Все C++, integrate через NDK.
 
 ---

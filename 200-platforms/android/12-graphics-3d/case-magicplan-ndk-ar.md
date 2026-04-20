@@ -29,6 +29,37 @@ difficulty: 3
 
 # Case study: MagicPlan
 
+## Business context
+
+MagicPlan решает концeretную workflow problem в home services industry:
+- **Real estate agents** must produce floor plans для listings. Before: hire drafter or manual measurement ($50-200 per plan).
+- **Contractors** для estimating jobs need accurate dimensions. Before: tape measure, hours per room.
+- **Insurance adjusters** documenting damage. Before: manual photos + measurements.
+- **Renovators** planning kitchens, bathrooms. Before: detailed plans from architect.
+
+MagicPlan cuts all этих workflow от hours к minutes, с comparable accuracy.
+
+Pricing:
+- Free trial: few plans.
+- Subscription: $9.99/month или $99/year.
+- Business plan: $39/month.
+- Enterprise: custom pricing.
+
+Revenue estimated $20-30M/year. Team ~50 people (Sensopia, based Montreal).
+
+## Historical timeline
+
+- **2011 — MagicPlan launch** на iPhone. Before ARCore — custom CV.
+- **2011-2016 — custom computer vision era.** OpenCV-based, gyroscope-enhanced.
+- **2013 — Android port.**
+- **2017 — ARCore integration.** Migration from custom CV.
+- **2020 — AI-powered wall detection** automating user taps.
+- **2022 — Estimate + invoice feature** для contractors.
+- **2024 — 3D room visualization** для renovation planning.
+- **2026 — 50M+ installs cumulative.**
+
+
+
 **MagicPlan** (Sensopia) — AR-based floor plan creation и measurement. User scans room с phone camera → automatic 2D floor plan generation + 3D model. Target: real estate, contractors, insurance adjusters. Launched 2011, Android port 2013.
 
 Unique — **input через AR** (scan real room), not drawing.

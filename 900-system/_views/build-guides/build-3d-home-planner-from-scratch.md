@@ -377,6 +377,98 @@ Cut scope ruthlessly для MVP.
 
 ---
 
+## Testing strategy
+
+### Unit tests
+
+- **Math utilities** (vector/matrix operations, quaternion slerp) — easy to test.
+- **Scene model logic** (add furniture, move furniture, save/load) — instrumented tests.
+- **Scene serialization** — round-trip assertion (serialize → deserialize → deep equals).
+
+### Integration tests
+
+- **Instrumented tests (androidTest):**
+  - Scene persistence (Room database).
+  - Filament rendering (screenshots сравниваются с baseline).
+  - ARCore session lifecycle.
+
+### UI tests
+
+- **Compose UI tests** для 2D editor.
+- **Instrumented** для 3D view (limited — can't easily verify visual output).
+- **Screenshot tests** через Paparazzi или Screenshot Tests for Android.
+
+### Performance tests
+
+- **Benchmarks** для critical paths:
+  - Scene load time.
+  - Frame time на reference devices.
+  - Battery drain over 30-min session.
+- **Macrobenchmark library** для measuring cold start, navigation.
+
+## Deployment checklist
+
+Before shipping MVP:
+
+- [ ] APK size ≤ 50 MB (or appropriate for Play Asset Delivery).
+- [ ] Tested на reference devices: Pixel 7a (Tensor G2), Samsung Galaxy A54 (Exynos 1380), Snapdragon 8 Gen 3 device.
+- [ ] Crash rate ≤ 0.1% (Firebase Crashlytics).
+- [ ] 60 FPS achievable на median device target.
+- [ ] Battery drain ≤ 25%/hour в sustained 3D view.
+- [ ] Scene save/load работает reliably.
+- [ ] AR session requirements detected корректно (ARCore support check).
+- [ ] Privacy policy готова (camera, storage permissions).
+- [ ] Google Play store listing ready.
+- [ ] Play Console internal testing passed.
+
+## Post-MVP expansion roadmap
+
+### Phase 2 (months 4-6)
+
+- Cloud sync via Firebase.
+- Undo/redo с Command pattern.
+- Copy/paste furniture.
+- Room templates.
+- Material substitution (swap fabric/wood).
+
+### Phase 3 (months 6-9)
+
+- Multi-user collaboration.
+- Photorealistic cloud rendering.
+- Import/export to other CAD formats.
+- Widget for home screen.
+
+### Phase 4 (months 9-12)
+
+- AR remote viewing (shared AR session).
+- AI-suggested furniture placement.
+- Marketplace for user-created models.
+
+## Troubleshooting common issues
+
+### Scene не renders
+- Verify Filament initialized (Filament.init in Application).
+- Verify swapchain creation.
+- Check что surface size matches texture size.
+
+### AR session fails to start
+- Check `ArCoreApk.checkAvailability` returns SUPPORTED_INSTALLED.
+- Verify camera permission granted.
+- Ensure Google Play Services for AR installed.
+
+### Battery drain too high
+- Disable plane detection after placement.
+- Lower camera resolution.
+- Target 30 FPS (via setFrameRate).
+- Pause session when app backgrounded.
+
+### Frame drops during scene transitions
+- Shader compilation hitch — implement pipeline cache pre-warm.
+- GPU pressure — consider LOD.
+- CPU pressure — profile с Perfetto.
+
+---
+
 ## После MVP (Phase 2+)
 
 - **Cloud sync** — Firebase или Supabase.
