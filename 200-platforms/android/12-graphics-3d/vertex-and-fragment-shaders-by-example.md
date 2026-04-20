@@ -268,6 +268,105 @@ val stages = arrayOf(
 
 ---
 
+## Example 4: Normal mapping
+
+Добавляем tangent-space normal map к Example 3.
+
+### Vertex shader addition
+
+```glsl
+layout(location = 3) in vec3 tangent;
+layout(location = 4) in vec3 bitangent;
+
+layout(location = 4) out mat3 v_TBN;
+
+void main() {
+    // ... other outputs ...
+    vec3 T = normalize(mat3(push.model) * tangent);
+    vec3 B = normalize(mat3(push.model) * bitangent);
+    vec3 N = normalize(mat3(push.model) * normal);
+    v_TBN = mat3(T, B, N);
+    
+    // ... rest ...
+}
+```
+
+### Fragment shader addition
+
+```glsl
+layout(set = 0, binding = 3) uniform sampler2D u_normalMap;
+
+void main() {
+    // Sample tangent-space normal
+    vec3 normalTS = texture(u_normalMap, v_uv).rgb * 2.0 - 1.0;
+    vec3 N = normalize(v_TBN * normalTS);
+    
+    // ... use N for lighting как в Example 3 ...
+}
+```
+
+Normal maps — standard practice для surface detail без geometry cost.
+
+---
+
+## Example 5: Procedural gradient effect
+
+Для AGSL / Compose — no geometry, pure fragment shader:
+
+```glsl
+// Fragment shader — animated gradient
+#version 460
+layout(location = 0) in vec2 v_uv;
+layout(location = 0) out vec4 fragColor;
+
+layout(push_constant) uniform Push {
+    vec2 resolution;
+    float time;
+} push;
+
+void main() {
+    vec2 uv = v_uv;
+    vec3 color = 0.5 + 0.5 * cos(push.time + uv.xyx + vec3(0.0, 2.0, 4.0));
+    fragColor = vec4(color, 1.0);
+}
+```
+
+Shadertoy-style effect. AGSL version (Compose) — minor syntax differences.
+
+---
+
+## Example 6: Post-processing blur
+
+Separable Gaussian blur в два pass (horizontal + vertical):
+
+### Fragment shader (horizontal pass)
+
+```glsl
+#version 460
+layout(location = 0) in vec2 v_uv;
+layout(location = 0) out vec4 fragColor;
+
+layout(set = 0, binding = 0) uniform sampler2D u_inputTex;
+
+const float weights[5] = float[](0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
+
+void main() {
+    vec2 texelSize = 1.0 / textureSize(u_inputTex, 0);
+    vec3 color = texture(u_inputTex, v_uv).rgb * weights[0];
+    
+    for (int i = 1; i < 5; i++) {
+        color += texture(u_inputTex, v_uv + vec2(texelSize.x * i, 0)).rgb * weights[i];
+        color += texture(u_inputTex, v_uv - vec2(texelSize.x * i, 0)).rgb * weights[i];
+    }
+    
+    fragColor = vec4(color, 1.0);
+}
+```
+
+Vertical pass идентичный, swapping `vec2(0, ...)` axis. Total: 9 texture samples per pixel × 2 passes vs 9×9=81 для naive 2D Gaussian.
+
+---
+
 ## Performance notes
 
 - Example 1: Simplest. ~60 FPS на любом GPU.

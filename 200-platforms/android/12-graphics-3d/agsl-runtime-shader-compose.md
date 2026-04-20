@@ -28,6 +28,9 @@ primary_sources:
   - url: "https://developer.android.com/develop/ui/views/graphics/agsl/using-agsl"
     title: "Android: Using AGSL in apps"
     accessed: 2026-04-20
+  - url: "https://skia.org/docs/user/sksl/"
+    title: "SkSL — Skia Shading Language (AGSL is based on SkSL)"
+    accessed: 2026-04-20
   - url: "https://github.com/drinkthestars/shady"
     title: "Shady — AGSL helper library for Compose"
     accessed: 2026-04-20

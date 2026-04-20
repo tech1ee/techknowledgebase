@@ -32,6 +32,35 @@ primary_sources:
 
 Symptom: приложение при первом запуске или при переходе в новую сцену на 200-500 ms зависает. Frame times 60 ms → 400 ms → 60 ms. Cause — **shader compilation jitter**: GPU driver translates SPIR-V в machine code при первом usage; это CPU-intensive operation.
 
+## Почему это production-critical
+
+Shader compilation jitter — one из topmost production issues на mobile Vulkan/GL:
+- **User impact:** visible pauses / hitches во время gameplay, animation, transitions.
+- **Review impact:** reviewers (Google Play, App Store) detect FPS drops, may flag.
+- **Perception:** 200 ms freeze при navigation subjective feels like crash.
+
+Google I/O 2024 presentation explicitly called it out: "shader compilation hitches are the #1 cause of janky first-run experience." Every major engine (Unity, Unreal, Filament, Godot) имеет dedicated mitigation strategies.
+
+## Историческая справка
+
+- **2010s — OpenGL ES era.** Shader compile happens на `glLinkProgram`. Less visible (fewer shaders typically), but same issue.
+- **2016 — Vulkan ships.** Explicit SPIR-V loading exposes compile timing.
+- **2018 — Pipeline cache standardized.** `VkPipelineCache` provides shared compile cache.
+- **2020 — "Shader jitter" publicly recognized.** Epic Games presentation on Unreal mobile ports.
+- **2021 — Google Play Games Services.** Pre-delivery shader compilation via Play Store.
+- **2023 — VK_EXT_pipeline_library.** Incremental pipeline creation, easier caching.
+- **2024 — Android Performance Tuner.** Integrates shader cache analytics.
+- **2026 — VPA-16 requires fast pipeline creation** through explicit features.
+
+## Measurement
+
+AGI (Android GPU Inspector) shows pipeline creation time:
+- "GPU Events" track with pipeline create events.
+- Frame times spike на events.
+- Vulkan validation warnings if creation synchronous.
+
+Target: <10 ms per pipeline creation. If >50 ms — mitigation needed.
+
 ---
 
 ## Проблема

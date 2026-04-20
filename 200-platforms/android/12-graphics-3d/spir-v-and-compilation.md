@@ -81,6 +81,38 @@ Runtime execution
 
 ---
 
+## SPIR-V формат — что внутри
+
+SPIR-V бинарный формат состоит из:
+
+- **Magic number** (`0x07230203`) для identification.
+- **Version/generator info.**
+- **Instruction stream** — каждая instruction имеет opcode + operands.
+- **Types and constants** declared first.
+- **Functions** — bodies с control flow.
+- **Entry points** — назначенные functions (main для vertex/fragment).
+- **Execution modes** — например OriginUpperLeft (Vulkan) vs OriginLowerLeft (GL).
+
+Example disassembled:
+```
+; Version: 1.5
+; Generator: Khronos Glslang 11.0.0
+OpCapability Shader
+OpMemoryModel Logical GLSL450
+OpEntryPoint Vertex %main "main" %position %gl_Position
+OpSource GLSL 460
+OpName %main "main"
+OpName %position "position"
+%float = OpTypeFloat 32
+%v3float = OpTypeVector %float 3
+%v4float = OpTypeVector %float 4
+...
+%main = OpFunction %void None %3
+...
+```
+
+Human-readable assembly (via `spirv-dis`). Binary compact — typical fragment shader ~5-10 KB binary vs 2-5 KB GLSL source.
+
 ## Tools
 
 ### shaderc / glslc
@@ -158,6 +190,49 @@ vkGetPipelineCacheData(device, pipelineCache, &size, data);
 Filament и каждый production engine сохраняет cache — instant startup на second launch.
 
 ---
+
+## Specialization constants
+
+SPIR-V feature позволяющая injection compile-time constants при pipeline creation:
+
+```glsl
+// Shader
+layout(constant_id = 0) const int SHADOW_SAMPLES = 4;
+layout(constant_id = 1) const float BLUR_RADIUS = 1.0;
+
+void main() {
+    for (int i = 0; i < SHADOW_SAMPLES; i++) {
+        // Use constants
+    }
+}
+```
+
+При pipeline creation:
+```cpp
+struct SpecData {
+    int shadowSamples;
+    float blurRadius;
+};
+SpecData data = { 8, 2.0 };
+
+VkSpecializationMapEntry entries[] = {
+    { .constantID = 0, .offset = offsetof(SpecData, shadowSamples), .size = sizeof(int) },
+    { .constantID = 1, .offset = offsetof(SpecData, blurRadius), .size = sizeof(float) },
+};
+VkSpecializationInfo specInfo = {
+    .mapEntryCount = 2,
+    .pMapEntries = entries,
+    .dataSize = sizeof(SpecData),
+    .pData = &data,
+};
+
+// Apply to shader stage
+shaderStage.pSpecializationInfo = &specInfo;
+```
+
+**Benefit vs uniforms:** compiler sees constants, can unroll loops, dead-code eliminate branches. **Benefit vs #define:** no shader recompilation at build time — single .spv covers всех variants.
+
+Used для quality tiers (shadow samples, LOD levels), feature flags, array sizes.
 
 ## Shader permutations
 
