@@ -32,6 +32,32 @@ difficulty: 4
 
 # ARCore fundamentals
 
+## Историческая справка
+
+ARCore имеет корни в Google Tango (2014-2017), Google's first AR platform которая требовала special hardware (depth cameras). Failed commercially — only few devices supported.
+
+- **2014 — Project Tango announced.** Special hardware required. Lenovo Phab 2 Pro, Asus ZenFone AR.
+- **2017 — Google pivots:** cancel Tango, launch ARCore (no special hardware needed).
+- **2017 — ARCore 1.0.** Software-based tracking через standard cameras + IMU. Works on most modern phones.
+- **2018 — Cloud Anchors.** Share AR experiences между users.
+- **2019 — Augmented Images.** Image tracking.
+- **2020 — Depth API.** Depth-from-motion без special hardware.
+- **2021 — Geospatial API.** Global positioning via Street View imagery.
+- **2022 — Scene Semantics.** ML-based scene understanding.
+- **2023 — Geospatial Creator.**
+- **2024 — Streetscape Geometry.** Real-world geometry matching.
+- **2026 — ARCore 1.38+** с enhanced ML integration.
+
+ARCore vs Apple ARKit (conceptual parity):
+- **ARCore works на Android.** ARKit only на iOS/iPadOS.
+- **Similar features overall.**
+- **ARKit arguably slightly ahead** в quality (Apple controls hardware entirely).
+- **ARCore works на wider device variety.**
+
+ARCore — не "rendering engine", это "world understanding engine". Apps provide rendering (Filament, Unity, Unreal, SceneView).
+
+
+
 **ARCore** — Google's Android AR platform, launched 2017, успel Tango research. ARCore 1.38+ (April 2026) поддерживает: SLAM tracking, plane detection, depth API, Geospatial API, Cloud Anchors, Lighting Estimation.
 
 Core concept: device + ARCore понимает real-world scene через camera + sensors, дает apps access к this understanding — плоскости, depth, lighting, positions.

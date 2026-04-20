@@ -29,6 +29,29 @@ difficulty: 4
 
 # AR Lighting Estimation
 
+## Почему это critical для AR quality
+
+AR иллюзия breaks instantly если virtual object имеет wrong lighting:
+- Bright object в dim room — looks placed "on top".
+- Hard shadows в cloudy day scene — impossible physically.
+- Neutral colored object в warm sunset light — clashes immediately.
+- Glossy object не отражает environment — flat, artificial.
+
+Human visual system very sensitive к lighting inconsistencies. Decades of photography taught us что correct lighting matches.
+
+IKEA's study: AR with environmental HDR lighting → 2× higher conversion vs ambient-only lighting.
+
+## Historical progression
+
+- **2017 — ARCore с AMBIENT_INTENSITY.** Single scalar + color. Primitive.
+- **2019 — ENVIRONMENTAL_HDR mode.** Spherical harmonics + main directional + reflection probe.
+- **2021 — IKEA Place adopts.** Noticeable quality improvement.
+- **2023 — ML-refined lighting** в ARCore 1.34. Better occlusion-aware estimation.
+- **2024 — Temporal smoothing** — less flicker.
+- **2026 — ARCore 1.38** с improved SH coefficients estimation.
+
+
+
 Virtual object должен **выглядеть принадлежащим** реальной сцене. Diван в тёмной комнате — dim; in bright sunlit room — bright. Shadow direction — matches real light. Metallic object reflects real environment.
 
 **ARCore Lighting Estimation** — API для этого. Three modes: ambient intensity, environmental HDR, main directional light.

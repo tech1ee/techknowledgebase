@@ -24,6 +24,28 @@ difficulty: 5
 
 # AR occlusion rendering
 
+## Почему это game-changer
+
+До ARCore Depth API (2019), AR objects floated "over" world. Users noticed fakeness immediately. Impact:
+- IKEA Place **без** occlusion: 5.5× conversion vs 2D catalog.
+- IKEA Place **с** occlusion: 11× conversion.
+- **2× improvement от one feature.**
+
+Occlusion — #1 feature separating "gimmick AR" от "convincing AR".
+
+## Techniques evolution
+
+- **2017-2019 — plane-based only.** ARCore имеет planes, render как depth-only. Works только для simple floor-level placement. Pokemon GO original — no occlusion.
+- **2019 — ARCore Depth API.** Per-pixel depth from motion. Enables occlusion за any real object (humans, walls, furniture).
+- **2020 — DepthLab UIST paper.** Academic foundation published.
+- **2021 — IKEA Place production adoption.** 2× conversion improvement demonstrated.
+- **2022 — Streetscape Geometry.** Outdoor scale occlusion через VPS.
+- **2023 — ML-refined depth.** Better edge preservation.
+- **2024 — Real-time semantic segmentation.** People, vehicles handled separately.
+- **2026 — Near-perfect mobile AR occlusion** на flagship devices.
+
+
+
 **Occlusion** — virtual objects correctly hidden за real-world objects. Без этого virtual содержимое "плavет" over реальностью — breaks immersion. IKEA Place study: 11× higher conversion с occlusion vs без.
 
 Achievable via ARCore Depth API, plane-based occlusion, или Streetscape Geometry.

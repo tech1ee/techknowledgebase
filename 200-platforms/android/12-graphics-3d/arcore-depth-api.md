@@ -31,6 +31,34 @@ difficulty: 4
 
 # ARCore Depth API
 
+## Technical background
+
+Depth-from-monocular-camera — challenging CV problem. ARCore uses:
+
+1. **Motion Stereo:** camera moves → ARCore reconstructs depth из parallax (like human 2 eyes).
+2. **Deep Learning:** ML model refines depth estimates, fills gaps.
+3. **ToF sensor fusion** (on supported devices): hardware depth sensor provides precise readings.
+
+Published в UIST 2020 Du, R. et al. "DepthLab: Real-Time 3D Interaction With Depth Maps for Mobile AR". Google's research transferred to production.
+
+Precision characteristics:
+- **Near range (0.5-2 m):** ±5 cm accuracy.
+- **Mid range (2-10 m):** ±15 cm.
+- **Far range (10-65 m):** ±1 m accuracy.
+
+Better на devices с ToF sensor (Samsung Galaxy flagships, some Pixel).
+
+## Историческая справка
+
+- **2017 — ARCore launch.** No depth API.
+- **2019 — Depth API announced.** Software-based.
+- **2020 — DepthLab UIST paper.** Research foundation published.
+- **2021 — Raw Depth API added.** Direct ToF access.
+- **2022 — ARCore 1.32.** Depth API stable, production-ready.
+- **2024 — ML model improvements** в ARCore 1.38.
+
+
+
 **Depth API** — ARCore feature, даёт per-pixel depth estimation из one camera. Range 0.5–65 m, precision improves with phone movement. Makes **occlusion-aware AR** possible — virtual furniture correctly hidden за real objects.
 
 Introduced 2019; hardware-accelerated на Pixel 4+ с ToF-sensor, software fallback для other devices (since UIST 2020 — Du et al. DepthLab algorithm).

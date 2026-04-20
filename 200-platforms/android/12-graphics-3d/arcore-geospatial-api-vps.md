@@ -30,6 +30,29 @@ difficulty: 4
 
 Основа для city-scale AR experiences: AR navigation (walking directions поверх street), AR games (location-based content), AR tourism (history overlays на buildings).
 
+## Historical context
+
+- **2007 — Street View launched.** Google accumulates billion+ street photos.
+- **2017 — ARCore initial release.** Local AR only.
+- **2021 — Geospatial API unveiled** at Google I/O 2021.
+- **2022 — Geospatial API GA.** Available в 87 countries.
+- **2023 — Geospatial Creator.** Design tools для creators.
+- **2024 — Streetscape Geometry.** Real-world building mesh available в AR.
+- **2026 — ARCore 1.38 expands coverage** к ~120 countries.
+
+VPS значительный shift для AR — от local-only (work внутри комнаты) к global positioning с centimeter-level accuracy.
+
+Technology behind VPS:
+1. **Visual localization.** Feature matching между phone camera и Street View dataset.
+2. **Structure-from-motion** reconstructions Google built от Street View.
+3. **ML feature descriptors** для robust matching в varying lighting, seasons.
+4. **Anchor coordinate system** — ECEF (Earth-centered, Earth-fixed) coordinates.
+5. **Cloud processing** — phone sends camera image, Google servers return localization.
+
+Privacy: phone sends image to Google temporary. Not stored permanently (after processing).
+
+
+
 ---
 
 ## Visual Positioning System (VPS)
